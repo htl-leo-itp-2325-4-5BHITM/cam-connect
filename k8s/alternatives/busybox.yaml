@@ -1,0 +1,50 @@
+# download and deploy files for init containers
+
+# does not work, test only
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: knife
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: busybox
+  template:
+    metadata:
+      labels:
+        app: busybox
+    spec:
+      containers:
+      - name: busybox
+        image: busybox:latest
+        command: ["/bin/sh", "-c"]
+        args: 
+          - /usr/local/bin/download-webcontent.sh;
+            tail -f /dev/null;
+        env:
+            - name: ARCHIVE_URL_TO_DOWNLOAD
+              value: https://github.com/caberger/webpack-demo/releases/download/v0.2.0-alpha/dist.tgz
+            - name: DESTINATION_FOLDER
+              value: /srv
+        workingDir: /root  
+        volumeMounts:
+        - name: html
+          mountPath: /srv
+          readOnly: false
+        - name: setup-script
+          mountPath: /usr/local/bin
+      volumes:
+        - name: html
+          persistentVolumeClaim:
+            claimName: nginx-www
+        - name: setup-script
+          configMap:
+            name: download-webcontent
+            defaultMode: 0744
+            items:
+              - key: download-webcontent.sh
+                path: download-webcontent.sh
+
+

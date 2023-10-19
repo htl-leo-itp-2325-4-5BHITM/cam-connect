@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "frontend",
+            "request": "launch",
+            "type": "chrome",
+            "url": "http://localhost:4200",
+            "webRoot": "${workspaceFolder}/www"
+        },
+        {
+            "type": "java",
+            "name": "backend",
+            "request": "launch",
+            "mainClass": "at.ac.htl.leonding.demo.Main",
+            "projectName": "backend",
+            "cwd": "${workspaceRoot}/backend",
+            "vmArgs": ["-Dquarkus.http.host=0.0.0.0", "-Dquarkus.profile=dev"]
+        },
+    ]
+}

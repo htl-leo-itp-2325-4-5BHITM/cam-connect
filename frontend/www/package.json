@@ -1,0 +1,36 @@
+{
+  "name": "webpack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack serve",
+    "test": "nyc ./node_modules/.bin/_mocha 'test/**/*.ts'",
+    "build": "webpack build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.2",
+    "@testdeck/mocha": "^0.3.3",
+    "@types/chai": "^4.3",
+    "chai": "^4.3",
+    "html-webpack-plugin": "^5.5",
+    "mocha": "^10.2.0",
+    "nyc": "^15.1.0",
+    "ts-loader": "^9.4.1",
+    "ts-mockito": "^2.6.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2",
+    "web-cli": "^1.0.0-prealpha",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^5.1",
+    "webpack-dev-server": "^4.11.1"
+  },
+  "dependencies": {
+    "immer": "^10.0",
+    "lit-html": "^3.0",
+    "rxjs": "^7.5.7"
+  }
+}

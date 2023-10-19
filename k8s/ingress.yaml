@@ -1,0 +1,27 @@
+# Allow access from the internet
+#
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  rules:
+    - host: student.cloud.htl-leonding.ac.at
+      http:
+        paths:
+          - path: /caberger
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx
+                port:
+                  number: 80
+          - path: /caberger/(.*)$
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx
+                port:
+                  number: 80
