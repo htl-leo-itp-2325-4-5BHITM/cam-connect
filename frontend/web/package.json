@@ -1,0 +1,25 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "Equipment management tool for the HTL-Leonding",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc --build",
+    "clean": "tsc --build --clean"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/htl-leo-itp-2325-4-5BHITM/cam-connect.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/htl-leo-itp-2325-4-5BHITM/cam-connect/issues"
+  },
+  "homepage": "https://github.com/htl-leo-itp-2325-4-5BHITM/cam-connect#readme",
+  "devDependencies": {
+    "sass": "^1.69.4",
+    "typescript": "^5.2.2"
+  }
+}

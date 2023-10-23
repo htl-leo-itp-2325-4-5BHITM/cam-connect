@@ -1,6 +1,6 @@
 # cam-connect conventions
-Please take the time to read this, i will tell you when its finished / updated. 
-If you follow these conventions we will have a better time writing code and the project can be handed of to the next group in a nice shape. 
+Please take the time to read this, I will tell you when its finished / updated. 
+If you follow these conventions we will have a better time writing code and the project can be handed off to the next group in a nice shape. 
 
 ## General
 
