@@ -1,3 +1,3 @@
 ## cam-connect
 
-Online rent system for the htl leonding.
+Online Verleihsystem der HTL-Leonding
