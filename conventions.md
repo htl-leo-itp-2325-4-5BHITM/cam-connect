@@ -61,10 +61,11 @@ function checkLogin(){
 //endregion
 ```
 
-### JS specifics
+### TS specifics
 
 - most checks should be done with === instead of ==, this also checks for the type: 1 == '1' is true 2 === '2' is not true
-- semicolons should be avoided wherever possible (this is a setting in webstorm so it wont add them automatically)
+- semicolons should be avoided wherever possible (this is a setting in webstorm so it won't add them automatically)
+- use .innerText instead of .innerHtml whenever you dont want to add elements to the DOM, this way you avoid injections
 
 ### style specific
 - there should be a base stylesheet whenever multiple pages need the same style
