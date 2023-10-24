@@ -101,8 +101,7 @@ For those that don't know scss this will seem weird, it's actually pretty easy
 
 ## Github
 - branch names
-- commit frequency
-- commit messages
+- try to commit at the end of each workday
+- commit messages should be precise and list all major changes
 - issues
-- approval
-- 
+- pull requests will need to be approved to go through clean code will have no problem passing

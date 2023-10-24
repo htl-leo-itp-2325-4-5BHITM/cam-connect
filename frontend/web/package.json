@@ -19,7 +19,6 @@
   },
   "homepage": "https://github.com/htl-leo-itp-2325-4-5BHITM/cam-connect#readme",
   "devDependencies": {
-    "sass": "^1.69.4",
     "typescript": "^5.2.2"
   }
 }
