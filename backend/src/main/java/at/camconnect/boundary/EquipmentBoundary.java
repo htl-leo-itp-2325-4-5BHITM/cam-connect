@@ -13,16 +13,23 @@ public class EquipmentBoundary {
     EquipmentRepository equipmentRepository;
 
     @GET
-    @Path("get/{id: [0-9]+}/getname")
-    public void setGrave(@PathParam("id")int id) {
-        equipmentRepository.getById(id).getName();
+    @Path("/getbyid/{id: [0-9]+}")
+    public Equipment getById(@PathParam("id")long id) {
+        return equipmentRepository.getById(id);
+    }
+
+    @GET
+    @Path("/getbyid/{id: [0-9]+}/getname")
+    public String getName(@PathParam("id")long id) {
+        return equipmentRepository.getById(id).getName();
     }
 
     @Transactional
     @POST
-    @Path("create")
+    @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void createCoffin(Equipment equipment){
+    public String createEquipment(Equipment equipment){
         equipmentRepository.add(equipment);
+        return "hallo";
     }
 }

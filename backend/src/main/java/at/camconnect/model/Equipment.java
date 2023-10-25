@@ -6,15 +6,17 @@ import jakarta.persistence.Id;
 @Entity
 public class Equipment {
 
+    @Id
+    private Long id;
+
+    public String name;
+
     public Equipment(String name) {
         this.name = name;
     }
 
     public Equipment() {
     }
-
-    @Id
-    private Long id;
 
     public void setId(Long id) {
         this.id = id;
@@ -24,7 +26,6 @@ public class Equipment {
         return id;
     }
 
-    public String name;
 
     public String getName() {
         return name;
