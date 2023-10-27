@@ -15,7 +15,6 @@ bin/
 # IntelliJ
 .idea
 *.ipr
-*.iml
 *.iws
 
 # NetBeans
