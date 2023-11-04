@@ -1,6 +1,99 @@
 /* click the thingie asking you to add a filewatcher */
-body p {
-  background-color: red;
+@page {
+  size: A4 landscape;
+}
+@media print {
+  #options {
+    display: none;
+  }
+}
+* {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+}
+
+img {
+  width: 100%;
+  display: block;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: hsl(0, 0%, 20%);
+  color: hsl(0, 0%, 0%);
+  font-family: sans-serif;
+}
+
+::selection {
+  background-color: hsl(0, 0%, 100%);
+  color: hsl(0, 0%, 0%);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  color: hsl(0, 0%, 100%);
+}
+
+/* main */
+table {
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  display: flex;
+}
+table tbody {
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+table th, table td {
+  border: 1px solid black;
+  height: inherit;
+}
+table th:nth-of-type(6), table th:nth-of-type(10), table td:nth-of-type(6), table td:nth-of-type(10) {
+  background-color: hsl(0, 0%, 90%);
+  border-right: 0.2rem solid #383838;
+}
+table th {
+  border-bottom: 0.2rem solid #383838;
+  background-color: hsl(0, 0%, 90%);
+  padding: 0.5rem;
+}
+table tr {
+  height: 2rem;
+}
+table input {
+  border: none;
+  background-color: transparent;
+  height: inherit;
+  padding: 0.3rem;
+  box-sizing: border-box;
+  font-size: 1rem;
+  width: 100%;
+  font-family: sans-serif;
+  font-weight: 500;
+}
+
+#options {
+  background-color: white;
+  padding: 0.5rem;
+  position: absolute;
+  border-bottom-right-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  box-shadow: 0 0 0.3rem 0.3rem rgba(0, 0, 0, 0.2);
+  z-index: 100;
+}
+#options input {
+  background-color: gray;
 }
 
 /*# sourceMappingURL=index.css.map */

@@ -1,7 +1,107 @@
 /* click the thingie asking you to add a filewatcher */
 
+@page { size: A4 landscape }
+
+@media print {
+  #options{
+    display: none;
+  }
+}
+
+*{
+  margin: 0;
+  padding: 0;
+  font: inherit;
+}
+
+img{
+  width:100%;
+  display: block;
+}
+
+html{
+  scroll-behavior: smooth;
+}
+
 body{
-  p{
-    background-color: red;
+  background-color: hsl(0,0,20%);
+  color: hsl(0,0,0%);
+  font-family: sans-serif;
+}
+
+::selection{
+  background-color: hsl(0, 0, 100%);
+  color: hsl(0, 0, 0%);
+}
+
+a{
+  text-decoration: none;
+  color: inherit;
+}
+
+button{
+  background-color: transparent;
+  border: none;
+  color: hsl(0, 0, 100%)
+}
+
+/* main */
+
+table{
+  border-collapse: collapse;
+  font-size: .8rem;
+  display: flex;
+
+  tbody{
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+  }
+
+  th,td {
+    border: 1px solid black;
+    height: inherit;
+
+    &:nth-of-type(6), &:nth-of-type(10) {
+      background-color: hsl(0, 0%, 90%);
+      border-right: .2rem solid #383838;
+    }
+  }
+
+  th {
+    border-bottom: .2rem solid #383838;
+    background-color: hsl(0, 0%, 90%);
+    padding: .5rem;
+  }
+
+  tr {
+    height: 2rem;
+  }
+
+  input{
+    border: none;
+    background-color: transparent;
+    height: inherit;
+    padding: .3rem;
+    box-sizing: border-box;
+    font-size: 1rem;
+    width: 100%;
+    font-family: sans-serif;
+    font-weight: 500;
+  }
+}
+
+#options{
+  background-color: white;
+  padding: .5rem;
+  position: absolute;
+  border-bottom-right-radius: .5rem;
+  border-top-right-radius: .5rem;
+  box-shadow: 0 0 .3rem .3rem rgba(0, 0, 0, 0.2);
+
+  z-index: 100;
+
+  input{
+    background-color: gray;
   }
 }
