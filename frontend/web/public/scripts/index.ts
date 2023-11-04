@@ -9,9 +9,9 @@ fetch('http://localhost:8080/equipment/create', {
     headers: {
         'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ name: 'Lumix S5ii'})
+    body: JSON.stringify({name: 'Lumix S5ii'})
 })
-    .then(response => response.json())
+    .then(response => response.text())
     .then(data => console.log(data))
     .catch(error => console.error(error));
 

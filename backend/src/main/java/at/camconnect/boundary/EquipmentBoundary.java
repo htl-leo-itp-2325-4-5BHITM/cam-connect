@@ -9,6 +9,10 @@ import jakarta.ws.rs.core.MediaType;
 
 @Path("/equipment")
 public class EquipmentBoundary {
+
+    public String equipmentDefault(){
+        return "Hey vom equip";
+    }
     @Inject
     EquipmentRepository equipmentRepository;
 
