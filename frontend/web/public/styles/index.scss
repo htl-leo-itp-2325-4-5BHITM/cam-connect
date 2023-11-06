@@ -27,11 +27,12 @@ body{
   background-color: hsl(0,0,20%);
   color: hsl(0,0,0%);
   font-family: sans-serif;
+  overflow: hidden;
 }
 
 ::selection{
-  background-color: hsl(0, 0, 100%);
-  color: hsl(0, 0, 0%);
+  background-color: rgba(117, 179, 215, 0.56);
+  color: black;
 }
 
 a{
@@ -59,7 +60,7 @@ table{
   }
 
   th,td {
-    border: 1px solid black;
+    border: 1px solid gray;
     height: inherit;
 
     &:nth-of-type(6), &:nth-of-type(10) {
@@ -81,27 +82,32 @@ table{
   input{
     border: none;
     background-color: transparent;
-    height: inherit;
-    padding: .3rem;
+    height: 100%;
+    padding: .3rem .15rem;
     box-sizing: border-box;
-    font-size: 1rem;
+    font-size: .8rem;
     width: 100%;
     font-family: sans-serif;
     font-weight: 500;
+    border-radius: .1rem;
+    color: #1a1a1a;
+    transition: all .1s;
+
+    &[type="checkbox"]{
+      height: 50%;
+    }
+
+    &:focus-visible{
+      background-color: rgba(179, 179, 179, 0.2);
+      outline: .15rem solid gray;
+      box-shadow: .2rem .2rem .2rem rgba(128, 128, 128, 0.49);
+    }
   }
 }
 
-#options{
-  background-color: white;
-  padding: .5rem;
+#studentSelection{
   position: absolute;
-  border-bottom-right-radius: .5rem;
-  border-top-right-radius: .5rem;
-  box-shadow: 0 0 .3rem .3rem rgba(0, 0, 0, 0.2);
-
-  z-index: 100;
-
-  input{
-    background-color: gray;
-  }
+  width: 20vw;
+  background-color: lightgray;
+  min-height: 10vh;
 }

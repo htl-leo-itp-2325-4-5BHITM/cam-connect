@@ -1,9 +1,5 @@
 //region test
 
- if (true){
-     console.log("dei mum")
- }
-
 fetch('http://localhost:8080/equipment/create', {
     method: 'POST',
     headers: {
@@ -23,31 +19,59 @@ fetch('http://localhost:8080/equipment/create', {
      .then(data => {
          console.log(data)
      })
+
  //endregion
 
+interface column{
+    name: string,
+    inputType: string
+}
 
-const headings = [
-    "Gerät Nr.", "Zubehör", "Entlehner*in + Klasse", "Entlehnung Datum", "Unterschrift Entlehner*in", "Paraphe Lehkraft", "Rückgabe geplant",
-    "Rückgabe tatsächlich", "Unterschrift Entlehner*in", "Paraphe Lehkraft", "Anmerkung"
+const columns:column[] = [
+    {name: "Gerät Nr.", inputType: "number"},
+    {name: "Zubehör", inputType: "text"},
+    {name: "Entlehner*in + Klasse", inputType: "text"},
+    {name: "Entlehnung Datum", inputType: "date"},
+    {name: "Unterschrift Entlehner*in", inputType: "checkbox"},
+    {name: "Paraphe Lehkraft", inputType: "text"},
+    {name: "Rückgabe geplant", inputType: "date"},
+    {name: "Rückgabe tatsächlich", inputType: "date"},
+    {name: "Unterschrift Entlehner*in", inputType: "checkbox"},
+    {name: "Paraphe Lehkraft", inputType: "text"},
+    {name: "Anmerkung", inputType: "text"},
 ]
 
 generateTable(20)
 function generateTable(rowCount: number){
-
-
     let headingHtml = document.createElement("tr")
     let rowHtml = document.createElement("tr")
 
     //ATTENTION this approach only works as long as you dont keep this logic when updating to any kind of data storrage logic
     //if it is kept this way, all rows would have the same content since they are made from the same row
-    headings.forEach(heading=>{
+    //nvm i think this works.. its ugly code tho sry guys
+
+    columns.forEach(column=>{
         let headRow = document.createElement("th")
-        headRow.innerText = heading
+        headRow.innerText = column.name
         headingHtml.appendChild(headRow)
 
-        let emptyRow = document.createElement("td")
-        emptyRow.appendChild(document.createElement("input"))
-        rowHtml.appendChild(emptyRow)
+        let cell = document.createElement("td")
+
+        let cellinput = document.createElement("input")
+            cellinput.type = column.inputType
+            cell.appendChild(cellinput)
+
+        switch (column.inputType) {
+            case "number":
+                cellinput.setAttribute("min", "0");
+                break
+        }
+
+        if(column.name === "Entlehner*in + Klasse"){
+            cellinput.onclick = openStudentPicker
+        }
+
+        rowHtml.appendChild(cell)
     })
 
     let table = document.querySelector('table')
@@ -60,4 +84,8 @@ function generateTable(rowCount: number){
         multiRowHtml += `<tr>${rowHtml.innerHTML}</tr>`
     }
     table.innerHTML += multiRowHtml
+}
+
+function openStudentPicker(e){
+    
 }
