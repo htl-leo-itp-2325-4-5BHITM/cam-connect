@@ -1,6 +1,3 @@
-if (true) {
-    console.log("dei mum");
-}
 fetch('http://localhost:8080/equipment/create', {
     method: 'POST',
     headers: {
@@ -19,21 +16,40 @@ fetch("http://localhost:8080/equipment/getbyid/1/getname")
     .then(function (data) {
     console.log(data);
 });
-var headings = [
-    "Gerät Nr.", "Zubehör", "Entlehner*in + Klasse", "Entlehnung Datum", "Unterschrift Entlehner*in", "Paraphe Lehkraft", "Rückgabe geplant",
-    "Rückgabe tatsächlich", "Unterschrift Entlehner*in", "Paraphe Lehkraft", "Anmerkung"
+var columns = [
+    { name: "Gerät Nr.", inputType: "number" },
+    { name: "Zubehör", inputType: "text" },
+    { name: "Entlehner*in + Klasse", inputType: "text" },
+    { name: "Entlehnung Datum", inputType: "date" },
+    { name: "Unterschrift Entlehner*in", inputType: "checkbox" },
+    { name: "Paraphe Lehkraft", inputType: "text" },
+    { name: "Rückgabe geplant", inputType: "date" },
+    { name: "Rückgabe tatsächlich", inputType: "date" },
+    { name: "Unterschrift Entlehner*in", inputType: "checkbox" },
+    { name: "Paraphe Lehkraft", inputType: "text" },
+    { name: "Anmerkung", inputType: "text" },
 ];
 generateTable(20);
 function generateTable(rowCount) {
     var headingHtml = document.createElement("tr");
     var rowHtml = document.createElement("tr");
-    headings.forEach(function (heading) {
+    columns.forEach(function (column) {
         var headRow = document.createElement("th");
-        headRow.innerText = heading;
+        headRow.innerText = column.name;
         headingHtml.appendChild(headRow);
-        var emptyRow = document.createElement("td");
-        emptyRow.appendChild(document.createElement("input"));
-        rowHtml.appendChild(emptyRow);
+        var cell = document.createElement("td");
+        var cellinput = document.createElement("input");
+        cellinput.type = column.inputType;
+        cell.appendChild(cellinput);
+        switch (column.inputType) {
+            case "number":
+                cellinput.setAttribute("min", "0");
+                break;
+        }
+        if (column.name === "Entlehner*in + Klasse") {
+            cellinput.onclick = openStudentPicker;
+        }
+        rowHtml.appendChild(cell);
     });
     var table = document.querySelector('table');
     table.innerHTML = "";
@@ -43,5 +59,7 @@ function generateTable(rowCount) {
         multiRowHtml += "<tr>".concat(rowHtml.innerHTML, "</tr>");
     }
     table.innerHTML += multiRowHtml;
+}
+function openStudentPicker() {
 }
 //# sourceMappingURL=index.js.map
