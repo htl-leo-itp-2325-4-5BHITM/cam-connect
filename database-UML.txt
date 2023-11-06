@@ -29,6 +29,7 @@
     entity TripodType {
         --
         * height
+        * head
     }
 
     entity StabilizerType {
