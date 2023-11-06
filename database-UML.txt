@@ -1,0 +1,64 @@
+@startuml
+    entity DeviceType {
+        * typeId
+        --
+        * typeName
+    }
+
+    entity CameraType {
+        --
+        * sensor: String
+        * mount (myb extra table)
+        * resolution
+    }
+
+    entity AudioType {
+        --
+        * windblocker: boolean
+        * wireless: boolean
+        * needsRecorder: boolean
+    }
+
+    entity LightType {
+        --
+        * watts: int
+        * RGB: boolean
+        * variableTemperature: boolean
+    }
+
+    entity TripodType {
+        --
+        * height
+    }
+
+    entity StabilizerType {
+        --
+        * maxWeight: Int
+        * numberOfAxis: Int
+    }
+
+    CameraType -up-|> DeviceType
+    AudioType -up-|> DeviceType
+    LightType -up-|> DeviceType
+    TripodType -up-|> DeviceType
+    StabilizerType -up-|> DeviceType
+
+    entity Device {
+        * deviceId
+        --
+        * serial
+        * note
+    }
+
+
+    entity Rent {
+        * rentId
+        --
+        * deviceId: Int
+        * rentStart: Date
+        * rentEnd: Date
+    }
+
+    Device }o-down-|{ DeviceType
+    Rent }o--|| Device
+@enduml

@@ -25,8 +25,9 @@ in the same line as the bracket
 - if you can't complete a piece of code right now, add a `//TODO` comment
 - every major, bigger block of functions (all that create a new entry, all that display refresh and edit the devices) 
 should be wrapped in a `//region name ..code here.. //endregion` that way they can be folded in webstorm
-- when using variables which uses are not immediatly clear add a comment on the same line to explain or on the line abovce to explain for multiple
+- when using variables which uses are not immediatly clear add a comment on the same line to explain or on the line above to explain for multiple
 - script, style and mockup files belonging together should have the same name
+- Id should be written like this `thingId`
 
 this example is very basic, some of the comments are not needed here, but you get the idea
 ```JS
@@ -101,8 +102,8 @@ For those that don't know scss this will seem weird, it's actually pretty easy
 - use the accent color #notyetdecided
 
 ## Github
+- try to commit at the end of each workday and when leaving school .-.
 - branch names
-- try to commit at the end of each workday
 - commit messages should be precise and list all major changes
 - issues
 - pull requests will need to be approved to go through clean code will have no problem passing
