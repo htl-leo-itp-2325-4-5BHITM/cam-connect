@@ -1,8 +1,9 @@
 @startuml
-    entity DeviceType {
+   entity DeviceType {
         * typeId
         --
-        * typeName
+        * typeName string
+        * tagid
     }
 
     entity CameraType {
@@ -58,8 +59,56 @@
         * deviceId: Int
         * rentStart: Date
         * rentEnd: Date
+        * studentid
+        * teacherid
     }
+
+
+
+
+
+    entity Tag {
+        * tagId
+        --
+        * typeId: Int
+        * description: string
+    }
+
+
+    entity Student {
+        * studentId
+        --
+        * name: string
+        * class: string
+        * password
+        * userid
+    }
+
+ entity Teacher {
+        * teacherId
+        --
+        * name: string
+        * verfication: string
+        * password
+        * userid
+    }
+
+
+    entity Tag {
+        * tagId
+        --
+        * typeId: Int
+        * description: string
+    }
+
+
 
     Device }o-down-|{ DeviceType
     Rent }o--|| Device
+    Rent }o--|| Student
+    Rent }o--|| Teacher
+   DeviceType }o-down-|{ Tag
+
+
+
 @enduml
