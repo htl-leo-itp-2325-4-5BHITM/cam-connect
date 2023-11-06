@@ -27,7 +27,7 @@
     }
 
     entity TripodType {
-        --
+        -- 
         * height
         * head
     }

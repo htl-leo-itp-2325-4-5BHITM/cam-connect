@@ -49,10 +49,8 @@ button {
 table {
   border-collapse: collapse;
   font-size: 0.8rem;
-  display: flex;
 }
 table tbody {
-  flex-direction: column;
   height: 100%;
   width: 100%;
 }
@@ -90,16 +88,25 @@ table input[type=checkbox] {
   height: 50%;
 }
 table input:focus-visible {
-  background-color: rgba(179, 179, 179, 0.2);
+  background-color: rgba(179, 179, 179, 0.1);
   outline: 0.15rem solid gray;
   box-shadow: 0.2rem 0.2rem 0.2rem rgba(128, 128, 128, 0.49);
 }
 
-#studentSelection {
+#studentSelectionPopup {
+  border-radius: 0.5rem;
   position: absolute;
-  width: 20vw;
-  background-color: lightgray;
+  width: 10vw;
+  background-color: #f2f2f2;
   min-height: 10vh;
+  box-shadow: 0 0 0.2rem 0.1rem rgba(0, 0, 0, 0.2);
+  display: none;
+}
+#studentSelectionPopup .search {
+  background-color: lightgrey;
+  width: 100%;
+  border: none;
+  outline: none;
 }
 
 /*# sourceMappingURL=index.css.map */
