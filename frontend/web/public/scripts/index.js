@@ -28,7 +28,7 @@ function generateTable(rowCount) {
             var cell = document.createElement("td");
             var cellinput = document.createElement("input");
             cellinput.type = column.inputType;
-            cellinput.setAttribute("cellType", column.cellType);
+            cellinput.setAttribute("celltype", column.cellType);
             switch (column.inputType) {
                 case "number":
                     cellinput.setAttribute("min", "0");
@@ -48,17 +48,19 @@ function generateTable(rowCount) {
     table.append.apply(table, html);
 }
 var studentSelectionPopup = document.querySelector("#studentSelectionPopup");
+var studentSearchbar = document.querySelector('#studentSelectionPopup .search');
 function openStudentPicker(input) {
     var bounds = input.getBoundingClientRect();
-    studentSelectionPopup.style.top = bounds.top + bounds.height + "px";
+    studentSelectionPopup.style.top = bounds.top + "px";
     studentSelectionPopup.style.left = bounds.left + "px";
     studentSelectionPopup.style.display = "block";
-    setTimeout(function () { document.addEventListener("click", closeStudentPicker); });
+    studentSearchbar.click();
+    setTimeout(function () { document.addEventListener("mousedown", closeStudentPicker); });
 }
 function closeStudentPicker(e) {
-    if (e.target === studentSelectionPopup || e.target.getAttribute("cellType") === "student")
+    if (e.target === studentSelectionPopup || e.target.closest('#studentSelectionPopup') === studentSelectionPopup || e.target.getAttribute("celltype") === "student")
         return;
     studentSelectionPopup.style.display = "none";
-    document.removeEventListener("click", closeStudentPicker);
+    document.removeEventListener("mousedown", closeStudentPicker);
 }
 //# sourceMappingURL=index.js.map

@@ -118,5 +118,9 @@ table{
     width: 100%;
     border: none;
     outline: none;
+    padding: .2rem;
+    font-size: .8rem;
+    box-sizing: border-box;
+    box-shadow: 0 .1rem .2rem rgba(0, 0, 0, 0.3);
   }
 }

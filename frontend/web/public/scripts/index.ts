@@ -65,7 +65,7 @@ function generateTable(rowCount: number){
 
             let cellinput = document.createElement("input")
             cellinput.type = column.inputType
-            cellinput.setAttribute("cellType", column.cellType)
+            cellinput.setAttribute("celltype", column.cellType)
 
             switch (column.inputType) {
                 case "number":
@@ -86,21 +86,22 @@ function generateTable(rowCount: number){
     table.append(...html)
 }
 
-let studentSelectionPopup:HTMLElement = document.querySelector("#studentSelectionPopup")
+const studentSelectionPopup:HTMLElement = document.querySelector("#studentSelectionPopup")
+const studentSearchbar:HTMLElement = document.querySelector('#studentSelectionPopup .search')
 function openStudentPicker(input:Element){
     let bounds = input.getBoundingClientRect()
-    studentSelectionPopup.style.top = bounds.top + bounds.height + "px"
+    studentSelectionPopup.style.top = bounds.top + "px"
     studentSelectionPopup.style.left = bounds.left + "px"
 
     studentSelectionPopup.style.display = "block"
-
-    setTimeout(function(){document.addEventListener("click", closeStudentPicker)},)
+    studentSearchbar.click()
+    setTimeout(function(){document.addEventListener("mousedown", closeStudentPicker)},)
 }
 
 function closeStudentPicker(e:MouseEvent){
     // @ts-ignore
-    if(e.target === studentSelectionPopup || e.target.getAttribute("cellType") === "student") return
-
+    if(e.target === studentSelectionPopup || e.target.closest('#studentSelectionPopup') === studentSelectionPopup || e.target.getAttribute("celltype") === "student") return
+    // @ts-ignore
     studentSelectionPopup.style.display = "none"
-    document.removeEventListener("click", closeStudentPicker)
+    document.removeEventListener("mousedown", closeStudentPicker)
 }
