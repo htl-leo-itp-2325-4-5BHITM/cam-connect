@@ -59,9 +59,12 @@
         * deviceId: Int
         * rentStart: Date
         * rentEnd: Date
+        *rentEndActual: Date
         * studentid
         * teacherid
     }
+
+
 
 
 
@@ -100,11 +103,20 @@
         * typeId: Int
         * description: string
     }
+    entity Set {
+        * setId
+       --
+        * setnr
+        *
+
+        }
 
 
 
-    Device }o-down-|{ DeviceType
+    Device }o-down-|| DeviceType
+    Device }o-down-|{ Set
     Rent }o--|| Device
+    Rent }o--|| Set
     Rent }o--|| Student
     Rent }o--|| Teacher
    DeviceType }o-down-|{ Tag
