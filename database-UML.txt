@@ -14,6 +14,19 @@
         * mount (myb extra table)
         * resolution
     }
+    entity DroneType {
+        --
+        * sensor: String
+        * mount (myb extra table)
+        * resolution
+        * maxRange
+    }
+    entity LensType {
+        --
+        * f-stop: string
+        * mount (myb extra table)
+        * focal lenght
+    }
 
     entity AudioType {
         --
@@ -46,6 +59,8 @@
     LightType -up-|> DeviceType
     TripodType -up-|> DeviceType
     StabilizerType -up-|> DeviceType
+    LensType -up-|> DeviceType
+    DroneType -up-|> DeviceType
 
     entity Device {
         * deviceId
@@ -65,7 +80,12 @@
         * rentEndPlanned: Date
         * rentEndActual: Date
     }
-
+   entity Favorite {
+        * favId
+        --
+        * deviceId: Int
+        * studentId: Int
+    }
     entity Tag {
         * tagId
         --
@@ -97,6 +117,7 @@
     Rent }o-up-|| Student
     Rent }o--|| Set
     Rent }o--|| Student
+    Favorite }o--|| Student
     Rent }o--|| Teacher
     DeviceType ||-right-o{ Tag
 @enduml
