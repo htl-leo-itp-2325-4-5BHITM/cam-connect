@@ -17,12 +17,10 @@ public class Student {
     
     private String firstname;
     private String lastname;
-    private LocalDate birthday;
 
-    public Student(String firstname, String lastname, String birthday) {
+    public Student(String firstname, String lastname) {
         this.firstname = firstname;
         this.lastname = lastname;
-        this.birthday = LocalDate.parse(birthday);
     }
 
     public Student() {
@@ -42,14 +40,5 @@ public class Student {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
-    }
-
-    public LocalDate getBirthday() {
-        return birthday;
-    }
-
-    //TODO i dont know if this is really a good solution but if we give data via json we need to convert from text to object idk pls kill me
-    public void setBirthday(String birthday) {
-        this.birthday = LocalDate.parse(birthday);
     }
 }

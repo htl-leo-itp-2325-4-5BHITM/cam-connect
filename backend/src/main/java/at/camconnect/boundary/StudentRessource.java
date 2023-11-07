@@ -6,6 +6,7 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import java.util.List;
 
@@ -31,13 +32,12 @@ public class StudentRessource {
         return studentRepository.getAll();
     }
 
-    //TODO why the fuck wont this take my input
     @POST
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public String createStudent(Student student){
+    public Response createStudent(Student student){
         studentRepository.create(student);
-        return "student created";
+        return Response.ok().build();
     }
 }

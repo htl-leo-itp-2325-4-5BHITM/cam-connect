@@ -19,14 +19,14 @@ public class StudentRepository{
         return em.find(Student.class, id);
     }
 
-    @Transactional
-    public void create(Student s){
-        em.persist(s);
-    }
-
     public List<Student> getAll(){
         Query q = em.createNativeQuery("SELECT * FROM Student");
         List<Student> results = q.getResultList();
         return results;
+    }
+
+    @Transactional
+    public void create(Student s){
+        em.persist(s);
     }
 }
