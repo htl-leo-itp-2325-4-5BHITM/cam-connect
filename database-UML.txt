@@ -15,6 +15,21 @@
         * resolution
     }
 
+    entity DroneType {
+        --
+        * sensor: String
+        * mount (myb extra table)
+        * resolution
+        * maxRange
+    }
+
+    entity LensType {
+        --
+        * f-stop: string
+        * mount (myb extra table)
+        * focal lenght
+    }
+
     entity AudioType {
         --
         * windblocker: boolean
@@ -41,11 +56,13 @@
         * numberOfAxis: Int
     }
 
-    DeviceType <|-down- CameraType
-    DeviceType <|-down- AudioType
-    DeviceType <|-down- LightType
-    DeviceType <|-down- TripodType
-    DeviceType <|-down- StabilizerType
+    CameraType -up-|> DeviceType
+    AudioType -up-|> DeviceType
+    LightType -up-|> DeviceType
+    TripodType -up-|> DeviceType
+    StabilizerType -up-|> DeviceType
+    LensType -up-|> DeviceType
+    DroneType -up-|> DeviceType
 
     entity Device {
         * deviceId
@@ -63,6 +80,13 @@
         * rentStart: Date
         * rentEndPlanned: Date
         * rentEndActual: Date
+    }
+
+   entity Favorite {
+        * favId
+        --
+        * deviceId: Int
+        * studentId: Int
     }
 
     entity Tag {
@@ -104,6 +128,8 @@
     Rent }o--|| Device
     Rent }o-up-|| Student
     Rent }o--|| Set
+    Rent }o--|| Student
+    Favorite }o--|| Student
     Rent }o--|| Teacher
     DeviceType ||-right-o{ Tag
 @enduml
