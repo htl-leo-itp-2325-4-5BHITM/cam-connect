@@ -10,7 +10,7 @@ import jakarta.ws.rs.core.MediaType;
 import java.util.List;
 
 @Path("/student")
-public class StudentBoundary {
+public class StudentRessource {
 
     @Produces
     public String studentDefault(){
@@ -25,19 +25,19 @@ public class StudentBoundary {
         return studentRepository.getById(id);
     }
 
-    //TODO why the fuck wont this take my input
-    @Transactional
-    @POST
-    @Path("/create")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public String createStudent(Student student){
-        studentRepository.create(student);
-        return "student created";
-    }
-
     @GET
     @Path("/getall")
     public List<Student> getAll() {
         return studentRepository.getAll();
+    }
+
+    //TODO why the fuck wont this take my input
+    @POST
+    @Path("/create")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public String createStudent(Student student){
+        studentRepository.create(student);
+        return "student created";
     }
 }

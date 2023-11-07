@@ -1,0 +1,10 @@
+###
+POST http://localhost:8080/student/create
+
+{"firstname": "Max", "lastname": "Muster", "birthday": "01.01.2006"}
+
+###
+GET http://localhost:8080/student/getbyid/1
+
+###
+GET http://localhost:8080/student/getall
