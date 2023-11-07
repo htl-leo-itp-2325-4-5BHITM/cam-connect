@@ -1,9 +1,10 @@
 @startuml
+   skinparam linetype ortho
+
    entity DeviceType {
         * typeId
         --
         * typeName string
-        * tagid
     }
 
     entity CameraType {
@@ -28,7 +29,7 @@
     }
 
     entity TripodType {
-        -- 
+        --
         * height
         * head
     }
@@ -48,8 +49,8 @@
     entity Device {
         * deviceId
         --
-        * serial
-        * note
+        * serial: String
+        * note: String
     }
 
 
@@ -57,15 +58,12 @@
         * rentId
         --
         * deviceId: Int
+        * studentId: Int
+        * teacherId: Int
         * rentStart: Date
-        * rentEnd: Date
-        * studentid
-        * teacherid
+        * rentEndPlanned: Date
+        * rentEndActual: Date
     }
-
-
-
-
 
     entity Tag {
         * tagId
@@ -73,7 +71,6 @@
         * typeId: Int
         * description: string
     }
-
 
     entity Student {
         * studentId
@@ -84,31 +81,18 @@
         * userid
     }
 
- entity Teacher {
+    entity Teacher {
         * teacherId
         --
         * name: string
         * verfication: string
         * password
-        * userid
+        * userId
     }
-
-
-    entity Tag {
-        * tagId
-        --
-        * typeId: Int
-        * description: string
-    }
-
-
 
     Device }o-down-|{ DeviceType
     Rent }o--|| Device
-    Rent }o--|| Student
+    Rent }o-up-|| Student
     Rent }o--|| Teacher
-   DeviceType }o-down-|{ Tag
-
-
-
+    DeviceType ||-right-o{ Tag
 @enduml
