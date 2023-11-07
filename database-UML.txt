@@ -5,6 +5,7 @@
         * typeId
         --
         * typeName string
+        * tagid
     }
 
     entity CameraType {
@@ -90,9 +91,12 @@
         * userId
     }
 
-    Device }o-down-|{ DeviceType
+    Device }o-down-|| DeviceType
+    Device }o-down-|{ Set
     Rent }o--|| Device
     Rent }o-up-|| Student
+    Rent }o--|| Set
+    Rent }o--|| Student
     Rent }o--|| Teacher
     DeviceType ||-right-o{ Tag
 @enduml
