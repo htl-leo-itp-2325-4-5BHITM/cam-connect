@@ -1,10 +1,14 @@
 package at.camconnect.model;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
 
+import java.time.LocalDate;
 import java.util.Date;
 
+@Entity
 public class Student {
     
     @Id
@@ -13,12 +17,15 @@ public class Student {
     
     private String firstname;
     private String lastname;
-    private Date birthday;
+    private LocalDate birthday;
 
-    public Student(String firstname, String lastname, Date birthday) {
+    public Student(String firstname, String lastname, String birthday) {
         this.firstname = firstname;
         this.lastname = lastname;
-        this.birthday = birthday;
+        this.birthday = LocalDate.parse(birthday);
+    }
+
+    public Student() {
     }
 
     public String getFirstname() {
@@ -37,11 +44,12 @@ public class Student {
         this.lastname = lastname;
     }
 
-    public Date getBirthday() {
+    public LocalDate getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
+    //TODO i dont know if this is really a good solution but if we give data via json we need to convert from text to object idk pls kill me
+    public void setBirthday(String birthday) {
+        this.birthday = LocalDate.parse(birthday);
     }
 }

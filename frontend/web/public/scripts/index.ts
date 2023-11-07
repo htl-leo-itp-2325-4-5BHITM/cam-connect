@@ -1,3 +1,4 @@
+const applicationURL:String = "http://localhost:8080"
 
 //region test
 /*
@@ -74,7 +75,7 @@ function generateTable(rowCount: number){
             }
 
             if(column.cellType === "student"){
-                cellinput.addEventListener("focus", () => {openStudentPicker(cellinput)})
+                cellinput.addEventListener("mouseup", () => {openStudentPicker(cellinput)})
             }
             cell.appendChild(cellinput)
 
@@ -86,6 +87,8 @@ function generateTable(rowCount: number){
     table.append(...html)
 }
 
+
+//region student search and selection
 const studentSelectionPopup:HTMLElement = document.querySelector("#studentSelectionPopup")
 const studentSearchbar:HTMLElement = document.querySelector('#studentSelectionPopup .search')
 function openStudentPicker(input:Element){
@@ -94,7 +97,7 @@ function openStudentPicker(input:Element){
     studentSelectionPopup.style.left = bounds.left + "px"
 
     studentSelectionPopup.style.display = "block"
-    studentSearchbar.click()
+    studentSearchbar.focus()
     setTimeout(function(){document.addEventListener("mousedown", closeStudentPicker)},)
 }
 
@@ -105,3 +108,17 @@ function closeStudentPicker(e:MouseEvent){
     studentSelectionPopup.style.display = "none"
     document.removeEventListener("mousedown", closeStudentPicker)
 }
+
+function searchForStudent(){
+    fetch(applicationURL + '/equipment/create', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'text/plain'
+        },
+        body: JSON.stringify({name: 'Lumix S5ii'})
+    })
+    .then(response => response.text())
+    .then(data => console.log(data))
+    .catch(error => console.error(error));
+}
+//endregion

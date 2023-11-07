@@ -1,3 +1,4 @@
+var applicationURL = "http://localhost:8080";
 var columns = [
     { name: "Gerät Nr.", inputType: "number", cellType: "nr" },
     { name: "Zubehör", inputType: "text", cellType: "extras" },
@@ -35,7 +36,7 @@ function generateTable(rowCount) {
                     break;
             }
             if (column.cellType === "student") {
-                cellinput.addEventListener("focus", function () { openStudentPicker(cellinput); });
+                cellinput.addEventListener("mouseup", function () { openStudentPicker(cellinput); });
             }
             cell.appendChild(cellinput);
             rowHtml.appendChild(cell);
@@ -54,7 +55,7 @@ function openStudentPicker(input) {
     studentSelectionPopup.style.top = bounds.top + "px";
     studentSelectionPopup.style.left = bounds.left + "px";
     studentSelectionPopup.style.display = "block";
-    studentSearchbar.click();
+    studentSearchbar.focus();
     setTimeout(function () { document.addEventListener("mousedown", closeStudentPicker); });
 }
 function closeStudentPicker(e) {
@@ -62,5 +63,17 @@ function closeStudentPicker(e) {
         return;
     studentSelectionPopup.style.display = "none";
     document.removeEventListener("mousedown", closeStudentPicker);
+}
+function searchForStudent() {
+    fetch(applicationURL + '/equipment/create', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'text/plain'
+        },
+        body: JSON.stringify({ name: 'Lumix S5ii' })
+    })
+        .then(function (response) { return response.text(); })
+        .then(function (data) { return console.log(data); })
+        .catch(function (error) { return console.error(error); });
 }
 //# sourceMappingURL=index.js.map
