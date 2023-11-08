@@ -11,7 +11,8 @@ public class Student {
     @GeneratedValue
     private int student_id;
     
-    private String name;
+    private String firstname;
+    private String lastname;
     private String school_class;
     private String password;
     private String user_id;
@@ -19,28 +20,32 @@ public class Student {
     public Student() {
     }
 
-    public Student(String name, String schoolclass, String password, String userid) {
-        this.name = name;
-        this.school_class = schoolclass;
-        setPassword(password);
-        this.user_id = userid;
-    }
-
-    @Override
-    public String toString() {
-        return name;
+    public Student(String firstname, String lastname, String school_class, String password, String user_id) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.school_class = school_class;
+        this.password = password;
+        this.user_id = user_id;
     }
 
     public int getStudent_id() {
         return student_id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public String getSchool_class() {
