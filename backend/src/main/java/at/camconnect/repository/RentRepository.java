@@ -15,6 +15,7 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 
 import java.sql.Date;
+import java.sql.SQLOutput;
 import java.util.List;
 
 @ApplicationScoped
@@ -44,6 +45,7 @@ public class RentRepository {
     @Transactional
     public void update(JsonObject rent){
         Student student = getStudentById(rent.getInt("student_id"));
+        System.out.println(rent.getInt("teacher_id"));
         Teacher teacher = getTeacherById(rent.getInt("teacher_id"));
         Device device = getDeviceById(rent.getInt("device_id"));
 
@@ -51,13 +53,13 @@ public class RentRepository {
         rent1.setStudent(student);
         rent1.setTeacher(teacher);
         rent1.setDevice(device);
-        rent1.setNotes(rent.getString("notes"));
+        rent1.setNotes(rent.getString("note"));
 
         em.merge(rent1);
     }
 
     public List<Rent> getAll(){
-        Query q = em.createNativeQuery("SELECT rent_id, student_id, device_id, teacher_id, rent_start, rent_end_planned, rent_end_actual FROM Rent");
+        Query q = em.createNativeQuery("SELECT rent_id, student_id, device_id, teacher_id, rent_start, rent_end_planned, rent_end_actual, notes FROM Rent");
         List<Rent> results = q.getResultList();
         return results;
     }

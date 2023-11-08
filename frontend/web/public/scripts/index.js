@@ -22,7 +22,7 @@ function requestAllStudents() {
         .catch(function (error) { return console.error(error); });
 }
 function requestAllTeachers() {
-    allStudents = [];
+    allTeachers = [];
     fetch(APPLICATION_URL + "/teacher/getall")
         .then(function (result) {
         console.log(result);
@@ -69,7 +69,7 @@ var columns = [
     { name: "Anmerkung", inputType: "text", cellType: "note" },
 ];
 function generateTable() {
-    var _a, _b;
+    var _a;
     var headingHtml = document.createElement("tr");
     columns.forEach(function (column) {
         var headRow = document.createElement("th");
@@ -82,10 +82,9 @@ function generateTable() {
     var html = [];
     var _loop_1 = function (i) {
         var row = document.createElement("tr");
-        console.log(String((_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id));
-        row.setAttribute("rent_id", String((_b = allRents[i]) === null || _b === void 0 ? void 0 : _b.rent_id));
+        row.setAttribute("rent_id", String((_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id));
         columns.forEach(function (column) {
-            var _a, _b;
+            var _a, _b, _c, _d, _e;
             var cell = document.createElement("td");
             var cellinput = document.createElement("input");
             cellinput.type = column.inputType;
@@ -95,9 +94,19 @@ function generateTable() {
                     cellinput.setAttribute("min", "0");
                     break;
             }
-            if (column.cellType === "student_id") {
-                cellinput.addEventListener("mouseup", function () { openStudentPicker(cellinput); });
-                cellinput.value = (_b = findStudentById((_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.student_id)) === null || _b === void 0 ? void 0 : _b.firstname;
+            switch (column.cellType) {
+                case "student_id":
+                    cellinput.addEventListener("mouseup", function () { openStudentPicker(cellinput); });
+                    cellinput.value = (_b = findStudentById((_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.student_id)) === null || _b === void 0 ? void 0 : _b.firstname;
+                    break;
+                case "teacherRent":
+                case "teacherReturn":
+                    cellinput.value = (_d = findTeacherById((_c = allRents[i]) === null || _c === void 0 ? void 0 : _c.teacher_id)) === null || _d === void 0 ? void 0 : _d.firstname;
+                    break;
+                case "note":
+                    cellinput.addEventListener("blur", function () { updateNote(cellinput); });
+                    cellinput.value = (_e = allRents[i]) === null || _e === void 0 ? void 0 : _e.note;
+                    break;
             }
             cell.appendChild(cellinput);
             row.appendChild(cell);
@@ -147,7 +156,7 @@ function searchForStudentFromSelectInput(inputValue) {
             var selectionOption = document.createElement('p');
             selectionOption.innerText = student[1] + " " + student[2];
             selectionOption.setAttribute("student_id", student[0]);
-            selectionOption.addEventListener("click", function () { setStudent(selectionOption); });
+            selectionOption.addEventListener("click", function () { updateStudent(selectionOption); });
             html.push(selectionOption);
         });
         if (html.length === 0) {
@@ -160,10 +169,28 @@ function searchForStudentFromSelectInput(inputValue) {
     })
         .catch(function (error) { return console.error(error); });
 }
-function setStudent(clickedOption) {
+function updateStudent(clickedOption) {
     var affectedRent = findRentById(editingRentId);
     affectedRent.student_id = Number(clickedOption.getAttribute("student_id"));
-    console.log(affectedRent);
+    fetch(APPLICATION_URL + '/rent/update', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(affectedRent)
+    })
+        .then(function (response) { return response.text(); })
+        .then(function (data) {
+        console.log(data);
+        requestAllRents();
+        closeStudentPicker();
+    })
+        .catch(function (error) { return console.error(error); });
+}
+function updateNote(input) {
+    editingRentId = Number(input.closest("tr").getAttribute("rent_id"));
+    var affectedRent = findRentById(editingRentId);
+    affectedRent.note = input.value;
     fetch(APPLICATION_URL + '/rent/update', {
         method: 'POST',
         headers: {
@@ -203,7 +230,8 @@ function rentArrayToJson(array) {
         teacher_id: Number(array[3]),
         rent_start: array[4],
         rent_end_planned: array[5],
-        rent_end_actual: array[6]
+        rent_end_actual: array[6],
+        note: array[7]
     };
     return json;
 }
@@ -243,6 +271,15 @@ function findStudentById(id) {
     allStudents.forEach(function (student) {
         if (student.student_id == id) {
             res = student;
+        }
+    });
+    return res;
+}
+function findTeacherById(id) {
+    var res = null;
+    allTeachers.forEach(function (teacher) {
+        if (teacher.teacher_id == id) {
+            res = teacher;
         }
     });
     return res;

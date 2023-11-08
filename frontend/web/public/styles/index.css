@@ -119,6 +119,7 @@ table input:focus-visible {
 #studentSelectionPopup .studentList p {
   padding: 0.2rem;
   color: #262626;
+  cursor: pointer;
 }
 #studentSelectionPopup .studentList .noResults {
   color: gray;

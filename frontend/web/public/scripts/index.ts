@@ -28,7 +28,7 @@ function requestAllStudents() {
         .catch(error => console.error(error))
 }
 function requestAllTeachers() {
-    allStudents = []
+    allTeachers = []
     fetch(APPLICATION_URL + "/teacher/getall")
         .then(result => {
             console.log(result)
@@ -94,7 +94,8 @@ interface Rent {
     teacher_id: number,
     rent_start: string,
     rent_end_planned: string,
-    rent_end_actual: string
+    rent_end_actual: string,
+    note: string
 }
 
 //region generate table
@@ -134,7 +135,6 @@ function generateTable(){
     let html:Element[] = []
     for (let i = 0; i < Math.min(allRents.length, 21); i++) {
         let row = document.createElement("tr")
-        console.log(String(allRents[i]?.rent_id))
         row.setAttribute("rent_id", String(allRents[i]?.rent_id))
 
         columns.forEach(column=>{
@@ -150,10 +150,21 @@ function generateTable(){
                     break
             }
 
-            if(column.cellType === "student_id"){
-                cellinput.addEventListener("mouseup", () => {openStudentPicker(cellinput)})
-                cellinput.value = findStudentById(allRents[i]?.student_id)?.firstname
+            switch (column.cellType) {
+                case "student_id":
+                    cellinput.addEventListener("mouseup", () => {openStudentPicker(cellinput)})
+                    cellinput.value = findStudentById(allRents[i]?.student_id)?.firstname
+                    break
+                case "teacherRent":
+                case "teacherReturn":
+                    cellinput.value = findTeacherById(allRents[i]?.teacher_id)?.firstname
+                    break
+                case "note":
+                    cellinput.addEventListener("blur", () => {updateNote(cellinput)})
+                    cellinput.value = allRents[i]?.note
+                    break
             }
+
             cell.appendChild(cellinput)
 
             row.appendChild(cell)
@@ -216,7 +227,7 @@ function searchForStudentFromSelectInput(inputValue:string){
                 let selectionOption = document.createElement('p');
                 selectionOption.innerText = student[1] + " " + student[2]
                 selectionOption.setAttribute("student_id", student[0])
-                selectionOption.addEventListener("click", ()=>{setStudent(selectionOption)})
+                selectionOption.addEventListener("click", ()=>{updateStudent(selectionOption)})
                 html.push(selectionOption)
             })
             if(html.length === 0) {
@@ -231,10 +242,30 @@ function searchForStudentFromSelectInput(inputValue:string){
         .catch(error => console.error(error));
 }
 
-function setStudent(clickedOption:HTMLElement){
+function updateStudent(clickedOption:HTMLElement){
     let affectedRent:Rent = findRentById(editingRentId)
     affectedRent.student_id = Number(clickedOption.getAttribute("student_id"))
-    console.log(affectedRent)
+
+    fetch(APPLICATION_URL + '/rent/update', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(affectedRent)
+    })
+        .then(response => response.text())
+        .then(data => {
+            console.log(data)
+            requestAllRents()
+            closeStudentPicker()
+        })
+        .catch(error => console.error(error));
+}
+
+function updateNote(input:HTMLInputElement){
+    editingRentId = Number(input.closest("tr").getAttribute("rent_id"))
+    let affectedRent:Rent = findRentById(editingRentId)
+    affectedRent.note = input.value
 
     fetch(APPLICATION_URL + '/rent/update', {
         method: 'POST',
@@ -272,7 +303,7 @@ function createRent(){
 }
 
 //region utlity
-function rentArrayToJson(array: any[]):Rent {
+function rentArrayToJson(array: any[]):Rent{
     let json:Rent = {
         rent_id: Number(array[0]),
         student_id: Number(array[1]),
@@ -280,7 +311,8 @@ function rentArrayToJson(array: any[]):Rent {
         teacher_id: Number(array[3]),
         rent_start: array[4],
         rent_end_planned: array[5],
-        rent_end_actual: array[6]
+        rent_end_actual: array[6],
+        note: array[7]
     }
     return json
 }
@@ -324,6 +356,16 @@ function findStudentById(id:number):Student {
     allStudents.forEach(student => {
         if(student.student_id == id){
             res = student;
+        }
+    })
+    return res
+}
+
+function findTeacherById(id:number):Teacher {
+    let res = null
+    allTeachers.forEach(teacher => {
+        if(teacher.teacher_id == id){
+            res = teacher;
         }
     })
     return res
