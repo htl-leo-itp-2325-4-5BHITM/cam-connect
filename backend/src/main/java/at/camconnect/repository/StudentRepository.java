@@ -30,7 +30,7 @@ public class StudentRepository{
     }
 
     public List<Student> search(JsonObject searchParams){
-        Query q = em.createQuery("SELECT firstname, lastname FROM Student s WHERE upper(s.firstname) LIKE :firstname || '%' ")
+        Query q = em.createQuery("SELECT student_id, firstname, lastname FROM Student s WHERE upper(s.firstname) LIKE :firstname || '%' ")
                 .setParameter("firstname", searchParams.getString("firstname").toUpperCase())
                 .setMaxResults(10);
         List<Student> results = q.getResultList();

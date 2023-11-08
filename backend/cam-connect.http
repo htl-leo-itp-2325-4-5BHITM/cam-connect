@@ -18,4 +18,4 @@ GET http://localhost:8080/student/getall
 ###
 POST http://localhost:8080/student/search/
 
-{"firstname": "max")
+{"firstname": "max"}

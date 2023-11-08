@@ -6,7 +6,6 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Student {
-    
     @Id
     @GeneratedValue
     private int student_id;

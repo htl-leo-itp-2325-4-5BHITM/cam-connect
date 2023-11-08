@@ -91,7 +91,8 @@ function generateTable(rowCount: number){
 //region student search and selection
 const studentSelectionPopup:HTMLElement = document.querySelector("#studentSelectionPopup")
 const studentSearchbar:HTMLElement = document.querySelector('#studentSelectionPopup .search')
-function openStudentPicker(input:Element){
+function openStudentPicker(input:HTMLInputElement){
+    input.value = ""
     let bounds = input.getBoundingClientRect()
     studentSelectionPopup.style.top = bounds.top + "px"
     studentSelectionPopup.style.left = bounds.left + "px"
@@ -122,16 +123,7 @@ interface Student {
  * @param inputValue
  */
 function searchForStudentFromSelectInput(inputValue:String){
-    fetch(APPLICATION_URL + "/student/search/")
-        .then(result => {
-            return result.json()
-        })
-        .then(data => {
-            let students:Student[] = data
-            data.for
-        })
-
-    fetch(APPLICATION_URL + '/student/create', {
+    fetch(APPLICATION_URL + '/student/search', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -141,12 +133,19 @@ function searchForStudentFromSelectInput(inputValue:String){
         .then(response => response.json())
         .then(data => {
             let html:HTMLElement[] = []
-            let students:Student[] = data
-            students.forEach(student => {
+            data.forEach((student: string[]) => {
                 let selectionOption = document.createElement('p');
-                selectionOption.innerText = student.firstname + " " + student.lastname
+                selectionOption.innerText = student[1] + " " + student[2]
+                selectionOption.setAttribute("student_id", student[0])
+                html.push(selectionOption)
             })
-            studentSelectionPopup.querySelector(".studentList").append(...html)
+            if(html.length === 0) {
+                let noResults = document.createElement('p');
+                noResults.classList.add("noResults")
+                noResults.innerText = "Keine Ergebnisse"
+                html.push(noResults)
+            }
+            studentSelectionPopup.querySelector(".studentList").replaceChildren(...html)
         })
         .catch(error => console.error(error));
 }

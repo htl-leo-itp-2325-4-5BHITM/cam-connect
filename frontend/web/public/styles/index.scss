@@ -106,21 +106,33 @@ table{
 #studentSelectionPopup{
   border-radius: .5rem;
   position: absolute;
-  width: 10vw;
+  width: 15vw;
   background-color: #f2f2f2;
   min-height: 10vh;
   box-shadow: 0 0 .2rem .1rem rgba(0, 0, 0, 0.2);
   display: none;
-
 
   .search{
     background-color: lightgrey;
     width: 100%;
     border: none;
     outline: none;
-    padding: .2rem;
-    font-size: .8rem;
+    padding: .4rem .2rem;
+    font-size: .9rem;
     box-sizing: border-box;
     box-shadow: 0 .1rem .2rem rgba(0, 0, 0, 0.3);
+  }
+}
+
+#studentSelectionPopup .studentList{
+  font-size: .9rem;
+
+  p{
+    padding: .2rem;
+    color: #262626;
+  }
+
+  .noResults{
+    color: gray;
   }
 }

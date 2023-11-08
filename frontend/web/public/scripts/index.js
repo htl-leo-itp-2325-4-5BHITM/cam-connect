@@ -51,6 +51,7 @@ function generateTable(rowCount) {
 var studentSelectionPopup = document.querySelector("#studentSelectionPopup");
 var studentSearchbar = document.querySelector('#studentSelectionPopup .search');
 function openStudentPicker(input) {
+    input.value = "";
     var bounds = input.getBoundingClientRect();
     studentSelectionPopup.style.top = bounds.top + "px";
     studentSelectionPopup.style.left = bounds.left + "px";
@@ -65,15 +66,7 @@ function closeStudentPicker(e) {
     document.removeEventListener("mousedown", closeStudentPicker);
 }
 function searchForStudentFromSelectInput(inputValue) {
-    fetch(APPLICATION_URL + "/student/search/")
-        .then(function (result) {
-        return result.json();
-    })
-        .then(function (data) {
-        var students = data;
-        data.for;
-    });
-    fetch(APPLICATION_URL + '/student/create', {
+    fetch(APPLICATION_URL + '/student/search', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -84,12 +77,19 @@ function searchForStudentFromSelectInput(inputValue) {
         .then(function (data) {
         var _a;
         var html = [];
-        var students = data;
-        students.forEach(function (student) {
+        data.forEach(function (student) {
             var selectionOption = document.createElement('p');
-            selectionOption.innerText = student.firstname + " " + student.lastname;
+            selectionOption.innerText = student[1] + " " + student[2];
+            selectionOption.setAttribute("student_id", student[0]);
+            html.push(selectionOption);
         });
-        (_a = studentSelectionPopup.querySelector(".studentList")).append.apply(_a, html);
+        if (html.length === 0) {
+            var noResults = document.createElement('p');
+            noResults.classList.add("noResults");
+            noResults.innerText = "Keine Ergebnisse";
+            html.push(noResults);
+        }
+        (_a = studentSelectionPopup.querySelector(".studentList")).replaceChildren.apply(_a, html);
     })
         .catch(function (error) { return console.error(error); });
 }

@@ -31,6 +31,7 @@ public class StudentRessource {
     @Path("/search")
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
+    @Produces(MediaType.APPLICATION_JSON)
     public List<Student> search(JsonObject data){
         return studentRepository.search(data);
     }
