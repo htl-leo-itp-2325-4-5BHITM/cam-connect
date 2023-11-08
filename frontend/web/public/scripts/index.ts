@@ -1,8 +1,8 @@
-const applicationURL:String = "http://localhost:8080"
+const APPLICATION_URL:String = "http://localhost:8080"
 
 //region test
 /*
-fetch('http://localhost:8080/equipment/create', {
+fetch(APPLICATION_URL + '/equipment/create', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -13,7 +13,7 @@ fetch('http://localhost:8080/equipment/create', {
     .then(data => console.log(data))
     .catch(error => console.error(error));
 
- fetch("http://localhost:8080/equipment/getbyid/1/getname")
+ fetch(APPLICATION_URL + "/equipment/getbyid/1/getname")
      .then(result => {
          console.log(result)
          return result.text()
@@ -117,8 +117,12 @@ interface Student {
     user_id: number
 }
 
-function searchForStudent(key:String){
-    fetch(applicationURL + "/student/searchbykey/" + key)
+/**
+ * fetches a list of student names that start with the entered phrase and displays them to the user to select
+ * @param inputValue
+ */
+function searchForStudentFromSelectInput(inputValue:String){
+    fetch(APPLICATION_URL + "/student/search/")
         .then(result => {
             return result.json()
         })
@@ -126,5 +130,24 @@ function searchForStudent(key:String){
             let students:Student[] = data
             data.for
         })
+
+    fetch(APPLICATION_URL + '/student/create', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({firstname: inputValue})
+    })
+        .then(response => response.json())
+        .then(data => {
+            let html:HTMLElement[] = []
+            let students:Student[] = data
+            students.forEach(student => {
+                let selectionOption = document.createElement('p');
+                selectionOption.innerText = student.firstname + " " + student.lastname
+            })
+            studentSelectionPopup.querySelector(".studentList").append(...html)
+        })
+        .catch(error => console.error(error));
 }
 //endregion

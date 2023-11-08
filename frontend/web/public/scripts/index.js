@@ -1,4 +1,4 @@
-var applicationURL = "http://localhost:8080";
+var APPLICATION_URL = "http://localhost:8080";
 var columns = [
     { name: "Gerät Nr.", inputType: "number", cellType: "nr" },
     { name: "Zubehör", inputType: "text", cellType: "extras" },
@@ -64,8 +64,8 @@ function closeStudentPicker(e) {
     studentSelectionPopup.style.display = "none";
     document.removeEventListener("mousedown", closeStudentPicker);
 }
-function searchForStudent(key) {
-    fetch(applicationURL + "/student/searchbykey/" + key)
+function searchForStudentFromSelectInput(inputValue) {
+    fetch(APPLICATION_URL + "/student/search/")
         .then(function (result) {
         return result.json();
     })
@@ -73,5 +73,24 @@ function searchForStudent(key) {
         var students = data;
         data.for;
     });
+    fetch(APPLICATION_URL + '/student/create', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ firstname: inputValue })
+    })
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+        var _a;
+        var html = [];
+        var students = data;
+        students.forEach(function (student) {
+            var selectionOption = document.createElement('p');
+            selectionOption.innerText = student.firstname + " " + student.lastname;
+        });
+        (_a = studentSelectionPopup.querySelector(".studentList")).append.apply(_a, html);
+    })
+        .catch(function (error) { return console.error(error); });
 }
 //# sourceMappingURL=index.js.map

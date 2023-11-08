@@ -18,7 +18,6 @@
     entity DroneType {
         --
         * sensor: String
-        * mount (myb extra table)
         * resolution
         * maxRange
     }
