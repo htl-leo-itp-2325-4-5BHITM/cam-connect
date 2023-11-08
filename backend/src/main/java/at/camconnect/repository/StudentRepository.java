@@ -35,6 +35,13 @@ public class StudentRepository{
         return em.find(Student.class, id);
     }
 
+
+    /*public Student getById(long id){
+        Query q = em.createNativeQuery("SELECT * FROM Student where student_id = " + id);
+        Student result = (Student) q.getSingleResult();
+        return result;
+    }*/
+
     public List<Student> getAll(){
         Query q = em.createNativeQuery("SELECT * FROM Student");
         List<Student> results = q.getResultList();

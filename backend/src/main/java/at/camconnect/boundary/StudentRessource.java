@@ -46,6 +46,7 @@ public class StudentRessource {
 
     @GET
     @Path("/getbyid/{id: [0-9]+}")
+
     public Student getById(@PathParam("id")long id) {
         return studentRepository.getById(id);
     }
