@@ -8,7 +8,7 @@ import java.util.Date;
 public class Rent {
     @Id
     @GeneratedValue
-    private int rentId;
+    private int rent_id;
 
     @ManyToOne
     @JoinColumn(name = "studentId")
@@ -22,30 +22,30 @@ public class Rent {
     @JoinColumn(name = "teacherId")
     private Teacher teacher;
 
-    private Date rentStart;
-    private Date rentEndPlanned;
-    private Date rentEndActual;
+    private Date rent_start;
+    private Date rent_end_planned;
+    private Date rent_end_actual;
 
     public Rent() {
     }
 
     public Rent(Date rentStart, Date rentEndPlanned, Date rentEndActual) {
-        this.rentStart = rentStart;
-        this.rentEndPlanned = rentEndPlanned;
-        this.rentEndActual = rentEndActual;
+        this.rent_start = rentStart;
+        this.rent_end_planned = rentEndPlanned;
+        this.rent_end_actual = rentEndActual;
     }
 
     public Rent(Student student, Device device, Teacher teacher, Date rentStart, Date rentEndPlanned, Date rentEndActual) {
         this.student = student;
         this.device = device;
         this.teacher = teacher;
-        this.rentStart = rentStart;
-        this.rentEndPlanned = rentEndPlanned;
-        this.rentEndActual = rentEndActual;
+        this.rent_start = rentStart;
+        this.rent_end_planned = rentEndPlanned;
+        this.rent_end_actual = rentEndActual;
     }
 
-    public int getRentId() {
-        return rentId;
+    public int getRent_id() {
+        return rent_id;
     }
 
     public Student getStudent() {
@@ -72,27 +72,27 @@ public class Rent {
         this.teacher = teacher;
     }
 
-    public Date getRentStart() {
-        return rentStart;
+    public Date getRent_start() {
+        return rent_start;
     }
 
-    public void setRentStart(Date rentStart) {
-        this.rentStart = rentStart;
+    public void setRent_start(Date rentStart) {
+        this.rent_start = rentStart;
     }
 
-    public Date getRentEndPlanned() {
-        return rentEndPlanned;
+    public Date getRent_end_planned() {
+        return rent_end_planned;
     }
 
-    public void setRentEndPlanned(Date rentEndPlanned) {
-        this.rentEndPlanned = rentEndPlanned;
+    public void setRent_end_planned(Date rentEndPlanned) {
+        this.rent_end_planned = rentEndPlanned;
     }
 
-    public Date getRentEndActual() {
-        return rentEndActual;
+    public Date getRent_end_actual() {
+        return rent_end_actual;
     }
 
-    public void setRentEndActual(Date rentEndActual) {
-        this.rentEndActual = rentEndActual;
+    public void setRent_end_actual(Date rentEndActual) {
+        this.rent_end_actual = rentEndActual;
     }
 }

@@ -9,32 +9,42 @@ public class Teacher {
 
     @Id
     @GeneratedValue
-    private int teacherId;
-    private String name;
+    private int teacher_id;
+    private String firstname;
+    private String lastname;
     private String verification;
     private String password;
-    private String userId;
+    private String user_id;
 
     public Teacher() {
     }
 
-    public Teacher(String name, String verification, String password, String userId) {
-        this.name = name;
+    public Teacher(String firstname, String lastname, String verification, String password, String user_id) {
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.verification = verification;
         this.password = password;
-        this.userId = userId;
+        this.user_id = user_id;
     }
 
-    public int getTeacherId() {
-        return teacherId;
+    public int getTeacher_id() {
+        return teacher_id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public String getVerification() {
@@ -53,11 +63,11 @@ public class Teacher {
         this.password = password;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUser_id() {
+        return user_id;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUser_id(String userId) {
+        this.user_id = userId;
     }
 }
