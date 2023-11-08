@@ -5,15 +5,15 @@ import at.camconnect.model.DeviceType;
 import jakarta.persistence.Entity;
 
 @Entity
-public class TripodType extends Device {
+public class TripodType extends DeviceType {
     private double height;
     private String head;
 
     public TripodType() {
     }
 
-    public TripodType(String serial, String note, double height, String head) {
-        super(serial, note);
+    public TripodType(String typeName, long typeId, double height, String head) {
+        super(typeName, typeId);
         this.height = height;
         this.head = head;
     }

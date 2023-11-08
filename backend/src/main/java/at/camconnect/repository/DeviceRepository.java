@@ -38,7 +38,7 @@ public class DeviceRepository {
     }
 
     public List<Device> getAll(){
-        Query q = em.createNativeQuery("SELECT * FROM Device");
+        Query q = em.createNativeQuery("SELECT device_id, height, dtype, head, note, serial FROM Device");
         List<Device> results = q.getResultList();
         return results;
     }
