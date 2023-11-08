@@ -15,7 +15,6 @@ import static org.hamcrest.CoreMatchers.is;
 
 public class RentTest {
     JsonObject student1 = Json.createObjectBuilder().add("firstname", "Yanik").add("lastname", "Kendler").add("school_class", "4BHITM").add("password", "1234").add("user_id", "it200272").build();
-    JsonObject student2 = Json.createObjectBuilder().add("firstname", "Leon").add("lastname", "Steinhuber").add("school_class", "4BHITM").add("password", "1234").add("user_id", "it200273").build();
     JsonObject teacher1 = Json.createObjectBuilder().add("firstname", "Erich").add("lastname", "Baar").add("verification", "").add("password", "1234").add("user_id", "it200274").build();
     JsonObject device1 = Json.createObjectBuilder().add("serial", "Camera").add("note", "nothing").build();
     JsonObject rent1 = Json.createObjectBuilder().add("student_id", "1").build();
@@ -55,6 +54,14 @@ public class RentTest {
                 .when()
                 .body(student1.toString())
                 .post("student/create")
+                .then()
+                .statusCode(200);
+
+        given()
+                .contentType("application/json")
+                .when()
+                .body(device1.toString())
+                .post("device/create")
                 .then()
                 .statusCode(200);
 
