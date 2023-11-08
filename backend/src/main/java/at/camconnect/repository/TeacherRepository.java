@@ -37,7 +37,7 @@ public class TeacherRepository {
     }
 
     public List<Teacher> getAll(){
-        Query q = em.createNativeQuery("SELECT * FROM Teacher");
+        Query q = em.createNativeQuery("SELECT teacher_id, firstname, lastname, verification, password, user_id FROM Teacher");
         List<Teacher> results = q.getResultList();
         return results;
     }

@@ -28,7 +28,7 @@ public class RentRessource {
     }
 
     @POST
-    @Path("/createEmpty")
+    @Path("/createempty")
     @Transactional
     public Response createRentEmpty (){
         rentRepository.createEmpty();
