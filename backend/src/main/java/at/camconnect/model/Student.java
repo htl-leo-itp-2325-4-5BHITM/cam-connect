@@ -3,35 +3,36 @@ package at.camconnect.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.NamedQuery;
-
-import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 public class Student {
     
     @Id
     @GeneratedValue
-    private int studentId;
+    private int student_id;
     
     private String name;
-    private String schoolClass;
+    private String school_class;
     private String password;
-    private String userId;
+    private String user_id;
 
     public Student() {
     }
 
-    public Student(String name, String schoolClass, String password, String userId) {
+    public Student(String name, String schoolclass, String password, String userid) {
         this.name = name;
-        this.schoolClass = schoolClass;
+        this.school_class = schoolclass;
         setPassword(password);
-        this.userId = userId;
+        this.user_id = userid;
     }
 
-    public int getStudentId() {
-        return studentId;
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    public int getStudent_id() {
+        return student_id;
     }
 
     public String getName() {
@@ -42,12 +43,12 @@ public class Student {
         this.name = name;
     }
 
-    public String getSchoolClass() {
-        return schoolClass;
+    public String getSchool_class() {
+        return school_class;
     }
 
-    public void setSchoolClass(String schoolClass) {
-        this.schoolClass = schoolClass;
+    public void setSchool_class(String schoolclass) {
+        this.school_class = schoolclass;
     }
 
     public String getPassword() {
@@ -60,10 +61,10 @@ public class Student {
     }
 
     public String getUserId() {
-        return userId;
+        return user_id;
     }
 
     public void setUserId(String userId) {
-        this.userId = userId;
+        this.user_id = userId;
     }
 }
