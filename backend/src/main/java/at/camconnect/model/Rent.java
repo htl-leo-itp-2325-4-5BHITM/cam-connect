@@ -1,5 +1,6 @@
 package at.camconnect.model;
 
+import at.camconnect.repository.StudentRepository;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -11,15 +12,15 @@ public class Rent {
     private int rent_id;
 
     @ManyToOne
-    @JoinColumn(name = "studentId")
+    @JoinColumn(name = "student_id")
     private Student student;
 
     @ManyToOne
-    @JoinColumn(name = "deviceId")
+    @JoinColumn(name = "device_id")
     private Device device;
 
     @ManyToOne
-    @JoinColumn(name = "teacherId")
+    @JoinColumn(name = "teacher_id")
     private Teacher teacher;
 
     private Date rent_start;
@@ -29,7 +30,8 @@ public class Rent {
     public Rent() {
     }
 
-    public Rent(Date rentStart, Date rentEndPlanned, Date rentEndActual) {
+    public Rent(Student student, Date rentStart, Date rentEndPlanned, Date rentEndActual) {
+        this.student = student;
         this.rent_start = rentStart;
         this.rent_end_planned = rentEndPlanned;
         this.rent_end_actual = rentEndActual;
