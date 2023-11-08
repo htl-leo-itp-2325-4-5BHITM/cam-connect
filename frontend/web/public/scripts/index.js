@@ -1,6 +1,7 @@
 var APPLICATION_URL = "http://localhost:8080";
 var allRents = [];
 var allStudents = [];
+var allTeachers = [];
 var editingRentId = -1;
 requestAllStudents();
 function requestAllStudents() {
@@ -15,6 +16,23 @@ function requestAllStudents() {
         var html = [];
         data.forEach(function (student) {
             allStudents.push(studentArrayToJson(student));
+        });
+        requestAllTeachers();
+    })
+        .catch(function (error) { return console.error(error); });
+}
+function requestAllTeachers() {
+    allStudents = [];
+    fetch(APPLICATION_URL + "/teacher/getall")
+        .then(function (result) {
+        console.log(result);
+        return result.json();
+    })
+        .then(function (data) {
+        console.log(data);
+        var html = [];
+        data.forEach(function (teacher) {
+            allTeachers.push(teacherArrayToJson(teacher));
         });
         requestAllRents();
     })
@@ -86,7 +104,7 @@ function generateTable() {
         });
         html.push(row);
     };
-    for (var i = 0; i < allRents.length; i++) {
+    for (var i = 0; i < Math.min(allRents.length, 21); i++) {
         _loop_1(i);
     }
     table.append.apply(table, html);
@@ -162,7 +180,7 @@ function setStudent(clickedOption) {
         .catch(function (error) { return console.error(error); });
 }
 function createRent() {
-    fetch(APPLICATION_URL + '/rent/create', {
+    fetch(APPLICATION_URL + '/rent/createempty', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -195,6 +213,17 @@ function studentArrayToJson(array) {
         firstname: array[1],
         lastname: array[2],
         school_class: array[3],
+        password: array[4],
+        user_id: array[5]
+    };
+    return json;
+}
+function teacherArrayToJson(array) {
+    var json = {
+        teacher_id: array[0],
+        firstname: array[1],
+        lastname: array[2],
+        verification: array[3],
         password: array[4],
         user_id: array[5]
     };
