@@ -15,30 +15,55 @@ public class Student {
     @GeneratedValue
     private int studentId;
     
-    private String firstname;
-    private String lastname;
-
-    public Student(String firstname, String lastname) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-    }
+    private String name;
+    private String schoolClass;
+    private String password;
+    private String userId;
 
     public Student() {
     }
 
-    public String getFirstname() {
-        return firstname;
+    public Student(String name, String schoolClass, String password, String userId) {
+        this.name = name;
+        this.schoolClass = schoolClass;
+        setPassword(password);
+        this.userId = userId;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public int getStudentId() {
+        return studentId;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getName() {
+        return name;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSchoolClass() {
+        return schoolClass;
+    }
+
+    public void setSchoolClass(String schoolClass) {
+        this.schoolClass = schoolClass;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        //TODO encrypt the password
+        this.password = password;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

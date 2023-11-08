@@ -1,34 +1,75 @@
 package at.camconnect.model;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.Date;
 
+@Entity
 public class Rent {
     @Id
     @GeneratedValue
     private int rentId;
+
+    @ManyToOne
+    @JoinColumn(name = "studentId")
+    private Student student;
+
+    @ManyToOne
+    @JoinColumn(name = "deviceId")
+    private Device device;
+
+    @ManyToOne
+    @JoinColumn(name = "teacherId")
+    private Teacher teacher;
+
     private Date rentStart;
-    private Date rentEndActual;
     private Date rentEndPlanned;
+    private Date rentEndActual;
 
-    private Device deviceId;
+    public Rent() {
+    }
 
-    public Rent(int rentId, Date rentStart, Date rentEndPlanned, Date rentEndActual, Device deviceId) {
-        this.rentId = rentId;
+    public Rent(Date rentStart, Date rentEndPlanned, Date rentEndActual) {
         this.rentStart = rentStart;
         this.rentEndPlanned = rentEndPlanned;
         this.rentEndActual = rentEndActual;
-        this.deviceId = deviceId;
+    }
+
+    public Rent(Student student, Device device, Teacher teacher, Date rentStart, Date rentEndPlanned, Date rentEndActual) {
+        this.student = student;
+        this.device = device;
+        this.teacher = teacher;
+        this.rentStart = rentStart;
+        this.rentEndPlanned = rentEndPlanned;
+        this.rentEndActual = rentEndActual;
     }
 
     public int getRentId() {
         return rentId;
     }
 
-    public void setRentId(int rentId) {
-        this.rentId = rentId;
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public Device getDevice() {
+        return device;
+    }
+
+    public void setDevice(Device device) {
+        this.device = device;
+    }
+
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
     }
 
     public Date getRentStart() {
@@ -45,10 +86,6 @@ public class Rent {
 
     public void setRentEndPlanned(Date rentEndPlanned) {
         this.rentEndPlanned = rentEndPlanned;
-    }
-
-    public Device getDeviceId() {
-        return deviceId;
     }
 
     public Date getRentEndActual() {

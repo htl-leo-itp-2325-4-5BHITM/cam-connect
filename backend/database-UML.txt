@@ -1,0 +1,135 @@
+@startuml
+   skinparam linetype ortho
+
+   entity DeviceType {
+        * typeId
+        --
+        * typeName string
+        * tagid
+    }
+
+    entity CameraType {
+        --
+        * sensor: String
+        * mount (myb extra table)
+        * resolution
+    }
+
+    entity DroneType {
+        --
+        * sensor: String
+        * mount (myb extra table)
+        * resolution
+        * maxRange
+    }
+
+    entity LensType {
+        --
+        * f-stop: string
+        * mount (myb extra table)
+        * focal lenght
+    }
+
+    entity AudioType {
+        --
+        * windblocker: boolean
+        * wireless: boolean
+        * needsRecorder: boolean
+    }
+
+    entity LightType {
+        --
+        * watts: int
+        * RGB: boolean
+        * variableTemperature: boolean
+    }
+
+    entity TripodType {
+        --
+        * height
+        * head
+    }
+
+    entity StabilizerType {
+        --
+        * maxWeight: Int
+        * numberOfAxis: Int
+    }
+
+    CameraType -up-|> DeviceType
+    AudioType -up-|> DeviceType
+    LightType -up-|> DeviceType
+    TripodType -up-|> DeviceType
+    StabilizerType -up-|> DeviceType
+    LensType -up-|> DeviceType
+    DroneType -up-|> DeviceType
+
+    entity Device {
+        * deviceId
+        --
+        * serial: String
+        * note: String
+    }
+
+    entity Rent {
+        * rentId
+        --
+        * deviceId: Int
+        * studentId: Int
+        * teacherId: Int
+        * rentStart: Date
+        * rentEndPlanned: Date
+        * rentEndActual: Date
+    }
+
+   entity Favorite {
+        * favId
+        --
+        * deviceId: Int
+        * studentId: Int
+    }
+
+    entity Tag {
+        * tagId
+        --
+        * typeId: Int
+        * description: string
+    }
+
+    entity Student {
+        * studentId
+        --
+        * name: string
+        * class: string
+        * password
+        * userid
+    }
+
+    entity Teacher {
+        * teacherId
+        --
+        * name: string
+        * verfication: string
+        * password
+        * userId
+    }
+
+     entity Set {
+            * teacherId
+            --
+            * name: string
+            * verfication: string
+            * password
+            * userId
+        }
+
+    Device }o-down-|| DeviceType
+    DeviceType }o-left-|{ Set
+    Rent }o--|| Device
+    Rent }o-up-|| Student
+    Rent }o--|| Set
+    Rent }o--|| Student
+    Favorite }o--|| Student
+    Rent }o--|| Teacher
+    DeviceType ||-right-o{ Tag
+@enduml

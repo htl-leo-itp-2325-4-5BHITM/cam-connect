@@ -1,34 +1,63 @@
 package at.camconnect.model;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
+@Entity
 public class Teacher {
 
     @Id
     @GeneratedValue
     private int teacherId;
-    private String firstname;
-    private String lastname;
+    private String name;
+    private String verification;
+    private String password;
+    private String userId;
 
-    public Teacher(String firstname, String lastname) {
-        this.firstname = firstname;
-        this.lastname = lastname;
+    public Teacher() {
     }
 
-    public String getFirstname() {
-        return firstname;
+    public Teacher(String name, String verification, String password, String userId) {
+        this.name = name;
+        this.verification = verification;
+        this.password = password;
+        this.userId = userId;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public int getTeacherId() {
+        return teacherId;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getName() {
+        return name;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getVerification() {
+        return verification;
+    }
+
+    public void setVerification(String verification) {
+        this.verification = verification;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
