@@ -2,6 +2,7 @@ const APPLICATION_URL:string = "http://localhost:8080"
 
 let allRents:Rent[] = []
 let allStudents:Student[] = []
+let allTeachers:Teacher[] = []
 let editingRentId:number = -1
 
 //region base requests
@@ -19,6 +20,26 @@ function requestAllStudents() {
 
             data.forEach((student:string[]) => {
                 allStudents.push(studentArrayToJson(student))
+            })
+
+            //TODO do this with promises
+            requestAllTeachers()
+        })
+        .catch(error => console.error(error))
+}
+function requestAllTeachers() {
+    allStudents = []
+    fetch(APPLICATION_URL + "/teacher/getall")
+        .then(result => {
+            console.log(result)
+            return result.json()
+        })
+        .then(data => {
+            console.log(data)
+            let html = []
+
+            data.forEach((teacher:string[]) => {
+                allTeachers.push(teacherArrayToJson(teacher))
             })
 
             requestAllRents()
@@ -53,6 +74,15 @@ interface Student {
     firstname: string,
     lastname: string,
     school_class: string,
+    password: string,
+    user_id: number
+}
+
+interface Teacher {
+    teacher_id: number,
+    firstname: string,
+    lastname: string,
+    verification: string,
     password: string,
     user_id: number
 }
@@ -102,7 +132,7 @@ function generateTable(){
     table.appendChild(headingHtml)
 
     let html:Element[] = []
-    for (let i = 0; i < allRents.length; i++) {
+    for (let i = 0; i < Math.min(allRents.length, 21); i++) {
         let row = document.createElement("tr")
         console.log(String(allRents[i]?.rent_id))
         row.setAttribute("rent_id", String(allRents[i]?.rent_id))
@@ -225,7 +255,7 @@ function setStudent(clickedOption:HTMLElement){
 //endregion
 
 function createRent(){
-    fetch(APPLICATION_URL + '/rent/create', {
+    fetch(APPLICATION_URL + '/rent/createempty', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -261,6 +291,18 @@ function studentArrayToJson(array: any[]):Student {
         firstname: array[1],
         lastname: array[2],
         school_class: array[3],
+        password: array[4],
+        user_id: array[5]
+    }
+    return json
+}
+
+function teacherArrayToJson(array: any[]):Teacher {
+    let json:Teacher = {
+        teacher_id: array[0],
+        firstname: array[1],
+        lastname: array[2],
+        verification: array[3],
         password: array[4],
         user_id: array[5]
     }
