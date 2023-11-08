@@ -13,7 +13,7 @@ POST http://localhost:8080/student/create
 GET http://localhost:8080/student/getbyid/1
 
 ###
-GET http://localhost:8080/student/getall
+GET http://localhost:8080/rent/getall
 
 ###
 POST http://localhost:8080/student/search/

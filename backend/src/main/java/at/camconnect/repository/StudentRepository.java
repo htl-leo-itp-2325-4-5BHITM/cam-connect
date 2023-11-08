@@ -43,7 +43,7 @@ public class StudentRepository{
     }*/
 
     public List<Student> getAll(){
-        Query q = em.createNativeQuery("SELECT * FROM Student");
+        Query q = em.createNativeQuery("SELECT STUDENT_ID, FIRSTNAME, LASTNAME, SCHOOL_CLASS, PASSWORD, USER_ID FROM Student");
         List<Student> results = q.getResultList();
         return results;
     }

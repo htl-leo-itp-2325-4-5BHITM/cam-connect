@@ -58,7 +58,7 @@ public class RentRepository {
     }
 
     public List<Rent> getAll(){
-        Query q = em.createNativeQuery("SELECT * FROM Rent");
+        Query q = em.createNativeQuery("SELECT rent_id, student_id, device_id, teacher_id, rent_start, rent_end_planned, rent_end_actual FROM Rent");
         List<Rent> results = q.getResultList();
         return results;
     }
