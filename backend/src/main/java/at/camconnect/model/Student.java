@@ -8,7 +8,7 @@ import jakarta.persistence.Id;
 public class Student {
     @Id
     @GeneratedValue
-    private int student_id;
+    private long student_id;
     
     private String firstname;
     private String lastname;
@@ -27,7 +27,19 @@ public class Student {
         this.user_id = user_id;
     }
 
-    public int getStudent_id() {
+    @Override
+    public String toString() {
+        return "Student{" +
+                "student_id=" + student_id +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", school_class='" + school_class + '\'' +
+                ", password='" + password + '\'' +
+                ", user_id='" + user_id + '\'' +
+                '}';
+    }
+
+    public long getStudent_id() {
         return student_id;
     }
 

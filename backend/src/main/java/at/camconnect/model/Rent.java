@@ -1,15 +1,22 @@
 package at.camconnect.model;
 
 import at.camconnect.repository.StudentRepository;
+import jakarta.ejb.Local;
 import jakarta.persistence.*;
+import org.apache.derby.client.am.DateTime;
 
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Entity
 public class Rent {
     @Id
     @GeneratedValue
-    private int rent_id;
+    private long rent_id;
 
     @ManyToOne
     @JoinColumn(name = "student_id")
@@ -30,11 +37,9 @@ public class Rent {
     public Rent() {
     }
 
-    public Rent(Student student, Date rentStart, Date rentEndPlanned, Date rentEndActual) {
+    public Rent(Student student) {
         this.student = student;
-        this.rent_start = rentStart;
-        this.rent_end_planned = rentEndPlanned;
-        this.rent_end_actual = rentEndActual;
+        this.rent_start = new Timestamp(new Date().getTime());
     }
 
     public Rent(Student student, Device device, Teacher teacher, Date rentStart, Date rentEndPlanned, Date rentEndActual) {
@@ -46,8 +51,24 @@ public class Rent {
         this.rent_end_actual = rentEndActual;
     }
 
-    public int getRent_id() {
+    @Override
+    public String toString() {
+        return "Rent{" +
+                "rent_id=" + rent_id +
+                ", student=" + student +
+                ", device=" + device +
+                ", teacher=" + teacher +
+                ", rent_start=" + rent_start +
+                ", rent_end_planned=" + rent_end_planned +
+                ", rent_end_actual=" + rent_end_actual +
+                '}';
+    }
+
+    public long getRent_id() {
         return rent_id;
+    }
+    public void setRent_id(int id) {
+        rent_id = id;
     }
 
     public Student getStudent() {

@@ -16,13 +16,25 @@ public class StudentRepository{
     @Inject
     EntityManager em;
 
+    @Transactional
+    public void create(Student s){
+        em.persist(s);
+    }
+
+    @Transactional
+    public void remove(Student s){
+        em.remove(s);
+    }
+
+    @Transactional
+    public void update(Student s){
+        em.merge(s);
+    }
+
     public Student getById(long id){
         return em.find(Student.class, id);
     }
 
-    /**
-     * @return List of all Students in db
-     */
     public List<Student> getAll(){
         Query q = em.createNativeQuery("SELECT * FROM Student");
         List<Student> results = q.getResultList();
@@ -35,10 +47,5 @@ public class StudentRepository{
                 .setMaxResults(10);
         List<Student> results = q.getResultList();
         return results;
-    }
-
-    @Transactional
-    public void create(Student s){
-        em.persist(s);
     }
 }

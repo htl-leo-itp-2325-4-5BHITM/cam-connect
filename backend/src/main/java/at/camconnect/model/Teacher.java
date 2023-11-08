@@ -9,7 +9,7 @@ public class Teacher {
 
     @Id
     @GeneratedValue
-    private int teacher_id;
+    private long teacher_id;
     private String firstname;
     private String lastname;
     private String verification;
@@ -27,7 +27,19 @@ public class Teacher {
         this.user_id = user_id;
     }
 
-    public int getTeacher_id() {
+    @Override
+    public String toString() {
+        return "Teacher{" +
+                "teacher_id=" + teacher_id +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", verification='" + verification + '\'' +
+                ", password='" + password + '\'' +
+                ", user_id='" + user_id + '\'' +
+                '}';
+    }
+
+    public long getTeacher_id() {
         return teacher_id;
     }
 
