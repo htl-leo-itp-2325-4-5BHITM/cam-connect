@@ -64,16 +64,14 @@ function closeStudentPicker(e) {
     studentSelectionPopup.style.display = "none";
     document.removeEventListener("mousedown", closeStudentPicker);
 }
-function searchForStudent() {
-    fetch(applicationURL + '/equipment/create', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'text/plain'
-        },
-        body: JSON.stringify({ name: 'Lumix S5ii' })
+function searchForStudent(key) {
+    fetch(applicationURL + "/student/searchbykey/" + key)
+        .then(function (result) {
+        console.log(result);
+        return result.text();
     })
-        .then(function (response) { return response.text(); })
-        .then(function (data) { return console.log(data); })
-        .catch(function (error) { return console.error(error); });
+        .then(function (data) {
+        console.log(data);
+    });
 }
 //# sourceMappingURL=index.js.map

@@ -29,8 +29,8 @@ public class StudentRepository{
     }
 
     public List<Student> searchByKey(String key){
-        Query q = em.createQuery("SELECT name, schoolClass, password, userId FROM Student s WHERE upper(s.name) LIKE upper(:key)")
-                .setParameter("key", key)
+        Query q = em.createQuery("SELECT firstname, lastname FROM Student s WHERE upper(s.firstname) LIKE :key || '%' ")
+                .setParameter("key", key.toUpperCase())
                 .setMaxResults(10);
         List<Student> results = q.getResultList();
         return results;

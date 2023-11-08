@@ -109,16 +109,14 @@ function closeStudentPicker(e:MouseEvent){
     document.removeEventListener("mousedown", closeStudentPicker)
 }
 
-function searchForStudent(){
-    fetch(applicationURL + '/student/search', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'text/plain'
-        },
-        body: JSON.stringify({name: 'Lumix S5ii'})
-    })
-    .then(response => response.text())
-    .then(data => console.log(data))
-    .catch(error => console.error(error));
+function searchForStudent(key:String){
+    fetch(applicationURL + "/student/searchbykey/" + key)
+        .then(result => {
+            console.log(result)
+            return result.text()
+        })
+        .then(data => {
+            console.log(data)
+        })
 }
 //endregion

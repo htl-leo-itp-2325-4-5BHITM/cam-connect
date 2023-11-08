@@ -2,10 +2,10 @@
    skinparam linetype ortho
 
    entity DeviceType {
-        * typeId
+        * type_id
         --
         * typeName string
-        * tagid
+        * tag_id
     }
 
     entity CameraType {
@@ -65,62 +65,62 @@
     DroneType -up-|> DeviceType
 
     entity Device {
-        * deviceId
+        * device_id
         --
         * serial: String
         * note: String
     }
 
     entity Rent {
-        * rentId
+        * rent_id
         --
-        * deviceId: Int
-        * studentId: Int
-        * teacherId: Int
-        * rentStart: Date
-        * rentEndPlanned: Date
-        * rentEndActual: Date
+        * device_id: Int
+        * student_id: Int
+        * teacher_id: Int
+        * rent_start: Date
+        * rent_end_planned: Date
+        * rent_end_actual: Date
     }
 
    entity Favorite {
-        * favId
+        * fav_id
         --
-        * deviceId: Int
-        * studentId: Int
+        * device_id: Int
+        * student_id: Int
     }
 
     entity Tag {
-        * tagId
+        * tag_id
         --
-        * typeId: Int
+        * type_id: Int
         * description: string
     }
 
     entity Student {
-        * studentId
+        * student_id
         --
         * name: string
         * class: string
         * password
-        * userid
+        * user_id
     }
 
     entity Teacher {
-        * teacherId
+        * teacher_id
         --
         * name: string
         * verfication: string
         * password
-        * userId
+        * user_id
     }
 
      entity Set {
-            * teacherId
+            * teacher_id
             --
             * name: string
             * verfication: string
             * password
-            * userId
+            * user_id
         }
 
     Device }o-down-|| DeviceType
