@@ -2,10 +2,10 @@
    skinparam linetype ortho
 
    entity DeviceType {
-        * typeId
+        * type_id
         --
         * typeName string
-        * tagid
+        * tag_id
     }
 
     entity CameraType {
@@ -65,63 +65,67 @@
     DroneType -up-|> DeviceType
 
     entity Device {
-        * deviceId
+        * device_id
         --
         * serial: String
         * note: String
     }
 
     entity Rent {
-        * rentId
+        * rent_id
         --
-        * deviceId: Int
-        * studentId: Int
-        * teacherId: Int
-        * rentStart: Date
-        * rentEndPlanned: Date
-        * rentEndActual: Date
+        * student_id: Int
+        * device_id: Int
+        * teacher_id: Int
+        * rent_start: Date
+        * rent_end_planned: Date
+        * rent_end_actual: Date
+        * status_rent_start: boolean
+        * status_rent_end: boolean
     }
 
    entity Favorite {
-        * favId
+        * fav_id
         --
-        * deviceId: Int
-        * studentId: Int
+        * device_id: Int
+        * student_id: Int
     }
 
     entity Tag {
-        * tagId
+        * tag_id
         --
-        * typeId: Int
+        * type_id: Int
         * description: string
     }
 
     entity Student {
-        * studentId
+        * student_id
         --
-        * name: string
-        * class: string
-        * password
-        * userid
+        * firstname: string
+        * lastname: string
+        * school_class: string
+        * password: string
+        * user_id: Int
     }
 
     entity Teacher {
-        * teacherId
+        * teacher_id
+        --
+        * firstname: string
+        * lastname: string
+        * verfication: string
+        * password
+        * user_id
+    }
+
+     entity Set {
+        * teacher_id
         --
         * name: string
         * verfication: string
         * password
-        * userId
+        * user_id
     }
-
-     entity Set {
-            * teacherId
-            --
-            * name: string
-            * verfication: string
-            * password
-            * userId
-        }
 
     Device }o-down-|| DeviceType
     DeviceType }o-left-|{ Set

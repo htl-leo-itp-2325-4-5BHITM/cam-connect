@@ -3,51 +3,57 @@ package at.camconnect.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.NamedQuery;
-
-import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 public class Student {
     
     @Id
     @GeneratedValue
-    private int studentId;
+    private int student_id;
     
-    private String name;
-    private String schoolClass;
+    private String firstname;
+    private String lastname;
+    private String school_class;
     private String password;
-    private String userId;
+    private String user_id;
 
     public Student() {
     }
 
-    public Student(String name, String schoolClass, String password, String userId) {
-        this.name = name;
-        this.schoolClass = schoolClass;
-        setPassword(password);
-        this.userId = userId;
+    public Student(String firstname, String lastname, String school_class, String password, String user_id) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.school_class = school_class;
+        this.password = password;
+        this.user_id = user_id;
     }
 
-    public int getStudentId() {
-        return studentId;
+    public int getStudent_id() {
+        return student_id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
-    public String getSchoolClass() {
-        return schoolClass;
+    public String getLastname() {
+        return lastname;
     }
 
-    public void setSchoolClass(String schoolClass) {
-        this.schoolClass = schoolClass;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getSchool_class() {
+        return school_class;
+    }
+
+    public void setSchool_class(String schoolclass) {
+        this.school_class = schoolclass;
     }
 
     public String getPassword() {
@@ -60,10 +66,10 @@ public class Student {
     }
 
     public String getUserId() {
-        return userId;
+        return user_id;
     }
 
     public void setUserId(String userId) {
-        this.userId = userId;
+        this.user_id = userId;
     }
 }

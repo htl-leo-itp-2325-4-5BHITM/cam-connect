@@ -4,6 +4,7 @@ import at.camconnect.model.Student;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.json.JsonObject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
@@ -28,9 +29,9 @@ public class StudentRepository{
         return results;
     }
 
-    public List<Student> searchByKey(String key){
-        Query q = em.createQuery("SELECT firstname, lastname FROM Student s WHERE upper(s.firstname) LIKE upper(:key)")
-                .setParameter("key", key)
+    public List<Student> search(JsonObject searchParams){
+        Query q = em.createQuery("SELECT firstname, lastname FROM Student s WHERE upper(s.firstname) LIKE :firstname || '%' ")
+                .setParameter("firstname", searchParams.getString("firstname").toUpperCase())
                 .setMaxResults(10);
         List<Student> results = q.getResultList();
         return results;

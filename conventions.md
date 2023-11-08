@@ -13,6 +13,7 @@ If you follow these conventions we will have a better time writing code and the 
 - use camelCase for folder names
 - use camelCase (or PascalCase) for filenames, and css class names
 - `{` brackets should be on the same lines as the code they belong to
+- use snake_case for database variables
 - every major piece of code: ifs, loops, functions, css selectors etc. should be seperated by a empty line from the previous
 - condition nesting should be avoided, instead invert the condition and return early
 - every major function should have a jsdoc comment overtop of it this should discribe
@@ -28,6 +29,9 @@ should be wrapped in a `//region name ..code here.. //endregion` that way they c
 - when using variables which uses are not immediatly clear add a comment on the same line to explain or on the line above to explain for multiple
 - script, style and mockup files belonging together should have the same name
 - Id should be written like this `thingId`
+- functions that create a new thing should be named `create` 
+- functions that search for something should be named `search` 
+- functions that get a specific thing by a specific param should be named `get`
 
 this example is very basic, some of the comments are not needed here, but you get the idea
 ```JS
@@ -103,6 +107,7 @@ For those that don't know scss this will seem weird, it's actually pretty easy
 
 ## Github
 - try to commit at the end of each workday and when leaving school .-.
+- if something is throwing errors at the end of the day add a //TODO comment and **comment it out** so that others can continue without having to change/fix your code 
 - branch names
 - commit messages should be precise and list all major changes
 - issues
