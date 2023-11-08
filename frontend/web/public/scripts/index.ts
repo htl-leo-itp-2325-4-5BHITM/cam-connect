@@ -109,14 +109,22 @@ function closeStudentPicker(e:MouseEvent){
     document.removeEventListener("mousedown", closeStudentPicker)
 }
 
+interface Student {
+    firstname: String,
+    lastname: String,
+    school_class: String,
+    password: String,
+    user_id: number
+}
+
 function searchForStudent(key:String){
     fetch(applicationURL + "/student/searchbykey/" + key)
         .then(result => {
-            console.log(result)
-            return result.text()
+            return result.json()
         })
         .then(data => {
-            console.log(data)
+            let students:Student[] = data
+            data.for
         })
 }
 //endregion

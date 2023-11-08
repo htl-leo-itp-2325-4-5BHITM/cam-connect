@@ -3,6 +3,8 @@ package at.camconnect.boundary;
 import at.camconnect.model.Student;
 import at.camconnect.repository.StudentRepository;
 import jakarta.inject.Inject;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -25,10 +27,12 @@ public class StudentRessource {
         return studentRepository.getById(id);
     }
 
-    @GET
-    @Path("/searchbykey/{key: [A-z0-9]+}")
-    public List<Student> getById(@PathParam("key")String key) {
-        return studentRepository.searchByKey(key);
+    @POST
+    @Path("/search")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public List<Student> search(JsonObject data){
+        return studentRepository.search(data);
     }
 
     @GET

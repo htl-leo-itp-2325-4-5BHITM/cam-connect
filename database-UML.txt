@@ -74,12 +74,14 @@
     entity Rent {
         * rent_id
         --
-        * device_id: Int
         * student_id: Int
+        * device_id: Int
         * teacher_id: Int
         * rent_start: Date
         * rent_end_planned: Date
         * rent_end_actual: Date
+        * status_rent_start: boolean
+        * status_rent_end: boolean
     }
 
    entity Favorite {
@@ -99,13 +101,24 @@
     entity Student {
         * student_id
         --
-        * name: string
-        * class: string
+        * firstname: string
+        * lastname: string
+        * school_class: string
+        * password: string
+        * user_id: Int
+    }
+
+    entity Teacher {
+        * teacher_id
+        --
+        * firstname: string
+        * lastname: string
+        * verfication: string
         * password
         * user_id
     }
 
-    entity Teacher {
+     entity Set {
         * teacher_id
         --
         * name: string
@@ -113,15 +126,6 @@
         * password
         * user_id
     }
-
-     entity Set {
-            * teacher_id
-            --
-            * name: string
-            * verfication: string
-            * password
-            * user_id
-        }
 
     Device }o-down-|| DeviceType
     DeviceType }o-left-|{ Set

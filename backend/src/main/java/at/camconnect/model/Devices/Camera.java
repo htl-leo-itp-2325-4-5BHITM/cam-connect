@@ -8,6 +8,5 @@ public class Camera extends Device {
     private String resolution;
 
     public Camera(int deviceId, int typId) {
-        super(deviceId, typId);
     }
 }

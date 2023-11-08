@@ -17,4 +17,5 @@ GET http://localhost:8080/student/getall
 
 ###
 POST http://localhost:8080/student/searchbykey/
-{key: "max")
+
+{"firstname": "max")

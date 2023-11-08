@@ -67,11 +67,11 @@ function closeStudentPicker(e) {
 function searchForStudent(key) {
     fetch(applicationURL + "/student/searchbykey/" + key)
         .then(function (result) {
-        console.log(result);
-        return result.text();
+        return result.json();
     })
         .then(function (data) {
-        console.log(data);
+        var students = data;
+        data.for;
     });
 }
 //# sourceMappingURL=index.js.map
