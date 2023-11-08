@@ -17,8 +17,8 @@ public class RentTest {
     JsonObject student1 = Json.createObjectBuilder().add("firstname", "Yanik").add("lastname", "Kendler").add("school_class", "4BHITM").add("password", "1234").add("user_id", "it200272").build();
     JsonObject teacher1 = Json.createObjectBuilder().add("firstname", "Erich").add("lastname", "Baar").add("verification", "").add("password", "1234").add("user_id", "it200274").build();
     JsonObject device1 = Json.createObjectBuilder().add("serial", "Camera").add("note", "nothing").build();
-    JsonObject rent1 = Json.createObjectBuilder().add("student_id", "1").build();
-    JsonObject rentUpdate = Json.createObjectBuilder().add("rent_id", 1).add("device_id", 1).add("student_id", 1).add("teacher_id", 1).add("rent_start", "").add("rent_end_planned", "").add("rend_end_actual", "").build();
+    JsonObject rent1 = Json.createObjectBuilder().add("student_id", 1).add("rent_start", " ").add("rent_end_planned", " ").add("rent_end_actual", " ").build();
+    JsonObject rentUpdate = Json.createObjectBuilder().add("rent_id", 1).add("device_id", 1).add("student_id", 1).add("teacher_id", 1).add("rent_start", " ").add("rent_end_planned", " ").add("rend_end_actual", " ").build();
 
     @Test
     public void testCreateRent() {

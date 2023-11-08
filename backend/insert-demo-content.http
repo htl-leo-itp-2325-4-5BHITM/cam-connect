@@ -1,0 +1,414 @@
+// Students
+###
+POST http://localhost:8080/student/create
+
+{"firstname": "Michael", "lastname": "Leisch", "password": "1234", "school_class": "4BHITM", "user_id": "it200269"}
+
+###
+POST http://localhost:8080/student/create
+
+{"firstname": "John", "lastname": "Doe", "password": "1234", "school_class": "4BHITM", "user_id": "it200270"}
+
+###
+POST http://localhost:8080/student/create
+
+{"firstname": "Jane", "lastname": "Smith", "password": "1234", "school_class": "4BHITM", "user_id": "it200271"}
+
+###
+POST http://localhost:8080/student/create
+
+{"firstname": "David", "lastname": "Johnson", "password": "1234", "school_class": "4BHITM", "user_id": "it200272"}
+
+###
+POST http://localhost:8080/student/create
+
+{"firstname": "Emily", "lastname": "Wilson", "password": "1234", "school_class": "4BHITM", "user_id": "it200273"}
+
+###
+POST http://localhost:8080/student/create
+
+{"firstname": "Sophia", "lastname": "Garcia", "password": "1234", "school_class": "4BHITM", "user_id": "it200274"}
+
+###
+POST http://localhost:8080/student/create
+
+{"firstname": "Matthew", "lastname": "Brown", "password": "1234", "school_class": "4BHITM", "user_id": "it200275"}
+
+###
+POST http://localhost:8080/student/create
+
+{"firstname": "Olivia", "lastname": "Davis", "password": "1234", "school_class": "4BHITM", "user_id": "it200276"}
+
+###
+POST http://localhost:8080/student/create
+
+{"firstname": "Daniel", "lastname": "Miller", "password": "1234", "school_class": "4BHITM", "user_id": "it200277"}
+
+###
+POST http://localhost:8080/student/create
+
+{"firstname": "Liam", "lastname": "Moore", "password": "1234", "school_class": "4BHITM", "user_id": "it200278"}
+
+###
+POST http://localhost:8080/student/create
+
+{"firstname": "Ella", "lastname": "Taylor", "password": "1234", "school_class": "4BHITM", "user_id": "it200279"}
+
+###
+POST http://localhost:8080/student/create
+
+{"firstname": "Ava", "lastname": "Johnson", "password": "1234", "school_class": "4BHITM", "user_id": "it200280"}
+
+###
+POST http://localhost:8080/student/create
+
+{"firstname": "William", "lastname": "Smith", "password": "1234", "school_class": "4BHITM", "user_id": "it200281"}
+
+###
+POST http://localhost:8080/student/create
+
+{"firstname": "Mia", "lastname": "Wilson", "password": "1234", "school_class": "4BHITM", "user_id": "it200282"}
+
+###
+POST http://localhost:8080/student/create
+
+{"firstname": "James", "lastname": "Doe", "password": "1234", "school_class": "4BHITM", "user_id": "it200283"}
+
+###
+POST http://localhost:8080/student/create
+
+{"firstname": "Isabella", "lastname": "Leisch", "password": "1234", "school_class": "4BHITM", "user_id": "it200284"}
+
+###
+POST http://localhost:8080/student/create
+
+{"firstname": "Liam", "lastname": "Johnson", "password": "1234", "school_class": "4BHITM", "user_id": "it200285"}
+
+###
+POST http://localhost:8080/student/create
+
+{"firstname": "Olivia", "lastname": "Moore", "password": "1234", "school_class": "4BHITM", "user_id": "it200286"}
+
+###
+POST http://localhost:8080/student/create
+
+{"firstname": "Aiden", "lastname": "Smith", "password": "1234", "school_class": "4BHITM", "user_id": "it200287"}
+
+
+
+###
+// Teacher
+POST http://localhost:8080/teacher/create
+
+{"firstname": "Aiden", "lastname": "Smith", "password": "1234", "user_id": "it100069", "verification": ""}
+
+###
+POST http://localhost:8080/teacher/create
+
+{"firstname": "Emma", "lastname": "Johnson", "password": "1234", "user_id": "it100070", "verification": ""}
+
+###
+POST http://localhost:8080/teacher/create
+
+{"firstname": "Liam", "lastname": "Brown", "password": "1234", "user_id": "it100071", "verification": ""}
+
+###
+POST http://localhost:8080/teacher/create
+
+{"firstname": "Olivia", "lastname": "Davis", "password": "1234", "user_id": "it100072", "verification": ""}
+
+###
+POST http://localhost:8080/teacher/create
+
+{"firstname": "James", "lastname": "Wilson", "password": "1234", "user_id": "it100073", "verification": ""}
+
+
+
+###
+// Device
+POST http://localhost:8080/device/create
+
+{"height": 25.25, "dtype": "Camera", "head": "", "note": "Passt", "serial": "Sony"}
+
+###
+POST http://localhost:8080/device/create
+
+{"height": 30.30, "dtype": "Stativ", "head": "", "note": "Mangelhaft", "serial": "Manfrotto"}
+
+###
+POST http://localhost:8080/device/create
+
+{"height": 20.00, "dtype": "Microphone", "head": "", "note": "Kaputt", "serial": "Shure"}
+
+###
+POST http://localhost:8080/device/create
+
+{"height": 28.10, "dtype": "Camera", "head": "", "note": "Passt", "serial": "Canon"}
+
+###
+POST http://localhost:8080/device/create
+
+{"height": 22.15, "dtype": "Stativ", "head": "", "note": "Mangelhaft", "serial": "Gitzo"}
+
+###
+POST http://localhost:8080/device/create
+
+{"height": 15.15, "dtype": "Microphone", "head": "", "note": "Kaputt", "serial": "Rode"}
+
+###
+POST http://localhost:8080/device/create
+
+{"height": 26.15, "dtype": "Camera", "head": "", "note": "Passt", "serial": "Nikon"}
+
+###
+POST http://localhost:8080/device/create
+
+{"height": 32.15, "dtype": "Stativ", "head": "", "note": "Mangelhaft", "serial": "Sachtler"}
+
+###
+POST http://localhost:8080/device/create
+
+{"height": 18.00, "dtype": "Microphone", "head": "", "note": "Kaputt", "serial": "Audio-Technica"}
+
+###
+POST http://localhost:8080/device/create
+
+{"height": 24.00, "dtype": "Camera", "head": "", "note": "Passt", "serial": "Panasonic"}
+
+###
+POST http://localhost:8080/device/create
+
+{"height": 29.00, "dtype": "Stativ", "head": "", "note": "Mangelhaft", "serial": "Benro"}
+
+###
+POST http://localhost:8080/device/create
+
+{"height": 19.00, "dtype": "Microphone", "head": "", "note": "Kaputt", "serial": "Sennheiser"}
+
+###
+POST http://localhost:8080/device/create
+
+{"height": 27.00, "dtype": "Camera", "head": "", "note": "Passt", "serial": "Fujifilm"}
+
+###
+POST http://localhost:8080/device/create
+
+{"height": 31.15, "dtype": "Stativ", "head": "", "note": "Mangelhaft", "serial": "Vinten"}
+
+###
+POST http://localhost:8080/device/create
+
+{"height": 16.50, "dtype": "Microphone", "head": "", "note": "Kaputt", "serial": "Zoom"}
+
+###
+POST http://localhost:8080/device/create
+
+{"height": 23.45, "dtype": "Camera", "head": "", "note": "Passt", "serial": "Olympus"}
+
+###
+POST http://localhost:8080/device/create
+
+{"height": 35.23, "dtype": "Stativ", "head": "", "note": "Mangelhaft", "serial": "Libec"}
+
+###
+POST http://localhost:8080/device/create
+
+{"height": 17.65, "dtype": "Microphone", "head": "", "note": "Kaputt", "serial": "Blue Microphones"}
+
+###
+POST http://localhost:8080/device/create
+
+{"height": 33.5, "dtype": "Camera", "head": "", "note": "Passt", "serial": "Leica"}
+
+###
+POST http://localhost:8080/device/create
+
+{"height": 21.23, "dtype": "Stativ", "head": "", "note": "Mangelhaft", "serial": "Vanguard"}
+
+###
+POST http://localhost:8080/device/create
+
+{"height": 14.75, "dtype": "Microphone", "head": "", "note": "Kaputt", "serial": "Samson"}
+
+
+
+###
+// Rent
+POST http://localhost:8080/rent/create
+
+{"student_id": 12, "rent_start": "08.11.2023", "rent_end_planned": "10.11.2023", "rent_end_actual": "15.11.2023"}
+
+###
+POST http://localhost:8080/rent/update
+
+{"rent_id": 1, "device_id": 4, "teacher_id": 3, "student_id": 12, "rent_start": "08.11.2023", "rent_end_planned": "10.11.2023", "rent_end_actual": "15.11.2023"}
+
+###
+POST http://localhost:8080/rent/create
+
+{"student_id": 8, "rent_start": "17.11.2023", "rent_end_planned": "20.11.2023", "rent_end_actual": "25.11.2023"}
+
+###
+POST http://localhost:8080/rent/update
+
+{"rent_id": 2, "device_id": 9, "teacher_id": 2, "student_id": 8, "rent_start": "17.11.2023", "rent_end_planned": "20.11.2023", "rent_end_actual": "25.11.2023"}
+
+###
+POST http://localhost:8080/rent/create
+
+{"student_id": 19, "rent_start": "03.12.2023", "rent_end_planned": "07.12.2023", "rent_end_actual": "12.12.2023"}
+
+###
+POST http://localhost:8080/rent/update
+
+{"rent_id": 3, "device_id": 7, "teacher_id": 5, "student_id": 19, "rent_start": "03.12.2023", "rent_end_planned": "07.12.2023", "rent_end_actual": "12.12.2023"}
+
+###
+POST http://localhost:8080/rent/create
+
+{"student_id": 11, "rent_start": "15.12.2023", "rent_end_planned": "18.12.2023", "rent_end_actual": "23.12.2023"}
+
+###
+POST http://localhost:8080/rent/update
+
+{"rent_id": 4, "device_id": 16, "teacher_id": 4, "student_id": 11, "rent_start": "15.12.2023", "rent_end_planned": "18.12.2023", "rent_end_actual": "23.12.2023"}
+
+###
+POST http://localhost:8080/rent/create
+
+{"student_id": 14, "rent_start": "19.01.2024", "rent_end_planned": "22.01.2024", "rent_end_actual": "27.01.2024"}
+
+###
+POST http://localhost:8080/rent/update
+
+{"rent_id": 5, "device_id": 8, "teacher_id": 2, "student_id": 14, "rent_start": "19.01.2024", "rent_end_planned": "22.01.2024", "rent_end_actual": "27.01.2024"}
+
+###
+POST http://localhost:8080/rent/create
+
+{"student_id": 7, "rent_start": "01.02.2024", "rent_end_planned": "04.02.2024", "rent_end_actual": "09.02.2024"}
+
+###
+POST http://localhost:8080/rent/update
+
+{"rent_id": 6, "device_id": 5, "teacher_id": 4, "student_id": 7, "rent_start": "01.02.2024", "rent_end_planned": "04.02.2024", "rent_end_actual": "09.02.2024"}
+
+###
+POST http://localhost:8080/rent/create
+
+{"student_id": 3, "rent_start": "13.02.2024", "rent_end_planned": "16.02.2024", "rent_end_actual": "21.02.2024"}
+
+###
+POST http://localhost:8080/rent/update
+
+{"rent_id": 7, "device_id": 11, "teacher_id": 5, "student_id": 3, "rent_start": "13.02.2024", "rent_end_planned": "16.02.2024", "rent_end_actual": "21.02.2024"}
+
+###
+POST http://localhost:8080/rent/create
+
+{"student_id": 6, "rent_start": "25.02.2024", "rent_end_planned": "28.02.2024", "rent_end_actual": "04.03.2024"}
+
+###
+POST http://localhost:8080/rent/update
+
+{"rent_id": 8, "device_id": 17, "teacher_id": 1, "student_id": 6, "rent_start": "25.02.2024", "rent_end_planned": "28.02.2024", "rent_end_actual": "04.03.2024"}
+
+###
+POST http://localhost:8080/rent/create
+
+{"student_id": 18, "rent_start": "08.03.2024", "rent_end_planned": "11.03.2024", "rent_end_actual": "16.03.2024"}
+
+###
+POST http://localhost:8080/rent/update
+
+{"rent_id": 9, "device_id": 10, "teacher_id": 3, "student_id": 18, "rent_start": "08.03.2024", "rent_end_planned": "11.03.2024", "rent_end_actual": "16.03.2024"}
+
+###
+POST http://localhost:8080/rent/create
+
+{"student_id": 1, "rent_start": "20.03.2024", "rent_end_planned": "23.03.2024", "rent_end_actual": "28.03.2024"}
+
+###
+POST http://localhost:8080/rent/update
+
+{"rent_id": 10, "device_id": 8, "teacher_id": 4, "student_id": 1, "rent_start": "20.03.2024", "rent_end_planned": "23.03.2024", "rent_end_actual": "28.03.2024"}
+
+###
+POST http://localhost:8080/rent/create
+
+{"student_id": 4, "rent_start": "01.04.2024", "rent_end_planned": "04.04.2024", "rent_end_actual": "09.04.2024"}
+
+###
+POST http://localhost:8080/rent/update
+
+{"rent_id": 11, "device_id": 6, "teacher_id": 2, "student_id": 4, "rent_start": "01.04.2024", "rent_end_planned": "04.04.2024", "rent_end_actual": "09.04.2024"}
+
+###
+POST http://localhost:8080/rent/create
+
+{"student_id": 15, "rent_start": "13.04.2024", "rent_end_planned": "16.04.2024", "rent_end_actual": "21.04.2024"}
+
+###
+POST http://localhost:8080/rent/update
+
+{"rent_id": 12, "device_id": 7, "teacher_id": 5, "student_id": 15, "rent_start": "13.04.2024", "rent_end_planned": "16.04.2024", "rent_end_actual": "21.04.2024"}
+
+###
+POST http://localhost:8080/rent/create
+
+{"student_id": 2, "rent_start": "25.04.2024", "rent_end_planned": "28.04.2024", "rent_end_actual": "03.05.2024"}
+
+###
+POST http://localhost:8080/rent/update
+
+{"rent_id": 13, "device_id": 5, "teacher_id": 1, "student_id": 2, "rent_start": "25.04.2024", "rent_end_planned": "28.04.2024", "rent_end_actual": "03.05.2024"}
+
+###
+POST http://localhost:8080/rent/create
+
+{"student_id": 19, "rent_start": "07.05.2024", "rent_end_planned": "10.05.2024", "rent_end_actual": "15.05.2024"}
+
+###
+POST http://localhost:8080/rent/update
+
+{"rent_id": 14, "device_id": 10, "teacher_id": 3, "student_id": 19, "rent_start": "07.05.2024", "rent_end_planned": "10.05.2024", "rent_end_actual": "15.05.2024"}
+
+###
+POST http://localhost:8080/rent/create
+
+{"student_id": 11, "rent_start": "19.05.2024", "rent_end_planned": "22.05.2024", "rent_end_actual": "27.05.2024"}
+
+###
+POST http://localhost:8080/rent/update
+
+{"rent_id": 15, "device_id": 12, "teacher_id": 4, "student_id": 11, "rent_start": "19.05.2024", "rent_end_planned": "22.05.2024", "rent_end_actual": "27.05.2024"}
+
+###
+POST http://localhost:8080/rent/create
+
+{"student_id": 5, "rent_start": "31.05.2024", "rent_end_planned": "03.06.2024", "rent_end_actual": "08.06.2024"}
+
+###
+POST http://localhost:8080/rent/update
+
+{"rent_id": 16, "device_id": 3, "teacher_id": 1, "student_id": 5, "rent_start": "31.05.2024", "rent_end_planned": "03.06.2024", "rent_end_actual": "08.06.2024"}
+
+###
+POST http://localhost:8080/rent/create
+
+{"student_id": 10, "rent_start": "12.06.2024", "rent_end_planned": "15.06.2024", "rent_end_actual": "20.06.2024"}
+
+###
+POST http://localhost:8080/rent/update
+
+{"rent_id": 17, "device_id": 7, "teacher_id": 5, "student_id": 10, "rent_start": "12.06.2024", "rent_end_planned": "15.06.2024", "rent_end_actual": "20.06.2024"}
+
+###
+POST http://localhost:8080/rent/create
+
+{"student_id": 14, "rent_start": "24.06.2024", "rent_end_planned": "27.06.2024", "rent_end_actual": "02.07.2024"}
+
+###
+POST http://localhost:8080/rent/update
+
+{"rent_id": 18, "device_id": 8, "teacher_id": 2, "student_id": 14, "rent_start": "24.06.2024", "rent_end_planned": "27.06.2024", "rent_end_actual": "02.07.2024"}
