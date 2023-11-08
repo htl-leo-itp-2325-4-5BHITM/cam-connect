@@ -1,27 +1,42 @@
 package at.camconnect.model;
 
-public class Device {
-    private int deviceId;
-    private int typId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 
-    public Device(int deviceId, int typId) {
-        this.deviceId = deviceId;
-        this.typId = typId;
+@Entity
+public class Device {
+    @Id
+    @GeneratedValue
+    private int deviceId;
+    private String serial;
+    private String note;
+
+    public Device() {
+    }
+
+    public Device(String serial, String note) {
+        this.serial = serial;
+        this.note = note;
     }
 
     public int getDeviceId() {
         return deviceId;
     }
 
-    public void setDeviceId(int deviceId) {
-        this.deviceId = deviceId;
+    public String getSerial() {
+        return serial;
     }
 
-    public int getTypId() {
-        return typId;
+    public void setSerial(String serial) {
+        this.serial = serial;
     }
 
-    public void setTypId(int typId) {
-        this.typId = typId;
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }
