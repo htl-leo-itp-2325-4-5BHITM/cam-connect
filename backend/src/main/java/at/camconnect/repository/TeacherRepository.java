@@ -16,29 +16,29 @@ public class TeacherRepository {
     @Inject
     EntityManager em;
 
-    public Teacher getById(long id){
-        return em.find(Teacher.class, id);
-    }
-
-    /**
-     * @return List of all Students in db
-     */
-    public List<Teacher> getAll(){
-        Query q = em.createNativeQuery("SELECT * FROM Teacher");
-        List<Teacher> results = q.getResultList();
-        return results;
-    }
-
-    public List<Teacher> searchByKey(String key){
-        Query q = em.createQuery("SELECT firstname, lastname FROM Teacher t WHERE upper(t.firstname) LIKE :key || '%' ")
-                .setParameter("key", key.toUpperCase())
-                .setMaxResults(10);
-        List<Teacher> results = q.getResultList();
-        return results;
-    }
 
     @Transactional
     public void create(Teacher t){
         em.persist(t);
+    }
+
+    @Transactional
+    public void remove(Teacher t){
+        em.remove(t);
+    }
+
+    @Transactional
+    public void update(Teacher t){
+        em.merge(t);
+    }
+
+    public Teacher getById(long id){
+        return em.find(Teacher.class, id);
+    }
+
+    public List<Teacher> getAll(){
+        Query q = em.createNativeQuery("SELECT * FROM Teacher");
+        List<Teacher> results = q.getResultList();
+        return results;
     }
 }

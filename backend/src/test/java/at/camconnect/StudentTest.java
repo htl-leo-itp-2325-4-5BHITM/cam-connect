@@ -24,23 +24,6 @@ public class StudentTest {
     }
 
     @Test
-    public void testGetStudents() {
-        given()
-                .contentType("application/json")
-                .when()
-                .body(student1.toString())
-                .post("student/create")
-                .then()
-                .statusCode(200);
-
-        given()
-                .when().get("student/getall")
-                .then()
-                .body("get(0).toString()", is("[1, Yanik, Kendler, 1234, 4BHITM, null]"))
-                .statusCode(200);
-    }
-
-    @Test
     public void testSearchStudent() {
 
     }

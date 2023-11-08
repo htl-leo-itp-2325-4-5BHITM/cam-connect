@@ -14,12 +14,35 @@ import java.util.List;
 
 @Path("/student")
 public class StudentRessource {
-    @Produces
-    public String studentDefault(){
-        return "Hey from Students";
-    }
     @Inject
     StudentRepository studentRepository;
+
+    @POST
+    @Path("/create")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response createStudent(Student s){
+        studentRepository.create(s);
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("/remove")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response removeStudent(Student s){
+        studentRepository.remove(s);
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("/update")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response updateStudent(Student s){
+        studentRepository.update(s);
+        return Response.ok().build();
+    }
 
     @GET
     @Path("/getbyid/{id: [0-9]+}")
@@ -39,14 +62,5 @@ public class StudentRessource {
     @Path("/getall")
     public List<Student> getAll() {
         return studentRepository.getAll();
-    }
-
-    @POST
-    @Path("/create")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Transactional
-    public Response createStudent(Student student){
-        studentRepository.create(student);
-        return Response.ok().build();
     }
 }

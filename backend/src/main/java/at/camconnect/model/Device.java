@@ -8,7 +8,7 @@ import jakarta.persistence.Id;
 public class Device {
     @Id
     @GeneratedValue
-    private int device_id;
+    private long device_id;
     private String serial;
     private String note;
 
@@ -20,7 +20,16 @@ public class Device {
         this.note = note;
     }
 
-    public int getDevice_id() {
+    @Override
+    public String toString() {
+        return "Device{" +
+                "device_id=" + device_id +
+                ", serial='" + serial + '\'' +
+                ", note='" + note + '\'' +
+                '}';
+    }
+
+    public long getDevice_id() {
         return device_id;
     }
 
