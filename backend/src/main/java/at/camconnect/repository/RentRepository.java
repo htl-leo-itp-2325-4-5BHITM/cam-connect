@@ -24,7 +24,11 @@ public class RentRepository {
 
     @Transactional
     public void create(JsonObject rent){
-        em.persist(new Rent(em.find(Student.class, rent.getString("student_id"))));
+        Rent rent1 = new Rent(em.find(Student.class, rent.getInt("student_id")),
+                rent.getString("rent_start"),
+                rent.getString("rent_end_planned"),
+                rent.getString("rent_end_actual"));
+        em.persist(rent1);
     }
 
     @Transactional
@@ -34,26 +38,17 @@ public class RentRepository {
 
     @Transactional
     public void update(JsonObject rent){
-        System.out.println("reset");
-        System.out.println("klan testa");
-
         Student student = getStudentById(rent.getInt("student_id"));
         Teacher teacher = getTeacherById(rent.getInt("teacher_id"));
-
-        System.out.println("klan testa");
-        System.out.println(student);
-        System.out.println(teacher);
+        Device device = getDeviceById(rent.getInt("device_id"));
 
         Rent rent1 = em.find(Rent.class, rent.getInt("rent_id"));
-
-        System.out.println("klan testa");
-        System.out.println(rent.getInt("rent_id"));
-        System.out.println(rent1);
+        System.out.println("LMAO" + rent);
+        System.out.println("renti" + rent1);
         rent1.setStudent(student);
         rent1.setTeacher(teacher);
+        rent1.setDevice(device);
 
-        System.out.println("klan testa");
-        System.out.println(rent1);
         em.merge(rent1);
     }
 
@@ -74,4 +69,8 @@ public class RentRepository {
     public Teacher getTeacherById(int teacher_id){
         return em.find(Teacher.class, teacher_id);
     }
+    public Device getDeviceById(int device_id){
+        return em.find(Device.class, device_id);
+    }
+
 }
