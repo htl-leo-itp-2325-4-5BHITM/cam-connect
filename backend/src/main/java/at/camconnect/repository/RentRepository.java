@@ -48,11 +48,10 @@ public class RentRepository {
         Device device = getDeviceById(rent.getInt("device_id"));
 
         Rent rent1 = em.find(Rent.class, rent.getInt("rent_id"));
-        System.out.println("LMAO" + rent);
-        System.out.println("renti" + rent1);
         rent1.setStudent(student);
         rent1.setTeacher(teacher);
         rent1.setDevice(device);
+        rent1.setNotes(rent.getString("notes"));
 
         em.merge(rent1);
     }

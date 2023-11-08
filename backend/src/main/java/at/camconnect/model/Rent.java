@@ -33,6 +33,7 @@ public class Rent {
     private String rent_start;
     private String rent_end_planned;
     private String rent_end_actual;
+    private String notes;
 
     public Rent() {
         this.rent_start = new Timestamp(new Date().getTime()).toString();
@@ -54,7 +55,7 @@ public class Rent {
         this.rent_end_actual = rentEndActual;
     }
 
-    public Rent(Student student, Device device, Teacher teacher, String rentStart, String rentEndPlanned, String rentEndActual) {
+    public Rent(Student student, Device device, Teacher teacher, String rentStart, String rentEndPlanned, String rentEndActual, String notes) {
         this();
 
         this.student = student;
@@ -79,6 +80,14 @@ public class Rent {
                 ", rent_end_planned=" + rent_end_planned +
                 ", rent_end_actual=" + rent_end_actual +
                 '}';
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     public long getRent_id() {
