@@ -19,8 +19,19 @@ public class StudentRepository{
         return em.find(Student.class, id);
     }
 
+    /**
+     * @return List of all Students in db
+     */
     public List<Student> getAll(){
         Query q = em.createNativeQuery("SELECT * FROM Student");
+        List<Student> results = q.getResultList();
+        return results;
+    }
+
+    public List<Student> searchByKey(String key){
+        Query q = em.createQuery("SELECT firstname, lastname FROM Student s WHERE upper(s.firstname) LIKE upper(:key)")
+                .setParameter("key", key)
+                .setMaxResults(10);
         List<Student> results = q.getResultList();
         return results;
     }

@@ -110,7 +110,7 @@ function closeStudentPicker(e:MouseEvent){
 }
 
 function searchForStudent(){
-    fetch(applicationURL + '/equipment/create', {
+    fetch(applicationURL + '/student/search', {
         method: 'POST',
         headers: {
             'Content-Type': 'text/plain'

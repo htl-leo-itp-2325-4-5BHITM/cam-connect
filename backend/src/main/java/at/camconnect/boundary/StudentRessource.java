@@ -12,7 +12,6 @@ import java.util.List;
 
 @Path("/student")
 public class StudentRessource {
-
     @Produces
     public String studentDefault(){
         return "Hey from Students";
@@ -24,6 +23,12 @@ public class StudentRessource {
     @Path("/getbyid/{id: [0-9]+}")
     public Student getById(@PathParam("id")long id) {
         return studentRepository.getById(id);
+    }
+
+    @GET
+    @Path("/searchbykey/{key: [A-z0-9]+}")
+    public List<Student> getById(@PathParam("key")String key) {
+        return studentRepository.searchByKey(key);
     }
 
     @GET
