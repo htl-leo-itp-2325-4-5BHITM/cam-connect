@@ -28,6 +28,14 @@ public class RentRessource {
     }
 
     @POST
+    @Path("/createEmpty")
+    @Transactional
+    public Response createRentEmpty (){
+        rentRepository.createEmpty();
+        return Response.ok().build();
+    }
+
+    @POST
     @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional

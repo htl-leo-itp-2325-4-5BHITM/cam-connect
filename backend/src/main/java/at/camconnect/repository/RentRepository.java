@@ -32,6 +32,11 @@ public class RentRepository {
     }
 
     @Transactional
+    public void createEmpty(){
+        em.persist(new Rent());
+    }
+
+    @Transactional
     public void remove(Rent rent){
         em.remove(rent);
     }

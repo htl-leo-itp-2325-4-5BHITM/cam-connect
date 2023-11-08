@@ -38,6 +38,11 @@ public class Rent {
         this.rent_start = new Timestamp(new Date().getTime()).toString();
     }
 
+    public Rent(Student student) {
+        this();
+        this.student = student;
+    }
+
     public Rent(Student student, String rentStart, String rentEndPlanned, String rentEndActual) {
         this();
         this.student = student;
