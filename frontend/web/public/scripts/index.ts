@@ -404,7 +404,7 @@ function convertDateFormat(inputDate: string): string {
     // Überprüfen, ob das Datum bereits im richtigen Format ist
     const isAlreadyFormatted = /^\d{4}-\d{2}-\d{2}$/.test(inputDate);
 
-    if (isAlreadyFormatted) {
+    if (isAlreadyFormatted || inputDate == undefined) {
         // Wenn es bereits im richtigen Format ist, original zurückgeben
         return inputDate;
     }

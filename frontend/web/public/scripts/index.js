@@ -312,7 +312,7 @@ function findTeacherById(id) {
 }
 function convertDateFormat(inputDate) {
     var isAlreadyFormatted = /^\d{4}-\d{2}-\d{2}$/.test(inputDate);
-    if (isAlreadyFormatted) {
+    if (isAlreadyFormatted || inputDate == undefined) {
         return inputDate;
     }
     var dateParts = inputDate.split('.');
