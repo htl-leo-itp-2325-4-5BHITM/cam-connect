@@ -157,15 +157,17 @@ function generateTable(){
                     break
                 case "teacherRent":
                 case "teacherReturn":
-                    cellinput.value = findTeacherById(allRents[i]?.teacher_id)?.firstname || ""
+                    cellinput.value = findTeacherById(allRents[i]?.teacher_id)?.lastname || ""
                     break
                 case "note":
                     cellinput.addEventListener("blur", () => {updateNote(cellinput)})
                     cellinput.value = allRents[i]?.note
                     break
                 case "rent_start":
+                case "rent_end_planned":
+                case "rent_end_actual":
                     cellinput.addEventListener("input", () => {updateDate(cellinput)})
-                    cellinput.value = convertDateFormat(allRents[i]?.rent_start)
+                    cellinput.value = convertDateFormat(allRents[i][column.cellType])
             }
 
             cell.appendChild(cellinput)

@@ -84,7 +84,7 @@ function generateTable() {
         var row = document.createElement("tr");
         row.setAttribute("rent_id", String((_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id));
         columns.forEach(function (column) {
-            var _a, _b, _c, _d, _e, _f;
+            var _a, _b, _c, _d, _e;
             var cell = document.createElement("td");
             var cellinput = document.createElement("input");
             cellinput.type = column.inputType;
@@ -101,15 +101,17 @@ function generateTable() {
                     break;
                 case "teacherRent":
                 case "teacherReturn":
-                    cellinput.value = ((_d = findTeacherById((_c = allRents[i]) === null || _c === void 0 ? void 0 : _c.teacher_id)) === null || _d === void 0 ? void 0 : _d.firstname) || "";
+                    cellinput.value = ((_d = findTeacherById((_c = allRents[i]) === null || _c === void 0 ? void 0 : _c.teacher_id)) === null || _d === void 0 ? void 0 : _d.lastname) || "";
                     break;
                 case "note":
                     cellinput.addEventListener("blur", function () { updateNote(cellinput); });
                     cellinput.value = (_e = allRents[i]) === null || _e === void 0 ? void 0 : _e.note;
                     break;
                 case "rent_start":
+                case "rent_end_planned":
+                case "rent_end_actual":
                     cellinput.addEventListener("input", function () { updateDate(cellinput); });
-                    cellinput.value = convertDateFormat((_f = allRents[i]) === null || _f === void 0 ? void 0 : _f.rent_start);
+                    cellinput.value = convertDateFormat(allRents[i][column.cellType]);
             }
             cell.appendChild(cellinput);
             row.appendChild(cell);
