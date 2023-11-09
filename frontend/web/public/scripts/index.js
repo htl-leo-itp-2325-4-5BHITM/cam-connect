@@ -84,7 +84,7 @@ function generateTable() {
         var row = document.createElement("tr");
         row.setAttribute("rent_id", String((_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id));
         columns.forEach(function (column) {
-            var _a, _b, _c, _d, _e;
+            var _a, _b, _c, _d, _e, _f;
             var cell = document.createElement("td");
             var cellinput = document.createElement("input");
             cellinput.type = column.inputType;
@@ -97,16 +97,19 @@ function generateTable() {
             switch (column.cellType) {
                 case "student_id":
                     cellinput.addEventListener("mouseup", function () { openStudentPicker(cellinput); });
-                    cellinput.value = (_b = findStudentById((_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.student_id)) === null || _b === void 0 ? void 0 : _b.firstname;
+                    cellinput.value = ((_b = findStudentById((_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.student_id)) === null || _b === void 0 ? void 0 : _b.firstname) || "";
                     break;
                 case "teacherRent":
                 case "teacherReturn":
-                    cellinput.value = (_d = findTeacherById((_c = allRents[i]) === null || _c === void 0 ? void 0 : _c.teacher_id)) === null || _d === void 0 ? void 0 : _d.firstname;
+                    cellinput.value = ((_d = findTeacherById((_c = allRents[i]) === null || _c === void 0 ? void 0 : _c.teacher_id)) === null || _d === void 0 ? void 0 : _d.firstname) || "";
                     break;
                 case "note":
                     cellinput.addEventListener("blur", function () { updateNote(cellinput); });
                     cellinput.value = (_e = allRents[i]) === null || _e === void 0 ? void 0 : _e.note;
                     break;
+                case "rent_start":
+                    cellinput.addEventListener("input", function () { updateRentStart(cellinput); });
+                    cellinput.value = (_f = allRents[i]) === null || _f === void 0 ? void 0 : _f.rent_start;
             }
             cell.appendChild(cellinput);
             row.appendChild(cell);
@@ -191,6 +194,26 @@ function updateNote(input) {
     editingRentId = Number(input.closest("tr").getAttribute("rent_id"));
     var affectedRent = findRentById(editingRentId);
     affectedRent.note = input.value;
+    fetch(APPLICATION_URL + '/rent/update', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(affectedRent)
+    })
+        .then(function (response) { return response.text(); })
+        .then(function (data) {
+        console.log(data);
+        requestAllRents();
+        closeStudentPicker();
+    })
+        .catch(function (error) { return console.error(error); });
+}
+function updateRentStart(input) {
+    editingRentId = Number(input.closest("tr").getAttribute("rent_id"));
+    var affectedRent = findRentById(editingRentId);
+    console.log(input.value);
+    affectedRent.rent_start = input.value;
     fetch(APPLICATION_URL + '/rent/update', {
         method: 'POST',
         headers: {

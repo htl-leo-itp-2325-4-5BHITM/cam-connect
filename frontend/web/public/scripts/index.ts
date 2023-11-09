@@ -153,16 +153,19 @@ function generateTable(){
             switch (column.cellType) {
                 case "student_id":
                     cellinput.addEventListener("mouseup", () => {openStudentPicker(cellinput)})
-                    cellinput.value = findStudentById(allRents[i]?.student_id)?.firstname
+                    cellinput.value = findStudentById(allRents[i]?.student_id)?.firstname || ""
                     break
                 case "teacherRent":
                 case "teacherReturn":
-                    cellinput.value = findTeacherById(allRents[i]?.teacher_id)?.firstname
+                    cellinput.value = findTeacherById(allRents[i]?.teacher_id)?.firstname || ""
                     break
                 case "note":
                     cellinput.addEventListener("blur", () => {updateNote(cellinput)})
                     cellinput.value = allRents[i]?.note
                     break
+                case "rent_start":
+                    cellinput.addEventListener("input", () => {updateRentStart(cellinput)})
+                    cellinput.value = allRents[i]?.rent_start
             }
 
             cell.appendChild(cellinput)
@@ -266,6 +269,28 @@ function updateNote(input:HTMLInputElement){
     editingRentId = Number(input.closest("tr").getAttribute("rent_id"))
     let affectedRent:Rent = findRentById(editingRentId)
     affectedRent.note = input.value
+
+    fetch(APPLICATION_URL + '/rent/update', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(affectedRent)
+    })
+        .then(response => response.text())
+        .then(data => {
+            console.log(data)
+            requestAllRents()
+            closeStudentPicker()
+        })
+        .catch(error => console.error(error));
+}
+
+function updateRentStart(input:HTMLInputElement){
+    editingRentId = Number(input.closest("tr").getAttribute("rent_id"))
+    let affectedRent:Rent = findRentById(editingRentId)
+    console.log(input.value)
+    affectedRent.rent_start = input.value
 
     fetch(APPLICATION_URL + '/rent/update', {
         method: 'POST',

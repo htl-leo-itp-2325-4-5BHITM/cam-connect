@@ -125,4 +125,11 @@ table input:focus-visible {
   color: gray;
 }
 
+button {
+  padding: 0.2rem 1rem;
+  border: 0.1rem solid gray;
+  border-radius: 0.3rem;
+  margin-top: 0.5rem;
+}
+
 /*# sourceMappingURL=index.css.map */
