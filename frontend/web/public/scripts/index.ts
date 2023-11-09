@@ -157,7 +157,7 @@ function generateTable(){
                     break
                 case "teacherRent":
                 case "teacherReturn":
-                    cellinput.value = findTeacherById(allRents[i]?.teacher_id)?.lastname || ""
+                    cellinput.value = findTeacherById(allRents[i]?.teacher_id)?.lastname = ""
                     break
                 case "note":
                     cellinput.addEventListener("blur", () => {updateNote(cellinput)})

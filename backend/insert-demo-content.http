@@ -231,7 +231,7 @@ POST http://localhost:8080/device/create
 {"height": 14.75, "dtype": "Microphone", "head": "", "note": "Kaputt", "serial": "Samson"}
 
 
-
+###
 // Rent
 POST http://localhost:8080/rent/create
 

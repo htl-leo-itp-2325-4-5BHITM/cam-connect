@@ -101,7 +101,7 @@ function generateTable() {
                     break;
                 case "teacherRent":
                 case "teacherReturn":
-                    cellinput.value = ((_d = findTeacherById((_c = allRents[i]) === null || _c === void 0 ? void 0 : _c.teacher_id)) === null || _d === void 0 ? void 0 : _d.lastname) || "";
+                    cellinput.value = (_d = findTeacherById((_c = allRents[i]) === null || _c === void 0 ? void 0 : _c.teacher_id)) === null || _d === void 0 ? void 0 : _d.lastname;
                     break;
                 case "note":
                     cellinput.addEventListener("blur", function () { updateNote(cellinput); });
