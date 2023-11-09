@@ -116,7 +116,7 @@ function generateTable() {
         });
         html.push(row);
     };
-    for (var i = 0; i < Math.min(allRents.length, 21); i++) {
+    for (var i = 0; i < Math.min(allRents.length, 20); i++) {
         _loop_1(i);
     }
     table.append.apply(table, html);

@@ -55,6 +55,9 @@ public class RentRepository {
             rent1.setTeacher(teacher);
             rent1.setDevice(device);
             rent1.setNotes(rent.getString("note"));
+            rent1.setRent_start(rent.getString("rent_start"));
+            rent1.setRent_end_actual(rent.getString("rent_end_actual"));
+            rent1.setRent_end_planned(rent.getString("rent_end_planned"));
         } catch(Exception ex) {
 
         }
