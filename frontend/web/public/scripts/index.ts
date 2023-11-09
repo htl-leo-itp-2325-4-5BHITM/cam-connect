@@ -133,7 +133,7 @@ function generateTable(){
     table.appendChild(headingHtml)
 
     let html:Element[] = []
-    for (let i = 0; i < Math.min(allRents.length, 21); i++) {
+    for (let i = 0; i < Math.min(allRents.length, 20); i++) {
         let row = document.createElement("tr")
         row.setAttribute("rent_id", String(allRents[i]?.rent_id))
 
