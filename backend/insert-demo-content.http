@@ -232,183 +232,152 @@ POST http://localhost:8080/device/create
 
 
 
-###
 // Rent
 POST http://localhost:8080/rent/create
 
-{"student_id": 12, "rent_start": "08.11.2023", "rent_end_planned": "10.11.2023", "rent_end_actual": "15.11.2023"}
+{"student_id": 12, "rent_start": "2023-11-08", "rent_end_planned": "2023-11-10", "rent_end_actual": "2023-11-15"}
 
 ###
 POST http://localhost:8080/rent/update
 
-{"rent_id": 1, "device_id": 4, "teacher_id": 3, "student_id": 12, "rent_start": "08.11.2023", "rent_end_planned": "10.11.2023", "rent_end_actual": "15.11.2023"}
+{"rent_id": 1, "device_id": 4, "teacher_id": 3, "student_id": 12, "rent_start": "2023-11-08", "rent_end_planned": "2023-11-10", "rent_end_actual": "2023-11-15"}
 
 ###
 POST http://localhost:8080/rent/create
 
-{"student_id": 8, "rent_start": "17.11.2023", "rent_end_planned": "20.11.2023", "rent_end_actual": "25.11.2023"}
+{"student_id": 8, "rent_start": "2023-11-17", "rent_end_planned": "2023-11-20", "rent_end_actual": "2023-11-25"}
 
 ###
 POST http://localhost:8080/rent/update
 
-{"rent_id": 2, "device_id": 9, "teacher_id": 2, "student_id": 8, "rent_start": "17.11.2023", "rent_end_planned": "20.11.2023", "rent_end_actual": "25.11.2023"}
+{"rent_id": 2, "device_id": 9, "teacher_id": 2, "student_id": 8, "rent_start": "2023-11-17", "rent_end_planned": "2023-11-20", "rent_end_actual": "2023-11-25"}
 
 ###
 POST http://localhost:8080/rent/create
 
-{"student_id": 19, "rent_start": "03.12.2023", "rent_end_planned": "07.12.2023", "rent_end_actual": "12.12.2023"}
+{"student_id": 19, "rent_start": "2023-12-03", "rent_end_planned": "2023-12-07", "rent_end_actual": "2023-12-12"}
 
 ###
 POST http://localhost:8080/rent/update
 
-{"rent_id": 3, "device_id": 7, "teacher_id": 5, "student_id": 19, "rent_start": "03.12.2023", "rent_end_planned": "07.12.2023", "rent_end_actual": "12.12.2023"}
+{"rent_id": 3, "device_id": 7, "teacher_id": 5, "student_id": 19, "rent_start": "2023-12-03", "rent_end_planned": "2023-12-07", "rent_end_actual": "2023-12-12"}
 
 ###
 POST http://localhost:8080/rent/create
 
-{"student_id": 11, "rent_start": "15.12.2023", "rent_end_planned": "18.12.2023", "rent_end_actual": "23.12.2023"}
+{"student_id": 11, "rent_start": "2023-12-15", "rent_end_planned": "2023-12-18", "rent_end_actual": "2023-12-23"}
 
 ###
 POST http://localhost:8080/rent/update
 
-{"rent_id": 4, "device_id": 16, "teacher_id": 4, "student_id": 11, "rent_start": "15.12.2023", "rent_end_planned": "18.12.2023", "rent_end_actual": "23.12.2023"}
+{"rent_id": 4, "device_id": 16, "teacher_id": 4, "student_id": 11, "rent_start": "2023-12-15", "rent_end_planned": "2023-12-18", "rent_end_actual": "2023-12-23"}
 
 ###
 POST http://localhost:8080/rent/create
 
-{"student_id": 14, "rent_start": "19.01.2024", "rent_end_planned": "22.01.2024", "rent_end_actual": "27.01.2024"}
+{"student_id": 14, "rent_start": "2024-01-19", "rent_end_planned": "2024-01-22", "rent_end_actual": "2024-01-27"}
 
 ###
 POST http://localhost:8080/rent/update
 
-{"rent_id": 5, "device_id": 8, "teacher_id": 2, "student_id": 14, "rent_start": "19.01.2024", "rent_end_planned": "22.01.2024", "rent_end_actual": "27.01.2024"}
+{"rent_id": 5, "device_id": 8, "teacher_id": 2, "student_id": 14, "rent_start": "2024-01-19", "rent_end_planned": "2024-01-22", "rent_end_actual": "2024-01-27"}
 
 ###
 POST http://localhost:8080/rent/create
 
-{"student_id": 7, "rent_start": "01.02.2024", "rent_end_planned": "04.02.2024", "rent_end_actual": "09.02.2024"}
+{"student_id": 7, "rent_start": "2024-02-01", "rent_end_planned": "2024-02-04", "rent_end_actual": "2024-02-09"}
 
 ###
 POST http://localhost:8080/rent/update
 
-{"rent_id": 6, "device_id": 5, "teacher_id": 4, "student_id": 7, "rent_start": "01.02.2024", "rent_end_planned": "04.02.2024", "rent_end_actual": "09.02.2024"}
+{"rent_id": 6, "device_id": 5, "teacher_id": 4, "student_id": 7, "rent_start": "2024-02-01", "rent_end_planned": "2024-02-04", "rent_end_actual": "2024-02-09"}
 
 ###
 POST http://localhost:8080/rent/create
 
-{"student_id": 3, "rent_start": "13.02.2024", "rent_end_planned": "16.02.2024", "rent_end_actual": "21.02.2024"}
+{"student_id": 3, "rent_start": "2024-02-13", "rent_end_planned": "2024-02-16", "rent_end_actual": "2024-02-21"}
 
 ###
 POST http://localhost:8080/rent/update
 
-{"rent_id": 7, "device_id": 11, "teacher_id": 5, "student_id": 3, "rent_start": "13.02.2024", "rent_end_planned": "16.02.2024", "rent_end_actual": "21.02.2024"}
+{"rent_id": 7, "device_id": 11, "teacher_id": 5, "student_id": 3, "rent_start": "2024-02-13", "rent_end_planned": "2024-02-16", "rent_end_actual": "2024-02-21"}
 
 ###
 POST http://localhost:8080/rent/create
 
-{"student_id": 6, "rent_start": "25.02.2024", "rent_end_planned": "28.02.2024", "rent_end_actual": "04.03.2024"}
+{"student_id": 6, "rent_start": "2024-02-25", "rent_end_planned": "2024-02-28", "rent_end_actual": "2024-03-04"}
 
 ###
 POST http://localhost:8080/rent/update
 
-{"rent_id": 8, "device_id": 17, "teacher_id": 1, "student_id": 6, "rent_start": "25.02.2024", "rent_end_planned": "28.02.2024", "rent_end_actual": "04.03.2024"}
+{"rent_id": 8, "device_id": 17, "teacher_id": 1, "student_id": 6, "rent_start": "2024-02-25", "rent_end_planned": "2024-02-28", "rent_end_actual": "2024-03-04"}
 
 ###
 POST http://localhost:8080/rent/create
 
-{"student_id": 18, "rent_start": "08.03.2024", "rent_end_planned": "11.03.2024", "rent_end_actual": "16.03.2024"}
+{"student_id": 18, "rent_start": "2024-03-08", "rent_end_planned": "2024-03-11", "rent_end_actual": "2024-03-16"}
 
 ###
 POST http://localhost:8080/rent/update
 
-{"rent_id": 9, "device_id": 10, "teacher_id": 3, "student_id": 18, "rent_start": "08.03.2024", "rent_end_planned": "11.03.2024", "rent_end_actual": "16.03.2024"}
+{"rent_id": 9, "device_id": 10, "teacher_id": 3, "student_id": 18, "rent_start": "2024-03-08", "rent_end_planned": "2024-03-11", "rent_end_actual": "2024-03-16"}
 
 ###
 POST http://localhost:8080/rent/create
 
-{"student_id": 1, "rent_start": "20.03.2024", "rent_end_planned": "23.03.2024", "rent_end_actual": "28.03.2024"}
+{"student_id": 1, "rent_start": "2024-03-20", "rent_end_planned": "2024-03-23", "rent_end_actual": "2024-03-28"}
 
 ###
 POST http://localhost:8080/rent/update
 
-{"rent_id": 10, "device_id": 8, "teacher_id": 4, "student_id": 1, "rent_start": "20.03.2024", "rent_end_planned": "23.03.2024", "rent_end_actual": "28.03.2024"}
+{"rent_id": 10, "device_id": 8, "teacher_id": 4, "student_id": 1, "rent_start": "2024-03-20", "rent_end_planned": "2024-03-23", "rent_end_actual": "2024-03-28"}
 
 ###
 POST http://localhost:8080/rent/create
 
-{"student_id": 4, "rent_start": "01.04.2024", "rent_end_planned": "04.04.2024", "rent_end_actual": "09.04.2024"}
+{"student_id": 4, "rent_start": "2024-04-01", "rent_end_planned": "2024-04-04", "rent_end_actual": "2024-04-09"}
 
 ###
 POST http://localhost:8080/rent/update
 
-{"rent_id": 11, "device_id": 6, "teacher_id": 2, "student_id": 4, "rent_start": "01.04.2024", "rent_end_planned": "04.04.2024", "rent_end_actual": "09.04.2024"}
+{"rent_id": 11, "device_id": 6, "teacher_id": 2, "student_id": 4, "rent_start": "2024-04-01", "rent_end_planned": "2024-04-04", "rent_end_actual": "2024-04-09"}
 
 ###
 POST http://localhost:8080/rent/create
 
-{"student_id": 15, "rent_start": "13.04.2024", "rent_end_planned": "16.04.2024", "rent_end_actual": "21.04.2024"}
+{"student_id": 15, "rent_start": "2024-04-13", "rent_end_planned": "2024-04-16", "rent_end_actual": "2024-04-21"}
 
 ###
 POST http://localhost:8080/rent/update
 
-{"rent_id": 12, "device_id": 7, "teacher_id": 5, "student_id": 15, "rent_start": "13.04.2024", "rent_end_planned": "16.04.2024", "rent_end_actual": "21.04.2024"}
+{"rent_id": 12, "device_id": 7, "teacher_id": 5, "student_id": 15, "rent_start": "2024-04-13", "rent_end_planned": "2024-04-16", "rent_end_actual": "2024-04-21"}
 
 ###
 POST http://localhost:8080/rent/create
 
-{"student_id": 2, "rent_start": "25.04.2024", "rent_end_planned": "28.04.2024", "rent_end_actual": "03.05.2024"}
+{"student_id": 2, "rent_start": "2024-04-25", "rent_end_planned": "2024-04-28", "rent_end_actual": "2024-05-03"}
 
 ###
 POST http://localhost:8080/rent/update
 
-{"rent_id": 13, "device_id": 5, "teacher_id": 1, "student_id": 2, "rent_start": "25.04.2024", "rent_end_planned": "28.04.2024", "rent_end_actual": "03.05.2024"}
+{"rent_id": 13, "device_id": 5, "teacher_id": 1, "student_id": 2, "rent_start": "2024-04-25", "rent_end_planned": "2024-04-28", "rent_end_actual": "2024-05-03"}
 
 ###
 POST http://localhost:8080/rent/create
 
-{"student_id": 19, "rent_start": "07.05.2024", "rent_end_planned": "10.05.2024", "rent_end_actual": "15.05.2024"}
+{"student_id": 19, "rent_start": "2024-05-07", "rent_end_planned": "2024-05-10", "rent_end_actual": "2024-05-15"}
 
 ###
 POST http://localhost:8080/rent/update
 
-{"rent_id": 14, "device_id": 10, "teacher_id": 3, "student_id": 19, "rent_start": "07.05.2024", "rent_end_planned": "10.05.2024", "rent_end_actual": "15.05.2024"}
+{"rent_id": 14, "device_id": 10, "teacher_id": 3, "student_id": 19, "rent_start": "2024-05-07", "rent_end_planned": "2024-05-10", "rent_end_actual": "2024-05-15"}
 
 ###
 POST http://localhost:8080/rent/create
 
-{"student_id": 11, "rent_start": "19.05.2024", "rent_end_planned": "22.05.2024", "rent_end_actual": "27.05.2024"}
+{"student_id": 11, "rent_start": "2024-05-19", "rent_end_planned": "2024-05-22", "rent_end_actual": "2024-05-27"}
 
 ###
 POST http://localhost:8080/rent/update
 
-{"rent_id": 15, "device_id": 12, "teacher_id": 4, "student_id": 11, "rent_start": "19.05.2024", "rent_end_planned": "22.05.2024", "rent_end_actual": "27.05.2024"}
-
-###
-POST http://localhost:8080/rent/create
-
-{"student_id": 5, "rent_start": "31.05.2024", "rent_end_planned": "03.06.2024", "rent_end_actual": "08.06.2024"}
-
-###
-POST http://localhost:8080/rent/update
-
-{"rent_id": 16, "device_id": 3, "teacher_id": 1, "student_id": 5, "rent_start": "31.05.2024", "rent_end_planned": "03.06.2024", "rent_end_actual": "08.06.2024"}
-
-###
-POST http://localhost:8080/rent/create
-
-{"student_id": 10, "rent_start": "12.06.2024", "rent_end_planned": "15.06.2024", "rent_end_actual": "20.06.2024"}
-
-###
-POST http://localhost:8080/rent/update
-
-{"rent_id": 17, "device_id": 7, "teacher_id": 5, "student_id": 10, "rent_start": "12.06.2024", "rent_end_planned": "15.06.2024", "rent_end_actual": "20.06.2024"}
-
-###
-POST http://localhost:8080/rent/create
-
-{"student_id": 14, "rent_start": "24.06.2024", "rent_end_planned": "27.06.2024", "rent_end_actual": "02.07.2024"}
-
-###
-POST http://localhost:8080/rent/update
-
-{"rent_id": 18, "device_id": 8, "teacher_id": 2, "student_id": 14, "rent_start": "24.06.2024", "rent_end_planned": "27.06.2024", "rent_end_actual": "02.07.2024"}
+{"rent_id": 15, "device_id": 12, "teacher_id": 4, "student_id": 11, "rent_start": "2024-05-19", "rent_end_planned": "2024-05-22", "rent_end_actual": "2024-05-27"}

@@ -49,19 +49,18 @@ public class RentRepository {
         Teacher teacher = getTeacherById(rent.getInt("teacher_id"));
         Device device = getDeviceById(rent.getInt("device_id"));
 
-        Rent rent1 = em.find(Rent.class, rent.getInt("rent_id"));
         String rent_start = "";
         String rent_end_planned = "";
         String rent_end_actual = "";
         String note = "";
+
+        Rent rent1 = em.find(Rent.class, rent.getInt("rent_id"));
         try{
             rent_start = rent.getString("rent_start");
             rent_end_planned = rent.getString("rent_end_planned");
             rent_end_actual = rent.getString("rent_end_actual");
             note = rent.getString("note");
-        } catch(Exception ex) {
-
-        }
+        } catch(Exception ex) {}
 
         rent1.update(student, device, teacher, rent_start, rent_end_planned, rent_end_actual, note);
         em.merge(rent1);
