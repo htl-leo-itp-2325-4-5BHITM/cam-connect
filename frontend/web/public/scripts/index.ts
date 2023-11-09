@@ -164,8 +164,8 @@ function generateTable(){
                     cellinput.value = allRents[i]?.note
                     break
                 case "rent_start":
-                    cellinput.addEventListener("input", () => {updateRentStart(cellinput)})
-                    cellinput.value = allRents[i]?.rent_start
+                    cellinput.addEventListener("input", () => {updateDate(cellinput)})
+                    cellinput.value = convertDateFormat(allRents[i]?.rent_start)
             }
 
             cell.appendChild(cellinput)
@@ -286,11 +286,13 @@ function updateNote(input:HTMLInputElement){
         .catch(error => console.error(error));
 }
 
-function updateRentStart(input:HTMLInputElement){
+function updateDate(input:HTMLInputElement){
     editingRentId = Number(input.closest("tr").getAttribute("rent_id"))
+    let param = input.getAttribute("cellType")
     let affectedRent:Rent = findRentById(editingRentId)
-    console.log(input.value)
-    affectedRent.rent_start = input.value
+    // @ts-ignore
+    affectedRent[param] = input.value
+    console.log(affectedRent)
 
     fetch(APPLICATION_URL + '/rent/update', {
         method: 'POST',
@@ -394,6 +396,27 @@ function findTeacherById(id:number):Teacher {
         }
     })
     return res
+}
+
+function convertDateFormat(inputDate: string): string {
+    // Überprüfen, ob das Datum bereits im richtigen Format ist
+    const isAlreadyFormatted = /^\d{4}-\d{2}-\d{2}$/.test(inputDate);
+
+    if (isAlreadyFormatted) {
+        // Wenn es bereits im richtigen Format ist, original zurückgeben
+        return inputDate;
+    }
+
+    // Aufteilen des Datums in Tag, Monat und Jahr
+    const dateParts = inputDate.split('.');
+    const day = dateParts[0];
+    const month = dateParts[1];
+    const year = dateParts[2];
+
+    // Neues Datum im gewünschten Format erstellen
+    const formattedDate = `${year}-${month}-${day}`;
+
+    return formattedDate;
 }
 
 //endregion

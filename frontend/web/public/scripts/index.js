@@ -108,8 +108,8 @@ function generateTable() {
                     cellinput.value = (_e = allRents[i]) === null || _e === void 0 ? void 0 : _e.note;
                     break;
                 case "rent_start":
-                    cellinput.addEventListener("input", function () { updateRentStart(cellinput); });
-                    cellinput.value = (_f = allRents[i]) === null || _f === void 0 ? void 0 : _f.rent_start;
+                    cellinput.addEventListener("input", function () { updateDate(cellinput); });
+                    cellinput.value = convertDateFormat((_f = allRents[i]) === null || _f === void 0 ? void 0 : _f.rent_start);
             }
             cell.appendChild(cellinput);
             row.appendChild(cell);
@@ -209,11 +209,12 @@ function updateNote(input) {
     })
         .catch(function (error) { return console.error(error); });
 }
-function updateRentStart(input) {
+function updateDate(input) {
     editingRentId = Number(input.closest("tr").getAttribute("rent_id"));
+    var param = input.getAttribute("cellType");
     var affectedRent = findRentById(editingRentId);
-    console.log(input.value);
-    affectedRent.rent_start = input.value;
+    affectedRent[param] = input.value;
+    console.log(affectedRent);
     fetch(APPLICATION_URL + '/rent/update', {
         method: 'POST',
         headers: {
@@ -306,5 +307,17 @@ function findTeacherById(id) {
         }
     });
     return res;
+}
+function convertDateFormat(inputDate) {
+    var isAlreadyFormatted = /^\d{4}-\d{2}-\d{2}$/.test(inputDate);
+    if (isAlreadyFormatted) {
+        return inputDate;
+    }
+    var dateParts = inputDate.split('.');
+    var day = dateParts[0];
+    var month = dateParts[1];
+    var year = dateParts[2];
+    var formattedDate = "".concat(year, "-").concat(month, "-").concat(day);
+    return formattedDate;
 }
 //# sourceMappingURL=index.js.map

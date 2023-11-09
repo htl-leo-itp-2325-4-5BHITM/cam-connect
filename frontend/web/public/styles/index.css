@@ -130,6 +130,7 @@ button {
   border: 0.1rem solid gray;
   border-radius: 0.3rem;
   margin-top: 0.5rem;
+  cursor: pointer;
 }
 
 /*# sourceMappingURL=index.css.map */
