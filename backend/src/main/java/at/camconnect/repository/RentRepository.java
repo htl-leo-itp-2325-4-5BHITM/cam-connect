@@ -50,10 +50,14 @@ public class RentRepository {
         Device device = getDeviceById(rent.getInt("device_id"));
 
         Rent rent1 = em.find(Rent.class, rent.getInt("rent_id"));
-        rent1.setStudent(student);
-        rent1.setTeacher(teacher);
-        rent1.setDevice(device);
-        rent1.setNotes(rent.getString("note"));
+        try{
+            rent1.setStudent(student);
+            rent1.setTeacher(teacher);
+            rent1.setDevice(device);
+            rent1.setNotes(rent.getString("note"));
+        } catch(Exception ex) {
+
+        }
 
         em.merge(rent1);
     }

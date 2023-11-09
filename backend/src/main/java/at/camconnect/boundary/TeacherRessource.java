@@ -2,6 +2,9 @@ package at.camconnect.boundary;
 
 import at.camconnect.model.Teacher;
 import at.camconnect.repository.TeacherRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.vertx.core.json.JsonObject;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
@@ -50,6 +53,7 @@ public class TeacherRessource {
 
     @GET
     @Path("/getall")
+    @Produces(MediaType.APPLICATION_JSON)
     public List<Teacher> getAll() {
         return teacherRepository.getAll();
     }
