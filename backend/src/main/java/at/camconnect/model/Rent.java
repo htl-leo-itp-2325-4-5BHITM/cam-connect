@@ -55,18 +55,14 @@ public class Rent {
         this.rent_end_actual = rentEndActual;
     }
 
-    public Rent(Student student, Device device, Teacher teacher, String rentStart, String rentEndPlanned, String rentEndActual, String notes) {
-        this();
+    public void update(Student student, Device device, Teacher teacher, String rentStart, String rentEndPlanned, String rentEndActual, String notes) {
+        this.student = student != null ? student : this.student;
+        this.device = device != null ? device : this.device;
+        this.teacher = teacher != null ? teacher : this.teacher;
 
-        this.student = student;
-        this.device = device;
-        this.teacher = teacher;
-
-        if(!rentStart.isEmpty()){
-            this.rent_start = rentStart;
-        }
-        this.rent_end_planned = rentEndPlanned;
-        this.rent_end_actual = rentEndActual;
+        this.rent_start = !rentStart.isEmpty() ? rentStart : this.rent_start;
+        this.rent_end_planned = !rentEndPlanned.isEmpty() ? rentEndPlanned : this.rent_end_planned;
+        this.rent_end_actual = !rentEndActual.isEmpty() ? rentEndActual : this.rent_end_actual;
     }
 
     @Override
