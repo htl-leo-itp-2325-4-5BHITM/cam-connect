@@ -3,7 +3,7 @@
   size: A4 landscape;
 }
 @media print {
-  #options {
+  #createRent {
     display: none;
   }
 }

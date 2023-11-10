@@ -119,7 +119,11 @@ const columns:column[] = [
     {name: "Anmerkung", inputType: "text", cellType: "note"},
 ]
 
+/**
+ * Renders the Table to the html based on the data in the allRents array of Rent JSONs
+ */
 function generateTable(){
+    //Create the Headin Row based purely on the data in the columns constant
     let headingHtml = document.createElement("tr")
 
     columns.forEach(column=>{
@@ -132,24 +136,29 @@ function generateTable(){
     table.innerHTML = ""
     table.appendChild(headingHtml)
 
+    //creates the main content
     let html:Element[] = []
-    for (let i = 0; i < Math.min(allRents.length, 20); i++) {
+    for (let i = 0; i < Math.min(allRents.length, 20); i++) { //run over either all the entries in allRents or 20 (max that fits on the page)
         let row = document.createElement("tr")
         row.setAttribute("rent_id", String(allRents[i]?.rent_id))
 
+        //loops over all the columns and creates a cell for each
         columns.forEach(column=>{
             let cell = document.createElement("td")
 
             let cellinput = document.createElement("input")
             cellinput.type = column.inputType
-            cellinput.setAttribute("celltype", column.cellType)
+            cellinput.setAttribute("celltype", column.cellType) //what piece of data the cell displays (rent_start, student_id etc.)
 
+            //TODO aberger wants to change switch statements to a map containing anonymous functions
+            //sets attributes specific to inputs
             switch (column.inputType) {
                 case "number":
                     cellinput.setAttribute("min", "0");
                     break
             }
 
+            //registers eventlisteners and displays data from allRents for columns that are synced with the db
             switch (column.cellType) {
                 case "student_id":
                     cellinput.addEventListener("mouseup", () => {openStudentPicker(cellinput)})
@@ -189,19 +198,24 @@ const studentSelectionPopup:HTMLElement = document.querySelector("#studentSelect
 const studentSearchbar:HTMLElement = document.querySelector('#studentSelectionPopup .search')
 function openStudentPicker(input:HTMLInputElement){
     editingRentId = Number(input.closest("tr").getAttribute("rent_id"))
+
+    //resets the popup
     searchForStudentFromSelectInput("")
     studentSelectionPopup.querySelector("input").value = ""
+
     let bounds = input.getBoundingClientRect()
     studentSelectionPopup.style.top = bounds.top + "px"
     studentSelectionPopup.style.left = bounds.left + "px"
 
     studentSelectionPopup.style.display = "block"
     studentSearchbar.focus()
+
     setTimeout(function(){document.addEventListener("mousedown", closeStudentPickerOnBlur)},)
 }
 
 function closeStudentPickerOnBlur(e:MouseEvent){
-    // @ts-ignore
+    // check if what was clicked is the popup and exit
+    // @ts-ignore cause the target object does not have the closest function in typescript smh
     if(e.target === studentSelectionPopup || e.target.closest('#studentSelectionPopup') === studentSelectionPopup || e.target.getAttribute("celltype") === "student") return
 
     closeStudentPicker()
@@ -332,6 +346,7 @@ function createRent(){
 }
 
 //region utlity
+//these should all be replaced and handled by the backend / served from the backend
 function rentArrayToJson(array: any[]):Rent{
     let json:Rent = {
         rent_id: Number(array[0]),

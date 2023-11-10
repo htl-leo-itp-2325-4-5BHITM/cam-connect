@@ -1,5 +1,6 @@
 package at.camconnect.repository;
 
+import at.camconnect.model.Rent;
 import at.camconnect.model.Student;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -43,9 +44,8 @@ public class StudentRepository{
     }*/
 
     public List<Student> getAll(){
-        Query q = em.createNativeQuery("SELECT STUDENT_ID, FIRSTNAME, LASTNAME, SCHOOL_CLASS, PASSWORD, USER_ID FROM Student");
-        List<Student> results = q.getResultList();
-        return results;
+        List<Student> students = em.createQuery("SELECT s FROM Student s", Student.class).getResultList();
+        return students;
     }
 
     public List<Student> search(JsonObject searchParams){
