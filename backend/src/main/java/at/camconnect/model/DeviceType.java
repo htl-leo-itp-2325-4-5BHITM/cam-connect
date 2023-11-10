@@ -1,21 +1,23 @@
 package at.camconnect.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class DeviceType {
     @Id
     @GeneratedValue
-    private long tagId;
-    private long typeId;
+    private long type_Id;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tag_Id", fetch = FetchType.EAGER)
+    private List<Tag> tags;
     private String typeName;
 
 
     public DeviceType(String typeName, long typeId) {
         this.typeName = typeName;
-        this.typeId = typeId;
+        this.type_Id = typeId;
     }
 
     public DeviceType() {
@@ -30,12 +32,12 @@ public class DeviceType {
         this.typeName = typeName;
     }
 
-    public long getTypeId() {
-        return typeId;
+    public long getType_Id() {
+        return type_Id;
     }
 
-    public void setTypeId(long typeId) {
-        this.typeId = typeId;
+    public void setType_Id(long typeId) {
+        this.type_Id = typeId;
     }
     //</editor-fold>
 }

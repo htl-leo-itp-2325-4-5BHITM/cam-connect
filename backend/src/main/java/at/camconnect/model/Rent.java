@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import org.apache.derby.client.am.DateTime;
 
 import java.sql.Time;
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -14,6 +13,7 @@ import java.util.Date;
 
 @Entity
 public class Rent {
+    //Wie soll man Set auf Rent mappen wenn selber primary key (hilfe)
     @Id
     @GeneratedValue
     private long rent_id;
