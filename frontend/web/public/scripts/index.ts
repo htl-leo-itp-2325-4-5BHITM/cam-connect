@@ -16,11 +16,7 @@ function requestAllStudents() {
         })
         .then(data => {
             console.log(data)
-            let html = []
-
-            data.forEach((student:string[]) => {
-                allStudents.push(studentArrayToJson(student))
-            })
+            allStudents = data
 
             //TODO do this with promises
             requestAllTeachers()
@@ -35,12 +31,7 @@ function requestAllTeachers() {
             return result.json()
         })
         .then(data => {
-            console.log(data)
-            let html = []
-
-            data.forEach((teacher:string[]) => {
-                allTeachers.push(teacherArrayToJson(teacher))
-            })
+            allTeachers = data
 
             requestAllRents()
         })
@@ -55,11 +46,7 @@ function requestAllRents() {
         })
         .then(data => {
             console.log(data)
-            let html = []
-
-            data.forEach((rent:string[]) => {
-                allRents.push(rentArrayToJson(rent))
-            })
+            allRents = data
 
             generateTable()
         })
@@ -166,7 +153,7 @@ function generateTable(){
                     break
                 case "teacherRent":
                 case "teacherReturn":
-                    cellinput.value = findTeacherById(allRents[i]?.teacher_id)?.lastname = ""
+                    cellinput.value = findTeacherById(allRents[i]?.teacher_id)?.lastname || ""
                     break
                 case "note":
                     cellinput.addEventListener("blur", () => {updateNote(cellinput)})

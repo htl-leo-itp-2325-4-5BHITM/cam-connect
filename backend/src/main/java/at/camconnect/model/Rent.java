@@ -36,7 +36,7 @@ public class Rent {
     private String notes;
 
     public Rent() {
-        this.rent_start = new Timestamp(new Date().getTime()).toString();
+        //this.rent_start = new Timestamp(new Date().getTime()).toString());
     }
 
     public Rent(Student student) {

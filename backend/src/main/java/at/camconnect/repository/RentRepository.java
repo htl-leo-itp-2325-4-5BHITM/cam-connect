@@ -75,7 +75,6 @@ public class RentRepository {
         return em.find(Rent.class, id);
     }
 
-
     public Student getStudentById(int student_id){
         return em.find(Student.class, student_id);
     }

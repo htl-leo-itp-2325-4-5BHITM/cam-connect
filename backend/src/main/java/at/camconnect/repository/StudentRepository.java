@@ -1,6 +1,5 @@
 package at.camconnect.repository;
 
-import at.camconnect.model.Rent;
 import at.camconnect.model.Student;
 
 import jakarta.enterprise.context.ApplicationScoped;

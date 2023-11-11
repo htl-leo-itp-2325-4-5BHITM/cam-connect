@@ -10,10 +10,9 @@ public class DeviceType {
     @GeneratedValue
     private long type_Id;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tag_Id", fetch = FetchType.EAGER)
-    private List<Tag> tags;
+    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "tag_id", fetch = FetchType.EAGER)
+    //private List<Tag> tags;
     private String typeName;
-
 
     public DeviceType(String typeName, long typeId) {
         this.typeName = typeName;

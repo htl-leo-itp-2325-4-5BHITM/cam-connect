@@ -70,12 +70,13 @@
         * note: String
     }
 
-    entity Rent {
+    entity Rent{
         * rent_id
         --
         * student_id: Int
         * device_id: Int
-        * teacher_id: Int
+        * teacher_id_start: Int
+        * teacher_id_end: Int
         * rent_start: Date
         * rent_end_planned: Date
         * rent_end_actual: Date
@@ -83,7 +84,7 @@
         * status_rent_end: boolean
     }
 
-   entity Favorite {
+   entity Favorite-WORK-IN-PROGRESS {
         * fav_id
         --
         * device_id: Int
@@ -117,22 +118,21 @@
         * user_id
     }
 
-     entity Set {
-        * teacher_id
+     entity DeviceSet {
+        * set_id
         --
         * name: string
-        * verfication: string
-        * password
-        * user_id
+        * device_types: List<DeviceType>
     }
 
     Device }o-down-|| DeviceType
-    DeviceType }o-left-|{ Set
+    DeviceType }|-left-o{ DeviceSet
     Rent }o--|| Device
     Rent }o-up-|| Student
-    Rent }o--|| Set
+    Rent }o--|| DeviceSet
     Rent }o--|| Student
     Favorite }o--|| Student
+    Rent }o--|| Teacher
     Rent }o--|| Teacher
     DeviceType ||-right-o{ Tag
 @enduml
