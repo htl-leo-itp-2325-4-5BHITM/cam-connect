@@ -1,21 +1,13 @@
 package at.camconnect.model;
 
-import at.camconnect.repository.StudentRepository;
-import jakarta.ejb.Local;
 import jakarta.persistence.*;
-import org.apache.derby.client.am.DateTime;
-
-import java.sql.Time;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Date;
 
 @Entity
 public class Rent {
     //Wie soll man Set auf Rent mappen wenn selber primary key (hilfe)
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rent_seq")
+    @SequenceGenerator(name = "rent_seq", sequenceName = "RENT_SEQ", allocationSize = 1)
     private long rent_id;
 
     @ManyToOne
@@ -33,7 +25,7 @@ public class Rent {
     private String rent_start;
     private String rent_end_planned;
     private String rent_end_actual;
-    private String notes;
+    private String note;
 
     public Rent() {
         //this.rent_start = new Timestamp(new Date().getTime()).toString());
@@ -63,6 +55,8 @@ public class Rent {
         this.rent_start = !rentStart.isEmpty() ? rentStart : this.rent_start;
         this.rent_end_planned = !rentEndPlanned.isEmpty() ? rentEndPlanned : this.rent_end_planned;
         this.rent_end_actual = !rentEndActual.isEmpty() ? rentEndActual : this.rent_end_actual;
+
+        this.note = notes;
     }
 
     @Override
@@ -78,12 +72,12 @@ public class Rent {
                 '}';
     }
 
-    public String getNotes() {
-        return notes;
+    public String getNote() {
+        return note;
     }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public void setNote(String notes) {
+        this.note = notes;
     }
 
     public long getRent_id() {

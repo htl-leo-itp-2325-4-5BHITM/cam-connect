@@ -2,22 +2,27 @@ package at.camconnect.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Tag {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tag_seq")
+    @SequenceGenerator(name = "tag_seq", sequenceName = "TAG_SEQ", allocationSize = 1)
     private long tag_id;
 
-    @ManyToOne
+    //TODO this is most likely wrong
+    @OneToMany
     @JoinColumn(name = "type_id")
-    private DeviceType type;
+    private List<DeviceType> type;
 
-    private String descreption;
+    private String name;
 
-    public Tag(long tag_Id, DeviceType type, String descreption) {
-        this.tag_id = tag_Id;
-        this.type = type;
-        this.descreption = descreption;
+    private String description;
+
+    public Tag(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 
     public Tag() {
@@ -31,19 +36,11 @@ public class Tag {
         this.tag_id = tag_Id;
     }
 
-    public DeviceType getType() {
-        return type;
+    public String getDescription() {
+        return description;
     }
 
-    public void setType(DeviceType type) {
-        this.type = type;
-    }
-
-    public String getDescreption() {
-        return descreption;
-    }
-
-    public void setDescreption(String descreption) {
-        this.descreption = descreption;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

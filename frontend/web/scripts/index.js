@@ -2,21 +2,15 @@ var APPLICATION_URL = "http://localhost:8080";
 var allRents = [];
 var allStudents = [];
 var allTeachers = [];
-var editingRentId = -1;
 requestAllStudents();
 function requestAllStudents() {
     allStudents = [];
     fetch(APPLICATION_URL + "/student/getall")
         .then(function (result) {
-        console.log(result);
         return result.json();
     })
         .then(function (data) {
-        console.log(data);
-        var html = [];
-        data.forEach(function (student) {
-            allStudents.push(studentArrayToJson(student));
-        });
+        allStudents = data;
         requestAllTeachers();
     })
         .catch(function (error) { return console.error(error); });
@@ -25,15 +19,10 @@ function requestAllTeachers() {
     allTeachers = [];
     fetch(APPLICATION_URL + "/teacher/getall")
         .then(function (result) {
-        console.log(result);
         return result.json();
     })
         .then(function (data) {
-        console.log(data);
-        var html = [];
-        data.forEach(function (teacher) {
-            allTeachers.push(teacherArrayToJson(teacher));
-        });
+        allTeachers = data;
         requestAllRents();
     })
         .catch(function (error) { return console.error(error); });
@@ -42,15 +31,10 @@ function requestAllRents() {
     allRents = [];
     fetch(APPLICATION_URL + "/rent/getall")
         .then(function (result) {
-        console.log(result);
         return result.json();
     })
         .then(function (data) {
-        console.log(data);
-        var html = [];
-        data.forEach(function (rent) {
-            allRents.push(rentArrayToJson(rent));
-        });
+        allRents = data;
         generateTable();
     })
         .catch(function (error) { return console.error(error); });
@@ -96,22 +80,22 @@ function generateTable() {
             }
             switch (column.cellType) {
                 case "student_id":
-                    cellinput.addEventListener("mouseup", function () { openStudentPicker(cellinput); });
-                    cellinput.value = ((_b = findStudentById((_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.student_id)) === null || _b === void 0 ? void 0 : _b.firstname) || "";
+                    cellinput.addEventListener("mouseup", function () { var _a; openStudentPicker(cellinput, (_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id); });
+                    cellinput.value = ((_b = (_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.student) === null || _b === void 0 ? void 0 : _b.firstname) || "";
                     break;
                 case "teacherRent":
                 case "teacherReturn":
-                    cellinput.value = (_d = findTeacherById((_c = allRents[i]) === null || _c === void 0 ? void 0 : _c.teacher_id)) === null || _d === void 0 ? void 0 : _d.lastname;
+                    cellinput.value = ((_d = (_c = allRents[i]) === null || _c === void 0 ? void 0 : _c.teacher) === null || _d === void 0 ? void 0 : _d.lastname) || "";
                     break;
                 case "note":
-                    cellinput.addEventListener("blur", function () { updateNote(cellinput); });
-                    cellinput.value = (_e = allRents[i]) === null || _e === void 0 ? void 0 : _e.note;
+                    cellinput.addEventListener("blur", function () { updateRent(cellinput, column.cellType, cellinput.value); });
+                    cellinput.value = ((_e = allRents[i]) === null || _e === void 0 ? void 0 : _e.note) || "";
                     break;
                 case "rent_start":
                 case "rent_end_planned":
                 case "rent_end_actual":
-                    cellinput.addEventListener("input", function () { updateDate(cellinput); });
-                    cellinput.value = convertDateFormat(allRents[i][column.cellType]);
+                    cellinput.addEventListener("input", function () { updateRent(cellinput, column.cellType, cellinput.value); });
+                    cellinput.value = allRents[i][column.cellType] || "";
             }
             cell.appendChild(cellinput);
             row.appendChild(cell);
@@ -125,10 +109,11 @@ function generateTable() {
 }
 var studentSelectionPopup = document.querySelector("#studentSelectionPopup");
 var studentSearchbar = document.querySelector('#studentSelectionPopup .search');
-function openStudentPicker(input) {
-    editingRentId = Number(input.closest("tr").getAttribute("rent_id"));
-    searchForStudentFromSelectInput("");
+studentSearchbar.addEventListener("keyup", function () { searchForStudentFromSelectInput(studentSearchbar.value, Number(studentSearchbar.getAttribute('rent_id'))); });
+function openStudentPicker(input, rentId) {
+    searchForStudentFromSelectInput("", rentId);
     studentSelectionPopup.querySelector("input").value = "";
+    studentSelectionPopup.querySelector("input").setAttribute("rent_id", String(rentId));
     var bounds = input.getBoundingClientRect();
     studentSelectionPopup.style.top = bounds.top + "px";
     studentSelectionPopup.style.left = bounds.left + "px";
@@ -145,7 +130,7 @@ function closeStudentPickerOnBlur(e) {
 function closeStudentPicker() {
     studentSelectionPopup.style.display = "none";
 }
-function searchForStudentFromSelectInput(inputValue) {
+function searchForStudentFromSelectInput(inputValue, rentId) {
     fetch(APPLICATION_URL + '/student/search', {
         method: 'POST',
         headers: {
@@ -159,9 +144,8 @@ function searchForStudentFromSelectInput(inputValue) {
         var html = [];
         data.forEach(function (student) {
             var selectionOption = document.createElement('p');
-            selectionOption.innerText = student[1] + " " + student[2];
-            selectionOption.setAttribute("student_id", student[0]);
-            selectionOption.addEventListener("click", function () { updateStudent(selectionOption); });
+            selectionOption.innerText = student.firstname + " " + student.lastname;
+            selectionOption.addEventListener("click", function () { updateRent(selectionOption, "student_id", student.student_id, rentId); });
             html.push(selectionOption);
         });
         if (html.length === 0) {
@@ -174,59 +158,31 @@ function searchForStudentFromSelectInput(inputValue) {
     })
         .catch(function (error) { return console.error(error); });
 }
-function updateStudent(clickedOption) {
-    var affectedRent = findRentById(editingRentId);
-    affectedRent.student_id = Number(clickedOption.getAttribute("student_id"));
+function updateRent(input, key, value, rentId) {
+    var _a, _b;
+    if (rentId == undefined)
+        rentId = Number(input.closest("tr").getAttribute("rent_id"));
+    var rentOriginal = findRentById(rentId);
+    var rentUpdate = {
+        rent_id: rentId,
+        student_id: (_a = rentOriginal.student) === null || _a === void 0 ? void 0 : _a.student_id,
+        device_id: rentOriginal.device_id,
+        teacher_id: (_b = rentOriginal.teacher) === null || _b === void 0 ? void 0 : _b.teacher_id,
+        rent_start: rentOriginal.rent_start,
+        rent_end_planned: rentOriginal.rent_end_planned,
+        rent_end_actual: rentOriginal.rent_end_actual,
+        note: rentOriginal.note
+    };
+    rentUpdate[key] = value;
     fetch(APPLICATION_URL + '/rent/update', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(affectedRent)
+        body: JSON.stringify(rentUpdate)
     })
         .then(function (response) { return response.text(); })
         .then(function (data) {
-        console.log(data);
-        requestAllRents();
-        closeStudentPicker();
-    })
-        .catch(function (error) { return console.error(error); });
-}
-function updateNote(input) {
-    editingRentId = Number(input.closest("tr").getAttribute("rent_id"));
-    var affectedRent = findRentById(editingRentId);
-    affectedRent.note = input.value;
-    fetch(APPLICATION_URL + '/rent/update', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(affectedRent)
-    })
-        .then(function (response) { return response.text(); })
-        .then(function (data) {
-        console.log(data);
-        requestAllRents();
-        closeStudentPicker();
-    })
-        .catch(function (error) { return console.error(error); });
-}
-function updateDate(input) {
-    editingRentId = Number(input.closest("tr").getAttribute("rent_id"));
-    var param = input.getAttribute("cellType");
-    var affectedRent = findRentById(editingRentId);
-    affectedRent[param] = input.value;
-    console.log(affectedRent);
-    fetch(APPLICATION_URL + '/rent/update', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(affectedRent)
-    })
-        .then(function (response) { return response.text(); })
-        .then(function (data) {
-        console.log(data);
         requestAllRents();
         closeStudentPicker();
     })
@@ -247,41 +203,6 @@ function createRent() {
         closeStudentPicker();
     })
         .catch(function (error) { return console.error(error); });
-}
-function rentArrayToJson(array) {
-    var json = {
-        rent_id: Number(array[0]),
-        student_id: Number(array[1]),
-        device_id: Number(array[2]),
-        teacher_id: Number(array[3]),
-        rent_start: array[4],
-        rent_end_planned: array[5],
-        rent_end_actual: array[6],
-        note: array[7]
-    };
-    return json;
-}
-function studentArrayToJson(array) {
-    var json = {
-        student_id: array[0],
-        firstname: array[1],
-        lastname: array[2],
-        school_class: array[3],
-        password: array[4],
-        user_id: array[5]
-    };
-    return json;
-}
-function teacherArrayToJson(array) {
-    var json = {
-        teacher_id: array[0],
-        firstname: array[1],
-        lastname: array[2],
-        verification: array[3],
-        password: array[4],
-        user_id: array[5]
-    };
-    return json;
 }
 function findRentById(id) {
     var res = null;
