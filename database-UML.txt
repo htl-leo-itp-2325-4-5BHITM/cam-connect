@@ -164,7 +164,6 @@
 
     Rent }o--|| Device
     Rent }o-up-|| Student
-    Rent }o--|| Student
     Rent }o-right-|| Teacher
     Rent }o-right-|| Teacher
 
