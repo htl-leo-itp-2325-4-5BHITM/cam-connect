@@ -36,82 +36,7 @@ public class RentRessource {
         return Response.ok().build();
     }
 
-    @POST
-    @Path("/update")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Transactional
-    public Response updateRent (JsonObject rent){
-        rentRepository.update(rent);
-        return Response.ok().build();
-    }
 
-    // Getter
-    //region
-    @POST
-    @Path("/update/{rentId}/student/")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response setStudent(@PathParam("rentId")long rentId, JsonObject student) {
-        rentRepository.setStudent(rentId, student.getInt("value"));
-        return Response.ok().build();
-    }
-
-    @POST
-    @Path("/update/{rentId}/teacher/")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response setTeacher(@PathParam("rentId")long rentId, JsonObject teacher) {
-        rentRepository.setTeacher(rentId, teacher.getInt("value"));
-        return Response.ok().build();
-    }
-
-    @POST
-    @Path("/update/{rentId}/device/")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response setDevice(@PathParam("rentId")long rentId, JsonObject device) {
-        rentRepository.setDevice(rentId, device.getInt("value"));
-        return Response.ok().build();
-    }
-
-    @POST
-    @Path("/update/{rentId}/rentstart/")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response setRentStart(@PathParam("rentId")long rentId, JsonObject rentStart) {
-        rentRepository.setRentStart(rentId, rentStart.getString("value"));
-        return Response.ok().build();
-    }
-
-    @POST
-    @Path("/update/{rentId}/rentendplanned/")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response setRendEndPlanned(@PathParam("rentId")long rentId, JsonObject rentEndPlanned) {
-        rentRepository.setRentEndPlanned(rentId, rentEndPlanned.getString("value"));
-        return Response.ok().build();
-    }
-
-    @POST
-    @Path("/update/{rentId}/rentendactual/")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response setRentEndActual(@PathParam("rentId")long rentId, JsonObject rentEndActual) {
-        rentRepository.setRentEndActual(rentId, rentEndActual.getString("value"));
-        return Response.ok().build();
-    }
-
-    @POST
-    @Path("/update/{rentId}/status/")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response setStatus(@PathParam("rentId")long rentId, JsonObject status) {
-        rentRepository.setStatus(rentId, status.getString("value"));
-        return Response.ok().build();
-    }
-
-    @POST
-    @Path("/update/{rentId}/note/")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response setNote(@PathParam("rentId")long rentId, JsonObject note) {
-        rentRepository.setNote(rentId, note.getString("value"));
-        return Response.ok().build();
-    }
-    //endregion
-/**
     @GET
     @Path("/getall")
     public List<Rent> getAll() {
@@ -124,54 +49,87 @@ public class RentRessource {
         return rentRepository.getById(id);
     }
 
-    // Getter
+    @POST
+    @Transactional
+    @Path("/getbyid/{id: [0-9]+}/update")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateRent (@PathParam("id")long id, JsonObject rent){
+        rentRepository.update(id, rent);
+        return Response.ok().build();
+    }
+
+    // Setter
     //region
-    @GET
-    @Path("/get/{rentId}/student")
-    public Student getStudent(@PathParam("rentId")long rentId) {
-        return rentRepository.getStudent(rentId);
+    @POST
+    @Path("/getbyid/{id: [0-9]+}/update/student")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response setStudent(@PathParam("id")long id, JsonObject student) {
+        rentRepository.setStudent(id, student.getInt("value"));
+        return Response.ok().build();
     }
 
-    @GET
-    @Path("/get/{rentId}/teacher")
-    public Teacher getTeacher(@PathParam("rentId")long rentId) {
-        return rentRepository.getTeacher(rentId);
+    @POST
+    @Path("/getbyid/{id: [0-9]+}/update/teacherstart")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response setTeacherStart(@PathParam("id")long id, JsonObject teacher) {
+        rentRepository.setTeacherStart(id, teacher.getInt("value"));
+        return Response.ok().build();
     }
 
-    @GET
-    @Path("/get/{rentId}/student")
-    public Device getDevice(@PathParam("rentId")long rentId) {
-        return rentRepository.getDevice(rentId);
+    @POST
+    @Path("/getbyid/{id: [0-9]+}/update/teacherend")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response setTeacherEnd(@PathParam("id")long id, JsonObject teacher) {
+        rentRepository.setTeacherEnd(id, teacher.getInt("value"));
+        return Response.ok().build();
     }
 
-    @GET
-    @Path("/get/{rentId}/rentstart")
-    public String getRentStart(@PathParam("rentId")long rentId) {
-        return rentRepository.getRentStart(rentId);
+    @POST
+    @Path("/getbyid/{id: [0-9]+}/update/device")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response setDevice(@PathParam("id")long id, JsonObject device) {
+        rentRepository.setDevice(id, device.getInt("value"));
+        return Response.ok().build();
     }
 
-    @GET
-    @Path("/get/{rentId}/rentendplanned")
-    public String getRentEndPlanned(@PathParam("rentId")long rentId) {
-        return rentRepository.getRentEndPlanned(rentId);
+    @POST
+    @Path("/getbyid/{id: [0-9]+}/update/rentstart")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response setRentStart(@PathParam("id")long id, JsonObject rentStart) {
+        rentRepository.setRentStart(id, rentStart.getString("value"));
+        return Response.ok().build();
     }
 
-    @GET
-    @Path("/get/{rentId}/rentendactual")
-    public String getRentEndActual(@PathParam("rentId")long rentId) {
-        return rentRepository.getRentEndActual(rentId);
+    @POST
+    @Path("/getbyid/{id: [0-9]+}/update/rentendplanned")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response setRendEndPlanned(@PathParam("id")long id, JsonObject rentEndPlanned) {
+        rentRepository.setRentEndPlanned(id, rentEndPlanned.getString("value"));
+        return Response.ok().build();
     }
 
-    @GET
-    @Path("/get/{rentId}/status")
-    public String getStatus(@PathParam("rentId")long rentId) {
-        return rentRepository.getStatus(rentId);
+    @POST
+    @Path("/getbyid/{id: [0-9]+}/update/rentendactual")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response setRentEndActual(@PathParam("id")long id, JsonObject rentEndActual) {
+        rentRepository.setRentEndActual(id, rentEndActual.getString("value"));
+        return Response.ok().build();
     }
 
-    @GET
-    @Path("/get/{rentId}/note")
-    public String getNote(@PathParam("rentId")long rentId) {
-        return rentRepository.getNote(rentId);
-    }**/
+    @POST
+    @Path("/getbyid/{id: [0-9]+}/update/status")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response setStatus(@PathParam("id")long id, JsonObject status) {
+        rentRepository.setStatus(id, status.getString("value"));
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("/getbyid/{id: [0-9]+}/update/note")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response setNote(@PathParam("id")long id, JsonObject note) {
+        rentRepository.setNote(id, note.getString("value"));
+        return Response.ok().build();
+    }
     //endregion
 }

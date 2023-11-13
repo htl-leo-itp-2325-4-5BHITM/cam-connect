@@ -43,32 +43,42 @@ public class RentRepository {
 
     //TODO fix this fuckery
     @Transactional
-    public void update(JsonObject rent){
-        Student student = null;
-        if(rent.getInt("student_id") != 0)
-            student = em.find(Student.class, "student_id");
-
-        System.out.println(rent.getInt("teacher_id"));
-        Teacher teacher = em.find(Teacher.class, "teacher_id");
-        Device device = null;
-        //TODO once demo devices exist
-        //device = getDeviceById(rent.getInt("device_id"));
-
-        String rent_start = "";
-        String rent_end_planned = "";
-        String rent_end_actual = "";
-        String note = "";
-
-        Rent updatedRent = em.find(Rent.class, rent.getInt("rent_id"));
+    public void update(long id, JsonObject rentJson){
         try{
-            rent_start = rent.getString("rent_start");
-            rent_end_planned = rent.getString("rent_end_planned");
-            rent_end_actual = rent.getString("rent_end_actual");
-            note = rent.getString("note");
-        } catch(Exception ex) {}
+            setStudent(id, rentJson.getInt("student_id"));
+        } catch(Exception ex){ System.out.println(ex.getMessage()); }
 
-        updatedRent.update(student, device, teacher, LocalDate.parse(rent_start), LocalDate.parse(rent_end_planned), LocalDate.parse(rent_end_actual), null, note);
-        em.merge(updatedRent);
+        try{
+            setTeacherStart(id, rentJson.getInt("teacher_start_id"));
+        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+
+        try{
+            setTeacherEnd(id, rentJson.getInt("teacher_end_id"));
+        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+
+        try{
+            setDevice(id, rentJson.getInt("device_id"));
+        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+
+        try{
+            setRentStart(id, rentJson.getString("rent_start"));
+        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+
+        try{
+            setRentEndPlanned(id, rentJson.getString("rent_end_planned"));
+        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+
+        try{
+            setRentEndActual(id, rentJson.getString("rent_end_actual"));
+        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+
+        try{
+            setStatus(id, rentJson.getString("status"));
+        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+
+        try{
+            setNote(id, rentJson.getString("note"));
+        } catch(Exception ex){ System.out.println(ex.getMessage()); }
     }
 
     public List<Rent> getAll(){
@@ -81,7 +91,7 @@ public class RentRepository {
     }
 
 
-    // Getter & Setter
+    // Setter
     //region
     public void setStudent(long rentId, long studentId) {
         Student student = em.find(Student.class, studentId);
@@ -89,18 +99,19 @@ public class RentRepository {
         rent.setStudent(student);
         em.merge(rent);
     }
-    public Student getStudent(long rentId) {
-        return getById(rentId).getStudent();
-    }
 
-    public void setTeacher(long rentId, long teacherId) {
+    public void setTeacherStart(long rentId, long teacherId) {
         Teacher teacher = em.find(Teacher.class, teacherId);
         Rent rent = getById(rentId);
-        rent.setTeacher(teacher);
+        rent.setTeacher_start(teacher);
         em.merge(rent);
     }
-    public Teacher getTeacher(long rentId) {
-        return getById(rentId).getTeacher();
+
+    public void setTeacherEnd(long rentId, long teacherId) {
+        Teacher teacher = em.find(Teacher.class, teacherId);
+        Rent rent = getById(rentId);
+        rent.setTeacher_end(teacher);
+        em.merge(rent);
     }
 
     public void setDevice(long rentId, long deviceId) {
@@ -109,25 +120,17 @@ public class RentRepository {
         rent.setDevice(device);
         em.merge(rent);
     }
-    public Device getDevice(long rentId) {
-        return getById(rentId).getDevice();
-    }
 
     public void setRentStart(long rentId, String date) {
         Rent rent = getById(rentId);
         rent.setRent_start(LocalDate.parse(date));
         em.merge(rent);
     }
-    public String getRentStart(long rentId) {
-        return getById(rentId).getRent_start().toString();
-    }
+
     public void setRentEndPlanned(long rentId, String date) {
         Rent rent = getById(rentId);
         rent.setRent_end_planned(LocalDate.parse(date));
         em.merge(rent);
-    }
-    public String getRentEndPlanned(long rentId) {
-        return getById(rentId).getRent_end_planned().toString();
     }
 
     public void setRentEndActual(long rentId, String date) {
@@ -135,26 +138,17 @@ public class RentRepository {
         rent.setRent_end_actual(LocalDate.parse(date));
         em.merge(rent);
     }
-    public String getRentEndActual(long rentId) {
-        return getById(rentId).getRent_end_actual().toString();
-    }
 
     public void setStatus(long rentId, String status) {
         Rent rent = getById(rentId);
         rent.setStatus(RentStatus.valueOf(status));
         em.merge(rent);
     }
-    public String getStatus(long rentId) {
-        return getById(rentId).getStatus().toString();
-    }
 
     public void setNote(long rentId, String note) {
         Rent rent = getById(rentId);
         rent.setNote(note);
         em.merge(rent);
-    }
-    public String getNote(long rentId) {
-        return getById(rentId).getNote();
     }
     //endregion
 }

@@ -3,8 +3,6 @@ package at.camconnect.model;
 import at.camconnect.Enums.RentStatus;
 import jakarta.persistence.*;
 
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.time.LocalDate;
 
 @Entity
@@ -24,7 +22,11 @@ public class Rent {
 
     @ManyToOne
     @JoinColumn(name = "teacher_id")
-    private Teacher teacher;
+    private Teacher teacher_start;
+
+    @ManyToOne
+    @JoinColumn(name = "teacher_id")
+    private Teacher teacher_end;
 
     private LocalDate rent_start;
     private LocalDate rent_end_planned;
@@ -47,22 +49,14 @@ public class Rent {
                 "rent_id=" + rent_id +
                 ", student=" + student +
                 ", device=" + device +
-                ", teacher=" + teacher +
+                ", teacherStart=" + teacher_start +
+                ", teacherEnd=" + teacher_end +
                 ", rent_start=" + rent_start +
                 ", rent_end_planned=" + rent_end_planned +
                 ", rent_end_actual=" + rent_end_actual +
+                ", status=" + status +
+                ", note='" + note + '\'' +
                 '}';
-    }
-
-    public void update(Student student, Device device, Teacher teacher, LocalDate rentStart, LocalDate rentEndPlanned, LocalDate rentEndActual, RentStatus status, String notes) {
-        setStudent(student);
-        setDevice(device);
-        setTeacher(teacher);
-        setRent_start(rentStart);
-        setRent_end_planned(rentEndPlanned);
-        setRent_end_actual(rentEndActual);
-        setStatus(status);
-        setNote(notes);
     }
 
     public long getRent_id() {
@@ -89,12 +83,20 @@ public class Rent {
         this.device = device;
     }
 
-    public Teacher getTeacher() {
-        return teacher;
+    public Teacher getTeacher_start() {
+        return teacher_start;
     }
 
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
+    public void setTeacher_start(Teacher teacherStart) {
+        this.teacher_start = teacherStart;
+    }
+
+    public Teacher getTeacher_end() {
+        return teacher_end;
+    }
+
+    public void setTeacher_end(Teacher teacherEnd) {
+        this.teacher_end = teacherEnd;
     }
 
     public LocalDate getRent_start() {
