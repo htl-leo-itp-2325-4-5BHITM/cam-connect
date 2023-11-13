@@ -67,7 +67,7 @@ public class RentRepository {
             note = rent.getString("note");
         } catch(Exception ex) {}
 
-        updatedRent.update(student, device, teacher, LocalDate.parse(rent_start), LocalDate.parse(rent_end_planned), LocalDate.parse(rent_end_actual), null, yynote);
+        updatedRent.update(student, device, teacher, LocalDate.parse(rent_start), LocalDate.parse(rent_end_planned), LocalDate.parse(rent_end_actual), null, note);
         em.merge(updatedRent);
     }
 

@@ -5,7 +5,6 @@ import at.camconnect.model.Rent;
 import at.camconnect.model.Student;
 import at.camconnect.model.Teacher;
 import at.camconnect.repository.RentRepository;
-import at.camconnect.repository.StudentRepository;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
@@ -46,7 +45,7 @@ public class RentRessource {
         return Response.ok().build();
     }
 
-    // Setter
+    // Getter
     //region
     @POST
     @Path("/update/{rentId}/student/")
@@ -112,7 +111,7 @@ public class RentRessource {
         return Response.ok().build();
     }
     //endregion
-
+/**
     @GET
     @Path("/getall")
     public List<Rent> getAll() {
@@ -173,6 +172,6 @@ public class RentRessource {
     @Path("/get/{rentId}/note")
     public String getNote(@PathParam("rentId")long rentId) {
         return rentRepository.getNote(rentId);
-    }
+    }**/
     //endregion
 }
