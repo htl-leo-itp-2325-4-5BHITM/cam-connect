@@ -59,18 +59,6 @@ public class Rent {
                 '}';
     }
 
-    public void update(Student student, Device device, Teacher teacherStart, Teacher teacherEnd, LocalDate rentStart, LocalDate rentEndPlanned, LocalDate rentEndActual, RentStatus status, String notes) {
-        setStudent(student);
-        setDevice(device);
-        setTeacher_start(teacherStart);
-        setTeacher_end(teacherEnd);
-        setRent_start(rentStart);
-        setRent_end_planned(rentEndPlanned);
-        setRent_end_actual(rentEndActual);
-        setStatus(status);
-        setNote(notes);
-    }
-
     public long getRent_id() {
         return rent_id;
     }

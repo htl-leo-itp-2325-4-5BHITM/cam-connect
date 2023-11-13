@@ -54,7 +54,7 @@ public class RentRessource {
     @Path("/getbyid/{id: [0-9]+}/update")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateRent (@PathParam("id")long id, JsonObject rent){
-        rentRepository.update(rent);
+        rentRepository.update(id, rent);
         return Response.ok().build();
     }
 
