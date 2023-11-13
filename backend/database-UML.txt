@@ -4,7 +4,7 @@
    entity DeviceType {
         * type_id: long
         --
-        * typeName string
+        * name string
     }
 
     entity CameraType {
@@ -18,7 +18,7 @@
         --
         * sensor_id: long
         * resolution_id: long
-        * maxRange
+        * maxRange: int
     }
 
     entity LensType {
@@ -44,7 +44,7 @@
 
     entity TripodType {
         --
-        * height
+        * height: int
         * head_id: long
     }
 
@@ -98,6 +98,7 @@
     entity Device {
         * device_id: long
         --
+        * number: int
         * serial: String
         * note: String
     }
@@ -112,8 +113,8 @@
         * rent_start: LocalDate
         * rent_end_planned: LocalDate
         * rent_end_actual: LocalDate
-        ' status is 0 when waiting for confirmation, 1 when confirmed, 2 when declined
-        * status: int
+        ' status is waiting for confirmation, confirmed, declined
+        * status: enum
     }
 
    entity Favorite {
