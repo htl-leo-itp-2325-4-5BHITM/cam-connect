@@ -106,9 +106,9 @@ For those that don't know scss this will seem weird, it's actually pretty easy
 - use the accent color #notyetdecided
 
 ## Github
-- try to commit at the end of each workday and when leaving school .-.
+- push at the end of each workday and when leaving school .-.
 - if something is throwing errors at the end of the day add a //TODO comment and **comment it out** so that others can continue without having to change/fix your code 
-- branch names
+- create a branch for your task with a fitting name
+  - when finished with the 
 - commit messages should be precise and list all major changes
-- issues
 - pull requests will need to be approved to go through clean code will have no problem passing

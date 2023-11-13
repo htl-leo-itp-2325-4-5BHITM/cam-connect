@@ -2,8 +2,6 @@ package at.camconnect.model;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-
 @Entity
 public class DeviceType {
     @Id
@@ -12,10 +10,10 @@ public class DeviceType {
 
     //@OneToMany(cascade = CascadeType.ALL, mappedBy = "tag_id", fetch = FetchType.EAGER)
     //private List<Tag> tags;
-    private String typeName;
+    private String name;
 
-    public DeviceType(String typeName, long typeId) {
-        this.typeName = typeName;
+    public DeviceType(String name, long typeId) {
+        this.name = name;
         this.type_Id = typeId;
     }
 
@@ -23,12 +21,12 @@ public class DeviceType {
     }
 
     //<editor-fold desc="Getter und Setter">
-    public String getTypeName() {
-        return typeName;
+    public String getName() {
+        return name;
     }
 
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
+    public void setName(String typeName) {
+        this.name = typeName;
     }
 
     public long getType_Id() {
