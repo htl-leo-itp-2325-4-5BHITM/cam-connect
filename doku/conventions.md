@@ -101,14 +101,13 @@ For those that don't know scss this will seem weird, it's actually pretty easy
 ```
 
 ## Style
-
 - use the font quicksand on every UI
-- use the accent color #notyetdecided
+- use the accent color `#4095BF` `hsl(200, 50, 50)`
 
 ## Github
 - push at the end of each workday and when leaving school .-.
-- if something is throwing errors at the end of the day add a //TODO comment and **comment it out** so that others can continue without having to change/fix your code 
+- if **something is throwing errors** at the end of the day add a //TODO comment and **comment it out** so that others can continue without having to change/fix your code 
 - create a branch for your task with a fitting name
-  - when finished with the 
+  - when finished with the task set its status to review and create a pull request
+  - a team member will approve the pull request or leave a comment on parts that should be improved
 - commit messages should be precise and list all major changes
-- pull requests will need to be approved to go through clean code will have no problem passing

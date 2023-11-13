@@ -18,12 +18,12 @@
         --
         * sensor_id: long
         * resolution_id: long
-        * maxRange: int
+        * max_range: int
     }
 
     entity LensType {
         --
-        * f-stop: Double
+        * f_stop: double
         * mount_id: long
         * focal_length: int
     }
@@ -32,14 +32,14 @@
         --
         * windblocker: boolean
         * wireless: boolean
-        * needsRecorder: boolean
+        * needs_recorder: boolean
     }
 
     entity LightType {
         --
         * watts: int
-        * RGB: boolean
-        * variableTemperature: boolean
+        * rgb: boolean
+        * variable_temperature: boolean
     }
 
     entity TripodType {
@@ -50,8 +50,8 @@
 
     entity StabilizerType {
         --
-        * maxWeight: int
-        * numberOfAxis: int
+        * max_weight: int
+        * number_of_axis: int
     }
 
     DeviceType <|-down- CameraType
