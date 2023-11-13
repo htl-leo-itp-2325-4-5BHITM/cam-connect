@@ -41,7 +41,6 @@ public class RentRepository {
         em.remove(rent);
     }
 
-    //TODO fix this fuckery
     @Transactional
     public void update(long id, JsonObject rentJson){
         try{
