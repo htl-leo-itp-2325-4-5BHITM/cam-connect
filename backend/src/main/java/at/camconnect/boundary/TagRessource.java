@@ -5,11 +5,11 @@ import at.camconnect.repository.TagRepository;
 import jakarta.inject.Inject;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
+import java.util.List;
 
 @Path("/tag")
 public class TagRessource {
@@ -23,6 +23,34 @@ public class TagRessource {
     @Transactional
     public Response createTag(Tag t){
         tagRepository.addTag(t);
-        return Response.ok().build(); 
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("/delete")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response removeTag(Tag t){
+        tagRepository.deleteTag(t);
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("/update{id: [0-9]+}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response upateTag(Tag t){
+        tagRepository.updateTag(t);
+        return Response.ok().build();
+    }
+    @GET
+    @Path("/getbyid/{id: [0-9]+}")
+    public Tag getById(@PathParam("id")long id){
+        return tagRepository.getTagById(id);
+    }
+    @GET
+    @Path("/getall")
+    public List<Tag> getAllTags(){
+        return tagRepository.getAll();
     }
 }

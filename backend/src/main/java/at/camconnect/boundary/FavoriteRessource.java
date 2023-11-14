@@ -35,7 +35,7 @@ public class FavoriteRessource {
     }
 
     @POST
-    @Path("/update/{id: [0-9]+}")
+    @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response updateFavorite(Favorite f){
