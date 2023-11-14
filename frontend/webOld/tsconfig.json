@@ -6,5 +6,7 @@
     "preserveConstEnums": true,
     "sourceMap": true
   },
-  "include": ["scripts/**/*"]
+  "files": [
+    "scripts/index.ts"
+  ]
 }
