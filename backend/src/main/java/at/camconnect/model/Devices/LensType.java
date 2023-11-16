@@ -1,13 +1,21 @@
 package at.camconnect.model.Devices;
 
 import at.camconnect.model.DeviceType;
+import at.camconnect.model.Devices.subtypes.LensMount;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class LensType extends DeviceType {
     private String fStop;
     private String mount;
     private int focalLength;
+
+    @ManyToOne
+    @JoinColumn(name = "mount_id")
+    private LensMount lensMount;
 
     public LensType(String typeName, long typeId, String fStop, String mount, int focalLength) {
         super(typeName, typeId);
