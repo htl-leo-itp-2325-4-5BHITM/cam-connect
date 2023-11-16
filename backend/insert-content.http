@@ -1,0 +1,159 @@
+POST http://localhost:8080/device-type/create
+
+{
+  "deviceTypes": [
+    {"type_id": 1, "typeName": "Camera", "tag_id": 101},
+    {"type_id": 2, "typeName": "Drone", "tag_id": 102},
+    {"type_id": 3, "typeName": "Lens", "tag_id": 103},
+    {"type_id": 4, "typeName": "Audio", "tag_id": 104},
+    {"type_id": 5, "typeName": "Light", "tag_id": 105},
+    {"type_id": 6, "typeName": "Tripod", "tag_id": 106},
+    {"type_id": 7, "typeName": "Stabilizer", "tag_id": 107}
+  ]
+}
+
+
+POST http://localhost:8080/camera-type/create
+
+{
+"cameraTypes": [
+{"sensor": "Full Frame", "mount": "Tripod Mount", "resolution": "4K"},
+{"sensor": "APS-C", "mount": "Handheld Mount", "resolution": "1080p"},
+{"sensor": "Micro Four Thirds", "mount": "Studio Mount", "resolution": "6K"}
+]
+}
+
+POST http://localhost:8080/drone-type/create
+
+
+{
+"droneTypes": [
+{"sensor": "HD Camera", "resolution": "720p", "maxRange": 500},
+{"sensor": "4K Camera", "resolution": "4K", "maxRange": 1000},
+{"sensor": "6K Camera", "resolution": "6K", "maxRange": 1500}
+]
+}
+
+
+POST http://localhost:8080/lens-type/create
+Content-Type: application/json
+
+{
+  "lensTypes": [
+    {"f-stop": "f/2.8", "mount": "Canon EF", "focalLength": "50mm"},
+    {"f-stop": "f/1.4", "mount": "Nikon F", "focalLength": "85mm"},
+    {"f-stop": "f/4.0", "mount": "Sony E", "focalLength": "24-70mm"}
+  ]
+}
+
+POST http://localhost:8080/audio-type/create
+Content-Type: application/json
+
+{
+  "audioTypes": [
+    {"windblocker": true, "wireless": true, "needsRecorder": false},
+    {"windblocker": false, "wireless": true, "needsRecorder": true},
+    {"windblocker": true, "wireless": false, "needsRecorder": true}
+  ]
+}
+
+POST http://localhost:8080/light-type/create
+Content-Type: application/json
+
+{
+  "lightTypes": [
+    {"watts": 100, "RGB": true, "variableTemperature": true},
+    {"watts": 50, "RGB": false, "variableTemperature": true},
+    {"watts": 200, "RGB": true, "variableTemperature": false}
+  ]
+}
+
+
+POST http://localhost:8080/tripod-type/create
+Content-Type: application/json
+
+{
+  "tripodTypes": [
+    {"height": "60 inches", "head": "Ball Head"},
+    {"height": "75 inches", "head": "Pan-and-Tilt Head"},
+    {"height": "50 inches", "head": "Fluid Head"}
+  ]
+}
+
+POST http://localhost:8080/stabilizer-type/create
+Content-Type: application/json
+
+{
+  "stabilizerTypes": [
+    {"maxWeight": 2, "numberOfAxis": 3},
+    {"maxWeight": 5, "numberOfAxis": 2},
+    {"maxWeight": 8, "numberOfAxis": 4}
+  ]
+}
+
+POST http://localhost:8080/device/create
+Content-Type: application/json
+
+{
+  "devices": [
+    {"device_id": 1, "serial": "ABC123", "note": "Used in the photography class"},
+    {"device_id": 2, "serial": "XYZ789", "note": "For outdoor video shooting"},
+    {"device_id": 3, "serial": "PQR456", "note": "Studio recording equipment"}
+  ]
+}
+
+POST http://localhost:8080/rent/create
+Content-Type: application/json
+
+{
+  "rents": [
+    {"rent_id": 1, "student_id": 101, "device_id": 1, "teacher_id": 201, "rent_start": "2023-01-01", "rent_end_planned": "2023-01-15", "rent_end_actual": "2023-01-14", "status_rent_start": true, "status_rent_end": true},
+    {"rent_id": 2, "student_id": 102, "device_id": 3, "teacher_id": 202, "rent_start": "2023-02-01", "rent_end_planned": "2023-02-10", "rent_end_actual": null, "status_rent_start": true, "status_rent_end": false},
+    {"rent_id": 3, "student_id": 103, "device_id": 5, "teacher_id": 203, "rent_start": "2023-03-01", "rent_end_planned": "2023-03-15", "rent_end_actual": null, "status_rent_start": true, "status_rent_end": false}
+  ]
+}
+
+POST http://localhost:8080/favorite/create
+Content-Type: application/json
+
+{
+  "favorites": [
+    {"fav_id": 1, "device_id": 1, "student_id": 101},
+    {"fav_id": 2, "device_id": 3, "student_id": 102},
+    {"fav_id": 3, "device_id": 5, "student_id": 103}
+  ]
+}
+
+POST http://localhost:8080/tag/create
+Content-Type: application/json
+
+{
+  "tags": [
+    {"tag_id": 101, "type_id": 1, "description": "Photography"},
+    {"tag_id": 102, "type_id": 2, "description": "Aerial"},
+    {"tag_id": 103, "type_id": 3, "description": "Portrait"},
+    {"tag_id": 104, "type_id": 4, "description": "Recording"},
+    {"tag_id": 105, "type_id": 5, "description": "Studio"},
+    {"tag_id": 106, "type_id": 6, "description": "Support"}
+  ]
+}
+
+POST http://localhost:8080/student/create
+Content-Type: application/json
+
+{
+  "students": [
+    {"student_id": 101, "firstname": "John", "lastname": "Doe", "school_class": "Photography 101", "password": "password123", "user_id": 301},
+    {"student_id": 102, "firstname": "Jane", "lastname": "Smith", "school_class": "Media Arts", "password": "pass456", "user_id": 302},
+    {"student_id": 103, "firstname": "Bob", "lastname": "Johnson", "school_class": "Sound Engineering", "password": "secure789", "user_id": 303}
+  ]
+}
+
+POST http://localhost:8080/teacher/create
+Content-Type: application/json
+
+{
+  "teachers": [
+    {"teacher_id": 201, "firstname": "Professor", "lastname": "Smith", "verification": "Verified", "password": "profpass123", "user_id": 401},
+    {"teacher_id":
+

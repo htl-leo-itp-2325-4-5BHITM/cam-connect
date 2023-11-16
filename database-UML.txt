@@ -119,20 +119,4 @@
 
      entity Set {
         * teacher_id
-        --
-        * name: string
-        * verfication: string
-        * password
-        * user_id
-    }
-
-    Device }o-down-|| DeviceType
-    DeviceType }o-left-|{ Set
-    Rent }o--|| Device
-    Rent }o-up-|| Student
-    Rent }o--|| Set
-    Rent }o--|| Student
-    Favorite }o--|| Student
-    Rent }o--|| Teacher
-    DeviceType ||-right-o{ Tag
-@enduml
+        --s
