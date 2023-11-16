@@ -43,13 +43,12 @@ public class StudentRepository{
     }*/
 
     public List<Student> getAll(){
-        Query q = em.createNativeQuery("SELECT STUDENT_ID, FIRSTNAME, LASTNAME, SCHOOL_CLASS, PASSWORD, USER_ID FROM Student");
-        List<Student> results = q.getResultList();
-        return results;
+        List<Student> students = em.createQuery("SELECT s FROM Student s", Student.class).getResultList();
+        return students;
     }
 
     public List<Student> search(JsonObject searchParams){
-        Query q = em.createQuery("SELECT student_id, firstname, lastname FROM Student s WHERE upper(s.firstname) LIKE :firstname || '%' ")
+        Query q = em.createQuery("SELECT s FROM Student s WHERE upper(s.firstname) LIKE :firstname || '%' ", Student.class)
                 .setParameter("firstname", searchParams.getString("firstname").toUpperCase())
                 .setMaxResults(10);
         List<Student> results = q.getResultList();

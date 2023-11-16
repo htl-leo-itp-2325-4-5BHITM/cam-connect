@@ -1,21 +1,15 @@
 package at.camconnect.model;
 
-import at.camconnect.repository.StudentRepository;
-import jakarta.ejb.Local;
+import at.camconnect.Enums.RentStatus;
 import jakarta.persistence.*;
-import org.apache.derby.client.am.DateTime;
 
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Date;
 
 @Entity
 public class Rent {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rent_seq")
+    @SequenceGenerator(name = "rent_seq", sequenceName = "RENT_SEQ", allocationSize = 1)
     private long rent_id;
 
     @ManyToOne
@@ -28,41 +22,25 @@ public class Rent {
 
     @ManyToOne
     @JoinColumn(name = "teacher_id")
-    private Teacher teacher;
+    private Teacher teacher_start;
 
-    private String rent_start;
-    private String rent_end_planned;
-    private String rent_end_actual;
-    private String notes;
+    @ManyToOne
+    @JoinColumn(name = "teacher_id")
+    private Teacher teacher_end;
+
+    private LocalDate rent_start;
+    private LocalDate rent_end_planned;
+    private LocalDate rent_end_actual;
+    private RentStatus status;
+    private String note;
 
     public Rent() {
-        this.rent_start = new Timestamp(new Date().getTime()).toString();
+        rent_start = LocalDate.now();
     }
 
     public Rent(Student student) {
         this();
         this.student = student;
-    }
-
-    public Rent(Student student, String rentStart, String rentEndPlanned, String rentEndActual) {
-        this();
-        this.student = student;
-
-        if(!rentStart.isEmpty()){
-            this.rent_start = rentStart;
-        }
-        this.rent_end_planned = rentEndPlanned;
-        this.rent_end_actual = rentEndActual;
-    }
-
-    public void update(Student student, Device device, Teacher teacher, String rentStart, String rentEndPlanned, String rentEndActual, String notes) {
-        this.student = student != null ? student : this.student;
-        this.device = device != null ? device : this.device;
-        this.teacher = teacher != null ? teacher : this.teacher;
-
-        this.rent_start = !rentStart.isEmpty() ? rentStart : this.rent_start;
-        this.rent_end_planned = !rentEndPlanned.isEmpty() ? rentEndPlanned : this.rent_end_planned;
-        this.rent_end_actual = !rentEndActual.isEmpty() ? rentEndActual : this.rent_end_actual;
     }
 
     @Override
@@ -71,26 +49,22 @@ public class Rent {
                 "rent_id=" + rent_id +
                 ", student=" + student +
                 ", device=" + device +
-                ", teacher=" + teacher +
+                ", teacherStart=" + teacher_start +
+                ", teacherEnd=" + teacher_end +
                 ", rent_start=" + rent_start +
                 ", rent_end_planned=" + rent_end_planned +
                 ", rent_end_actual=" + rent_end_actual +
+                ", status=" + status +
+                ", note='" + note + '\'' +
                 '}';
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
     }
 
     public long getRent_id() {
         return rent_id;
     }
-    public void setRent_id(int id) {
-        rent_id = id;
+
+    public void setRent_id(long rent_id) {
+        this.rent_id = rent_id;
     }
 
     public Student getStudent() {
@@ -109,35 +83,59 @@ public class Rent {
         this.device = device;
     }
 
-    public Teacher getTeacher() {
-        return teacher;
+    public Teacher getTeacher_start() {
+        return teacher_start;
     }
 
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
+    public void setTeacher_start(Teacher teacherStart) {
+        this.teacher_start = teacherStart;
     }
 
-    public String getRent_start() {
+    public Teacher getTeacher_end() {
+        return teacher_end;
+    }
+
+    public void setTeacher_end(Teacher teacherEnd) {
+        this.teacher_end = teacherEnd;
+    }
+
+    public LocalDate getRent_start() {
         return rent_start;
     }
 
-    public void setRent_start(String rent_start) {
+    public void setRent_start(LocalDate rent_start) {
         this.rent_start = rent_start;
     }
 
-    public String getRent_end_planned() {
+    public LocalDate getRent_end_planned() {
         return rent_end_planned;
     }
 
-    public void setRent_end_planned(String rent_end_planned) {
+    public void setRent_end_planned(LocalDate rent_end_planned) {
         this.rent_end_planned = rent_end_planned;
     }
 
-    public String getRent_end_actual() {
+    public LocalDate getRent_end_actual() {
         return rent_end_actual;
     }
 
-    public void setRent_end_actual(String rent_end_actual) {
+    public void setRent_end_actual(LocalDate rent_end_actual) {
         this.rent_end_actual = rent_end_actual;
+    }
+
+    public RentStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(RentStatus status) {
+        this.status = status;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

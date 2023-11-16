@@ -12,7 +12,7 @@ import jakarta.ws.rs.core.Response;
 
 import java.util.List;
 
-@Path("/student")
+@Path("/api/student")
 public class StudentRessource {
     @Inject
     StudentRepository studentRepository;

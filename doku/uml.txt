@@ -1,0 +1,173 @@
+@startuml
+   skinparam linetype ortho
+
+   entity DeviceType {
+        * type_id: long
+        --
+        * name string
+    }
+
+    entity CameraType {
+        --
+        * sensor_id: long
+        * resolution_id: long
+        * mount_id: long
+    }
+
+    entity DroneType {
+        --
+        * sensor_id: long
+        * resolution_id: long
+        * max_range: int
+    }
+
+    entity LensType {
+        --
+        * f_stop: double
+        * mount_id: long
+        * focal_length: int
+    }
+
+    entity AudioType {
+        --
+        * windblocker: boolean
+        * wireless: boolean
+        * needs_recorder: boolean
+    }
+
+    entity LightType {
+        --
+        * watts: int
+        * rgb: boolean
+        * variable_temperature: boolean
+    }
+
+    entity TripodType {
+        --
+        * height: int
+        * head_id: long
+    }
+
+    entity StabilizerType {
+        --
+        * max_weight: int
+        * number_of_axis: int
+    }
+
+    DeviceType <|-down- CameraType
+    DeviceType <|-down- AudioType
+    DeviceType <|-down- LightType
+    DeviceType <|-down- TripodType
+    DeviceType <|-down- StabilizerType
+    DeviceType <|-down- DroneType
+    DeviceType <|-down- LensType
+
+    entity TripodHead {
+        * head_id: long
+        --
+        * name: String
+    }
+
+    entity LensMount {
+        * mount_id: long
+        --
+        * name: String
+    }
+
+    entity CameraSensor {
+        * sensor_id: long
+        --
+        * name: String
+    }
+
+    entity CameraResolution {
+        * resolution_id: long
+        --
+        * name: String
+        * details: String
+    }
+
+    TripodType }o--|| TripodHead
+    LensType }o--|| LensMount
+    CameraType }o--|| LensMount
+    CameraType }o--|| CameraSensor
+    DroneType }o--|| CameraSensor
+    DroneType }o--|| CameraResolution
+    CameraType }o--|| CameraResolution
+
+    entity Device {
+        * device_id: long
+        --
+        * number: int
+        * serial: String
+        * note: String
+    }
+
+    entity Rent{
+        * rent_id: long
+        --
+        * student_id: long
+        * device_id: long
+        * teacher_id_start: long
+        * teacher_id_end: long
+        * rent_start: LocalDate
+        * rent_end_planned: LocalDate
+        * rent_end_actual: LocalDate
+        ' status is waiting for confirmation, confirmed, declined
+        * status: enum
+    }
+
+   entity Favorite {
+        * fav_id: long
+        --
+        * type_id: int
+        * student_id: int
+    }
+
+    entity Tag {
+        * tag_id : long
+        --
+        * type_ids: List<type_id>
+        * name: String
+        * description: String
+    }
+
+    entity Student {
+        * student_id: long
+        --
+        * firstname: String
+        * lastname: String
+        * school_class: String
+        * email: String
+        * password: String
+        * username: String
+    }
+
+    entity Teacher {
+        * teacher_id: long
+        --
+        * firstname: String
+        * lastname: String
+        * password: String
+        * username: String
+    }
+
+     entity DeviceSet {
+        * set_id: long
+        --
+        * name: String
+        * device_types: List<DeviceType>
+    }
+
+    Device }o-down-|| DeviceType
+    DeviceType }|-left-o{ DeviceSet
+    DeviceType }o-right-o{ Tag
+
+    Rent }o--|| Device
+    Rent }o-up-|| Student
+    Rent }o-right-|| Teacher
+    Rent }o-right-|| Teacher
+
+    Favorite }o-left-|| Student
+    Favorite }o--|| DeviceType
+@enduml

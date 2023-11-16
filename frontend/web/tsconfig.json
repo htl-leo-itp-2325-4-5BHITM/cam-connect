@@ -7,6 +7,6 @@
     "sourceMap": true
   },
   "files": [
-    "public/scripts/index.ts"
+    "scripts/index.ts"
   ]
 }

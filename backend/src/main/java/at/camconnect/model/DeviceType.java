@@ -1,41 +1,40 @@
 package at.camconnect.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class DeviceType {
     @Id
     @GeneratedValue
-    private long tagId;
-    private long typeId;
-    private String typeName;
+    private long type_Id;
 
+    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "tag_id", fetch = FetchType.EAGER)
+    //private List<Tag> tags;
+    private String name;
 
-    public DeviceType(String typeName, long typeId) {
-        this.typeName = typeName;
-        this.typeId = typeId;
+    public DeviceType(String name, long typeId) {
+        this.name = name;
+        this.type_Id = typeId;
     }
 
     public DeviceType() {
     }
 
     //<editor-fold desc="Getter und Setter">
-    public String getTypeName() {
-        return typeName;
+    public String getName() {
+        return name;
     }
 
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
+    public void setName(String typeName) {
+        this.name = typeName;
     }
 
-    public long getTypeId() {
-        return typeId;
+    public long getType_Id() {
+        return type_Id;
     }
 
-    public void setTypeId(long typeId) {
-        this.typeId = typeId;
+    public void setType_Id(long typeId) {
+        this.type_Id = typeId;
     }
     //</editor-fold>
 }
