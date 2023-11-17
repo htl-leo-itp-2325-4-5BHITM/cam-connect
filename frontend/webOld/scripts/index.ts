@@ -1,9 +1,3 @@
-class WordCount extends HTMLParagraphElement {
-    constructor() {
-        super();
-    }
-}
-
 const APPLICATION_URL:string = "http://localhost:8080"
 
 let allRents:RentComplete[] = []
