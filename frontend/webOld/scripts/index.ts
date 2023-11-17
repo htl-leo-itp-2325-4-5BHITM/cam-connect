@@ -1,4 +1,4 @@
-const APPLICATION_URL:string = "http://localhost:8080"
+const APPLICATION_URL:string = "http://localhost:8080/api"
 
 let allRents:RentComplete[] = []
 let allStudents:Student[] = []
@@ -128,6 +128,7 @@ function generateTable(){
     table.innerHTML = ""
     table.appendChild(headingHtml)
 
+    console.log(allRents, allRents.length)
     //creates the main content
     let html:Element[] = []
     for (let i = 0; i < Math.min(allRents.length, 20); i++) { //run over either all the entries in allRents or 20 (max that fits on the page)

@@ -1,4 +1,4 @@
-var APPLICATION_URL = "http://localhost:8080";
+var APPLICATION_URL = "http://localhost:8080/api";
 var allRents = [];
 var allStudents = [];
 var allTeachers = [];
@@ -63,6 +63,7 @@ function generateTable() {
     var table = document.querySelector('table');
     table.innerHTML = "";
     table.appendChild(headingHtml);
+    console.log(allRents, allRents.length);
     var html = [];
     var _loop_1 = function (i) {
         var row = document.createElement("tr");

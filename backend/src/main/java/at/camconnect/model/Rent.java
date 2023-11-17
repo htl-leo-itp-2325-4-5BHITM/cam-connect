@@ -1,6 +1,6 @@
 package at.camconnect.model;
 
-import at.camconnect.Enums.RentStatus;
+import at.camconnect.enums.RentStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
