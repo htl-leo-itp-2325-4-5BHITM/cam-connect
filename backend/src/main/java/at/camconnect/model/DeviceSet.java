@@ -1,8 +1,8 @@
 package at.camconnect.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class DeviceSet {
@@ -10,6 +10,10 @@ public class DeviceSet {
     private String name;
     @Id
     private Long id;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    private
+    List<DeviceType> device_types;
 
     public DeviceSet(String name) {
         this.name = name;
@@ -33,6 +37,14 @@ public class DeviceSet {
 
     public Long getId() {
         return id;
+    }
+
+    public List<DeviceType> getDevice_types() {
+        return device_types;
+    }
+
+    public void addDevice_type(DeviceType device_type) {
+        this.device_types.add(device_type);
     }
     //endregion
 }
