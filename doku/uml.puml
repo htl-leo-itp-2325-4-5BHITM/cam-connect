@@ -5,6 +5,7 @@
         * type_id: long
         --
         * name string
+        * image: image
     }
 
     entity CameraType {
@@ -12,12 +13,15 @@
         * sensor_id: long
         * resolution_id: long
         * mount_id: long
+        * framerate: int
+        * autofocus: boolean
     }
 
     entity DroneType {
         --
         * sensor_id: long
-        * resolution_id: long
+        * resolution_video_id: long
+        * resolution_foto_id: long
         * max_range: int
     }
 
@@ -117,17 +121,10 @@
         * status: enum
     }
 
-   entity Favorite {
-        * fav_id: long
-        --
-        * type_id: int
-        * student_id: int
-    }
-
     entity Tag {
         * tag_id : long
         --
-        * type_ids: List<type_id>
+        * type_ids: List<DeviceType>
         * name: String
         * description: String
     }
@@ -141,6 +138,7 @@
         * email: String
         * password: String
         * username: String
+        * favourites: List<DeviceType>
     }
 
     entity Teacher {
@@ -168,6 +166,5 @@
     Rent }o-right-|| Teacher
     Rent }o-right-|| Teacher
 
-    Favorite }o-left-|| Student
-    Favorite }o--|| DeviceType
+    Student }o--|| DeviceType
 @enduml

@@ -1,6 +1,11 @@
+# CamConnect API Doku
+
+- `routename/{pathParam}: {PostBody, JSONkeys} -> Return Value`
+- `iamnotavalidroute -x`
+
 ```
 api
-├── rent
+├── rent -x
 │   ├── create -> Rent
 │   ├── getall -> [Rent]
 │   └── getbyid/{rent_id} -> Rent
@@ -15,16 +20,16 @@ api
 │           ├── rentendactual : {value}
 │           ├── note : {value}
 │           └── status : {value}
-├── device
+├── device -x
 │   ├── create : {count} -> [Device]
 │   ├── getall -> [Device]
 │   └── getbyid/{rent_id}
 │       ├── remove
-│       └── update/ : {number, serial, note}
+│       └── update : {number, serial, note}
 │           ├── number : {value}
 │           ├── serial : {value}
 │           └── note : {value}
-├── devicetype
+├── devicetype -x
 │   ├── create -x
 │   │   ├── lens : {f_stop, mount_id, focal_length}
 │   │   ├── camera : {sensor_id, resolution_id, mount_id}
@@ -43,8 +48,8 @@ api
 │           ├── light : {watts, rbg, variable_temperatur}
 │           ├── tripod : {height, head_id}
 │           └── stabilizer : {max_weight, number_of_axis}
-├── student
-└── teacher
+├── student -x
+└── teacher -x
 ```
 
 <!--
@@ -52,7 +57,7 @@ api
 https://tree.nathanfriend.io/
 
 - api
-  - rent
+  - rent -x
     - create -> Rent
     - getall -> [Rent]
     - getbyid/{rent_id} -> Rent
@@ -67,16 +72,16 @@ https://tree.nathanfriend.io/
         - rentendactual : {value}
         - note : {value}
         - status : {value}
-  - device
+  - device -x
     - create : {count} -> [Device]
     - getall -> [Device]
     - getbyid/{rent_id}
       - remove
-      - update/ : {number, serial, note}
+      - update : {number, serial, note}
         - number : {value}
         - serial : {value}
         - note : {value}
-  - devicetype
+  - devicetype -x
     - create -x
       - lens : {f_stop, mount_id, focal_length}
       - camera : {sensor_id, resolution_id, mount_id}
@@ -95,7 +100,7 @@ https://tree.nathanfriend.io/
         - light : {watts, rbg, variable_temperatur}
         - tripod : {height, head_id}
         - stabilizer : {max_weight, number_of_axis}
-  - student
-  - teacher 
+  - student -x
+  - teacher -x
 
 -->
