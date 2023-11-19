@@ -2,6 +2,8 @@ package at.camconnect.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Student {
     @Id
@@ -14,6 +16,10 @@ public class Student {
     private String school_class;
     private String password;
     private String user_id;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    private
+    List<DeviceType> favourites;
 
     public Student() {
     }
@@ -81,5 +87,13 @@ public class Student {
 
     public void setUserId(String userId) {
         this.user_id = userId;
+    }
+
+    public List<DeviceType> getFavourites() {
+        return favourites;
+    }
+
+    public void addFavourite(DeviceType favourite) {
+        this.favourites.add(favourite);
     }
 }

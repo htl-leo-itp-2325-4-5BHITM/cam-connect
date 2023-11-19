@@ -1,0 +1,147 @@
+/* click the thingie asking you to add a filewatcher */
+
+@page { size: A4 landscape }
+
+@media print {
+  #createRent{
+    display: none;
+  }
+}
+
+*{
+  margin: 0;
+  padding: 0;
+  font: inherit;
+}
+
+img{
+  width:100%;
+  display: block;
+}
+
+html{
+  scroll-behavior: smooth;
+}
+
+body{
+  background-color: hsl(0,0,20%);
+  color: hsl(0,0,0%);
+  font-family: sans-serif;
+  overflow: hidden;
+}
+
+::selection{
+  background-color: rgba(117, 179, 215, 0.56);
+  color: black;
+}
+
+a{
+  text-decoration: none;
+  color: inherit;
+}
+
+button{
+  background-color: transparent;
+  border: none;
+  color: hsl(0, 0, 0%)
+}
+
+/* main */
+
+table{
+  border-collapse: collapse;
+  font-size: .8rem;
+
+  tbody{
+    height: 100%;
+    width: 100%;
+  }
+
+  th,td {
+    border: 1px solid gray;
+    height: inherit;
+
+    &:nth-of-type(6), &:nth-of-type(10) {
+      background-color: hsl(0, 0%, 90%);
+      border-right: .2rem solid #383838;
+    }
+  }
+
+  th {
+    border-bottom: .2rem solid #383838;
+    background-color: hsl(0, 0%, 90%);
+    padding: .5rem;
+  }
+
+  tr {
+    height: 2rem;
+  }
+
+  input{
+    border: none;
+    background-color: transparent;
+    height: 100%;
+    padding: .3rem .15rem;
+    box-sizing: border-box;
+    font-size: .8rem;
+    width: 100%;
+    font-family: sans-serif;
+    font-weight: 500;
+    border-radius: .1rem;
+    color: #1a1a1a;
+    transition: all .1s;
+
+    &[type="checkbox"]{
+      height: 50%;
+    }
+
+    &:focus-visible{
+      background-color: rgba(179, 179, 179, 0.1);
+      outline: .15rem solid gray;
+      box-shadow: .2rem .2rem .2rem rgba(128, 128, 128, 0.49);
+    }
+  }
+}
+
+#studentSelectionPopup{
+  border-radius: .5rem;
+  position: absolute;
+  width: 15vw;
+  background-color: #f2f2f2;
+  min-height: 10vh;
+  box-shadow: 0 0 .2rem .1rem rgba(0, 0, 0, 0.2);
+  display: none;
+
+  .search{
+    background-color: lightgrey;
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: .4rem .2rem;
+    font-size: .9rem;
+    box-sizing: border-box;
+    box-shadow: 0 .1rem .2rem rgba(0, 0, 0, 0.3);
+  }
+}
+
+#studentSelectionPopup .studentList{
+  font-size: .9rem;
+
+  p{
+    padding: .2rem;
+    color: #262626;
+    cursor: pointer;
+  }
+
+  .noResults{
+    color: gray;
+  }
+}
+
+button{
+  padding: .2rem 1rem;
+  border: .1rem solid gray;
+  border-radius: .3rem;
+  margin-top: .5rem;
+  cursor: pointer;
+}

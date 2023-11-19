@@ -62,6 +62,7 @@ public class StudentRessource {
 
     @GET
     @Path("/getall")
+    @Produces(MediaType.APPLICATION_JSON)
     public List<Student> getAll() {
         return studentRepository.getAll();
     }

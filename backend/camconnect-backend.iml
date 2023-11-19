@@ -5,7 +5,9 @@
       <configuration>
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
-        <datasource-mapping />
+        <datasource-mapping>
+          <factory-entry name="camconnect-backend" value="b7a0ded0-e100-4471-9766-fef5bb6d99ba" />
+        </datasource-mapping>
         <naming-strategy-map />
       </configuration>
     </facet>

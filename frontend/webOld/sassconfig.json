@@ -1,0 +1,13 @@
+{
+  "removeComments": false,
+  "sourceMaps": true,
+  "indentType": "tab",
+  "indentWidth": 1,
+  "linefeed": "cr",
+  "omitSourceMapUrl": false,
+  "outputStyle": "compressed",
+
+  "files": [
+    "public/styles/index.scss"
+  ]
+}

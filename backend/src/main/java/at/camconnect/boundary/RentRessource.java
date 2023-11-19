@@ -36,7 +36,6 @@ public class RentRessource {
         return Response.ok().build();
     }
 
-
     @GET
     @Path("/getall")
     public List<Rent> getAll() {

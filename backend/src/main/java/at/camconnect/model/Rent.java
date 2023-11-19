@@ -1,6 +1,6 @@
 package at.camconnect.model;
 
-import at.camconnect.Enums.RentStatus;
+import at.camconnect.enums.RentStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -21,11 +21,11 @@ public class Rent {
     private Device device;
 
     @ManyToOne
-    @JoinColumn(name = "teacher_id")
+    @JoinColumn(name = "teacher_id_start")
     private Teacher teacher_start;
 
     @ManyToOne
-    @JoinColumn(name = "teacher_id")
+    @JoinColumn(name = "teacher_id_end")
     private Teacher teacher_end;
 
     private LocalDate rent_start;
