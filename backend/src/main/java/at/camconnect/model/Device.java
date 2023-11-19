@@ -3,6 +3,7 @@ package at.camconnect.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Device {
@@ -12,12 +13,16 @@ public class Device {
     private String serial;
     private String note;
 
+    @ManyToOne
+    private DeviceType deviceType;
+
     public Device() {
     }
 
-    public Device(String serial, String note) {
+    public Device(String serial, String note, DeviceType deviceType) {
         this.serial = serial;
         this.note = note;
+        this.deviceType = deviceType;
     }
 
     @Override
@@ -47,5 +52,13 @@ public class Device {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public DeviceType getDeviceType() {
+        return deviceType;
+    }
+
+    public void setDeviceType(DeviceType deviceType) {
+        this.deviceType = deviceType;
     }
 }

@@ -12,8 +12,7 @@ public class DeviceSet {
     private Long id;
 
     @OneToMany(fetch = FetchType.EAGER)
-    private
-    List<DeviceType> device_types;
+    private List<DeviceType> device_types;
 
     public DeviceSet(String name) {
         this.name = name;

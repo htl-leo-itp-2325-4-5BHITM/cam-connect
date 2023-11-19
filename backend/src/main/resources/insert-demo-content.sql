@@ -1,3 +1,5 @@
+/*TODO fix something here that causes the primary key errors*/
+
 INSERT INTO student (student_id, firstname, lastname, password, school_class, user_id) VALUES (NEXT VALUE FOR student_seq, 'Anna', 'Schmidt', 'passwort1', '1CHITM', 'IT200271');
 INSERT INTO student (student_id, firstname, lastname, password, school_class, user_id) VALUES (NEXT VALUE FOR student_seq, 'Lukas', 'Müller', 'passwort2', '2AHITM', 'IT200272');
 INSERT INTO student (student_id, firstname, lastname, password, school_class, user_id) VALUES (NEXT VALUE FOR student_seq, 'Sophie', 'Wagner', 'passwort3', '3BHITM', 'IT200273');

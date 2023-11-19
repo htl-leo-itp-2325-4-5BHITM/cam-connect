@@ -18,8 +18,7 @@ public class Student {
     private String user_id;
 
     @OneToMany(fetch = FetchType.EAGER)
-    private
-    List<DeviceType> favourites;
+    private List<DeviceType> favourites;
 
     public Student() {
     }
