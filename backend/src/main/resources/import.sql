@@ -88,3 +88,23 @@ INSERT INTO Teacher (teacher_id, firstname, lastname, verification, password, us
                                                                                            (201, 'Professor', 'Smith', 'Verified', 'profpass123', 401),
                                                                                            (202, 'Dr.', 'Jones', 'Verified', 'drjones456', 402),
                                                                                            (203, 'Ms.', 'Williams', 'Verified', 'mswilliams789', 403);
+-- Insert demo data for Rent table
+INSERT INTO rent (rent_id, device_id, rent_start, rent_end_planned, rent_end_actual, student_id, teacher_id)
+VALUES
+    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 1, DATE('2023-01-01'), DATE('2023-01-10'), DATE('2023-01-08'), 1, 1),
+    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 2, DATE('2023-02-01'), DATE('2023-02-15'), DATE('2023-02-10'), 2, 2),
+    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 3, DATE('2023-03-01'), DATE('2023-03-20'), DATE('2023-03-18'), 3, 3),
+    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 4, DATE('2023-04-01'), DATE('2023-04-12'), DATE('2023-04-10'), 4, 4),
+    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 5, DATE('2023-05-01'), DATE('2023-05-25'), DATE('2023-05-20'), 5, 5),
+    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 6, DATE('2023-06-01'), DATE('2023-06-18'), DATE('2023-06-15'), 6, 6),
+    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 7, DATE('2023-07-01'), DATE('2023-07-30'), DATE('2023-07-28'), 7, 7),
+    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 8, DATE('2023-08-01'), DATE('2023-08-12'), DATE('2023-08-10'), 8, 8),
+    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 9, DATE('2023-09-01'), DATE('2023-09-22'), DATE('2023-09-20'), 9, 9),
+    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 10, DATE('2023-10-01'), DATE('2023-10-15'), DATE('2023-10-12'), 10, 10),
+    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 11, DATE('2023-11-01'), DATE('2023-11-18'), DATE('2023-11-15'), 11, 11),
+    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 12, DATE('2023-12-01'), DATE('2023-12-25'), DATE('2023-12-22'), 12, 12),
+    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 13, DATE('2024-01-01'), DATE('2024-01-12'), DATE('2024-01-10'), 13, 13),
+    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 14, DATE('2024-02-01'), DATE('2024-02-15'), DATE('2024-02-12'), 14, 14),
+    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 15, DATE('2024-03-01'), DATE('2024-03-20'), DATE('2024-03-18'), 15, 15);
+
+
