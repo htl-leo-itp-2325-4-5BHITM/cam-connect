@@ -21,6 +21,24 @@ If you follow these conventions we will have a better time writing code and the 
 - push at the end of each workday and when leaving school .-.
   - if something is throwing errors at the end of the day add a //TODO comment and **comment it out** so that others can continue work without having to change/fix your code
 
+## Workflow
+Starting work on a new issue
+- move it to the "In Progress" category
+- create a branch based on the "dev" branch with your issue id and a super short description `#0 Explaining the Workflow`
+
+Completing a Issue
+- move your issue to the "Review" area
+- create a pull request
+- yanik will either approve or decline the request, in the second case he will comment on your issue with things that need improvement
+
+## Github
+- push at the end of each workday and when leaving school .-.
+- if **something is throwing errors** at the end of the day add a //TODO comment and **comment it out** so that others can continue without having to change/fix your code
+- create a branch for your task with a fitting name
+  - when finished with the task set its status to review and create a pull request
+  - a team member will approve the pull request or leave a comment on parts that should be improved
+- commit messages should be precise and list all major changes
+
 ## Code and file formatting
 
 - use camelCase for folder names
