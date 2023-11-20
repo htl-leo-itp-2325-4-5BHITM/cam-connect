@@ -66,4 +66,11 @@ public class StudentRessource {
     public List<Student> getAll() {
         return studentRepository.getAll();
     }
+
+    @POST
+    @Path("/importstudents")
+    @Consumes(MediaType.TEXT_PLAIN)
+    public Response importStudents(String[] csvData){
+        studentRepository.importStudents(csvData);
+    }
 }

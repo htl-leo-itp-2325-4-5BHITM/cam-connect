@@ -9,6 +9,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.LinkedList;
 import java.util.List;
 
 @ApplicationScoped
@@ -53,5 +56,25 @@ public class StudentRepository{
                 .setMaxResults(10);
         List<Student> results = q.getResultList();
         return results;
+    }
+    public boolean importStudents(String[] csv){ //nicht getestet
+        try{
+            List<String[]> csvLines = new LinkedList<>();
+            for (String s :
+                    csv) {
+                csvLines.add(s.split(","));
+            }
+
+            for (String[] sArr:
+                 csvLines) {
+                Student student = new Student(sArr[0].trim(), sArr[1].trim(), sArr[2].trim(),sArr[3].trim(), sArr[4].trim());
+                em.persist(student);
+                return true;
+                //Device List soll null sein
+            }
+         } catch (NumberFormatException e) {
+            System.err.println("Fehler beim Parsen des Integers: " + e.getMessage());
+        }
+        return false;
     }
 }
