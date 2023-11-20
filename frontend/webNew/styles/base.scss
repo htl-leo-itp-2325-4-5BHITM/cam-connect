@@ -1,0 +1,39 @@
+//Dependencies: variables.SCSS
+
+*{
+    margin: 0;
+    padding: 0;
+    font: inherit;
+    accent-color: $accent;
+}
+
+img{
+    width:100%;
+    display: block;
+}
+
+html{
+    scroll-behavior: smooth;
+}
+
+body{
+	background-color: hsl(0,0,20%);
+	color: hsl(0,0,0%);
+	font-family: sans-serif;
+}
+
+::selection{
+    background-color: $accent;
+    color: hsl(0, 0, 0%);
+}
+
+a{
+    text-decoration: none;
+    color: inherit;
+}
+
+button{
+    background-color: transparent;
+    border: none;
+    color: hsl(0, 0, 100%)
+}

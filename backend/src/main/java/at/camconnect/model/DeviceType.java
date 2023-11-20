@@ -5,8 +5,9 @@ import jakarta.persistence.*;
 @Entity
 public class DeviceType {
     @Id
-    @GeneratedValue
-    private Long type_Id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "device_type_seq")
+    @SequenceGenerator(name = "device_type_seq", sequenceName = "DEVICE_TPYE_SEQ", allocationSize = 1)
+    private Long type_id;
 
     //@OneToMany(cascade = CascadeType.ALL, mappedBy = "tag_id", fetch = FetchType.EAGER)
     //private List<Tag> tags;
@@ -14,7 +15,7 @@ public class DeviceType {
 
     public DeviceType(String name, long typeId) {
         this.name = name;
-        this.type_Id = typeId;
+        this.type_id = typeId;
     }
 
     public DeviceType() {
@@ -29,12 +30,12 @@ public class DeviceType {
         this.name = typeName;
     }
 
-    public long getType_Id() {
-        return type_Id;
+    public long getType_id() {
+        return type_id;
     }
 
-    public void setType_Id(long typeId) {
-        this.type_Id = typeId;
+    public void setType_id(long typeId) {
+        this.type_id = typeId;
     }
     //</editor-fold>
 }

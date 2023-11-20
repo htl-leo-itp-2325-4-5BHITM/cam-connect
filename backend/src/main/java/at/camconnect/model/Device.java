@@ -1,9 +1,6 @@
 package at.camconnect.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class Device {
@@ -13,8 +10,8 @@ public class Device {
     private String serial;
     private String note;
 
-  /*  @ManyToOne
-    private DeviceType deviceType;*/
+    @ManyToOne
+    private DeviceType type;
 
     public Device() {
     }
