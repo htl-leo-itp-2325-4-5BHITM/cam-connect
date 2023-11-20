@@ -1,6 +1,6 @@
 # CamConnect API Doku
 
-- `routename/{pathParam}: {PostBody, JSONkeys} -> Return Value`
+- `routename/{pathparam}: {PostBody, JSONkeys} -> ReturnValue`
 - `iamnotavalidroute -x`
 
 ```
