@@ -4,54 +4,19 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./styles/style.css">
-    <title>Partytiga</title>
+    <title>Cam Connect</title>
 </head>
 
 <body>
-    <h1>Partytiga</h1>
+    <h1>Cam Connect</h1>
 
-    <div id="success" class="info"><h2>Event erfolgreich gespeichert</h2></div>
-    <div id="error" class="info"><h2>Fehler beim Speichern des Events</h2></div>
+    <cc-button color="accent" type="filled" size="medium"></cc-button>
 
-    <form id="eventForm">
+    <cc-button color="accent" type="outlined" size="small"></cc-button>
 
-        <label for="eventName">Name des Events:</label>
-        <input type="text" id="eventName" required>
-        
-        <br>
-        <br>
+    <cc-button color="gray" type="filled" size="medium"></cc-button>
 
-        <label for="organizerName">Name des Veranstalters:</label>
-        <input type="text" id="organizerName" required>
-        
-        <br>
-        <br>
-
-        <label for="eventDate">Datum:</label>
-        <input type="date" id="eventDate" required>
-
-        <br>
-        <br>
-
-        <label for="eventLocation">Adresse:</label>
-        <input type="text" id="eventLocation" required>
-
-        <br>
-        <br>
-
-        <button type="button" id="addEvent">Hinzufügen</button>
-        <button type="button" id="loadEvents">Laden</button>
-    </form>
-
-    <h2>Liste:</h2>
-        <form>
-            <label for="veranstalter">Veranstalter:</label>
-            <select id="veranstalter" name="veranstalter">
-                
-            </select>
-        </form>
-        <event-table></event-table>
+    <cc-button color="gray" type="outlined" size="small"></cc-button>
 </body>
 
 </html>

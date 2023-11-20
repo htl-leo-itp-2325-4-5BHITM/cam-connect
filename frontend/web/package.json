@@ -18,7 +18,16 @@
   },
   "homepage": "https://github.com/htl-leo-itp-2325-4-5BHITM/cam-connect#readme",
   "devDependencies": {
+    "css-loader": "^6.8.1",
+    "cssnano": "^6.0.1",
+    "node-sass": "^9.0.0",
+    "postcss-loader": "^7.3.3",
+    "sass-loader": "^13.3.2",
+    "style-loader": "^3.3.3",
     "typescript": "^5.2.2",
     "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "lit-html": "^3.1.0"
   }
 }
