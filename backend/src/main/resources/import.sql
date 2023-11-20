@@ -1,4 +1,4 @@
--- Insert demo data for DeviceType
+/*-- Insert demo data for DeviceType
 INSERT INTO DeviceType (type_id, typeName, tag_id) VALUES
                                                        (1, 'Camera', 101),
                                                        (2, 'Drone', 102),
@@ -108,3 +108,4 @@ VALUES
     ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 15, DATE('2024-03-01'), DATE('2024-03-20'), DATE('2024-03-18'), 15, 15);
 
 
+*/
