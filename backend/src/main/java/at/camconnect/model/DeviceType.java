@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 public class DeviceType {
     @Id
     @GeneratedValue
-    private long type_Id;
+    private Long type_Id;
 
     //@OneToMany(cascade = CascadeType.ALL, mappedBy = "tag_id", fetch = FetchType.EAGER)
     //private List<Tag> tags;

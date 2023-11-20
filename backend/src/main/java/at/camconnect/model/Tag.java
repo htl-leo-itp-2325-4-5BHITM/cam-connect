@@ -9,7 +9,7 @@ public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tag_seq")
     @SequenceGenerator(name = "tag_seq", sequenceName = "TAG_SEQ", allocationSize = 1)
-    private long tag_id;
+    private Long tag_id;
 
     //TODO this is most likely wrong
     @OneToMany

@@ -9,20 +9,19 @@ import jakarta.persistence.ManyToOne;
 public class Device {
     @Id
     @GeneratedValue
-    private long device_id;
+    private Long device_id;
     private String serial;
     private String note;
 
-    @ManyToOne
-    private DeviceType deviceType;
+  /*  @ManyToOne
+    private DeviceType deviceType;*/
 
     public Device() {
     }
 
-    public Device(String serial, String note, DeviceType deviceType) {
+    public Device(String serial, String note) {
         this.serial = serial;
         this.note = note;
-        this.deviceType = deviceType;
     }
 
     @Override
@@ -52,13 +51,5 @@ public class Device {
 
     public void setNote(String note) {
         this.note = note;
-    }
-
-    public DeviceType getDeviceType() {
-        return deviceType;
-    }
-
-    public void setDeviceType(DeviceType deviceType) {
-        this.deviceType = deviceType;
     }
 }

@@ -271,7 +271,9 @@ function updateRent(input:HTMLElement, key:string, value:any, rentId?:number) {
     // @ts-ignore
     rentUpdate[key] = value
 
-    fetch(APPLICATION_URL + '/rent/update', {
+    console.log(rentUpdate)
+
+    fetch(APPLICATION_URL + '/rent/getbyid/' + rentId +'/update', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
