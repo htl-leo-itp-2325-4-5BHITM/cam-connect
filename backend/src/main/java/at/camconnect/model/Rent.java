@@ -10,7 +10,7 @@ public class Rent {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rent_seq")
     @SequenceGenerator(name = "rent_seq", sequenceName = "RENT_SEQ", allocationSize = 1)
-    private long rent_id;
+    private Long rent_id;
 
     @ManyToOne
     @JoinColumn(name = "student_id")

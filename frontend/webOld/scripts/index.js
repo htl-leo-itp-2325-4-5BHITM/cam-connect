@@ -175,7 +175,8 @@ function updateRent(input, key, value, rentId) {
         note: rentOriginal.note
     };
     rentUpdate[key] = value;
-    fetch(APPLICATION_URL + '/rent/update', {
+    console.log(rentUpdate);
+    fetch(APPLICATION_URL + '/rent/getbyid/' + rentId + '/update', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

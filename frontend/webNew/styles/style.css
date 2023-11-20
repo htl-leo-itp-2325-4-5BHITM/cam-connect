@@ -1,0 +1,51 @@
+html{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-align: center;
+    color: rgb(80, 0, 154);
+}
+
+h1{
+    margin-top: 10vh;
+    margin-bottom: 6vh;
+}
+
+h2{
+    margin-top: 8vh;
+}
+
+input, button{
+    border-radius: 5px;
+    border: solid rgb(62, 62, 62) 1px;
+    padding: 0.3rem;
+    color: rgb(80, 0, 154);
+}
+
+input{
+    color: #000;
+}
+
+button{
+    cursor: pointer;
+}
+
+form{
+    width: 90vw;
+    margin: auto;
+    text-align: left;
+    padding: 3rem;
+    border: solid 1px rgb(219, 219, 219);
+    border-radius: 5px;
+}
+
+.info{
+    position: absolute;
+    margin-left: 37vw;
+}
+
+#success{
+    opacity: 0;
+} 
+
+#error{
+    opacity: 0;
+}

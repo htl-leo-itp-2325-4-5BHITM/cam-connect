@@ -5,7 +5,8 @@ If you follow these conventions we will have a better time writing code and the 
 ## General
 
 - cam-connect should be spelled with a dash and in lowercase wherever possible
-- all internal planning documents, files, comments, documentations should be in english
+  - alternatively "cc" can be used for things like components: `cc-button`
+- all internal planning documents, files, comments, commit messages, documentations should be in english
 - all external proposals, progress reports, documentations should be in german
 
 ## Code and file formatting

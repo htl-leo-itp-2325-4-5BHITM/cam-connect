@@ -9,7 +9,7 @@ public class Teacher {
 
     @Id
     @GeneratedValue
-    private long teacher_id;
+    private Long teacher_id;
     private String firstname;
     private String lastname;
     private String verification;

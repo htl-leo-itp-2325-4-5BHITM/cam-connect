@@ -4,7 +4,7 @@
    entity DeviceType {
         * type_id: long
         --
-        * name string
+        * name: String
         * image: image
     }
 
