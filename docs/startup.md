@@ -22,7 +22,7 @@ Open the whole project in Webstorm, VsCode or similar.
 
 Web is based on webpack, run it by cd-ing to the web folder and running `npm start`
 
-The project is now accessible at localhost:4000
+The project is now accessible at localhost:4200
 
 ### IOS
 Open the whole project in Xcode.
