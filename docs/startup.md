@@ -22,6 +22,8 @@ Open the whole project in Webstorm, VsCode or similar.
 
 Web is based on webpack, run it by cd-ing to the web folder and running `npm start`
 
+The project is now accessible at localhost:4000
+
 ### IOS
 Open the whole project in Xcode.
 
@@ -30,4 +32,4 @@ Open the whole project in AndroidStudio or similar.
 
 ## Docs
 
-To run the uml file, install the "PlantUML Integration" plugin
+To run the uml file, install the "PlantUML Integration" plugin in IntelliJ
