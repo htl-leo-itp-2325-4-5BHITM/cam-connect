@@ -21,6 +21,5 @@
     "unused/**/*"],
   "include": [
     "src/**/*",
-    "global.d.ts"
   ]
   }

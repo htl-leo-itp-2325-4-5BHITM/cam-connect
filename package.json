@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "css-modules-typescript-loader": "^4.0.1",
+    "sass-to-string": "^1.6.3"
+  }
+}

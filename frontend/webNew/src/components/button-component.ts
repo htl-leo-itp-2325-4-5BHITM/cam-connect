@@ -1,17 +1,17 @@
 import {html, render} from "lit-html"
 
-import styles from '../../styles/components/button.scss'
+//TODO tale antother look at this
+// @ts-ignore
+import styles from '../../styles/components/button.styles.scss'
 
 enum Size {MEDIUM="medium", SMALL="small"}
 enum Type {FILLED="filled", OUTLINED="outlined"}
 enum Color {ACCENT="accent", GRAY="gray"}
 
-const style = document.createElement("style")
 const button = (size: Size, type: Type, color: Color) => html`
-<link rel="stylesheet" href="/styles/components/button.css" >
-<button class="cc-button" color="${color}" type="${type}" size="${size}">
-    Button
-</button>`
+    <button class="cc-button" color="${color}" type="${type}" size="${size}">
+        Button
+    </button>`
 
 
 class ButtonComponent extends HTMLElement {
@@ -19,9 +19,9 @@ class ButtonComponent extends HTMLElement {
         super()
         const shadow = this.attachShadow({mode: "open"})
 
-/*        const styleTag = document.createElement('style');
-        styleTag.innerHTML = JSON.stringify(style).replace(/"/g, '');
-        shadow.appendChild(styleTag);*/
+        const style = document.createElement('style');
+        style.textContent = styles;
+        shadow.appendChild(style)
     }
     connectedCallback() {
         this.render()

@@ -26,7 +26,7 @@ The project is now accessible at localhost:4200
 
 ### IOS
 Open the whole project in Xcode.
-
+    
 ### Android
 Open the whole project in AndroidStudio or similar.
 

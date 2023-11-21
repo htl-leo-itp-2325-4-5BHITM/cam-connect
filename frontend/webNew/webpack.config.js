@@ -4,7 +4,7 @@ const webpack = require('webpack');
 
 const baseHref = "/";
 
-module.exports = env => ({
+module.exports = {
     entry: './src/index.ts',
     mode: "development",
     module: {
@@ -16,12 +16,29 @@ module.exports = env => ({
             },
             {
                 test: /\.scss$/,
+                exclude: [/\.styles.scss$/, /node_modules/],
                 use: [
-                    'style-loader',
-                    'css-loader',
-                    'sass-loader'
+                    { loader: "style-loader" },
+                    { loader: "css-modules-typescript-loader"},
+                    { loader: "css-loader", options: { modules: true } },
+                    { loader: "sass-loader" },
+                ]
+            },
+            {
+                test: /\.styles.scss$/,
+                exclude: /node_modules/,
+                use: [
+                    "sass-to-string",
+                    {
+                        loader: "sass-loader",
+                        options: {
+                            sassOptions: {
+                                outputStyle: "compressed",
+                            },
+                        },
+                    },
                 ],
-            }
+            },
         ]
     },
     devtool: "cheap-module-source-map",
@@ -56,4 +73,4 @@ module.exports = env => ({
         },
         historyApiFallback: true
     }
-});
+};
