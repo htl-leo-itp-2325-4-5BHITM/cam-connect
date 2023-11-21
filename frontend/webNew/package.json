@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack serve --port 4200",
     "build": "webpack",
-    "server": "json-server --watch ./dummy/events.json --port 8080"
+    "testo": "webpack --json > stats.json"
   },
   "author": "",
   "license": "ISC",
