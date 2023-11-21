@@ -9,20 +9,17 @@ If you follow these conventions we will have a better time writing code and the 
 - all internal planning documents, files, comments, commit messages, documentations should be in english
 - all external proposals, progress reports, documentations should be in german
 
-## Workflow
-- Starting on a new issue: move it to "In Progress"
-- Completing a Issue move issue to the "Review" area
+## Workflow / GitHub
+- When completing a issue move it to the "Review" area
   - yanik will check out the issue and either
     - move it to done
     - write a comment on what needs more work
-- The dev branch should be merged with main when a sprint is finished
-
-## GitHub
+- The dev branch will be merged with main when a sprint is finished
 - commit often, this just safes your work to git
+  - commit messages should start with the issue your working on and be precise and short`#0 Updated GitHub section in convetions.md`
+  - if many things were changed write a description
 - push at the end of each workday and when leaving school .-.
-- if **something is throwing errors** at the end of the day add a //TODO comment and **comment it out** so that others can continue without having to change/fix your code
-- commit messages should be precise and just a few words `Updated GitHub section in convetions`
-- if many things were changed write a description
+  - if something is throwing errors at the end of the day add a //TODO comment and **comment it out** so that others can continue work without having to change/fix your code
 
 ## Code and file formatting
 

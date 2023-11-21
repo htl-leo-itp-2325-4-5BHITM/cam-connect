@@ -16,9 +16,10 @@ public class Device {
     public Device() {
     }
 
-    public Device(String serial, String note) {
+    public Device(String serial, String note, DeviceType type) {
         this.serial = serial;
         this.note = note;
+        this.type = type;
     }
 
     @Override
@@ -48,5 +49,13 @@ public class Device {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public DeviceType getType() {
+        return type;
+    }
+
+    public void setType(DeviceType type) {
+        this.type = type;
     }
 }
