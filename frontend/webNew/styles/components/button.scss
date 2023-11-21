@@ -1,6 +1,6 @@
 @import "../variables.scss";
 
-button.cc-button {
+cc-button::part(cc-button) {
   font-size: 1.25rem;
   min-width: 20ch;
   height: 5ch;
