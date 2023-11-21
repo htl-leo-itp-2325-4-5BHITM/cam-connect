@@ -1,7 +1,6 @@
 import {html, render} from "lit-html"
 
-import "../../styles/variables.scss"
-import "../../styles/components/button.scss"
+import styles from '../../styles/components/button.scss'
 
 import styles from '../../styles/button.scss'
 
@@ -9,22 +8,18 @@ enum Size {MEDIUM="medium", SMALL="small"}
 enum Type {FILLED="filled", OUTLINED="outlined"}
 enum Color {ACCENT="accent", GRAY="gray"}
 
-const host = document.querySelector("#host")
-
-const sheet = new CSSStyleSheet()
-sheet.replaceSync("button { color: red; }")
-
+const style = document.createElement("style")
 const button = (size: Size, type: Type, color: Color) => html`
-<button part="cc-button" size="${size}" type="${type}" color="${color}"'>
-
+<link rel="stylesheet" href="/styles/components/button.css" >
+<button class="cc-button" color="${color}" type="${type}" size="${size}">
     Button
 </button>`
+
 
 class ButtonComponent extends HTMLElement {
     constructor() {
         super()
-        const shadow = host.attachShadow({mode: "open"})
-        shadow.adoptedStyleSheets = [sheet]
+        const shadow = this.attachShadow({mode: "open"})
     }
     connectedCallback() {
         this.render()
