@@ -21,5 +21,6 @@
     "unused/**/*"],
   "include": [
     "src/**/*",
+    "declarations.d.ts"
   ]
   }

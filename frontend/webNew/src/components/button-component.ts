@@ -1,7 +1,5 @@
 import {html, render} from "lit-html"
 
-//TODO tale antother look at this
-// @ts-ignore
 import styles from '../../styles/components/button.styles.scss'
 
 enum Size {MEDIUM="medium", SMALL="small"}
