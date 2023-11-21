@@ -20,5 +20,7 @@
     "test/**/*",
     "unused/**/*"],
   "include": [
-    "src/**/*"]
+    "src/**/*",
+    "global.d.ts"
+  ]
   }

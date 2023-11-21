@@ -26,7 +26,7 @@ module.exports = env => ({
     },
     devtool: "cheap-module-source-map",
     resolve: {
-        extensions: ['.ts', '.js'],
+        extensions: ['.ts', '.js', '.scss'],
         alias: {
             Model: path.resolve(__dirname, "src/model")
         }
