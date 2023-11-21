@@ -72,5 +72,6 @@ public class StudentRessource {
     @Consumes(MediaType.TEXT_PLAIN)
     public Response importStudents(String[] csvData){
         studentRepository.importStudents(csvData);
+        return null;
     }
 }
