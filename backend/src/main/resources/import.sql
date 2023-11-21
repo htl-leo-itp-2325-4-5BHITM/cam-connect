@@ -1,111 +1,111 @@
-/*-- Insert demo data for DeviceType
-INSERT INTO DeviceType (type_id, typeName, tag_id) VALUES
-                                                       (1, 'Camera', 101),
-                                                       (2, 'Drone', 102),
-                                                       (3, 'Lens', 103),
-                                                       (4, 'Audio', 104),
-                                                       (5, 'Light', 105),
-                                                       (6, 'Tripod', 106),
-                                                       (7, 'Stabilizer', 107);
+-- Insert sample data for LensMount
+INSERT INTO LensMount (mount_id, name) VALUES
+                                           (1, 'Canon EF'),
+                                           (2, 'Nikon F'),
+                                           (3, 'Sony E');
+-- Add more LensMount records as needed
 
--- Insert demo data for CameraType
-INSERT INTO CameraType (sensor, mount, resolution) VALUES
-                                                       ('Full Frame', 'Tripod Mount', '4K'),
-                                                       ('APS-C', 'Handheld Mount', '1080p'),
-                                                       ('Micro Four Thirds', 'Studio Mount', '6K');
+-- Insert sample data for CameraSensor
+INSERT INTO CameraSensor (sensor_id, name) VALUES
+                                               (1, 'Full Frame'),
+                                               (2, 'APS-C'),
+                                               (3, 'Micro Four Thirds'),
+                                               (4, '1-inch');
+-- Add more CameraSensor records as needed
 
--- Insert demo data for DroneType
-INSERT INTO DroneType (sensor, resolution, maxRange) VALUES
-                                                         ('HD Camera', '720p', 500),
-                                                         ('4K Camera', '4K', 1000),
-                                                         ('6K Camera', '6K', 1500);
+-- Insert sample data for TripodHead
+INSERT INTO TripodHead (head_id, name) VALUES
+                                           (3, 'Gimbal Head'),
+                                           (4, 'Fluid Head');
+-- Add more TripodHead records as needed
 
--- Insert demo data for LensType
-INSERT INTO LensType (f-stop, mount, focalLength) VALUES
-                                                      ('f/2.8', 'Canon EF', '50mm'),
-                                                      ('f/1.4', 'Nikon F', '85mm'),
-                                                      ('f/4.0', 'Sony E', '24-70mm');
+-- Insert sample data for CameraResolution
+INSERT INTO CameraResolution (resolution_id, name, details) VALUES
+                                                                (1, 'HD', '1920x1080'),
+                                                                (2, '4K UHD', '3840x2160'),
+                                                                (3, '5K', '5120x2880'),
+                                                                (4, '6K', '6144x3456');
+-- Add more CameraResolution records as needed
 
--- Insert demo data for AudioType
-INSERT INTO AudioType (windblocker, wireless, needsRecorder) VALUES
-                                                                 (true, true, false),
-                                                                 (false, true, true),
-                                                                 (true, false, true);
+-- Insert sample data for DeviceType
+INSERT INTO DeviceType (type_id, name, image) VALUES
+                                                  (1, 'Camera', 'camera_image.jpg'),
+                                                  (2, 'Drone', 'drone_image.jpg'),
+                                                  (3, 'Audio Device', 'audio_image.jpg'),
+                                                  (4, 'Light', 'light_image.jpg'),
+                                                  (5, 'Tripod', 'tripod_image.jpg'),
+                                                  (6, 'Stabilizer', 'stabilizer_image.jpg'),
+                                                  (7, 'Lens', 'lens_image.jpg');
+-- Add more DeviceType records as needed
 
--- Insert demo data for LightType
-INSERT INTO LightType (watts, RGB, variableTemperature) VALUES
-                                                            (100, true, true),
-                                                            (50, false, true),
-                                                            (200, true, false);
+-- Insert sample data for LightType
+INSERT INTO LightType (type_id, watts, rgb, variable_temperature) VALUES
+                                                                      (4, 100, true, false),
+                                                                      (5, 200, false, true);
+-- Add more LightType records as needed
 
--- Insert demo data for TripodType
-INSERT INTO TripodType (height, head) VALUES
-                                          ('60 inches', 'Ball Head'),
-                                          ('75 inches', 'Pan-and-Tilt Head'),
-                                          ('50 inches', 'Fluid Head');
+-- Insert sample data for StabilizerType
+INSERT INTO StabilizerType (type_id, max_weight, number_of_axis) VALUES
+                                                                     (6, 5, 3),
+                                                                     (7, 8, 4);
+-- Add more StabilizerType records as needed
 
--- Insert demo data for StabilizerType
-INSERT INTO StabilizerType (maxWeight, numberOfAxis) VALUES
-                                                         (2, 3),
-                                                         (5, 2),
-                                                         (8, 4);
+-- Insert sample data for DroneType
+INSERT INTO DroneType (type_id, sensor_id, resolution_video_id, resolution_foto_id, max_range) VALUES
+                                                                                                   (2, 1, 1, 2, 500),
+                                                                                                   (7, 2, 3, 4, 1000);
+-- Add more DroneType records as needed
 
--- Insert demo data for Device
-INSERT INTO Device (device_id, serial, note) VALUES
-                                                 (1, 'ABC123', 'Used in the photography class'),
-                                                 (2, 'XYZ789', 'For outdoor video shooting'),
-                                                 (3, 'PQR456', 'Studio recording equipment');
+-- Insert sample data for LensType
+INSERT INTO LensType (type_id, f_stop, mount_id, focal_length) VALUES
+                                                                   (7, 2.8, 1, 50),
+                                                                   (8, 1.4, 2, 85);
+-- Add more LensType records as needed
 
--- Insert demo data for Rent
-INSERT INTO Rent (rent_id, student_id, device_id, teacher_id, rent_start, rent_end_planned, rent_end_actual, status_rent_start, status_rent_end) VALUES
-                                                                                                                                                     (1, 101, 1, 201, '2023-01-01', '2023-01-15', '2023-01-14', true, true),
-                                                                                                                                                     (2, 102, 3, 202, '2023-02-01', '2023-02-10', NULL, true, false),
-                                                                                                                                                     (3, 103, 5, 203, '2023-03-01', '2023-03-15', NULL, true, false);
+-- Insert sample data for AudioType
+INSERT INTO AudioType (type_id, windblocker, wireless, needs_recorder) VALUES
+                                                                           (3, true, false, true),
+                                                                           (4, false, true, false);
+-- Add more AudioType records as needed
 
--- Insert demo data for Favorite
-INSERT INTO Favorite (fav_id, device_id, student_id) VALUES
-                                                         (1, 1, 101),
-                                                         (2, 3, 102),
-                                                         (3, 5, 103);
+-- Insert sample data for TripodType
+INSERT INTO TripodType (type_id, height, head_id) VALUES
+                                                      (5, 150, 1),
+                                                      (6, 180, 2);
+-- Add more TripodType records as needed
 
--- Insert demo data for Tag
-INSERT INTO Tag (tag_id, type_id, description) VALUES
-                                                   (101, 1, 'Photography'),
-                                                   (102, 2, 'Aerial'),
-                                                   (103, 3, 'Portrait'),
-                                                   (104, 4, 'Recording'),
-                                                   (105, 5, 'Studio'),
-                                                   (106, 6, 'Support');
+-- Insert sample data for Tag
+INSERT INTO Tag (tag_id, type_ids, name, description) VALUES
+                                                          (1, [1, 2, 7], 'Photography', 'Devices for photography enthusiasts'),
+                                                          (2, [3, 6], 'Audio Recording', 'Devices for audio recording');
+-- Add more Tag records as needed
 
--- Insert demo data for Student
-INSERT INTO Student (student_id, firstname, lastname, school_class, password, user_id) VALUES
-                                                                                           (101, 'John', 'Doe', 'Photography 101', 'password123', 301),
-                                                                                           (102, 'Jane', 'Smith', 'Media Arts', 'pass456', 302),
-                                                                                           (103, 'Bob', 'Johnson', 'Sound Engineering', 'secure789', 303);
+-- Insert sample data for Device
+INSERT INTO Device (device_id, number, serial, note, type_id) VALUES
+                                                                  (1, 101, 'SN123456', 'Good condition', 1),
+                                                                  (2, 102, 'SN789012', 'Needs maintenance', 3);
+-- Add more Device records as needed
 
--- Insert demo data for Teacher
-INSERT INTO Teacher (teacher_id, firstname, lastname, verification, password, user_id) VALUES
-                                                                                           (201, 'Professor', 'Smith', 'Verified', 'profpass123', 401),
-                                                                                           (202, 'Dr.', 'Jones', 'Verified', 'drjones456', 402),
-                                                                                           (203, 'Ms.', 'Williams', 'Verified', 'mswilliams789', 403);
--- Insert demo data for Rent table
-INSERT INTO rent (rent_id, device_id, rent_start, rent_end_planned, rent_end_actual, student_id, teacher_id)
-VALUES
-    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 1, DATE('2023-01-01'), DATE('2023-01-10'), DATE('2023-01-08'), 1, 1),
-    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 2, DATE('2023-02-01'), DATE('2023-02-15'), DATE('2023-02-10'), 2, 2),
-    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 3, DATE('2023-03-01'), DATE('2023-03-20'), DATE('2023-03-18'), 3, 3),
-    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 4, DATE('2023-04-01'), DATE('2023-04-12'), DATE('2023-04-10'), 4, 4),
-    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 5, DATE('2023-05-01'), DATE('2023-05-25'), DATE('2023-05-20'), 5, 5),
-    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 6, DATE('2023-06-01'), DATE('2023-06-18'), DATE('2023-06-15'), 6, 6),
-    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 7, DATE('2023-07-01'), DATE('2023-07-30'), DATE('2023-07-28'), 7, 7),
-    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 8, DATE('2023-08-01'), DATE('2023-08-12'), DATE('2023-08-10'), 8, 8),
-    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 9, DATE('2023-09-01'), DATE('2023-09-22'), DATE('2023-09-20'), 9, 9),
-    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 10, DATE('2023-10-01'), DATE('2023-10-15'), DATE('2023-10-12'), 10, 10),
-    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 11, DATE('2023-11-01'), DATE('2023-11-18'), DATE('2023-11-15'), 11, 11),
-    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 12, DATE('2023-12-01'), DATE('2023-12-25'), DATE('2023-12-22'), 12, 12),
-    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 13, DATE('2024-01-01'), DATE('2024-01-12'), DATE('2024-01-10'), 13, 13),
-    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 14, DATE('2024-02-01'), DATE('2024-02-15'), DATE('2024-02-12'), 14, 14),
-    ((SELECT NEXT VALUE FOR rent_seq FROM SYSIBM.SYSDUMMY1), 15, DATE('2024-03-01'), DATE('2024-03-20'), DATE('2024-03-18'), 15, 15);
+-- Insert sample data for Rent
+INSERT INTO Rent (rent_id, student_id, device_id, teacher_id_start, teacher_id_end, rent_start, rent_end_planned, rent_end_actual, status) VALUES
+                                                                                                                                               (1, 1, 1, 1, 2, '2023-01-01', '2023-01-15', '2023-01-15', 'confirmed'),
+                                                                                                                                               (2, 2, 2, 2, 1, '2023-02-01', '2023-02-10', '2023-02-10', 'confirmed');
+-- Add more Rent records as needed
 
+-- Insert sample data for Student
+INSERT INTO Student (student_id, firstname, lastname, school_class, email, password, username) VALUES
+                                                                                                   (1, 'John', 'Doe', '10A', 'john.doe@example.com', 'password123', 'john_doe'),
+                                                                                                   (2, 'Jane', 'Smith', '11B', 'jane.smith@example.com', 'securepass', 'jane_smith');
+-- Add more Student records as needed
 
-*/
+-- Insert sample data for Teacher
+INSERT INTO Teacher (teacher_id, firstname, lastname, password, username) VALUES
+                                                                              (1, 'Professor', 'Johnson', 'teacherpass', 'prof_johnson'),
+                                                                              (2, 'Dr.', 'Williams', 'pass123', 'dr_williams');
+-- Add more Teacher records as needed
+
+-- Insert sample data for DeviceSet
+INSERT INTO DeviceSet (set_id, name, device_types) VALUES
+                                                       (1, 'Photography Kit', [1, 2, 7]),
+                                                       (2, 'Audio Recording Set', [3, 6]);
+-- Add more DeviceSet records as needed

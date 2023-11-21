@@ -14,6 +14,7 @@ sheet.replaceSync("button { color: red; }")
 
 const button = (size: Size, type: Type, color: Color) => html`
 <button part="cc-button" size="${size}" type="${type}" color="${color}"'>
+
     Button
 </button>`
 
