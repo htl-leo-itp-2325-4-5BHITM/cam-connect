@@ -2,8 +2,6 @@ import {html, render} from "lit-html"
 
 import styles from '../../styles/components/button.scss'
 
-import styles from '../../styles/button.scss'
-
 enum Size {MEDIUM="medium", SMALL="small"}
 enum Type {FILLED="filled", OUTLINED="outlined"}
 enum Color {ACCENT="accent", GRAY="gray"}
