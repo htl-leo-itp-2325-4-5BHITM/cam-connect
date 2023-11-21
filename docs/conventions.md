@@ -10,22 +10,19 @@ If you follow these conventions we will have a better time writing code and the 
 - all external proposals, progress reports, documentations should be in german
 
 ## Workflow
-Starting work on a new issue
-- move it to the "In Progress" category
-- create a branch based on the "dev" branch with your issue id and a super short description `#0 Explaining the Workflow`
+- Starting on a new issue: move it to "In Progress"
+- Completing a Issue move issue to the "Review" area
+  - yanik will check out the issue and either
+    - move it to done
+    - write a comment on what needs more work
+- The dev branch should be merged with main when a sprint is finished
 
-Completing a Issue
-- move your issue to the "Review" area
-- create a pull request
-- yanik will either approve or decline the request, in the second case he will comment on your issue with things that need improvement
-
-## Github
+## GitHub
+- commit often, this just safes your work to git
 - push at the end of each workday and when leaving school .-.
 - if **something is throwing errors** at the end of the day add a //TODO comment and **comment it out** so that others can continue without having to change/fix your code
-- create a branch for your task with a fitting name
-  - when finished with the task set its status to review and create a pull request
-  - a team member will approve the pull request or leave a comment on parts that should be improved
-- commit messages should be precise and list all major changes
+- commit messages should be precise and just a few words `Updated GitHub section in convetions`
+- if many things were changed write a description
 
 ## Code and file formatting
 
@@ -91,9 +88,14 @@ function checkLogin(){
 - semicolons should be avoided wherever possible (this is a setting in webstorm so it won't add them automatically)
 - use .innerText instead of .innerHtml whenever you dont want to add elements to the DOM, this way you avoid injections
 
-### style specific
+### SCSS specific
 - there should be a base stylesheet whenever multiple pages need the same style
 - don't nest multiple container selectors only sub items or pseude selectors
+- classnames and similar should be camelCase
+- units
+  - do not use pixels
+  - use rem for text related sizes: font size, text container, height etc.
+  - use vw for 
 
 For those that don't know scss this will seem weird, it's actually pretty easy
 ```SCSS
