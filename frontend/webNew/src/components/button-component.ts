@@ -18,6 +18,10 @@ class ButtonComponent extends HTMLElement {
     constructor() {
         super()
         const shadow = this.attachShadow({mode: "open"})
+
+/*        const styleTag = document.createElement('style');
+        styleTag.innerHTML = JSON.stringify(style).replace(/"/g, '');
+        shadow.appendChild(styleTag);*/
     }
     connectedCallback() {
         this.render()
