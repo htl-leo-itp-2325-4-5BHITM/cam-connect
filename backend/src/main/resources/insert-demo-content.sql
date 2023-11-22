@@ -16,6 +16,16 @@ INSERT INTO student (student_id, firstname, lastname, password, school_class, us
 INSERT INTO student (student_id, firstname, lastname, password, school_class, user_id) VALUES (NEXT VALUE FOR student_seq, 'Paul', 'Lange', 'passwort14', '4AHITM', 'IT200284');
 INSERT INTO student (student_id, firstname, lastname, password, school_class, user_id) VALUES (NEXT VALUE FOR student_seq, 'Clara', 'Graf', 'passwort15', '5CHITM', 'IT200285');
 
+
+INSERT INTO Teacher (teacher_id, firstname, lastname, password, username) VALUES
+                                                                     (NEXT VALUE FOR teacher_seq, 'Professor', 'Johnson', 'teacherpass', 'prof_johnson');
+INSERT INTO Teacher (teacher_id, firstname, lastname, password, username) VALUES  (NEXT VALUE FOR teacher_seq, 'Dr.', 'Williams', 'pass123', 'dr_williams');
+INSERT INTO Teacher (teacher_id, firstname, lastname, password, username) VALUES (NEXT VALUE FOR teacher_seq, 'Ms.', 'Smith', 'teacherpass', 'ms_smith');
+INSERT INTO Teacher (teacher_id, firstname, lastname, password, username) VALUES  (NEXT VALUE FOR teacher_seq, 'Mr.', 'Jones', 'pass123', 'mr_jones');
+INSERT INTO Teacher (teacher_id, firstname, lastname, password, username) VALUES (NEXT VALUE FOR teacher_seq, 'Dr.', 'Miller', 'teacherpass', 'dr_miller');
+INSERT INTO Teacher (teacher_id, firstname, lastname, password, username) VALUES (NEXT VALUE FOR teacher_seq, 'Mrs.', 'Brown', 'pass123', 'mrs_brown');
+
+
 /*
 INSERT INTO rent (DEVICE_ID, RENT_END_ACTUAL, RENT_END_PLANNED, RENT_ID, RENT_START, STUDENT_ID, TEACHER_ID) VALUES (1, '2023-01-01', '2023-01-05', NEXT VALUE FOR rent_seq, '2023-01-02', 1, 1);
 INSERT INTO rent (DEVICE_ID, RENT_END_ACTUAL, RENT_END_PLANNED, RENT_ID, RENT_START, STUDENT_ID, TEACHER_ID) VALUES (2, '2023-02-01', '2023-02-10', NEXT VALUE FOR rent_seq, '2023-02-05', 2, 2);

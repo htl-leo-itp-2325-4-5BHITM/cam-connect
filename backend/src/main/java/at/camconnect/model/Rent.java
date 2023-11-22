@@ -59,7 +59,16 @@ public class Rent {
                 '}';
     }
 
-    public long getRent_id() {
+
+    public String getAccessory() {
+        return accessory;
+    }
+
+    public void setAccessory(String accessory) {
+        this.accessory = accessory;
+    }
+
+    public long getRent_id()  {
         return rent_id;
     }
 
