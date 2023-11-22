@@ -29,5 +29,48 @@
         <cc-rent-status status="vergeben"></cc-rent-status>
         <cc-rent-status status="gesperrt"></cc-rent-status>
     </div>
+
+    <div>
+        <div>
+            <cc-confirmation-status status="bestätigt"></cc-confirmation-status>
+            <cc-confirmation-status status="bestätigt" isBig="true"></cc-confirmation-status>
+        </div>
+        <div>
+            <cc-confirmation-status status="warten"></cc-confirmation-status>
+            <cc-confirmation-status status="warten" isBig="true"></cc-confirmation-status>
+        </div>
+        <div>
+            <cc-confirmation-status status="abgelehnt"></cc-confirmation-status>
+            <cc-confirmation-status status="abgelehnt" isBig="true"></cc-confirmation-status>
+        </div>
+    </div>
+
+    <cc-filter-option>
+        <cc-filter-element>Option 1</cc-filter-element>
+        <cc-filter-element>Option 2</cc-filter-element>
+        <cc-filter-element>Option 3</cc-filter-element>
+    </cc-filter-option>
+
+    <cc-filter-block name="FilterName">
+        <cc-filter-element>Option 1</cc-filter-element>
+        <cc-filter-element>Option 2</cc-filter-element>
+        <cc-filter-element>Option 3</cc-filter-element>
+    </cc-filter-block>
+
+    <div>
+        <cc-circle-select checked="false" color="accent" type="single"></cc-circle-select>
+        <cc-circle-select checked="true" color="accent" type="single"></cc-circle-select>
+    </div>
+    <div>
+        <cc-circle-select checked="false" color="gray" type="single"></cc-circle-select>
+        <cc-circle-select checked="true" color="gray" type="single"></cc-circle-select>
+    </div>
+    <div>
+        <cc-circle-select checked="false" color="accent" type="multiple"></cc-circle-select>
+        <cc-circle-select checked="true" color="accent" type="multiple"></cc-circle-select>
+    </div>
+
+    <cc-property-value property="Element" value="Wert"></cc-property-value>
+    <cc-property-value property="Element" value="Wert"></cc-property-value>
 </body>
 </html>
