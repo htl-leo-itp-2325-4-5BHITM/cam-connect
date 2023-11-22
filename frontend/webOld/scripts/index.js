@@ -3,6 +3,9 @@ var allRents = [];
 var allStudents = [];
 var allTeachers = [];
 requestAllStudents();
+requestAllTeachers();
+
+
 function requestAllStudents() {
     allStudents = [];
     fetch(APPLICATION_URL + "/student/getall")
@@ -44,7 +47,6 @@ var columns = [
     { name: "Zubehör", inputType: "text", cellType: "extras" },
     { name: "Entlehner*in + Klasse", inputType: "text", cellType: "student_id" },
     { name: "Entlehnung Datum", inputType: "date", cellType: "rent_start" },
-    { name: "Unterschrift Entlehner*in", inputType: "checkbox", cellType: "sigRent" },
     { name: "Paraphe Lehkraft", inputType: "text", cellType: "teacherRent" },
     { name: "Rückgabe geplant", inputType: "date", cellType: "rent_end_planned" },
     { name: "Rückgabe tatsächlich", inputType: "date", cellType: "rent_end_actual" },
@@ -159,6 +161,61 @@ function searchForStudentFromSelectInput(inputValue, rentId) {
     })
         .catch(function (error) { return console.error(error); });
 }
+
+
+
+var teacherSelectionPopup = document.querySelector("#studentSelectionPopup");
+var teacherSearchbar = document.querySelector('#studentSelectionPopup .search');
+studentSearchbar.addEventListener("keyup", function () { searchForStudentFromSelectInput(studentSearchbar.value, Number(studentSearchbar.getAttribute('rent_id'))); });
+function openTeacherPicker(input, rentId) {
+    searchForStudentFromSelectInput("", rentId);
+    studentSelectionPopup.querySelector("input").value = "";
+    studentSelectionPopup.querySelector("input").setAttribute("rent_id", String(rentId));
+    var bounds = input.getBoundingClientRect();
+    studentSelectionPopup.style.top = bounds.top + "px";
+    studentSelectionPopup.style.left = bounds.left + "px";
+    studentSelectionPopup.style.display = "block";
+    studentSearchbar.focus();
+    setTimeout(function () { document.addEventListener("mousedown", closeStudentPickerOnBlur); });
+}
+function closeStudentPickerOnBlur(e) {
+    if (e.target === studentSelectionPopup || e.target.closest('#studentSelectionPopup') === studentSelectionPopup || e.target.getAttribute("celltype") === "student")
+        return;
+    closeStudentPicker();
+    document.removeEventListener("mousedown", closeStudentPickerOnBlur);
+}
+function closeStudentPicker() {
+    studentSelectionPopup.style.display = "none";
+}
+function searchForStudentFromSelectInput(inputValue, rentId) {
+    fetch(APPLICATION_URL + '/student/search', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ firstname: inputValue })
+    })
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+            var _a;
+            var html = [];
+            data.forEach(function (student) {
+                var selectionOption = document.createElement('p');
+                selectionOption.innerText = student.firstname + " " + student.lastname;
+                selectionOption.addEventListener("click", function () { updateRent(selectionOption, "student_id", student.student_id, rentId); });
+                html.push(selectionOption);
+            });
+            if (html.length === 0) {
+                var noResults = document.createElement('p');
+                noResults.classList.add("noResults");
+                noResults.innerText = "Keine Ergebnisse";
+                html.push(noResults);
+            }
+            (_a = studentSelectionPopup.querySelector(".studentList")).replaceChildren.apply(_a, html);
+        })
+        .catch(function (error) { return console.error(error); });
+}
+
 function updateRent(input, key, value, rentId) {
     var _a, _b;
     if (rentId == undefined)
@@ -206,6 +263,7 @@ function createRent() {
     })
         .catch(function (error) { return console.error(error); });
 }
+
 function findRentById(id) {
     var res = null;
     allRents.forEach(function (rent) {
@@ -233,6 +291,18 @@ function findTeacherById(id) {
     });
     return res;
 }
+
+function findDeviceById(id) {
+    var res = null;
+    allTeachers.forEach(function (device) {
+        if (device.device_id == id) {
+            res = device;
+        }
+    });
+    return res;
+}
+
+
 function convertDateFormat(inputDate) {
     var isAlreadyFormatted = /^\d{4}-\d{2}-\d{2}$/.test(inputDate);
     if (isAlreadyFormatted || inputDate == undefined) {
