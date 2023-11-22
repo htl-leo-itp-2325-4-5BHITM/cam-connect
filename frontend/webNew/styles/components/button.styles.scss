@@ -1,6 +1,7 @@
 @import "../variables.scss";
 
-cc-button::part(cc-button) {
+.cc-button{
+  background-color: $accent;
   font-size: 1.25rem;
   min-width: 20ch;
   height: 5ch;
