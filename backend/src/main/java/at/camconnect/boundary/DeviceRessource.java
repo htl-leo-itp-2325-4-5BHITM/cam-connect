@@ -26,6 +26,18 @@ public class DeviceRessource {
         return Response.ok().build();
     }
 
+    @GET
+    @Path("/getall")
+    public List<Device> getAll() {
+        return deviceRepository.getAll();
+    }
+
+    @GET
+    @Path("/getbyid/{id: [0-9]+}")
+    public Device getById(@PathParam("id")long id) {
+        return deviceRepository.getById(id);
+    }
+
     @POST
     @Path("/remove")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -42,17 +54,5 @@ public class DeviceRessource {
     public Response updateTeacher(Device d){
         deviceRepository.update(d);
         return Response.ok().build();
-    }
-
-    @GET
-    @Path("/getbyid/{id: [0-9]+}")
-    public Device getById(@PathParam("id")long id) {
-        return deviceRepository.getById(id);
-    }
-
-    @GET
-    @Path("/getall")
-    public List<Device> getAll() {
-        return deviceRepository.getAll();
     }
 }

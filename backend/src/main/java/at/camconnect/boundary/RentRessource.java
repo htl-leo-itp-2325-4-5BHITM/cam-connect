@@ -57,8 +57,7 @@ public class RentRessource {
         return Response.ok().build();
     }
 
-    // Setter
-    //region
+    //region Getter Setter
     @POST
     @Path("/getbyid/{id: [0-9]+}/update/student")
     @Consumes(MediaType.APPLICATION_JSON)
