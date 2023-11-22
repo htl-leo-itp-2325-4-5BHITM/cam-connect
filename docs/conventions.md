@@ -6,8 +6,8 @@ If you follow these conventions we will have a better time writing code and the 
 
 - cam-connect should be spelled with a dash and in lowercase wherever possible
   - alternatively "cc" can be used for things like components: `cc-button`
-- all internal planning documents, files, comments, commit messages, documentations should be in english
-- all external proposals, progress reports, documentations should be in german
+- all internal planning documents, files, comments, commit messages, documentations should be in **english**
+- all external proposals, progress reports, documentations should be in **german**
 
 ## Workflow / GitHub
 - When completing a issue move it to the "Review" area
@@ -15,7 +15,7 @@ If you follow these conventions we will have a better time writing code and the 
     - move it to done
     - write a comment on what needs more work
 - The dev branch will be merged with main when a sprint is finished
-- commit often, this just safes your work to git
+- commit often, this just safes your work to your local git git
   - commit messages should start with the issue your working on and be precise and short`#0 Updated GitHub section in convetions.md`
   - if many things were changed write a description
 - push at the end of each workday and when leaving school .-.
@@ -24,7 +24,7 @@ If you follow these conventions we will have a better time writing code and the 
 ## Code and file formatting
 
 - use camelCase for folder names
-- use camelCase (or PascalCase) for filenames, and css class names
+- use camelCase (or PascalCase for classes) for filenames, and css class names
 - `{` brackets should be on the same lines as the code they belong to
 - use snake_case for database variables
 - every major piece of code: ifs, loops, functions, css selectors etc. should be seperated by a empty line from the previous
@@ -42,9 +42,9 @@ should be wrapped in a `//region name ..code here.. //endregion` that way they c
 - when using variables which uses are not immediatly clear add a comment on the same line to explain or on the line above to explain for multiple
 - script, style and mockup files belonging together should have the same name
 - Id should be written like this `thingId`
-- functions that create a new thing should be named `create` 
-- functions that search for something should be named `search` 
-- functions that get a specific thing by a specific param should be named `get`
+- functions that create a new thing should be named `createSomething` 
+- functions that search for something should be named `searchForSomething` 
+- functions that get a specific thing by a specific param should be named `getAllSomethings` / `getSomethingByID`
 
 this example is very basic, some of the comments are not needed here, but you get the idea
 ```JS
@@ -92,16 +92,23 @@ function checkLogin(){
 - units
   - do not use pixels
   - use rem for text related sizes: font size, text container, height etc.
-  - use vw for 
+  - use vw for standalone widths, that of: popups, big areas, etc.
+  - use % for child items
+  - use ch for text width: this represents how many characters can fit
+  - try to use box-sizing: border-box to make designs more robust
+  - use grids and their gap property
 
 For those that don't know scss this will seem weird, it's actually pretty easy
 ```SCSS
+@import 
+$accent: #FF0505; //defines a variable
+
 .equipmentItem{
-  &:hover{
-    color: red;
+  &:hover{ //compiles to .equipmentItem:hover{}
+    color: $accent;
   }
   
-  h2{
+  h2{ //compiles to .equipmentItem h2
     font-family: quicksand, sans-serif;
   }
 }
@@ -112,7 +119,7 @@ For those that don't know scss this will seem weird, it's actually pretty easy
     background-color: white;
   }
   
-  .tag{
+  &.marked{ //compiles to .equipmentItem .tags.marked
     color: black;
   }
 }
