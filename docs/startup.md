@@ -15,11 +15,18 @@ If you cant select the module try re adding it
 - select the cam-connect_backend.iml file from the backend folder
 
 If the Module still does not show up you need to only open the backend folder in IntelliJ and run the whole thing.
+
 ### errors
 if you get errors related to no existent contstraints, wrong primary keys or simmilar this may be because quarkus has config files
 that say that something exists that has been updated by a pull. These files sometimes do no get reloaded automatically. Try the following:
 - select all the tables in the database explorer and delete them by pressing "entf", then rerun the project twice
 - open the maven tab(should be above database) and run clean and recompile in the lifecycle area 
+
+if you get errors with your maven version 
+- open `file > settings`
+- under `Build, Execution, Deployment > Build Tools > Maven`
+- set the `Maven Home path:` to use the maven wrapper
+- check the 5th checkbox to `Always update snapshots`
 
 ## Frontend
 

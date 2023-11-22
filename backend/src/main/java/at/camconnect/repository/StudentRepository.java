@@ -9,8 +9,11 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -57,14 +60,25 @@ public class StudentRepository{
         List<Student> results = q.getResultList();
         return results;
     }
+    /*
     public boolean importStudents(String[] csv){ //nicht getestet
-        try{
+
+        String csvFilePath = "../csv/test.csv";
+
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
+            String line;
+
             List<String[]> csvLines = new LinkedList<>();
-            for (String s :
-                    csv) {
-                csvLines.add(s.split(","));
+
+            while ((line = br.readLine()) != null) {
+                // Teile die Zeile anhand des Kommas
+                String[] row = line.split(",");
+
+                // Füge die Zeile zur Datenliste hinzu
+                csvLines.add(row);
             }
 
+            //csvLines.remove(0);
             for (String[] sArr:
                  csvLines) {
                 Student student = new Student(sArr[0].trim(), sArr[1].trim(), sArr[2].trim(),sArr[3].trim(), sArr[4].trim());
@@ -72,9 +86,11 @@ public class StudentRepository{
                 return true;
                 //Device List soll null sein
             }
-         } catch (NumberFormatException e) {
+         } catch (Exception e) {
             System.err.println("Fehler beim Parsen des Integers: " + e.getMessage());
         }
         return false;
     }
+    
+     */
 }

@@ -67,11 +67,14 @@ public class StudentRessource {
         return studentRepository.getAll();
     }
 
-    @POST
+ /*   @POST
     @Path("/importstudents")
     @Consumes(MediaType.TEXT_PLAIN)
     public Response importStudents(String[] csvData){
-        studentRepository.importStudents(csvData);
-        return null;
+        if (studentRepository.importStudents(csvData)) {
+            return Response.ok().build();
+        }
+        return Response.status(400).build();
     }
+    */
 }

@@ -3,6 +3,7 @@ package at.camconnect.model;
 import jakarta.persistence.*;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class DeviceType {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "device_type_seq")
