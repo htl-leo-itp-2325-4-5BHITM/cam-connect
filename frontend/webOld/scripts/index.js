@@ -54,6 +54,9 @@ var columns = [
     { name: "Paraphe Lehkraft", inputType: "text", cellType: "teacherReturn" },
     { name: "Anmerkung", inputType: "text", cellType: "note" },
 ];
+
+
+
 function generateTable() {
     var _a;
     var headingHtml = document.createElement("tr");
@@ -87,6 +90,9 @@ function generateTable() {
                     cellinput.value = ((_b = (_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.student) === null || _b === void 0 ? void 0 : _b.firstname) || "";
                     break;
                 case "teacherRent":
+                    cellinput.addEventListener("mouseup", function () { var _a; openTeacherPicker(cellinput, (_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id); });
+                    cellinput.value = ((_b = (_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.teacher) === null || _b === void 0 ? void 0 : _b.lastname) || "";
+                    break;
                 case "teacherReturn":
                     cellinput.value = ((_d = (_c = allRents[i]) === null || _c === void 0 ? void 0 : _c.teacher) === null || _d === void 0 ? void 0 : _d.lastname) || "";
                     break;
@@ -110,6 +116,10 @@ function generateTable() {
     }
     table.append.apply(table, html);
 }
+
+
+// start student search
+
 var studentSelectionPopup = document.querySelector("#studentSelectionPopup");
 var studentSearchbar = document.querySelector('#studentSelectionPopup .search');
 studentSearchbar.addEventListener("keyup", function () { searchForStudentFromSelectInput(studentSearchbar.value, Number(studentSearchbar.getAttribute('rent_id'))); });
@@ -133,6 +143,9 @@ function closeStudentPickerOnBlur(e) {
 function closeStudentPicker() {
     studentSelectionPopup.style.display = "none";
 }
+
+
+
 function searchForStudentFromSelectInput(inputValue, rentId) {
     fetch(APPLICATION_URL + '/student/search', {
         method: 'POST',
@@ -162,22 +175,6 @@ function searchForStudentFromSelectInput(inputValue, rentId) {
         .catch(function (error) { return console.error(error); });
 }
 
-
-
-var teacherSelectionPopup = document.querySelector("#studentSelectionPopup");
-var teacherSearchbar = document.querySelector('#studentSelectionPopup .search');
-studentSearchbar.addEventListener("keyup", function () { searchForStudentFromSelectInput(studentSearchbar.value, Number(studentSearchbar.getAttribute('rent_id'))); });
-function openTeacherPicker(input, rentId) {
-    searchForStudentFromSelectInput("", rentId);
-    studentSelectionPopup.querySelector("input").value = "";
-    studentSelectionPopup.querySelector("input").setAttribute("rent_id", String(rentId));
-    var bounds = input.getBoundingClientRect();
-    studentSelectionPopup.style.top = bounds.top + "px";
-    studentSelectionPopup.style.left = bounds.left + "px";
-    studentSelectionPopup.style.display = "block";
-    studentSearchbar.focus();
-    setTimeout(function () { document.addEventListener("mousedown", closeStudentPickerOnBlur); });
-}
 function closeStudentPickerOnBlur(e) {
     if (e.target === studentSelectionPopup || e.target.closest('#studentSelectionPopup') === studentSelectionPopup || e.target.getAttribute("celltype") === "student")
         return;
@@ -187,22 +184,54 @@ function closeStudentPickerOnBlur(e) {
 function closeStudentPicker() {
     studentSelectionPopup.style.display = "none";
 }
-function searchForStudentFromSelectInput(inputValue, rentId) {
-    fetch(APPLICATION_URL + '/student/search', {
+// end for student search
+
+
+// search for Teacher start
+
+var teacherSelectionPopup = document.querySelector("#teacherSelectionPopup");
+var teacherSearchbar = document.querySelector('#teacherSelectionPopup .search');
+teacherSearchbar.addEventListener("keyup", function () { searchForTeacherFromSelectInput(teacherSearchbar.value, Number(teacherSearchbar.getAttribute('rent_id'))); });
+
+function openTeacherPicker(input, rentId) {
+    searchForTeacherFromSelectInput("", rentId);
+    teacherSelectionPopup.querySelector("input").value = "";
+    teacherSelectionPopup.querySelector("input").setAttribute("rent_id", String(rentId));
+    var bounds = input.getBoundingClientRect();
+    teacherSelectionPopup.style.top = bounds.top + "px";
+    teacherSelectionPopup.style.left = bounds.left + "px";
+    teacherSelectionPopup.style.display = "block";
+    teacherSearchbar.focus();
+    setTimeout(function () { document.addEventListener("mousedown", closeTeacherPickerOnBlur); });
+}
+
+function closeTeacherPickerOnBlur(e) {
+    if (e.target === teacherSelectionPopup || e.target.closest('#teacherSelectionPopup') === teacherSelectionPopup || e.target.getAttribute("celltype") === "teacher")
+        return;
+    closeTeacherPicker();
+    document.removeEventListener("mousedown", closeTeacherPickerOnBlur);
+}
+
+function closeTeacherPicker() {
+    teacherSelectionPopup.style.display = "none";
+}
+
+function searchForTeacherFromSelectInput(inputValue, rentId) {
+    fetch(APPLICATION_URL + '/teacher/search', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ firstname: inputValue })
+        body: JSON.stringify({ lastname: inputValue })
     })
         .then(function (response) { return response.json(); })
         .then(function (data) {
             var _a;
             var html = [];
-            data.forEach(function (student) {
+            data.forEach(function (teacher) {
                 var selectionOption = document.createElement('p');
-                selectionOption.innerText = student.firstname + " " + student.lastname;
-                selectionOption.addEventListener("click", function () { updateRent(selectionOption, "student_id", student.student_id, rentId); });
+                selectionOption.innerText = teacher.firstname + " " + teacher.lastname;
+                selectionOption.addEventListener("click", function () { updateRent(selectionOption, "teacher_id", teacher.teacher_id, rentId); });
                 html.push(selectionOption);
             });
             if (html.length === 0) {
@@ -211,10 +240,15 @@ function searchForStudentFromSelectInput(inputValue, rentId) {
                 noResults.innerText = "Keine Ergebnisse";
                 html.push(noResults);
             }
-            (_a = studentSelectionPopup.querySelector(".studentList")).replaceChildren.apply(_a, html);
+            (_a = teacherSelectionPopup.querySelector(".teacherList")).replaceChildren.apply(_a, html);
         })
         .catch(function (error) { return console.error(error); });
 }
+
+
+
+// search for Teacher end
+
 
 function updateRent(input, key, value, rentId) {
     var _a, _b;
