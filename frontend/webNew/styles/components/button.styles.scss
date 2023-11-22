@@ -1,5 +1,9 @@
 @import "../variables.scss";
 
+:host{
+  all: initial;
+}
+
 .cc-button{
   background-color: $accent;
   font-size: 1.25rem;

@@ -84,6 +84,7 @@ function checkLogin(){
 - most checks should be done with === instead of ==, this also checks for the type: 1 == '1' is true 2 === '2' is not true
 - semicolons should be avoided wherever possible (this is a setting in webstorm so it won't add them automatically)
 - use .innerText instead of .innerHtml whenever you dont want to add elements to the DOM, this way you avoid injections
+- use `string` instead of `String` whenever possible
 
 ### SCSS specific
 - there should be a base stylesheet whenever multiple pages need the same style
@@ -100,7 +101,6 @@ function checkLogin(){
 
 For those that don't know scss this will seem weird, it's actually pretty easy
 ```SCSS
-@import 
 $accent: #FF0505; //defines a variable
 
 .equipmentItem{

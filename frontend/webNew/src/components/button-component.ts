@@ -6,7 +6,7 @@ enum Size {MEDIUM="medium", SMALL="small"}
 enum Type {FILLED="filled", OUTLINED="outlined"}
 enum Color {ACCENT="accent", GRAY="gray"}
 
-const button = (value: String, size: Size, type: Type, color: Color) => html`
+const button = (value: string, size: Size, type: Type, color: Color) => html`
     <button class="cc-button" color="${color}" type="${type}" size="${size}">
         ${value == "" ? "Button" : value}
     </button>`
