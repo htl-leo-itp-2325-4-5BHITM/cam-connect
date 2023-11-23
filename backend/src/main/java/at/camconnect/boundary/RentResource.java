@@ -1,9 +1,6 @@
 package at.camconnect.boundary;
 
-import at.camconnect.model.Device;
 import at.camconnect.model.Rent;
-import at.camconnect.model.Student;
-import at.camconnect.model.Teacher;
 import at.camconnect.repository.RentRepository;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
@@ -15,7 +12,7 @@ import jakarta.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/api/rent")
-public class RentRessource {
+public class RentResource {
     @Inject
     RentRepository rentRepository;
 

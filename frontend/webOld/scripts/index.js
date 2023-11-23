@@ -40,7 +40,7 @@ function requestAllRents() {
         .catch(function (error) { return console.error(error); });
 }
 var columns = [
-    { name: "Gerät Nr.", inputType: "number", cellType: "" },
+    { name: "Gerät Nr.", inputType: "text", cellType: "device_string" },
     { name: "Zubehör", inputType: "text", cellType: "accessory" },
     { name: "Entlehner*in + Klasse", inputType: "text", cellType: "student_id" },
     { name: "Entlehnung Datum", inputType: "date", cellType: "rent_start" },
@@ -75,11 +75,6 @@ function generateTable() {
                 var cellinput_1 = document.createElement("input");
                 cellinput_1.type = column.inputType;
                 cellinput_1.setAttribute("celltype", column.cellType);
-                switch (column.inputType) {
-                    case "number":
-                        cellinput_1.setAttribute("min", "0");
-                        break;
-                }
                 switch (column.cellType) {
                     case "student_id":
                         cellinput_1.addEventListener("mouseup", function () {
@@ -98,6 +93,7 @@ function generateTable() {
                         break;
                     case "note":
                     case "accessory":
+                    case "device_string":
                         cellinput_1.addEventListener("blur", function () {
                             updateRent(cellinput_1, column.cellType, cellinput_1.value);
                         });
@@ -235,6 +231,7 @@ function updateRent(input, key, value, rentId) {
     console.log(rentId);
     var rentOriginal = findRentById(rentId);
     var rentUpdate = {
+        device_string: rentOriginal.device_string,
         rent_id: rentId,
         student_id: (_a = rentOriginal.student) === null || _a === void 0 ? void 0 : _a.student_id,
         device_id: rentOriginal.device_id,
@@ -244,7 +241,7 @@ function updateRent(input, key, value, rentId) {
         rent_end_planned: rentOriginal.rent_end_planned,
         rent_end_actual: rentOriginal.rent_end_actual,
         note: rentOriginal.note,
-        accessory: rentOriginal.accessory,
+        accessory: rentOriginal.accessory
     };
     rentUpdate[key] = value;
     console.log(rentUpdate);

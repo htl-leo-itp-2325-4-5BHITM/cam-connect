@@ -1,9 +1,7 @@
 package at.camconnect.boundary;
 
 import at.camconnect.model.Device;
-import at.camconnect.model.Teacher;
 import at.camconnect.repository.DeviceRepository;
-import at.camconnect.repository.TeacherRepository;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
@@ -13,7 +11,7 @@ import jakarta.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/api/device")
-public class DeviceRessource {
+public class DeviceResource {
     @Inject
     DeviceRepository deviceRepository;
 

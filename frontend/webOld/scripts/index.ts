@@ -79,7 +79,8 @@ interface RentComplete {
     rent_end_planned: string,
     rent_end_actual: string,
     note: string,
-    accessory: string
+    accessory: string,
+    device_string: string
 }
 
 interface RentSimple {
@@ -92,7 +93,8 @@ interface RentSimple {
     rent_end_planned: string,
     rent_end_actual: string,
     note: string,
-    accessory: string
+    accessory: string,
+    device_string: string
 }
 
 //region generate table
@@ -103,7 +105,7 @@ interface column{
 }
 
 const columns:column[] = [
-    {name: "Gerät Nr.", inputType: "number", cellType: ""},
+    {name: "Gerät Nr.", inputType: "text", cellType: "device_string"},
     {name: "Zubehör", inputType: "text", cellType: "accessory"},
     {name: "Entlehner*in + Klasse", inputType: "text", cellType: "student_id"},
     {name: "Entlehnung Datum", inputType: "date", cellType: "rent_start"},
@@ -149,14 +151,6 @@ function generateTable(){
                 cellinput.type = column.inputType
                 cellinput.setAttribute("celltype", column.cellType) //what piece of data the cell displays (rent_start, student_id etc.)
 
-                //TODO aberger wants to change switch statements to a map containing anonymous functions
-                //sets attributes specific to inputs
-                switch (column.inputType) {
-                    case "number":
-                        cellinput.setAttribute("min", "0");
-                        break
-                }
-
                 //registers eventlisteners and displays data from allRents for columns that are synced with the db
                 switch (column.cellType) {
                     case "student_id":
@@ -174,6 +168,7 @@ function generateTable(){
                         break
                     case "note":
                     case "accessory":
+                    case "device_string":
                         cellinput.addEventListener("blur", () => {
                             updateRent(cellinput, column.cellType, cellinput.value)
                         })
@@ -343,6 +338,7 @@ function updateRent(input:HTMLElement, key:string, value:any, rentId?:number) {
     console.log(rentId)
     let rentOriginal:RentComplete = findRentById(rentId)
     let rentUpdate:RentSimple = {
+        device_string:rentOriginal.device_string,
         rent_id: rentId,
         student_id: rentOriginal.student?.student_id,
         device_id: rentOriginal.device_id,
@@ -352,7 +348,7 @@ function updateRent(input:HTMLElement, key:string, value:any, rentId?:number) {
         rent_end_planned: rentOriginal.rent_end_planned,
         rent_end_actual: rentOriginal.rent_end_actual,
         note: rentOriginal.note,
-        accessory: rentOriginal.accessory,
+        accessory: rentOriginal.accessory
     }
     // @ts-ignore
     rentUpdate[key] = value

@@ -1,5 +1,5 @@
 package at.camconnect.boundary;
 
-public class DeviceSetRessource {
+public class DeviceSetResource {
     //TODO this and the repo
 }

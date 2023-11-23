@@ -3,7 +3,6 @@ package at.camconnect.boundary;
 import at.camconnect.model.Tag;
 import at.camconnect.repository.TagRepository;
 import jakarta.inject.Inject;
-import jakarta.persistence.UniqueConstraint;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -12,7 +11,7 @@ import jakarta.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/tag")
-public class TagRessource {
+public class TagResource {
 
     @Inject
     TagRepository tagRepository;

@@ -76,6 +76,10 @@ public class RentRepository {
         try{
             setAccessory(id, rentJson.getString("accessory"));
         } catch(Exception ex){ System.out.println(ex.getMessage()); }
+
+        try{
+            setDeviceString(id, rentJson.getString("device_string"));
+        } catch(Exception ex){ System.out.println(ex.getMessage()); }
     }
 
     public List<Rent> getAll(){
@@ -151,6 +155,11 @@ public class RentRepository {
     public void setAccessory(long rentId, String accessory) {
         Rent rent = getById(rentId);
         rent.setAccessory(accessory);
+        em.merge(rent);
+    }
+    public void setDeviceString(long rentId, String device_string) {
+        Rent rent = getById(rentId);
+        rent.setDevice_string(device_string);
         em.merge(rent);
     }
     //endregion

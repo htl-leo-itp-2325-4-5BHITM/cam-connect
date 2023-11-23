@@ -1,33 +1,27 @@
 package at.camconnect.boundary;
 
-import at.camconnect.dtos.FormDataDTO;
 import at.camconnect.model.Student;
-import at.camconnect.model.Teacher;
-import at.camconnect.repository.TeacherRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import at.camconnect.repository.StudentRepository;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-/*import org.jboss.resteasy.reactive.MultipartForm;*/
 
-import java.io.InputStream;
 import java.util.List;
 
-@Path("/api/teacher")
-public class TeacherRessource {
+@Path("/api/student")
+public class StudentResource {
     @Inject
-    TeacherRepository teacherRepository;
+    StudentRepository studentRepository;
 
     @POST
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response createTeacher(Teacher t){
-        teacherRepository.create(t);
+    public Response createStudent(Student s){
+        studentRepository.create(s);
         return Response.ok().build();
     }
 
@@ -35,8 +29,8 @@ public class TeacherRessource {
     @Path("/remove")
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response removeTeacher(Teacher t){
-        teacherRepository.remove(t);
+    public Response removeStudent(Student s){
+        studentRepository.remove(s);
         return Response.ok().build();
     }
 
@@ -44,9 +38,16 @@ public class TeacherRessource {
     @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response updateTeacher(Teacher t){
-        teacherRepository.update(t);
+    public Response updateStudent(Student s){
+        studentRepository.update(s);
         return Response.ok().build();
+    }
+
+    @GET
+    @Path("/getbyid/{id: [0-9]+}")
+
+    public Student getById(@PathParam("id")long id) {
+        return studentRepository.getById(id);
     }
 
     @POST
@@ -54,25 +55,20 @@ public class TeacherRessource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Teacher> search(JsonObject data){
-        return teacherRepository.search(data);
-    }
-
-    @GET
-    @Path("/getbyid/{id: [0-9]+}")
-    public Teacher getById(@PathParam("id")long id) {
-        return teacherRepository.getById(id);
+    public List<Student> search(JsonObject data){
+        return studentRepository.search(data);
     }
 
     @GET
     @Path("/getall")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Teacher> getAll() {
-        return teacherRepository.getAll();
+    public List<Student> getAll() {
+        return studentRepository.getAll();
     }
 
+
     @POST
-    @Path("/importteacher")
+    @Path("/importstudents")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.TEXT_PLAIN)
     public Response uploadCsvFile(/*@MultipartForm FormDataDTO formData*/) {
@@ -82,7 +78,7 @@ public class TeacherRessource {
 
         // Hier wird die CSV-Datei an die Repository-Klasse weitergeleitet
         try {
-            teacherRepository.importTeachers(fileInputStream);
+            studentRepository.importStudents(fileInputStream);
             return Response.ok().build();
         } catch (Exception e) {
             e.printStackTrace();
@@ -90,4 +86,6 @@ public class TeacherRessource {
         }*/
         return Response.serverError().build();
     }
+
+
 }
