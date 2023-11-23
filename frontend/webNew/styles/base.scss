@@ -1,10 +1,13 @@
 //Dependencies: variables.SCSS
+@import "./variables";
 
 *{
     margin: 0;
     padding: 0;
     font: inherit;
     accent-color: $accent;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
 }
 
 img{
@@ -17,14 +20,14 @@ html{
 }
 
 body{
-	background-color: hsl(0,0,20%);
-	color: hsl(0,0,0%);
+	background-color: hsl(0,0%,10%);
+	color: hsl(0,0%,0%);
 	font-family: sans-serif;
 }
 
 ::selection{
     background-color: $accent;
-    color: hsl(0, 0, 0%);
+    color: hsl(0, 0%, 0%);
 }
 
 a{
@@ -35,5 +38,5 @@ a{
 button{
     background-color: transparent;
     border: none;
-    color: hsl(0, 0, 100%)
+    color: hsl(0, 0%, 100%)
 }

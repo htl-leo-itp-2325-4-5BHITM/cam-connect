@@ -25,8 +25,6 @@ class PropertyValueComponent extends HTMLElement {
     render() {
         const property = this.getAttribute("property")
         const value = this.getAttribute("value")
-
-        console.log(property, value)
         render(rentStatus(property, value), this.shadowRoot)
     }
 }

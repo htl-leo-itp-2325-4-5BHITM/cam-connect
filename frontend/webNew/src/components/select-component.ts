@@ -1,8 +1,6 @@
-import {html, render} from "lit-html"
+import styles from '../../styles/components/select.styles.scss'
 
-import styles from '../../styles/components/filter.styles.scss'
-
-class FilterOptionComponent extends HTMLElement {
+class SelectComponent extends HTMLElement {
     constructor() {
         super()
         const shadow = this.attachShadow({mode: "open"})
@@ -16,15 +14,15 @@ class FilterOptionComponent extends HTMLElement {
     }
 
     render() {
-        const filterElements = this.querySelectorAll("cc-filter-element")
+        const selectElements = this.querySelectorAll("cc-select-element")
         const divBox = document.createElement('div')
-        divBox.setAttribute("class", "filter-option")
+        divBox.setAttribute("class", "select")
 
-        filterElements.forEach((elem) => {
+        selectElements.forEach((elem) => {
             divBox.appendChild(elem)
         })
 
         this.shadowRoot.appendChild(divBox)
     }
 }
-customElements.define("cc-filter-option", FilterOptionComponent)
+customElements.define("cc-select", SelectComponent)
