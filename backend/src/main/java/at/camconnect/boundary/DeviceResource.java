@@ -19,6 +19,7 @@ public class DeviceResource {
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
+    @Produces
     public Response createDevice(Device d){
         deviceRepository.create(d);
         return Response.ok().build();
@@ -32,24 +33,27 @@ public class DeviceResource {
 
     @GET
     @Path("/getbyid/{id: [0-9]+}")
+    @Produces
     public Device getById(@PathParam("id")long id) {
         return deviceRepository.getById(id);
     }
 
     @POST
-    @Path("/remove")
+    @Path("/getbyid/{id: [0-9]+}/remove")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces
     @Transactional
-    public Response removeTeacher(Device d){
-        deviceRepository.remove(d);
+    public Response remove(@PathParam("id")long id){
+        deviceRepository.remove(id);
         return Response.ok().build();
     }
 
     @POST
-    @Path("/update")
+    @Path("/getbyid/{id: [0-9]+}/update/serial")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces
     @Transactional
-    public Response updateTeacher(Device d){
+    public Response update(Device d){
         deviceRepository.update(d);
         return Response.ok().build();
     }

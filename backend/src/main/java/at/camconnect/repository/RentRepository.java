@@ -31,8 +31,17 @@ public class RentRepository {
     }
 
     @Transactional
-    public void remove(Rent rent){
-        em.remove(rent);
+    public void remove(Long id){
+        em.remove(em.find(Rent.class, id));
+    }
+
+    public List<Rent> getAll(){
+        List<Rent> rents = em.createQuery("SELECT r FROM Rent r", Rent.class).getResultList();
+        return rents;
+    }
+
+    public Rent getById(long id){
+        return em.find(Rent.class, id);
     }
 
     @Transactional
@@ -82,85 +91,64 @@ public class RentRepository {
         } catch(Exception ex){ System.out.println(ex.getMessage()); }
     }
 
-    public List<Rent> getAll(){
-        List<Rent> rents = em.createQuery("SELECT r FROM Rent r", Rent.class).getResultList();
-        return rents;
-    }
-
-    public Rent getById(long id){
-        return em.find(Rent.class, id);
-    }
-
-
     // Setter
     //region
     public void setStudent(long rentId, long studentId) {
         Student student = em.find(Student.class, studentId);
         Rent rent = getById(rentId);
         rent.setStudent(student);
-        em.merge(rent);
     }
 
     public void setTeacherStart(long rentId, long teacherId) {
         Teacher teacher = em.find(Teacher.class, teacherId);
         Rent rent = getById(rentId);
         rent.setTeacher_start(teacher);
-        em.merge(rent);
     }
 
     public void setTeacherEnd(long rentId, long teacherId) {
         Teacher teacher = em.find(Teacher.class, teacherId);
         Rent rent = getById(rentId);
         rent.setTeacher_end(teacher);
-        em.merge(rent);
     }
 
     public void setDevice(long rentId, long deviceId) {
         Device device = em.find(Device.class, deviceId);
         Rent rent = getById(rentId);
         rent.setDevice(device);
-        em.merge(rent);
     }
 
     public void setRentStart(long rentId, String date) {
         Rent rent = getById(rentId);
         rent.setRent_start(LocalDate.parse(date));
-        em.merge(rent);
     }
 
     public void setRentEndPlanned(long rentId, String date) {
         Rent rent = getById(rentId);
         rent.setRent_end_planned(LocalDate.parse(date));
-        em.merge(rent);
     }
 
     public void setRentEndActual(long rentId, String date) {
         Rent rent = getById(rentId);
         rent.setRent_end_actual(LocalDate.parse(date));
-        em.merge(rent);
     }
 
     public void setStatus(long rentId, String status) {
         Rent rent = getById(rentId);
         rent.setStatus(RentStatus.valueOf(status));
-        em.merge(rent);
     }
 
     public void setNote(long rentId, String note) {
         Rent rent = getById(rentId);
         rent.setNote(note);
-        em.merge(rent);
     }
 
     public void setAccessory(long rentId, String accessory) {
         Rent rent = getById(rentId);
         rent.setAccessory(accessory);
-        em.merge(rent);
     }
     public void setDeviceString(long rentId, String device_string) {
         Rent rent = getById(rentId);
         rent.setDevice_string(device_string);
-        em.merge(rent);
     }
     //endregion
 }
