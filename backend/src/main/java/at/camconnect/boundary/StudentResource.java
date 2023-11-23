@@ -68,7 +68,7 @@ public class StudentResource {
 
 
     @POST
-    @Path("/importstudents")
+    @Path("/import")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.TEXT_PLAIN)
     public Response uploadCsvFile(/*@MultipartForm FormDataDTO formData*/) {
