@@ -6,9 +6,9 @@ enum Size {MEDIUM="medium", SMALL="small"}
 enum Type {FILLED="filled", OUTLINED="outlined"}
 enum Color {ACCENT="accent", GRAY="gray"}
 
-const button = (size: Size, type: Type, color: Color) => html`
+const button = (value: string, size: Size, type: Type, color: Color) => html`
     <button class="cc-button" color="${color}" type="${type}" size="${size}">
-        Button
+        ${value == "" ? "Button" : value}
     </button>`
 
 
@@ -29,7 +29,8 @@ class ButtonComponent extends HTMLElement {
         const size = this.getAttribute('size') as Size
         const type = this.getAttribute('type') as Type
         const color = this.getAttribute('color') as Color
-        render(button(size, type, color), this.shadowRoot)
+        const value = this.innerHTML
+        render(button(value, size, type, color), this.shadowRoot)
     }
 }
 customElements.define("cc-button", ButtonComponent)

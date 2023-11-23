@@ -1,0 +1,48 @@
+:host {
+  all: initial;
+}
+
+.cc-button {
+  background-color: #4095BF;
+  font-size: 1.25rem;
+  min-width: 10ch;
+  border: 1px solid;
+  border-radius: 0.3rem;
+  padding: 0.25rem 1rem;
+  margin: 0.5rem;
+  cursor: pointer;
+  transition: 0.2s all ease;
+}
+.cc-button[type=outlined] {
+  border: 2px solid;
+  background: transparent;
+}
+.cc-button[size=small] {
+  font-size: 1.125rem;
+  min-width: 8ch;
+}
+.cc-button[color=accent] {
+  border-color: #75B3D7;
+}
+.cc-button[color=accent][type=filled] {
+  background-color: #4095BF;
+  color: #FFFFFF;
+}
+.cc-button[color=accent][type=filled]:hover {
+  background-color: #2F6C8E;
+}
+.cc-button[color=accent][type=outlined] {
+  color: #75B3D7;
+}
+.cc-button[color=gray] {
+  color: #E6E6E6;
+  border-color: #8C8C8C;
+}
+.cc-button[color=gray][type=filled] {
+  background-color: #363636;
+}
+.cc-button[color=gray][type=filled]:hover {
+  background-color: #262626;
+}
+
+/*# sourceMappingURL=button.styles.css.map */

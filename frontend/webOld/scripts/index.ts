@@ -5,7 +5,8 @@ let allStudents:Student[] = []
 let allTeachers:Teacher[] = []
 
 //region base requests
-requestAllStudents()
+requestAllStudents();
+
 function requestAllStudents() {
     allStudents = []
     fetch(APPLICATION_URL + "/student/getall")
@@ -220,6 +221,7 @@ function closeStudentPicker(){
     studentSelectionPopup.style.display = "none"
 }
 
+
 /**
  * fetches a list of student names that start with the entered phrase and displays them to the user to select
  * @param inputValue
@@ -255,8 +257,70 @@ function searchForStudentFromSelectInput(inputValue:string, rentId?:number){
         .catch(error => console.error(error));
 }
 
+//search for teacher
+
+var teacherSelectionPopup = document.querySelector("#teacherSelectionPopup") as HTMLInputElement;
+var teacherSearchbar = document.querySelector('#teacherSelectionPopup .search') as HTMLInputElement;
+teacherSearchbar.addEventListener("keyup", function () { searchForTeacherFromSelectInput(teacherSearchbar.value, Number(teacherSearchbar.getAttribute('rent_id'))); });
+
+function openTeacherPicker(input:HTMLInputElement, rentId:number, teacherType:string) {
+    searchForTeacherFromSelectInput("", rentId);
+    teacherSelectionPopup.querySelector("input").value = "";
+    teacherSelectionPopup.querySelector("input").setAttribute("rent_id", String(rentId));
+    teacherSelectionPopup.querySelector("input").setAttribute("teacher_type", teacherType);
+    var bounds = input.getBoundingClientRect();
+    teacherSelectionPopup.style.top = bounds.top + "px";
+    teacherSelectionPopup.style.left = bounds.left + "px";
+    teacherSelectionPopup.style.display = "block";
+    teacherSearchbar.focus();
+    setTimeout(function () { document.addEventListener("mousedown", closeTeacherPickerOnBlur); });
+}
+
+function closeTeacherPickerOnBlur(e:MouseEvent) {
+    //@ts-ignore
+    if (e.target === teacherSelectionPopup || e.target.closest('#teacherSelectionPopup') === teacherSelectionPopup || e.target.getAttribute("celltype") === "teacher_start" || e.target.getAttribute("celltype") === "teacher_end")
+        return;
+    closeTeacherPicker();
+    document.removeEventListener("mousedown", closeTeacherPickerOnBlur);
+}
+
+function closeTeacherPicker() {
+    teacherSelectionPopup.style.display = "none";
+}
+
+function searchForTeacherFromSelectInput(inputValue:string, rentId:number) {
+    fetch(APPLICATION_URL + '/teacher/search', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ lastname: inputValue })
+    })
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+            let teacherType = teacherSearchbar.getAttribute('teacher_type')
+            console.log(data)
+            var html = [];
+            data.forEach(function (teacher:Teacher) {
+                var selectionOption = document.createElement('p');
+                selectionOption.innerText = teacher.firstname + " " + teacher.lastname;
+                selectionOption.addEventListener("click", function () { updateRent(selectionOption, teacherType, teacher.teacher_id, rentId); });
+                html.push(selectionOption);
+            });
+            if (html.length === 0) {
+                var noResults = document.createElement('p');
+                noResults.classList.add("noResults");
+                noResults.innerText = "Keine Ergebnisse";
+                html.push(noResults);
+            }
+            teacherSelectionPopup.querySelector(".teacherList").replaceChildren(...html)
+        })
+        .catch(error => console.error(error));
+}
+
 function updateRent(input:HTMLElement, key:string, value:any, rentId?:number) {
     if(rentId == undefined) rentId = Number(input.closest("tr").getAttribute("rent_id"))
+    console.log(rentId)
     let rentOriginal:RentComplete = findRentById(rentId)
     let rentUpdate:RentSimple = {
         rent_id: rentId,

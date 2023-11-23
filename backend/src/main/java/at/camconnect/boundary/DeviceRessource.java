@@ -1,6 +1,5 @@
 package at.camconnect.boundary;
 
-import at.camconnect.dtos.FormDataDTO;
 import at.camconnect.model.Device;
 import at.camconnect.model.Teacher;
 import at.camconnect.repository.DeviceRepository;
@@ -10,9 +9,7 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.jboss.resteasy.reactive.MultipartForm;
 
-import java.io.InputStream;
 import java.util.List;
 
 @Path("/api/device")
@@ -27,6 +24,18 @@ public class DeviceRessource {
     public Response createDevice(Device d){
         deviceRepository.create(d);
         return Response.ok().build();
+    }
+
+    @GET
+    @Path("/getall")
+    public List<Device> getAll() {
+        return deviceRepository.getAll();
+    }
+
+    @GET
+    @Path("/getbyid/{id: [0-9]+}")
+    public Device getById(@PathParam("id")long id) {
+        return deviceRepository.getById(id);
     }
 
     @POST
@@ -45,36 +54,5 @@ public class DeviceRessource {
     public Response updateTeacher(Device d){
         deviceRepository.update(d);
         return Response.ok().build();
-    }
-
-    @GET
-    @Path("/getbyid/{id: [0-9]+}")
-    public Device getById(@PathParam("id")long id) {
-        return deviceRepository.getById(id);
-    }
-
-    @GET
-    @Path("/getall")
-    public List<Device> getAll() {
-        return deviceRepository.getAll();
-    }
-
-    @POST
-    @Path("/importdevices")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response uploadCsvFile(@MultipartForm FormDataDTO formData) {
-        // FormData enthält die Informationen zur Datei
-        InputStream fileInputStream = formData.file();
-        String fileName = formData.filename();
-
-        // Hier wird die CSV-Datei an die Repository-Klasse weitergeleitet
-        try {
-            deviceRepository.importDevices(fileInputStream);
-            return Response.ok().build();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Response.status(400).build();
-        }
     }
 }

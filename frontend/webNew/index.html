@@ -7,14 +7,70 @@
     <title>Cam Connect</title>
 </head>
 <body>
-    <h2>Cam Connect</h2>
+    <div>
+        <cc-button color="accent" type="filled" size="medium">dfdsfasdf</cc-button>
+        <cc-button color="accent" type="filled" size="small"></cc-button>
+    </div>
+    <div>
+        <cc-button color="accent" type="outlined" size="medium"></cc-button>
+        <cc-button color="accent" type="outlined" size="small"></cc-button>
+    </div>
+    <div>
+        <cc-button color="gray" type="filled" size="medium"></cc-button>
+        <cc-button color="gray" type="filled" size="small"></cc-button>
+    </div>
+    <div>
+        <cc-button color="gray" type="outlined" size="medium"></cc-button>
+        <cc-button color="gray" type="outlined" size="small"></cc-button>
+    </div>
 
-    <cc-button color="accent" type="filled" size="medium"></cc-button>
+    <div>
+        <cc-rent-status status="verfügbar" amount="1"></cc-rent-status>
+        <cc-rent-status status="vergeben"></cc-rent-status>
+        <cc-rent-status status="gesperrt"></cc-rent-status>
+    </div>
 
-    <cc-button color="accent" type="outlined" size="small"></cc-button>
+    <div>
+        <div>
+            <cc-confirmation-status status="bestätigt"></cc-confirmation-status>
+            <cc-confirmation-status status="bestätigt" isBig="true"></cc-confirmation-status>
+        </div>
+        <div>
+            <cc-confirmation-status status="warten"></cc-confirmation-status>
+            <cc-confirmation-status status="warten" isBig="true"></cc-confirmation-status>
+        </div>
+        <div>
+            <cc-confirmation-status status="abgelehnt"></cc-confirmation-status>
+            <cc-confirmation-status status="abgelehnt" isBig="true"></cc-confirmation-status>
+        </div>
+    </div>
 
-    <cc-button color="gray" type="filled" size="medium"></cc-button>
+    <cc-filter-option>
+        <cc-filter-element>Option 1</cc-filter-element>
+        <cc-filter-element>Option 2</cc-filter-element>
+        <cc-filter-element>Option 3</cc-filter-element>
+    </cc-filter-option>
 
-    <cc-button color="gray" type="outlined" size="small"></cc-button>
+    <cc-filter-block name="FilterName">
+        <cc-filter-element>Option 1</cc-filter-element>
+        <cc-filter-element>Option 2</cc-filter-element>
+        <cc-filter-element>Option 3</cc-filter-element>
+    </cc-filter-block>
+
+    <div>
+        <cc-circle-select checked="false" color="accent" type="single"></cc-circle-select>
+        <cc-circle-select checked="true" color="accent" type="single"></cc-circle-select>
+    </div>
+    <div>
+        <cc-circle-select checked="false" color="gray" type="single"></cc-circle-select>
+        <cc-circle-select checked="true" color="gray" type="single"></cc-circle-select>
+    </div>
+    <div>
+        <cc-circle-select checked="false" color="accent" type="multiple"></cc-circle-select>
+        <cc-circle-select checked="true" color="accent" type="multiple"></cc-circle-select>
+    </div>
+
+    <cc-property-value property="Element" value="Wert"></cc-property-value>
+    <cc-property-value property="Element" value="Wert"></cc-property-value>
 </body>
 </html>
