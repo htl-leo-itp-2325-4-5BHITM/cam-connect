@@ -11,11 +11,14 @@ import jakarta.transaction.Transactional;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import com.opencsv.CSVReader;
 
 @ApplicationScoped
 public class StudentRepository{
@@ -60,37 +63,29 @@ public class StudentRepository{
         List<Student> results = q.getResultList();
         return results;
     }
-    /*
-    public boolean importStudents(String[] csv){ //nicht getestet
 
-        String csvFilePath = "../csv/test.csv";
 
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
+    public boolean processCsv(InputStream fileInputStream, String fileName) {
+        int counter = 0;
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(fileInputStream))) {
             String line;
 
-            List<String[]> csvLines = new LinkedList<>();
+            while ((line = reader.readLine()) != null) {
+                // Splitte die CSV-Zeile
+                String[] values = line.split(",");
 
-            while ((line = br.readLine()) != null) {
-                // Teile die Zeile anhand des Kommas
-                String[] row = line.split(",");
+                // Füge die Werte zur Liste hinzu
 
-                // Füge die Zeile zur Datenliste hinzu
-                csvLines.add(row);
-            }
-
-            //csvLines.remove(0);
-            for (String[] sArr:
-                 csvLines) {
-                Student student = new Student(sArr[0].trim(), sArr[1].trim(), sArr[2].trim(),sArr[3].trim(), sArr[4].trim());
+                Student student = new Student(values[0].trim(), values[1].trim(), values[2].trim(),values[3].trim(), values[4].trim());
                 em.persist(student);
-                return true;
-                //Device List soll null sein
             }
-         } catch (Exception e) {
-            System.err.println("Fehler beim Parsen des Integers: " + e.getMessage());
+
+            return true;
+            // Hier hast du das CSV als List<String[]> und kannst es weiter verarbeiten
+        } catch(Exception ex){
+            return false;
         }
-        return false;
     }
     
-     */
+
 }

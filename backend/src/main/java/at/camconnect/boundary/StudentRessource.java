@@ -1,5 +1,6 @@
 package at.camconnect.boundary;
 
+import at.camconnect.dtos.FormDataDTO;
 import at.camconnect.model.Student;
 import at.camconnect.repository.StudentRepository;
 import jakarta.inject.Inject;
@@ -10,7 +11,9 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.io.InputStream;
 import java.util.List;
+import org.jboss.resteasy.reactive.MultipartForm;
 
 @Path("/api/student")
 public class StudentRessource {
@@ -67,14 +70,25 @@ public class StudentRessource {
         return studentRepository.getAll();
     }
 
- /*   @POST
+
+    @POST
     @Path("/importstudents")
-    @Consumes(MediaType.TEXT_PLAIN)
-    public Response importStudents(String[] csvData){
-        if (studentRepository.importStudents(csvData)) {
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response uploadCsvFile(@MultipartForm FormDataDTO formData) {
+        // FormData enthält die Informationen zur Datei
+        InputStream fileInputStream = formData.file();
+        String fileName = formData.filename();
+
+        // Hier wird die CSV-Datei an die Repository-Klasse weitergeleitet
+        try {
+            studentRepository.importStudents(fileInputStream, fileName);
             return Response.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(400).build();
         }
-        return Response.status(400).build();
     }
-    */
+
+
 }

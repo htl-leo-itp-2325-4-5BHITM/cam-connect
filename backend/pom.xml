@@ -26,6 +26,11 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>org.glassfish.jersey.media</groupId>
+                <artifactId>jersey-media-multipart</artifactId>
+                <version>2.x</version> <!-- Verwende die entsprechende Jersey-Version -->
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>
