@@ -73,7 +73,8 @@ interface RentComplete {
     rent_id: number,
     student: Student,
     device_id: number,
-    teacher: Teacher,
+    teacher_start: Teacher,
+    teacher_end: Teacher,
     rent_start: string,
     rent_end_planned: string,
     rent_end_actual: string,
@@ -84,7 +85,8 @@ interface RentSimple {
     rent_id: number,
     student_id: number,
     device_id: number,
-    teacher_id: number,
+    teacher_start_id: number,
+    teacher_end_id: number,
     rent_start: string,
     rent_end_planned: string,
     rent_end_actual: string,
@@ -104,11 +106,11 @@ const columns:column[] = [
     {name: "Entlehner*in + Klasse", inputType: "text", cellType: "student_id"},
     {name: "Entlehnung Datum", inputType: "date", cellType: "rent_start"},
     {name: "Unterschrift Entlehner*in", inputType: "checkbox", cellType: "sigRent"},
-    {name: "Paraphe Lehkraft", inputType: "text", cellType: "teacherRent"},
+    {name: "Paraphe Lehkraft", inputType: "text", cellType: "teacher_start"},
     {name: "Rückgabe geplant", inputType: "date", cellType: "rent_end_planned"},
     {name: "Rückgabe tatsächlich", inputType: "date", cellType: "rent_end_actual"},
     {name: "Unterschrift Entlehner*in", inputType: "checkbox", cellType: "sigReturn"},
-    {name: "Paraphe Lehkraft", inputType: "text", cellType: "teacherReturn"},
+    {name: "Paraphe Lehkraft", inputType: "text", cellType: "teacher_end"},
     {name: "Anmerkung", inputType: "text", cellType: "note"},
 ]
 
@@ -256,8 +258,9 @@ function searchForStudentFromSelectInput(inputValue:string, rentId?:number){
         })
         .catch(error => console.error(error));
 }
+//endregion
 
-//search for teacher
+//region search for teacher
 
 var teacherSelectionPopup = document.querySelector("#teacherSelectionPopup") as HTMLInputElement;
 var teacherSearchbar = document.querySelector('#teacherSelectionPopup .search') as HTMLInputElement;
@@ -317,6 +320,8 @@ function searchForTeacherFromSelectInput(inputValue:string, rentId:number) {
         })
         .catch(error => console.error(error));
 }
+
+//endregion
 
 function updateRent(input:HTMLElement, key:string, value:any, rentId?:number) {
     if(rentId == undefined) rentId = Number(input.closest("tr").getAttribute("rent_id"))

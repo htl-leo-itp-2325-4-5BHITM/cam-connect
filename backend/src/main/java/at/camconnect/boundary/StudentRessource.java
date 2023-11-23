@@ -75,8 +75,8 @@ public class StudentRessource {
     @Path("/importstudents")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response uploadCsvFile(@MultipartForm FormDataDTO formData) {
-        // FormData enthält die Informationen zur Datei
+    public Response uploadCsvFile(/*@MultipartForm FormDataDTO formData*/) {
+        /*// FormData enthält die Informationen zur Datei
         InputStream fileInputStream = formData.file();
         String fileName = formData.filename();
 
@@ -87,7 +87,8 @@ public class StudentRessource {
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(400).build();
-        }
+        }*/
+        return Response.serverError().build();
     }
 
 

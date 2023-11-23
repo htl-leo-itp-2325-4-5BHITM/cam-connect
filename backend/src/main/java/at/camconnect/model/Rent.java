@@ -33,6 +33,7 @@ public class Rent {
     private LocalDate rent_end_actual;
     private RentStatus status;
     private String note;
+    private String accessory;
 
     public Rent() {
         rent_start = LocalDate.now();

@@ -1,17 +1,18 @@
 package at.camconnect.boundary;
 
 import at.camconnect.dtos.FormDataDTO;
+import at.camconnect.model.Student;
 import at.camconnect.model.Teacher;
 import at.camconnect.repository.TeacherRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.vertx.core.json.JsonObject;
 import jakarta.inject.Inject;
+import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.jboss.resteasy.reactive.MultipartForm;
+/*import org.jboss.resteasy.reactive.MultipartForm;*/
 
 import java.io.InputStream;
 import java.util.List;
@@ -48,6 +49,15 @@ public class TeacherRessource {
         return Response.ok().build();
     }
 
+    @POST
+    @Path("/search")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Teacher> search(JsonObject data){
+        return teacherRepository.search(data);
+    }
+
     @GET
     @Path("/getbyid/{id: [0-9]+}")
     public Teacher getById(@PathParam("id")long id) {
@@ -65,8 +75,8 @@ public class TeacherRessource {
     @Path("/importteacher")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response uploadCsvFile(@MultipartForm FormDataDTO formData) {
-        // FormData enthält die Informationen zur Datei
+    public Response uploadCsvFile(/*@MultipartForm FormDataDTO formData*/) {
+        /*// FormData enthält die Informationen zur Datei
         InputStream fileInputStream = formData.file();
         String fileName = formData.filename();
 
@@ -77,6 +87,7 @@ public class TeacherRessource {
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(400).build();
-        }
+        }*/
+        return Response.serverError().build();
     }
 }

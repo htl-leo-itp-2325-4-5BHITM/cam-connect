@@ -5,6 +5,7 @@ import at.camconnect.model.Student;
 import at.camconnect.model.Teacher;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.json.JsonObject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
@@ -19,7 +20,6 @@ import java.util.List;
 public class TeacherRepository {
     @Inject
     EntityManager em;
-
 
     @Transactional
     public void create(Teacher t){
@@ -44,8 +44,17 @@ public class TeacherRepository {
         List<Teacher> teachers = em.createQuery("SELECT t FROM Teacher t", Teacher.class).getResultList();
         return teachers;
     }
+
+    public List<Teacher> search(JsonObject searchParams){
+        Query q = em.createQuery("SELECT t FROM Teacher t WHERE upper(t.lastname) LIKE :lastname || '%' ", Teacher.class)
+                .setParameter("lastname", searchParams.getString("lastname").toUpperCase())
+                .setMaxResults(10);
+        List<Teacher> results = q.getResultList();
+        return results;
+    }
+
     public boolean importTeachers(InputStream fileInputStream) {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(fileInputStream))) {
+        /*try (BufferedReader reader = new BufferedReader(new InputStreamReader(fileInputStream))) {
             String line;
 
             while ((line = reader.readLine()) != null) {
@@ -62,6 +71,7 @@ public class TeacherRepository {
             // Hier hast du das CSV als List<String[]> und kannst es weiter verarbeiten
         } catch(Exception ex){
             return false;
-        }
+        }*/
+        return false;
     }
 }

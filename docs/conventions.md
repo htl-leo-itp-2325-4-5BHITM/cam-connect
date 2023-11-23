@@ -119,7 +119,7 @@ function checkLogin(){
 
 For those that don't know scss this will seem weird, it's actually pretty easy
 ```SCSS
-$accent: #FF0505; //defines a variable
+$accent: #4095BF; //defines a variable
 
 .equipmentItem{
   &:hover{ //compiles to .equipmentItem:hover{}
@@ -146,3 +146,4 @@ $accent: #FF0505; //defines a variable
 ## Style
 - use the font quicksand on every UI
 - use the accent color `#4095BF` `hsl(200, 50, 50)`
+- for recoloring svgs you can use this generator https://codepen.io/sosuke/pen/Pjoqqp
