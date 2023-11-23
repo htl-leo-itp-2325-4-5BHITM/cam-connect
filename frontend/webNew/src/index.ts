@@ -8,6 +8,7 @@ import "./components/circle-select-component"
 import "./components/property-value-component"
 import "./components/select-component"
 import "./components/select-element-component"
+import "./components/value-chain-component"
 import "../styles/base.scss"
 
 //basically einfach default function file für erstellen clicken popups und alles
