@@ -7,68 +7,68 @@
     <title>Cam Connect</title>
 </head>
 <body>
+<div>
+    <cc-button color="accent" type="filled" size="medium"></cc-button>
+    <cc-button color="accent" type="filled" size="small"></cc-button>
+</div>
+<div>
+    <cc-button color="accent" type="outlined" size="medium"></cc-button>
+    <cc-button color="accent" type="outlined" size="small"></cc-button>
+</div>
+<div>
+    <cc-button color="gray" type="filled" size="medium"></cc-button>
+    <cc-button color="gray" type="filled" size="small"></cc-button>
+</div>
+<div>
+    <cc-button color="gray" type="outlined" size="medium"></cc-button>
+    <cc-button color="gray" type="outlined" size="small"></cc-button>
+</div>
+
+<div>
+    <cc-rent-status status="verfügbar" amount="1"></cc-rent-status>
+    <cc-rent-status status="vergeben"></cc-rent-status>
+    <cc-rent-status status="gesperrt"></cc-rent-status>
+</div>
+
+<div>
     <div>
-        <cc-button color="accent" type="filled" size="medium"></cc-button>
-        <cc-button color="accent" type="filled" size="small"></cc-button>
+        <cc-confirmation-status status="bestätigt"></cc-confirmation-status>
+        <cc-confirmation-status status="bestätigt" isBig="true"></cc-confirmation-status>
     </div>
     <div>
-        <cc-button color="accent" type="outlined" size="medium"></cc-button>
-        <cc-button color="accent" type="outlined" size="small"></cc-button>
+        <cc-confirmation-status status="warten"></cc-confirmation-status>
+        <cc-confirmation-status status="warten" isBig="true"></cc-confirmation-status>
     </div>
     <div>
-        <cc-button color="gray" type="filled" size="medium"></cc-button>
-        <cc-button color="gray" type="filled" size="small"></cc-button>
+        <cc-confirmation-status status="abgelehnt"></cc-confirmation-status>
+        <cc-confirmation-status status="abgelehnt" isBig="true"></cc-confirmation-status>
     </div>
-    <div>
-        <cc-button color="gray" type="outlined" size="medium"></cc-button>
-        <cc-button color="gray" type="outlined" size="small"></cc-button>
-    </div>
+</div>
 
-    <div>
-        <cc-rent-status status="verfügbar" amount="1"></cc-rent-status>
-        <cc-rent-status status="vergeben"></cc-rent-status>
-        <cc-rent-status status="gesperrt"></cc-rent-status>
-    </div>
+<cc-filter-block name="FilterName">
+    <cc-filter-element>Option 1</cc-filter-element>
+    <cc-filter-element>Option 2</cc-filter-element>
+    <cc-filter-element>Option 3</cc-filter-element>
+</cc-filter-block>
 
-    <div>
-        <div>
-            <cc-confirmation-status status="bestätigt"></cc-confirmation-status>
-            <cc-confirmation-status status="bestätigt" isBig="true"></cc-confirmation-status>
-        </div>
-        <div>
-            <cc-confirmation-status status="warten"></cc-confirmation-status>
-            <cc-confirmation-status status="warten" isBig="true"></cc-confirmation-status>
-        </div>
-        <div>
-            <cc-confirmation-status status="abgelehnt"></cc-confirmation-status>
-            <cc-confirmation-status status="abgelehnt" isBig="true"></cc-confirmation-status>
-        </div>
-    </div>
+<div>
+    <cc-circle-select color="accent" type="single"></cc-circle-select>
+    <cc-circle-select color="gray" type="single"></cc-circle-select>
+    <cc-circle-select color="accent" type="multiple"></cc-circle-select>
+</div>
 
-    <cc-filter-block name="FilterName">
-        <cc-filter-element>Option 1</cc-filter-element>
-        <cc-filter-element>Option 2</cc-filter-element>
-        <cc-filter-element>Option 3</cc-filter-element>
-    </cc-filter-block>
+<cc-property-value property="Element" value="Wert"></cc-property-value>
 
-    <div>
-        <cc-circle-select color="accent" type="single"></cc-circle-select>
-        <cc-circle-select color="gray" type="single"></cc-circle-select>
-        <cc-circle-select color="accent" type="multiple"></cc-circle-select>
-    </div>
+<cc-select>
+    <cc-select-element>option</cc-select-element>
+    <cc-select-element selected="true">option</cc-select-element>
+    <cc-select-element>option</cc-select-element>
+</cc-select>
 
-    <cc-property-value property="Element" value="Wert"></cc-property-value>
-
-    <cc-select>
-        <cc-select-element>option</cc-select-element>
-        <cc-select-element selected="true">option</cc-select-element>
-        <cc-select-element>option</cc-select-element>
-    </cc-select>
-
-    <cc-value-chain>
-        <p>value 1</p>
-        <a href="#">value 2</a>
-        <p type="link">value 3</p>
-    </cc-value-chain>
+<cc-value-chain>
+    <p>value 1</p>
+    <a href="#">value 2</a>
+    <p type="link">value 3</p>
+</cc-value-chain>
 </body>
 </html>
