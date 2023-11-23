@@ -333,6 +333,83 @@ function searchForTeacherFromSelectInput(inputValue:string, rentId:number) {
 
 //endregion
 
+//region load csv updata
+
+
+function importStudents(file: File): Promise<boolean> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return fetch(`${APPLICATION_URL}/students/import`, {
+        method: 'POST',
+        body: formData,
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Import successful:', data);
+            return true;
+        })
+        .catch(error => {
+            console.error('Error importing students:', error);
+            return false;
+        });
+}
+
+// Example usage:
+const fileInput = document.getElementById('csvFileInput') as HTMLInputElement;
+
+fileInput.addEventListener('change', (event) => {
+    const files = (event.target as HTMLInputElement).files;
+
+    if (files && files.length > 0) {
+        const file = files[0];
+console.log(file)
+        importStudents(file)
+            .then(success => {
+                if (success) {
+                    console.log('Students imported successfully!');
+                    // Optionally, perform any actions after successful import
+                } else {
+                    console.error('Failed to import students.');
+                    // Optionally, handle the failure scenario
+                }
+            });
+    }
+});
+
+
+
+/*
+function uploadStudents(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    fetch(APPLICATION_URL + '/students/upload', {
+        method: 'POST',
+        body: formData,
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Upload successful:', data);
+            // Optionally, refresh the student data in the frontend
+        })
+        .catch(error => console.error('Error uploading file:', error));
+}
+
+function handleFileUpload() {
+    const fileInput = document.getElementById('csvFileInput') as HTMLInputElement;
+    const file = fileInput.files?.[0];
+
+    if (file) {
+        uploadStudents(file);
+    } else {
+        console.error('No file selected');
+    }
+}
+*/
+//endregion
+
+
 function updateRent(input:HTMLElement, key:string, value:any, rentId?:number) {
     if(rentId == undefined) rentId = Number(input.closest("tr").getAttribute("rent_id"))
     console.log(rentId)
@@ -420,6 +497,8 @@ function findTeacherById(id:number):Teacher {
     })
     return res
 }
+
+
 
 function convertDateFormat(inputDate: string): string {
     // Überprüfen, ob das Datum bereits im richtigen Format ist

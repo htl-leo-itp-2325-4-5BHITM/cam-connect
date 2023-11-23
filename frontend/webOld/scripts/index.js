@@ -224,6 +224,40 @@ function searchForTeacherFromSelectInput(inputValue, rentId) {
     })
         .catch(function (error) { return console.error(error); });
 }
+function importStudents(file) {
+    var formData = new FormData();
+    formData.append('file', file);
+    return fetch("".concat(APPLICATION_URL, "/students/import"), {
+        method: 'POST',
+        body: formData,
+    })
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+        console.log('Import successful:', data);
+        return true;
+    })
+        .catch(function (error) {
+        console.error('Error importing students:', error);
+        return false;
+    });
+}
+var fileInput = document.getElementById('csvFileInput');
+fileInput.addEventListener('change', function (event) {
+    var files = event.target.files;
+    if (files && files.length > 0) {
+        var file = files[0];
+        console.log(file);
+        importStudents(file)
+            .then(function (success) {
+            if (success) {
+                console.log('Students imported successfully!');
+            }
+            else {
+                console.error('Failed to import students.');
+            }
+        });
+    }
+});
 function updateRent(input, key, value, rentId) {
     var _a, _b, _c;
     if (rentId == undefined)
