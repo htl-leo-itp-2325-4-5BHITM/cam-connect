@@ -8,8 +8,8 @@ public class StabilizerType extends DeviceType {
     private int maxWeight;
     private int numberOfAxis;
 
-    public StabilizerType(String typeName, long typeId, int maxWeight, int numberOfAxis) {
-        super(typeName, typeId);
+    public StabilizerType(String typeName, int maxWeight, int numberOfAxis) {
+        super(typeName);
         this.maxWeight = maxWeight;
         this.numberOfAxis = numberOfAxis;
     }

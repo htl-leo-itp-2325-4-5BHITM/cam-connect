@@ -11,6 +11,7 @@ public class Device {
     private String number;
     private String note;
     @ManyToOne
+    @JoinColumn(name = "type_id")
     private DeviceType type;
 
     public Device() {

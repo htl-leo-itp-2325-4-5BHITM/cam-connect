@@ -86,6 +86,4 @@ public class StudentResource {
         }*/
         return Response.serverError().build();
     }
-
-
 }

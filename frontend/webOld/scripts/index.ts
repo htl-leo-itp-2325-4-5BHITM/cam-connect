@@ -97,6 +97,8 @@ interface RentSimple {
     device_string: string
 }
 
+console.log("gadsfsadf")
+
 //region generate table
 interface column{
     name: string,
@@ -197,7 +199,6 @@ function generateTable(){
 }
 
 //endregion
-
 
 //region student search and selection
 const studentSelectionPopup:HTMLElement = document.querySelector("#studentSelectionPopup")
@@ -333,8 +334,75 @@ function searchForTeacherFromSelectInput(inputValue:string, rentId:number) {
 
 //endregion
 
-//region load csv updata
 
+function updateRent(input:HTMLElement, key:string, value:any, rentId?:number) {
+    if (rentId == undefined) rentId = Number(input.closest("tr").getAttribute("rent_id"))
+    console.log(rentId)
+    let rentOriginal: RentComplete = findRentById(rentId)
+    let rentUpdate: RentSimple = {
+        device_string: rentOriginal.device_string,
+        rent_id: rentId,
+        student_id: rentOriginal.student?.student_id,
+        device_id: rentOriginal.device_id,
+        teacher_start_id: rentOriginal.teacher_start?.teacher_id,
+        teacher_end_id: rentOriginal.teacher_end?.teacher_id,
+        rent_start: rentOriginal.rent_start,
+        rent_end_planned: rentOriginal.rent_end_planned,
+        rent_end_actual: rentOriginal.rent_end_actual,
+        note: rentOriginal.note,
+        accessory: rentOriginal.accessory
+    }
+    // @ts-ignore
+    rentUpdate[key] = value
+
+    console.log(rentUpdate)
+
+    fetch(APPLICATION_URL + '/rent/getbyid/' + rentId + '/update', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(rentUpdate)
+    })
+        .then(response => response.text())
+        .then(data => {
+            requestAllRents()
+            closeStudentPicker()
+            closeTeacherPicker()
+        })
+        .catch(error => console.error(error));
+}
+
+function createRent(){
+    fetch(APPLICATION_URL + '/rent/createempty', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({})
+    })
+        .then(response => response.text())
+        .then(data => {
+            console.log(data)
+            requestAllRents()
+            closeStudentPicker()
+        })
+        .catch(error => console.error(error));
+}
+
+//region utlity
+function findRentById(id:number):RentComplete {
+    let res = null
+    allRents.forEach(rent => {
+        if(rent.rent_id == id){
+            res = rent;
+        }
+    })
+    return res
+}
+//endregion
+
+//region load csv update
 
 function importStudents(file: File): Promise<boolean> {
     const formData = new FormData();
@@ -377,8 +445,6 @@ console.log(file)
     }
 });
 
-
-
 /*
 function uploadStudents(file: File) {
     const formData = new FormData();
@@ -407,118 +473,4 @@ function handleFileUpload() {
     }
 }
 */
-//endregion
-
-
-function updateRent(input:HTMLElement, key:string, value:any, rentId?:number) {
-    if(rentId == undefined) rentId = Number(input.closest("tr").getAttribute("rent_id"))
-    console.log(rentId)
-    let rentOriginal:RentComplete = findRentById(rentId)
-    let rentUpdate:RentSimple = {
-        device_string:rentOriginal.device_string,
-        rent_id: rentId,
-        student_id: rentOriginal.student?.student_id,
-        device_id: rentOriginal.device_id,
-        teacher_start_id: rentOriginal.teacher_start?.teacher_id,
-        teacher_end_id: rentOriginal.teacher_end?.teacher_id,
-        rent_start: rentOriginal.rent_start,
-        rent_end_planned: rentOriginal.rent_end_planned,
-        rent_end_actual: rentOriginal.rent_end_actual,
-        note: rentOriginal.note,
-        accessory: rentOriginal.accessory
-    }
-    // @ts-ignore
-    rentUpdate[key] = value
-
-    console.log(rentUpdate)
-
-    fetch(APPLICATION_URL + '/rent/getbyid/' + rentId +'/update', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(rentUpdate)
-    })
-        .then(response => response.text())
-        .then(data => {
-            requestAllRents()
-            closeStudentPicker()
-            closeTeacherPicker()
-        })
-        .catch(error => console.error(error));
-}
-//endregion
-
-function createRent(){
-    fetch(APPLICATION_URL + '/rent/createempty', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({})
-    })
-        .then(response => response.text())
-        .then(data => {
-            console.log(data)
-            requestAllRents()
-            closeStudentPicker()
-        })
-        .catch(error => console.error(error));
-}
-
-//region utlity
-//these should all be replaced and handled by the backend / served from the backend
-function findRentById(id:number):RentComplete {
-    let res = null
-    allRents.forEach(rent => {
-        if(rent.rent_id == id){
-            res = rent;
-        }
-    })
-    return res
-}
-
-function findStudentById(id:number):Student {
-    let res = null
-    allStudents.forEach(student => {
-        if(student.student_id == id){
-            res = student;
-        }
-    })
-    return res
-}
-
-function findTeacherById(id:number):Teacher {
-    let res = null
-    allTeachers.forEach(teacher => {
-        if(teacher.teacher_id == id){
-            res = teacher;
-        }
-    })
-    return res
-}
-
-
-
-function convertDateFormat(inputDate: string): string {
-    // Überprüfen, ob das Datum bereits im richtigen Format ist
-    const isAlreadyFormatted = /^\d{4}-\d{2}-\d{2}$/.test(inputDate);
-
-    if (isAlreadyFormatted || inputDate == undefined) {
-        // Wenn es bereits im richtigen Format ist, original zurückgeben
-        return inputDate;
-    }
-
-    // Aufteilen des Datums in Tag, Monat und Jahr
-    const dateParts = inputDate.split('.');
-    const day = dateParts[0];
-    const month = dateParts[1];
-    const year = dateParts[2];
-
-    // Neues Datum im gewünschten Format erstellen
-    const formattedDate = `${year}-${month}-${day}`;
-
-    return formattedDate;
-}
-
 //endregion

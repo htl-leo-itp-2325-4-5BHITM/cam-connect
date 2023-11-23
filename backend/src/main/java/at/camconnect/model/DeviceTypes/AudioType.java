@@ -9,8 +9,8 @@ public class AudioType extends DeviceType {
     private boolean wireless;
     private boolean needsRecorder;
 
-    public AudioType(String typeName, long typeId, boolean windblocker, boolean wireless, boolean needsRecorder) {
-        super(typeName, typeId);
+    public AudioType(String typeName, boolean windblocker, boolean wireless, boolean needsRecorder) {
+        super(typeName);
         this.windblocker = windblocker;
         this.wireless = wireless;
         this.needsRecorder = needsRecorder;

@@ -9,8 +9,7 @@ public class DroneType extends DeviceType {
     private String resolution;
     private int maxRange;
 
-    public DroneType(String typeName, long typeId, String sensor, String resolution, int maxRange) {
-        super(typeName, typeId);
+    public DroneType(String typeName, String sensor, String resolution, int maxRange) {
         this.sensor = sensor;
         this.resolution = resolution;
         this.maxRange = maxRange;

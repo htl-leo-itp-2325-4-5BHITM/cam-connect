@@ -11,8 +11,7 @@ public class CameraType extends DeviceType {
     public CameraType() {
     }
 
-    public CameraType(String typeName, long typeId, String sensor, String resolution, String mount) {
-        super(typeName, typeId);
+    public CameraType(String typeName, String sensor, String resolution, String mount) {
         this.sensor = sensor;
         this.resolution = resolution;
         this.mount = mount;

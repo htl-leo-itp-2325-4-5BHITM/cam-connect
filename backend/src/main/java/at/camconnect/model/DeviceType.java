@@ -2,21 +2,23 @@ package at.camconnect.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class DeviceType {
+public abstract class DeviceType {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "device_type_seq")
     @SequenceGenerator(name = "device_type_seq", sequenceName = "DEVICE_TPYE_SEQ", allocationSize = 1)
     private Long type_id;
 
-    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "tag_id", fetch = FetchType.EAGER)
-    //private List<Tag> tags;
+    //TODO fix this fucker, he causes a super ugly error
+    /*@OneToMany(cascade = CascadeType.ALL, mappedBy = "tag_id", fetch = FetchType.EAGER)
+    private List<Tag> tags;*/
     private String name;
 
-    public DeviceType(String name, long typeId) {
+    public DeviceType(String name) {
         this.name = name;
-        this.type_id = typeId;
     }
 
     public DeviceType() {

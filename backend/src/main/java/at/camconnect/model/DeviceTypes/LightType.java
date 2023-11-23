@@ -7,13 +7,13 @@ import jakarta.persistence.Entity;
 public class LightType extends DeviceType {
     private int watts;
     private boolean rgb;
-    private boolean variableTempreture;
+    private boolean variable_temperature;
 
-    public LightType(String typeName, long typeId, int watts, boolean rgb, boolean variableTempreture) {
-        super(typeName, typeId);
+    public LightType(String typeName, int watts, boolean rgb, boolean variable_temperature) {
+        super(typeName);
         this.watts = watts;
         this.rgb = rgb;
-        this.variableTempreture = variableTempreture;
+        this.variable_temperature = variable_temperature;
     }
 
     public LightType() {
@@ -35,11 +35,11 @@ public class LightType extends DeviceType {
         this.rgb = rgb;
     }
 
-    public boolean isVariableTempreture() {
-        return variableTempreture;
+    public boolean isVariable_temperature() {
+        return variable_temperature;
     }
 
-    public void setVariableTempreture(boolean variableTempreture) {
-        this.variableTempreture = variableTempreture;
+    public void setVariable_temperature(boolean variableTempreture) {
+        this.variable_temperature = variableTempreture;
     }
 }

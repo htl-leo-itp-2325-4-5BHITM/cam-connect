@@ -19,7 +19,7 @@ public class Teacher {
     public Teacher() {
     }
 
-    public Teacher(String firstname, String lastname, String verification, String password, String user_id) {
+    public Teacher(String firstname, String lastname, String verification, String password, String username) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.verification = verification;

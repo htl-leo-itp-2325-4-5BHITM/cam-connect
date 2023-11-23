@@ -16,8 +16,8 @@ public class LensType extends DeviceType {
     @JoinColumn(name = "mount_id")
     private LensMount lensMount;
 
-    public LensType(String typeName, long typeId, String fStop, String mount, int focalLength) {
-        super(typeName, typeId);
+    public LensType(String typeName, String fStop, String mount, int focalLength) {
+        super(typeName);
         this.fStop = fStop;
         this.mount = mount;
         this.focalLength = focalLength;

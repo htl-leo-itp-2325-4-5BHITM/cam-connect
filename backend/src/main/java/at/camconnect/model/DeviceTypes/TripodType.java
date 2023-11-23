@@ -11,8 +11,8 @@ public class TripodType extends DeviceType {
     public TripodType() {
     }
 
-    public TripodType(String typeName, long typeId, double height, String head) {
-        super(typeName, typeId);
+    public TripodType(String typeName, double height, String head) {
+        super(typeName);
         this.height = height;
         this.head = head;
     }

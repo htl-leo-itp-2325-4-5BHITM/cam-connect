@@ -39,6 +39,7 @@ function requestAllRents() {
     })
         .catch(function (error) { return console.error(error); });
 }
+console.log("gadsfsadf");
 var columns = [
     { name: "Gerät Nr.", inputType: "text", cellType: "device_string" },
     { name: "Zubehör", inputType: "text", cellType: "accessory" },
@@ -224,40 +225,6 @@ function searchForTeacherFromSelectInput(inputValue, rentId) {
     })
         .catch(function (error) { return console.error(error); });
 }
-function importStudents(file) {
-    var formData = new FormData();
-    formData.append('file', file);
-    return fetch("".concat(APPLICATION_URL, "/students/import"), {
-        method: 'POST',
-        body: formData,
-    })
-        .then(function (response) { return response.json(); })
-        .then(function (data) {
-        console.log('Import successful:', data);
-        return true;
-    })
-        .catch(function (error) {
-        console.error('Error importing students:', error);
-        return false;
-    });
-}
-var fileInput = document.getElementById('csvFileInput');
-fileInput.addEventListener('change', function (event) {
-    var files = event.target.files;
-    if (files && files.length > 0) {
-        var file = files[0];
-        console.log(file);
-        importStudents(file)
-            .then(function (success) {
-            if (success) {
-                console.log('Students imported successfully!');
-            }
-            else {
-                console.error('Failed to import students.');
-            }
-        });
-    }
-});
 function updateRent(input, key, value, rentId) {
     var _a, _b, _c;
     if (rentId == undefined)
@@ -319,34 +286,38 @@ function findRentById(id) {
     });
     return res;
 }
-function findStudentById(id) {
-    var res = null;
-    allStudents.forEach(function (student) {
-        if (student.student_id == id) {
-            res = student;
-        }
+function importStudents(file) {
+    var formData = new FormData();
+    formData.append('file', file);
+    return fetch("".concat(APPLICATION_URL, "/students/import"), {
+        method: 'POST',
+        body: formData,
+    })
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+        console.log('Import successful:', data);
+        return true;
+    })
+        .catch(function (error) {
+        console.error('Error importing students:', error);
+        return false;
     });
-    return res;
 }
-function findTeacherById(id) {
-    var res = null;
-    allTeachers.forEach(function (teacher) {
-        if (teacher.teacher_id == id) {
-            res = teacher;
-        }
-    });
-    return res;
-}
-function convertDateFormat(inputDate) {
-    var isAlreadyFormatted = /^\d{4}-\d{2}-\d{2}$/.test(inputDate);
-    if (isAlreadyFormatted || inputDate == undefined) {
-        return inputDate;
+var fileInput = document.getElementById('csvFileInput');
+fileInput.addEventListener('change', function (event) {
+    var files = event.target.files;
+    if (files && files.length > 0) {
+        var file = files[0];
+        console.log(file);
+        importStudents(file)
+            .then(function (success) {
+            if (success) {
+                console.log('Students imported successfully!');
+            }
+            else {
+                console.error('Failed to import students.');
+            }
+        });
     }
-    var dateParts = inputDate.split('.');
-    var day = dateParts[0];
-    var month = dateParts[1];
-    var year = dateParts[2];
-    var formattedDate = "".concat(year, "-").concat(month, "-").concat(day);
-    return formattedDate;
-}
+});
 //# sourceMappingURL=index.js.map
