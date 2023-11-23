@@ -1,1 +1,22 @@
 @import "../variables";
+
+cc-circle-select div{
+  display: grid;
+  place-content: center;
+  width: 1.4rem;
+  aspect-ratio: 1/1;
+  cursor: pointer;
+
+  &.accent img {
+    filter: invert(57%) sepia(54%) saturate(507%) hue-rotate(155deg) brightness(83%) contrast(88%);
+  }
+  &.gray img {
+    filter: invert(73%) sepia(10%) saturate(0%) hue-rotate(181deg) brightness(93%) contrast(87%);
+  }
+
+  img{
+    width: 1.4rem;
+    aspect-ratio: 1/1;
+  }
+}
+

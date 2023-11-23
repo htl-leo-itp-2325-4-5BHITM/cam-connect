@@ -8,7 +8,7 @@
 </head>
 <body>
     <div>
-        <cc-button color="accent" type="filled" size="medium">dfdsfasdf</cc-button>
+        <cc-button color="accent" type="filled" size="medium"></cc-button>
         <cc-button color="accent" type="filled" size="small"></cc-button>
     </div>
     <div>
@@ -45,12 +45,6 @@
         </div>
     </div>
 
-    <cc-filter-option>
-        <cc-filter-element>Option 1</cc-filter-element>
-        <cc-filter-element>Option 2</cc-filter-element>
-        <cc-filter-element>Option 3</cc-filter-element>
-    </cc-filter-option>
-
     <cc-filter-block name="FilterName">
         <cc-filter-element>Option 1</cc-filter-element>
         <cc-filter-element>Option 2</cc-filter-element>
@@ -58,19 +52,23 @@
     </cc-filter-block>
 
     <div>
-        <cc-circle-select checked="false" color="accent" type="single"></cc-circle-select>
-        <cc-circle-select checked="true" color="accent" type="single"></cc-circle-select>
-    </div>
-    <div>
-        <cc-circle-select checked="false" color="gray" type="single"></cc-circle-select>
-        <cc-circle-select checked="true" color="gray" type="single"></cc-circle-select>
-    </div>
-    <div>
-        <cc-circle-select checked="false" color="accent" type="multiple"></cc-circle-select>
-        <cc-circle-select checked="true" color="accent" type="multiple"></cc-circle-select>
+        <cc-circle-select color="accent" type="single"></cc-circle-select>
+        <cc-circle-select color="gray" type="single"></cc-circle-select>
+        <cc-circle-select color="accent" type="multiple"></cc-circle-select>
     </div>
 
     <cc-property-value property="Element" value="Wert"></cc-property-value>
-    <cc-property-value property="Element" value="Wert"></cc-property-value>
+
+    <cc-select>
+        <cc-select-element>option</cc-select-element>
+        <cc-select-element selected="true">option</cc-select-element>
+        <cc-select-element>option</cc-select-element>
+    </cc-select>
+
+    <cc-value-chain>
+        <p>value 1</p>
+        <a href="#">value 2</a>
+        <p type="link">value 3</p>
+    </cc-value-chain>
 </body>
 </html>
