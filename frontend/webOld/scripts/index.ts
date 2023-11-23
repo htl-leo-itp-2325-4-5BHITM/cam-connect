@@ -333,6 +333,38 @@ function searchForTeacherFromSelectInput(inputValue:string, rentId:number) {
 
 //endregion
 
+//region load csv updata
+
+function uploadStudents(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    fetch(APPLICATION_URL + '/students/upload', {
+        method: 'POST',
+        body: formData,
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Upload successful:', data);
+            // Optionally, refresh the student data in the frontend
+        })
+        .catch(error => console.error('Error uploading file:', error));
+}
+
+function handleFileUpload() {
+    const fileInput = document.getElementById('csvFileInput') as HTMLInputElement;
+    const file = fileInput.files?.[0];
+
+    if (file) {
+        uploadStudents(file);
+    } else {
+        console.error('No file selected');
+    }
+}
+
+//endregion
+
+
 function updateRent(input:HTMLElement, key:string, value:any, rentId?:number) {
     if(rentId == undefined) rentId = Number(input.closest("tr").getAttribute("rent_id"))
     console.log(rentId)
@@ -420,6 +452,8 @@ function findTeacherById(id:number):Teacher {
     })
     return res
 }
+
+
 
 function convertDateFormat(inputDate: string): string {
     // Überprüfen, ob das Datum bereits im richtigen Format ist
