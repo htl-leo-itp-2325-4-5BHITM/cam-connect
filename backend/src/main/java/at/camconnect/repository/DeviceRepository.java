@@ -1,6 +1,7 @@
 package at.camconnect.repository;
 
 import at.camconnect.model.Device;
+import at.camconnect.model.DeviceType;
 import at.camconnect.model.Rent;
 import at.camconnect.model.Student;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -11,6 +12,9 @@ import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 
 @ApplicationScoped
@@ -40,5 +44,28 @@ public class DeviceRepository {
     public List<Device> getAll(){
         List<Device> rents = em.createQuery("SELECT r FROM Rent r", Device.class).getResultList();
         return rents;
+    }
+
+    public boolean importDevices(InputStream fileInputStream) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(fileInputStream))) {
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                // Splitte die CSV-Zeile
+                String[] values = line.split(",");
+
+                // Füge die Werte zur Liste hinzu
+                DeviceType deviceType = em.find(DeviceType.class, Integer.valueOf(values[2].trim()));
+                if(deviceType == null){
+                    return false;
+                }
+                Device device = new Device(values[0].trim(), values[1].trim(),deviceType);
+                em.persist(device);
+            }
+            return true;
+            // Hier hast du das CSV als List<String[]> und kannst es weiter verarbeiten
+        } catch(Exception ex){
+            return false;
+        }
     }
 }

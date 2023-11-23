@@ -1,5 +1,6 @@
 package at.camconnect.boundary;
 
+import at.camconnect.dtos.FormDataDTO;
 import at.camconnect.model.Teacher;
 import at.camconnect.repository.TeacherRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,7 +11,9 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.jboss.resteasy.reactive.MultipartForm;
 
+import java.io.InputStream;
 import java.util.List;
 
 @Path("/api/teacher")
@@ -58,5 +61,22 @@ public class TeacherRessource {
         return teacherRepository.getAll();
     }
 
+    @POST
+    @Path("/importteacher")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response uploadCsvFile(@MultipartForm FormDataDTO formData) {
+        // FormData enthält die Informationen zur Datei
+        InputStream fileInputStream = formData.file();
+        String fileName = formData.filename();
 
+        // Hier wird die CSV-Datei an die Repository-Klasse weitergeleitet
+        try {
+            teacherRepository.importTeachers(fileInputStream);
+            return Response.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(400).build();
+        }
+    }
 }

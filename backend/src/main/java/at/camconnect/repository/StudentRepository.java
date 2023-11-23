@@ -65,8 +65,7 @@ public class StudentRepository{
     }
 
 
-    public boolean processCsv(InputStream fileInputStream, String fileName) {
-        int counter = 0;
+    public boolean importStudents(InputStream fileInputStream) {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(fileInputStream))) {
             String line;
 

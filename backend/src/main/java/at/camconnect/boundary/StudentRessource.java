@@ -82,7 +82,7 @@ public class StudentRessource {
 
         // Hier wird die CSV-Datei an die Repository-Klasse weitergeleitet
         try {
-            studentRepository.importStudents(fileInputStream, fileName);
+            studentRepository.importStudents(fileInputStream);
             return Response.ok().build();
         } catch (Exception e) {
             e.printStackTrace();
