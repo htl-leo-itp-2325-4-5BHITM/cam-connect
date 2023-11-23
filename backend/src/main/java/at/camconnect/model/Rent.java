@@ -80,11 +80,11 @@ public class Rent {
         this.accessory = accessory;
     }
 
-    public long getRent_id()  {
+    public Long getRent_id()  {
         return rent_id;
     }
 
-    public void setRent_id(long rent_id) {
+    public void setRent_id(Long rent_id) {
         this.rent_id = rent_id;
     }
 

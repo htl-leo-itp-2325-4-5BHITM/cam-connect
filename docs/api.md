@@ -2,6 +2,8 @@
 
 - `routename/{pathparam}: {PostBody, JSONkeys} -> ReturnValue`
 - `iamnotavalidroute -x`
+- use the tool linked below to create the tree structure, copy the list version from the commented-out section
+- change the api as needed, then update both the tree and the list in here
 
 ```
 api
@@ -28,7 +30,8 @@ api
 │       └── update : {number, serial, note}
 │           ├── number : {value}
 │           ├── serial : {value}
-│           └── note : {value}
+│           ├── note : {value}
+│           └── type: {value}
 ├── devicetype -x
 │   ├── create -x
 │   │   ├── lens : {f_stop, mount_id, focal_length}

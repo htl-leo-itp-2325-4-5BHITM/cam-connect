@@ -2,15 +2,11 @@ package at.camconnect.repository;
 
 import at.camconnect.model.Device;
 import at.camconnect.model.DeviceType;
-import at.camconnect.model.Rent;
-import at.camconnect.model.Student;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.core.Response;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -33,8 +29,22 @@ public class DeviceRepository {
     }
 
     @Transactional
-    public void update(Device d){
-        em.merge(d);
+    public void update(Long id, JsonObject data) {
+        try{
+            setNumber(id, data.getString("number"));
+        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+
+        try{
+            setNote(id, data.getString("note"));
+        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+
+        try{
+            setSerial(id, data.getString("serial"));
+        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+
+        try{
+            setType(id, data.getInt("number"));
+        } catch(Exception ex){ System.out.println(ex.getMessage()); }
     }
 
     public Device getById(long id){
@@ -46,26 +56,44 @@ public class DeviceRepository {
         return rents;
     }
 
+    public void setNumber(long rentId, String number) {
+        Device device = getById(rentId);
+        device.setNumber(number);
+    }
 
+    public void setSerial(long rentId, String serial) {
+        Device device = getById(rentId);
+        device.setSerial(serial);
+    }
+
+    public void setNote(long rentId, String serial) {
+        Device device = getById(rentId);
+        device.setNote(serial);
+    }
+
+    public void setType(long rentId, int type) {
+        Device device = getById(rentId);
+        DeviceType deviceType = em.find(DeviceType.class, type);
+        device.setType(deviceType);
+    }
 
     public boolean importDevices(InputStream fileInputStream) {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(fileInputStream))) {
             String line;
 
             while ((line = reader.readLine()) != null) {
-                // Splitte die CSV-Zeile
                 String[] values = line.split(",");
 
-                // Füge die Werte zur Liste hinzu
                 DeviceType deviceType = em.find(DeviceType.class, Integer.valueOf(values[2].trim()));
                 if(deviceType == null){
                     return false;
                 }
-                Device device = new Device(values[0].trim(), values[1].trim(),deviceType);
+
+                //TODO there was a error in the device class the number attribute was missing
+                Device device = new Device(values[0].trim(), "TODO", values[1].trim(),deviceType);
                 em.persist(device);
             }
             return true;
-            // Hier hast du das CSV als List<String[]> und kannst es weiter verarbeiten
         } catch(Exception ex){
             return false;
         }
