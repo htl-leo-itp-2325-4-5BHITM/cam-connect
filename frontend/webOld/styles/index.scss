@@ -101,7 +101,7 @@ table{
   }
 }
 
-#studentSelectionPopup{
+#studentSelectionPopup, #teacherSelectionPopup{
   border-radius: .5rem;
   position: absolute;
   width: 15vw;
@@ -122,7 +122,7 @@ table{
   }
 }
 
-#studentSelectionPopup .studentList{
+#studentSelectionPopup .studentList, #teacherSelectionPopup .teacherList{
   font-size: .9rem;
 
   p{

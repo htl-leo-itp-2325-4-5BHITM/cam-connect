@@ -41,7 +41,7 @@ function requestAllRents() {
 }
 var columns = [
     { name: "Gerät Nr.", inputType: "number", cellType: "" },
-    { name: "Zubehör", inputType: "text", cellType: "" },
+    { name: "Zubehör", inputType: "text", cellType: "accessory" },
     { name: "Entlehner*in + Klasse", inputType: "text", cellType: "student_id" },
     { name: "Entlehnung Datum", inputType: "date", cellType: "rent_start" },
     { name: "Unterschrift Entlehner*in", inputType: "none", cellType: "" },
@@ -71,30 +71,46 @@ function generateTable() {
         columns.forEach(function (column) {
             var _a, _b, _c;
             var cell = document.createElement("td");
-            if (column.inputType != "none") {
+            if (column.inputType !== "none") {
                 var cellinput_1 = document.createElement("input");
                 cellinput_1.type = column.inputType;
                 cellinput_1.setAttribute("celltype", column.cellType);
+                switch (column.inputType) {
+                    case "number":
+                        cellinput_1.setAttribute("min", "0");
+                        break;
+                }
                 switch (column.cellType) {
                     case "student_id":
-                        cellinput_1.addEventListener("mouseup", function () { var _a; openStudentPicker(cellinput_1, (_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id); });
+                        cellinput_1.addEventListener("mouseup", function () {
+                            var _a;
+                            openStudentPicker(cellinput_1, (_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id);
+                        });
                         cellinput_1.value = ((_b = (_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.student) === null || _b === void 0 ? void 0 : _b.firstname) || "";
                         break;
                     case "teacher_start":
                     case "teacher_end":
-                        cellinput_1.addEventListener("mouseup", function () { var _a; openTeacherPicker(cellinput_1, (_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id, column.cellType + "_id"); });
+                        cellinput_1.addEventListener("mouseup", function () {
+                            var _a;
+                            openTeacherPicker(cellinput_1, (_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id, column.cellType + "_id");
+                        });
                         cellinput_1.value = ((_c = allRents[i][column.cellType]) === null || _c === void 0 ? void 0 : _c.lastname) || "";
                         break;
                     case "note":
                     case "accessory":
-                        cellinput_1.addEventListener("blur", function () { updateRent(cellinput_1, column.cellType, cellinput_1.value); });
+                        cellinput_1.addEventListener("blur", function () {
+                            updateRent(cellinput_1, column.cellType, cellinput_1.value);
+                        });
                         cellinput_1.value = allRents[i][column.cellType] || "";
                         break;
                     case "rent_start":
                     case "rent_end_planned":
                     case "rent_end_actual":
-                        cellinput_1.addEventListener("input", function () { updateRent(cellinput_1, column.cellType, cellinput_1.value); });
+                        cellinput_1.addEventListener("input", function () {
+                            updateRent(cellinput_1, column.cellType, cellinput_1.value);
+                        });
                         cellinput_1.value = allRents[i][column.cellType] || "";
+                        break;
                 }
                 cell.appendChild(cellinput_1);
             }
@@ -228,7 +244,7 @@ function updateRent(input, key, value, rentId) {
         rent_end_planned: rentOriginal.rent_end_planned,
         rent_end_actual: rentOriginal.rent_end_actual,
         note: rentOriginal.note,
-        accessory: rentOriginal.accessory
+        accessory: rentOriginal.accessory,
     };
     rentUpdate[key] = value;
     console.log(rentUpdate);

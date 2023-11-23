@@ -78,7 +78,8 @@ interface RentComplete {
     rent_start: string,
     rent_end_planned: string,
     rent_end_actual: string,
-    note: string
+    note: string,
+    accessory: string
 }
 
 interface RentSimple {
@@ -90,7 +91,8 @@ interface RentSimple {
     rent_start: string,
     rent_end_planned: string,
     rent_end_actual: string,
-    note: string
+    note: string,
+    accessory: string
 }
 
 //region generate table
@@ -101,15 +103,15 @@ interface column{
 }
 
 const columns:column[] = [
-    {name: "Gerät Nr.", inputType: "number", cellType: "nr"},
-    {name: "Zubehör", inputType: "text", cellType: "extras"},
+    {name: "Gerät Nr.", inputType: "number", cellType: ""},
+    {name: "Zubehör", inputType: "text", cellType: "accessory"},
     {name: "Entlehner*in + Klasse", inputType: "text", cellType: "student_id"},
     {name: "Entlehnung Datum", inputType: "date", cellType: "rent_start"},
-    {name: "Unterschrift Entlehner*in", inputType: "checkbox", cellType: "sigRent"},
+    {name: "Unterschrift Entlehner*in", inputType: "none", cellType: ""},
     {name: "Paraphe Lehkraft", inputType: "text", cellType: "teacher_start"},
     {name: "Rückgabe geplant", inputType: "date", cellType: "rent_end_planned"},
     {name: "Rückgabe tatsächlich", inputType: "date", cellType: "rent_end_actual"},
-    {name: "Unterschrift Entlehner*in", inputType: "checkbox", cellType: "sigReturn"},
+    {name: "Unterschrift Entlehner*in", inputType: "none", cellType: ""},
     {name: "Paraphe Lehkraft", inputType: "text", cellType: "teacher_end"},
     {name: "Anmerkung", inputType: "text", cellType: "note"},
 ]
@@ -142,40 +144,53 @@ function generateTable(){
         columns.forEach(column=>{
             let cell = document.createElement("td")
 
-            let cellinput = document.createElement("input")
-            cellinput.type = column.inputType
-            cellinput.setAttribute("celltype", column.cellType) //what piece of data the cell displays (rent_start, student_id etc.)
+            if(column.inputType !== "none") {
+                let cellinput = document.createElement("input")
+                cellinput.type = column.inputType
+                cellinput.setAttribute("celltype", column.cellType) //what piece of data the cell displays (rent_start, student_id etc.)
 
-            //TODO aberger wants to change switch statements to a map containing anonymous functions
-            //sets attributes specific to inputs
-            switch (column.inputType) {
-                case "number":
-                    cellinput.setAttribute("min", "0");
-                    break
+                //TODO aberger wants to change switch statements to a map containing anonymous functions
+                //sets attributes specific to inputs
+                switch (column.inputType) {
+                    case "number":
+                        cellinput.setAttribute("min", "0");
+                        break
+                }
+
+                //registers eventlisteners and displays data from allRents for columns that are synced with the db
+                switch (column.cellType) {
+                    case "student_id":
+                        cellinput.addEventListener("mouseup", () => {
+                            openStudentPicker(cellinput, allRents[i]?.rent_id)
+                        })
+                        cellinput.value = allRents[i]?.student?.firstname || ""
+                        break
+                    case "teacher_start":
+                    case "teacher_end":
+                        cellinput.addEventListener("mouseup", () => {
+                            openTeacherPicker(cellinput, allRents[i]?.rent_id, column.cellType + "_id")
+                        })
+                        cellinput.value = allRents[i][column.cellType]?.lastname || ""
+                        break
+                    case "note":
+                    case "accessory":
+                        cellinput.addEventListener("blur", () => {
+                            updateRent(cellinput, column.cellType, cellinput.value)
+                        })
+                        cellinput.value = allRents[i][column.cellType] || ""
+                        break
+                    case "rent_start":
+                    case "rent_end_planned":
+                    case "rent_end_actual":
+                        cellinput.addEventListener("input", () => {
+                            updateRent(cellinput, column.cellType, cellinput.value)
+                        })
+                        cellinput.value = allRents[i][column.cellType] || ""
+                        break
+                }
+
+                cell.appendChild(cellinput)
             }
-
-            //registers eventlisteners and displays data from allRents for columns that are synced with the db
-            switch (column.cellType) {
-                case "student_id":
-                    cellinput.addEventListener("mouseup", () => {openStudentPicker(cellinput, allRents[i]?.rent_id)})
-                    cellinput.value = allRents[i]?.student?.firstname || ""
-                    break
-                case "teacherRent":
-                case "teacherReturn":
-                    cellinput.value = allRents[i]?.teacher?.lastname || ""
-                    break
-                case "note":
-                    cellinput.addEventListener("blur", () => {updateRent(cellinput, column.cellType, cellinput.value)})
-                    cellinput.value = allRents[i]?.note || ""
-                    break
-                case "rent_start":
-                case "rent_end_planned":
-                case "rent_end_actual":
-                    cellinput.addEventListener("input", () => {updateRent(cellinput, column.cellType, cellinput.value)})
-                    cellinput.value = allRents[i][column.cellType] || ""
-            }
-
-            cell.appendChild(cellinput)
 
             row.appendChild(cell)
         })
@@ -331,11 +346,13 @@ function updateRent(input:HTMLElement, key:string, value:any, rentId?:number) {
         rent_id: rentId,
         student_id: rentOriginal.student?.student_id,
         device_id: rentOriginal.device_id,
-        teacher_id: rentOriginal.teacher?.teacher_id,
+        teacher_start_id: rentOriginal.teacher_start?.teacher_id,
+        teacher_end_id: rentOriginal.teacher_end?.teacher_id,
         rent_start: rentOriginal.rent_start,
         rent_end_planned: rentOriginal.rent_end_planned,
         rent_end_actual: rentOriginal.rent_end_actual,
-        note: rentOriginal.note
+        note: rentOriginal.note,
+        accessory: rentOriginal.accessory,
     }
     // @ts-ignore
     rentUpdate[key] = value
@@ -353,6 +370,7 @@ function updateRent(input:HTMLElement, key:string, value:any, rentId?:number) {
         .then(data => {
             requestAllRents()
             closeStudentPicker()
+            closeTeacherPicker()
         })
         .catch(error => console.error(error));
 }
