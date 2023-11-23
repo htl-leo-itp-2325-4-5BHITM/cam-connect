@@ -28,8 +28,8 @@ public class DeviceRepository {
     }
 
     @Transactional
-    public void remove(Device d){
-        em.remove(d);
+    public void remove(Long id){
+        em.remove(em.find(Device.class, id));
     }
 
     @Transactional
@@ -45,6 +45,8 @@ public class DeviceRepository {
         List<Device> rents = em.createQuery("SELECT r FROM Rent r", Device.class).getResultList();
         return rents;
     }
+
+
 
     public boolean importDevices(InputStream fileInputStream) {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(fileInputStream))) {

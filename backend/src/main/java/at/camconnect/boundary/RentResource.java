@@ -45,6 +45,14 @@ public class RentResource {
         return rentRepository.getById(id);
     }
 
+    @GET
+    @Path("/getbyid/{id: [0-9]+}")
+    public Response remove(@PathParam("id")long id) {
+        rentRepository.remove(id);
+        return Response.ok().build();
+    }
+
+    //region updates
     @POST
     @Transactional
     @Path("/getbyid/{id: [0-9]+}/update")
@@ -54,7 +62,6 @@ public class RentResource {
         return Response.ok().build();
     }
 
-    //region Getter Setter
     @POST
     @Path("/getbyid/{id: [0-9]+}/update/student")
     @Consumes(MediaType.APPLICATION_JSON)
