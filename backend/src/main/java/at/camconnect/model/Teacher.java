@@ -14,17 +14,17 @@ public class Teacher {
     private String lastname;
     private String verification;
     private String password;
-    private String user_id;
+    private String username;
 
     public Teacher() {
     }
 
-    public Teacher(String firstname, String lastname, String verification, String password, String user_id) {
+    public Teacher(String firstname, String lastname, String verification, String password, String username) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.verification = verification;
         this.password = password;
-        this.user_id = user_id;
+        this.username = username;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class Teacher {
                 ", lastname='" + lastname + '\'' +
                 ", verification='" + verification + '\'' +
                 ", password='" + password + '\'' +
-                ", user_id='" + user_id + '\'' +
+                ", user_id='" + username + '\'' +
                 '}';
     }
 
@@ -75,11 +75,11 @@ public class Teacher {
         this.password = password;
     }
 
-    public String getUser_id() {
-        return user_id;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUser_id(String userId) {
-        this.user_id = userId;
+    public void setUsername(String userId) {
+        this.username = userId;
     }
 }

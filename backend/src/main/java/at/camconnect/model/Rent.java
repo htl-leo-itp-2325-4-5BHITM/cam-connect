@@ -34,6 +34,18 @@ public class Rent {
     private RentStatus status;
     private String note;
 
+    //TODO remove these when moving to new UI permanatly - also remove them in repo resource and update functions
+    private String accessory;
+    private String device_string;
+
+    public String getDevice_string() {
+        return device_string;
+    }
+
+    public void setDevice_string(String deviceString) {
+        this.device_string = deviceString;
+    }
+
     public Rent() {
         rent_start = LocalDate.now();
     }
@@ -59,11 +71,20 @@ public class Rent {
                 '}';
     }
 
-    public long getRent_id() {
+
+    public String getAccessory() {
+        return accessory;
+    }
+
+    public void setAccessory(String accessory) {
+        this.accessory = accessory;
+    }
+
+    public Long getRent_id()  {
         return rent_id;
     }
 
-    public void setRent_id(long rent_id) {
+    public void setRent_id(Long rent_id) {
         this.rent_id = rent_id;
     }
 

@@ -1,0 +1,52 @@
+@import "../variables.scss";
+
+:host{
+  all: initial;
+}
+
+.cc-button{
+  background-color: $accent;
+  font-size: 1.25rem;
+  min-width: 10ch;
+  border: 1px solid;
+  border-radius: .3rem;
+  padding: .25rem 1rem;
+  margin: .5rem;
+  cursor: pointer;
+  transition: .2s all ease;
+
+  &[type = "outlined"]{
+    border: 2px solid;
+    background: transparent;
+  }
+
+  &[size = "small"]{
+    font-size: 1.125rem;
+    min-width: 8ch;
+  }
+
+  &[color = "accent"]{
+    border-color: $accentLight;
+    &[type = "filled"]{
+      background-color: $accent;
+      color: $gray1000;
+      &:hover{
+        background-color: $accentDark;
+      }
+    }
+    &[type = "outlined"]{
+      color: $accentLight;
+    }
+  }
+
+  &[color = "gray"]{
+    color: $gray900;
+    border-color: $gray600;
+    &[type = "filled"]{
+      background-color: $gray300;
+      &:hover{
+        background-color: $gray100;
+      }
+    }
+  }
+}

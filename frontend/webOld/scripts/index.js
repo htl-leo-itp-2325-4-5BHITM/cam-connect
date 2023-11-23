@@ -39,17 +39,18 @@ function requestAllRents() {
     })
         .catch(function (error) { return console.error(error); });
 }
+console.log("gadsfsadf");
 var columns = [
-    { name: "Gerät Nr.", inputType: "number", cellType: "nr" },
-    { name: "Zubehör", inputType: "text", cellType: "extras" },
+    { name: "Gerät Nr.", inputType: "text", cellType: "device_string" },
+    { name: "Zubehör", inputType: "text", cellType: "accessory" },
     { name: "Entlehner*in + Klasse", inputType: "text", cellType: "student_id" },
     { name: "Entlehnung Datum", inputType: "date", cellType: "rent_start" },
-    { name: "Unterschrift Entlehner*in", inputType: "checkbox", cellType: "sigRent" },
-    { name: "Paraphe Lehkraft", inputType: "text", cellType: "teacherRent" },
+    { name: "Unterschrift Entlehner*in", inputType: "none", cellType: "" },
+    { name: "Paraphe Lehkraft", inputType: "text", cellType: "teacher_start" },
     { name: "Rückgabe geplant", inputType: "date", cellType: "rent_end_planned" },
     { name: "Rückgabe tatsächlich", inputType: "date", cellType: "rent_end_actual" },
-    { name: "Unterschrift Entlehner*in", inputType: "checkbox", cellType: "sigReturn" },
-    { name: "Paraphe Lehkraft", inputType: "text", cellType: "teacherReturn" },
+    { name: "Unterschrift Entlehner*in", inputType: "none", cellType: "" },
+    { name: "Paraphe Lehkraft", inputType: "text", cellType: "teacher_end" },
     { name: "Anmerkung", inputType: "text", cellType: "note" },
 ];
 function generateTable() {
@@ -69,36 +70,47 @@ function generateTable() {
         var row = document.createElement("tr");
         row.setAttribute("rent_id", String((_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id));
         columns.forEach(function (column) {
-            var _a, _b, _c, _d, _e;
+            var _a, _b, _c;
             var cell = document.createElement("td");
-            var cellinput = document.createElement("input");
-            cellinput.type = column.inputType;
-            cellinput.setAttribute("celltype", column.cellType);
-            switch (column.inputType) {
-                case "number":
-                    cellinput.setAttribute("min", "0");
-                    break;
+            if (column.inputType !== "none") {
+                var cellinput_1 = document.createElement("input");
+                cellinput_1.type = column.inputType;
+                cellinput_1.setAttribute("celltype", column.cellType);
+                switch (column.cellType) {
+                    case "student_id":
+                        cellinput_1.addEventListener("mouseup", function () {
+                            var _a;
+                            openStudentPicker(cellinput_1, (_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id);
+                        });
+                        cellinput_1.value = ((_b = (_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.student) === null || _b === void 0 ? void 0 : _b.firstname) || "";
+                        break;
+                    case "teacher_start":
+                    case "teacher_end":
+                        cellinput_1.addEventListener("mouseup", function () {
+                            var _a;
+                            openTeacherPicker(cellinput_1, (_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id, column.cellType + "_id");
+                        });
+                        cellinput_1.value = ((_c = allRents[i][column.cellType]) === null || _c === void 0 ? void 0 : _c.lastname) || "";
+                        break;
+                    case "note":
+                    case "accessory":
+                    case "device_string":
+                        cellinput_1.addEventListener("blur", function () {
+                            updateRent(cellinput_1, column.cellType, cellinput_1.value);
+                        });
+                        cellinput_1.value = allRents[i][column.cellType] || "";
+                        break;
+                    case "rent_start":
+                    case "rent_end_planned":
+                    case "rent_end_actual":
+                        cellinput_1.addEventListener("input", function () {
+                            updateRent(cellinput_1, column.cellType, cellinput_1.value);
+                        });
+                        cellinput_1.value = allRents[i][column.cellType] || "";
+                        break;
+                }
+                cell.appendChild(cellinput_1);
             }
-            switch (column.cellType) {
-                case "student_id":
-                    cellinput.addEventListener("mouseup", function () { var _a; openStudentPicker(cellinput, (_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id); });
-                    cellinput.value = ((_b = (_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.student) === null || _b === void 0 ? void 0 : _b.firstname) || "";
-                    break;
-                case "teacherRent":
-                case "teacherReturn":
-                    cellinput.value = ((_d = (_c = allRents[i]) === null || _c === void 0 ? void 0 : _c.teacher) === null || _d === void 0 ? void 0 : _d.lastname) || "";
-                    break;
-                case "note":
-                    cellinput.addEventListener("blur", function () { updateRent(cellinput, column.cellType, cellinput.value); });
-                    cellinput.value = ((_e = allRents[i]) === null || _e === void 0 ? void 0 : _e.note) || "";
-                    break;
-                case "rent_start":
-                case "rent_end_planned":
-                case "rent_end_actual":
-                    cellinput.addEventListener("input", function () { updateRent(cellinput, column.cellType, cellinput.value); });
-                    cellinput.value = allRents[i][column.cellType] || "";
-            }
-            cell.appendChild(cellinput);
             row.appendChild(cell);
         });
         html.push(row);
@@ -159,20 +171,78 @@ function searchForStudentFromSelectInput(inputValue, rentId) {
     })
         .catch(function (error) { return console.error(error); });
 }
+var teacherSelectionPopup = document.querySelector("#teacherSelectionPopup");
+var teacherSearchbar = document.querySelector('#teacherSelectionPopup .search');
+teacherSearchbar.addEventListener("keyup", function () { searchForTeacherFromSelectInput(teacherSearchbar.value, Number(teacherSearchbar.getAttribute('rent_id'))); });
+function openTeacherPicker(input, rentId, teacherType) {
+    searchForTeacherFromSelectInput("", rentId);
+    teacherSelectionPopup.querySelector("input").value = "";
+    teacherSelectionPopup.querySelector("input").setAttribute("rent_id", String(rentId));
+    teacherSelectionPopup.querySelector("input").setAttribute("teacher_type", teacherType);
+    var bounds = input.getBoundingClientRect();
+    teacherSelectionPopup.style.top = bounds.top + "px";
+    teacherSelectionPopup.style.left = bounds.left + "px";
+    teacherSelectionPopup.style.display = "block";
+    teacherSearchbar.focus();
+    setTimeout(function () { document.addEventListener("mousedown", closeTeacherPickerOnBlur); });
+}
+function closeTeacherPickerOnBlur(e) {
+    if (e.target === teacherSelectionPopup || e.target.closest('#teacherSelectionPopup') === teacherSelectionPopup || e.target.getAttribute("celltype") === "teacher_start" || e.target.getAttribute("celltype") === "teacher_end")
+        return;
+    closeTeacherPicker();
+    document.removeEventListener("mousedown", closeTeacherPickerOnBlur);
+}
+function closeTeacherPicker() {
+    teacherSelectionPopup.style.display = "none";
+}
+function searchForTeacherFromSelectInput(inputValue, rentId) {
+    fetch(APPLICATION_URL + '/teacher/search', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ lastname: inputValue })
+    })
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+        var _a;
+        var teacherType = teacherSearchbar.getAttribute('teacher_type');
+        console.log(data);
+        var html = [];
+        data.forEach(function (teacher) {
+            var selectionOption = document.createElement('p');
+            selectionOption.innerText = teacher.firstname + " " + teacher.lastname;
+            selectionOption.addEventListener("click", function () { updateRent(selectionOption, teacherType, teacher.teacher_id, rentId); });
+            html.push(selectionOption);
+        });
+        if (html.length === 0) {
+            var noResults = document.createElement('p');
+            noResults.classList.add("noResults");
+            noResults.innerText = "Keine Ergebnisse";
+            html.push(noResults);
+        }
+        (_a = teacherSelectionPopup.querySelector(".teacherList")).replaceChildren.apply(_a, html);
+    })
+        .catch(function (error) { return console.error(error); });
+}
 function updateRent(input, key, value, rentId) {
-    var _a, _b;
+    var _a, _b, _c;
     if (rentId == undefined)
         rentId = Number(input.closest("tr").getAttribute("rent_id"));
+    console.log(rentId);
     var rentOriginal = findRentById(rentId);
     var rentUpdate = {
+        device_string: rentOriginal.device_string,
         rent_id: rentId,
         student_id: (_a = rentOriginal.student) === null || _a === void 0 ? void 0 : _a.student_id,
         device_id: rentOriginal.device_id,
-        teacher_id: (_b = rentOriginal.teacher) === null || _b === void 0 ? void 0 : _b.teacher_id,
+        teacher_start_id: (_b = rentOriginal.teacher_start) === null || _b === void 0 ? void 0 : _b.teacher_id,
+        teacher_end_id: (_c = rentOriginal.teacher_end) === null || _c === void 0 ? void 0 : _c.teacher_id,
         rent_start: rentOriginal.rent_start,
         rent_end_planned: rentOriginal.rent_end_planned,
         rent_end_actual: rentOriginal.rent_end_actual,
-        note: rentOriginal.note
+        note: rentOriginal.note,
+        accessory: rentOriginal.accessory
     };
     rentUpdate[key] = value;
     console.log(rentUpdate);
@@ -187,6 +257,7 @@ function updateRent(input, key, value, rentId) {
         .then(function (data) {
         requestAllRents();
         closeStudentPicker();
+        closeTeacherPicker();
     })
         .catch(function (error) { return console.error(error); });
 }
@@ -215,34 +286,38 @@ function findRentById(id) {
     });
     return res;
 }
-function findStudentById(id) {
-    var res = null;
-    allStudents.forEach(function (student) {
-        if (student.student_id == id) {
-            res = student;
-        }
+function importStudents(file) {
+    var formData = new FormData();
+    formData.append('file', file);
+    return fetch("".concat(APPLICATION_URL, "/students/import"), {
+        method: 'POST',
+        body: formData,
+    })
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+        console.log('Import successful:', data);
+        return true;
+    })
+        .catch(function (error) {
+        console.error('Error importing students:', error);
+        return false;
     });
-    return res;
 }
-function findTeacherById(id) {
-    var res = null;
-    allTeachers.forEach(function (teacher) {
-        if (teacher.teacher_id == id) {
-            res = teacher;
-        }
-    });
-    return res;
-}
-function convertDateFormat(inputDate) {
-    var isAlreadyFormatted = /^\d{4}-\d{2}-\d{2}$/.test(inputDate);
-    if (isAlreadyFormatted || inputDate == undefined) {
-        return inputDate;
+var fileInput = document.getElementById('csvFileInput');
+fileInput.addEventListener('change', function (event) {
+    var files = event.target.files;
+    if (files && files.length > 0) {
+        var file = files[0];
+        console.log(file);
+        importStudents(file)
+            .then(function (success) {
+            if (success) {
+                console.log('Students imported successfully!');
+            }
+            else {
+                console.error('Failed to import students.');
+            }
+        });
     }
-    var dateParts = inputDate.split('.');
-    var day = dateParts[0];
-    var month = dateParts[1];
-    var year = dateParts[2];
-    var formattedDate = "".concat(year, "-").concat(month, "-").concat(day);
-    return formattedDate;
-}
+});
 //# sourceMappingURL=index.js.map

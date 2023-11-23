@@ -8,17 +8,20 @@ public class Device {
     @GeneratedValue
     private Long device_id;
     private String serial;
+    private String number;
     private String note;
-
     @ManyToOne
+    @JoinColumn(name = "type_id")
     private DeviceType type;
 
     public Device() {
     }
 
-    public Device(String serial, String note) {
+    public Device(String serial, String number, String note, DeviceType type) {
         this.serial = serial;
+        this.number = number;
         this.note = note;
+        this.type = type;
     }
 
     @Override
@@ -48,5 +51,21 @@ public class Device {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public DeviceType getType() {
+        return type;
+    }
+
+    public void setType(DeviceType type) {
+        this.type = type;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 }

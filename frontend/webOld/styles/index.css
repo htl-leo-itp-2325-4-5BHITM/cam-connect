@@ -1,4 +1,3 @@
-/* click the thingie asking you to add a filewatcher */
 @page {
   size: A4 landscape;
 }
@@ -93,7 +92,7 @@ table input:focus-visible {
   box-shadow: 0.2rem 0.2rem 0.2rem rgba(128, 128, 128, 0.49);
 }
 
-#studentSelectionPopup {
+#studentSelectionPopup, #teacherSelectionPopup {
   border-radius: 0.5rem;
   position: absolute;
   width: 15vw;
@@ -102,7 +101,7 @@ table input:focus-visible {
   box-shadow: 0 0 0.2rem 0.1rem rgba(0, 0, 0, 0.2);
   display: none;
 }
-#studentSelectionPopup .search {
+#studentSelectionPopup .search, #teacherSelectionPopup .search {
   background-color: lightgrey;
   width: 100%;
   border: none;
@@ -113,15 +112,15 @@ table input:focus-visible {
   box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.3);
 }
 
-#studentSelectionPopup .studentList {
+#studentSelectionPopup .studentList, #teacherSelectionPopup .teacherList {
   font-size: 0.9rem;
 }
-#studentSelectionPopup .studentList p {
+#studentSelectionPopup .studentList p, #teacherSelectionPopup .teacherList p {
   padding: 0.2rem;
   color: #262626;
   cursor: pointer;
 }
-#studentSelectionPopup .studentList .noResults {
+#studentSelectionPopup .studentList .noResults, #teacherSelectionPopup .teacherList .noResults {
   color: gray;
 }
 

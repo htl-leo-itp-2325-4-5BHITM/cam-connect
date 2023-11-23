@@ -2,7 +2,7 @@
    skinparam linetype ortho
 
    entity DeviceType {
-        * type_id: long
+        * type_id: Long
         --
         * name: String
         * image: image
@@ -10,25 +10,25 @@
 
     entity CameraType {
         --
-        * sensor_id: long
-        * resolution_id: long
-        * mount_id: long
+        * sensor_id: Long
+        * resolution_id: Long
+        * mount_id: Long
         * framerate: int
         * autofocus: boolean
     }
 
     entity DroneType {
         --
-        * sensor_id: long
-        * resolution_video_id: long
-        * resolution_foto_id: long
+        * sensor_id: Long
+        * resolution_video_id: Long
+        * resolution_foto_id: Long
         * max_range: int
     }
 
     entity LensType {
         --
         * f_stop: double
-        * mount_id: long
+        * mount_id: Long
         * focal_length: int
     }
 
@@ -49,7 +49,7 @@
     entity TripodType {
         --
         * height: int
-        * head_id: long
+        * head_id: Long
     }
 
     entity StabilizerType {
@@ -67,25 +67,25 @@
     DeviceType <|-down- LensType
 
     entity TripodHead {
-        * head_id: long
+        * head_id: Long
         --
         * name: String
     }
 
     entity LensMount {
-        * mount_id: long
+        * mount_id: Long
         --
         * name: String
     }
 
     entity CameraSensor {
-        * sensor_id: long
+        * sensor_id: Long
         --
         * name: String
     }
 
     entity CameraResolution {
-        * resolution_id: long
+        * resolution_id: Long
         --
         * name: String
         * details: String
@@ -100,20 +100,21 @@
     CameraType }o--|| CameraResolution
 
     entity Device {
-        * device_id: long
+        * device_id: Long
         --
-        * number: int
+        * number: String
+        * type: Long
         * serial: String
         * note: String
     }
 
     entity Rent{
-        * rent_id: long
+        * rent_id: Long
         --
-        * student_id: long
-        * device_id: long
-        * teacher_id_start: long
-        * teacher_id_end: long
+        * student_id: Long
+        * device_id: Long
+        * teacher_id_start: Long
+        * teacher_id_end: Long
         * rent_start: LocalDate
         * rent_end_planned: LocalDate
         * rent_end_actual: LocalDate
@@ -122,7 +123,7 @@
     }
 
     entity Tag {
-        * tag_id : long
+        * tag_id : Long
         --
         * type_ids: List<DeviceType>
         * name: String
@@ -130,7 +131,7 @@
     }
 
     entity Student {
-        * student_id: long
+        * student_id: Long
         --
         * firstname: String
         * lastname: String
@@ -142,7 +143,7 @@
     }
 
     entity Teacher {
-        * teacher_id: long
+        * teacher_id: Long
         --
         * firstname: String
         * lastname: String
@@ -151,7 +152,7 @@
     }
 
      entity DeviceSet {
-        * set_id: long
+        * set_id: Long
         --
         * name: String
         * device_types: List<DeviceType>

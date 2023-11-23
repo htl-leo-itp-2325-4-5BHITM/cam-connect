@@ -5,7 +5,8 @@ let allStudents:Student[] = []
 let allTeachers:Teacher[] = []
 
 //region base requests
-requestAllStudents()
+requestAllStudents();
+
 function requestAllStudents() {
     allStudents = []
     fetch(APPLICATION_URL + "/student/getall")
@@ -72,23 +73,31 @@ interface RentComplete {
     rent_id: number,
     student: Student,
     device_id: number,
-    teacher: Teacher,
+    teacher_start: Teacher,
+    teacher_end: Teacher,
     rent_start: string,
     rent_end_planned: string,
     rent_end_actual: string,
-    note: string
+    note: string,
+    accessory: string,
+    device_string: string
 }
 
 interface RentSimple {
     rent_id: number,
     student_id: number,
     device_id: number,
-    teacher_id: number,
+    teacher_start_id: number,
+    teacher_end_id: number,
     rent_start: string,
     rent_end_planned: string,
     rent_end_actual: string,
-    note: string
+    note: string,
+    accessory: string,
+    device_string: string
 }
+
+console.log("gadsfsadf")
 
 //region generate table
 interface column{
@@ -98,16 +107,16 @@ interface column{
 }
 
 const columns:column[] = [
-    {name: "Gerät Nr.", inputType: "number", cellType: "nr"},
-    {name: "Zubehör", inputType: "text", cellType: "extras"},
+    {name: "Gerät Nr.", inputType: "text", cellType: "device_string"},
+    {name: "Zubehör", inputType: "text", cellType: "accessory"},
     {name: "Entlehner*in + Klasse", inputType: "text", cellType: "student_id"},
     {name: "Entlehnung Datum", inputType: "date", cellType: "rent_start"},
-    {name: "Unterschrift Entlehner*in", inputType: "checkbox", cellType: "sigRent"},
-    {name: "Paraphe Lehkraft", inputType: "text", cellType: "teacherRent"},
+    {name: "Unterschrift Entlehner*in", inputType: "none", cellType: ""},
+    {name: "Paraphe Lehkraft", inputType: "text", cellType: "teacher_start"},
     {name: "Rückgabe geplant", inputType: "date", cellType: "rent_end_planned"},
     {name: "Rückgabe tatsächlich", inputType: "date", cellType: "rent_end_actual"},
-    {name: "Unterschrift Entlehner*in", inputType: "checkbox", cellType: "sigReturn"},
-    {name: "Paraphe Lehkraft", inputType: "text", cellType: "teacherReturn"},
+    {name: "Unterschrift Entlehner*in", inputType: "none", cellType: ""},
+    {name: "Paraphe Lehkraft", inputType: "text", cellType: "teacher_end"},
     {name: "Anmerkung", inputType: "text", cellType: "note"},
 ]
 
@@ -139,40 +148,46 @@ function generateTable(){
         columns.forEach(column=>{
             let cell = document.createElement("td")
 
-            let cellinput = document.createElement("input")
-            cellinput.type = column.inputType
-            cellinput.setAttribute("celltype", column.cellType) //what piece of data the cell displays (rent_start, student_id etc.)
+            if(column.inputType !== "none") {
+                let cellinput = document.createElement("input")
+                cellinput.type = column.inputType
+                cellinput.setAttribute("celltype", column.cellType) //what piece of data the cell displays (rent_start, student_id etc.)
 
-            //TODO aberger wants to change switch statements to a map containing anonymous functions
-            //sets attributes specific to inputs
-            switch (column.inputType) {
-                case "number":
-                    cellinput.setAttribute("min", "0");
-                    break
+                //registers eventlisteners and displays data from allRents for columns that are synced with the db
+                switch (column.cellType) {
+                    case "student_id":
+                        cellinput.addEventListener("mouseup", () => {
+                            openStudentPicker(cellinput, allRents[i]?.rent_id)
+                        })
+                        cellinput.value = allRents[i]?.student?.firstname || ""
+                        break
+                    case "teacher_start":
+                    case "teacher_end":
+                        cellinput.addEventListener("mouseup", () => {
+                            openTeacherPicker(cellinput, allRents[i]?.rent_id, column.cellType + "_id")
+                        })
+                        cellinput.value = allRents[i][column.cellType]?.lastname || ""
+                        break
+                    case "note":
+                    case "accessory":
+                    case "device_string":
+                        cellinput.addEventListener("blur", () => {
+                            updateRent(cellinput, column.cellType, cellinput.value)
+                        })
+                        cellinput.value = allRents[i][column.cellType] || ""
+                        break
+                    case "rent_start":
+                    case "rent_end_planned":
+                    case "rent_end_actual":
+                        cellinput.addEventListener("input", () => {
+                            updateRent(cellinput, column.cellType, cellinput.value)
+                        })
+                        cellinput.value = allRents[i][column.cellType] || ""
+                        break
+                }
+
+                cell.appendChild(cellinput)
             }
-
-            //registers eventlisteners and displays data from allRents for columns that are synced with the db
-            switch (column.cellType) {
-                case "student_id":
-                    cellinput.addEventListener("mouseup", () => {openStudentPicker(cellinput, allRents[i]?.rent_id)})
-                    cellinput.value = allRents[i]?.student?.firstname || ""
-                    break
-                case "teacherRent":
-                case "teacherReturn":
-                    cellinput.value = allRents[i]?.teacher?.lastname || ""
-                    break
-                case "note":
-                    cellinput.addEventListener("blur", () => {updateRent(cellinput, column.cellType, cellinput.value)})
-                    cellinput.value = allRents[i]?.note || ""
-                    break
-                case "rent_start":
-                case "rent_end_planned":
-                case "rent_end_actual":
-                    cellinput.addEventListener("input", () => {updateRent(cellinput, column.cellType, cellinput.value)})
-                    cellinput.value = allRents[i][column.cellType] || ""
-            }
-
-            cell.appendChild(cellinput)
 
             row.appendChild(cell)
         })
@@ -184,7 +199,6 @@ function generateTable(){
 }
 
 //endregion
-
 
 //region student search and selection
 const studentSelectionPopup:HTMLElement = document.querySelector("#studentSelectionPopup")
@@ -220,6 +234,7 @@ function closeStudentPicker(){
     studentSelectionPopup.style.display = "none"
 }
 
+
 /**
  * fetches a list of student names that start with the entered phrase and displays them to the user to select
  * @param inputValue
@@ -254,26 +269,95 @@ function searchForStudentFromSelectInput(inputValue:string, rentId?:number){
         })
         .catch(error => console.error(error));
 }
+//endregion
+
+//region search for teacher
+
+var teacherSelectionPopup = document.querySelector("#teacherSelectionPopup") as HTMLInputElement;
+var teacherSearchbar = document.querySelector('#teacherSelectionPopup .search') as HTMLInputElement;
+teacherSearchbar.addEventListener("keyup", function () { searchForTeacherFromSelectInput(teacherSearchbar.value, Number(teacherSearchbar.getAttribute('rent_id'))); });
+
+function openTeacherPicker(input:HTMLInputElement, rentId:number, teacherType:string) {
+    searchForTeacherFromSelectInput("", rentId);
+    teacherSelectionPopup.querySelector("input").value = "";
+    teacherSelectionPopup.querySelector("input").setAttribute("rent_id", String(rentId));
+    teacherSelectionPopup.querySelector("input").setAttribute("teacher_type", teacherType);
+    var bounds = input.getBoundingClientRect();
+    teacherSelectionPopup.style.top = bounds.top + "px";
+    teacherSelectionPopup.style.left = bounds.left + "px";
+    teacherSelectionPopup.style.display = "block";
+    teacherSearchbar.focus();
+    setTimeout(function () { document.addEventListener("mousedown", closeTeacherPickerOnBlur); });
+}
+
+function closeTeacherPickerOnBlur(e:MouseEvent) {
+    //@ts-ignore
+    if (e.target === teacherSelectionPopup || e.target.closest('#teacherSelectionPopup') === teacherSelectionPopup || e.target.getAttribute("celltype") === "teacher_start" || e.target.getAttribute("celltype") === "teacher_end")
+        return;
+    closeTeacherPicker();
+    document.removeEventListener("mousedown", closeTeacherPickerOnBlur);
+}
+
+function closeTeacherPicker() {
+    teacherSelectionPopup.style.display = "none";
+}
+
+function searchForTeacherFromSelectInput(inputValue:string, rentId:number) {
+    fetch(APPLICATION_URL + '/teacher/search', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ lastname: inputValue })
+    })
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+            let teacherType = teacherSearchbar.getAttribute('teacher_type')
+            console.log(data)
+            var html = [];
+            data.forEach(function (teacher:Teacher) {
+                var selectionOption = document.createElement('p');
+                selectionOption.innerText = teacher.firstname + " " + teacher.lastname;
+                selectionOption.addEventListener("click", function () { updateRent(selectionOption, teacherType, teacher.teacher_id, rentId); });
+                html.push(selectionOption);
+            });
+            if (html.length === 0) {
+                var noResults = document.createElement('p');
+                noResults.classList.add("noResults");
+                noResults.innerText = "Keine Ergebnisse";
+                html.push(noResults);
+            }
+            teacherSelectionPopup.querySelector(".teacherList").replaceChildren(...html)
+        })
+        .catch(error => console.error(error));
+}
+
+//endregion
+
 
 function updateRent(input:HTMLElement, key:string, value:any, rentId?:number) {
-    if(rentId == undefined) rentId = Number(input.closest("tr").getAttribute("rent_id"))
-    let rentOriginal:RentComplete = findRentById(rentId)
-    let rentUpdate:RentSimple = {
+    if (rentId == undefined) rentId = Number(input.closest("tr").getAttribute("rent_id"))
+    console.log(rentId)
+    let rentOriginal: RentComplete = findRentById(rentId)
+    let rentUpdate: RentSimple = {
+        device_string: rentOriginal.device_string,
         rent_id: rentId,
         student_id: rentOriginal.student?.student_id,
         device_id: rentOriginal.device_id,
-        teacher_id: rentOriginal.teacher?.teacher_id,
+        teacher_start_id: rentOriginal.teacher_start?.teacher_id,
+        teacher_end_id: rentOriginal.teacher_end?.teacher_id,
         rent_start: rentOriginal.rent_start,
         rent_end_planned: rentOriginal.rent_end_planned,
         rent_end_actual: rentOriginal.rent_end_actual,
-        note: rentOriginal.note
+        note: rentOriginal.note,
+        accessory: rentOriginal.accessory
     }
     // @ts-ignore
     rentUpdate[key] = value
 
     console.log(rentUpdate)
 
-    fetch(APPLICATION_URL + '/rent/getbyid/' + rentId +'/update', {
+    fetch(APPLICATION_URL + '/rent/getbyid/' + rentId + '/update', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -284,10 +368,10 @@ function updateRent(input:HTMLElement, key:string, value:any, rentId?:number) {
         .then(data => {
             requestAllRents()
             closeStudentPicker()
+            closeTeacherPicker()
         })
         .catch(error => console.error(error));
 }
-//endregion
 
 function createRent(){
     fetch(APPLICATION_URL + '/rent/createempty', {
@@ -307,7 +391,6 @@ function createRent(){
 }
 
 //region utlity
-//these should all be replaced and handled by the backend / served from the backend
 function findRentById(id:number):RentComplete {
     let res = null
     allRents.forEach(rent => {
@@ -317,46 +400,77 @@ function findRentById(id:number):RentComplete {
     })
     return res
 }
+//endregion
 
-function findStudentById(id:number):Student {
-    let res = null
-    allStudents.forEach(student => {
-        if(student.student_id == id){
-            res = student;
-        }
+//region load csv update
+
+function importStudents(file: File): Promise<boolean> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return fetch(`${APPLICATION_URL}/students/import`, {
+        method: 'POST',
+        body: formData,
     })
-    return res
+        .then(response => response.json())
+        .then(data => {
+            console.log('Import successful:', data);
+            return true;
+        })
+        .catch(error => {
+            console.error('Error importing students:', error);
+            return false;
+        });
 }
 
-function findTeacherById(id:number):Teacher {
-    let res = null
-    allTeachers.forEach(teacher => {
-        if(teacher.teacher_id == id){
-            res = teacher;
-        }
-    })
-    return res
-}
+// Example usage:
+const fileInput = document.getElementById('csvFileInput') as HTMLInputElement;
 
-function convertDateFormat(inputDate: string): string {
-    // Überprüfen, ob das Datum bereits im richtigen Format ist
-    const isAlreadyFormatted = /^\d{4}-\d{2}-\d{2}$/.test(inputDate);
+fileInput.addEventListener('change', (event) => {
+    const files = (event.target as HTMLInputElement).files;
 
-    if (isAlreadyFormatted || inputDate == undefined) {
-        // Wenn es bereits im richtigen Format ist, original zurückgeben
-        return inputDate;
+    if (files && files.length > 0) {
+        const file = files[0];
+console.log(file)
+        importStudents(file)
+            .then(success => {
+                if (success) {
+                    console.log('Students imported successfully!');
+                    // Optionally, perform any actions after successful import
+                } else {
+                    console.error('Failed to import students.');
+                    // Optionally, handle the failure scenario
+                }
+            });
     }
+});
 
-    // Aufteilen des Datums in Tag, Monat und Jahr
-    const dateParts = inputDate.split('.');
-    const day = dateParts[0];
-    const month = dateParts[1];
-    const year = dateParts[2];
+/*
+function uploadStudents(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
 
-    // Neues Datum im gewünschten Format erstellen
-    const formattedDate = `${year}-${month}-${day}`;
-
-    return formattedDate;
+    fetch(APPLICATION_URL + '/students/upload', {
+        method: 'POST',
+        body: formData,
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Upload successful:', data);
+            // Optionally, refresh the student data in the frontend
+        })
+        .catch(error => console.error('Error uploading file:', error));
 }
 
+function handleFileUpload() {
+    const fileInput = document.getElementById('csvFileInput') as HTMLInputElement;
+    const file = fileInput.files?.[0];
+
+    if (file) {
+        uploadStudents(file);
+    } else {
+        console.error('No file selected');
+    }
+}
+*/
 //endregion

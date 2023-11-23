@@ -1,0 +1,32 @@
+@import "../variables";
+
+:host {
+  all: initial;
+}
+
+.cc-confirmation-status{
+  width: 1.5rem;
+  aspect-ratio: 1/1;
+  border-radius: 100%;
+  margin: 1rem;
+
+  &[isBig="true"]{
+    color: white;
+    font-size: 1rem;
+    border-radius: .25rem;
+    width: fit-content;
+    aspect-ratio: auto;
+    padding: .1rem .2rem;
+    margin: .5rem;
+  }
+
+  &[status="bestätigt"]{
+    background-color: $good;
+  }
+  &[status="warten"]{
+    background-color: $mid;
+  }
+  &[status="abgelehnt"]{
+    background-color: $bad;
+  }
+}
