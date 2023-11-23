@@ -63,7 +63,7 @@ public class StudentRepository{
         return results;
     }
 
-    /*public boolean importStudents(InputStream fileInputStream) {
+    public boolean importStudents(InputStream fileInputStream) {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(fileInputStream))) {
             String line;
 
@@ -82,7 +82,7 @@ public class StudentRepository{
         } catch(Exception ex){
             return false;
         }
-    }*/
+    }
     
 
 }

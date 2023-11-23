@@ -335,6 +335,51 @@ function searchForTeacherFromSelectInput(inputValue:string, rentId:number) {
 
 //region load csv updata
 
+
+function importStudents(file: File): Promise<boolean> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return fetch(`${APPLICATION_URL}/students/import`, {
+        method: 'POST',
+        body: formData,
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Import successful:', data);
+            return true;
+        })
+        .catch(error => {
+            console.error('Error importing students:', error);
+            return false;
+        });
+}
+
+// Example usage:
+const fileInput = document.getElementById('csvFileInput') as HTMLInputElement;
+
+fileInput.addEventListener('change', (event) => {
+    const files = (event.target as HTMLInputElement).files;
+
+    if (files && files.length > 0) {
+        const file = files[0];
+console.log(file)
+        importStudents(file)
+            .then(success => {
+                if (success) {
+                    console.log('Students imported successfully!');
+                    // Optionally, perform any actions after successful import
+                } else {
+                    console.error('Failed to import students.');
+                    // Optionally, handle the failure scenario
+                }
+            });
+    }
+});
+
+
+
+/*
 function uploadStudents(file: File) {
     const formData = new FormData();
     formData.append('file', file);
@@ -361,7 +406,7 @@ function handleFileUpload() {
         console.error('No file selected');
     }
 }
-
+*/
 //endregion
 
 

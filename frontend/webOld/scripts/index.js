@@ -224,30 +224,40 @@ function searchForTeacherFromSelectInput(inputValue, rentId) {
     })
         .catch(function (error) { return console.error(error); });
 }
-function uploadStudents(file) {
+function importStudents(file) {
     var formData = new FormData();
     formData.append('file', file);
-    fetch(APPLICATION_URL + '/students/upload', {
+    return fetch("".concat(APPLICATION_URL, "/students/import"), {
         method: 'POST',
         body: formData,
     })
         .then(function (response) { return response.json(); })
         .then(function (data) {
-        console.log('Upload successful:', data);
+        console.log('Import successful:', data);
+        return true;
     })
-        .catch(function (error) { return console.error('Error uploading file:', error); });
+        .catch(function (error) {
+        console.error('Error importing students:', error);
+        return false;
+    });
 }
-function handleFileUpload() {
-    var _a;
-    var fileInput = document.getElementById('csvFileInput');
-    var file = (_a = fileInput.files) === null || _a === void 0 ? void 0 : _a[0];
-    if (file) {
-        uploadStudents(file);
+var fileInput = document.getElementById('csvFileInput');
+fileInput.addEventListener('change', function (event) {
+    var files = event.target.files;
+    if (files && files.length > 0) {
+        var file = files[0];
+        console.log(file);
+        importStudents(file)
+            .then(function (success) {
+            if (success) {
+                console.log('Students imported successfully!');
+            }
+            else {
+                console.error('Failed to import students.');
+            }
+        });
     }
-    else {
-        console.error('No file selected');
-    }
-}
+});
 function updateRent(input, key, value, rentId) {
     var _a, _b, _c;
     if (rentId == undefined)
