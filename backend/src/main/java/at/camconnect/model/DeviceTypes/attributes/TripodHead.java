@@ -1,6 +1,6 @@
-package at.camconnect.model.Devices.subtypes;
+package at.camconnect.model.DeviceTypes.attributes;
 
-import at.camconnect.model.Devices.TripodType;
+import at.camconnect.model.DeviceTypes.TripodType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;

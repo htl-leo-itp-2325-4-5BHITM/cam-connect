@@ -1,17 +1,19 @@
-package at.camconnect.model.Devices.subtypes;
+package at.camconnect.model.DeviceTypes.attributes;
 
-import at.camconnect.model.Devices.CameraType;
-import at.camconnect.model.Devices.DroneType;
+import at.camconnect.model.DeviceTypes.CameraType;
+import at.camconnect.model.DeviceTypes.DroneType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class CameraSensor {
+public class CameraResolution {
     @Id
-    private long sensor_id;
+    private long resolution_id;
 
     private String name;
+
+    private String details;
 
     @ManyToOne
     private CameraType cameraType;
@@ -19,22 +21,23 @@ public class CameraSensor {
     @ManyToOne
     private DroneType droneType;
 
-    public CameraSensor(long sensor_id, String name, CameraType cameraType, DroneType droneType) {
-        this.sensor_id = sensor_id;
+    public CameraResolution(long resolution_id, String name, String details, CameraType cameraType, DroneType droneType) {
+        this.resolution_id = resolution_id;
         this.name = name;
+        this.details = details;
         this.cameraType = cameraType;
         this.droneType = droneType;
     }
 
-    public CameraSensor() {
+    public CameraResolution() {
     }
 
-    public long getSensor_id() {
-        return sensor_id;
+    public long getResolution_id() {
+        return resolution_id;
     }
 
-    public void setSensor_id(long sensor_id) {
-        this.sensor_id = sensor_id;
+    public void setResolution_id(long resolution_id) {
+        this.resolution_id = resolution_id;
     }
 
     public String getName() {
@@ -43,6 +46,14 @@ public class CameraSensor {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
     }
 
     public CameraType getCameraType() {

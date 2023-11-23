@@ -1,7 +1,7 @@
-package at.camconnect.model.Devices.subtypes;
+package at.camconnect.model.DeviceTypes.attributes;
 
-import at.camconnect.model.Devices.CameraType;
-import at.camconnect.model.Devices.LensType;
+import at.camconnect.model.DeviceTypes.CameraType;
+import at.camconnect.model.DeviceTypes.LensType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;

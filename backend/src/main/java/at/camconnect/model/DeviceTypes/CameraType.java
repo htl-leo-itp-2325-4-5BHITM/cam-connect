@@ -1,6 +1,5 @@
-package at.camconnect.model.Devices;
+package at.camconnect.model.DeviceTypes;
 
-import at.camconnect.model.Device;
 import at.camconnect.model.DeviceType;
 import jakarta.persistence.Entity;
 
