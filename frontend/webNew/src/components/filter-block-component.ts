@@ -2,6 +2,9 @@ import {html, render} from "lit-html"
 
 import styles from '../../styles/components/filter.styles.scss'
 
+/**
+ *
+ */
 class FilterBlockComponent extends HTMLElement {
     constructor() {
         super()

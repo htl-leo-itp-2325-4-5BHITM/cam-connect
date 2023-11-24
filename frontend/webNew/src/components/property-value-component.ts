@@ -2,6 +2,10 @@ import {html, render} from "lit-html"
 
 import styles from '../../styles/components/property-value.styles.scss'
 
+/**
+ * @Param property: is the text which comes first
+ * @Param value: is the text which comes after the property
+ */
 class PropertyValueComponent extends HTMLElement {
     constructor() {
         super()

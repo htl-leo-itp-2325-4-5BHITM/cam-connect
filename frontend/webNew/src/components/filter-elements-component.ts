@@ -1,5 +1,6 @@
-import {html, render} from "lit-html"
-
+/**
+ * @Param isActive: sets if the property is currently active or not
+ */
 class FilterElementsComponent extends HTMLElement {
     constructor() {
         super()

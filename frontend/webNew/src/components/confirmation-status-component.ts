@@ -4,6 +4,10 @@ import styles from '../../styles/components/confirmation-status.styles.scss'
 
 enum Status {CONFIRMED="bestätigt", WAITING="warten", DECLINED="abgelehnt"}
 
+/**
+ * @Param status: is "bestätigt", "warten", "abgelehnt"
+ * @Param isBig: if the status is big you see the text, otherwise not
+ */
 class ConfirmationStatusComponent extends HTMLElement {
     constructor() {
         super()

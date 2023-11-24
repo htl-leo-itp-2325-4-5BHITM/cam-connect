@@ -9,7 +9,7 @@ enum Color {ACCENT="accent", GRAY="gray"}
  * @Param size: medium or small button
  * @Param type: filled or outlined button
  * @Param color: accent or gray button
- * @Param value: which is in the button
+ * @Param value: text content of the button
  */
 class ButtonComponent extends HTMLElement {
     constructor() {

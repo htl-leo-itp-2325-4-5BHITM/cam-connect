@@ -3,6 +3,11 @@ import {html, render} from "lit-html"
 import styles from '../../styles/components/rent-status.styles.scss'
 
 enum Status {VERFUEGBAR="verfügbar", VERGEBEN="vergeben", GESPERRT="gesperrt"}
+
+/**
+ * @Param status: is "verfügbar", "vergeben" oder "gesperrt"
+ * @Param amount: is the amount of status types
+ */
 class RentStatusComponent extends HTMLElement {
     constructor() {
         super()
@@ -28,7 +33,7 @@ class RentStatusComponent extends HTMLElement {
         div.classList.add("cc-rent-status")
         div.setAttribute("status", status)
         div.setAttribute("amount", amount)
-        div.innerHTML = `${amount} ${status.charAt(0).toUpperCase()}${status.substring(1,status.length)}`
+        div.innerHTML = `${amount ? amount : ""} ${status.charAt(0).toUpperCase()}${status.substring(1,status.length)}`
         return div
     }
 }
