@@ -2,9 +2,9 @@
 
 -- Insert sample data for LensMount
 INSERT INTO LensMount (mount_id, name) VALUES
-                                           (1, 'Canon EF'),
-                                           (2, 'Nikon F'),
-                                           (3, 'Sony E');
+                                           (NEXT VALUE FOR lensmount_seq, 'Canon EF'),
+                                           (NEXT VALUE FOR lens_seq, 'Nikon F'),
+                                           (NEXT VALUE FOR lens_seq, 'Sony E');
 -- Add more LensMount records as needed
 
 -- Insert sample data for CameraSensor
@@ -113,116 +113,215 @@ INSERT INTO DeviceSet (set_id, name, device_types) VALUES
 -- Add more DeviceSet records as needed
 
 -- Test Inserts for LensMount
+*/
+-- Assuming you have sequences named accordingly (e.g., lens_mount_seq, camera_sensor_seq, etc.)
+-- Create sequences: CREATE SEQUENCE lens_mount_seq, camera_sensor_seq, tripod_head_seq, ...
 
+/*
 
+-- Create sequences for LensMount
+CREATE SEQUENCE lens_mount_seq START WITH 1 INCREMENT BY 1;
+
+-- Create sequences for CameraSensor
+CREATE SEQUENCE camera_sensor_seq START WITH 1 INCREMENT BY 1;
+
+-- Create sequences for TripodHead
+CREATE SEQUENCE tripod_head_seq START WITH 1 INCREMENT BY 1;
+
+-- Create sequences for CameraResolution
+CREATE SEQUENCE camera_resolution_seq START WITH 1 INCREMENT BY 1;
+
+-- Create sequences for DeviceType
+CREATE SEQUENCE device_type_seq START WITH 1 INCREMENT BY 1;
+
+-- Create sequences for LightType
+CREATE SEQUENCE light_type_seq START WITH 1 INCREMENT BY 1;
+
+-- Create sequences for StabilizerType
+CREATE SEQUENCE stabilizer_type_seq START WITH 1 INCREMENT BY 1;
+
+-- Create sequences for DroneType
+CREATE SEQUENCE drone_type_seq START WITH 1 INCREMENT BY 1;
+
+-- Create sequences for LensType
+CREATE SEQUENCE lens_type_seq START WITH 1 INCREMENT BY 1;
+
+-- Create sequences for AudioType
+CREATE SEQUENCE audio_type_seq START WITH 1 INCREMENT BY 1;
+
+-- Create sequences for TripodType
+CREATE SEQUENCE tripod_type_seq START WITH 1 INCREMENT BY 1;
+
+-- Create sequences for Tag
+CREATE SEQUENCE tag_seq START WITH 1 INCREMENT BY 1;
+
+*/
+-- Test Inserts for LensMount
 INSERT INTO LensMount (mount_id, name) VALUES
-                                           (1, 'Canon EF'),
-                                           (2, 'Nikon F'),
-                                           (3, 'Sony E'),
-                                           (4, 'Pentax K'),
-                                           (5, 'Fujifilm X'),
-                                           (6, 'Olympus/Panasonic Micro Four Thirds');
+                                           (NEXT VALUE FOR lens_mount_seq, 'Canon EF');
+INSERT INTO LensMount (mount_id, name) VALUES
+                                           (NEXT VALUE FOR lens_mount_seq, 'Nikon F');
+INSERT INTO LensMount (mount_id, name) VALUES
+                                           (NEXT VALUE FOR lens_mount_seq, 'Sony E');
+INSERT INTO LensMount (mount_id, name) VALUES
+                                           (NEXT VALUE FOR lens_mount_seq, 'Pentax K');
+INSERT INTO LensMount (mount_id, name) VALUES
+                                           (NEXT VALUE FOR lens_mount_seq, 'Fujifilm X');
+INSERT INTO LensMount (mount_id, name) VALUES
+                                           (NEXT VALUE FOR lens_mount_seq, 'Olympus/Panasonic Micro Four Thirds');
 
 -- Test Inserts for CameraSensor
 INSERT INTO CameraSensor (sensor_id, name) VALUES
-                                               (1, 'Full Frame'),
-                                               (2, 'APS-C'),
-                                               (3, 'Micro Four Thirds'),
-                                               (4, 'Medium Format'),
-                                               (5, '1-inch'),
-                                               (6, 'Four Thirds');
+                                               (NEXT VALUE FOR camera_sensor_seq, 'Full Frame');
+INSERT INTO CameraSensor (sensor_id, name) VALUES
+                                               (NEXT VALUE FOR camera_sensor_seq, 'APS-C');
+INSERT INTO CameraSensor (sensor_id, name) VALUES
+                                               (NEXT VALUE FOR camera_sensor_seq, 'Micro Four Thirds');
+INSERT INTO CameraSensor (sensor_id, name) VALUES
+                                               (NEXT VALUE FOR camera_sensor_seq, 'Medium Format');
+INSERT INTO CameraSensor (sensor_id, name) VALUES
+                                               (NEXT VALUE FOR camera_sensor_seq, '1-inch');
+    INSERT INTO CameraSensor (sensor_id, name) VALUES
+                                               (NEXT VALUE FOR camera_sensor_seq, 'Four Thirds');
 
 -- Test Inserts for TripodHead
 INSERT INTO TripodHead (head_id, name) VALUES
-                                           (1, 'Ball Head'),
-                                           (2, 'Pan-and-Tilt Head'),
-                                           (3, 'Gimbal Head'),
-                                           (4, 'Fluid Head'),
-                                           (5, 'Three-Way Pan Head'),
-                                           (6, 'Geared Head');
+                                           (NEXT VALUE FOR tripod_head_seq, 'Ball Head');
+INSERT INTO TripodHead (head_id, name) VALUES
+                                           (NEXT VALUE FOR tripod_head_seq, 'Pan-and-Tilt Head');
+INSERT INTO TripodHead (head_id, name) VALUES
+                                           (NEXT VALUE FOR tripod_head_seq, 'Gimbal Head');
+INSERT INTO TripodHead (head_id, name) VALUES
+                                           (NEXT VALUE FOR tripod_head_seq, 'Fluid Head');
+INSERT INTO TripodHead (head_id, name) VALUES
+                                           (NEXT VALUE FOR tripod_head_seq, 'Three-Way Pan Head');
+INSERT INTO TripodHead (head_id, name) VALUES
+                                           (NEXT VALUE FOR tripod_head_seq, 'Geared Head');
 
 -- Test Inserts for CameraResolution
 INSERT INTO CameraResolution (resolution_id, name, details) VALUES
-                                                                (1, 'HD', '1920x1080'),
-                                                                (2, '4K UHD', '3840x2160'),
-                                                                (3, '5K', '5120x2880'),
-                                                                (4, '6K', '6144x3456'),
-                                                                (5, '8K', '7680x4320'),
-                                                                (6, '12K', '12288x6912');
+                                                                (NEXT VALUE FOR camera_resolution_seq, 'HD', '1920x1080');
+INSERT INTO CameraResolution (resolution_id, name, details) VALUES
+                                                              (NEXT VALUE FOR camera_resolution_seq, '4K UHD', '3840x2160');
+INSERT INTO CameraResolution (resolution_id, name, details) VALUES
+                                                                (NEXT VALUE FOR camera_resolution_seq, '5K', '5120x2880');
+INSERT INTO CameraResolution (resolution_id, name, details) VALUES
+                                                                (NEXT VALUE FOR camera_resolution_seq, '6K', '6144x3456');
+    INSERT INTO CameraResolution (resolution_id, name, details) VALUES
+                                                                (NEXT VALUE FOR camera_resolution_seq, '8K', '7680x4320');
+INSERT INTO CameraResolution (resolution_id, name, details) VALUES
+                                                                (NEXT VALUE FOR camera_resolution_seq, '12K', '12288x6912');
 
 -- Test Inserts for DeviceType
-INSERT INTO DeviceType (type_id, name, image) VALUES
-                                                  (1, 'Camera', 'camera_image.jpg'),
-                                                  (2, 'Drone', 'drone_image.jpg'),
-                                                  (3, 'Audio Device', 'audio_image.jpg'),
-                                                  (4, 'Light', 'light_image.jpg'),
-                                                  (5, 'Tripod', 'tripod_image.jpg'),
-                                                  (6, 'Stabilizer', 'stabilizer_image.jpg'),
-                                                  (7, 'Lens', 'lens_image.jpg');
+INSERT INTO DeviceType (type_id, name) VALUES
+                                                  (NEXT VALUE FOR device_type_seq, 'Camera');
+INSERT INTO DeviceType (type_id, name) VALUES
+                                                  (NEXT VALUE FOR device_type_seq, 'Drone');
+INSERT INTO DeviceType (type_id, name) VALUES
+                                                  (NEXT VALUE FOR device_type_seq, 'Audio Device');
+INSERT INTO DeviceType (type_id, name) VALUES
+                                                  (NEXT VALUE FOR device_type_seq, 'Light');
+INSERT INTO DeviceType (type_id, name) VALUES
+                                                  (NEXT VALUE FOR device_type_seq, 'Tripod');
+INSERT INTO DeviceType (type_id, name) VALUES
+                                                  (NEXT VALUE FOR device_type_seq, 'Stabilizer');
+INSERT INTO DeviceType (type_id, name) VALUES
+                                                  (NEXT VALUE FOR device_type_seq, 'Lens');
 
 -- Test Inserts for LightType
 INSERT INTO LightType (type_id, watts, rgb, variable_temperature) VALUES
-                                                                      (4, 100, true, false),
-                                                                      (5, 200, false, true),
-                                                                      (8, 50, true, true),
-                                                                      (9, 150, true, false),
-                                                                      (10, 120, false, true),
-                                                                      (11, 75, true, true);
+                                                                      (NEXT VALUE FOR light_type_seq, 100, true, false),
+INSERT INTO LightType (type_id, watts, rgb, variable_temperature) VALUES
+                                                                      (NEXT VALUE FOR light_type_seq, 200, false, true),
+INSERT INTO LightType (type_id, watts, rgb, variable_temperature) VALUES
+                                                                      (NEXT VALUE FOR light_type_seq, 50, true, true),
+INSERT INTO LightType (type_id, watts, rgb, variable_temperature) VALUES
+                                                                      (NEXT VALUE FOR light_type_seq, 150, true, false),
+INSERT INTO LightType (type_id, watts, rgb, variable_temperature) VALUES
+                                                                      (NEXT VALUE FOR light_type_seq, 120, false, true),
+INSERT INTO LightType (type_id, watts, rgb, variable_temperature) VALUES
+                                                                      (NEXT VALUE FOR light_type_seq, 75, true, true);
 
 -- Test Inserts for StabilizerType
 INSERT INTO StabilizerType (type_id, max_weight, number_of_axis) VALUES
-                                                                     (6, 5, 3),
-                                                                     (7, 8, 4),
-                                                                     (12, 10, 2),
-                                                                     (13, 15, 3),
-                                                                     (14, 20, 4),
-                                                                     (15, 25, 5);
+                                                                     (NEXT VALUE FOR stabilizer_type_seq, 5, 3);
+INSERT INTO StabilizerType (type_id, max_weight, number_of_axis) VALUES
+                                                                     (NEXT VALUE FOR stabilizer_type_seq, 8, 4);
+INSERT INTO StabilizerType (type_id, max_weight, number_of_axis) VALUES
+                                                                     (NEXT VALUE FOR stabilizer_type_seq, 10, 2);
+INSERT INTO StabilizerType (type_id, max_weight, number_of_axis) VALUES
+                                                                     (NEXT VALUE FOR stabilizer_type_seq, 15, 3);
+INSERT INTO StabilizerType (type_id, max_weight, number_of_axis) VALUES
+                                                                     (NEXT VALUE FOR stabilizer_type_seq, 20, 4);
+INSERT INTO StabilizerType (type_id, max_weight, number_of_axis) VALUES
+                                                                     (NEXT VALUE FOR stabilizer_type_seq, 25, 5);
 
 -- Test Inserts for DroneType
 INSERT INTO DroneType (type_id, sensor_id, resolution_video_id, resolution_foto_id, max_range) VALUES
-                                                                                                   (2, 1, 1, 2, 500),
-                                                                                                   (7, 2, 3, 4, 1000),
-                                                                                                   (16, 3, 5, 6, 1500),
-                                                                                                   (17, 4, 7, 8, 2000),
-                                                                                                   (18, 5, 9, 10, 2500),
-                                                                                                   (19, 6, 11, 12, 3000);
+                                                                                                   (NEXT VALUE FOR drone_type_seq, 1, 1, 2, 500);
+INSERT INTO DroneType (type_id, sensor_id, resolution_video_id, resolution_foto_id, max_range) VALUES
+                                                                                                   (NEXT VALUE FOR drone_type_seq, 2, 3, 4, 1000);
+INSERT INTO DroneType (type_id, sensor_id, resolution_video_id, resolution_foto_id, max_range) VALUES
+                                                                                                   (NEXT VALUE FOR drone_type_seq, 3, 5, 6, 1500);
+INSERT INTO DroneType (type_id, sensor_id, resolution_video_id, resolution_foto_id, max_range) VALUES
+                                                                                                   (NEXT VALUE FOR drone_type_seq, 4, 7, 8, 2000);
+INSERT INTO DroneType (type_id, sensor_id, resolution_video_id, resolution_foto_id, max_range) VALUES
+                                                                                                   (NEXT VALUE FOR drone_type_seq, 5, 9, 10, 2500);
+INSERT INTO DroneType (type_id, sensor_id, resolution_video_id, resolution_foto_id, max_range) VALUES
+                                                                                                   (NEXT VALUE FOR drone_type_seq, 6, 11, 12, 3000);
 
 -- Test Inserts for LensType
 INSERT INTO LensType (type_id, f_stop, mount_id, focal_length) VALUES
-                                                                   (7, 2.8, 1, 50),
-                                                                   (8, 1.4, 2, 85),
-                                                                   (20, 2, 3, 35),
-                                                                   (21, 4, 4, 200),
-                                                                   (22, 1.8, 5, 24),
-                                                                   (23, 3.5, 6, 100);
+                                                                   (NEXT VALUE FOR lens_type_seq, 2.8, 1, 50);
+INSERT INTO LensType (type_id, f_stop, mount_id, focal_length) VALUES
+                                                                   (NEXT VALUE FOR lens_type_seq, 1.4, 2, 85);
+INSERT INTO LensType (type_id, f_stop, mount_id, focal_length) VALUES
+                                                                   (NEXT VALUE FOR lens_type_seq, 2, 3, 35);
+INSERT INTO LensType (type_id, f_stop, mount_id, focal_length) VALUES
+                                                                   (NEXT VALUE FOR lens_type_seq, 4, 4, 200);
+INSERT INTO LensType (type_id, f_stop, mount_id, focal_length) VALUES
+                                                                   (NEXT VALUE FOR lens_type_seq, 1.8, 5, 24);
+INSERT INTO LensType (type_id, f_stop, mount_id, focal_length) VALUES
+                                                                   (NEXT VALUE FOR lens_type_seq, 3.5, 6, 100);
 
 -- Test Inserts for AudioType
 INSERT INTO AudioType (type_id, windblocker, wireless, needs_recorder) VALUES
-                                                                           (3, true, false, true),
-                                                                           (4, false, true, false),
-                                                                           (24, true, true, true),
-                                                                           (25, false, false, true),
-                                                                           (26, true, true, false),
-                                                                           (27, false, true, true);
+                                                                           (NEXT VALUE FOR audio_type_seq, true, false, true);
+INSERT INTO AudioType (type_id, windblocker, wireless, needs_recorder) VALUES
+                                                                           (NEXT VALUE FOR audio_type_seq, false, true, false);
+INSERT INTO AudioType (type_id, windblocker, wireless, needs_recorder) VALUES
+                                                                           (NEXT VALUE FOR audio_type_seq, true, true, true);
+INSERT INTO AudioType (type_id, windblocker, wireless, needs_recorder) VALUES
+                                                                           (NEXT VALUE FOR audio_type_seq, false, false, true);
+INSERT INTO AudioType (type_id, windblocker, wireless, needs_recorder) VALUES
+                                                                           (NEXT VALUE FOR audio_type_seq, true, true, false);
+INSERT INTO AudioType (type_id, windblocker, wireless, needs_recorder) VALUES
+                                                                           (NEXT VALUE FOR audio_type_seq, false, true, true);
 
 -- Test Inserts for TripodType
 INSERT INTO TripodType (type_id, height, head_id) VALUES
-                                                      (5, 150, 1),
-                                                      (6, 180, 2),
-                                                      (28, 120, 3),
-                                                      (29, 200, 4),
-                                                      (30, 160, 5),
-                                                      (31, 140, 6);
+                                                      (NEXT VALUE FOR tripod_type_seq, 150, 1);
+INSERT INTO TripodType (type_id, height, head_id) VALUES
+                                                      (NEXT VALUE FOR tripod_type_seq, 180, 2);
+INSERT INTO TripodType (type_id, height, head_id) VALUES
+                                                      (NEXT VALUE FOR tripod_type_seq, 120, 3);
+INSERT INTO TripodType (type_id, height, head_id) VALUES
+                                                      (NEXT VALUE FOR tripod_type_seq, 200, 4);
+INSERT INTO TripodType (type_id, height, head_id) VALUES
+                                                      (NEXT VALUE FOR tripod_type_seq, 160, 5);
+INSERT INTO TripodType (type_id, height, head_id) VALUES
+                                                      (NEXT VALUE FOR tripod_type_seq, 140, 6);
 
 -- Test Inserts for Tag
 INSERT INTO Tag (tag_id, type_ids, name, description) VALUES
-                                                          (1, [1, 2, 7], 'Photography', 'Devices for photography enthusiasts'),
-                                                          (2, [3, 6], 'Audio Recording', 'Devices for audio recording'),
-                                                          (3, [4, 5], 'Lighting', 'Devices for professional lighting'),
-                                                          (4, [8, 9], 'Stabilization', 'Devices for video stabilization'),
-                                                          (5, [10, 11], 'Tripods', 'Devices for stable camera support'),
-                                                          (6, [12, 13], 'Drones', 'Devices for aerial photography');
+                                                          (NEXT VALUE FOR tag_seq, [NEXT VALUE FOR device_type_seq, NEXT VALUE FOR device_type_seq, NEXT VALUE FOR device_type_seq], 'Photography', 'Devices for photography enthusiasts');
+
+INSERT INTO Tag (tag_id, type_ids, name, description) VALUES
+    (NEXT VALUE FOR tag_seq, [NEXT VALUE FOR device_type_seq, NEXT VALUE FOR device_type_seq, NEXT VALUE FOR device_type_seq], 'Stabilization', 'Devices for video stabilization');
+INSERT INTO Tag (tag_id, type_ids, name, description) VALUES
+    (NEXT VALUE FOR tag_seq, [NEXT VALUE FOR device_type_seq, NEXT VALUE FOR device_type_seq, NEXT VALUE FOR device_type_seq], 'Tripods', 'Devices for stable camera support');
+INSERT INTO Tag (tag_id, type_ids, name, description) VALUES
+    (NEXT VALUE FOR tag_seq, [NEXT VALUE FOR device_type_seq, NEXT VALUE FOR device_type_seq, NEXT VALUE FOR device_type_seq], 'Drones', 'Devices for aerial photography');
 
 -- Test Inserts for Device
 
-*/

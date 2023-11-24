@@ -25,6 +25,18 @@ INSERT INTO Teacher (teacher_id, firstname, lastname, password, username) VALUES
 INSERT INTO Teacher (teacher_id, firstname, lastname, password, username) VALUES (NEXT VALUE FOR teacher_seq, 'Dr.', 'Miller', 'teacherpass', 'dr_miller');
 INSERT INTO Teacher (teacher_id, firstname, lastname, password, username) VALUES (NEXT VALUE FOR teacher_seq, 'Mrs.', 'Brown', 'pass123', 'mrs_brown');
 
+INSERT INTO LensMount (mount_id, name) VALUES
+    (NEXT VALUE FOR lens_mount_seq, 'Canon EF');
+INSERT INTO LensMount (mount_id, name) VALUES
+    (NEXT VALUE FOR lens_mount_seq, 'Nikon F');
+INSERT INTO LensMount (mount_id, name) VALUES
+    (NEXT VALUE FOR lens_mount_seq, 'Sony E');
+INSERT INTO LensMount (mount_id, name) VALUES
+    (NEXT VALUE FOR lens_mount_seq, 'Pentax K');
+INSERT INTO LensMount (mount_id, name) VALUES
+    (NEXT VALUE FOR lens_mount_seq, 'Fujifilm X');
+INSERT INTO LensMount (mount_id, name) VALUES
+    (NEXT VALUE FOR lens_mount_seq, 'Olympus/Panasonic Micro Four Thirds');
 
 /*
 INSERT INTO rent (DEVICE_ID, RENT_END_ACTUAL, RENT_END_PLANNED, RENT_ID, RENT_START, STUDENT_ID, TEACHER_ID) VALUES (1, '2023-01-01', '2023-01-05', NEXT VALUE FOR rent_seq, '2023-01-02', 1, 1);
