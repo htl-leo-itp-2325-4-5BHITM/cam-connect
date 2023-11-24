@@ -1,14 +1,13 @@
 package at.camconnect.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Teacher {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "device_teacher_seq")
+    @SequenceGenerator(name = "device_teacher_seq", sequenceName = "DEVICE_TEACHER_SEQ", allocationSize = 1)
     private Long teacher_id;
     private String firstname;
     private String lastname;

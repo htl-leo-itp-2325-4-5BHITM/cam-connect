@@ -156,6 +156,16 @@ CREATE SEQUENCE tripod_type_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE tag_seq START WITH 1 INCREMENT BY 1;
 
 */
+
+ALTER TABLE DeviceType
+DROP CONSTRAINT FKOM60OH48RCRTMD54HIWAOA89P;
+
+ALTER TABLE DeviceType
+    ADD CONSTRAINT FKOM60OH48RCRTMD54HIWAOA89P
+        FOREIGN KEY (type_id)
+            REFERENCES ReferencedTable(id)
+            ON DELETE CASCADE;
+
 -- Test Inserts for LensMount
 INSERT INTO LensMount (mount_id, name) VALUES
                                            (NEXT VALUE FOR lens_mount_seq, 'Canon EF');
@@ -213,6 +223,10 @@ INSERT INTO CameraResolution (resolution_id, name, details) VALUES
                                                                 (NEXT VALUE FOR camera_resolution_seq, '12K', '12288x6912');
 
 -- Test Inserts for DeviceType
+
+
+
+
 INSERT INTO DeviceType (type_id, name) VALUES
                                                   (NEXT VALUE FOR device_type_seq, 'Camera');
 INSERT INTO DeviceType (type_id, name) VALUES

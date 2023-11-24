@@ -8,6 +8,8 @@ import jakarta.persistence.ManyToOne;
 
 @Entity
 public class LensType extends DeviceType {
+
+
     private String fStop;
     private String mount;
     private int focalLength;
