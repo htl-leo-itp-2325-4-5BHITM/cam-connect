@@ -10,37 +10,25 @@ If you follow these conventions we will have a better time writing code and the 
 - all external proposals, progress reports, documentations should be in **german**
 
 ## Workflow / GitHub
-- When completing a issue move it to the "Review" area
+- When completing a issue move it to the "Review" area (not done)
   - yanik will check out the issue and either
     - move it to done
     - write a comment on what needs more work
 - The dev branch will be merged with main when a sprint is finished
-- commit often, this just safes your work to your local git git
-  - commit messages should start with the issue your working on and be precise and short`#0 Updated GitHub section in convetions.md`
+- The Main branch should **always be runnable**
+- commit often, this just safes your work to your local git
+  - commit messages 
+    - should be precise and short
+    - should start with the issue number your working on or with "hotfix:", "refactor:" or something similar when not working on any issue
+    - `#0 Updated Workflow section in convetions.md`
   - if many things were changed write a description
 - push at the end of each workday and when leaving school .-.
-  - if something is throwing errors at the end of the day add a //TODO comment and **comment it out** so that others can continue work without having to change/fix your code
-
-## Workflow
-Starting work on a new issue
-- move it to the "In Progress" category
-- create a branch based on the "dev" branch with your issue id and a super short description `#0 Explaining the Workflow`
-
-Completing a Issue
-- move your issue to the "Review" area
-- create a pull request
-- yanik will either approve or decline the request, in the second case he will comment on your issue with things that need improvement
-
-## Github
-- push at the end of each workday and when leaving school .-.
-- if **something is throwing errors** at the end of the day add a //TODO comment and **comment it out** so that others can continue without having to change/fix your code
-- create a branch for your task with a fitting name
-  - when finished with the task set its status to review and create a pull request
-  - a team member will approve the pull request or leave a comment on parts that should be improved
-- commit messages should be precise and list all major changes
+  - if something is throwing errors add a //TODO and **comment it out**
+  - if your issue is constantly throwing errors you can create a feature branch
+    - name it `#issueId` & a super short description of your issue
+    - switch to that branch, work there until its all done and then create a pull request to dev
 
 ## Code and file formatting
-
 - use camelCase for folder names
 - use camelCase (or PascalCase for classes) for filenames, and css class names
 - `{` brackets should be on the same lines as the code they belong to

@@ -134,7 +134,7 @@ public class RentRepository {
 
     public void setStatus(long rentId, String status) {
         Rent rent = getById(rentId);
-        rent.setStatus(RentStatus.valueOf(status));
+        rent.setVerification_status(RentStatus.valueOf(status));
     }
 
     public void setNote(long rentId, String note) {
