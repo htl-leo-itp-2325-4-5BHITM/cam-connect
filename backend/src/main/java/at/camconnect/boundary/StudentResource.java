@@ -1,9 +1,9 @@
 package at.camconnect.boundary;
 
+import at.camconnect.CCError;
 import at.camconnect.model.Student;
 import at.camconnect.repository.StudentRepository;
 import jakarta.inject.Inject;
-import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
@@ -33,6 +33,13 @@ public class StudentResource {
     public Response removeStudent(Student s){
         studentRepository.remove(s);
         return Response.ok().build();
+    }
+
+    @PUT
+    @Path("/testccerrors")
+    @Transactional
+    public Response test(){
+        return Response.status(400).entity(CCError.create(1101)).build();
     }
 
     @POST
