@@ -12,4 +12,3 @@ import "./components/value-chain-component"
 import "../styles/base.scss"
 
 //basically einfach default function file für erstellen clicken popups und alles
-

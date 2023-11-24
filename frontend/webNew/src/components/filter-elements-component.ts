@@ -1,3 +1,5 @@
+import {html, render} from "lit-html"
+
 class FilterElementsComponent extends HTMLElement {
     constructor() {
         super()
@@ -11,6 +13,10 @@ class FilterElementsComponent extends HTMLElement {
         this.setAttribute("isActive", (!isActive).toString());
     }
     render() {
+        this.filterElement() // we're not appending it to the shadow root, so that we can style the element by the parent
+    }
+
+    filterElement() {
         const div = document.createElement("div")
         div.classList.add("filter-element")
         div.setAttribute("isActive", this.getAttribute("isActive"))
@@ -22,6 +28,8 @@ class FilterElementsComponent extends HTMLElement {
         div.appendChild(option)
         this.innerHTML = ""
         this.appendChild(div)
+
+        return div;
     }
 }
 customElements.define("cc-filter-element", FilterElementsComponent)

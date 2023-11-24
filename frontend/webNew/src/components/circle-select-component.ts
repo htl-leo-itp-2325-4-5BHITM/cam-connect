@@ -1,3 +1,4 @@
+import {html, render} from "lit-html"
 import styles from '../../styles/components/circle-select.styles.scss'
 
 enum Color {ACCENT="accent", GRAY="gray"}
@@ -14,20 +15,24 @@ class CircleSelectComponent extends HTMLElement {
         const color = this.getAttribute("color") as Color
         const type = this.getAttribute("type") as Type
 
+        this.appendChild(this.circleSelect(color, type))
+    }
+
+    circleSelect(color, type) {
         const div = document.createElement("div")
         div.classList.add(color)
 
         const image = document.createElement("img")
-        image.src = `../../ressource/${div.classList.contains("active") ? "checked" : "unchecked"}_${type}.svg`
+        image.src = `../../resource/${div.classList.contains("active") ? "checked" : "unchecked"}_${type}.svg`
         div.addEventListener("click", this.swapCheckbox.bind(this, image, type))
         div.appendChild(image)
 
-        this.appendChild(div)
+        return div
     }
 
     swapCheckbox(image, type) {
         this.classList.toggle("active")
-        image.src = `../../ressource/${this.classList.contains("active") ? "checked" : "unchecked"}_${type}.svg`
+        image.src = `../../resource/${this.classList.contains("active") ? "checked" : "unchecked"}_${type}.svg`
     }
 }
 customElements.define("cc-circle-select", CircleSelectComponent)
