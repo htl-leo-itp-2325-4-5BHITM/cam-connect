@@ -1,6 +1,6 @@
 package at.camconnect.repository;
 
-import at.camconnect.enums.DeviceTypes;
+import at.camconnect.enums.DeviceTypeEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypes.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,7 +15,7 @@ public class DeviceTypeRepository {
     @Inject
     EntityManager em;
 
-    public void create(DeviceTypes type, JsonObject data){
+    public void create(DeviceTypeEnum type, JsonObject data){
         DeviceType deviceType = null;
 
         String dataString = String.valueOf(data);
@@ -23,25 +23,25 @@ public class DeviceTypeRepository {
 
         try {
             switch (type){
-                case Audio:
+                case audio:
                         deviceType = objectMapper.readValue(dataString, AudioType.class);
                     break;
-                case Camera:
+                case camera:
                         deviceType = objectMapper.readValue(dataString, CameraType.class);
                     break;
-                case Drone:
+                case drone:
                         deviceType = objectMapper.readValue(dataString, DroneType.class);
                     break;
-                case Lens:
+                case lens:
                         deviceType = objectMapper.readValue(dataString, LensType.class);
                     break;
-                case Light:
+                case light:
                         deviceType = objectMapper.readValue(dataString, LightType.class);
                     break;
-                case Stabilizer:
+                case stabilizer:
                         deviceType = objectMapper.readValue(dataString, StabilizerType.class);
                     break;
-                case Tripod:
+                case tripod:
                         deviceType = objectMapper.readValue(dataString, TripodType.class);
                     break;
             }

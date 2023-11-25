@@ -39,7 +39,7 @@ public class StudentResource {
     @Path("/testccerrors")
     @Transactional
     public Response test(){
-        return Response.status(400).entity(CCError.create(1101)).build();
+        return Response.status(400).entity(CCError.create(69)).build();
     }
 
     @POST

@@ -1,6 +1,6 @@
 package at.camconnect.boundary;
 
-import at.camconnect.enums.DeviceTypes;
+import at.camconnect.enums.DeviceTypeEnum;
 import at.camconnect.repository.DeviceTypeRepository;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
@@ -20,7 +20,7 @@ public class DeviceTypeResource {
     @Path("/create/{type: [A-z]+}")
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response create(@PathParam("type") DeviceTypes type, JsonObject data){
+    public Response create(@PathParam("type") DeviceTypeEnum type, JsonObject data){
         deviceTypeRepository.create(type, data);
         return Response.ok().build();
     }

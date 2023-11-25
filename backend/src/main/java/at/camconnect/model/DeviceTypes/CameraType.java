@@ -1,43 +1,54 @@
 package at.camconnect.model.DeviceTypes;
 
 import at.camconnect.model.DeviceType;
+import at.camconnect.model.DeviceTypes.attributes.CameraResolution;
+import at.camconnect.model.DeviceTypes.attributes.CameraSensor;
+import at.camconnect.model.DeviceTypes.attributes.LensMount;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class CameraType extends DeviceType {
-    private String sensor;
-    private String resolution;
-    private String mount;
+    @ManyToOne
+    @JoinColumn(name = "sensor_id")
+    private CameraSensor sensor;
+    @ManyToOne
+    @JoinColumn(name = "resolution_id")
+    private CameraResolution resolution;
+    @ManyToOne
+    @JoinColumn(name = "mount_id")
+    private LensMount mount;
     public CameraType() {
     }
 
-    public CameraType(String typeName, String sensor, String resolution, String mount) {
+    public CameraType(String typeName, CameraSensor sensor, CameraResolution resolution, LensMount mount) {
         this.sensor = sensor;
         this.resolution = resolution;
         this.mount = mount;
     }
 
-    public String getSensor() {
+    public CameraSensor getSensor() {
         return sensor;
     }
 
-    public void setSensor(String sensor) {
+    public void setSensor(CameraSensor sensor) {
         this.sensor = sensor;
     }
 
-    public String getResolution() {
+    public CameraResolution getResolution() {
         return resolution;
     }
 
-    public void setResolution(String resolution) {
+    public void setResolution(CameraResolution resolution) {
         this.resolution = resolution;
     }
 
-    public String getMount() {
+    public LensMount getMount() {
         return mount;
     }
 
-    public void setMount(String mount) {
+    public void setMount(LensMount mount) {
         this.mount = mount;
     }
 }

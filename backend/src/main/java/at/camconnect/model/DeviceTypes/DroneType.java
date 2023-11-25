@@ -7,12 +7,13 @@ import jakarta.persistence.Entity;
 public class DroneType extends DeviceType {
     private String sensor;
     private String resolution;
-    private int maxRange;
+    private int max_range;
 
-    public DroneType(String typeName, String sensor, String resolution, int maxRange) {
+    public DroneType(String typeName, String sensor, String resolution, int max_range) {
+        super(typeName);
         this.sensor = sensor;
         this.resolution = resolution;
-        this.maxRange = maxRange;
+        this.max_range = max_range;
     }
 
     public DroneType() {
@@ -34,11 +35,11 @@ public class DroneType extends DeviceType {
         this.resolution = resolution;
     }
 
-    public int getMaxRange() {
-        return maxRange;
+    public int getMax_range() {
+        return max_range;
     }
 
-    public void setMaxRange(int maxRange) {
-        this.maxRange = maxRange;
+    public void setMax_range(int maxRange) {
+        this.max_range = maxRange;
     }
 }

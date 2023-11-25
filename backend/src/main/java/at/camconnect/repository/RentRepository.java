@@ -1,6 +1,6 @@
 package at.camconnect.repository;
 
-import at.camconnect.enums.RentStatus;
+import at.camconnect.enums.RentStatuEnum;
 import at.camconnect.model.Device;
 import at.camconnect.model.Rent;
 import at.camconnect.model.Student;
@@ -134,7 +134,7 @@ public class RentRepository {
 
     public void setStatus(long rentId, String status) {
         Rent rent = getById(rentId);
-        rent.setVerification_status(RentStatus.valueOf(status));
+        rent.setVerification_status(RentStatuEnum.valueOf(status));
     }
 
     public void setNote(long rentId, String note) {

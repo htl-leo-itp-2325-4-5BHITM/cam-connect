@@ -6,15 +6,11 @@ import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class DeviceType {
+public class DeviceType {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "device_type_seq")
-    @SequenceGenerator(name = "device_type_seq", sequenceName = "DEVICE_TPYE_SEQ", allocationSize = 1)
+    @SequenceGenerator(name = "device_type_seq", sequenceName = "DEVICE_TYPE_SEQ", allocationSize = 1)
     private Long type_id;
-
-    //TODO fix this fucker, he causes a super ugly error
-    /*@OneToMany(cascade = CascadeType.ALL, mappedBy = "tag_id", fetch = FetchType.EAGER)
-    private List<Tag> tags;*/
     private String name;
 
     public DeviceType(String name) {
@@ -24,7 +20,7 @@ public abstract class DeviceType {
     public DeviceType() {
     }
 
-    //<editor-fold desc="Getter und Setter">
+    //region Getter und Setter
     public String getName() {
         return name;
     }
@@ -40,5 +36,5 @@ public abstract class DeviceType {
     public void setType_id(long typeId) {
         this.type_id = typeId;
     }
-    //</editor-fold>
+    //endregion
 }
