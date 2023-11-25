@@ -32,6 +32,9 @@ public class Rent {
     private LocalDate rent_end_planned;
     private LocalDate rent_end_actual;
     private RentStatus verification_status;
+
+    private String verification_message;
+
     private String note;
 
     //TODO remove these when moving to new UI permanatly - also remove them in repo resource and update functions
@@ -48,6 +51,7 @@ public class Rent {
 
     public Rent() {
         rent_start = LocalDate.now();
+        verification_status = RentStatus.CREATED;
     }
 
     public Rent(Student student) {
