@@ -13,7 +13,7 @@ public class LensMount {
 
     private String name;
 
-    public LensMount(long mount_id, String name, LensType lensType, CameraType cameraType) {
+    public LensMount(long mount_id, String name) {
         this.mount_id = mount_id;
         this.name = name;
     }

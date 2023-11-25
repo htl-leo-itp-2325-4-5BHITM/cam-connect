@@ -1,5 +1,6 @@
 package at.camconnect.repository;
 
+import at.camconnect.CCError;
 import at.camconnect.enums.DeviceTypeEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypes.*;
@@ -15,7 +16,7 @@ public class DeviceTypeRepository {
     @Inject
     EntityManager em;
 
-    public void create(DeviceTypeEnum type, JsonObject data){
+    public CCError create(DeviceTypeEnum type, JsonObject data){
         DeviceType deviceType = null;
 
         String dataString = String.valueOf(data);
@@ -44,11 +45,15 @@ public class DeviceTypeRepository {
                 case tripod:
                         deviceType = objectMapper.readValue(dataString, TripodType.class);
                     break;
+                default:
+                    return new CCError(1104);
             }
 
             em.persist(deviceType);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            return new CCError(1106);
         }
+
+        return new CCError(1000);
     }
 }

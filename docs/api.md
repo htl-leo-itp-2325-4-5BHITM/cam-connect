@@ -67,6 +67,6 @@ api
 - 1100 **Structure Error**
 - 1101 Invalid id in getter 
 - 1102 Invalid id in setter
-- 1103 Missing required data in body
+- 1105 Missing required data in body
 - 1200 **Task was not performed**
 - 1201 Duplicate request

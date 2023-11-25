@@ -35,13 +35,6 @@ public class StudentResource {
         return Response.ok().build();
     }
 
-    @PUT
-    @Path("/testccerrors")
-    @Transactional
-    public Response test(){
-        return Response.status(400).entity(CCError.create(69)).build();
-    }
-
     @POST
     @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)

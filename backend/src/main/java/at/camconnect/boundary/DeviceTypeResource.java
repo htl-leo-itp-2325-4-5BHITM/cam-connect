@@ -1,5 +1,6 @@
 package at.camconnect.boundary;
 
+import at.camconnect.CCError;
 import at.camconnect.enums.DeviceTypeEnum;
 import at.camconnect.repository.DeviceTypeRepository;
 import jakarta.inject.Inject;
@@ -21,7 +22,7 @@ public class DeviceTypeResource {
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(@PathParam("type") DeviceTypeEnum type, JsonObject data){
-        deviceTypeRepository.create(type, data);
-        return Response.ok().build();
+        CCError error = deviceTypeRepository.create(type, data);
+        return Response.ok().entity(error).build();
     }
 }
