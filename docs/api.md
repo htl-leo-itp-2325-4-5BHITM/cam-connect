@@ -59,14 +59,18 @@ api
 - Every Endpoint returns a Response object with standard http Status code to indicate the general status of the request.
 - If a request goes through but is faulty the http status is 400 or a fitting 4xx [error](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
   - Instead of the requested entity, a CCError should be returned
-  - `return Response.status(400).entity(CCError.create(1XXX)).build()`
+  - `return Response.status(400).entity(CCError.create(1xxx)).build()`
 
 ### CC Error Codes
 
-- 1000 All good
-- 1100 **Structure Error**
-- 1101 Invalid id in getter 
-- 1102 Invalid id in setter
-- 1105 Missing required data in body
-- 1200 **Task was not performed**
-- 1201 Duplicate request
+- 1000: All good
+- 1001: Something went wrong but an invalid error code was provided
+- 1100: **Structure error**: Problems with the general request structure / syntax
+- 1101: Invalid id in getter
+- 1102: Invalid id in setter
+- 1103: Missing required argument in url
+- 1104: Invalid argument in url
+- 1105: Missing required data in body
+- 1106: Invalid data in body
+- 1200: **Task was not performed**: The data provided was structurally / syntactically correct but the requested action cant be performed.
+- 1201: Duplicate request

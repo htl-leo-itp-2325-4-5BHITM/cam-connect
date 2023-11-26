@@ -5,6 +5,7 @@ import at.camconnect.enums.DeviceTypeEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypes.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -16,44 +17,49 @@ public class DeviceTypeRepository {
     @Inject
     EntityManager em;
 
-    public CCError create(DeviceTypeEnum type, JsonObject data){
+    public CCError create(DeviceTypeEnum typeEnum, JsonObject data){
         DeviceType deviceType = null;
 
         String dataString = String.valueOf(data);
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
-            switch (type){
-                case audio:
-                        deviceType = objectMapper.readValue(dataString, AudioType.class);
-                    break;
-                case camera:
-                        deviceType = objectMapper.readValue(dataString, CameraType.class);
-                    break;
-                case drone:
-                        deviceType = objectMapper.readValue(dataString, DroneType.class);
-                    break;
-                case lens:
-                        deviceType = objectMapper.readValue(dataString, LensType.class);
-                    break;
-                case light:
-                        deviceType = objectMapper.readValue(dataString, LightType.class);
-                    break;
-                case stabilizer:
-                        deviceType = objectMapper.readValue(dataString, StabilizerType.class);
-                    break;
-                case tripod:
-                        deviceType = objectMapper.readValue(dataString, TripodType.class);
-                    break;
-                default:
-                    return new CCError(1104);
-            }
-
-            em.persist(deviceType);
+            deviceType = objectMapper.readValue(dataString, enumToClass(typeEnum));
         } catch (JsonProcessingException e) {
             return new CCError(1106);
         }
 
+        em.persist(deviceType);
+
         return new CCError(1000);
+    }
+
+    public CCError update(int id, JsonObject data){
+        //TODO implement abstract update function in all Types
+        //em.find(DeviceType.class, id).update(data);
+        return new CCError(1000);
+    }
+
+    //region utility functions
+    private Class<? extends DeviceType> enumToClass(DeviceTypeEnum typeEnum) {
+        //yes there are breaks missing, but they are unnecessary because of the returns
+        switch(typeEnum){
+            case audio:
+                return AudioType.class;
+            case camera:
+                return CameraType.class;
+            case drone:
+                return DroneType.class;
+            case lens:
+                return LensType.class;
+            case light:
+                return LightType.class;
+            case stabilizer:
+                return StabilizerType.class;
+            case tripod:
+                return TripodType.class;
+        }
+
+        return null;
     }
 }
