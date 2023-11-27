@@ -42,9 +42,9 @@ public class DeviceTypeResource {
         try{
             deviceTypeRepository.update(id, data);
         }catch (CCException ex){
-            return Response.ok().entity(new CCError(ex)).build();
+            return new CCError(ex).toResponse();
         }
 
-        return Response.ok().entity(new CCError(1000)).build();
+        return CCError.ok();
     }
 }

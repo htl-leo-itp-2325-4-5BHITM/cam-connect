@@ -1,5 +1,8 @@
 package at.camconnect;
 
+import jakarta.json.JsonObject;
+import jakarta.ws.rs.core.Response;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,6 +70,19 @@ public class CCError {
         setMessage(exception.getMessage());
     }
 
+    public Response toResponse(){
+        return Response.status(400).entity(this).build();
+    }
+
+    public static Response ok(){
+        return Response.ok().entity(new CCError(1000)).build();
+    }
+
+    public static Response ok(JsonObject data){
+        return Response.ok().entity(new CCError(1000)).build();
+    }
+
+    //region getter and setter
     public int getCc_error() {
         return cc_error;
     }
@@ -92,4 +108,5 @@ public class CCError {
         this.cc_error = errorCode;
         this.details = ERROR_CODE_DETAILS.get(errorCode);
     }
+    //endregion
 }
