@@ -1,7 +1,9 @@
 package at.camconnect.model.DeviceTypes;
 
+import at.camconnect.errorSystem.CCException;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypes.attributes.LensMount;
+import jakarta.json.JsonObject;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -23,6 +25,23 @@ public class LensType extends DeviceType {
     }
 
     public LensType() {
+    }
+
+    @Override
+    public void update(JsonObject data) {
+        //TODO only getInt possible here
+        try {
+            setF_stop(data.getInt("f_stop"));
+        } catch (Exception e) {
+            throw new CCException(1006, "f-stop was not updated");
+        }
+        try {
+            setFocal_length(data.getInt("focal_length"));
+        } catch (Exception e) {
+            throw new CCException(1006, "f-focal_length was not updated");
+        }
+
+        //TODO add update for mount
     }
 
     //region getter setter

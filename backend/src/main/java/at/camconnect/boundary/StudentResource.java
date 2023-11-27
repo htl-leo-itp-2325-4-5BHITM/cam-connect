@@ -1,6 +1,5 @@
 package at.camconnect.boundary;
 
-import at.camconnect.CCError;
 import at.camconnect.model.Student;
 import at.camconnect.repository.StudentRepository;
 import jakarta.inject.Inject;

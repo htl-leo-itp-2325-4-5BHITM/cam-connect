@@ -1,8 +1,8 @@
 package at.camconnect.boundary;
 
-import at.camconnect.CCError;
-import at.camconnect.CCException;
-import at.camconnect.CCResponse;
+import at.camconnect.errorSystem.CCError;
+import at.camconnect.errorSystem.CCException;
+import at.camconnect.errorSystem.CCResponse;
 import at.camconnect.enums.DeviceTypeEnum;
 import at.camconnect.repository.DeviceTypeRepository;
 import jakarta.inject.Inject;
@@ -24,8 +24,6 @@ public class DeviceTypeResource {
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(@PathParam("type") DeviceTypeEnum type, JsonObject data){
-        CCError error = new CCError(1000);
-
         try{
             deviceTypeRepository.create(type, data);
         }catch (CCException ex){

@@ -2,6 +2,8 @@ package at.camconnect.model.DeviceTypes;
 
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypes.attributes.TripodHead;
+import at.camconnect.errorSystem.CCException;
+import jakarta.json.JsonObject;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -21,6 +23,18 @@ public class TripodType extends DeviceType {
         super(typeName);
         this.height = height;
         this.head = head;
+    }
+
+    @Override
+    public void update(JsonObject data) {
+        //TODO only getint possible here
+        try{
+            setHeight(data.getInt("height"));
+        } catch (Exception e) {
+            throw new CCException(1006, "height was not updated");
+        }
+
+        //TODO add head update
     }
 
     public double getHeight() {

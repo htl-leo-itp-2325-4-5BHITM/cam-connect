@@ -1,7 +1,7 @@
 package at.camconnect.repository;
 
-import at.camconnect.CCError;
-import at.camconnect.CCException;
+import at.camconnect.errorSystem.CCError;
+import at.camconnect.errorSystem.CCException;
 import at.camconnect.enums.DeviceTypeEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypes.*;
@@ -17,7 +17,7 @@ public class DeviceTypeRepository {
     @Inject
     EntityManager em;
 
-    public CCError create(DeviceTypeEnum typeEnum, JsonObject data){
+    public void create(DeviceTypeEnum typeEnum, JsonObject data){
         DeviceType deviceType = null;
 
         String dataString = String.valueOf(data);
@@ -30,8 +30,6 @@ public class DeviceTypeRepository {
         }
 
         em.persist(deviceType);
-
-        return new CCError(1000);
     }
 
     public void update(Long id, JsonObject data){
@@ -61,4 +59,6 @@ public class DeviceTypeRepository {
 
         throw new CCException(1104);
     }
+
+    //endregion
 }

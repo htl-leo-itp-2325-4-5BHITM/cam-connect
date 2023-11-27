@@ -1,6 +1,8 @@
 package at.camconnect.model.DeviceTypes;
 
+import at.camconnect.errorSystem.CCException;
 import at.camconnect.model.DeviceType;
+import jakarta.json.JsonObject;
 import jakarta.persistence.Entity;
 
 @Entity
@@ -15,6 +17,20 @@ public class StabilizerType extends DeviceType {
     }
 
     public StabilizerType() {
+    }
+
+    @Override
+    public void update(JsonObject data) {
+        try{
+            setMax_weight(data.getInt("max_weight"));
+        } catch (Exception e) {
+            throw new CCException(1006, "max_weight was not updated");
+        }
+        try{
+            setNumber_of_axis(data.getInt("number_of_axis"));
+        } catch (Exception e) {
+            throw new CCException(1006, "number_of_axis was not updated");
+        }
     }
 
     public int getMax_weight() {

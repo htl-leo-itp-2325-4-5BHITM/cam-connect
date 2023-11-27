@@ -1,4 +1,4 @@
-package at.camconnect;
+package at.camconnect.errorSystem;
 
 import jakarta.ws.rs.core.Response;
 import java.util.Map;
@@ -25,26 +25,26 @@ public class CCError {
             Map.entry(1201, "Duplicate request")
     );
 
-    private int cc_error;
+    private int ccError;
     private String details;
     private String message;
 
     /**
      * creates a new error code meant to be returned by most api endpoints
-     * @param cc_error custom cc_error code: see api doc for all options
+     * @param ccError custom ccError code: see api doc for all options
      * @param message error message that details what caused the error
      */
-    public CCError(int cc_error, String message) {
-        setCc_error(cc_error);
+    public CCError(int ccError, String message) {
+        setCcError(ccError);
         setMessage(message);
     }
 
     /**
      * creates a new error code meant to be returned by most api endpoints
-     * @param cc_error custom cc_error code: see api doc for all options
+     * @param ccError custom ccError code: see api doc for all options
      */
-    public CCError(int cc_error) {
-        setCc_error(cc_error);
+    public CCError(int ccError) {
+        setCcError(ccError);
         setMessage("");
     }
 
@@ -53,7 +53,7 @@ public class CCError {
      * @param exception CCException that should get converted to error
      */
     public CCError(CCException exception) {
-        setCc_error(exception.getError());
+        setCcError(exception.getError());
         setMessage(exception.getMessage());
     }
 
@@ -62,8 +62,8 @@ public class CCError {
     }
 
     //region getter and setter
-    public int getCc_error() {
-        return cc_error;
+    public int getCcError() {
+        return ccError;
     }
 
     public String getDetails() {
@@ -79,13 +79,13 @@ public class CCError {
         this.message = message;
     }
 
-    private void setCc_error(int cc_error){
-        if(!ERROR_CODE_DETAILS.containsKey(cc_error)) {
-            cc_error = 1001;
+    private void setCcError(int ccError){
+        if(!ERROR_CODE_DETAILS.containsKey(ccError)) {
+            ccError = 1001;
         };
 
-        this.cc_error = cc_error;
-        this.details = ERROR_CODE_DETAILS.get(cc_error);
+        this.ccError = ccError;
+        this.details = ERROR_CODE_DETAILS.get(ccError);
     }
     //endregion
 }

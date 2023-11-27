@@ -4,6 +4,7 @@ import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypes.attributes.CameraResolution;
 import at.camconnect.model.DeviceTypes.attributes.CameraSensor;
 import at.camconnect.model.DeviceTypes.attributes.LensMount;
+import jakarta.json.JsonObject;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -21,12 +22,17 @@ public class CameraType extends DeviceType {
     private LensMount mount;
     public CameraType() {
     }
-
     public CameraType(String typeName, CameraSensor sensor, CameraResolution resolution, LensMount mount) {
         this.sensor = sensor;
         this.resolution = resolution;
         this.mount = mount;
     }
+
+    @Override
+    public void update(JsonObject data) {
+        //TODO the setters here are a problem cause you need to convert ids to objects
+    }
+
 
     public CameraSensor getSensor() {
         return sensor;
