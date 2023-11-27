@@ -1,39 +1,29 @@
 package at.camconnect;
 
-import jakarta.json.JsonObject;
 import jakarta.ws.rs.core.Response;
-
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 /**
- * is used to create custom CCError objects meant to be returned by most api endpoints
+ * Custom CCError that communicates an issue to the API caller
+ * Is packaged inside a CCResponseDTO by the CCResponse class
  */
 public class CCError {
-    private static final Map<Integer, String> ERROR_CODE_DETAILS;
+    private static final Map<Integer, String> ERROR_CODE_DETAILS = Map.ofEntries(
+            Map.entry(1000, "All good"),
+            Map.entry(1001, "Something went wrong but an invalid error code was provided"),
 
-    //creates a map of all error codes and their details
-    //WHEN ADDING AN ERROR CODE: also update the api.md
-    static {
-        Map<Integer, String> errorCodesMap = new HashMap<>();
-        errorCodesMap.put(1000, "All good");
-        errorCodesMap.put(1001, "Something went wrong but an invalid error code was provided");
+            Map.entry(1100, "Structure error"),
+            Map.entry(1101, "Invalid id in getter"),
+            Map.entry(1102, "Invalid id in setter"),
+            Map.entry(1103, "Missing required argument in url"),
+            Map.entry(1104, "Invalid argument structure/syntax/type in url"),
+            Map.entry(1105, "Missing required data in body"),
+            Map.entry(1106, "Invalid data structure/syntax/type in body"),
 
-        errorCodesMap.put(1100, "Structure error");
-        errorCodesMap.put(1101, "Invalid id in getter");
-        errorCodesMap.put(1102, "Invalid id in setter");
-        errorCodesMap.put(1103, "Missing required argument in url");
-        errorCodesMap.put(1104, "Invalid argument structure/syntax/type in url");
-        errorCodesMap.put(1105, "Missing required data in body");
-        errorCodesMap.put(1106, "Invalid data structure/syntax/type in body");
-
-        errorCodesMap.put(1200, "Task was not performed");
-        errorCodesMap.put(1201, "Duplicate request");
-
-        ERROR_CODE_DETAILS = Collections.unmodifiableMap(errorCodesMap);
-    }
+            Map.entry(1200, "Task was not performed"),
+            Map.entry(1201, "Duplicate request")
+    );
 
     private int cc_error;
     private String details;
@@ -41,28 +31,25 @@ public class CCError {
 
     /**
      * creates a new error code meant to be returned by most api endpoints
-     *
-     * @param errorCode custom cc_error code: see api doc for all options
+     * @param cc_error custom cc_error code: see api doc for all options
      * @param message error message that details what caused the error
      */
-    public CCError(int errorCode, String message) {
-        setCc_error(errorCode);
+    public CCError(int cc_error, String message) {
+        setCc_error(cc_error);
         setMessage(message);
     }
 
     /**
      * creates a new error code meant to be returned by most api endpoints
-     *
-     * @param errorCode custom cc_error code: see api doc for all options
+     * @param cc_error custom cc_error code: see api doc for all options
      */
-    public CCError(int errorCode) {
-        setCc_error(errorCode);
+    public CCError(int cc_error) {
+        setCc_error(cc_error);
         setMessage("");
     }
 
     /**
      * creates a new error code meant to be returned by most api endpoints
-     *
      * @param exception CCException that should get converted to error
      */
     public CCError(CCException exception) {
@@ -72,14 +59,6 @@ public class CCError {
 
     public Response toResponse(){
         return Response.status(400).entity(this).build();
-    }
-
-    public static Response ok(){
-        return Response.ok().entity(new CCError(1000)).build();
-    }
-
-    public static Response ok(JsonObject data){
-        return Response.ok().entity(new CCError(1000)).build();
     }
 
     //region getter and setter
@@ -95,18 +74,18 @@ public class CCError {
         return message;
     }
 
-    public void setMessage(String message) {
+    private void setMessage(String message) {
         if(Objects.equals(message, "")) message = "no error message provided";
         this.message = message;
     }
 
-    public void setCc_error(int errorCode){
-        if(!ERROR_CODE_DETAILS.containsKey(errorCode)) {
-            errorCode = 1001;
+    private void setCc_error(int cc_error){
+        if(!ERROR_CODE_DETAILS.containsKey(cc_error)) {
+            cc_error = 1001;
         };
 
-        this.cc_error = errorCode;
-        this.details = ERROR_CODE_DETAILS.get(errorCode);
+        this.cc_error = cc_error;
+        this.details = ERROR_CODE_DETAILS.get(cc_error);
     }
     //endregion
 }

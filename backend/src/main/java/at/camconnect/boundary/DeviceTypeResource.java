@@ -2,6 +2,7 @@ package at.camconnect.boundary;
 
 import at.camconnect.CCError;
 import at.camconnect.CCException;
+import at.camconnect.CCResponse;
 import at.camconnect.enums.DeviceTypeEnum;
 import at.camconnect.repository.DeviceTypeRepository;
 import jakarta.inject.Inject;
@@ -28,10 +29,10 @@ public class DeviceTypeResource {
         try{
             deviceTypeRepository.create(type, data);
         }catch (CCException ex){
-            error = new CCError(ex);
+            return CCResponse.error(ex);
         }
 
-        return Response.ok().entity(error).build();
+        return CCResponse.ok();
     }
 
     @POST
@@ -45,6 +46,6 @@ public class DeviceTypeResource {
             return new CCError(ex).toResponse();
         }
 
-        return CCError.ok();
+        return CCResponse.ok();
     }
 }
