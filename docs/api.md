@@ -69,8 +69,8 @@ api
 - 1101: Invalid id in getter
 - 1102: Invalid id in setter
 - 1103: Missing required argument in url
-- 1104: Invalid argument in url
+- 1104: Invalid argument structure/syntax/type in url
 - 1105: Missing required data in body
-- 1106: Invalid data in body
+- 1106: Invalid data structure/syntax/type in body
 - 1200: **Task was not performed**: The data provided was structurally / syntactically correct but the requested action cant be performed.
 - 1201: Duplicate request

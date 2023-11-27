@@ -1,11 +1,11 @@
 package at.camconnect.repository;
 
 import at.camconnect.CCError;
+import at.camconnect.CCException;
 import at.camconnect.enums.DeviceTypeEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypes.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -26,7 +26,7 @@ public class DeviceTypeRepository {
         try {
             deviceType = objectMapper.readValue(dataString, enumToClass(typeEnum));
         } catch (JsonProcessingException e) {
-            return new CCError(1106);
+            throw new CCException(1006);
         }
 
         em.persist(deviceType);
@@ -34,10 +34,9 @@ public class DeviceTypeRepository {
         return new CCError(1000);
     }
 
-    public CCError update(int id, JsonObject data){
-        //TODO implement abstract update function in all Types
-        //em.find(DeviceType.class, id).update(data);
-        return new CCError(1000);
+    public void update(Long id, JsonObject data){
+        DeviceType deviceType = em.find(DeviceType.class, id);
+        deviceType.update(data);
     }
 
     //region utility functions
@@ -60,6 +59,6 @@ public class DeviceTypeRepository {
                 return TripodType.class;
         }
 
-        return null;
+        throw new CCException(1104);
     }
 }

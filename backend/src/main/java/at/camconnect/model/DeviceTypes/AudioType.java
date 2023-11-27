@@ -1,7 +1,11 @@
 package at.camconnect.model.DeviceTypes;
 
+import at.camconnect.CCError;
+import at.camconnect.CCException;
 import at.camconnect.model.DeviceType;
+import jakarta.json.JsonObject;
 import jakarta.persistence.Entity;
+import jakarta.transaction.Transactional;
 
 @Entity
 public class AudioType extends DeviceType {
@@ -17,6 +21,28 @@ public class AudioType extends DeviceType {
     }
 
     public AudioType() {
+    }
+
+    @Transactional
+    @Override
+    public void update(JsonObject data) {
+        try{
+            setWindblocker(data.getBoolean("windblocker"));
+        } catch (Exception e) {
+            throw new CCException(1006, "windlocker was not updated");
+        }
+
+        try{
+            data.getBoolean("wireless");
+        } catch (Exception e) {
+            throw new CCException(1006, "wireless was not updated");
+        }
+
+        try{
+            data.getBoolean("needsRecorder");
+        } catch (Exception e) {
+            throw new CCException(1006, "needsRecorder was not updated");
+        }
     }
 
     public boolean isWindblocker() {

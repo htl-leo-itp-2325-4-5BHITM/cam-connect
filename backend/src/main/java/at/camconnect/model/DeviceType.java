@@ -1,12 +1,11 @@
 package at.camconnect.model;
 
+import jakarta.json.JsonObject;
 import jakarta.persistence.*;
-
-import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class DeviceType {
+public abstract class DeviceType{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "device_type_seq")
     @SequenceGenerator(name = "device_type_seq", sequenceName = "DEVICE_TYPE_SEQ", allocationSize = 1)
@@ -19,6 +18,8 @@ public class DeviceType {
 
     public DeviceType() {
     }
+
+    public abstract void update(JsonObject data);
 
     //region Getter und Setter
     public String getName() {

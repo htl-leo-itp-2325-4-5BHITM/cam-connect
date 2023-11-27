@@ -1,17 +1,18 @@
 package at.camconnect;
 
-public class CCExpection extends RuntimeException{
-    private int error;
-    public CCExpection(int errorcode) {
+public class CCException extends RuntimeException{
+    private int errorCode;
+    public CCException(int errorCode) {
         super();
-        this.setError(errorcode);
+        this.errorCode = errorCode;
+    }
+
+    public CCException(int errorCode, String message) {
+        super(message);
+        this.errorCode = errorCode;
     }
 
     public int getError() {
-        return error;
-    }
-
-    public void setError(int error) {
-        this.error = error;
+        return errorCode;
     }
 }
