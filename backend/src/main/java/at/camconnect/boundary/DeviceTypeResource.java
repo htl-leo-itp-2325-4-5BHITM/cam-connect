@@ -34,12 +34,12 @@ public class DeviceTypeResource {
     }
 
     @POST
-    @Path("/getbyid/{id: [0-9]+}/update")
+    @Path("/getbyid/{id: [0-9]+}/update/{type: [A-z]+}")
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("id") Long id, JsonObject data){
+    public Response update(@PathParam("id") Long id, @PathParam("type") DeviceTypeEnum type, JsonObject data){
         try{
-            deviceTypeRepository.update(id, data);
+            deviceTypeRepository.update(id, type, data);
         }catch (CCException ex){
             return new CCError(ex).toResponse();
         }

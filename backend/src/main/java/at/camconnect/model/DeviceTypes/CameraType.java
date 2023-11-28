@@ -28,11 +28,6 @@ public class CameraType extends DeviceType {
         this.mount = mount;
     }
 
-    @Override
-    public void update(JsonObject data) {
-        //TODO the setters here are a problem cause you need to convert ids to objects
-    }
-
 
     public CameraSensor getSensor() {
         return sensor;

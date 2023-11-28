@@ -32,9 +32,39 @@ public class DeviceTypeRepository {
         em.persist(deviceType);
     }
 
-    public void update(Long id, JsonObject data){
-        DeviceType deviceType = em.find(DeviceType.class, id);
-        deviceType.update(data);
+    public void update(Long id, DeviceTypeEnum typeEnum, JsonObject data){
+        switch(typeEnum){
+            case audio:
+                AudioType deviceType = em.find(AudioType.class, id);
+                try{
+                    deviceType.setWindblocker(data.getBoolean("windblocker"));
+                }catch (Exception ex){
+                    throw new CCException(1106);
+                }
+                try{
+                    deviceType.setWireless(data.getBoolean("wireless"));
+                }catch (Exception ex){
+                    throw new CCException(1106);
+                }
+                try{
+                    deviceType.setNeedsRecorder(data.getBoolean("recorder"));
+                }catch (Exception ex){
+                    throw new CCException(1106);
+                }
+                break;
+            case camera:
+                break;
+            case drone:
+                break;
+            case lens:
+                break;
+            case light:
+                break;
+            case stabilizer:
+                break;
+            case tripod:
+                break;
+        }
     }
 
     //region utility functions

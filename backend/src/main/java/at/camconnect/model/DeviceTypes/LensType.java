@@ -27,23 +27,6 @@ public class LensType extends DeviceType {
     public LensType() {
     }
 
-    @Override
-    public void update(JsonObject data) {
-        //TODO only getInt possible here
-        try {
-            setF_stop(data.getInt("f_stop"));
-        } catch (Exception e) {
-            throw new CCException(1006, "f-stop was not updated");
-        }
-        try {
-            setFocal_length(data.getInt("focal_length"));
-        } catch (Exception e) {
-            throw new CCException(1006, "f-focal_length was not updated");
-        }
-
-        //TODO add update for mount
-    }
-
     //region getter setter
     public double getF_stop() {
         return f_stop;

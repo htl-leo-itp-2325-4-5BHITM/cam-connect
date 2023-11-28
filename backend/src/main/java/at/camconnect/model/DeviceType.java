@@ -19,8 +19,6 @@ public abstract class DeviceType{
     public DeviceType() {
     }
 
-    public abstract void update(JsonObject data);
-
     //region Getter und Setter
     public String getName() {
         return name;

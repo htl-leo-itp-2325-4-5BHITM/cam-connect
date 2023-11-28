@@ -25,18 +25,6 @@ public class TripodType extends DeviceType {
         this.head = head;
     }
 
-    @Override
-    public void update(JsonObject data) {
-        //TODO only getint possible here
-        try{
-            setHeight(data.getInt("height"));
-        } catch (Exception e) {
-            throw new CCException(1006, "height was not updated");
-        }
-
-        //TODO add head update
-    }
-
     public double getHeight() {
         return height;
     }

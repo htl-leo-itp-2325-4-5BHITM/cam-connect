@@ -20,26 +20,6 @@ public class LightType extends DeviceType {
 
     public LightType() {
     }
-
-    @Override
-    public void update(JsonObject data) {
-        try{
-            setWatts(data.getInt("watts"));
-        } catch (Exception e) {
-            throw new CCException(1006, "watts were not updated");
-        }
-        try{
-            setRgb(data.getBoolean("rgb"));
-        } catch (Exception e) {
-            throw new CCException(1006, "rgb was not updated");
-        }
-        try{
-            setVariable_temperature(data.getBoolean("variable_temperature"));
-        } catch (Exception e) {
-            throw new CCException(1006, "variable_temperature was not updated");
-        }
-    }
-
     public int getWatts() {
         return watts;
     }
