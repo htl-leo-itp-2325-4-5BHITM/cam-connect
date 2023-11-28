@@ -42,14 +42,14 @@ api
 │   │   └── stabilizer : {max_weight, number_of_axis}
 │   └── getbyid/{type_id} -> DeviceType
 │       ├── remove
-│       └── update : {number, serial, note}
-│           ├── lens : {f_stop, mount_id, focal_length}
-│           ├── camera : {sensor_id, resolution_id, mount_id}
-│           ├── drone : {sensor_id, resolution_id, max_range
-│           ├── audio : {windblocker, wireless, needs-recorder}
-│           ├── light : {watts, rbg, variable_temperatur}
-│           ├── tripod : {height, head_id}
-│           └── stabilizer : {max_weight, number_of_axis}
+│       └── update -x
+│           ├── lens : {name, f_stop, mount_id, focal_length}
+│           ├── camera : {name, sensor_id, resolution_id, mount_id}
+│           ├── drone : {name, sensor_id, resolution_id, max_range
+│           ├── audio : {name, windblocker, wireless, needs-recorder}
+│           ├── light : {name, watts, rbg, variable_temperatur}
+│           ├── tripod : {name, height, head_id}
+│           └── stabilizer : {name, max_weight, number_of_axis}
 ├── student -x
 └── teacher -x
 ```

@@ -2,16 +2,24 @@ package at.camconnect.model.DeviceTypes;
 
 import at.camconnect.errorSystem.CCException;
 import at.camconnect.model.DeviceType;
+import at.camconnect.model.DeviceTypes.attributes.CameraResolution;
+import at.camconnect.model.DeviceTypes.attributes.CameraSensor;
 import jakarta.json.JsonObject;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class DroneType extends DeviceType {
-    private String sensor;
-    private String resolution;
+    @ManyToOne
+    @JoinColumn(name = "sensor_id")
+    private CameraSensor sensor;
+    @ManyToOne
+    @JoinColumn(name = "resolution_id")
+    private CameraResolution resolution;
     private int max_range;
 
-    public DroneType(String typeName, String sensor, String resolution, int max_range) {
+    public DroneType(String typeName, CameraSensor sensor, CameraResolution resolution, int max_range) {
         super(typeName);
         this.sensor = sensor;
         this.resolution = resolution;
@@ -21,19 +29,19 @@ public class DroneType extends DeviceType {
     public DroneType() {
     }
 
-    public String getSensor() {
+    public CameraSensor getSensor() {
         return sensor;
     }
 
-    public void setSensor(String sensor) {
+    public void setSensor(CameraSensor sensor) {
         this.sensor = sensor;
     }
 
-    public String getResolution() {
+    public CameraResolution getResolution() {
         return resolution;
     }
 
-    public void setResolution(String resolution) {
+    public void setResolution(CameraResolution resolution) {
         this.resolution = resolution;
     }
 

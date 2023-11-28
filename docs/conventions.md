@@ -36,6 +36,8 @@ If you follow these conventions we will have a better time writing code and the 
 - use camelCase (or PascalCase for classes) for filenames, and css class names
 - `{` brackets should be on the same lines as the code they belong to
 - use snake_case for database variables
+  - whenever a variable is used as an foreign key it should be named simply `<object>` when it contains a entity and `<object>_id` when it contains the id. This should be the case everywhere.
+  - these _ names should be kept the same all throughout the project. Eg. when passing them to the frontend.
 - every major piece of code: ifs, loops, functions, css selectors etc. should be seperated by a empty line from the previous
 - condition nesting should be avoided, instead invert the condition and return early
 - every major function should have a jsdoc comment overtop of it this should discribe

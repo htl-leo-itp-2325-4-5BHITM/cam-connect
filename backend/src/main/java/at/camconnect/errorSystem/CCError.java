@@ -25,26 +25,26 @@ public class CCError {
             Map.entry(1201, "Duplicate request")
     );
 
-    private int ccError;
+    private int errorCode;
     private String details;
     private String message;
 
     /**
      * creates a new error code meant to be returned by most api endpoints
-     * @param ccError custom ccError code: see api doc for all options
+     * @param errorCode custom ccError code: see api doc for all options
      * @param message error message that details what caused the error
      */
-    public CCError(int ccError, String message) {
-        setCcError(ccError);
+    public CCError(int errorCode, String message) {
+        setErrorCode(errorCode);
         setMessage(message);
     }
 
     /**
      * creates a new error code meant to be returned by most api endpoints
-     * @param ccError custom ccError code: see api doc for all options
+     * @param errorCode custom ccError code: see api doc for all options
      */
-    public CCError(int ccError) {
-        setCcError(ccError);
+    public CCError(int errorCode) {
+        setErrorCode(errorCode);
         setMessage("");
     }
 
@@ -53,7 +53,7 @@ public class CCError {
      * @param exception CCException that should get converted to error
      */
     public CCError(CCException exception) {
-        setCcError(exception.getError());
+        setErrorCode(exception.getError());
         setMessage(exception.getMessage());
     }
 
@@ -62,8 +62,8 @@ public class CCError {
     }
 
     //region getter and setter
-    public int getCcError() {
-        return ccError;
+    public int getErrorCode() {
+        return errorCode;
     }
 
     public String getDetails() {
@@ -75,17 +75,17 @@ public class CCError {
     }
 
     private void setMessage(String message) {
-        if(Objects.equals(message, "")) message = "no error message provided";
+        if(Objects.equals(message, "") || message == null) message = "no error message provided";
         this.message = message;
     }
 
-    private void setCcError(int ccError){
-        if(!ERROR_CODE_DETAILS.containsKey(ccError)) {
-            ccError = 1001;
+    private void setErrorCode(int errorCode){
+        if(!ERROR_CODE_DETAILS.containsKey(errorCode)) {
+            errorCode = 1001;
         };
 
-        this.ccError = ccError;
-        this.details = ERROR_CODE_DETAILS.get(ccError);
+        this.errorCode = errorCode;
+        this.details = ERROR_CODE_DETAILS.get(errorCode);
     }
     //endregion
 }

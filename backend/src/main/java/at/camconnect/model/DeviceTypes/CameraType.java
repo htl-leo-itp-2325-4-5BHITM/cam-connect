@@ -23,6 +23,7 @@ public class CameraType extends DeviceType {
     public CameraType() {
     }
     public CameraType(String typeName, CameraSensor sensor, CameraResolution resolution, LensMount mount) {
+        super(typeName);
         this.sensor = sensor;
         this.resolution = resolution;
         this.mount = mount;
