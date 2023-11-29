@@ -2,28 +2,20 @@ package at.camconnect.model.DeviceTypes.attributes;
 
 import at.camconnect.model.DeviceTypes.CameraType;
 import at.camconnect.model.DeviceTypes.LensType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class LensMount {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "lens_mount_seq")
+    @SequenceGenerator(name = "lens_mount_seq", sequenceName = "LENS_MOUNT_SEQ", allocationSize = 1)
     private long mount_id;
 
     private String name;
 
-    @ManyToOne
-    private LensType lensType;
-
-    @ManyToOne
-    private CameraType cameraType;
-
-    public LensMount(long mount_id, String name, LensType lensType, CameraType cameraType) {
+    public LensMount(long mount_id, String name) {
         this.mount_id = mount_id;
         this.name = name;
-        this.lensType = lensType;
-        this.cameraType = cameraType;
     }
     public LensMount() {
     }
@@ -44,19 +36,4 @@ public class LensMount {
         this.name = name;
     }
 
-    public LensType getLensType() {
-        return lensType;
-    }
-
-    public void setLensType(LensType lensType) {
-        this.lensType = lensType;
-    }
-
-    public CameraType getCameraType() {
-        return cameraType;
-    }
-
-    public void setCameraType(CameraType cameraType) {
-        this.cameraType = cameraType;
-    }
 }

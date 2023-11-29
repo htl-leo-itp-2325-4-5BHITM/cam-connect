@@ -118,8 +118,9 @@
         * rent_start: LocalDate
         * rent_end_planned: LocalDate
         * rent_end_actual: LocalDate
-        ' status is waiting for confirmation, confirmed, declined
-        * status: enum
+        * verification_status: RentStatus
+        * verification_code: String
+        * verification_message: String
     }
 
     entity Tag {

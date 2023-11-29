@@ -1,6 +1,8 @@
 package at.camconnect.model.DeviceTypes;
 
+import at.camconnect.errorSystem.CCException;
 import at.camconnect.model.DeviceType;
+import jakarta.json.JsonObject;
 import jakarta.persistence.Entity;
 
 @Entity
@@ -18,7 +20,6 @@ public class LightType extends DeviceType {
 
     public LightType() {
     }
-
     public int getWatts() {
         return watts;
     }

@@ -11,9 +11,7 @@ public class Tag {
     @SequenceGenerator(name = "tag_seq", sequenceName = "TAG_SEQ", allocationSize = 1)
     private Long tag_id;
 
-    //TODO this is most likely wrong
     @OneToMany
-    @JoinColumn(name = "type_id")
     private List<DeviceType> type;
 
     private String name;

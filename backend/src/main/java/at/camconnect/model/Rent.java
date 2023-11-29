@@ -1,6 +1,6 @@
 package at.camconnect.model;
 
-import at.camconnect.enums.RentStatus;
+import at.camconnect.enums.RentStatuEnum;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -31,7 +31,10 @@ public class Rent {
     private LocalDate rent_start;
     private LocalDate rent_end_planned;
     private LocalDate rent_end_actual;
-    private RentStatus status;
+    private RentStatuEnum verification_status;
+
+    private String verification_message;
+
     private String note;
 
     //TODO remove these when moving to new UI permanatly - also remove them in repo resource and update functions
@@ -48,6 +51,7 @@ public class Rent {
 
     public Rent() {
         rent_start = LocalDate.now();
+        verification_status = RentStatuEnum.CREATED;
     }
 
     public Rent(Student student) {
@@ -66,7 +70,7 @@ public class Rent {
                 ", rent_start=" + rent_start +
                 ", rent_end_planned=" + rent_end_planned +
                 ", rent_end_actual=" + rent_end_actual +
-                ", status=" + status +
+                ", status=" + verification_status +
                 ", note='" + note + '\'' +
                 '}';
     }
@@ -144,12 +148,12 @@ public class Rent {
         this.rent_end_actual = rent_end_actual;
     }
 
-    public RentStatus getStatus() {
-        return status;
+    public RentStatuEnum getVerification_status() {
+        return verification_status;
     }
 
-    public void setStatus(RentStatus status) {
-        this.status = status;
+    public void setVerification_status(RentStatuEnum status) {
+        this.verification_status = status;
     }
 
     public String getNote() {
