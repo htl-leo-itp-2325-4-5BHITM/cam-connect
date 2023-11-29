@@ -36,6 +36,18 @@ public class DeviceTypeRepository {
         em.persist(deviceType);
     }
 
+    public DeviceType getById(Long id) {
+        DeviceType deviceType = em.find(DeviceType.class, id);
+        if (deviceType == null) throw new CCException(1101);
+        return deviceType;
+    }
+
+    public void remove(Long id){
+        DeviceType deviceType = em.find(DeviceType.class, id);
+        if (deviceType == null) throw new CCException(1101);
+        em.remove(deviceType);
+    }
+
     //I know this guy is brutal but I cant split it into the individual models cause of the id to entity conversion
     public void update(Long id, DeviceTypeEnum typeEnum, JsonObject data){
         switch(typeEnum){
@@ -196,7 +208,7 @@ public class DeviceTypeRepository {
     //region utility functions
     private Class<? extends DeviceType> enumToClass(DeviceTypeEnum typeEnum) {
         //yes there are breaks missing, but they are unnecessary because of the returns
-        switch(typeEnum){
+        switch (typeEnum) {
             case audio:
                 return AudioType.class;
             case camera:
@@ -214,12 +226,6 @@ public class DeviceTypeRepository {
         }
 
         throw new CCException(1104);
-    }
-
-    public DeviceType getById(Long id) {
-        DeviceType result = em.find(DeviceType.class, id);
-        if (result == null) throw new CCException(1101);
-        return result;
     }
 
     //endregion
