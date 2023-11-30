@@ -1,5 +1,6 @@
 package at.camconnect.repository;
 
+import at.camconnect.errorSystem.CCException;
 import at.camconnect.model.Device;
 import at.camconnect.model.DeviceType;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -48,12 +49,17 @@ public class DeviceRepository {
     }
 
     public Device getById(long id){
-        return em.find(Device.class, id);
+        Device device = em.find(Device.class, id);
+        if (device == null) throw new CCException(1101);
+        return device;
     }
 
     public List<Device> getAll(){
-        List<Device> rents = em.createQuery("SELECT r FROM Rent r", Device.class).getResultList();
-        return rents;
+        List<Device> devices = em.createQuery("SELECT d FROM Device d", Device.class).getResultList();
+        if(devices.isEmpty()){
+            throw new CCException(1202);
+        }
+        return devices;
     }
 
     public void setNumber(long rentId, String number) {
