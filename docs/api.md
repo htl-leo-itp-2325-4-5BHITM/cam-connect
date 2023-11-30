@@ -22,7 +22,7 @@ api
 │           ├── note : {value}
 │           └── status : {value}
 ├── device -x
-│   ├── create : {count} -> [Device]
+│   ├── create/ : {type_id, number, serial} -> [Device]
 │   ├── getall -> [Device]
 │   └── getbyid/{rent_id}
 │       ├── remove
@@ -32,6 +32,7 @@ api
 │           ├── note : {value}
 │           └── type: {value}
 ├── devicetype -x
+│   ├── getall
 │   ├── create -x
 │   │   ├── lens : {f_stop, mount_id, focal_length}
 │   │   ├── camera : {sensor_id, resolution_id, mount_id}
