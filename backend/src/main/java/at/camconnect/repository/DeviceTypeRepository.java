@@ -27,6 +27,7 @@ public class DeviceTypeRepository {
         String dataString = String.valueOf(data);
         ObjectMapper objectMapper = new ObjectMapper();
 
+
         try {
             deviceType = objectMapper.readValue(dataString, enumToClass(typeEnum));
         } catch (JsonProcessingException e) {

@@ -2,6 +2,10 @@ package at.camconnect.boundary;
 
 import at.camconnect.model.Rent;
 import at.camconnect.repository.RentRepository;
+import io.quarkus.mailer.Mail;
+import io.quarkus.mailer.Mailer;
+import io.smallrye.common.annotation.Blocking;
+import io.smallrye.mutiny.Uni;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
@@ -15,6 +19,9 @@ import java.util.List;
 public class RentResource {
     @Inject
     RentRepository rentRepository;
+
+    @Inject
+    Mailer mailer;
 
     @POST
     @Path("/create")
@@ -43,6 +50,19 @@ public class RentResource {
     @Path("/getbyid/{id: [0-9]+}")
     public Rent getById(@PathParam("id")long id) {
         return rentRepository.getById(id);
+    }
+
+    @POST
+    @Path("/getbyid/{id: [0-9]+}/sendconfirmation")
+    @Blocking
+    public void sendConfirmation(@PathParam("id")long id) {
+        mailer.send(
+                Mail.withText("michael.leisch@gmx.at",
+
+                        "Ahoy from Quarkus",
+                        "A simple email sent from a Quarkus application"
+                )
+        );
     }
 
     @GET

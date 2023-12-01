@@ -5,7 +5,8 @@ import jakarta.persistence.*;
 @Entity
 public class Device {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "device_seq")
+    @SequenceGenerator(name = "device_seq", sequenceName = "DEVICE_SEQ", allocationSize = 1)
     private Long device_id;
     private String serial;
     private String number;

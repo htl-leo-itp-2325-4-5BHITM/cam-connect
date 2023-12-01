@@ -1,21 +1,2 @@
-
 ###
-POST http://localhost:8080/student/create
-
-{"firstname": "Max", "lastname": "Muster"}
-
-###
-POST http://localhost:8080/student/create
-
-{"firstname": "Michi", "lastname": "Leisch"}
-
-###
-GET http://localhost:8080/student/getbyid/1
-
-###
-GET http://localhost:8080/rent/getall
-
-###
-POST http://localhost:8080/student/search/
-
-{"firstname": "max"}
+POST http://localhost:8080/api/rent/getbyid/1/sendconfirmation

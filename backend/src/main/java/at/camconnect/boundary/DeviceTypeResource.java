@@ -13,7 +13,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-@Path("/devicetype")
+@Path("/api/devicetype")
 public class DeviceTypeResource {
     @Inject
     DeviceTypeRepository deviceTypeRepository;
