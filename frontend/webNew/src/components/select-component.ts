@@ -1,3 +1,5 @@
+import {html, render} from "lit-html"
+
 import styles from '../../styles/components/select.styles.scss'
 
 class SelectComponent extends HTMLElement {
@@ -14,15 +16,18 @@ class SelectComponent extends HTMLElement {
     }
 
     render() {
+        render(this.select(), this.shadowRoot)
+    }
+
+    select() {
         const selectElements = this.querySelectorAll("cc-select-element")
-        const divBox = document.createElement('div')
-        divBox.setAttribute("class", "select")
+        const div = document.createElement('div')
+        div.setAttribute("class", "select")
 
         selectElements.forEach((elem) => {
-            divBox.appendChild(elem)
+            div.appendChild(elem)
         })
-
-        this.shadowRoot.appendChild(divBox)
+        return div
     }
 }
 customElements.define("cc-select", SelectComponent)

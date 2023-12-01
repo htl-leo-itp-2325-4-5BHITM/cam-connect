@@ -1,3 +1,5 @@
+import {html, render} from "lit-html"
+
 import styles from '../../styles/components/value-chain.styles.scss'
 
 class ValueChainComponent extends HTMLElement {
@@ -14,15 +16,19 @@ class ValueChainComponent extends HTMLElement {
     }
 
     render() {
+        render(this.valueChain(), this.shadowRoot)
+    }
+
+    valueChain() {
         const selectElements = this.querySelectorAll("*")
-        const divBox = document.createElement('div')
-        divBox.setAttribute("class", "chain")
+        const div = document.createElement('div')
+        div.setAttribute("class", "chain")
 
         selectElements.forEach((elem) => {
-            divBox.appendChild(elem)
+            div.appendChild(elem)
         })
 
-        this.shadowRoot.appendChild(divBox)
+        return div
     }
 }
 customElements.define("cc-value-chain", ValueChainComponent)

@@ -1,50 +1,43 @@
 # cam-connect conventions
-Please take the time to read this, I will tell you when its finished / updated. 
+Please take the time to read this, I will tell you when its updated. 
+\
 If you follow these conventions we will have a better time writing code and the project can be handed off to the next group in a nice shape. 
 
 ## General
-
 - cam-connect should be spelled with a dash and in lowercase wherever possible
   - alternatively "cc" can be used for things like components: `cc-button`
 - all internal planning documents, files, comments, commit messages, documentations should be in **english**
 - all external proposals, progress reports, documentations should be in **german**
 
 ## Workflow / GitHub
-- When completing a issue move it to the "Review" area
+- When completing a issue move it to the "Review" area (not done)
   - yanik will check out the issue and either
     - move it to done
     - write a comment on what needs more work
-- The dev branch will be merged with main when a sprint is finished
-- commit often, this just safes your work to your local git git
-  - commit messages should start with the issue your working on and be precise and short`#0 Updated GitHub section in convetions.md`
+- The Main branch should **always be runnable**
+- Commit often, this just safes your work to your local git
+  - commit messages 
+    - should be precise and short
+    - should start with the issue number your working on or with "hotfix:", "refactor:" or something similar when not working on any issue
+    - `#0 Updated Workflow section in convetions.md`
   - if many things were changed write a description
-- push at the end of each workday and when leaving school .-.
-  - if something is throwing errors at the end of the day add a //TODO comment and **comment it out** so that others can continue work without having to change/fix your code
-
-## Workflow
-Starting work on a new issue
-- move it to the "In Progress" category
-- create a branch based on the "dev" branch with your issue id and a super short description `#0 Explaining the Workflow`
-
-Completing a Issue
-- move your issue to the "Review" area
-- create a pull request
-- yanik will either approve or decline the request, in the second case he will comment on your issue with things that need improvement
-
-## Github
-- push at the end of each workday and when leaving school .-.
-- if **something is throwing errors** at the end of the day add a //TODO comment and **comment it out** so that others can continue without having to change/fix your code
-- create a branch for your task with a fitting name
-  - when finished with the task set its status to review and create a pull request
-  - a team member will approve the pull request or leave a comment on parts that should be improved
-- commit messages should be precise and list all major changes
+- Push at the end of each workday and when leaving school .-.
+  - if something is throwing errors add a //TODO and **comment it out**
+  - if your issue is constantly throwing errors you can create a feature branch
+    - name it `#issueId` & a super short description of your issue
+    - switch to that branch, work there until its all done and then create a pull request to dev
+- When a sprint is finished
+  - The dev branch will be merged with main
+  - A description of the major changes will be added to the [changelog](./changelog.md) and pull request
+  - if necessary the [feature list](../README.md/#features) will be updated
 
 ## Code and file formatting
-
 - use camelCase for folder names
 - use camelCase (or PascalCase for classes) for filenames, and css class names
 - `{` brackets should be on the same lines as the code they belong to
 - use snake_case for database variables
+  - whenever a variable is used as an foreign key it should be named simply `<object>` when it contains a entity and `<object>_id` when it contains the id. This should be the case everywhere.
+  - these _ names should be kept the same all throughout the project. Eg. when passing them to the frontend.
 - every major piece of code: ifs, loops, functions, css selectors etc. should be seperated by a empty line from the previous
 - condition nesting should be avoided, instead invert the condition and return early
 - every major function should have a jsdoc comment overtop of it this should discribe
@@ -55,7 +48,7 @@ Completing a Issue
 in the same line as the bracket
 - every codeblock which contents are not immediately clear should have a comment explaining its content overtop of it
 - if you can't complete a piece of code right now, add a `//TODO` comment
-- every major, bigger block of functions (all that create a new entry, all that display refresh and edit the devices) 
+- every major, bigger block of functions (all that create a new entry, all that display refresh and edit the devices, etc.) 
 should be wrapped in a `//region name ..code here.. //endregion` that way they can be folded in webstorm
 - when using variables which uses are not immediatly clear add a comment on the same line to explain or on the line above to explain for multiple
 - script, style and mockup files belonging together should have the same name
@@ -80,12 +73,11 @@ function checkAdminPanelLogin() {
     }
     
     //displays error to user
-    if(!verifyAdminPassword(document.querySelector('.passwordInput').innerHTML)){ //input password matchs with that in db
+    if(!verifyAdminPassword(document.querySelector('.adminPasswordInput').innerHTML)){ //input password matchs with that in db
         displayError("The entered password is not correct")
         return false
     }
     
-    displayAdminPannel()
     return true
 }
 
@@ -106,16 +98,18 @@ function checkLogin(){
 
 ### SCSS specific
 - there should be a base stylesheet whenever multiple pages need the same style
-- don't nest multiple container selectors only sub items or pseude selectors
+- don't nest multiple container selectors only sub items or pseudo selectors
 - classnames and similar should be camelCase
 - units
   - do not use pixels
-  - use rem for text related sizes: font size, text container, height etc.
-  - use vw for standalone widths, that of: popups, big areas, etc.
-  - use % for child items
-  - use ch for text width: this represents how many characters can fit
-  - try to use box-sizing: border-box to make designs more robust
-  - use grids and their gap property
+  - use `rem` for text related sizes: font size, text container, height etc.
+  - use `vw` for standalone widths, that of: popups, big areas, etc.
+  - use `%` for the width of child items
+  - use `ch` for text width: this represents how many characters can fit
+- try to use `box-sizing: border-box` to make designs more robust
+- use grids and their gap property
+- use `aspect-ratio: 1` for squares
+- use width/height `fit-content` for auto scaling
 
 For those that don't know scss this will seem weird, it's actually pretty easy
 ```SCSS

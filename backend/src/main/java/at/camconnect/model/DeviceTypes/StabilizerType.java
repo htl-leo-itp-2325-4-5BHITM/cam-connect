@@ -1,35 +1,35 @@
 package at.camconnect.model.DeviceTypes;
 
+import at.camconnect.errorSystem.CCException;
 import at.camconnect.model.DeviceType;
+import jakarta.json.JsonObject;
 import jakarta.persistence.Entity;
 
 @Entity
 public class StabilizerType extends DeviceType {
-    private int maxWeight;
-    private int numberOfAxis;
+    private int max_weight;
+    private int number_of_axis;
 
-    public StabilizerType(String typeName, int maxWeight, int numberOfAxis) {
+    public StabilizerType(String typeName, int max_weight, int number_of_axis) {
         super(typeName);
-        this.maxWeight = maxWeight;
-        this.numberOfAxis = numberOfAxis;
+        this.max_weight = max_weight;
+        this.number_of_axis = number_of_axis;
     }
-
     public StabilizerType() {
     }
-
-    public int getMaxWeight() {
-        return maxWeight;
+    public int getMax_weight() {
+        return max_weight;
     }
 
-    public void setMaxWeight(int maxWeight) {
-        this.maxWeight = maxWeight;
+    public void setMax_weight(int maxWeight) {
+        this.max_weight = maxWeight;
     }
 
-    public int getNumberOfAxis() {
-        return numberOfAxis;
+    public int getNumber_of_axis() {
+        return number_of_axis;
     }
 
-    public void setNumberOfAxis(int numberOfAxis) {
-        this.numberOfAxis = numberOfAxis;
+    public void setNumber_of_axis(int numberOfAxis) {
+        this.number_of_axis = numberOfAxis;
     }
 }

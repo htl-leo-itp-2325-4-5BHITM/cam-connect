@@ -119,14 +119,6 @@ public class RentResource {
     }
 
     @POST
-    @Path("/getbyid/{id: [0-9]+}/update/status")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response setStatus(@PathParam("id")long id, JsonObject status) {
-        rentRepository.setStatus(id, status.getString("value"));
-        return Response.ok().build();
-    }
-
-    @POST
     @Path("/getbyid/{id: [0-9]+}/update/note")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response setNote(@PathParam("id")long id, JsonObject note) {

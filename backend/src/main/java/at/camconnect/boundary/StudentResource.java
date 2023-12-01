@@ -3,7 +3,6 @@ package at.camconnect.boundary;
 import at.camconnect.model.Student;
 import at.camconnect.repository.StudentRepository;
 import jakarta.inject.Inject;
-import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;

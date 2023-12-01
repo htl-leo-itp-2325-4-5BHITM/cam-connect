@@ -2,13 +2,10 @@ import {html, render} from "lit-html"
 
 import styles from '../../styles/components/property-value.styles.scss'
 
-const rentStatus = (property, value) => html`
-    <div>
-        <p class="property">${property}:</p>
-        <p class="value">${value}</p>
-    </div>`
-
-
+/**
+ * @Param property: is the text which comes first
+ * @Param value: is the text which comes after the property
+ */
 class PropertyValueComponent extends HTMLElement {
     constructor() {
         super()
@@ -25,7 +22,22 @@ class PropertyValueComponent extends HTMLElement {
     render() {
         const property = this.getAttribute("property")
         const value = this.getAttribute("value")
-        render(rentStatus(property, value), this.shadowRoot)
+        render(this.rentStatus(property, value), this.shadowRoot)
+    }
+    
+    rentStatus(property, value) {
+        let div = document.createElement('div')
+
+        let propertyTag = document.createElement('p')
+        propertyTag.classList.add("property")
+        propertyTag.innerHTML = `${property}: `
+        let valueTag = document.createElement('p')
+        valueTag.classList.add("value")
+        valueTag.innerHTML = value
+
+        div.appendChild(propertyTag)
+        div.appendChild(valueTag)
+        return div
     }
 }
 customElements.define("cc-property-value", PropertyValueComponent)

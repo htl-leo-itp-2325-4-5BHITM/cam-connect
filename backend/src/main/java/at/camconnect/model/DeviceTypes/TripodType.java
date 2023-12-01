@@ -1,17 +1,25 @@
 package at.camconnect.model.DeviceTypes;
 
 import at.camconnect.model.DeviceType;
+import at.camconnect.model.DeviceTypes.attributes.TripodHead;
+import at.camconnect.errorSystem.CCException;
+import jakarta.json.JsonObject;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class TripodType extends DeviceType {
     private double height;
-    private String head;
+
+    @ManyToOne
+    @JoinColumn(name = "head_id")
+    private TripodHead head;
 
     public TripodType() {
     }
 
-    public TripodType(String typeName, double height, String head) {
+    public TripodType(String typeName, double height, TripodHead head) {
         super(typeName);
         this.height = height;
         this.head = head;
@@ -25,11 +33,11 @@ public class TripodType extends DeviceType {
         this.height = height;
     }
 
-    public String getHead() {
+    public TripodHead getHead() {
         return head;
     }
 
-    public void setHead(String head) {
+    public void setHead(TripodHead head) {
         this.head = head;
     }
 }

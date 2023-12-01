@@ -4,12 +4,10 @@ import styles from '../../styles/components/rent-status.styles.scss'
 
 enum Status {VERFUEGBAR="verfügbar", VERGEBEN="vergeben", GESPERRT="gesperrt"}
 
-const rentStatus = (status: Status, amount) => html`
-    <div class="cc-rent-status" status="${status}" amount="${amount}">
-        ${amount} ${status.charAt(0).toUpperCase()}${status.substring(1,status.length)}
-    </div>`
-
-
+/**
+ * @Param status: is "verfügbar", "vergeben" oder "gesperrt"
+ * @Param amount: is the amount of status types
+ */
 class RentStatusComponent extends HTMLElement {
     constructor() {
         super()
@@ -27,7 +25,16 @@ class RentStatusComponent extends HTMLElement {
         const status = this.getAttribute('status') as Status
         const amount = this.getAttribute('amount')
 
-        render(rentStatus(status, amount), this.shadowRoot)
+        render(this.rentStatus(status, amount), this.shadowRoot)
+    }
+
+    rentStatus(status, amount) {
+        let div = document.createElement('div')
+        div.classList.add("cc-rent-status")
+        div.setAttribute("status", status)
+        div.setAttribute("amount", amount)
+        div.innerHTML = `${amount ? amount : ""} ${status.charAt(0).toUpperCase()}${status.substring(1,status.length)}`
+        return div
     }
 }
 customElements.define("cc-rent-status", RentStatusComponent)

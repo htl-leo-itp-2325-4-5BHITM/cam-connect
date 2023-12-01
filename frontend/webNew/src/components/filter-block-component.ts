@@ -1,5 +1,10 @@
+import {html, render} from "lit-html"
+
 import styles from '../../styles/components/filter.styles.scss'
 
+/**
+ *
+ */
 class FilterBlockComponent extends HTMLElement {
     constructor() {
         super()
@@ -14,18 +19,22 @@ class FilterBlockComponent extends HTMLElement {
     }
 
     render() {
+        render(this.filterElement(), this.shadowRoot)
+    }
+
+    filterElement() {
         const filterElements = this.querySelectorAll("cc-filter-element")
-        const divBox = document.createElement('div')
-        divBox.setAttribute("class", "filter-block")
+        const div = document.createElement('div')
+        div.setAttribute("class", "filter-block")
         const heading = document.createElement('h2')
         heading.innerHTML = this.getAttribute("name")
 
-        divBox.appendChild(heading)
+        div.appendChild(heading)
         filterElements.forEach((elem) => {
-            divBox.appendChild(elem)
+            div.appendChild(elem)
         })
 
-        this.shadowRoot.appendChild(divBox)
+        return div
     }
 }
 customElements.define("cc-filter-block", FilterBlockComponent)

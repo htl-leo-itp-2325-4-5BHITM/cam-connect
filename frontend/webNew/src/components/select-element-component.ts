@@ -1,8 +1,14 @@
+import {html, render} from "lit-html"
+
 class SelectElementComponent extends HTMLElement {
     constructor() {
         super()
     }
     connectedCallback() {
+        this.render()
+    }
+
+    render() {
         const div = document.createElement("div")
         div.classList.add("select-element")
         div.addEventListener('click', this.toggleOption.bind(div))
