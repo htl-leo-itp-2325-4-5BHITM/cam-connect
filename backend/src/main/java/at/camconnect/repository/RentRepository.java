@@ -1,12 +1,13 @@
 package at.camconnect.repository;
 
-import at.camconnect.enums.RentStatuEnum;
+import at.camconnect.enums.RentStatusEnum;
+import at.camconnect.errorSystem.CCException;
+import at.camconnect.errorSystem.CCResponse;
 import at.camconnect.model.Device;
 import at.camconnect.model.Rent;
 import at.camconnect.model.Student;
 import at.camconnect.model.Teacher;
-import io.quarkus.mailer.Mail;
-import io.quarkus.mailer.Mailer;
+import io.vertx.ext.mail.MailMessage;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
@@ -15,6 +16,7 @@ import jakarta.transaction.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Random;
 
 @ApplicationScoped
 public class RentRepository {
@@ -45,6 +47,31 @@ public class RentRepository {
     public Rent getById(long id){
         return em.find(Rent.class, id);
     }
+
+
+    public MailMessage getMailMessage (String itUser) {
+        MailMessage message = new MailMessage();
+        message.setFrom("signup.camconnect@gmail.com");
+        message.setTo(itUser + "@students.htl-leonding.ac.at");
+        message.setText("Bitte bestätige den Verleih # in dem sie auf den Link klicken: ");
+        message.setHtml("<a href='localhost:4200?verification_code=" + generateVerificationCode() + "'>Bestätigen</a>");
+
+        return message;
+    }
+    public String generateVerificationCode() {
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < 10; i++) {
+            int index = random.nextInt(characters.length());
+            char randomChar = characters.charAt(index);
+            sb.append(randomChar);
+        }
+
+        return sb.toString();
+    }
+
 
     @Transactional
     public void update(long id, JsonObject rentJson){
@@ -136,7 +163,7 @@ public class RentRepository {
 
     public void setStatus(long rentId, String status) {
         Rent rent = getById(rentId);
-        rent.setVerification_status(RentStatuEnum.valueOf(status));
+        rent.setVerification_status(RentStatusEnum.valueOf(status));
     }
 
     public void setNote(long rentId, String note) {
@@ -151,6 +178,14 @@ public class RentRepository {
     public void setDeviceString(long rentId, String device_string) {
         Rent rent = getById(rentId);
         rent.setDevice_string(device_string);
+    }
+    public void setVerificationMessage(long rentId, RentStatusEnum verification){
+        Rent rent = getById(rentId);
+
+        if(rent.getVerification_status() == RentStatusEnum.WAITING){
+            throw new CCException(1201);
+        }
+        rent.setVerification_status(verification);
     }
     //endregion
 }

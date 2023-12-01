@@ -1,2 +1,2 @@
 ###
-POST http://localhost:8080/api/rent/getbyid/1/sendconfirmation
+GET http://localhost:8080/api/rent/getbyid/1/sendconfirmation/it200269
