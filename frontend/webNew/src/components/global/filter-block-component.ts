@@ -1,6 +1,6 @@
 import {html, render} from "lit-html"
 
-import styles from '../../styles/components/filter.styles.scss'
+import styles from '../../../styles/components/global/filter.styles.scss'
 
 /**
  *

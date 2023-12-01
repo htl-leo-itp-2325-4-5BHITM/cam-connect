@@ -1,6 +1,58 @@
 @import "variables.scss";
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 
-* {
+:global nav{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Quicksand', sans-serif;
+  color: $gray800;
+  font-weight: 400;
+  background-color: $gray300;
+  padding: .8rem;
 
+  div.logo::before{
+    background-color: $accent;
+    width: .5rem;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+  }
+
+  div.pageSelector {
+    display: flex;
+
+    p {
+      cursor: pointer;
+    }
+
+    p:first-child::after {
+      color: $accent;
+      content: '•';
+      padding-inline: .5rem;
+    }
+
+    p.active {
+      color: $gray1000;
+      font-weight: 600;
+    }
+  }
+
+  div.searchBar{
+    width: 22ch;
+    background-color: $gray400;
+    border-radius: .5rem;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: .2rem;
+
+    input{
+      color: $gray800;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid $gray800;
+      padding: .2rem;
+    }
+  }
 }
+
+

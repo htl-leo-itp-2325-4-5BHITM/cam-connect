@@ -1,6 +1,6 @@
 import {html, render} from "lit-html"
 
-import styles from '../../styles/components/property-value.styles.scss'
+import styles from '../../../styles/components/global/property-value.styles.scss'
 
 /**
  * @Param property: is the text which comes first
