@@ -39,7 +39,6 @@ function requestAllRents() {
     })
         .catch(function (error) { return console.error(error); });
 }
-console.log("gadsfsadf");
 var columns = [
     { name: "Gerät Nr.", inputType: "text", cellType: "device_string" },
     { name: "Zubehör", inputType: "text", cellType: "accessory" },
@@ -122,7 +121,9 @@ function generateTable() {
 }
 var studentSelectionPopup = document.querySelector("#studentSelectionPopup");
 var studentSearchbar = document.querySelector('#studentSelectionPopup .search');
-studentSearchbar.addEventListener("keyup", function () { searchForStudentFromSelectInput(studentSearchbar.value, Number(studentSearchbar.getAttribute('rent_id'))); });
+studentSearchbar.addEventListener("keyup", function () {
+    searchForStudentFromSelectInput(studentSearchbar.value, Number(studentSearchbar.getAttribute('rent_id')));
+});
 function openStudentPicker(input, rentId) {
     searchForStudentFromSelectInput("", rentId);
     studentSelectionPopup.querySelector("input").value = "";
@@ -132,7 +133,9 @@ function openStudentPicker(input, rentId) {
     studentSelectionPopup.style.left = bounds.left + "px";
     studentSelectionPopup.style.display = "block";
     studentSearchbar.focus();
-    setTimeout(function () { document.addEventListener("mousedown", closeStudentPickerOnBlur); });
+    setTimeout(function () {
+        document.addEventListener("mousedown", closeStudentPickerOnBlur);
+    });
 }
 function closeStudentPickerOnBlur(e) {
     if (e.target === studentSelectionPopup || e.target.closest('#studentSelectionPopup') === studentSelectionPopup || e.target.getAttribute("celltype") === "student")
@@ -158,7 +161,9 @@ function searchForStudentFromSelectInput(inputValue, rentId) {
         data.forEach(function (student) {
             var selectionOption = document.createElement('p');
             selectionOption.innerText = student.firstname + " " + student.lastname;
-            selectionOption.addEventListener("click", function () { updateRent(selectionOption, "student_id", student.student_id, rentId); });
+            selectionOption.addEventListener("click", function () {
+                updateRent(selectionOption, "student_id", student.student_id, rentId);
+            });
             html.push(selectionOption);
         });
         if (html.length === 0) {
@@ -173,7 +178,9 @@ function searchForStudentFromSelectInput(inputValue, rentId) {
 }
 var teacherSelectionPopup = document.querySelector("#teacherSelectionPopup");
 var teacherSearchbar = document.querySelector('#teacherSelectionPopup .search');
-teacherSearchbar.addEventListener("keyup", function () { searchForTeacherFromSelectInput(teacherSearchbar.value, Number(teacherSearchbar.getAttribute('rent_id'))); });
+teacherSearchbar.addEventListener("keyup", function () {
+    searchForTeacherFromSelectInput(teacherSearchbar.value, Number(teacherSearchbar.getAttribute('rent_id')));
+});
 function openTeacherPicker(input, rentId, teacherType) {
     searchForTeacherFromSelectInput("", rentId);
     teacherSelectionPopup.querySelector("input").value = "";
@@ -184,7 +191,9 @@ function openTeacherPicker(input, rentId, teacherType) {
     teacherSelectionPopup.style.left = bounds.left + "px";
     teacherSelectionPopup.style.display = "block";
     teacherSearchbar.focus();
-    setTimeout(function () { document.addEventListener("mousedown", closeTeacherPickerOnBlur); });
+    setTimeout(function () {
+        document.addEventListener("mousedown", closeTeacherPickerOnBlur);
+    });
 }
 function closeTeacherPickerOnBlur(e) {
     if (e.target === teacherSelectionPopup || e.target.closest('#teacherSelectionPopup') === teacherSelectionPopup || e.target.getAttribute("celltype") === "teacher_start" || e.target.getAttribute("celltype") === "teacher_end")
@@ -203,7 +212,9 @@ function searchForTeacherFromSelectInput(inputValue, rentId) {
         },
         body: JSON.stringify({ lastname: inputValue })
     })
-        .then(function (response) { return response.json(); })
+        .then(function (response) {
+        return response.json();
+    })
         .then(function (data) {
         var _a;
         var teacherType = teacherSearchbar.getAttribute('teacher_type');
@@ -212,7 +223,9 @@ function searchForTeacherFromSelectInput(inputValue, rentId) {
         data.forEach(function (teacher) {
             var selectionOption = document.createElement('p');
             selectionOption.innerText = teacher.firstname + " " + teacher.lastname;
-            selectionOption.addEventListener("click", function () { updateRent(selectionOption, teacherType, teacher.teacher_id, rentId); });
+            selectionOption.addEventListener("click", function () {
+                updateRent(selectionOption, teacherType, teacher.teacher_id, rentId);
+            });
             html.push(selectionOption);
         });
         if (html.length === 0) {
@@ -287,25 +300,30 @@ function findRentById(id) {
     return res;
 }
 function importStudents(file) {
+    console.log("importing");
     var formData = new FormData();
     formData.append('file', file);
-    return fetch("".concat(APPLICATION_URL, "/students/import"), {
+    return fetch("".concat(APPLICATION_URL, "/student/import"), {
         method: 'POST',
         body: formData,
     })
-        .then(function (response) { return response.json(); })
+        .then(function (response) {
+        console.log(response);
+        response.json();
+    })
         .then(function (data) {
-        console.log('Import successful:', data);
+        console.log(data);
         return true;
     })
         .catch(function (error) {
-        console.error('Error importing students:', error);
+        console.error(error);
         return false;
     });
 }
 var fileInput = document.getElementById('csvFileInput');
-fileInput.addEventListener('change', function (event) {
-    var files = event.target.files;
+var importButton = document.querySelector('#importButton');
+importButton.addEventListener('click', function (event) {
+    var files = fileInput.files;
     if (files && files.length > 0) {
         var file = files[0];
         console.log(file);

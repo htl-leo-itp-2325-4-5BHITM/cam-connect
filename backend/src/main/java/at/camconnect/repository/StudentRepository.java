@@ -1,5 +1,6 @@
 package at.camconnect.repository;
 
+import at.camconnect.errorSystem.CCException;
 import at.camconnect.model.Student;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -8,16 +9,10 @@ import jakarta.json.JsonObject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 @ApplicationScoped
 public class StudentRepository{
@@ -63,26 +58,21 @@ public class StudentRepository{
         return results;
     }
 
-    public boolean importStudents(InputStream fileInputStream) {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(fileInputStream))) {
-            String line;
+    public void importStudents(File file) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line = reader.readLine();
+            if(line == null) throw new CCException(1203);
+            String[] lineArray = line.split(";");
+
+            if (!lineArray[0].equals("vorname") || !lineArray[1].equals("nachname") || !lineArray[2].equals("klasse") || !lineArray[3].equals("email") || !lineArray[4].equals("username") || !lineArray[5].equals("passwort")) throw new CCException(1204);
+            if(lineArray.length != 6) throw new CCException(1204);
 
             while ((line = reader.readLine()) != null) {
-                // Splitte die CSV-Zeile
-                String[] values = line.split(",");
-
-                // Füge die Werte zur Liste hinzu
-
-                Student student = new Student(values[0].trim(), values[1].trim(), values[2].trim(),values[3].trim(), values[4].trim());
-                em.persist(student);
+                create(new Student(lineArray[0], lineArray[1], lineArray[2], lineArray[3], lineArray[4], lineArray[5]));
             }
-
-            return true;
-            // Hier hast du das CSV als List<String[]> und kannst es weiter verarbeiten
-        } catch(Exception ex){
-            return false;
+        } catch (IOException e) {
+            //TODO right error code
+            throw new CCException(1200);
         }
     }
-    
-
 }

@@ -1,18 +1,18 @@
-INSERT INTO student (student_id, firstname, lastname, password, school_class, user_id) VALUES (NEXT VALUE FOR student_seq, 'Anna', 'Schmidt', 'passwort1', '1CHITM', 'IT200271');
-INSERT INTO student (student_id, firstname, lastname, password, school_class, user_id) VALUES (NEXT VALUE FOR student_seq, 'Lukas', 'Müller', 'passwort2', '2AHITM', 'IT200272');
-INSERT INTO student (student_id, firstname, lastname, password, school_class, user_id) VALUES (NEXT VALUE FOR student_seq, 'Sophie', 'Wagner', 'passwort3', '3BHITM', 'IT200273');
-INSERT INTO student (student_id, firstname, lastname, password, school_class, user_id) VALUES (NEXT VALUE FOR student_seq, 'Max', 'Hofmann', 'passwort4', '4CHITM', 'IT200274');
-INSERT INTO student (student_id, firstname, lastname, password, school_class, user_id) VALUES (NEXT VALUE FOR student_seq, 'Emma', 'Klein', 'passwort5', '5AHITM', 'IT200275');
-INSERT INTO student (student_id, firstname, lastname, password, school_class, user_id) VALUES (NEXT VALUE FOR student_seq, 'Leon', 'Schulz', 'passwort6', '1BHITM', 'IT200276');
-INSERT INTO student (student_id, firstname, lastname, password, school_class, user_id) VALUES (NEXT VALUE FOR student_seq, 'Mia', 'Herrmann', 'passwort7', '2CHITM', 'IT200277');
-INSERT INTO student (student_id, firstname, lastname, password, school_class, user_id) VALUES (NEXT VALUE FOR student_seq, 'Tim', 'Becker', 'passwort8', '3AHITM', 'IT200278');
-INSERT INTO student (student_id, firstname, lastname, password, school_class, user_id) VALUES (NEXT VALUE FOR student_seq, 'Lena', 'Schneider', 'passwort9', '4CHITM', 'IT200279');
-INSERT INTO student (student_id, firstname, lastname, password, school_class, user_id) VALUES (NEXT VALUE FOR student_seq, 'Finn', 'Koch', 'passwort10', '5BHITM', 'IT200280');
-INSERT INTO student (student_id, firstname, lastname, password, school_class, user_id) VALUES (NEXT VALUE FOR student_seq, 'Laura', 'Bauer', 'passwort11', '1AHITM', 'IT200281');
-INSERT INTO student (student_id, firstname, lastname, password, school_class, user_id) VALUES (NEXT VALUE FOR student_seq, 'Elias', 'Schuster', 'passwort12', '2BHITM', 'IT200282');
-INSERT INTO student (student_id, firstname, lastname, password, school_class, user_id) VALUES (NEXT VALUE FOR student_seq, 'Hannah', 'Wolf', 'passwort13', '3CHITM', 'IT200283');
-INSERT INTO student (student_id, firstname, lastname, password, school_class, user_id) VALUES (NEXT VALUE FOR student_seq, 'Paul', 'Lange', 'passwort14', '4AHITM', 'IT200284');
-INSERT INTO student (student_id, firstname, lastname, password, school_class, user_id) VALUES (NEXT VALUE FOR student_seq, 'Clara', 'Graf', 'passwort15', '5CHITM', 'IT200285');
+INSERT INTO student (student_id, firstname, lastname, password, school_class, username) VALUES (NEXT VALUE FOR student_seq, 'Anna', 'Schmidt', 'passwort1', '1CHITM', 'IT200271');
+INSERT INTO student (student_id, firstname, lastname, password, school_class, username) VALUES (NEXT VALUE FOR student_seq, 'Lukas', 'Müller', 'passwort2', '2AHITM', 'IT200272');
+INSERT INTO student (student_id, firstname, lastname, password, school_class, username) VALUES (NEXT VALUE FOR student_seq, 'Sophie', 'Wagner', 'passwort3', '3BHITM', 'IT200273');
+INSERT INTO student (student_id, firstname, lastname, password, school_class, username) VALUES (NEXT VALUE FOR student_seq, 'Max', 'Hofmann', 'passwort4', '4CHITM', 'IT200274');
+INSERT INTO student (student_id, firstname, lastname, password, school_class, username) VALUES (NEXT VALUE FOR student_seq, 'Emma', 'Klein', 'passwort5', '5AHITM', 'IT200275');
+INSERT INTO student (student_id, firstname, lastname, password, school_class, username) VALUES (NEXT VALUE FOR student_seq, 'Leon', 'Schulz', 'passwort6', '1BHITM', 'IT200276');
+INSERT INTO student (student_id, firstname, lastname, password, school_class, username) VALUES (NEXT VALUE FOR student_seq, 'Mia', 'Herrmann', 'passwort7', '2CHITM', 'IT200277');
+INSERT INTO student (student_id, firstname, lastname, password, school_class, username) VALUES (NEXT VALUE FOR student_seq, 'Tim', 'Becker', 'passwort8', '3AHITM', 'IT200278');
+INSERT INTO student (student_id, firstname, lastname, password, school_class, username) VALUES (NEXT VALUE FOR student_seq, 'Lena', 'Schneider', 'passwort9', '4CHITM', 'IT200279');
+INSERT INTO student (student_id, firstname, lastname, password, school_class, username) VALUES (NEXT VALUE FOR student_seq, 'Finn', 'Koch', 'passwort10', '5BHITM', 'IT200280');
+INSERT INTO student (student_id, firstname, lastname, password, school_class, username) VALUES (NEXT VALUE FOR student_seq, 'Laura', 'Bauer', 'passwort11', '1AHITM', 'IT200281');
+INSERT INTO student (student_id, firstname, lastname, password, school_class, username) VALUES (NEXT VALUE FOR student_seq, 'Elias', 'Schuster', 'passwort12', '2BHITM', 'IT200282');
+INSERT INTO student (student_id, firstname, lastname, password, school_class, username) VALUES (NEXT VALUE FOR student_seq, 'Hannah', 'Wolf', 'passwort13', '3CHITM', 'IT200283');
+INSERT INTO student (student_id, firstname, lastname, password, school_class, username) VALUES (NEXT VALUE FOR student_seq, 'Paul', 'Lange', 'passwort14', '4AHITM', 'IT200284');
+INSERT INTO student (student_id, firstname, lastname, password, school_class, username) VALUES (NEXT VALUE FOR student_seq, 'Clara', 'Graf', 'passwort15', '5CHITM', 'IT200285');
 
 
 INSERT INTO Teacher (teacher_id, firstname, lastname, password, username) VALUES(NEXT VALUE FOR teacher_seq, 'Professor', 'Johnson', 'teacherpass', 'prof_johnson');
