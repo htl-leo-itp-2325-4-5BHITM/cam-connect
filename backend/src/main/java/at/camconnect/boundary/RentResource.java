@@ -1,7 +1,18 @@
 package at.camconnect.boundary;
 
+import at.camconnect.enums.RentStatusEnum;
+import at.camconnect.errorSystem.CCException;
+import at.camconnect.errorSystem.CCResponse;
 import at.camconnect.model.Rent;
 import at.camconnect.repository.RentRepository;
+import io.quarkus.mailer.Mail;
+import io.quarkus.mailer.MailTemplate;
+import io.quarkus.mailer.Mailer;
+import io.quarkus.qute.Location;
+import io.smallrye.common.annotation.Blocking;
+import io.smallrye.mutiny.Uni;
+import io.vertx.ext.mail.MailClient;
+import io.vertx.ext.mail.MailMessage;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
@@ -15,6 +26,9 @@ import java.util.List;
 public class RentResource {
     @Inject
     RentRepository rentRepository;
+
+    @Inject
+    MailClient client;
 
     @POST
     @Path("/create")
@@ -43,6 +57,21 @@ public class RentResource {
     @Path("/getbyid/{id: [0-9]+}")
     public Rent getById(@PathParam("id")long id) {
         return rentRepository.getById(id);
+    }
+
+    @GET
+    @Path("/getbyid/{id: [0-9]+}/sendconfirmation/{itUser}")
+    public Response sendConfirmation(@PathParam("id")long id, @PathParam("itUser")String itUser) {
+        try{
+            rentRepository.setVerificationMessage(id, RentStatusEnum.WAITING);
+
+            client.sendMail(rentRepository.getMailMessage(itUser))
+                    .onSuccess(System.out::println)
+                    .onFailure(Throwable::printStackTrace);
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
 
     @GET
