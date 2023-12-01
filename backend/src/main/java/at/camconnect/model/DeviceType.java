@@ -12,6 +12,17 @@ public abstract class DeviceType{
     private Long type_id;
     private String name;
 
+
+    private String image;
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public DeviceType(String name) {
         this.name = name;
     }
