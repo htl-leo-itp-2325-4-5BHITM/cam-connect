@@ -303,13 +303,12 @@ function importStudents(file) {
     console.log("importing");
     var formData = new FormData();
     formData.append('file', file);
-    return fetch("".concat(APPLICATION_URL, "/student/import"), {
+    return fetch("http://localhost:8080/api/student/import", {
         method: 'POST',
         body: formData,
     })
         .then(function (response) {
-        console.log(response);
-        response.json();
+        return response.json();
     })
         .then(function (data) {
         console.log(data);

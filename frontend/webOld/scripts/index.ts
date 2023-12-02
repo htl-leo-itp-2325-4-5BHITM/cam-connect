@@ -426,13 +426,12 @@ function importStudents(file: File): Promise<boolean> {
     const formData = new FormData();
     formData.append('file', file)
 
-    return fetch(`${APPLICATION_URL}/student/import`, {
+    return fetch(`http://localhost:8080/api/student/import`, {
         method: 'POST',
         body: formData,
     })
         .then(response => {
-            console.log(response)
-            response.json()
+            return response.json()
         })
         .then(data => {
             console.log(data)
