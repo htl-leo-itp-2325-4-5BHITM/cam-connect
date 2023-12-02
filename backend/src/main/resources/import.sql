@@ -1,4 +1,4 @@
-INSERT INTO student (student_id, firstname, lastname, password, school_class, username) VALUES (NEXT VALUE FOR student_seq, 'Anna', 'Schmidt', 'passwort1', '1CHITM', 'IT200271');
+/*INSERT INTO student (student_id, firstname, lastname, password, school_class, username) VALUES (NEXT VALUE FOR student_seq, 'Anna', 'Schmidt', 'passwort1', '1CHITM', 'IT200271');
 INSERT INTO student (student_id, firstname, lastname, password, school_class, username) VALUES (NEXT VALUE FOR student_seq, 'Lukas', 'Müller', 'passwort2', '2AHITM', 'IT200272');
 INSERT INTO student (student_id, firstname, lastname, password, school_class, username) VALUES (NEXT VALUE FOR student_seq, 'Sophie', 'Wagner', 'passwort3', '3BHITM', 'IT200273');
 INSERT INTO student (student_id, firstname, lastname, password, school_class, username) VALUES (NEXT VALUE FOR student_seq, 'Max', 'Hofmann', 'passwort4', '4CHITM', 'IT200274');
@@ -12,15 +12,15 @@ INSERT INTO student (student_id, firstname, lastname, password, school_class, us
 INSERT INTO student (student_id, firstname, lastname, password, school_class, username) VALUES (NEXT VALUE FOR student_seq, 'Elias', 'Schuster', 'passwort12', '2BHITM', 'IT200282');
 INSERT INTO student (student_id, firstname, lastname, password, school_class, username) VALUES (NEXT VALUE FOR student_seq, 'Hannah', 'Wolf', 'passwort13', '3CHITM', 'IT200283');
 INSERT INTO student (student_id, firstname, lastname, password, school_class, username) VALUES (NEXT VALUE FOR student_seq, 'Paul', 'Lange', 'passwort14', '4AHITM', 'IT200284');
-INSERT INTO student (student_id, firstname, lastname, password, school_class, username) VALUES (NEXT VALUE FOR student_seq, 'Clara', 'Graf', 'passwort15', '5CHITM', 'IT200285');
+INSERT INTO student (student_id, firstname, lastname, password, school_class, username) VALUES (NEXT VALUE FOR student_seq, 'Clara', 'Graf', 'passwort15', '5CHITM', 'IT200285');*/
 
 
-INSERT INTO Teacher (teacher_id, firstname, lastname, password, username) VALUES(NEXT VALUE FOR teacher_seq, 'Professor', 'Johnson', 'teacherpass', 'prof_johnson');
+/*INSERT INTO Teacher (teacher_id, firstname, lastname, password, username) VALUES(NEXT VALUE FOR teacher_seq, 'Professor', 'Johnson', 'teacherpass', 'prof_johnson');
 INSERT INTO Teacher (teacher_id, firstname, lastname, password, username) VALUES(NEXT VALUE FOR teacher_seq, 'Dr.', 'Williams', 'pass123', 'dr_williams');
 INSERT INTO Teacher (teacher_id, firstname, lastname, password, username) VALUES(NEXT VALUE FOR teacher_seq, 'Ms.', 'Smith', 'teacherpass', 'ms_smith');
 INSERT INTO Teacher (teacher_id, firstname, lastname, password, username) VALUES(NEXT VALUE FOR teacher_seq, 'Mr.', 'Jones', 'pass123', 'mr_jones');
 INSERT INTO Teacher (teacher_id, firstname, lastname, password, username) VALUES(NEXT VALUE FOR teacher_seq, 'Dr.', 'Miller', 'teacherpass', 'dr_miller');
-INSERT INTO Teacher (teacher_id, firstname, lastname, password, username) VALUES(NEXT VALUE FOR teacher_seq, 'Mrs.', 'Brown', 'pass123', 'mrs_brown');
+INSERT INTO Teacher (teacher_id, firstname, lastname, password, username) VALUES(NEXT VALUE FOR teacher_seq, 'Mrs.', 'Brown', 'pass123', 'mrs_brown');*/
 
 insert into tag (tag_id, name, description) values (NEXT VALUE FOR tag_seq, 'Foto', 'Dieses Gerät ist am besten für Fotografie geeignet');
 insert into tag (tag_id, name, description) values (NEXT VALUE FOR tag_seq, 'Video', 'Dieses Gerät ist am besten fürs filmen von Videos geeignet');

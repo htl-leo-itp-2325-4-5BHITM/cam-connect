@@ -3,6 +3,7 @@ var allRents = [];
 var allStudents = [];
 var allTeachers = [];
 requestAllStudents();
+PopupEngine.init({ textColor: "black", backgroundColor: "white", elemBackground: "#EEE" });
 function requestAllStudents() {
     allStudents = [];
     fetch(APPLICATION_URL + "/student/getall")
@@ -63,7 +64,6 @@ function generateTable() {
     var table = document.querySelector('table');
     table.innerHTML = "";
     table.appendChild(headingHtml);
-    console.log(allRents, allRents.length);
     var html = [];
     var _loop_1 = function (i) {
         var row = document.createElement("tr");
@@ -290,6 +290,36 @@ function createRent() {
     })
         .catch(function (error) { return console.error(error); });
 }
+function importFromCsv(button) {
+    var file = button.closest("div").querySelector("input").files[0];
+    var formData = new FormData();
+    formData.append('file', file);
+    console.log(formData, file);
+    var importType = button.closest("div").getAttribute("data-import");
+    fetch("http://localhost:8080/api/".concat(importType, "/import"), {
+        method: 'POST',
+        body: formData,
+    })
+        .then(function (response) {
+        return response.json();
+    })
+        .then(function (data) {
+        console.log(data);
+        switch (data.ccError.errorCode) {
+            case 1000:
+                PopupEngine.createNotification({ text: "Successfully imported ".concat(importType) });
+                break;
+        }
+        requestAllStudents();
+    })
+        .catch(function (error) {
+        console.error(error);
+    });
+}
+var importButtons = document.querySelectorAll('#import button');
+importButtons.forEach(function (elem) {
+    elem.addEventListener("click", function () { importFromCsv(elem); });
+});
 function findRentById(id) {
     var res = null;
     allRents.forEach(function (rent) {
@@ -299,42 +329,4 @@ function findRentById(id) {
     });
     return res;
 }
-function importStudents(file) {
-    console.log("importing");
-    var formData = new FormData();
-    formData.append('file', file);
-    return fetch("http://localhost:8080/api/student/import", {
-        method: 'POST',
-        body: formData,
-    })
-        .then(function (response) {
-        return response.json();
-    })
-        .then(function (data) {
-        console.log(data);
-        return true;
-    })
-        .catch(function (error) {
-        console.error(error);
-        return false;
-    });
-}
-var fileInput = document.getElementById('csvFileInput');
-var importButton = document.querySelector('#importButton');
-importButton.addEventListener('click', function (event) {
-    var files = fileInput.files;
-    if (files && files.length > 0) {
-        var file = files[0];
-        console.log(file);
-        importStudents(file)
-            .then(function (success) {
-            if (success) {
-                console.log('Students imported successfully!');
-            }
-            else {
-                console.error('Failed to import students.');
-            }
-        });
-    }
-});
 //# sourceMappingURL=index.js.map

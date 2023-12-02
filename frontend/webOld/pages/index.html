@@ -9,20 +9,14 @@
         <link rel="stylesheet" href="../styles/index.css">
 
         <script src="../scripts/index.js" defer></script>
+        <script src="../scripts/popupEngine.js"></script>
     </head>
 
     <body class="A4 landscape">
         <section class="sheet padding-10mm">
             <table>
             </table>
-            <div id="edit">
-                <button id="createRent" onclick="createRent()">erstellen</button>
-
-                <div>
-                    <input type="file" id="csvFileInput" accept=".csv" />
-                    <button id="importButton">Import Students</button>
-                </div>
-            </div>
+            <button id="createRent" onclick="createRent()">erstellen</button>
         </section>
 
         <div id="studentSelectionPopup">
@@ -33,6 +27,23 @@
         <div id="teacherSelectionPopup">
             <input class="search" type="text" placeholder="lehrer">
             <div class="teacherList"></div>
+        </div>
+
+        <div id="import">
+            <div data-import="student">
+                <input type="file" accept=".csv" />
+                <button>Schüler Importieren</button>
+            </div>
+            <hr>
+            <div data-import="teacher">
+                <input type="file" accept=".csv" />
+                <button>Lehrer Importieren</button>
+            </div>
+            <hr>
+            <div data-import="device">
+                <input type="file" accept=".csv" />
+                <button>Geräte Importieren</button>
+            </div>
         </div>
     </body>
 </html>
