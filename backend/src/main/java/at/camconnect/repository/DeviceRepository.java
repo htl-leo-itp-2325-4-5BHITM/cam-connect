@@ -25,7 +25,11 @@ public class DeviceRepository {
 
     @Transactional
     public void remove(Long id){
-        em.remove(em.find(Device.class, id));
+        em.remove(getById(id));
+    }
+
+    public Device getById(long id){
+        return em.find(Device.class, id);
     }
 
     @Transactional
@@ -47,13 +51,8 @@ public class DeviceRepository {
         } catch(Exception ex){ System.out.println(ex.getMessage()); }
     }
 
-    public Device getById(long id){
-        return em.find(Device.class, id);
-    }
-
     public List<Device> getAll(){
-        List<Device> rents = em.createQuery("SELECT r FROM Rent r", Device.class).getResultList();
-        return rents;
+        return em.createQuery("SELECT r FROM Rent r", Device.class).getResultList();
     }
 
     public void setNumber(long rentId, String number) {
