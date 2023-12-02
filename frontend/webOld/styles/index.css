@@ -2,7 +2,7 @@
   size: A4 landscape;
 }
 @media print {
-  #createRent {
+  #edit {
     display: none;
   }
 }
@@ -128,8 +128,18 @@ button {
   padding: 0.2rem 1rem;
   border: 0.1rem solid gray;
   border-radius: 0.3rem;
-  margin-top: 0.5rem;
   cursor: pointer;
+}
+
+#edit {
+  display: flex;
+  gap: 2rem;
+  margin-top: 0.3rem;
+}
+#edit div {
+  border: 0.1rem solid gray;
+  padding: 0.2rem;
+  border-radius: 0.3rem;
 }
 
 /*# sourceMappingURL=index.css.map */

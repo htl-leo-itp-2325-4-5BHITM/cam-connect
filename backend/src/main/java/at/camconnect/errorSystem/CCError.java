@@ -22,7 +22,10 @@ public class CCError {
             Map.entry(1106, "Invalid data structure/syntax/type in body"),
 
             Map.entry(1200, "Task was not performed"),
-            Map.entry(1201, "Duplicate request")
+            Map.entry(1201, "Duplicate request"),
+            Map.entry(1202, "No results"),
+            Map.entry(1203, "File is empty"),
+            Map.entry(1204, "File has Invalid Structure")
     );
 
     private int errorCode;

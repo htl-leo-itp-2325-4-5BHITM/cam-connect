@@ -1,7 +1,7 @@
 @page { size: A4 landscape }
 
 @media print {
-  #createRent, #csvFileInput{
+  #edit{
     display: none;
   }
 }
@@ -140,6 +140,17 @@ button{
   padding: .2rem 1rem;
   border: .1rem solid gray;
   border-radius: .3rem;
-  margin-top: .5rem;
   cursor: pointer;
+}
+
+#edit{
+  display: flex;
+  gap: 2rem;
+  margin-top: .3rem;
+
+  div{
+    border: .1rem solid gray;
+    padding: .2rem;
+    border-radius: .3rem;
+  }
 }

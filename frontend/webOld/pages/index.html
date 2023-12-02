@@ -15,7 +15,14 @@
         <section class="sheet padding-10mm">
             <table>
             </table>
-            <button id="createRent" onclick="createRent()">erstellen</button>
+            <div id="edit">
+                <button id="createRent" onclick="createRent()">erstellen</button>
+
+                <div>
+                    <input type="file" id="csvFileInput" accept=".csv" />
+                    <button id="importButton">Import Students</button>
+                </div>
+            </div>
         </section>
 
         <div id="studentSelectionPopup">
@@ -27,10 +34,5 @@
             <input class="search" type="text" placeholder="lehrer">
             <div class="teacherList"></div>
         </div>
-
-        <!--<input type="file" id="csvFileInput" accept=".csv" />
-        <button id="importButton">Import Students</button>
-        -->
-
     </body>
 </html>

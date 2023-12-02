@@ -1,6 +1,6 @@
 import {html, render} from "lit-html"
 
-import styles from '../../styles/components/rent-status.styles.scss'
+import styles from '../../../styles/components/global/rent-status.styles.scss'
 
 enum Status {VERFUEGBAR="verfügbar", VERGEBEN="vergeben", GESPERRT="gesperrt"}
 
