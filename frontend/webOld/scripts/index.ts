@@ -62,7 +62,7 @@ interface Student {
     lastname: string,
     school_class: string,
     password: string,
-    user_id: number
+    username: string
 }
 
 interface Teacher {
@@ -83,6 +83,9 @@ interface RentComplete {
     rent_start: string,
     rent_end_planned: string,
     rent_end_actual: string,
+    verification_code: string,
+    verification_status: string,
+    verification_message: string,
     note: string,
     accessory: string,
     device_string: string
@@ -97,6 +100,9 @@ interface RentSimple {
     rent_start: string,
     rent_end_planned: string,
     rent_end_actual: string,
+    verification_code: string,
+    verification_status: string,
+    verification_message: string,
     note: string,
     accessory: string,
     device_string: string
@@ -121,6 +127,7 @@ const columns: column[] = [
     {name: "Unterschrift Entlehner*in", inputType: "none", cellType: ""},
     {name: "Paraphe Lehkraft", inputType: "text", cellType: "teacher_end"},
     {name: "Anmerkung", inputType: "text", cellType: "note"},
+    {name: "VStatus", inputType: "none", cellType: "verification_status"},
 ]
 
 /**
@@ -130,11 +137,13 @@ function generateTable() {
     //Create the Heading Row based purely on the data in the columns constant
     let headingHtml = document.createElement("tr")
 
+    console.log(columns)
     columns.forEach(column => {
         let headRow = document.createElement("th")
         headRow.innerText = column.name
         headingHtml.appendChild(headRow)
     })
+
 
     let table = document.querySelector('table')
     table.innerHTML = ""
@@ -191,6 +200,30 @@ function generateTable() {
                 cell.appendChild(cellinput)
             }
 
+            if (column.cellType == "verification_status"){
+                console.log(allRents[i]?.verification_status)
+
+                switch (allRents[i]?.verification_status){
+                    case "CREATED": // if not already requested
+                        let cellButton = document.createElement("button")
+                        cellButton.classList.add("verification_button")
+                        cellButton.innerHTML = "Bestätigung Anfragen"
+
+                        cellButton.addEventListener("onclick", () => {
+                            sendVerificationRequest(allRents[i]?.rent_id, allRents[i]?.student.username)
+                        })
+                        cell.appendChild(cellButton)
+                        break
+                    default:
+                        let cellChip = document.createElement('div')
+                        cellChip.classList.add("verification_chip")
+                        cellChip.setAttribute("status", allRents[i]?.verification_status)
+                        cellChip.innerHTML = allRents[i]?.verification_status
+                        cell.appendChild(cellChip)
+                        break
+                }
+            }
+
             row.appendChild(cell)
         })
 
@@ -201,6 +234,23 @@ function generateTable() {
 }
 
 //endregion
+
+// region verification
+function sendVerificationRequest(rentId: number, studentUsername: string){
+    console.log(rentId, studentUsername)
+    fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/sendconfirmation/${studentUsername}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            requestAllRents()
+        })
+        .catch(error => console.error(error));
+}
 
 //region student search and selection
 const studentSelectionPopup: HTMLElement = document.querySelector("#studentSelectionPopup")
@@ -367,6 +417,9 @@ function updateRent(input: HTMLElement, key: string, value: any, rentId?: number
         rent_start: rentOriginal.rent_start,
         rent_end_planned: rentOriginal.rent_end_planned,
         rent_end_actual: rentOriginal.rent_end_actual,
+        verification_code: rentOriginal.verification_code,
+        verification_status: rentOriginal.verification_status,
+        verification_message: rentOriginal.verification_message,
         note: rentOriginal.note,
         accessory: rentOriginal.accessory
     }

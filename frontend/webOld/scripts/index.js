@@ -52,10 +52,12 @@ var columns = [
     { name: "Unterschrift Entlehner*in", inputType: "none", cellType: "" },
     { name: "Paraphe Lehkraft", inputType: "text", cellType: "teacher_end" },
     { name: "Anmerkung", inputType: "text", cellType: "note" },
+    { name: "VStatus", inputType: "none", cellType: "verification_status" },
 ];
 function generateTable() {
     var _a;
     var headingHtml = document.createElement("tr");
+    console.log(columns);
     columns.forEach(function (column) {
         var headRow = document.createElement("th");
         headRow.innerText = column.name;
@@ -69,7 +71,7 @@ function generateTable() {
         var row = document.createElement("tr");
         row.setAttribute("rent_id", String((_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id));
         columns.forEach(function (column) {
-            var _a, _b, _c;
+            var _a, _b, _c, _d, _e, _f, _g;
             var cell = document.createElement("td");
             if (column.inputType !== "none") {
                 var cellinput_1 = document.createElement("input");
@@ -110,6 +112,28 @@ function generateTable() {
                 }
                 cell.appendChild(cellinput_1);
             }
+            if (column.cellType == "verification_status") {
+                console.log((_d = allRents[i]) === null || _d === void 0 ? void 0 : _d.verification_status);
+                switch ((_e = allRents[i]) === null || _e === void 0 ? void 0 : _e.verification_status) {
+                    case "CREATED":
+                        var cellButton = document.createElement("button");
+                        cellButton.classList.add("verification_button");
+                        cellButton.innerHTML = "Bestätigung Anfragen";
+                        cellButton.addEventListener("onclick", function () {
+                            var _a, _b;
+                            sendVerificationRequest((_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id, (_b = allRents[i]) === null || _b === void 0 ? void 0 : _b.student.username);
+                        });
+                        cell.appendChild(cellButton);
+                        break;
+                    default:
+                        var cellChip = document.createElement('div');
+                        cellChip.classList.add("verification_chip");
+                        cellChip.setAttribute("status", (_f = allRents[i]) === null || _f === void 0 ? void 0 : _f.verification_status);
+                        cellChip.innerHTML = (_g = allRents[i]) === null || _g === void 0 ? void 0 : _g.verification_status;
+                        cell.appendChild(cellChip);
+                        break;
+                }
+            }
             row.appendChild(cell);
         });
         html.push(row);
@@ -118,6 +142,21 @@ function generateTable() {
         _loop_1(i);
     }
     table.append.apply(table, html);
+}
+function sendVerificationRequest(rentId, studentUsername) {
+    console.log(rentId, studentUsername);
+    fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/sendconfirmation/").concat(studentUsername), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+        console.log(data);
+        requestAllRents();
+    })
+        .catch(function (error) { return console.error(error); });
 }
 var studentSelectionPopup = document.querySelector("#studentSelectionPopup");
 var studentSearchbar = document.querySelector('#studentSelectionPopup .search');
@@ -254,6 +293,9 @@ function updateRent(input, key, value, rentId) {
         rent_start: rentOriginal.rent_start,
         rent_end_planned: rentOriginal.rent_end_planned,
         rent_end_actual: rentOriginal.rent_end_actual,
+        verification_code: rentOriginal.verification_code,
+        verification_status: rentOriginal.verification_status,
+        verification_message: rentOriginal.verification_message,
         note: rentOriginal.note,
         accessory: rentOriginal.accessory
     };

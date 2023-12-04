@@ -104,6 +104,31 @@ table{
   }
 }
 
+button.verification_button{
+  cursor: pointer;
+}
+div.verification_chip{
+  color: #E6E6E6;
+
+  &[status = "CONFIRMED"]{
+    background-color: #578656;
+    content: "Bestätigt";
+  }
+  &[status = "DECLINED"]{
+    cursor: pointer;
+    background-color: #B94646;
+    content: "Abgelehnt";
+  }
+  &[status = "WAITING"]{
+    background-color: #CC8633;
+    content: "Warte auf Bestätigung";
+  }
+  &[status = "RETURNED"]{
+    background-color: #578656;
+    content: "Zurückgegeben";
+  }
+}
+
 #studentSelectionPopup, #teacherSelectionPopup{
   border-radius: .5rem;
   position: absolute;
