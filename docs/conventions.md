@@ -110,6 +110,7 @@ function checkLogin(){
 - use grids and their gap property
 - use `aspect-ratio: 1` for squares
 - use width/height `fit-content` for auto scaling
+- for recoloring svgs you can use this generator https://codepen.io/sosuke/pen/Pjoqqp
 
 For those that don't know scss this will seem weird, it's actually pretty easy
 ```SCSS
@@ -140,8 +141,3 @@ $accent: #4095BF; //defines a variable
 ## JAVA specific
 - Api routes should be implemented in the same order as they are in the api.md documentation
 - If the route does not jet exist in the docu file it should be added (further instructions in the file) 
-
-## Style
-- use the font quicksand on every UI
-- use the accent color `#4095BF` `hsl(200, 50, 50)`
-- for recoloring svgs you can use this generator https://codepen.io/sosuke/pen/Pjoqqp
