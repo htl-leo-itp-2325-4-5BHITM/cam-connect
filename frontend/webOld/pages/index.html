@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="../styles/index.css">
 
         <script src="../scripts/index.js" defer></script>
+        <script src="../scripts/popupEngine.js"></script>
     </head>
 
     <body class="A4 landscape">
@@ -28,9 +29,21 @@
             <div class="teacherList"></div>
         </div>
 
-        <!--<input type="file" id="csvFileInput" accept=".csv" />
-        <button id="importButton">Import Students</button>
-        -->
-
+        <div id="import">
+            <div data-import="student">
+                <input type="file" accept=".csv" />
+                <button>Schüler Importieren</button>
+            </div>
+            <hr>
+            <div data-import="teacher">
+                <input type="file" accept=".csv" />
+                <button>Lehrer Importieren</button>
+            </div>
+            <hr>
+            <div data-import="device">
+                <input type="file" accept=".csv" />
+                <button>Geräte Importieren</button>
+            </div>
+        </div>
     </body>
 </html>

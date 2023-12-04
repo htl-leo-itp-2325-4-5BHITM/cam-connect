@@ -7,6 +7,14 @@ Online Verleihsystem der HTL-Leonding
 
 **Übersichtliche auflistung aller Geräte und deren Verfügbarkeit**
 
+### Importieren von Listen
+Die Applikation akzeptiert ";" getrennte csv files welche dann ausgelesen werden 
+und pro Zeile als Schüler, Lehrer oder Gerät angelegt werden.
+
+Die CSV files sollten als erste Zeile eine Überschriften-Zeile haben
+und eine bestimmte Reihenfolge. Beispiele dafür können aus [dem repo](./assets/examples)
+heruntergeladen werden.
+
 ## Team
 - [Yanik Kendler](https://github.com/elYanuki): Lead
 - [Michael Leisch](https://github.com/Michiii11)

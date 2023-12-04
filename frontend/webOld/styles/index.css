@@ -2,7 +2,7 @@
   size: A4 landscape;
 }
 @media print {
-  #createRent {
+  #import, #createRent {
     display: none;
   }
 }
@@ -125,11 +125,33 @@ table input:focus-visible {
 }
 
 button {
+  margin: 0.2rem;
   padding: 0.2rem 1rem;
   border: 0.1rem solid gray;
   border-radius: 0.3rem;
-  margin-top: 0.5rem;
   cursor: pointer;
+}
+
+#import {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background-color: #EEE;
+  padding: 0.5rem;
+  padding-bottom: 2rem;
+  border-top-right-radius: 0.5rem;
+}
+#import * {
+  font-size: 0.9rem;
+}
+#import div {
+  display: flex;
+  gap: 1rem;
+}
+#import hr {
+  margin-block: 0.3rem;
 }
 
 /*# sourceMappingURL=index.css.map */

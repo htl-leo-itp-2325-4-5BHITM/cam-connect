@@ -77,7 +77,7 @@ api
       return CCResponse.error(ex);
   }
   return CCResponse.ok(result);
-  ``
+  ```
 - Wherever a error occurs in the Repository a CCException should be thrown
   ```java
   throw new CCException(errorCode);
@@ -97,3 +97,5 @@ api
 - 1200: **Task was not performed**: The data provided was structurally / syntactically correct but the requested action cant be performed.
 - 1201: Duplicate request
 - 1202: The data provided to the endpoint returned no results
+- 1203: File is empty
+- 1204: File has Invalid Structure

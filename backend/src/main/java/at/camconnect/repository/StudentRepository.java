@@ -1,5 +1,6 @@
 package at.camconnect.repository;
 
+import at.camconnect.errorSystem.CCException;
 import at.camconnect.model.Student;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -8,16 +9,10 @@ import jakarta.json.JsonObject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 @ApplicationScoped
 public class StudentRepository{
@@ -40,15 +35,10 @@ public class StudentRepository{
     }
 
     public Student getById(long id){
-        return em.find(Student.class, id);
-    }
-
-
-    /*public Student getById(long id){
-        Query q = em.createNativeQuery("SELECT * FROM Student where student_id = " + id);
-        Student result = (Student) q.getSingleResult();
+        Student result = em.find(Student.class, id);
+        if (result == null) throw new CCException(1101);
         return result;
-    }*/
+    }
 
     public List<Student> getAll(){
         List<Student> students = em.createQuery("SELECT s FROM Student s", Student.class).getResultList();
@@ -59,30 +49,34 @@ public class StudentRepository{
         Query q = em.createQuery("SELECT s FROM Student s WHERE upper(s.firstname) LIKE :firstname || '%' ", Student.class)
                 .setParameter("firstname", searchParams.getString("firstname").toUpperCase())
                 .setMaxResults(10);
-        List<Student> results = q.getResultList();
-        return results;
+        return (List<Student>) q.getResultList();
     }
 
-    public boolean importStudents(InputStream fileInputStream) {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(fileInputStream))) {
-            String line;
+    public void importStudents(File file) {
+        //TODO fix the null checks when even when no file is uploaded the 1105 is never thrown only the weird arraylength check works
+        if(file == null) throw new CCException(1105);
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line = reader.readLine();
+
+            if(line == null || line.equals("")) throw new CCException(1203);
+            String[] lineArray = line.split(";");
+            if (lineArray.length <= 1) throw new CCException(1203);
+
+            //our friend \uFEFF is a invisible zero space character added to csv files when opening excel that throws off my validations :)
+            lineArray[0] = lineArray[0].replace("\uFEFF", "");
+
+            //checks if the csv file matches the required structure
+            if(lineArray.length != 6) throw new CCException(1204, "invalid line length");
+            if (!lineArray[0].equals("vorname") || !lineArray[1].equals("nachname") || !lineArray[2].equals("klasse") || !lineArray[3].equals("email") || !lineArray[4].equals("username") || !lineArray[5].equals("passwort")) throw new CCException(1204, "invalid header row");
 
             while ((line = reader.readLine()) != null) {
-                // Splitte die CSV-Zeile
-                String[] values = line.split(",");
-
-                // Füge die Werte zur Liste hinzu
-
-                Student student = new Student(values[0].trim(), values[1].trim(), values[2].trim(),values[3].trim(), values[4].trim());
-                em.persist(student);
+                lineArray = line.split(";");
+                if(lineArray.length != 6) break;
+                create(new Student(lineArray[0], lineArray[1], lineArray[2], lineArray[3], lineArray[4], lineArray[5]));
             }
-
-            return true;
-            // Hier hast du das CSV als List<String[]> und kannst es weiter verarbeiten
-        } catch(Exception ex){
-            return false;
+        } catch (IOException e) {
+            throw new CCException(1204, "File could not be read");
         }
     }
-    
-
 }

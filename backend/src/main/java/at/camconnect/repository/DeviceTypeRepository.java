@@ -43,22 +43,29 @@ public class DeviceTypeRepository {
         return deviceType;
     }
 
-    public void remove(Long id){
-        DeviceType deviceType = em.find(DeviceType.class, id);
+    public void checkForNull(DeviceType deviceType){
         if (deviceType == null) throw new CCException(1101);
-        em.remove(deviceType);
+    }
+
+    public void remove(Long id){
+        em.remove(getById(id));
     }
 
     //I know this guy is brutal but I cant split it into the individual models cause of the id to entity conversion
     public void update(Long id, DeviceTypeEnum typeEnum, JsonObject data){
+        //not only sets the name but by running the "getById" also checks for invalid ids
+        //note: I did not find a way to reduce to a single em.find because of how java extends works
+        DeviceType deviceType = getById(id);
+        try{
+            deviceType.setName(data.getString("name"));
+        }catch (Exception ex){
+            throw new CCException(1106);
+        }
+
         switch(typeEnum){
             case audio:
                 AudioType audioType = em.find(AudioType.class, id);
-                try{
-                    audioType.setName(data.getString("name"));
-                }catch (Exception ex){
-                    throw new CCException(1106);
-                }
+
                 try{
                     audioType.setWindblocker(data.getBoolean("windblocker"));
                 }catch (Exception ex){
@@ -77,11 +84,7 @@ public class DeviceTypeRepository {
                 break;
             case camera:
                 CameraType cameraType = em.find(CameraType.class, id);
-                try{
-                    cameraType.setName(data.getString("name"));
-                }catch (Exception ex){
-                    throw new CCException(1106);
-                }
+
                 try{
                     cameraType.setSensor(em.find(CameraSensor.class, data.getInt("sensor_id")));
                 }catch (Exception ex){
@@ -100,11 +103,7 @@ public class DeviceTypeRepository {
                 break;
             case drone:
                 DroneType droneType = em.find(DroneType.class, id);
-                try{
-                    droneType.setName(data.getString("name"));
-                }catch (Exception ex){
-                    throw new CCException(1106);
-                }
+
                 try{
                     droneType.setSensor(em.find(CameraSensor.class, data.getInt("sensor_id")));
                 }catch (Exception ex){
@@ -123,11 +122,7 @@ public class DeviceTypeRepository {
                 break;
             case lens:
                 LensType lensType = em.find(LensType.class, id);
-                try{
-                    lensType.setName(data.getString("name"));
-                }catch (Exception ex){
-                    throw new CCException(1106);
-                }
+
                 try{
                     lensType.setFocal_length(data.getInt("focal_length"));
                 }catch (Exception ex){
@@ -146,11 +141,7 @@ public class DeviceTypeRepository {
                 break;
             case light:
                 LightType lightType = em.find(LightType.class, id);
-                try{
-                    lightType.setName(data.getString("name"));
-                }catch (Exception ex){
-                    throw new CCException(1106);
-                }
+
                 try{
                     lightType.setRgb(data.getBoolean("rgb"));
                 }catch (Exception ex){
@@ -169,11 +160,7 @@ public class DeviceTypeRepository {
                 break;
             case stabilizer:
                 StabilizerType stabilizerType = em.find(StabilizerType.class, id);
-                try{
-                    stabilizerType.setName(data.getString("name"));
-                }catch (Exception ex){
-                    throw new CCException(1106);
-                }
+
                 try{
                     stabilizerType.setNumber_of_axis(data.getInt("number_of_axis"));
                 }catch (Exception ex){
@@ -187,11 +174,7 @@ public class DeviceTypeRepository {
                 break;
             case tripod:
                 TripodType tripodType = em.find(TripodType.class, id);
-                try{
-                    tripodType.setName(data.getString("name"));
-                }catch (Exception ex){
-                    throw new CCException(1106);
-                }
+
                 try{
                     tripodType.setHeight(data.getInt("height"));
                 }catch (Exception ex){

@@ -46,6 +46,20 @@ public class DeviceTypeResource {
         return CCResponse.ok(result);
     }
 
+    @GET
+    @Path("/getbyid/{id: [0-9]+}/remove")
+    @Transactional
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response remove(@PathParam("id") Long id){
+        try{
+            deviceTypeRepository.remove(id);
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok();
+    }
+
     @POST
     @Path("/getbyid/{id: [0-9]+}/update/{type: [A-z]+}")
     @Transactional

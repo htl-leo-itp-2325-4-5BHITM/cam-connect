@@ -26,7 +26,7 @@ public class DeviceRepository {
 
     @Transactional
     public void remove(Long id){
-        em.remove(em.find(Device.class, id));
+        em.remove(getById(id));
     }
 
     @Transactional

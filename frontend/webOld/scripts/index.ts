@@ -1,11 +1,14 @@
-const APPLICATION_URL:string = "http://localhost:8080/api"
+const APPLICATION_URL: string = "http://localhost:8080/api"
 
-let allRents:RentComplete[] = []
-let allStudents:Student[] = []
-let allTeachers:Teacher[] = []
+let allRents: RentComplete[] = []
+let allStudents: Student[] = []
+let allTeachers: Teacher[] = []
 
 //region base requests
-requestAllStudents();
+requestAllStudents()
+
+// @ts-ignore
+PopupEngine.init({textColor:"black", backgroundColor: "white", elemBackground: "#EEE"})
 
 function requestAllStudents() {
     allStudents = []
@@ -21,6 +24,7 @@ function requestAllStudents() {
         })
         .catch(error => console.error(error))
 }
+
 function requestAllTeachers() {
     allTeachers = []
     fetch(APPLICATION_URL + "/teacher/getall")
@@ -34,6 +38,7 @@ function requestAllTeachers() {
         })
         .catch(error => console.error(error))
 }
+
 function requestAllRents() {
     allRents = []
     fetch(APPLICATION_URL + "/rent/getall")
@@ -64,7 +69,7 @@ interface Teacher {
     teacher_id: number,
     firstname: string,
     lastname: string,
-    verification: string,
+    username: string,
     password: string,
     user_id: number
 }
@@ -97,16 +102,14 @@ interface RentSimple {
     device_string: string
 }
 
-console.log("gadsfsadf")
-
 //region generate table
-interface column{
+interface column {
     name: string,
     inputType: string,
     cellType: string
 }
 
-const columns:column[] = [
+const columns: column[] = [
     {name: "Gerät Nr.", inputType: "text", cellType: "device_string"},
     {name: "Zubehör", inputType: "text", cellType: "accessory"},
     {name: "Entlehner*in + Klasse", inputType: "text", cellType: "student_id"},
@@ -123,11 +126,11 @@ const columns:column[] = [
 /**
  * Renders the Table to the html based on the data in the allRents array of Rent JSONs
  */
-function generateTable(){
+function generateTable() {
     //Create the Heading Row based purely on the data in the columns constant
     let headingHtml = document.createElement("tr")
 
-    columns.forEach(column=>{
+    columns.forEach(column => {
         let headRow = document.createElement("th")
         headRow.innerText = column.name
         headingHtml.appendChild(headRow)
@@ -137,18 +140,17 @@ function generateTable(){
     table.innerHTML = ""
     table.appendChild(headingHtml)
 
-    console.log(allRents, allRents.length)
     //creates the main content
-    let html:Element[] = []
+    let html: Element[] = []
     for (let i = 0; i < Math.min(allRents.length, 20); i++) { //run over either all the entries in allRents or 20 (max that fits on the page)
         let row = document.createElement("tr")
         row.setAttribute("rent_id", String(allRents[i]?.rent_id))
 
         //loops over all the columns and creates a cell for each
-        columns.forEach(column=>{
+        columns.forEach(column => {
             let cell = document.createElement("td")
 
-            if(column.inputType !== "none") {
+            if (column.inputType !== "none") {
                 let cellinput = document.createElement("input")
                 cellinput.type = column.inputType
                 cellinput.setAttribute("celltype", column.cellType) //what piece of data the cell displays (rent_start, student_id etc.)
@@ -201,11 +203,14 @@ function generateTable(){
 //endregion
 
 //region student search and selection
-const studentSelectionPopup:HTMLElement = document.querySelector("#studentSelectionPopup")
-const studentSearchbar:HTMLInputElement = document.querySelector('#studentSelectionPopup .search')
+const studentSelectionPopup: HTMLElement = document.querySelector("#studentSelectionPopup")
+const studentSearchbar: HTMLInputElement = document.querySelector('#studentSelectionPopup .search')
 
-studentSearchbar.addEventListener("keyup", () => {searchForStudentFromSelectInput(studentSearchbar.value, Number(studentSearchbar.getAttribute('rent_id')))})
-function openStudentPicker(input:HTMLInputElement, rentId:number){
+studentSearchbar.addEventListener("keyup", () => {
+    searchForStudentFromSelectInput(studentSearchbar.value, Number(studentSearchbar.getAttribute('rent_id')))
+})
+
+function openStudentPicker(input: HTMLInputElement, rentId: number) {
     //resets the popup
     searchForStudentFromSelectInput("", rentId)
     studentSelectionPopup.querySelector("input").value = ""
@@ -218,19 +223,21 @@ function openStudentPicker(input:HTMLInputElement, rentId:number){
     studentSelectionPopup.style.display = "block"
     studentSearchbar.focus()
 
-    setTimeout(function(){document.addEventListener("mousedown", closeStudentPickerOnBlur)},)
+    setTimeout(function () {
+        document.addEventListener("mousedown", closeStudentPickerOnBlur)
+    },)
 }
 
-function closeStudentPickerOnBlur(e:MouseEvent){
+function closeStudentPickerOnBlur(e: MouseEvent) {
     // check if what was clicked is the popup and exit
     // @ts-ignore cause the target object does not have the closest function in typescript smh
-    if(e.target === studentSelectionPopup || e.target.closest('#studentSelectionPopup') === studentSelectionPopup || e.target.getAttribute("celltype") === "student") return
+    if (e.target === studentSelectionPopup || e.target.closest('#studentSelectionPopup') === studentSelectionPopup || e.target.getAttribute("celltype") === "student") return
 
     closeStudentPicker()
     document.removeEventListener("mousedown", closeStudentPickerOnBlur)
 }
 
-function closeStudentPicker(){
+function closeStudentPicker() {
     studentSelectionPopup.style.display = "none"
 }
 
@@ -240,7 +247,7 @@ function closeStudentPicker(){
  * @param inputValue
  * @param rentId
  */
-function searchForStudentFromSelectInput(inputValue:string, rentId?:number){
+function searchForStudentFromSelectInput(inputValue: string, rentId?: number) {
     fetch(APPLICATION_URL + '/student/search', {
         method: 'POST',
         headers: {
@@ -250,15 +257,17 @@ function searchForStudentFromSelectInput(inputValue:string, rentId?:number){
     })
         .then(response => response.json())
         .then(data => {
-            let html:HTMLElement[] = []
+            let html: HTMLElement[] = []
 
             data.forEach((student: Student) => {
                 let selectionOption = document.createElement('p');
                 selectionOption.innerText = student.firstname + " " + student.lastname
-                selectionOption.addEventListener("click", ()=>{updateRent(selectionOption, "student_id", student.student_id, rentId)})
+                selectionOption.addEventListener("click", () => {
+                    updateRent(selectionOption, "student_id", student.student_id, rentId)
+                })
                 html.push(selectionOption)
             })
-            if(html.length === 0) {
+            if (html.length === 0) {
                 let noResults = document.createElement('p');
                 noResults.classList.add("noResults")
                 noResults.innerText = "Keine Ergebnisse"
@@ -269,15 +278,18 @@ function searchForStudentFromSelectInput(inputValue:string, rentId?:number){
         })
         .catch(error => console.error(error));
 }
+
 //endregion
 
 //region search for teacher
 
 var teacherSelectionPopup = document.querySelector("#teacherSelectionPopup") as HTMLInputElement;
 var teacherSearchbar = document.querySelector('#teacherSelectionPopup .search') as HTMLInputElement;
-teacherSearchbar.addEventListener("keyup", function () { searchForTeacherFromSelectInput(teacherSearchbar.value, Number(teacherSearchbar.getAttribute('rent_id'))); });
+teacherSearchbar.addEventListener("keyup", function () {
+    searchForTeacherFromSelectInput(teacherSearchbar.value, Number(teacherSearchbar.getAttribute('rent_id')));
+});
 
-function openTeacherPicker(input:HTMLInputElement, rentId:number, teacherType:string) {
+function openTeacherPicker(input: HTMLInputElement, rentId: number, teacherType: string) {
     searchForTeacherFromSelectInput("", rentId);
     teacherSelectionPopup.querySelector("input").value = "";
     teacherSelectionPopup.querySelector("input").setAttribute("rent_id", String(rentId));
@@ -287,10 +299,12 @@ function openTeacherPicker(input:HTMLInputElement, rentId:number, teacherType:st
     teacherSelectionPopup.style.left = bounds.left + "px";
     teacherSelectionPopup.style.display = "block";
     teacherSearchbar.focus();
-    setTimeout(function () { document.addEventListener("mousedown", closeTeacherPickerOnBlur); });
+    setTimeout(function () {
+        document.addEventListener("mousedown", closeTeacherPickerOnBlur);
+    });
 }
 
-function closeTeacherPickerOnBlur(e:MouseEvent) {
+function closeTeacherPickerOnBlur(e: MouseEvent) {
     //@ts-ignore
     if (e.target === teacherSelectionPopup || e.target.closest('#teacherSelectionPopup') === teacherSelectionPopup || e.target.getAttribute("celltype") === "teacher_start" || e.target.getAttribute("celltype") === "teacher_end")
         return;
@@ -302,23 +316,27 @@ function closeTeacherPicker() {
     teacherSelectionPopup.style.display = "none";
 }
 
-function searchForTeacherFromSelectInput(inputValue:string, rentId:number) {
+function searchForTeacherFromSelectInput(inputValue: string, rentId: number) {
     fetch(APPLICATION_URL + '/teacher/search', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ lastname: inputValue })
+        body: JSON.stringify({lastname: inputValue})
     })
-        .then(function (response) { return response.json(); })
+        .then(function (response) {
+            return response.json();
+        })
         .then(function (data) {
             let teacherType = teacherSearchbar.getAttribute('teacher_type')
             console.log(data)
             var html = [];
-            data.forEach(function (teacher:Teacher) {
+            data.forEach(function (teacher: Teacher) {
                 var selectionOption = document.createElement('p');
                 selectionOption.innerText = teacher.firstname + " " + teacher.lastname;
-                selectionOption.addEventListener("click", function () { updateRent(selectionOption, teacherType, teacher.teacher_id, rentId); });
+                selectionOption.addEventListener("click", function () {
+                    updateRent(selectionOption, teacherType, teacher.teacher_id, rentId);
+                });
                 html.push(selectionOption);
             });
             if (html.length === 0) {
@@ -335,7 +353,7 @@ function searchForTeacherFromSelectInput(inputValue:string, rentId:number) {
 //endregion
 
 
-function updateRent(input:HTMLElement, key:string, value:any, rentId?:number) {
+function updateRent(input: HTMLElement, key: string, value: any, rentId?: number) {
     if (rentId == undefined) rentId = Number(input.closest("tr").getAttribute("rent_id"))
     console.log(rentId)
     let rentOriginal: RentComplete = findRentById(rentId)
@@ -373,7 +391,7 @@ function updateRent(input:HTMLElement, key:string, value:any, rentId?:number) {
         .catch(error => console.error(error));
 }
 
-function createRent(){
+function createRent() {
     fetch(APPLICATION_URL + '/rent/createempty', {
         method: 'POST',
         headers: {
@@ -390,87 +408,55 @@ function createRent(){
         .catch(error => console.error(error));
 }
 
+//region load csv update
+
+function importFromCsv(button:HTMLButtonElement) {
+    let file:File = button.closest("div").querySelector("input").files[0]
+    const formData = new FormData()
+    formData.append('file', file)
+
+    console.log(formData, file)
+
+    let importType = button.closest("div").getAttribute("data-import")
+
+    fetch(`http://localhost:8080/api/${importType}/import`, {
+        method: 'POST',
+        body: formData,
+    })
+        .then(response => {
+            return response.json()
+        })
+        .then(data => {
+            console.log(data)
+            switch (data.ccError.errorCode){
+                case 1000:
+                    //@ts-ignore
+                    PopupEngine.createNotification({text: `Successfully imported ${importType}`})
+                    break
+            }
+            requestAllStudents()
+        })
+        .catch(error => {
+            console.error(error)
+        })
+}
+
+// Example usage:
+let importButtons = document.querySelectorAll('#import button') as NodeListOf<HTMLButtonElement>
+importButtons.forEach(elem=>{
+    elem.addEventListener("click", ()=>{importFromCsv(elem)})
+})
+//endregion
+
 //region utlity
-function findRentById(id:number):RentComplete {
+function findRentById(id: number): RentComplete {
     let res = null
     allRents.forEach(rent => {
-        if(rent.rent_id == id){
+        if (rent.rent_id == id) {
             res = rent;
         }
     })
     return res
 }
-//endregion
 
-//region load csv update
-
-function importStudents(file: File): Promise<boolean> {
-    const formData = new FormData();
-    formData.append('file', file);
-
-    return fetch(`${APPLICATION_URL}/students/import`, {
-        method: 'POST',
-        body: formData,
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Import successful:', data);
-            return true;
-        })
-        .catch(error => {
-            console.error('Error importing students:', error);
-            return false;
-        });
-}
-
-// Example usage:
-const fileInput = document.getElementById('csvFileInput') as HTMLInputElement;
-
-fileInput.addEventListener('change', (event) => {
-    const files = (event.target as HTMLInputElement).files;
-
-    if (files && files.length > 0) {
-        const file = files[0];
-console.log(file)
-        importStudents(file)
-            .then(success => {
-                if (success) {
-                    console.log('Students imported successfully!');
-                    // Optionally, perform any actions after successful import
-                } else {
-                    console.error('Failed to import students.');
-                    // Optionally, handle the failure scenario
-                }
-            });
-    }
-});
-
-/*
-function uploadStudents(file: File) {
-    const formData = new FormData();
-    formData.append('file', file);
-
-    fetch(APPLICATION_URL + '/students/upload', {
-        method: 'POST',
-        body: formData,
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Upload successful:', data);
-            // Optionally, refresh the student data in the frontend
-        })
-        .catch(error => console.error('Error uploading file:', error));
-}
-
-function handleFileUpload() {
-    const fileInput = document.getElementById('csvFileInput') as HTMLInputElement;
-    const file = fileInput.files?.[0];
-
-    if (file) {
-        uploadStudents(file);
-    } else {
-        console.error('No file selected');
-    }
-}
-*/
 //endregion
