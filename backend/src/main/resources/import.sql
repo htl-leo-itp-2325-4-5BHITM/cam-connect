@@ -299,73 +299,52 @@ VALUES (6, 75, true, true);
 
 -- Test Inserts for StabilizerType
 INSERT INTO StabilizerType (type_id, max_weight, number_of_axis)
-VALUES (NEXT VALUE FOR device_type_seq, 5, 3);
+VALUES (1, 5, 3);
 INSERT INTO StabilizerType (type_id, max_weight, number_of_axis)
-VALUES (NEXT VALUE FOR device_type_seq, 8, 4);
+VALUES (2, 8, 4);
 INSERT INTO StabilizerType (type_id, max_weight, number_of_axis)
-VALUES (NEXT VALUE FOR device_type_seq, 10, 2);
+VALUES (3, 10, 2);
 INSERT INTO StabilizerType (type_id, max_weight, number_of_axis)
-VALUES (NEXT VALUE FOR device_type_seq, 15, 3);
+VALUES (4, 15, 3);
 INSERT INTO StabilizerType (type_id, max_weight, number_of_axis)
-VALUES (NEXT VALUE FOR device_type_seq, 20, 4);
+VALUES (5, 20, 4);
 INSERT INTO StabilizerType (type_id, max_weight, number_of_axis)
-VALUES (NEXT VALUE FOR device_type_seq, 25, 5);
+VALUES (6, 25, 5);
 
 -- Test Inserts for DroneType
-INSERT INTO DroneType (type_id, sensor_id, resolution_video_id, resolution_foto_id, max_range)
-VALUES (NEXT VALUE FOR device_type_seq, 1, 1, 2, 500);
-INSERT INTO DroneType (type_id, sensor_id, resolution_video_id, resolution_foto_id, max_range)
-VALUES (NEXT VALUE FOR device_type_seq, 2, 3, 4, 1000);
-INSERT INTO DroneType (type_id, sensor_id, resolution_video_id, resolution_foto_id, max_range)
-VALUES (NEXT VALUE FOR device_type_seq, 3, 5, 6, 1500);
-INSERT INTO DroneType (type_id, sensor_id, resolution_video_id, resolution_foto_id, max_range)
-VALUES (NEXT VALUE FOR device_type_seq, 4, 7, 8, 2000);
-INSERT INTO DroneType (type_id, sensor_id, resolution_video_id, resolution_foto_id, max_range)
-VALUES (NEXT VALUE FOR device_type_seq, 5, 9, 10, 2500);
-INSERT INTO DroneType (type_id, sensor_id, resolution_video_id, resolution_foto_id, max_range)
-VALUES (NEXT VALUE FOR device_type_seq, 6, 11, 12, 3000);
+INSERT INTO DroneType (type_id, sensor_id, resolution_id, max_range)
+VALUES (1, 1, 1, 500);
+INSERT INTO DroneType (type_id, sensor_id, resolution_id, max_range)
+VALUES (2, 2, 3, 1000);
+INSERT INTO DroneType (type_id, sensor_id, resolution_id,  max_range)
+VALUES (3, 3, 5, 1500);
 
 -- Test Inserts for LensType
 INSERT INTO LensType (type_id, f_stop, mount_id, focal_length)
-VALUES (NEXT VALUE FOR device_type_seq, 2.8, 1, 50);
+VALUES (1, 2.8, 1, 50);
 INSERT INTO LensType (type_id, f_stop, mount_id, focal_length)
-VALUES (NEXT VALUE FOR device_type_seq, 1.4, 2, 85);
+VALUES (2, 1.4, 2, 85);
 INSERT INTO LensType (type_id, f_stop, mount_id, focal_length)
-VALUES (NEXT VALUE FOR device_type_seq, 2, 3, 35);
-INSERT INTO LensType (type_id, f_stop, mount_id, focal_length)
-VALUES (NEXT VALUE FOR device_type_seq, 4, 4, 200);
-INSERT INTO LensType (type_id, f_stop, mount_id, focal_length)
-VALUES (NEXT VALUE FOR device_type_seq, 1.8, 5, 24);
-INSERT INTO LensType (type_id, f_stop, mount_id, focal_length)
-VALUES (NEXT VALUE FOR device_type_seq, 3.5, 6, 100);
+VALUES (3, 2, 3, 35);
+
 
 -- Test Inserts for AudioType
-INSERT INTO AudioType (type_id, windblocker, wireless, needs_recorder)
-VALUES (NEXT VALUE FOR device_type_seq, true, false, true);
-INSERT INTO AudioType (type_id, windblocker, wireless, needs_recorder)
-VALUES (NEXT VALUE FOR device_type_seq, false, true, false);
-INSERT INTO AudioType (type_id, windblocker, wireless, needs_recorder)
-VALUES (NEXT VALUE FOR device_type_seq, true, true, true);
-INSERT INTO AudioType (type_id, windblocker, wireless, needs_recorder)
-VALUES (NEXT VALUE FOR device_type_seq, false, false, true);
-INSERT INTO AudioType (type_id, windblocker, wireless, needs_recorder)
-VALUES (NEXT VALUE FOR device_type_seq, true, true, false);
-INSERT INTO AudioType (type_id, windblocker, wireless, needs_recorder)
-VALUES (NEXT VALUE FOR device_type_seq, false, true, true);
+INSERT INTO AudioType (type_id, windblocker, wireless, needsrecorder)
+VALUES (1, true, false, true);
+INSERT INTO AudioType (type_id, windblocker, wireless, needsrecorder)
+VALUES (2, false, true, false);
+INSERT INTO AudioType (type_id, windblocker, wireless, needsrecorder)
+VALUES (3, true, true, true);
+
 
 -- Test Inserts for TripodType
 INSERT INTO TripodType (type_id, height, head_id)
-VALUES (NEXT VALUE FOR device_type_seq, 150, 1);
+VALUES (1, 150, 1);
 INSERT INTO TripodType (type_id, height, head_id)
-VALUES (NEXT VALUE FOR device_type_seq, 180, 2);
+VALUES (2, 180, 2);
 INSERT INTO TripodType (type_id, height, head_id)
-VALUES (NEXT VALUE FOR device_type_seq, 120, 3);
-INSERT INTO TripodType (type_id, height, head_id)
-VALUES (NEXT VALUE FOR device_type_seq, 200, 4);
-INSERT INTO TripodType (type_id, height, head_id)
-VALUES (NEXT VALUE FOR device_type_seq, 160, 5);
-INSERT INTO TripodType (type_id, height, head_id)
-VALUES (NEXT VALUE FOR device_type_seq, 140, 6);
+VALUES (3, 120, 3);
+
 
 -- Test Inserts for Tag
 --TODO change to static ids "NEXT VALUE FOR device_type_seq" will break everything
