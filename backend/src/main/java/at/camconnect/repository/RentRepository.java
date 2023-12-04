@@ -17,6 +17,7 @@ import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 @ApplicationScoped
 public class RentRepository {
@@ -49,16 +50,16 @@ public class RentRepository {
     }
 
 
-    public MailMessage getMailMessage (String itUser) {
+    public MailMessage getMailMessage (long rentId, String itUser) {
         MailMessage message = new MailMessage();
         message.setFrom("signup.camconnect@gmail.com");
         message.setTo(itUser + "@students.htl-leonding.ac.at");
         message.setText("Bitte bestätige den Verleih # in dem sie auf den Link klicken: ");
-        message.setHtml("<a href='localhost:4200?verification_code=" + generateVerificationCode() + "'>Bestätigen</a>");
+        message.setHtml("<a href='localhost:4200?verification_code=" + generateVerificationCode(rentId) + "'>Bestätigen</a>");
 
         return message;
     }
-    public String generateVerificationCode() {
+    public String generateVerificationCode(long rentId) {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();
         StringBuilder sb = new StringBuilder();
@@ -69,7 +70,24 @@ public class RentRepository {
             sb.append(randomChar);
         }
 
+        // the verification code is set to current rent
+        Rent rent = getById(rentId);
+        rent.setVerification_code(sb.toString());
+
         return sb.toString();
+    }
+
+    public void setConfirmationStatus (long rentId, RentStatusEnum rentStatus, String verificationCode, String verificationMessage) {
+        Rent rent = getById(rentId);
+
+        Set<RentStatusEnum> notAllowedStatus = Set.of(RentStatusEnum.CONFIRMED, RentStatusEnum.DECLINED, RentStatusEnum.RETURNED);
+
+        // set only if the not allowed status' aren't the current status and if the verification is the same as provided
+        if (!notAllowedStatus.contains(rent.getVerification_status()) && rent.getVerification_code().equals(verificationCode)) {
+            rent.setVerification_status(rentStatus);
+        } else{
+            throw new CCException(1001);
+        }
     }
 
 
@@ -186,6 +204,9 @@ public class RentRepository {
             throw new CCException(1201);
         }
         rent.setVerification_status(verification);
+    }
+    public void setVerificationCode(long rentId, String verification_code){
+        Rent rent = getById(rentId);
     }
     //endregion
 }

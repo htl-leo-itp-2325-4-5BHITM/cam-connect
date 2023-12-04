@@ -64,11 +64,20 @@ public class RentResource {
     public Response sendConfirmation(@PathParam("id")long id, @PathParam("itUser")String itUser) {
         try{
             rentRepository.setVerificationMessage(id, RentStatusEnum.WAITING);
-
-            client.sendMail(rentRepository.getMailMessage(itUser))
-                    .onSuccess(System.out::println)
-                    .onFailure(Throwable::printStackTrace);
+            client.sendMail(rentRepository.getMailMessage(id, itUser));
         }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
+    }
+
+    @POST
+    @Path("getbyid/{id: [0-9]+}/confirm/{verificationCode}/{verificationMessage}/{status}") //todo verificationMessage optional
+    public Response setConfirmationStatus(@PathParam("id")long id, @PathParam("verificationCode")String code,
+                                          @PathParam("verificationMessage")String message, @PathParam("status")String status){
+        try {
+            rentRepository.setConfirmationStatus(id, RentStatusEnum.valueOf(status), code, message);
+        } catch(CCException ex) {
             return CCResponse.error(ex);
         }
         return CCResponse.ok();

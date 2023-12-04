@@ -90,38 +90,6 @@ public class RentTest {
 
     @Test
     void testIfMailIsSend() {
-        given()
-                .contentType("application/json")
-                .when()
-                .body(teacher1.toString())
-                .post("api/teacher/create")
-                .then()
-                .statusCode(200);
-
-        given()
-                .contentType("application/json")
-                .when()
-                .body(student1.toString())
-                .post("api/student/create")
-                .then()
-                .statusCode(200);
-
-        given()
-                .contentType("application/json")
-                .when()
-                .body(device1.toString())
-                .post("api/device/create")
-                .then()
-                .statusCode(200);
-
-        given()
-                .contentType("application/json")
-                .when()
-                .body(rent1.toString())
-                .post("api/rent/create")
-                .then()
-                .statusCode(200);
-
         // call a REST endpoint that sends email
         given()
                 .when()

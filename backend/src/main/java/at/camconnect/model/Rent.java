@@ -31,6 +31,7 @@ public class Rent {
     private LocalDate rent_start;
     private LocalDate rent_end_planned;
     private LocalDate rent_end_actual;
+    private String verification_code;
     private RentStatusEnum verification_status;
 
     private String verification_message;
@@ -71,6 +72,7 @@ public class Rent {
                 ", rent_end_planned=" + rent_end_planned +
                 ", rent_end_actual=" + rent_end_actual +
                 ", status=" + verification_status +
+                ", code=" + verification_code +
                 ", note='" + note + '\'' +
                 '}';
     }
@@ -162,5 +164,21 @@ public class Rent {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public String getVerification_code() {
+        return verification_code;
+    }
+
+    public void setVerification_code(String verification_code) {
+        this.verification_code = verification_code;
+    }
+
+    public String getVerification_message() {
+        return verification_message;
+    }
+
+    public void setVerification_message(String verification_message) {
+        this.verification_message = verification_message;
     }
 }
