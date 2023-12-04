@@ -78,7 +78,7 @@ public class CCError {
     }
 
     private void setMessage(String message) {
-        if(Objects.equals(message, "") || message == null) message = "no error message provided";
+        if(Objects.equals(message, "") || message == null) message = "";
         this.message = message;
     }
 

@@ -11,17 +11,17 @@ public class Teacher {
     private Long teacher_id;
     private String firstname;
     private String lastname;
-    private String verification;
-    private String password;
+    private String email;
     private String username;
+    private String password;
 
     public Teacher() {
     }
 
-    public Teacher(String firstname, String lastname, String verification, String password, String username) {
+    public Teacher(String firstname, String lastname, String email, String password, String username) {
         this.firstname = firstname;
         this.lastname = lastname;
-        this.verification = verification;
+        this.email = email;
         this.password = password;
         this.username = username;
     }
@@ -32,7 +32,7 @@ public class Teacher {
                 "teacher_id=" + teacher_id +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
-                ", verification='" + verification + '\'' +
+                ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", user_id='" + username + '\'' +
                 '}';
@@ -58,12 +58,12 @@ public class Teacher {
         this.lastname = lastname;
     }
 
-    public String getVerification() {
-        return verification;
+    public String getEmail() {
+        return email;
     }
 
-    public void setVerification(String verification) {
-        this.verification = verification;
+    public void setEmail(String verification) {
+        this.email = verification;
     }
 
     public String getPassword() {

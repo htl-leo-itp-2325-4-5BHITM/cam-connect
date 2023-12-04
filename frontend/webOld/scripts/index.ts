@@ -5,7 +5,10 @@ let allStudents: Student[] = []
 let allTeachers: Teacher[] = []
 
 //region base requests
-requestAllStudents();
+requestAllStudents()
+
+// @ts-ignore
+PopupEngine.init({textColor:"black", backgroundColor: "white", elemBackground: "#EEE"})
 
 function requestAllStudents() {
     allStudents = []
@@ -66,7 +69,7 @@ interface Teacher {
     teacher_id: number,
     firstname: string,
     lastname: string,
-    verification: string,
+    username: string,
     password: string,
     user_id: number
 }
@@ -137,7 +140,6 @@ function generateTable() {
     table.innerHTML = ""
     table.appendChild(headingHtml)
 
-    console.log(allRents, allRents.length)
     //creates the main content
     let html: Element[] = []
     for (let i = 0; i < Math.min(allRents.length, 20); i++) { //run over either all the entries in allRents or 20 (max that fits on the page)
@@ -406,6 +408,46 @@ function createRent() {
         .catch(error => console.error(error));
 }
 
+//region load csv update
+
+function importFromCsv(button:HTMLButtonElement) {
+    let file:File = button.closest("div").querySelector("input").files[0]
+    const formData = new FormData()
+    formData.append('file', file)
+
+    console.log(formData, file)
+
+    let importType = button.closest("div").getAttribute("data-import")
+
+    fetch(`http://localhost:8080/api/${importType}/import`, {
+        method: 'POST',
+        body: formData,
+    })
+        .then(response => {
+            return response.json()
+        })
+        .then(data => {
+            console.log(data)
+            switch (data.ccError.errorCode){
+                case 1000:
+                    //@ts-ignore
+                    PopupEngine.createNotification({text: `Successfully imported ${importType}`})
+                    break
+            }
+            requestAllStudents()
+        })
+        .catch(error => {
+            console.error(error)
+        })
+}
+
+// Example usage:
+let importButtons = document.querySelectorAll('#import button') as NodeListOf<HTMLButtonElement>
+importButtons.forEach(elem=>{
+    elem.addEventListener("click", ()=>{importFromCsv(elem)})
+})
+//endregion
+
 //region utlity
 function findRentById(id: number): RentComplete {
     let res = null
@@ -417,53 +459,4 @@ function findRentById(id: number): RentComplete {
     return res
 }
 
-//endregion
-
-//region load csv update
-
-function importStudents(file: File): Promise<boolean> {
-    console.log("importing")
-    const formData = new FormData();
-    formData.append('file', file)
-
-    return fetch(`${APPLICATION_URL}/student/import`, {
-        method: 'POST',
-        body: formData,
-    })
-        .then(response => {
-            console.log(response)
-            response.json()
-        })
-        .then(data => {
-            console.log(data)
-            return true
-        })
-        .catch(error => {
-            console.error(error)
-            return false
-        })
-}
-
-// Example usage:
-const fileInput = document.getElementById('csvFileInput') as HTMLInputElement
-const importButton = document.querySelector('#importButton') as HTMLButtonElement
-
-importButton.addEventListener('click', (event) => {
-    const files = fileInput.files;
-
-    if (files && files.length > 0) {
-        const file = files[0]
-        console.log(file)
-        importStudents(file)
-            .then(success => {
-                if (success) {
-                    console.log('Students imported successfully!')
-                    // Optionally, perform any actions after successful import
-                } else {
-                    console.error('Failed to import students.')
-                    // Optionally, handle the failure scenario
-                }
-            });
-    }
-});
 //endregion

@@ -1,11 +1,12 @@
 @page { size: A4 landscape }
 
 @media print {
-  #edit{
+  #import, #createRent{
     display: none;
   }
 }
 
+//region resets
 *{
   margin: 0;
   padding: 0;
@@ -43,6 +44,8 @@ button{
   border: none;
   color: hsl(0, 0, 0%)
 }
+
+//endregion
 
 /* main */
 
@@ -137,20 +140,34 @@ table{
 }
 
 button{
+  margin: .2rem;
   padding: .2rem 1rem;
   border: .1rem solid gray;
   border-radius: .3rem;
   cursor: pointer;
 }
 
-#edit{
+#import{
   display: flex;
-  gap: 2rem;
-  margin-top: .3rem;
+  flex-direction: column;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background-color: #EEE;
+  padding: .5rem;
+  padding-bottom: 2rem;
+  border-top-right-radius: .5rem;
+
+  *{
+    font-size: .9rem;
+  }
 
   div{
-    border: .1rem solid gray;
-    padding: .2rem;
-    border-radius: .3rem;
+    display: flex;
+    gap: 1rem;
+  }
+
+  hr{
+    margin-block: .3rem;
   }
 }
