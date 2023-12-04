@@ -46,7 +46,9 @@ public class RentRepository {
     }
 
     public Rent getById(long id){
-        return em.find(Rent.class, id);
+        Rent result = em.find(Rent.class, id);
+        if (result == null) throw new CCException(1101);
+        return result;
     }
 
 
@@ -93,49 +95,62 @@ public class RentRepository {
 
     @Transactional
     public void update(long id, JsonObject rentJson){
+        if(rentJson == null) throw new CCException(1105);
+
+        if(rentJson.containsKey("student_id"))
         try{
             setStudent(id, rentJson.getInt("student_id"));
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+        } catch(Exception ex){ throw new CCException(1105, "cannot update student_id " + ex.getMessage()); }
 
+        if(rentJson.containsKey("teacher_start_id"))
         try{
             setTeacherStart(id, rentJson.getInt("teacher_start_id"));
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+        } catch(Exception ex){ throw new CCException(1105, "cannot update teacher_start_id " + ex.getMessage()); }
 
+        if(rentJson.containsKey("teacher_end_id"))
         try{
             setTeacherEnd(id, rentJson.getInt("teacher_end_id"));
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+        } catch(Exception ex){ throw new CCException(1105, "cannot update teacher_end_id " + ex.getMessage()); }
 
+        if(rentJson.containsKey("device_id"))
         try{
             setDevice(id, rentJson.getInt("device_id"));
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+        } catch(Exception ex){ throw new CCException(1105, "cannot update device_id " + ex.getMessage()); }
 
+        if(rentJson.containsKey("rent_start"))
         try{
             setRentStart(id, rentJson.getString("rent_start"));
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+        } catch(Exception ex){ throw new CCException(1105, "cannot update rent_start " + ex.getMessage()); }
 
+        if(rentJson.containsKey("rent_end_planned"))
         try{
             setRentEndPlanned(id, rentJson.getString("rent_end_planned"));
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+        } catch(Exception ex){ throw new CCException(1105, "cannot update rent_end_planned " + ex.getMessage()); }
 
+        if(rentJson.containsKey("rent_end_actual"))
         try{
             setRentEndActual(id, rentJson.getString("rent_end_actual"));
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+        } catch(Exception ex){ throw new CCException(1105, "cannot update rent_end_actual " + ex.getMessage()); }
 
+        if(rentJson.containsKey("status"))
         try{
             setStatus(id, rentJson.getString("status"));
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+        } catch(Exception ex){ throw new CCException(1105, "cannot update status " + ex.getMessage()); }
 
+        if(rentJson.containsKey("note"))
         try{
             setNote(id, rentJson.getString("note"));
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+        } catch(Exception ex){ throw new CCException(1105, "cannot update note " + ex.getMessage()); }
 
+        if(rentJson.containsKey("accessory"))
         try{
             setAccessory(id, rentJson.getString("accessory"));
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+        } catch(Exception ex){ throw new CCException(1105, "cannot update accessory " + ex.getMessage()); }
 
+        if(rentJson.containsKey("device_string"))
         try{
             setDeviceString(id, rentJson.getString("device_string"));
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+        } catch(Exception ex){ throw new CCException(1105, "cannot update device_string " + ex.getMessage()); }
     }
 
     // Setter

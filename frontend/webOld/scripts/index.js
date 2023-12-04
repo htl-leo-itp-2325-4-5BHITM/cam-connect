@@ -308,8 +308,9 @@ function updateRent(input, key, value, rentId) {
         },
         body: JSON.stringify(rentUpdate)
     })
-        .then(function (response) { return response.text(); })
+        .then(function (response) { return response.json(); })
         .then(function (data) {
+        console.log(data);
         requestAllRents();
         closeStudentPicker();
         closeTeacherPicker();
@@ -332,7 +333,7 @@ function createRent() {
     })
         .catch(function (error) { return console.error(error); });
 }
-function importFromCsv(button) {
+function importDataFromCsv(button) {
     var file = button.closest("div").querySelector("input").files[0];
     var formData = new FormData();
     formData.append('file', file);
@@ -358,9 +359,9 @@ function importFromCsv(button) {
         console.error(error);
     });
 }
-var importButtons = document.querySelectorAll('#import button');
-importButtons.forEach(function (elem) {
-    elem.addEventListener("click", function () { importFromCsv(elem); });
+var importButtonss = document.querySelectorAll('#import button');
+importButtonss.forEach(function (elem) {
+    elem.addEventListener("click", function () { importDataFromCsv(elem); });
 });
 function findRentById(id) {
     var res = null;

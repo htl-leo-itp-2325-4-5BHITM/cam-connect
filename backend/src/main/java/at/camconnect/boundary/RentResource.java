@@ -96,8 +96,12 @@ public class RentResource {
     @Path("/getbyid/{id: [0-9]+}/update")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateRent (@PathParam("id")long id, JsonObject rent){
-        rentRepository.update(id, rent);
-        return Response.ok().build();
+        try{
+            rentRepository.update(id, rent);
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
 
     @POST

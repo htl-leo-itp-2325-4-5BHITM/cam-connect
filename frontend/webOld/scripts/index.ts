@@ -435,8 +435,9 @@ function updateRent(input: HTMLElement, key: string, value: any, rentId?: number
         },
         body: JSON.stringify(rentUpdate)
     })
-        .then(response => response.text())
+        .then(response => response.json())
         .then(data => {
+            console.log(data)
             requestAllRents()
             closeStudentPicker()
             closeTeacherPicker()
@@ -463,7 +464,7 @@ function createRent() {
 
 //region load csv update
 
-function importFromCsv(button:HTMLButtonElement) {
+function importDataFromCsv(button:HTMLButtonElement) {
     let file:File = button.closest("div").querySelector("input").files[0]
     const formData = new FormData()
     formData.append('file', file)
@@ -494,14 +495,14 @@ function importFromCsv(button:HTMLButtonElement) {
         })
 }
 
-// Example usage:
-let importButtons = document.querySelectorAll('#import button') as NodeListOf<HTMLButtonElement>
-importButtons.forEach(elem=>{
-    elem.addEventListener("click", ()=>{importFromCsv(elem)})
+let importButtonss = document.querySelectorAll('#import button') as NodeListOf<HTMLButtonElement>
+importButtonss.forEach(elem=>{
+    elem.addEventListener("click", ()=>{importDataFromCsv(elem)})
 })
 //endregion
 
 //region utlity
+// @ts-ignore
 function findRentById(id: number): RentComplete {
     let res = null
     allRents.forEach(rent => {
