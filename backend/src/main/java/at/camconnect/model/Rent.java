@@ -4,6 +4,7 @@ import at.camconnect.enums.RentStatusEnum;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Random;
 
 @Entity
 public class Rent {
@@ -77,7 +78,25 @@ public class Rent {
                 '}';
     }
 
+    public String generateVerification_code() {
+        //this could possibly result in a problem with case sensitivity in urls
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder();
 
+        for (int i = 0; i < 10; i++) {
+            int index = random.nextInt(characters.length());
+            char randomChar = characters.charAt(index);
+            sb.append(randomChar);
+        }
+
+        // the verification code is set to current rent
+        this.verification_code = sb.toString();
+
+        return this.verification_code;
+    }
+
+    //region getter setter
     public String getAccessory() {
         return accessory;
     }
@@ -170,10 +189,6 @@ public class Rent {
         return verification_code;
     }
 
-    public void setVerification_code(String verification_code) {
-        this.verification_code = verification_code;
-    }
-
     public String getVerification_message() {
         return verification_message;
     }
@@ -181,4 +196,5 @@ public class Rent {
     public void setVerification_message(String verification_message) {
         this.verification_message = verification_message;
     }
+    //endregion
 }

@@ -2,11 +2,11 @@ package at.camconnect.repository;
 
 import at.camconnect.enums.RentStatusEnum;
 import at.camconnect.errorSystem.CCException;
-import at.camconnect.errorSystem.CCResponse;
 import at.camconnect.model.Device;
 import at.camconnect.model.Rent;
 import at.camconnect.model.Student;
 import at.camconnect.model.Teacher;
+import io.vertx.ext.mail.MailClient;
 import io.vertx.ext.mail.MailMessage;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -17,13 +17,15 @@ import jakarta.transaction.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 @ApplicationScoped
 public class RentRepository {
     @Inject
     EntityManager em;
+
+    @Inject
+    MailClient client;
 
     @Transactional
     public void create(JsonObject rentJson){
@@ -46,56 +48,44 @@ public class RentRepository {
         return rents;
     }
 
-    public Rent getById(long id){
+    public Rent getById(Long id){
         Rent result = em.find(Rent.class, id);
         if (result == null) throw new CCException(1101);
         return result;
     }
 
-    public MailMessage getMailMessage (long rentId, String itUser) {
+    public void sendConfirmation(Long id, String username){
+        client.sendMail(generateMailMessage(id, username));
+        setVerificationStatus(id, RentStatusEnum.WAITING);
+    }
+
+    public MailMessage generateMailMessage(Long rentId, String username) {
         MailMessage message = new MailMessage();
         message.setFrom("signup.camconnect@gmail.com");
-        message.setTo(itUser + "@students.htl-leonding.ac.at");
+        message.setTo(username + "@students.htl-leonding.ac.at");
         message.setText("Bitte bestätige den Verleih # in dem sie auf den Link klicken: ");
-        message.setHtml("<a href='localhost:4200?verification_code=" + generateVerificationCode(rentId) + "'>Bestätigen</a>");
+        String verification_code = getById(rentId).generateVerification_code();
+        message.setHtml("<a href='localhost:4200?verification_code=" + verification_code + "'>Bestätigen</a>");
 
         return message;
     }
 
-    public String generateVerificationCode(long rentId) {
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        Random random = new Random();
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 0; i < 10; i++) {
-            int index = random.nextInt(characters.length());
-            char randomChar = characters.charAt(index);
-            sb.append(randomChar);
-        }
-
-        // the verification code is set to current rent
-        Rent rent = getById(rentId);
-        rent.setVerification_code(sb.toString());
-
-        return sb.toString();
-    }
-
-    public void setConfirmationStatus (long rentId, RentStatusEnum rentStatus, String verificationCode, String verificationMessage) {
+    public void setConfirmationStatus (Long rentId, RentStatusEnum rentStatus, String verificationCode, String verificationMessage) {
         Rent rent = getById(rentId);
 
         Set<RentStatusEnum> notAllowedStatus = Set.of(RentStatusEnum.CONFIRMED, RentStatusEnum.DECLINED, RentStatusEnum.RETURNED);
 
-        // set only if the not allowed status' aren't the current status and if the verification is the same as provided
+        // set only if the current status is allowed and if the verification_code is the same as provided
         if (!notAllowedStatus.contains(rent.getVerification_status()) && rent.getVerification_code().equals(verificationCode)) {
             rent.setVerification_status(rentStatus);
         } else{
-            throw new CCException(1001);
+            throw new CCException(1205);
         }
     }
 
 
     @Transactional
-    public void update(long id, JsonObject rentJson){
+    public void update(Long id, JsonObject rentJson){
         if(rentJson == null) throw new CCException(1105);
 
         if(validateJsonKey(rentJson,"student_id"))
@@ -155,72 +145,73 @@ public class RentRepository {
     }
 
     //region setter
-    public void setStudent(long rentId, long studentId) {
+    public void setStudent(Long rentId, long studentId) {
         Student student = em.find(Student.class, studentId);
         Rent rent = getById(rentId);
         rent.setStudent(student);
     }
 
-    public void setTeacherStart(long rentId, long teacherId) {
+    public void setTeacherStart(Long rentId, long teacherId) {
         Teacher teacher = em.find(Teacher.class, teacherId);
         Rent rent = getById(rentId);
         rent.setTeacher_start(teacher);
     }
 
-    public void setTeacherEnd(long rentId, long teacherId) {
+    public void setTeacherEnd(Long rentId, long teacherId) {
         Teacher teacher = em.find(Teacher.class, teacherId);
         Rent rent = getById(rentId);
         rent.setTeacher_end(teacher);
     }
 
-    public void setDevice(long rentId, long deviceId) {
+    public void setDevice(Long rentId, long deviceId) {
         Device device = em.find(Device.class, deviceId);
         Rent rent = getById(rentId);
         rent.setDevice(device);
     }
 
-    public void setRentStart(long rentId, String date) {
+    public void setRentStart(Long rentId, String date) {
         Rent rent = getById(rentId);
         rent.setRent_start(LocalDate.parse(date));
     }
 
-    public void setRentEndPlanned(long rentId, String date) {
+    public void setRentEndPlanned(Long rentId, String date) {
         Rent rent = getById(rentId);
         rent.setRent_end_planned(LocalDate.parse(date));
     }
 
-    public void setRentEndActual(long rentId, String date) {
+    public void setRentEndActual(Long rentId, String date) {
         Rent rent = getById(rentId);
         rent.setRent_end_actual(LocalDate.parse(date));
     }
 
-    public void setStatus(long rentId, String status) {
+    public void setStatus(Long rentId, String status) {
         Rent rent = getById(rentId);
         rent.setVerification_status(RentStatusEnum.valueOf(status));
     }
 
-    public void setNote(long rentId, String note) {
+    public void setNote(Long rentId, String note) {
         Rent rent = getById(rentId);
         rent.setNote(note);
     }
 
-    public void setAccessory(long rentId, String accessory) {
+    public void setAccessory(Long rentId, String accessory) {
         Rent rent = getById(rentId);
         rent.setAccessory(accessory);
     }
-    public void setDeviceString(long rentId, String device_string) {
+    public void setDeviceString(Long rentId, String device_string) {
         Rent rent = getById(rentId);
         rent.setDevice_string(device_string);
     }
-    public void setVerificationMessage(long rentId, RentStatusEnum verification){
+    public void setVerificationStatus(Long rentId, RentStatusEnum verificationStatus){
         Rent rent = getById(rentId);
 
-        if(rent.getVerification_status() == RentStatusEnum.WAITING){
+        if(rent.getVerification_status() == verificationStatus){
             throw new CCException(1201);
         }
-        rent.setVerification_status(verification);
+
+        rent.setVerification_status(verificationStatus);
     }
-    public void setVerificationCode(long rentId, String verification_code){
+    public void setVerificationCode(Long rentId, String verification_code){
         Rent rent = getById(rentId);
     }
     //endregion

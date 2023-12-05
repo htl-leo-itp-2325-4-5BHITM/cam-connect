@@ -25,7 +25,8 @@ public class CCError {
             Map.entry(1201, "Duplicate request"),
             Map.entry(1202, "No results"),
             Map.entry(1203, "File is empty"),
-            Map.entry(1204, "File has Invalid Structure")
+            Map.entry(1204, "File has Invalid Structure"),
+            Map.entry(1205, "Operation was not allowed")
     );
 
     private int errorCode;

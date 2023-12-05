@@ -86,7 +86,7 @@ api
 
 ### Accepted ErrorCodes
 - 1000: All good
-- 1001: Something went wrong but an invalid error code was provided
+- 1001: Something went wrong but an invalid error code was provided (dont use this)
 - 1100: **Structure error**: Problems with the general request structure / syntax
 - 1101: Invalid id in getter
 - 1102: Invalid id in setter
@@ -99,3 +99,4 @@ api
 - 1202: The data provided to the endpoint returned no results
 - 1203: File is empty
 - 1204: File has Invalid Structure
+- 1205: Operation was not allowed

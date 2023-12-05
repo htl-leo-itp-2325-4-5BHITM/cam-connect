@@ -168,6 +168,7 @@ button {
   padding: 0.5rem;
   padding-bottom: 2rem;
   border-top-right-radius: 0.5rem;
+  box-shadow: 0 0 0.5rem 0.3rem rgba(0, 0, 0, 0.4);
 }
 #import * {
   font-size: 0.9rem;
