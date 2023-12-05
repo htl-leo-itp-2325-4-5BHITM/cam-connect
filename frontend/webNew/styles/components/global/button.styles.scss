@@ -18,6 +18,10 @@
   &[type = "outlined"]{
     border: 2px solid;
     background: transparent;
+
+    &:hover{
+      background: $gray100;
+    }
   }
 
   &[size = "small"]{

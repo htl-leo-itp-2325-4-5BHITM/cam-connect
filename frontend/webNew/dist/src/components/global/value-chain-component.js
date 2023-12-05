@@ -17,7 +17,7 @@ class ValueChainComponent extends HTMLElement {
     valueChain() {
         const selectElements = this.querySelectorAll("*");
         const div = document.createElement('div');
-        div.setAttribute("class", "chain");
+        div.classList.add("chain");
         selectElements.forEach((elem) => {
             div.appendChild(elem);
         });

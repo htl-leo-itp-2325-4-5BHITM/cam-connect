@@ -27,6 +27,10 @@
     height: fit-content;
     margin-left: .3rem;
 
+    &:hover{
+      color: $gray900;
+    }
+
     &[isActive = "true"]{
       color: white;
       font-weight: 600;

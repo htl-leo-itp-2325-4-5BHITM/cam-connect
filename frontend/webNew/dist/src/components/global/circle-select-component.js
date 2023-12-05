@@ -28,6 +28,7 @@ class CircleSelectComponent extends HTMLElement {
     circleSelect(color, type) {
         const div = document.createElement("div");
         div.classList.add(color || "accent");
+        div.classList.add(type || "single");
         const image = document.createElement("img");
         image.src = `../../assets/${div.classList.contains("active") ? "checked" : "unchecked"}_${type || "single"}.svg`;
         div.addEventListener("click", this.swapCheckbox.bind(this, image, type));

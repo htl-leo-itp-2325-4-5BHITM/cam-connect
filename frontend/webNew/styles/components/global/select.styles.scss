@@ -31,4 +31,8 @@ cc-select-element{
     color: white;
     font-weight: 600;
   }
+
+  &:hover{
+    color: $gray900;
+  }
 }

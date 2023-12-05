@@ -1,6 +1,6 @@
 //TODO find a way to import a whole folder of modules
 import "./components/global/button-component";
-import "./components/global/rent-status-component";
+import "./components/global/chip-component";
 import "./components/global/confirmation-status-component";
 import "./components/global/filter-block-component";
 import "./components/global/filter-elements-component";

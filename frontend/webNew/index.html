@@ -24,11 +24,18 @@
         </div>
     </nav>
 
+    <cc-button color="accent" size="large" type="filled"></cc-button>
     <cc-button color="accent" size="large" type="outlined"></cc-button>
+    <cc-button color="gray" size="large" type="filled"></cc-button>
+    <cc-button color="gray" size="large" type="outlined"></cc-button>
+
+    <cc-circle-select></cc-circle-select>
+    <cc-circle-select type="multiple"></cc-circle-select>
+    <cc-circle-select color="gray"></cc-circle-select>
 
     <cc-confirmation-status status="CONFIRMED" isBig="true"></cc-confirmation-status>
+
     <cc-property-value></cc-property-value>
-    <cc-rent-status></cc-rent-status>
 
     <cc-select>
         <cc-select-element selected="true">test</cc-select-element>
@@ -37,16 +44,37 @@
     </cc-select>
 
     <cc-value-chain>
-        <p>Test</p>
+        <p class="isLink">Underline</p>
         <a>Testi</a>
         <p>Peter</p>
     </cc-value-chain>
 
-    <cc-filter-block>
+    <cc-filter-block name="Filtername">
         <cc-filter-element>test</cc-filter-element>
         <cc-filter-element>test</cc-filter-element>
         <cc-filter-element>test</cc-filter-element>
         <cc-filter-element>test</cc-filter-element>
     </cc-filter-block>
+
+    <div style="display: flex;">
+        <cc-chip color="accent" size="small"></cc-chip>
+        <cc-chip color="accent"></cc-chip>
+    </div>
+    <div style="display: flex;">
+        <cc-chip color="good" size="small"></cc-chip>
+        <cc-chip color="good"></cc-chip>
+    </div>
+    <div style="display: flex;">
+        <cc-chip color="mid" size="small"></cc-chip>
+        <cc-chip color="mid"></cc-chip>
+    </div>
+    <div style="display: flex;">
+        <cc-chip color="bad" size="small" removeable="true"></cc-chip>
+        <cc-chip color="bad" removeable="true"></cc-chip>
+    </div>
+    <div style="display: flex;">
+        <cc-chip color="gray" size="small" removeable="true"></cc-chip>
+        <cc-chip color="gray" removeable="true"></cc-chip>
+    </div>
 </body>
 </html>

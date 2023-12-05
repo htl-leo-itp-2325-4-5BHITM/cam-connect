@@ -18,7 +18,11 @@ div.chain{
     margin: 0;
   }
 
-  [type="link"]{
+  .isLink{
     text-decoration: underline;
+
+    &:after{
+      text-decoration: none;
+    }
   }
 }

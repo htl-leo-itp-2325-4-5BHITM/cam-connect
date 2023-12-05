@@ -15,14 +15,15 @@ class FilterBlockComponent extends HTMLElement {
         this.render();
     }
     render() {
-        render(this.filterElement(), this.shadowRoot);
+        let name = this.getAttribute("name");
+        render(this.filterElement(name), this.shadowRoot);
     }
-    filterElement() {
+    filterElement(name) {
         const filterElements = this.querySelectorAll("cc-filter-element");
         const div = document.createElement('div');
         div.setAttribute("class", "filter-block");
         const heading = document.createElement('h2');
-        heading.innerHTML = this.getAttribute("name");
+        heading.innerHTML = name;
         div.appendChild(heading);
         filterElements.forEach((elem) => {
             div.appendChild(elem);

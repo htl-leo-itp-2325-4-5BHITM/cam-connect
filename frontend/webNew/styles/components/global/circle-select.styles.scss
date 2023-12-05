@@ -2,10 +2,13 @@
 
 cc-circle-select div{
   display: grid;
+  width: 2rem;
   place-content: center;
-  width: 1.4rem;
-  aspect-ratio: 1/1;
   cursor: pointer;
+
+  &.multiple img{
+    width: 1.6rem;
+  }
 
   &.accent img {
     filter: invert(57%) sepia(54%) saturate(507%) hue-rotate(155deg) brightness(83%) contrast(88%);
