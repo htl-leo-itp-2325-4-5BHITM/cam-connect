@@ -11,6 +11,7 @@ import io.vertx.ext.mail.MailMessage;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
@@ -97,65 +98,63 @@ public class RentRepository {
     public void update(long id, JsonObject rentJson){
         if(rentJson == null) throw new CCException(1105);
 
-        if(rentJson.containsKey("student_id"))
+        if(validateJsonKey(rentJson,"student_id"))
         try{
             setStudent(id, rentJson.getInt("student_id"));
         } catch(Exception ex){ throw new CCException(1105, "cannot update student_id " + ex.getMessage()); }
 
-        if(rentJson.containsKey("teacher_start_id"))
+        if(validateJsonKey(rentJson,"teacher_start_id"))
         try{
             setTeacherStart(id, rentJson.getInt("teacher_start_id"));
         } catch(Exception ex){ throw new CCException(1105, "cannot update teacher_start_id " + ex.getMessage()); }
 
-        if(rentJson.containsKey("teacher_end_id"))
+        if(validateJsonKey(rentJson,"teacher_end_id"))
         try{
             setTeacherEnd(id, rentJson.getInt("teacher_end_id"));
         } catch(Exception ex){ throw new CCException(1105, "cannot update teacher_end_id " + ex.getMessage()); }
 
-        if(rentJson.containsKey("device_id"))
+        if(validateJsonKey(rentJson,"device_id"))
         try{
             setDevice(id, rentJson.getInt("device_id"));
         } catch(Exception ex){ throw new CCException(1105, "cannot update device_id " + ex.getMessage()); }
 
-        if(rentJson.containsKey("rent_start"))
+        if(validateJsonKey(rentJson,"rent_start"))
         try{
             setRentStart(id, rentJson.getString("rent_start"));
         } catch(Exception ex){ throw new CCException(1105, "cannot update rent_start " + ex.getMessage()); }
 
-        //TODO check for null
-        if(rentJson.containsKey("rent_end_planned"))
+        if(validateJsonKey(rentJson, "rent_end_planned"))
         try{
             setRentEndPlanned(id, rentJson.getString("rent_end_planned"));
         } catch(Exception ex){ throw new CCException(1105, "cannot update rent_end_planned " + ex.getMessage()); }
 
-        if(rentJson.containsKey("rent_end_actual"))
+        if(validateJsonKey(rentJson,"rent_end_actual"))
         try{
             setRentEndActual(id, rentJson.getString("rent_end_actual"));
         } catch(Exception ex){ throw new CCException(1105, "cannot update rent_end_actual " + ex.getMessage()); }
 
-        if(rentJson.containsKey("status"))
+        if(validateJsonKey(rentJson,"status"))
         try{
             setStatus(id, rentJson.getString("status"));
         } catch(Exception ex){ throw new CCException(1105, "cannot update status " + ex.getMessage()); }
 
-        if(rentJson.containsKey("note"))
+        if(validateJsonKey(rentJson,"note"))
         try{
             setNote(id, rentJson.getString("note"));
         } catch(Exception ex){ throw new CCException(1105, "cannot update note " + ex.getMessage()); }
 
-        if(rentJson.containsKey("accessory"))
+        if(validateJsonKey(rentJson,"accessory"))
         try{
             setAccessory(id, rentJson.getString("accessory"));
         } catch(Exception ex){ throw new CCException(1105, "cannot update accessory " + ex.getMessage()); }
 
-        if(rentJson.containsKey("device_string"))
+        if(validateJsonKey(rentJson,"device_string"))
         try{
             setDeviceString(id, rentJson.getString("device_string"));
         } catch(Exception ex){ throw new CCException(1105, "cannot update device_string " + ex.getMessage()); }
     }
 
-    // Setter
-    //region
+    //region setter
     public void setStudent(long rentId, long studentId) {
         Student student = em.find(Student.class, studentId);
         Rent rent = getById(rentId);
@@ -223,6 +222,12 @@ public class RentRepository {
     }
     public void setVerificationCode(long rentId, String verification_code){
         Rent rent = getById(rentId);
+    }
+    //endregion
+
+    //region utility
+    private boolean validateJsonKey(JsonObject jsonObject, String key){
+        return (jsonObject.containsKey(key) && jsonObject.get(key) != null && jsonObject.get(key) != JsonValue.NULL);
     }
     //endregion
 }

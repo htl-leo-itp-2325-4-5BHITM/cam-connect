@@ -31,7 +31,7 @@ public class DeviceTypeRepository {
         try {
             deviceType = objectMapper.readValue(dataString, enumToClass(typeEnum));
         } catch (JsonProcessingException e) {
-            throw new CCException(1006);
+            throw new CCException(1106);
         }
 
         em.persist(deviceType);
