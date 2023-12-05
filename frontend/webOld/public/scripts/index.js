@@ -57,7 +57,6 @@ var columns = [
 function generateTable() {
     var _a;
     var headingHtml = document.createElement("tr");
-    console.log(columns);
     columns.forEach(function (column) {
         var headRow = document.createElement("th");
         headRow.innerText = column.name;
@@ -71,7 +70,7 @@ function generateTable() {
         var row = document.createElement("tr");
         row.setAttribute("rent_id", String((_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id));
         columns.forEach(function (column) {
-            var _a, _b, _c, _d, _e, _f, _g;
+            var _a, _b, _c, _d, _e, _f;
             var cell = document.createElement("td");
             if (column.inputType !== "none") {
                 var cellinput_1 = document.createElement("input");
@@ -113,8 +112,9 @@ function generateTable() {
                 cell.appendChild(cellinput_1);
             }
             if (column.cellType == "verification_status") {
-                console.log((_d = allRents[i]) === null || _d === void 0 ? void 0 : _d.verification_status);
-                switch ((_e = allRents[i]) === null || _e === void 0 ? void 0 : _e.verification_status) {
+                switch ((_d = allRents[i]) === null || _d === void 0 ? void 0 : _d.verification_status) {
+                    case null:
+                    case undefined:
                     case "CREATED":
                         var cellButton = document.createElement("button");
                         cellButton.classList.add("verification_button");
@@ -128,8 +128,8 @@ function generateTable() {
                     default:
                         var cellChip = document.createElement('div');
                         cellChip.classList.add("verification_chip");
-                        cellChip.setAttribute("status", (_f = allRents[i]) === null || _f === void 0 ? void 0 : _f.verification_status);
-                        cellChip.innerHTML = (_g = allRents[i]) === null || _g === void 0 ? void 0 : _g.verification_status;
+                        cellChip.setAttribute("status", (_e = allRents[i]) === null || _e === void 0 ? void 0 : _e.verification_status);
+                        cellChip.innerHTML = (_f = allRents[i]) === null || _f === void 0 ? void 0 : _f.verification_status;
                         cell.appendChild(cellChip);
                         break;
                 }
@@ -144,27 +144,10 @@ function generateTable() {
     table.append.apply(table, html);
 }
 function sendVerificationRequest(rentId) {
-    fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/sendconfirmation/}"), {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }
+    fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/sendconfirmation"))
+        .then(function (response) {
+        return response.json();
     })
-        .then(function (response) { return response.json(); })
-        .then(function (data) {
-        console.log(data);
-        requestAllRents();
-    })
-        .catch(function (error) { return console.error(error); });
-}
-function setVerificationStatus(rentId, verification_status) {
-    fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/confirm/}"), {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(function (response) { return response.json(); })
         .then(function (data) {
         console.log(data);
         requestAllRents();

@@ -137,7 +137,6 @@ function generateTable() {
     //Create the Heading Row based purely on the data in the columns constant
     let headingHtml = document.createElement("tr")
 
-    console.log(columns)
     columns.forEach(column => {
         let headRow = document.createElement("th")
         headRow.innerText = column.name
@@ -201,9 +200,9 @@ function generateTable() {
             }
 
             if (column.cellType == "verification_status"){
-                console.log(allRents[i]?.verification_status)
-
                 switch (allRents[i]?.verification_status){
+                    case null:
+                    case undefined:
                     case "CREATED": // if not already requested
                         let cellButton = document.createElement("button")
                         cellButton.classList.add("verification_button")
@@ -237,13 +236,10 @@ function generateTable() {
 
 // region verification
 function sendVerificationRequest(rentId: number){
-    fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/sendconfirmation/}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(response => response.json())
+    fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/sendconfirmation`)
+        .then(response => {
+            return response.json()
+        })
         .then(data => {
             console.log(data)
             requestAllRents()

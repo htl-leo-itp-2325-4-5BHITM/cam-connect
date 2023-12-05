@@ -54,35 +54,59 @@ public class RentRepository {
         return result;
     }
 
-    public void sendConfirmation(Long id, String username){
-        client.sendMail(generateMailMessage(id, username));
-        setVerificationStatus(id, RentStatusEnum.WAITING);
+    public MailClient sendConfirmation(Long id){
+        MailMessage message = generateMailMessage(id);
+        System.out.println(message.toJson());
+
+        getById(id).setStatus(RentStatusEnum.WAITING);
+
+        return client.sendMail(message, result -> {
+            if (result.succeeded()) {
+                System.out.println("Email sent successfully");
+            } else {
+                System.out.println("Failed to send email: " + result.cause());
+                throw new CCException(1200, "Failed to send mail");
+            }
+        });
     }
 
-    public MailMessage generateMailMessage(Long rentId, String username) {
+    public MailMessage generateMailMessage(Long id) {
         MailMessage message = new MailMessage();
         message.setFrom("signup.camconnect@gmail.com");
-        message.setTo(username + "@students.htl-leonding.ac.at");
+        String email = getById(id).getStudent().getEmail();
+        message.setTo(email);
+        message.setSubject("Bestätigung des Geräteverleih");
         message.setText("Bitte bestätige den Verleih # in dem sie auf den Link klicken: ");
-        String verification_code = getById(rentId).generateVerification_code();
+        String verification_code = getById(id).generateVerification_code();
         message.setHtml("<a href='localhost:4200?verification_code=" + verification_code + "'>Bestätigen</a>");
 
         return message;
     }
 
-    public void setConfirmationStatus (Long rentId, RentStatusEnum rentStatus, String verificationCode, String verificationMessage) {
+    public void confirm(Long rentId, JsonObject jsonObject) {
+        String verificationCode;
+        String verificationMessage;
+        RentStatusEnum verificationStatus;
+        try{
+            verificationCode = jsonObject.getString("verification_code");
+            verificationMessage = jsonObject.getString("verification_message");
+            verificationStatus = RentStatusEnum.valueOf(jsonObject.getString("verification_status"));
+        } catch (IllegalArgumentException e) {
+            throw new CCException(1106);
+        }
+
         Rent rent = getById(rentId);
 
-        Set<RentStatusEnum> notAllowedStatus = Set.of(RentStatusEnum.CONFIRMED, RentStatusEnum.DECLINED, RentStatusEnum.RETURNED);
+        Set<RentStatusEnum> allowedStatus = Set.of(RentStatusEnum.CONFIRMED, RentStatusEnum.DECLINED);
 
         // set only if the current status is allowed and if the verification_code is the same as provided
-        if (!notAllowedStatus.contains(rent.getVerification_status()) && rent.getVerification_code().equals(verificationCode)) {
-            rent.setVerification_status(rentStatus);
+        if (allowedStatus.contains(rent.getStatus()) && rent.getVerification_code().equals(verificationCode)) {
+            rent.setStatus(verificationStatus);
+            rent.setVerification_message(verificationMessage);
         } else{
             throw new CCException(1205);
         }
     }
-
 
     @Transactional
     public void update(Long id, JsonObject rentJson){
@@ -116,8 +140,10 @@ public class RentRepository {
             setRentEndActual(id, rentJson.getString("rent_end_actual"));
         } catch(Exception ex){ throw new CCException(1105, "cannot update rent_end_actual " + ex.getMessage()); }
 
-        if(validateJsonKey(rentJson,"status")) try{
-            setStatus(id, rentJson.getString("status"));
+
+        if(validateJsonKey(rentJson,"status"))
+        try{
+            confirm(id, rentJson.getString("status"));
         } catch(Exception ex){ throw new CCException(1105, "cannot update status " + ex.getMessage()); }
 
         if(validateJsonKey(rentJson,"note")) try{
@@ -173,9 +199,9 @@ public class RentRepository {
         rent.setRent_end_actual(LocalDate.parse(date));
     }
 
-    public void setStatus(Long rentId, String status) {
+    public void confirm(Long rentId, String status) {
         Rent rent = getById(rentId);
-        rent.setVerification_status(RentStatusEnum.valueOf(status));
+        rent.setStatus(RentStatusEnum.valueOf(status));
     }
 
     public void setNote(Long rentId, String note) {
@@ -191,14 +217,14 @@ public class RentRepository {
         Rent rent = getById(rentId);
         rent.setDevice_string(device_string);
     }
-    public void setVerificationStatus(Long rentId, RentStatusEnum verificationStatus){
+    public void confirm(Long rentId, RentStatusEnum verificationStatus){
         Rent rent = getById(rentId);
 
-        if(rent.getVerification_status() == verificationStatus){
+        if(rent.getStatus() == verificationStatus){
             throw new CCException(1201);
         }
 
-        rent.setVerification_status(verificationStatus);
+        rent.setStatus(verificationStatus);
     }
     public void setVerificationCode(Long rentId, String verification_code){
         Rent rent = getById(rentId);
