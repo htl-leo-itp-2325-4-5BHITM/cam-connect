@@ -4,15 +4,13 @@ import jakarta.json.JsonObject;
 import jakarta.persistence.*;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class DeviceType{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "device_type_seq")
     @SequenceGenerator(name = "device_type_seq", sequenceName = "DEVICE_TYPE_SEQ", allocationSize = 1)
     private Long type_id;
     private String name;
-
-
     private String image;
 
     public String getImage() {

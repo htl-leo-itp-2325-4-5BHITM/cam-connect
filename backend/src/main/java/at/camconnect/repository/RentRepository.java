@@ -51,7 +51,6 @@ public class RentRepository {
         return result;
     }
 
-
     public MailMessage getMailMessage (long rentId, String itUser) {
         MailMessage message = new MailMessage();
         message.setFrom("signup.camconnect@gmail.com");
@@ -61,6 +60,7 @@ public class RentRepository {
 
         return message;
     }
+
     public String generateVerificationCode(long rentId) {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();
@@ -122,6 +122,7 @@ public class RentRepository {
             setRentStart(id, rentJson.getString("rent_start"));
         } catch(Exception ex){ throw new CCException(1105, "cannot update rent_start " + ex.getMessage()); }
 
+        //TODO check for null
         if(rentJson.containsKey("rent_end_planned"))
         try{
             setRentEndPlanned(id, rentJson.getString("rent_end_planned"));
