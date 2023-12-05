@@ -1,5 +1,5 @@
 INSERT INTO student (student_id, firstname, lastname, password, school_class, username)
-VALUES (NEXT VALUE FOR student_seq, 'Anna', 'Schmidt', 'passwort1', '1CHITM', 'IT200271');
+VALUES (NEXT VALUE FOR student_seq, 'Anna', 'Schmidt', 'passwort1', '1CHITM', 'IT200269');
 INSERT INTO student (student_id, firstname, lastname, password, school_class, username)
 VALUES (NEXT VALUE FOR student_seq, 'Lukas', 'Müller', 'passwort2', '2AHITM', 'IT200272');
 INSERT INTO student (student_id, firstname, lastname, password, school_class, username)

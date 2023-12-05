@@ -209,8 +209,8 @@ function generateTable() {
                         cellButton.classList.add("verification_button")
                         cellButton.innerHTML = "Bestätigung Anfragen"
 
-                        cellButton.addEventListener("onclick", () => {
-                            sendVerificationRequest(allRents[i]?.rent_id, allRents[i]?.student.username)
+                        cellButton.addEventListener("click", () => {
+                            sendVerificationRequest(allRents[i]?.rent_id)
                         })
                         cell.appendChild(cellButton)
                         break
@@ -236,9 +236,8 @@ function generateTable() {
 //endregion
 
 // region verification
-function sendVerificationRequest(rentId: number, studentUsername: string){
-    console.log(rentId, studentUsername)
-    fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/sendconfirmation/${studentUsername}`, {
+function sendVerificationRequest(rentId: number){
+    fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/sendconfirmation/}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -251,6 +250,22 @@ function sendVerificationRequest(rentId: number, studentUsername: string){
         })
         .catch(error => console.error(error));
 }
+
+function setVerificationStatus(rentId: number, verification_status: string){
+    fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/confirm/}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            requestAllRents()
+        })
+        .catch(error => console.error(error));
+}
+// endregion
 
 //region student search and selection
 const studentSelectionPopup: HTMLElement = document.querySelector("#studentSelectionPopup")

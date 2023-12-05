@@ -56,7 +56,7 @@ public class RentResource {
         return rentRepository.getById(id);
     }
 
-    @GET
+    @POST
     @Path("/getbyid/{id: [0-9]+}/sendconfirmation/{username}")
     public Response sendConfirmation(@PathParam("id")Long id, @PathParam("username")String username) {
         try{

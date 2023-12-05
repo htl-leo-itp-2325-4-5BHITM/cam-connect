@@ -119,9 +119,9 @@ function generateTable() {
                         var cellButton = document.createElement("button");
                         cellButton.classList.add("verification_button");
                         cellButton.innerHTML = "Bestätigung Anfragen";
-                        cellButton.addEventListener("onclick", function () {
-                            var _a, _b;
-                            sendVerificationRequest((_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id, (_b = allRents[i]) === null || _b === void 0 ? void 0 : _b.student.username);
+                        cellButton.addEventListener("click", function () {
+                            var _a;
+                            sendVerificationRequest((_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id);
                         });
                         cell.appendChild(cellButton);
                         break;
@@ -143,9 +143,22 @@ function generateTable() {
     }
     table.append.apply(table, html);
 }
-function sendVerificationRequest(rentId, studentUsername) {
-    console.log(rentId, studentUsername);
-    fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/sendconfirmation/").concat(studentUsername), {
+function sendVerificationRequest(rentId) {
+    fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/sendconfirmation/}"), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+        console.log(data);
+        requestAllRents();
+    })
+        .catch(function (error) { return console.error(error); });
+}
+function setVerificationStatus(rentId, verification_status) {
+    fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/confirm/}"), {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

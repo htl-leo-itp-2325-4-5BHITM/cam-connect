@@ -88,58 +88,47 @@ public class RentRepository {
     public void update(Long id, JsonObject rentJson){
         if(rentJson == null) throw new CCException(1105);
 
-        if(validateJsonKey(rentJson,"student_id"))
-        try{
+        if(validateJsonKey(rentJson,"student_id")) try{
             setStudent(id, rentJson.getInt("student_id"));
         } catch(Exception ex){ throw new CCException(1105, "cannot update student_id " + ex.getMessage()); }
 
-        if(validateJsonKey(rentJson,"teacher_start_id"))
-        try{
+        if(validateJsonKey(rentJson,"teacher_start_id")) try{
             setTeacherStart(id, rentJson.getInt("teacher_start_id"));
         } catch(Exception ex){ throw new CCException(1105, "cannot update teacher_start_id " + ex.getMessage()); }
 
-        if(validateJsonKey(rentJson,"teacher_end_id"))
-        try{
+        if(validateJsonKey(rentJson,"teacher_end_id")) try{
             setTeacherEnd(id, rentJson.getInt("teacher_end_id"));
         } catch(Exception ex){ throw new CCException(1105, "cannot update teacher_end_id " + ex.getMessage()); }
 
-        if(validateJsonKey(rentJson,"device_id"))
-        try{
+        if(validateJsonKey(rentJson,"device_id")) try{
             setDevice(id, rentJson.getInt("device_id"));
         } catch(Exception ex){ throw new CCException(1105, "cannot update device_id " + ex.getMessage()); }
 
-        if(validateJsonKey(rentJson,"rent_start"))
-        try{
+        if(validateJsonKey(rentJson,"rent_start")) try{
             setRentStart(id, rentJson.getString("rent_start"));
         } catch(Exception ex){ throw new CCException(1105, "cannot update rent_start " + ex.getMessage()); }
 
-        if(validateJsonKey(rentJson, "rent_end_planned"))
-        try{
+        if(validateJsonKey(rentJson, "rent_end_planned")) try{
             setRentEndPlanned(id, rentJson.getString("rent_end_planned"));
         } catch(Exception ex){ throw new CCException(1105, "cannot update rent_end_planned " + ex.getMessage()); }
 
-        if(validateJsonKey(rentJson,"rent_end_actual"))
-        try{
+        if(validateJsonKey(rentJson,"rent_end_actual")) try{
             setRentEndActual(id, rentJson.getString("rent_end_actual"));
         } catch(Exception ex){ throw new CCException(1105, "cannot update rent_end_actual " + ex.getMessage()); }
 
-        if(validateJsonKey(rentJson,"status"))
-        try{
+        if(validateJsonKey(rentJson,"status")) try{
             setStatus(id, rentJson.getString("status"));
         } catch(Exception ex){ throw new CCException(1105, "cannot update status " + ex.getMessage()); }
 
-        if(validateJsonKey(rentJson,"note"))
-        try{
+        if(validateJsonKey(rentJson,"note")) try{
             setNote(id, rentJson.getString("note"));
         } catch(Exception ex){ throw new CCException(1105, "cannot update note " + ex.getMessage()); }
 
-        if(validateJsonKey(rentJson,"accessory"))
-        try{
+        if(validateJsonKey(rentJson,"accessory")) try{
             setAccessory(id, rentJson.getString("accessory"));
         } catch(Exception ex){ throw new CCException(1105, "cannot update accessory " + ex.getMessage()); }
 
-        if(validateJsonKey(rentJson,"device_string"))
-        try{
+        if(validateJsonKey(rentJson,"device_string")) try{
             setDeviceString(id, rentJson.getString("device_string"));
         } catch(Exception ex){ throw new CCException(1105, "cannot update device_string " + ex.getMessage()); }
     }
