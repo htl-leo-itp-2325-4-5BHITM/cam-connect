@@ -137,7 +137,6 @@ function generateTable() {
     //Create the Heading Row based purely on the data in the columns constant
     let headingHtml = document.createElement("tr")
 
-    console.log(columns)
     columns.forEach(column => {
         let headRow = document.createElement("th")
         headRow.innerText = column.name
@@ -201,16 +200,16 @@ function generateTable() {
             }
 
             if (column.cellType == "verification_status"){
-                console.log(allRents[i]?.verification_status)
-
                 switch (allRents[i]?.verification_status){
+                    case null:
+                    case undefined:
                     case "CREATED": // if not already requested
                         let cellButton = document.createElement("button")
                         cellButton.classList.add("verification_button")
                         cellButton.innerHTML = "Bestätigung Anfragen"
 
-                        cellButton.addEventListener("onclick", () => {
-                            sendVerificationRequest(allRents[i]?.rent_id, allRents[i]?.student.username)
+                        cellButton.addEventListener("click", () => {
+                            sendVerificationRequest(allRents[i]?.rent_id)
                         })
                         cell.appendChild(cellButton)
                         break
@@ -236,15 +235,11 @@ function generateTable() {
 //endregion
 
 // region verification
-function sendVerificationRequest(rentId: number, studentUsername: string){
-    console.log(rentId, studentUsername)
-    fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/sendconfirmation/${studentUsername}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(response => response.json())
+function sendVerificationRequest(rentId: number){
+    fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/sendconfirmation`)
+        .then(response => {
+            return response.json()
+        })
         .then(data => {
             console.log(data)
             requestAllRents()

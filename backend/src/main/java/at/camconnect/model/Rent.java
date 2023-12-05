@@ -33,9 +33,9 @@ public class Rent {
     private LocalDate rent_end_planned;
     private LocalDate rent_end_actual;
     private String verification_code;
-    private RentStatusEnum verification_status;
-
     private String verification_message;
+    private RentStatusEnum status;
+
 
     private String note;
 
@@ -53,7 +53,7 @@ public class Rent {
 
     public Rent() {
         rent_start = LocalDate.now();
-        verification_status = RentStatusEnum.CREATED;
+        status = RentStatusEnum.CREATED;
     }
 
     public Rent(Student student) {
@@ -72,7 +72,7 @@ public class Rent {
                 ", rent_start=" + rent_start +
                 ", rent_end_planned=" + rent_end_planned +
                 ", rent_end_actual=" + rent_end_actual +
-                ", status=" + verification_status +
+                ", status=" + status +
                 ", code=" + verification_code +
                 ", note='" + note + '\'' +
                 '}';
@@ -169,12 +169,12 @@ public class Rent {
         this.rent_end_actual = rent_end_actual;
     }
 
-    public RentStatusEnum getVerification_status() {
-        return verification_status;
+    public RentStatusEnum getStatus() {
+        return status;
     }
 
-    public void setVerification_status(RentStatusEnum status) {
-        this.verification_status = status;
+    public void setStatus(RentStatusEnum status) {
+        this.status = status;
     }
 
     public String getNote() {

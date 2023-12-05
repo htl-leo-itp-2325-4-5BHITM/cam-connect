@@ -118,7 +118,7 @@
         * rent_start: LocalDate
         * rent_end_planned: LocalDate
         * rent_end_actual: LocalDate
-        * verification_status: RentStatus
+        * status: RentStatus
         * verification_code: String
         * verification_message: String
     }
