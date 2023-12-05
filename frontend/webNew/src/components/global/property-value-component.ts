@@ -30,10 +30,10 @@ class PropertyValueComponent extends HTMLElement {
 
         let propertyTag = document.createElement('p')
         propertyTag.classList.add("property")
-        propertyTag.innerHTML = `${property}: `
+        propertyTag.innerHTML = `${property || "Property"}: `
         let valueTag = document.createElement('p')
         valueTag.classList.add("value")
-        valueTag.innerHTML = value
+        valueTag.innerHTML = value || "Value"
 
         div.appendChild(propertyTag)
         div.appendChild(valueTag)

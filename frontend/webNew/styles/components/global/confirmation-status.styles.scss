@@ -20,13 +20,13 @@
     margin: .5rem;
   }
 
-  &[status="bestätigt"]{
+  &[status="CONFIRMED"]{
     background-color: $good;
   }
-  &[status="warten"]{
+  &[status="WAITING"]{
     background-color: $mid;
   }
-  &[status="abgelehnt"]{
+  &[status="DECLINED"]{
     background-color: $bad;
   }
 }

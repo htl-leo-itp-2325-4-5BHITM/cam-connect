@@ -12,13 +12,13 @@
   padding: .1rem .2rem;
   margin: .5rem;
 
-  &[status="verfügbar"]{
+  &[status="VERFUEGBAR"]{
     background-color: $good;
   }
-  &[status="vergeben"]{
+  &[status="VERGEBEN"]{
     background-color: $bad;
   }
-  &[status="gesperrt"]{
+  &[status="GESPERRT"]{
     background-color: $gray500;
   }
 }

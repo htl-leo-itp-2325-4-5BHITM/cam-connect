@@ -24,10 +24,10 @@ class CircleSelectComponent extends HTMLElement {
 
     circleSelect(color, type) {
         const div = document.createElement("div")
-        div.classList.add(color)
+        div.classList.add(color || "accent")
 
         const image = document.createElement("img")
-        image.src = `../../resource/${div.classList.contains("active") ? "checked" : "unchecked"}_${type}.svg`
+        image.src = `../../assets/${div.classList.contains("active") ? "checked" : "unchecked"}_${type || "single"}.svg`
         div.addEventListener("click", this.swapCheckbox.bind(this, image, type))
         div.appendChild(image)
 
@@ -36,7 +36,7 @@ class CircleSelectComponent extends HTMLElement {
 
     swapCheckbox(image, type) {
         this.classList.toggle("active")
-        image.src = `../../resource/${this.classList.contains("active") ? "checked" : "unchecked"}_${type}.svg`
+        image.src = `../../assets/${this.classList.contains("active") ? "checked" : "unchecked"}_${type || "single"}.svg`
     }
 }
 customElements.define("cc-circle-select", CircleSelectComponent)

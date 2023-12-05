@@ -30,9 +30,9 @@ class ConfirmationStatusComponent extends HTMLElement {
     confirmationStatus (status, isBig) {
         let div = document.createElement('div')
         div.classList.add("cc-confirmation-status")
-        div.setAttribute("status", status)
-        div.setAttribute("isBig", isBig)
-        div.innerHTML = isBig ? status.toString() : ""
+        div.setAttribute("status", status || "WAITING")
+        div.setAttribute("isBig", isBig || false)
+        div.innerHTML = isBig ? status ? status.toString() : "warten" : ""
 
         return div
     }

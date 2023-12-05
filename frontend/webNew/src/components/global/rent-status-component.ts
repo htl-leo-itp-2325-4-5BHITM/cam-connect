@@ -31,9 +31,9 @@ class RentStatusComponent extends HTMLElement {
     rentStatus(status, amount) {
         let div = document.createElement('div')
         div.classList.add("cc-rent-status")
-        div.setAttribute("status", status)
+        div.setAttribute("status", status || "VERFUEGBAR")
         div.setAttribute("amount", amount)
-        div.innerHTML = `${amount ? amount : ""} ${status.charAt(0).toUpperCase()}${status.substring(1,status.length)}`
+        div.innerHTML = `${amount ? amount : ""} ${status ? status.charAt(0).toUpperCase() : "V"}${status ? status.substring(1,status.length) : "erfügbar"}`
         return div
     }
 }
