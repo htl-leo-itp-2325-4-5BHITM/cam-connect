@@ -8,45 +8,47 @@ import jakarta.persistence.ManyToOne;
 
 @Entity
 public class LensType extends DeviceType {
-    private String fStop;
-    private String mount;
-    private int focalLength;
+    private double f_stop;
+    private int focal_length;
 
     @ManyToOne
     @JoinColumn(name = "mount_id")
-    private LensMount lensMount;
+    private LensMount lens_mount;
 
-    public LensType(String typeName, String fStop, String mount, int focalLength) {
+    public LensType(String typeName, double f_stop, LensMount lens_mount, int focal_length) {
         super(typeName);
-        this.fStop = fStop;
-        this.mount = mount;
-        this.focalLength = focalLength;
+        this.f_stop = f_stop;
+        this.lens_mount = lens_mount;
+        this.focal_length = focal_length;
     }
 
     public LensType() {
     }
 
-    public String getfStop() {
-        return fStop;
+    //region getter setter
+    public double getF_stop() {
+        return f_stop;
     }
 
-    public void setfStop(String fStop) {
-        this.fStop = fStop;
+    public void setF_stop(double f_stop) {
+        this.f_stop = f_stop;
     }
 
-    public String getMount() {
-        return mount;
+    public int getFocal_length() {
+        return focal_length;
     }
 
-    public void setMount(String mount) {
-        this.mount = mount;
+    public void setFocal_length(int focal_length) {
+        this.focal_length = focal_length;
     }
 
-    public int getFocalLength() {
-        return focalLength;
+    public LensMount getLens_mount() {
+        return lens_mount;
     }
 
-    public void setFocalLength(int focalLength) {
-        this.focalLength = focalLength;
+    public void setLens_mount(LensMount lens_mount) {
+        this.lens_mount = lens_mount;
     }
+
+    //endregion
 }

@@ -1,0 +1,16 @@
+@import "../../variables";
+
+div{
+  display: flex;
+}
+
+.property{
+  color: $gray800;
+  font-weight: 400;
+  padding-right: .2rem;
+}
+
+.value{
+  color: white;
+  font-weight: 500;
+}

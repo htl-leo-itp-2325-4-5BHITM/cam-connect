@@ -17,6 +17,7 @@ public class AudioType extends DeviceType {
     }
 
     public AudioType() {
+
     }
 
     public boolean isWindblocker() {

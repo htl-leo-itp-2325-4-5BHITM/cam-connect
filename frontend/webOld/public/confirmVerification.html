@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>CamConnect Verleihbestätigung</title>
+
+        <link rel="stylesheet" href="styles/confirmation.css">
+
+        <script src="scripts/confirmation.js" defer></script>
+        <script src="scripts/popupEngine.js"></script>
+    </head>
+
+    <body>
+        <main class="verification">
+            <h2>Möchtest du folgenden Verleih bestätigen</h2>
+
+            <div class="rentData"></div>
+
+            <div class="buttons">
+                <button onclick="confirmRent('confirmed')" class="accept">Zustimmen</button>
+            </div>
+
+            <div class="buttons">
+                <input type="text" id="rejectionReason" placeholder="Ablehngrund">
+                <button onclick="confirmRent('declined')" class="decline">Ablehnen</button>
+            </div>
+        </main>
+    </body>
+</html>

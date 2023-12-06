@@ -18,7 +18,6 @@ public class LightType extends DeviceType {
 
     public LightType() {
     }
-
     public int getWatts() {
         return watts;
     }

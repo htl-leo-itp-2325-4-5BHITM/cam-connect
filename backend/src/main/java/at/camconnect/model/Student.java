@@ -14,8 +14,9 @@ public class Student {
     private String firstname;
     private String lastname;
     private String school_class;
+    private String email;
+    private String username;
     private String password;
-    private String user_id;
 
     @OneToMany(fetch = FetchType.EAGER)
     private List<DeviceType> favourites;
@@ -23,12 +24,13 @@ public class Student {
     public Student() {
     }
 
-    public Student(String firstname, String lastname, String school_class, String password, String user_id) {
+    public Student(String firstname, String lastname, String school_class, String email, String password, String username) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.school_class = school_class;
-        this.password = password;
-        this.user_id = user_id;
+        this.email = email;
+        setPassword(password);
+        this.username = username;
     }
 
     @Override
@@ -39,7 +41,7 @@ public class Student {
                 ", lastname='" + lastname + '\'' +
                 ", school_class='" + school_class + '\'' +
                 ", password='" + password + '\'' +
-                ", user_id='" + user_id + '\'' +
+                ", username='" + username + '\'' +
                 '}';
     }
 
@@ -80,12 +82,12 @@ public class Student {
         this.password = password;
     }
 
-    public String getUserId() {
-        return user_id;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserId(String userId) {
-        this.user_id = userId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public List<DeviceType> getFavourites() {
@@ -94,5 +96,13 @@ public class Student {
 
     public void addFavourite(DeviceType favourite) {
         this.favourites.add(favourite);
+    }
+
+    public String getEmail() {
+        return email != null ? email : firstname.toLowerCase().charAt(0)+"."+lastname.toLowerCase()+"@students.htl-leonding.ac.at";
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

@@ -1,23 +1,33 @@
 package at.camconnect.repository;
 
-import at.camconnect.enums.RentStatus;
+import at.camconnect.enums.RentStatusEnum;
+import at.camconnect.statusSystem.CCException;
 import at.camconnect.model.Device;
 import at.camconnect.model.Rent;
 import at.camconnect.model.Student;
 import at.camconnect.model.Teacher;
+import io.vertx.ext.mail.MailClient;
+import io.vertx.ext.mail.MailMessage;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @ApplicationScoped
 public class RentRepository {
     @Inject
     EntityManager em;
+
+    @Inject
+    MailClient client;
+
+    private final String FRONTEND_URL = "https://localhost:3000";
 
     @Transactional
     public void create(JsonObject rentJson){
@@ -40,115 +50,211 @@ public class RentRepository {
         return rents;
     }
 
-    public Rent getById(long id){
-        return em.find(Rent.class, id);
+    public Rent getById(Long id){
+        Rent result = em.find(Rent.class, id);
+        if (result == null) throw new CCException(1101);
+        return result;
     }
 
     @Transactional
-    public void update(long id, JsonObject rentJson){
-        try{
-            setStudent(id, rentJson.getInt("student_id"));
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+    public MailClient sendConfirmation(Long id){
+        Rent rent = getById(id);
+        if(rent.getStatus().equals(RentStatusEnum.WAITING)){
+            throw new CCException(1205, "Email is already send");
+        }
 
-        try{
-            setTeacherStart(id, rentJson.getInt("teacher_start_id"));
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+        MailMessage message = generateMailMessage(id);
+        System.out.println(message.toJson());
 
-        try{
-            setTeacherEnd(id, rentJson.getInt("teacher_end_id"));
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+        rent.setStatus(RentStatusEnum.WAITING);
+        em.merge(rent);
 
-        try{
-            setDevice(id, rentJson.getInt("device_id"));
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
-
-        try{
-            setRentStart(id, rentJson.getString("rent_start"));
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
-
-        try{
-            setRentEndPlanned(id, rentJson.getString("rent_end_planned"));
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
-
-        try{
-            setRentEndActual(id, rentJson.getString("rent_end_actual"));
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
-
-        try{
-            setStatus(id, rentJson.getString("status"));
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
-
-        try{
-            setNote(id, rentJson.getString("note"));
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
-
-        try{
-            setAccessory(id, rentJson.getString("accessory"));
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
-
-        try{
-            setDeviceString(id, rentJson.getString("device_string"));
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+        return client.sendMail(message, result -> {
+            if (result.succeeded()) {
+                System.out.println("Email sent successfully");
+            } else {
+                System.out.println("Failed to send email: " + result.cause());
+                throw new CCException(1200, "Failed to send mail");
+            }
+        });
     }
 
-    // Setter
-    //region
-    public void setStudent(long rentId, long studentId) {
+    @Transactional
+    public MailMessage generateMailMessage(Long id) {
+        MailMessage message = new MailMessage();
+        message.setFrom("signup.camconnect@gmail.com");
+        String email = getById(id).getStudent().getEmail();
+        message.setTo(email);
+        message.setSubject("Bestätigung des Geräteverleih");
+
+        String verification_code = getById(id).generateVerification_code();
+        em.merge(getById(id));
+
+        String url = FRONTEND_URL + "/confirmVerification.html?vcode=" + verification_code + "&id=" + id;
+        //plaintext is als backup für den html content, wenn html möglich ist wird nur das angezeigt
+        message.setText("Bitte besuchen Sie " + url + " um ihren Verleih zu bestätigen");
+        message.setHtml("Bitte clicken Sie <a href=\"" + url + "\">hier</a> um den Verleih zu bestätigen");
+
+        return message;
+    }
+
+    @Transactional
+    public void confirm(Long rentId, JsonObject jsonObject) {
+        Rent rent = getById(rentId);
+
+        if(!rent.getStatus().equals(RentStatusEnum.WAITING)){
+            throw new CCException(1205);
+        }
+
+        String verificationCode;
+        String verificationMessage;
+        RentStatusEnum verificationStatus;
+
+        try{
+            verificationCode = jsonObject.getString("verification_code");
+            verificationMessage = jsonObject.getString("verification_message");
+            verificationStatus = RentStatusEnum.valueOf(jsonObject.getString("verification_status").toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new CCException(1106);
+        }
+
+        Set<RentStatusEnum> allowedStatus = Set.of(RentStatusEnum.CONFIRMED, RentStatusEnum.DECLINED);
+        // set only if the current status is allowed and if the verification_code is the same as provided
+        if (allowedStatus.contains(verificationStatus) && rent.getVerification_code().equals(verificationCode)) {
+            rent.setStatus(verificationStatus);
+            rent.setVerification_message(verificationMessage);
+            em.merge(rent);
+        } else{
+            throw new CCException(1205, "Message: " + verificationMessage + ", Status: " + verificationStatus + ", Code: " + verificationCode);
+        }
+    }
+
+    @Transactional
+    public void update(Long id, JsonObject rentJson){
+        if(rentJson == null) throw new CCException(1105);
+
+        if(validateJsonKey(rentJson,"student_id")) try{
+            setStudent(id, rentJson.getInt("student_id"));
+        } catch(Exception ex){ throw new CCException(1105, "cannot update student_id " + ex.getMessage()); }
+
+        if(validateJsonKey(rentJson,"teacher_start_id")) try{
+            setTeacherStart(id, rentJson.getInt("teacher_start_id"));
+        } catch(Exception ex){ throw new CCException(1105, "cannot update teacher_start_id " + ex.getMessage()); }
+
+        if(validateJsonKey(rentJson,"teacher_end_id")) try{
+            setTeacherEnd(id, rentJson.getInt("teacher_end_id"));
+        } catch(Exception ex){ throw new CCException(1105, "cannot update teacher_end_id " + ex.getMessage()); }
+
+        if(validateJsonKey(rentJson,"device_id")) try{
+            setDevice(id, rentJson.getInt("device_id"));
+        } catch(Exception ex){ throw new CCException(1105, "cannot update device_id " + ex.getMessage()); }
+
+        if(validateJsonKey(rentJson,"rent_start")) try{
+            setRentStart(id, rentJson.getString("rent_start"));
+        } catch(Exception ex){ throw new CCException(1105, "cannot update rent_start " + ex.getMessage()); }
+
+        if(validateJsonKey(rentJson, "rent_end_planned")) try{
+            setRentEndPlanned(id, rentJson.getString("rent_end_planned"));
+        } catch(Exception ex){ throw new CCException(1105, "cannot update rent_end_planned " + ex.getMessage()); }
+
+        if(validateJsonKey(rentJson,"rent_end_actual")) try{
+            setRentEndActual(id, rentJson.getString("rent_end_actual"));
+        } catch(Exception ex){ throw new CCException(1105, "cannot update rent_end_actual " + ex.getMessage()); }
+
+
+        if(validateJsonKey(rentJson,"status"))
+        try{
+            confirm(id, rentJson.getString("status"));
+        } catch(Exception ex){ throw new CCException(1105, "cannot update status " + ex.getMessage()); }
+
+        if(validateJsonKey(rentJson,"note")) try{
+            setNote(id, rentJson.getString("note"));
+        } catch(Exception ex){ throw new CCException(1105, "cannot update note " + ex.getMessage()); }
+
+        if(validateJsonKey(rentJson,"accessory")) try{
+            setAccessory(id, rentJson.getString("accessory"));
+        } catch(Exception ex){ throw new CCException(1105, "cannot update accessory " + ex.getMessage()); }
+
+        if(validateJsonKey(rentJson,"device_string")) try{
+            setDeviceString(id, rentJson.getString("device_string"));
+        } catch(Exception ex){ throw new CCException(1105, "cannot update device_string " + ex.getMessage()); }
+    }
+
+    //region setter
+    public void setStudent(Long rentId, long studentId) {
         Student student = em.find(Student.class, studentId);
         Rent rent = getById(rentId);
         rent.setStudent(student);
     }
 
-    public void setTeacherStart(long rentId, long teacherId) {
+    public void setTeacherStart(Long rentId, long teacherId) {
         Teacher teacher = em.find(Teacher.class, teacherId);
         Rent rent = getById(rentId);
         rent.setTeacher_start(teacher);
     }
 
-    public void setTeacherEnd(long rentId, long teacherId) {
+    public void setTeacherEnd(Long rentId, long teacherId) {
         Teacher teacher = em.find(Teacher.class, teacherId);
         Rent rent = getById(rentId);
         rent.setTeacher_end(teacher);
     }
 
-    public void setDevice(long rentId, long deviceId) {
+    public void setDevice(Long rentId, long deviceId) {
         Device device = em.find(Device.class, deviceId);
         Rent rent = getById(rentId);
         rent.setDevice(device);
     }
 
-    public void setRentStart(long rentId, String date) {
+    public void setRentStart(Long rentId, String date) {
         Rent rent = getById(rentId);
         rent.setRent_start(LocalDate.parse(date));
     }
 
-    public void setRentEndPlanned(long rentId, String date) {
+    public void setRentEndPlanned(Long rentId, String date) {
         Rent rent = getById(rentId);
         rent.setRent_end_planned(LocalDate.parse(date));
     }
 
-    public void setRentEndActual(long rentId, String date) {
+    public void setRentEndActual(Long rentId, String date) {
         Rent rent = getById(rentId);
         rent.setRent_end_actual(LocalDate.parse(date));
     }
 
-    public void setStatus(long rentId, String status) {
+    public void confirm(Long rentId, String status) {
         Rent rent = getById(rentId);
-        rent.setVerification_status(RentStatus.valueOf(status));
+        rent.setStatus(RentStatusEnum.valueOf(status));
     }
 
-    public void setNote(long rentId, String note) {
+    public void setNote(Long rentId, String note) {
         Rent rent = getById(rentId);
         rent.setNote(note);
     }
 
-    public void setAccessory(long rentId, String accessory) {
+    public void setAccessory(Long rentId, String accessory) {
         Rent rent = getById(rentId);
         rent.setAccessory(accessory);
     }
-    public void setDeviceString(long rentId, String device_string) {
+    public void setDeviceString(Long rentId, String device_string) {
         Rent rent = getById(rentId);
         rent.setDevice_string(device_string);
+    }
+    public void confirm(Long rentId, RentStatusEnum verificationStatus){
+        Rent rent = getById(rentId);
+
+        if(rent.getStatus() == verificationStatus){
+            throw new CCException(1201);
+        }
+
+        rent.setStatus(verificationStatus);
+    }
+    public void setVerificationCode(Long rentId, String verification_code){
+        Rent rent = getById(rentId);
+    }
+    //endregion
+
+    //region utility
+    private boolean validateJsonKey(JsonObject jsonObject, String key){
+        return (jsonObject.containsKey(key) && jsonObject.get(key) != null && jsonObject.get(key) != JsonValue.NULL);
     }
     //endregion
 }

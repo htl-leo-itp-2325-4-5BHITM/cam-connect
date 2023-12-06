@@ -1,0 +1,185 @@
+@charset "UTF-8";
+@page {
+  size: A4 landscape;
+}
+@media print {
+  #import, #createRent {
+    display: none;
+  }
+}
+* {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+}
+
+img {
+  width: 100%;
+  display: block;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: hsl(0, 0%, 20%);
+  color: hsl(0, 0%, 0%);
+  font-family: sans-serif;
+  overflow: hidden;
+}
+
+::selection {
+  background-color: rgba(117, 179, 215, 0.56);
+  color: black;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  color: hsl(0, 0%, 0%);
+}
+
+/* main */
+table {
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+table tbody {
+  height: 100%;
+  width: 100%;
+}
+table th, table td {
+  border: 1px solid gray;
+  height: inherit;
+}
+table th:nth-of-type(6), table th:nth-of-type(10), table td:nth-of-type(6), table td:nth-of-type(10) {
+  background-color: hsl(0, 0%, 90%);
+  border-right: 0.2rem solid #383838;
+}
+table th {
+  border-bottom: 0.2rem solid #383838;
+  background-color: hsl(0, 0%, 90%);
+  padding: 0.5rem;
+}
+table tr {
+  height: 2rem;
+}
+table input {
+  border: none;
+  background-color: transparent;
+  height: 100%;
+  padding: 0.3rem 0.15rem;
+  box-sizing: border-box;
+  font-size: 0.8rem;
+  width: 100%;
+  font-family: sans-serif;
+  font-weight: 500;
+  border-radius: 0.1rem;
+  color: #1a1a1a;
+  transition: all 0.1s;
+}
+table input[type=checkbox] {
+  height: 50%;
+}
+table input:focus-visible {
+  background-color: rgba(179, 179, 179, 0.1);
+  outline: 0.15rem solid gray;
+  box-shadow: 0.2rem 0.2rem 0.2rem rgba(128, 128, 128, 0.49);
+}
+
+button.verification_button {
+  cursor: pointer;
+}
+
+div.verification_chip {
+  padding: 0.5rem;
+  color: #E6E6E6;
+}
+div.verification_chip[status=CONFIRMED] {
+  background-color: #578656;
+  content: "Bestätigt";
+}
+div.verification_chip[status=DECLINED] {
+  cursor: pointer;
+  background-color: #B94646;
+  content: "Abgelehnt";
+}
+div.verification_chip[status=WAITING] {
+  background-color: #CC8633;
+  content: "Warte auf Bestätigung";
+}
+div.verification_chip[status=RETURNED] {
+  background-color: #578656;
+  content: "Zurückgegeben";
+}
+
+#studentSelectionPopup, #teacherSelectionPopup {
+  border-radius: 0.5rem;
+  position: absolute;
+  width: 15vw;
+  background-color: #f2f2f2;
+  min-height: 10vh;
+  box-shadow: 0 0 0.2rem 0.1rem rgba(0, 0, 0, 0.2);
+  display: none;
+}
+#studentSelectionPopup .search, #teacherSelectionPopup .search {
+  background-color: lightgrey;
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 0.4rem 0.2rem;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+  box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.3);
+}
+
+#studentSelectionPopup .studentList, #teacherSelectionPopup .teacherList {
+  font-size: 0.9rem;
+}
+#studentSelectionPopup .studentList p, #teacherSelectionPopup .teacherList p {
+  padding: 0.2rem;
+  color: #262626;
+  cursor: pointer;
+}
+#studentSelectionPopup .studentList .noResults, #teacherSelectionPopup .teacherList .noResults {
+  color: gray;
+}
+
+button {
+  margin: 0.2rem;
+  padding: 0.2rem 1rem;
+  border: 0.1rem solid gray;
+  border-radius: 0.3rem;
+  cursor: pointer;
+}
+
+#import {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background-color: #EEE;
+  padding: 0.5rem;
+  padding-bottom: 2rem;
+  border-top-right-radius: 0.5rem;
+  box-shadow: 0 0 0.5rem 0.3rem rgba(0, 0, 0, 0.4);
+}
+#import * {
+  font-size: 0.9rem;
+}
+#import div {
+  display: flex;
+  gap: 1rem;
+}
+#import hr {
+  margin-block: 0.3rem;
+}
+
+/*# sourceMappingURL=index.css.map */

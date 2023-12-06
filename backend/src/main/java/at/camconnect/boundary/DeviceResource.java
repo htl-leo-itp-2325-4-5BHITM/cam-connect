@@ -1,5 +1,7 @@
 package at.camconnect.boundary;
 
+import at.camconnect.statusSystem.CCException;
+import at.camconnect.statusSystem.CCResponse;
 import at.camconnect.model.Device;
 import at.camconnect.repository.DeviceRepository;
 import jakarta.inject.Inject;
@@ -23,20 +25,33 @@ public class DeviceResource {
     @Produces
     public Response createDevice(Device d){
         deviceRepository.create(d);
-        return Response.ok().build();
+        return CCResponse.ok();
     }
 
     @GET
     @Path("/getall")
-    public List<Device> getAll() {
-        return deviceRepository.getAll();
+    public Response getAll() {
+        List<Device> devices;
+        try{
+            devices = deviceRepository.getAll();
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok(devices);
     }
 
     @GET
     @Path("/getbyid/{id: [0-9]+}")
     @Produces
-    public Device getById(@PathParam("id")long id) {
-        return deviceRepository.getById(id);
+    public Response getById(@PathParam("id")long id) {
+        Device result;
+        try{
+            result = deviceRepository.getById(id);
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok(result);
     }
 
     @POST

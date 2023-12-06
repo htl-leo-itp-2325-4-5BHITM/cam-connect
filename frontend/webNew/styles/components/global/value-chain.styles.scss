@@ -1,0 +1,34 @@
+@import "../../variables";
+
+:host{
+  all: initial;
+}
+
+div.chain{
+  display: flex;
+
+  :not(:last-child):after{
+    content: "•";
+    margin-inline: .5rem;
+  }
+
+  *{
+    color: white;
+    text-decoration: none;
+    margin: 0;
+  }
+
+  .isLink{
+    text-decoration: underline;
+    cursor: pointer;
+
+    &:hover{
+      color: $gray900;
+    }
+
+    &:after{
+      text-decoration: none;
+      display: inline-block
+    }
+  }
+}

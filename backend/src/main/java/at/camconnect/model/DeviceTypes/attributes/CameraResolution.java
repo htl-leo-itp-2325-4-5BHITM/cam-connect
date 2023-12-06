@@ -2,13 +2,13 @@ package at.camconnect.model.DeviceTypes.attributes;
 
 import at.camconnect.model.DeviceTypes.CameraType;
 import at.camconnect.model.DeviceTypes.DroneType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class CameraResolution {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "camera_resolution_seq")
+    @SequenceGenerator(name = "camera_resolution_seq", sequenceName = "CAMERA_RESOLUTION_SEQ", allocationSize = 1)
     private long resolution_id;
 
     private String name;

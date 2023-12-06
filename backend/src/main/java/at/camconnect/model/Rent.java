@@ -1,9 +1,10 @@
 package at.camconnect.model;
 
-import at.camconnect.enums.RentStatus;
+import at.camconnect.enums.RentStatusEnum;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Random;
 
 @Entity
 public class Rent {
@@ -31,7 +32,11 @@ public class Rent {
     private LocalDate rent_start;
     private LocalDate rent_end_planned;
     private LocalDate rent_end_actual;
-    private RentStatus verification_status;
+    private String verification_code;
+    private String verification_message;
+    private RentStatusEnum status;
+
+
     private String note;
 
     //TODO remove these when moving to new UI permanatly - also remove them in repo resource and update functions
@@ -48,6 +53,7 @@ public class Rent {
 
     public Rent() {
         rent_start = LocalDate.now();
+        status = RentStatusEnum.CREATED;
     }
 
     public Rent(Student student) {
@@ -66,12 +72,31 @@ public class Rent {
                 ", rent_start=" + rent_start +
                 ", rent_end_planned=" + rent_end_planned +
                 ", rent_end_actual=" + rent_end_actual +
-                ", status=" + verification_status +
+                ", status=" + status +
+                ", code=" + verification_code +
                 ", note='" + note + '\'' +
                 '}';
     }
 
+    public String generateVerification_code() {
+        //this could possibly result in a problem with case sensitivity in urls
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder();
 
+        for (int i = 0; i < 10; i++) {
+            int index = random.nextInt(characters.length());
+            char randomChar = characters.charAt(index);
+            sb.append(randomChar);
+        }
+
+        // the verification code is set to current rent
+        this.verification_code = sb.toString();
+
+        return this.verification_code;
+    }
+
+    //region getter setter
     public String getAccessory() {
         return accessory;
     }
@@ -144,12 +169,12 @@ public class Rent {
         this.rent_end_actual = rent_end_actual;
     }
 
-    public RentStatus getVerification_status() {
-        return verification_status;
+    public RentStatusEnum getStatus() {
+        return status;
     }
 
-    public void setVerification_status(RentStatus status) {
-        this.verification_status = status;
+    public void setStatus(RentStatusEnum status) {
+        this.status = status;
     }
 
     public String getNote() {
@@ -159,4 +184,17 @@ public class Rent {
     public void setNote(String note) {
         this.note = note;
     }
+
+    public String getVerification_code() {
+        return verification_code;
+    }
+
+    public String getVerification_message() {
+        return verification_message;
+    }
+
+    public void setVerification_message(String verification_message) {
+        this.verification_message = verification_message;
+    }
+    //endregion
 }

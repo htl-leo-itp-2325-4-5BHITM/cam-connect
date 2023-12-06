@@ -1,0 +1,38 @@
+@import "../../variables";
+
+:host{
+  all: initial;
+}
+
+.select {
+  display: flex;
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: $gray800;
+
+  :not(:last-child):after{
+    margin-inline: .5rem;
+    content: "•";
+  }
+
+  p{
+    margin: 0;
+  }
+}
+
+cc-select-element{
+  display: flex;
+  align-items: center;
+}
+
+.select-element{
+  cursor: pointer;
+  &.active{
+    color: white;
+    font-weight: 600;
+  }
+
+  &:hover{
+    color: $gray900;
+  }
+}

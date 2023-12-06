@@ -22,7 +22,7 @@ api
 │           ├── note : {value}
 │           └── status : {value}
 ├── device -x
-│   ├── create : {count} -> [Device]
+│   ├── create/ : {type_id, number, serial} -> [Device]
 │   ├── getall -> [Device]
 │   └── getbyid/{rent_id}
 │       ├── remove
@@ -32,6 +32,7 @@ api
 │           ├── note : {value}
 │           └── type: {value}
 ├── devicetype -x
+│   ├── getall
 │   ├── create -x
 │   │   ├── lens : {f_stop, mount_id, focal_length}
 │   │   ├── camera : {sensor_id, resolution_id, mount_id}
@@ -42,14 +43,14 @@ api
 │   │   └── stabilizer : {max_weight, number_of_axis}
 │   └── getbyid/{type_id} -> DeviceType
 │       ├── remove
-│       └── update : {number, serial, note}
-│           ├── lens : {f_stop, mount_id, focal_length}
-│           ├── camera : {sensor_id, resolution_id, mount_id}
-│           ├── drone : {sensor_id, resolution_id, max_range
-│           ├── audio : {windblocker, wireless, needs-recorder}
-│           ├── light : {watts, rbg, variable_temperatur}
-│           ├── tripod : {height, head_id}
-│           └── stabilizer : {max_weight, number_of_axis}
+│       └── update -x
+│           ├── lens : {name, f_stop, mount_id, focal_length}
+│           ├── camera : {name, sensor_id, resolution_id, mount_id}
+│           ├── drone : {name, sensor_id, resolution_id, max_range
+│           ├── audio : {name, windblocker, wireless, needs-recorder}
+│           ├── light : {name, watts, rbg, variable_temperatur}
+│           ├── tripod : {name, height, head_id}
+│           └── stabilizer : {name, max_weight, number_of_axis}
 ├── student -x
 └── teacher -x
 ```
@@ -57,16 +58,44 @@ api
 ## Response Structure
 
 - Every Endpoint returns a Response object with standard http Status code to indicate the general status of the request.
-- If a request goes through but is faulty the http status is 400 or a fitting 4xx [error](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
-  - Instead of the requested entity, a CCError should be returned
-  - `return Response.status(400).entity(CCError.create(1XXX)).build()`
+- Every Response has a CCResponse DTO in its body.
+  - the `ccStatus` contains a CCError object that itself provides
+    - `statusCode` a Integer code referring to the specific error that occurred
+    - `details` a pre-defined String generally explaining the statusCode
+    - `message` a case specific String explaing what exactly caused the error
+  - the `data` is optional and only existent if the statusCode is 1000 (ok)
 
-### CC Error Codes
+## CC Status System
 
-- 1000 All good
-- 1100 **Structure Error**
-- 1101 Invalid id in getter 
-- 1102 Invalid id in setter
-- 1103 Missing required data in body
-- 1200 **Task was not performed**
-- 1201 Duplicate request
+### Endpoint structure
+- Every Endpoint should try/catch for a CCException and call the Repository function inside
+  ```java
+  Something result;
+  try{
+      result = somethingRepository.getById(id);
+  }catch (CCException ex){
+      return CCResponse.error(ex);
+  }
+  return CCResponse.ok(result);
+  ```
+- Wherever a error occurs in the Repository a CCException should be thrown
+  ```java
+  throw new CCException(statusCode);
+  throw new CCException(statusCode, "custom error message")
+  ```
+
+### Accepted Status Codes
+- 1000: All good
+- 1100: **Structure error**: Problems with the general request structure / syntax
+- 1101: Invalid id in getter
+- 1102: Invalid id in setter
+- 1103: Missing required argument in url
+- 1104: Invalid argument structure/syntax/type in url
+- 1105: Missing required data in body
+- 1106: Invalid data structure/syntax/type in body
+- 1200: **Task was not performed**: The data provided was structurally / syntactically correct but the requested action cant be performed.
+- 1201: Duplicate request
+- 1202: The data provided to the endpoint returned no results
+- 1203: File is empty
+- 1204: File has Invalid Structure
+- 1205: Operation was not allowed
