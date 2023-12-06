@@ -54,11 +54,18 @@ public class RentRepository {
         return result;
     }
 
+    @Transactional
     public MailClient sendConfirmation(Long id){
+        Rent rent = getById(id);
+        if(rent.getStatus().equals(RentStatusEnum.WAITING)){
+            throw new CCException(1205, "Email is already send");
+        }
+
         MailMessage message = generateMailMessage(id);
         System.out.println(message.toJson());
 
-        getById(id).setStatus(RentStatusEnum.WAITING);
+        rent.setStatus(RentStatusEnum.WAITING);
+        em.merge(rent);
 
         return client.sendMail(message, result -> {
             if (result.succeeded()) {
@@ -70,13 +77,17 @@ public class RentRepository {
         });
     }
 
+    @Transactional
     public MailMessage generateMailMessage(Long id) {
         MailMessage message = new MailMessage();
         message.setFrom("signup.camconnect@gmail.com");
         String email = getById(id).getStudent().getEmail();
         message.setTo(email);
         message.setSubject("Bestätigung des Geräteverleih");
+
         String verification_code = getById(id).generateVerification_code();
+        em.merge(getById(id));
+
         String url = "http://localhost:3000/confirmVerification.html?vcode=" + verification_code + "&id=" + id;
         //plaintext is als backup für den html content, wenn html möglich ist wird nur das angezeigt
         message.setText("Bitte besuchen Sie " + url + " um ihren Verleih zu bestätigen");
@@ -85,28 +96,34 @@ public class RentRepository {
         return message;
     }
 
+    @Transactional
     public void confirm(Long rentId, JsonObject jsonObject) {
+        Rent rent = getById(rentId);
+
+        if(!rent.getStatus().equals(RentStatusEnum.WAITING)){
+            throw new CCException(1205);
+        }
+
         String verificationCode;
         String verificationMessage;
         RentStatusEnum verificationStatus;
+
         try{
             verificationCode = jsonObject.getString("verification_code");
             verificationMessage = jsonObject.getString("verification_message");
-            verificationStatus = RentStatusEnum.valueOf(jsonObject.getString("verification_status"));
+            verificationStatus = RentStatusEnum.valueOf(jsonObject.getString("verification_status").toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new CCException(1106);
         }
 
-        Rent rent = getById(rentId);
-
         Set<RentStatusEnum> allowedStatus = Set.of(RentStatusEnum.CONFIRMED, RentStatusEnum.DECLINED);
-
         // set only if the current status is allowed and if the verification_code is the same as provided
-        if (allowedStatus.contains(rent.getStatus()) && rent.getVerification_code().equals(verificationCode)) {
+        if (allowedStatus.contains(verificationStatus) && rent.getVerification_code().equals(verificationCode)) {
             rent.setStatus(verificationStatus);
             rent.setVerification_message(verificationMessage);
+            em.merge(rent);
         } else{
-            throw new CCException(1205);
+            throw new CCException(1205, "Message: " + verificationMessage + ", Status: " + verificationStatus + ", Code: " + verificationCode);
         }
     }
 

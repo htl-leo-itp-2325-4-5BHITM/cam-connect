@@ -98,6 +98,7 @@ button.verification_button {
 }
 
 div.verification_chip {
+  padding: 0.5rem;
   color: #E6E6E6;
 }
 div.verification_chip[status=CONFIRMED] {

@@ -6,7 +6,7 @@
 
         <link rel="stylesheet" href="styles/confirmation.css">
 
-        <script src="scripts/index.js" defer></script>
+        <script src="scripts/confirmation.js" defer></script>
         <script src="scripts/popupEngine.js"></script>
     </head>
 
@@ -15,9 +15,9 @@
             <h2>Möchtest du den Verleih bestätigen</h2>
 
             <div class="buttons">
-                <button onclick="setVerificationStatus('accept')" class="accept">Zustimmen</button>
+                <button onclick="confirmRent('confirmed')" class="accept">Zustimmen</button>
                 <input type="text" id="rejectionReason" placeholder="Ablehngrund">
-                <button onclick="setVerificationStatus('decline')" class="decline">Ablehnen</button>
+                <button onclick="confirmRent('declined')" class="decline">Ablehnen</button>
             </div>
         </main>
     </body>
