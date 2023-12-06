@@ -1,9 +1,18 @@
 var APPLICATION_URL = "http://localhost:8080/api";
 PopupEngine.init({ textColor: "black", backgroundColor: "white", elemBackground: "#EEE" });
+var urlParams = new URLSearchParams(window.location.search);
+var rentId = urlParams.get("id");
+var code = urlParams.get("vcode");
+fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId))
+    .then(function (result) {
+    return result.json();
+})
+    .then(function (data) {
+    console.log(data);
+    document.querySelector('.rentData').innerHTML = "\n            <p>".concat(data.student.firstname, " ").concat(data.student.lastname, "</p>\n            <p>Ger\u00E4t Nr: ").concat(data.device_string, ", mit Zubeh\u00F6r: ").concat(data.accessory || "keinem", "</p>\n            <p>von: ").concat(data.rent_start, ", bis (geplant): ").concat(data.rent_end_planned || "unbekannt", "</p>\n        ");
+})
+    .catch(function (error) { return console.error(error); });
 function confirmRent(verificationStatus) {
-    var urlParams = new URLSearchParams(window.location.search);
-    var rentId = urlParams.get("id");
-    var code = urlParams.get("vcode");
     var verificationMessage = document.querySelector("#rejectionReason").value;
     fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/confirm"), {
         method: 'POST',

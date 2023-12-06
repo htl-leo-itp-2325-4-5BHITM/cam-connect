@@ -3,10 +3,26 @@ const APPLICATION_URL: string = "http://localhost:8080/api"
 // @ts-ignore
 PopupEngine.init({textColor:"black", backgroundColor: "white", elemBackground: "#EEE"})
 
+const urlParams = new URLSearchParams(window.location.search)
+let rentId = urlParams.get("id")
+let code = urlParams.get("vcode")
+
+fetch(APPLICATION_URL + `/rent/getbyid/${rentId}`)
+    .then(result => {
+        return result.json()
+    })
+    .then((data) => {
+        console.log(data)
+        document.querySelector('.rentData').innerHTML = `
+            <p>${data.student.firstname} ${data.student.lastname}</p>
+            <p>Gerät Nr: ${data.device_string}, mit Zubehör: ${data.accessory || "keinem"}</p>
+            <p>von: ${data.rent_start}, bis (geplant): ${data.rent_end_planned || "unbekannt"}</p>
+        `
+    })
+    .catch(error => console.error(error))
+
+
 function confirmRent(verificationStatus: string){
-    const urlParams = new URLSearchParams(window.location.search)
-    let rentId = urlParams.get("id")
-    let code = urlParams.get("vcode")
     let verificationMessage = (document.querySelector("#rejectionReason") as HTMLInputElement).value
 
     fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/confirm`, {

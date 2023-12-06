@@ -52,6 +52,13 @@ var columns = [
     { name: "Anmerkung", inputType: "text", cellType: "note" },
     { name: "VStatus", inputType: "none", cellType: "verification_status" },
 ];
+var statusResolved = {
+    "WAITING": "wartend",
+    "DECLINED": "abgelehnt",
+    "CONFIRMED": "bestätigt",
+    "CREATED": "erstellt",
+    "RETURNED": "zurückgegeben"
+};
 function generateTable() {
     var _a;
     var headingHtml = document.createElement("tr");
@@ -127,7 +134,7 @@ function generateTable() {
                         var cellChip = document.createElement('div');
                         cellChip.classList.add("verification_chip");
                         cellChip.setAttribute("status", (_e = allRents[i]) === null || _e === void 0 ? void 0 : _e.status);
-                        cellChip.innerHTML = (_f = allRents[i]) === null || _f === void 0 ? void 0 : _f.status;
+                        cellChip.innerHTML = statusResolved[(_f = allRents[i]) === null || _f === void 0 ? void 0 : _f.status];
                         if (((_g = allRents[i]) === null || _g === void 0 ? void 0 : _g.status) == "DECLINED") {
                             cellChip.setAttribute("data-popup-heading", "Ablehnungsnachricht");
                             cellChip.setAttribute("data-popup-text", "Anfrage nochmal senden");

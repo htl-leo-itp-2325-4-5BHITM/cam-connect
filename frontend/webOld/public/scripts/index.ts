@@ -129,6 +129,14 @@ const columns: column[] = [
     {name: "VStatus", inputType: "none", cellType: "verification_status"},
 ]
 
+const statusResolved = {
+    "WAITING": "wartend",
+    "DECLINED": "abgelehnt",
+    "CONFIRMED": "bestätigt",
+    "CREATED": "erstellt",
+    "RETURNED": "zurückgegeben"
+}
+
 /**
  * Renders the Table to the html based on the data in the allRents array of Rent JSONs
  */
@@ -216,7 +224,8 @@ function generateTable() {
                         let cellChip = document.createElement('div')
                         cellChip.classList.add("verification_chip")
                         cellChip.setAttribute("status", allRents[i]?.status)
-                        cellChip.innerHTML = allRents[i]?.status
+                        // @ts-ignore
+                        cellChip.innerHTML = statusResolved[allRents[i]?.status]
 
                         if(allRents[i]?.status == "DECLINED"){
                             cellChip.setAttribute("data-popup-heading", "Ablehnungsnachricht")
