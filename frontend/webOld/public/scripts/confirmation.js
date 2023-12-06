@@ -1,5 +1,4 @@
 var APPLICATION_URL = "http://localhost:8080/api";
-// @ts-ignore
 PopupEngine.init({ textColor: "black", backgroundColor: "white", elemBackground: "#EEE" });
 function confirmRent(verificationStatus) {
     var urlParams = new URLSearchParams(window.location.search);
@@ -23,19 +22,17 @@ function confirmRent(verificationStatus) {
         switch (data.ccStatus.statusCode) {
             case 1000:
                 if (verificationStatus == "confirmed") {
-                    //@ts-ignore
-                    PopupEngine.createModal({ text: "Verleihung wurde erfolgreich best\u00E4tigt" });
+                    PopupEngine.createModal({ text: "Verleihung wurde erfolgreich best\u00E4tigt. Sie k\u00F6nnen diese Seite nun schlie\u00DFen." });
                 }
                 else if (verificationStatus == "declined") {
-                    //@ts-ignore
-                    PopupEngine.createModal({ text: "Verleihung wurde erfolgreich abgelehnt" });
+                    PopupEngine.createModal({ text: "Verleihung wurde erfolgreich abgelehnt. Sie k\u00F6nnen diese Seite nun schlie\u00DFen." });
                 }
                 break;
             case 1205:
-                //@ts-ignore
                 PopupEngine.createModal({ text: "Die Verleihung wurde bereits best\u00E4tigt oder abgelehnt" });
                 break;
         }
     })
         .catch(function (error) { return console.error(error); });
 }
+//# sourceMappingURL=confirmation.js.map

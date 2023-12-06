@@ -1,3 +1,4 @@
+// @ts-ignore
 const APPLICATION_URL: string = "http://localhost:8080/api"
 // @ts-ignore
 PopupEngine.init({textColor:"black", backgroundColor: "white", elemBackground: "#EEE"})
@@ -26,10 +27,10 @@ function confirmRent(verificationStatus: string){
                 case 1000:
                     if(verificationStatus == "confirmed"){
                         //@ts-ignore
-                        PopupEngine.createModal({text: `Verleihung wurde erfolgreich bestätigt`})
+                        PopupEngine.createModal({text: `Verleihung wurde erfolgreich bestätigt. Sie können diese Seite nun schließen.`})
                     } else if(verificationStatus == "declined"){
                         //@ts-ignore
-                        PopupEngine.createModal({text: `Verleihung wurde erfolgreich abgelehnt`})
+                        PopupEngine.createModal({text: `Verleihung wurde erfolgreich abgelehnt. Sie können diese Seite nun schließen.`})
                     }
                     break
                 case 1205:

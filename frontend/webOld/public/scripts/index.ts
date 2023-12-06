@@ -1,3 +1,4 @@
+// @ts-ignore
 const APPLICATION_URL: string = "http://localhost:8080/api"
 
 let allRents: RentComplete[] = []

@@ -10,15 +10,15 @@
 
 ## Logo
 ### Logomark
-| accent on black | accent on gray | accent on white |
-| ---------------------- | ---------------------- | ---------------------- |
-| ![](./img/cc-logomark-accent-on-black.png)  | ![](./img/cc-logomark-accent-on-gray.png) | ![](./img/cc-logomark-accent-on-white.png)
+| accent on black                            | accent on gray                            | accent on white                            |
+|--------------------------------------------|-------------------------------------------|--------------------------------------------|
+| ![](./img/cc-logomark-accent-on-black.png) | ![](./img/cc-logomark-accent-on-gray.png) | ![](./img/cc-logomark-accent-on-white.png) |
 
-| white on black | white on gray | 
-| ---------------------- | ---------------------- | 
-| ![](./img/cc-logomark-white-on-black.png)  | ![](./img/cc-logomark-white-on-gray.png) |
+| white on black                              | white on gray                            | 
+|---------------------------------------------|------------------------------------------| 
+| ![](./img/cc-logomark-white-on-black.png)   | ![](./img/cc-logomark-white-on-gray.png) |
 
-| black on white | black on gray | 
-| ---------------------- | ---------------------- | 
-| ![](./img/cc-logomark-black-on-white.png)  | ![](./img/cc-logomark-black-on-gray.png) |
+| black on white                            | black on gray                            | 
+|-------------------------------------------|------------------------------------------| 
+| ![](./img/cc-logomark-black-on-white.png) | ![](./img/cc-logomark-black-on-gray.png) |
 ### Wordmark
