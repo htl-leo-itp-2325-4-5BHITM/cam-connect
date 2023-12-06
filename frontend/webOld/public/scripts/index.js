@@ -358,6 +358,20 @@ function createRent() {
     })
         .catch(function (error) { return console.error(error); });
 }
+function deleteRow(rentId) {
+    var confirmation = confirm("Are you sure you want to delete this row?");
+    if (confirmation) {
+        fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/delete"), {
+            method: 'DELETE',
+        })
+            .then(function (response) { return response.json(); })
+            .then(function (data) {
+            console.log(data);
+            requestAllRents();
+        })
+            .catch(function (error) { return console.error(error); });
+    }
+}
 function importDataFromCsv(button) {
     var file = button.closest("div").querySelector("input").files[0];
     var formData = new FormData();
