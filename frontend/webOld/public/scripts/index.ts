@@ -460,6 +460,23 @@ function createRent() {
         .catch(error => console.error(error));
 }
 
+//DeleteRow
+function deleteRow(rentId) {
+    const confirmation = confirm("Are you sure you want to delete this row?");
+    if (confirmation) {
+        fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/delete`, {
+            method: 'DELETE',
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                requestAllRents(); // Refresh the table after deletion
+            })
+            .catch(error => console.error(error));
+    }
+}
+
+
 //region load csv update
 
 function importDataFromCsv(button:HTMLButtonElement) {
