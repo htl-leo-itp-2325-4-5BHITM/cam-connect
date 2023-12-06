@@ -1,0 +1,31 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Quicksand", sans-serif;
+}
+
+body {
+  padding: 2rem;
+  text-align: center;
+}
+
+.verification button {
+  margin: 1rem;
+  padding: 0.3rem;
+  border-radius: 0.2rem;
+  border: 1px solid #CCCCCC;
+  cursor: pointer;
+  color: white;
+}
+.verification button.accept {
+  background-color: #578656;
+}
+.verification button.decline {
+  background-color: #B94646;
+}
+.verification input {
+  margin-left: 2rem;
+  padding: 0.3rem;
+}
+
+/*# sourceMappingURL=confirmation.css.map */

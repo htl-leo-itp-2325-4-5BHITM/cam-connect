@@ -51,7 +51,6 @@ public class RentResource {
     @GET
     @Path("/getbyid/{id: [0-9]+}/sendconfirmation")
     public Response sendConfirmation(@PathParam("id")Long id) {
-        System.out.println("reached backend");
         try{
             rentRepository.sendConfirmation(id);
         }catch (CCException ex){

@@ -4,21 +4,20 @@
         <meta charset="utf-8">
         <title>CamConnect</title>
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.4.1/paper.css">
-        <link rel="stylesheet" href="styles/index.css">
+        <link rel="stylesheet" href="styles/confirmation.css">
 
         <script src="scripts/index.js" defer></script>
         <script src="scripts/popupEngine.js"></script>
     </head>
 
-    <body class="A4 landscape">
+    <body>
         <main class="verification">
             <h2>Möchtest du den Verleih bestätigen</h2>
 
             <div class="buttons">
-                <button onclick="setVerificationStatus()" class="accept">Zustimmen</button>
-                <button onclick="setVerificationStatus()" class="decline">Ablehnen</button>
+                <button onclick="setVerificationStatus('accept')" class="accept">Zustimmen</button>
+                <input type="text" id="rejectionReason" placeholder="Ablehngrund">
+                <button onclick="setVerificationStatus('decline')" class="decline">Ablehnen</button>
             </div>
         </main>
     </body>

@@ -154,6 +154,31 @@ function sendVerificationRequest(rentId) {
     })
         .catch(function (error) { return console.error(error); });
 }
+function setVerificationStatus(verificationStatus) {
+    var urlParams = new URLSearchParams(window.location.search);
+    var rentId = urlParams.get("id");
+    var code = urlParams.get("vcode");
+    var messageInput = document.querySelector("#rejectionReason");
+    var verificationMessage = messageInput.value;
+    console.log(rentId, code, verificationMessage, verificationStatus);
+    fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/confirm/"), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "verification_code": code,
+            "verification_status": verificationStatus,
+            "verification_message": verificationMessage
+        })
+    })
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+        console.log(data);
+        requestAllRents();
+    })
+        .catch(function (error) { return console.error(error); });
+}
 var studentSelectionPopup = document.querySelector("#studentSelectionPopup");
 var studentSearchbar = document.querySelector('#studentSelectionPopup .search');
 studentSearchbar.addEventListener("keyup", function () {

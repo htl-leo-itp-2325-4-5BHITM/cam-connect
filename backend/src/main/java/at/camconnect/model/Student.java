@@ -99,7 +99,7 @@ public class Student {
     }
 
     public String getEmail() {
-        return email;
+        return email != null ? email : firstname.toLowerCase().charAt(0)+"."+lastname.toLowerCase()+"@students.htl-leonding.ac.at";
     }
 
     public void setEmail(String email) {

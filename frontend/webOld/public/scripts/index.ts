@@ -247,12 +247,24 @@ function sendVerificationRequest(rentId: number){
         .catch(error => console.error(error));
 }
 
-function setVerificationStatus(rentId: number, verification_status: string){
-    fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/confirm/}`, {
+function setVerificationStatus(verificationStatus: string){
+    const urlParams = new URLSearchParams(window.location.search)
+    let rentId = urlParams.get("id")
+    let code = urlParams.get("vcode")
+    let messageInput = document.querySelector("#rejectionReason") as HTMLInputElement
+    let verificationMessage = messageInput.value
+    console.log(rentId, code, verificationMessage, verificationStatus)
+
+    fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/confirm/`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify({
+            "verification_code": code,
+            "verification_status": verificationStatus,
+            "verification_message": verificationMessage
+        })
     })
         .then(response => response.json())
         .then(data => {
