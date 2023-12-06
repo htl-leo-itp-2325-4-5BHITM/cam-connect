@@ -21,7 +21,8 @@ function confirmRent(verificationStatus: string){
     })
         .then(response => response.json())
         .then(data => {
-            switch (data.ccError.errorCode) {
+            console.log(data)
+            switch (data.ccStatus.statusCode) {
                 case 1000:
                     if(verificationStatus == "confirmed"){
                         //@ts-ignore

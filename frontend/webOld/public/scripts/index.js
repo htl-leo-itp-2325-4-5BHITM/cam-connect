@@ -129,9 +129,26 @@ function generateTable() {
                         cellChip.setAttribute("status", (_e = allRents[i]) === null || _e === void 0 ? void 0 : _e.status);
                         cellChip.innerHTML = (_f = allRents[i]) === null || _f === void 0 ? void 0 : _f.status;
                         if (((_g = allRents[i]) === null || _g === void 0 ? void 0 : _g.status) == "DECLINED") {
+                            cellChip.setAttribute("data-popup-heading", "Ablehnungsnachricht");
+                            cellChip.setAttribute("data-popup-text", "Anfrage nochmal senden");
                             cellChip.addEventListener("click", function () {
                                 var _a;
-                                PopupEngine.createModal({ heading: "Ablehnungsnachricht", text: (_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.verification_message });
+                                PopupEngine.createModal({
+                                    heading: "Ablehnungsnachricht",
+                                    text: (_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.verification_message,
+                                    buttons: [
+                                        {
+                                            text: "Anfrage nochmal senden",
+                                            action: function () {
+                                                sendVerificationRequest(allRents[i].rent_id);
+                                            },
+                                            closePopup: true
+                                        },
+                                        {
+                                            text: "Abbrechen"
+                                        }
+                                    ]
+                                });
                             });
                         }
                         cell.appendChild(cellChip);
@@ -148,6 +165,7 @@ function generateTable() {
     table.append.apply(table, html);
 }
 function sendVerificationRequest(rentId) {
+    console.log(rentId);
     fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/sendconfirmation"))
         .then(function (response) {
         return response.json();
@@ -294,7 +312,7 @@ function updateRent(input, key, value, rentId) {
         rent_end_planned: rentOriginal.rent_end_planned,
         rent_end_actual: rentOriginal.rent_end_actual,
         verification_code: rentOriginal.verification_code,
-        verification_status: rentOriginal.verification_status,
+        status: rentOriginal.status,
         verification_message: rentOriginal.verification_message,
         note: rentOriginal.note,
         accessory: rentOriginal.accessory
@@ -348,7 +366,7 @@ function importDataFromCsv(button) {
     })
         .then(function (data) {
         console.log(data);
-        switch (data.ccError.errorCode) {
+        switch (data.ccStatus.statusCode) {
             case 1000:
                 PopupEngine.createNotification({ text: "Successfully imported ".concat(importType) });
                 break;

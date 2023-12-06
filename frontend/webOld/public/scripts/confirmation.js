@@ -19,7 +19,8 @@ function confirmRent(verificationStatus) {
     })
         .then(function (response) { return response.json(); })
         .then(function (data) {
-        switch (data.ccError.errorCode) {
+        console.log(data);
+        switch (data.ccStatus.statusCode) {
             case 1000:
                 if (verificationStatus == "confirmed") {
                     //@ts-ignore
