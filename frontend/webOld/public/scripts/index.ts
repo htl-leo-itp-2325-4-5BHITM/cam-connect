@@ -1,3 +1,4 @@
+// @ts-ignore
 const APPLICATION_URL: string = "http://localhost:8080/api"
 
 let allRents: RentComplete[] = []
@@ -128,6 +129,14 @@ const columns: column[] = [
     {name: "VStatus", inputType: "none", cellType: "verification_status"},
 ]
 
+const statusResolved = {
+    "WAITING": "wartend",
+    "DECLINED": "abgelehnt",
+    "CONFIRMED": "bestätigt",
+    "CREATED": "erstellt",
+    "RETURNED": "zurückgegeben"
+}
+
 /**
  * Renders the Table to the html based on the data in the allRents array of Rent JSONs
  */
@@ -215,12 +224,30 @@ function generateTable() {
                         let cellChip = document.createElement('div')
                         cellChip.classList.add("verification_chip")
                         cellChip.setAttribute("status", allRents[i]?.status)
-                        cellChip.innerHTML = allRents[i]?.status
+                        // @ts-ignore
+                        cellChip.innerHTML = statusResolved[allRents[i]?.status]
 
                         if(allRents[i]?.status == "DECLINED"){
+                            cellChip.setAttribute("data-popup-heading", "Ablehnungsnachricht")
+                            cellChip.setAttribute("data-popup-text", "Anfrage nochmal senden")
                             cellChip.addEventListener("click", () => {
                                 //@ts-ignore
-                                PopupEngine.createModal({heading: "Ablehnungsnachricht", text: allRents[i]?.verification_message})
+                                PopupEngine.createModal({
+                                    heading: "Ablehnungsnachricht",
+                                    text: allRents[i]?.verification_message,
+                                    buttons: [
+                                        {
+                                            text: "Anfrage nochmal senden",
+                                            action: () => {
+                                                sendVerificationRequest(allRents[i].rent_id)
+                                            },
+                                            closePopup: true
+                                        },
+                                        {
+                                            text: "Abbrechen"
+                                        }
+                                    ]
+                                })
                             })
                         }
                         cell.appendChild(cellChip)
@@ -238,6 +265,7 @@ function generateTable() {
 
 // region verification
 function sendVerificationRequest(rentId: number){
+    console.log(rentId)
     fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/sendconfirmation`)
         .then(response => {
             return response.json()
@@ -416,7 +444,7 @@ function updateRent(input: HTMLElement, key: string, value: any, rentId?: number
         rent_end_planned: rentOriginal.rent_end_planned,
         rent_end_actual: rentOriginal.rent_end_actual,
         verification_code: rentOriginal.verification_code,
-        verification_status: rentOriginal.verification_status,
+        status: rentOriginal.status,
         verification_message: rentOriginal.verification_message,
         note: rentOriginal.note,
         accessory: rentOriginal.accessory
@@ -497,7 +525,7 @@ function importDataFromCsv(button:HTMLButtonElement) {
         })
         .then(data => {
             console.log(data)
-            switch (data.ccError.errorCode){
+            switch (data.ccStatus.statusCode){
                 case 1000:
                     //@ts-ignore
                     PopupEngine.createNotification({text: `Successfully imported ${importType}`})

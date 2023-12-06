@@ -27,6 +27,8 @@ public class RentRepository {
     @Inject
     MailClient client;
 
+    private final String FRONTEND_URL = "https://localhost:3000";
+
     @Transactional
     public void create(JsonObject rentJson){
         Rent rent = new Rent(em.find(Student.class, rentJson.getInt("student_id")));
@@ -88,7 +90,7 @@ public class RentRepository {
         String verification_code = getById(id).generateVerification_code();
         em.merge(getById(id));
 
-        String url = "http://localhost:3000/confirmVerification.html?vcode=" + verification_code + "&id=" + id;
+        String url = FRONTEND_URL + "/confirmVerification.html?vcode=" + verification_code + "&id=" + id;
         //plaintext is als backup für den html content, wenn html möglich ist wird nur das angezeigt
         message.setText("Bitte besuchen Sie " + url + " um ihren Verleih zu bestätigen");
         message.setHtml("Bitte clicken Sie <a href=\"" + url + "\">hier</a> um den Verleih zu bestätigen");

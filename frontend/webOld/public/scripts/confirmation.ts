@@ -1,11 +1,28 @@
-const APPLICATION_URL: string = "http://localhost:8080/api"
+// @ts-ignore
+const APPLICATION_URL: string = " https://2c14-185-51-129-49.ngrok.io/api"
 // @ts-ignore
 PopupEngine.init({textColor:"black", backgroundColor: "white", elemBackground: "#EEE"})
 
+const urlParams = new URLSearchParams(window.location.search)
+let rentId = urlParams.get("id")
+let code = urlParams.get("vcode")
+
+fetch(APPLICATION_URL + `/rent/getbyid/${rentId}`)
+    .then(result => {
+        return result.json()
+    })
+    .then((data) => {
+        console.log(data)
+        document.querySelector('.rentData').innerHTML = `
+            <p>${data.student.firstname} ${data.student.lastname}</p>
+            <p>Gerät Nr: ${data.device_string}, mit Zubehör: ${data.accessory || "keinem"}</p>
+            <p>von: ${data.rent_start}, bis (geplant): ${data.rent_end_planned || "unbekannt"}</p>
+        `
+    })
+    .catch(error => console.error(error))
+
+
 function confirmRent(verificationStatus: string){
-    const urlParams = new URLSearchParams(window.location.search)
-    let rentId = urlParams.get("id")
-    let code = urlParams.get("vcode")
     let verificationMessage = (document.querySelector("#rejectionReason") as HTMLInputElement).value
 
     fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/confirm`, {
@@ -21,14 +38,15 @@ function confirmRent(verificationStatus: string){
     })
         .then(response => response.json())
         .then(data => {
-            switch (data.ccError.errorCode) {
+            console.log(data)
+            switch (data.ccStatus.statusCode) {
                 case 1000:
                     if(verificationStatus == "confirmed"){
                         //@ts-ignore
-                        PopupEngine.createModal({text: `Verleihung wurde erfolgreich bestätigt`})
+                        PopupEngine.createModal({text: `Verleihung wurde erfolgreich bestätigt. Sie können diese Seite nun schließen.`})
                     } else if(verificationStatus == "declined"){
                         //@ts-ignore
-                        PopupEngine.createModal({text: `Verleihung wurde erfolgreich abgelehnt`})
+                        PopupEngine.createModal({text: `Verleihung wurde erfolgreich abgelehnt. Sie können diese Seite nun schließen.`})
                     }
                     break
                 case 1205:

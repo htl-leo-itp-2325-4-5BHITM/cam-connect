@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>CamConnect</title>
+        <title>CamConnect Verleihbestätigung</title>
 
         <link rel="stylesheet" href="styles/confirmation.css">
 
@@ -12,10 +12,15 @@
 
     <body>
         <main class="verification">
-            <h2>Möchtest du den Verleih bestätigen</h2>
+            <h2>Möchtest du folgenden Verleih bestätigen</h2>
+
+            <div class="rentData"></div>
 
             <div class="buttons">
                 <button onclick="confirmRent('confirmed')" class="accept">Zustimmen</button>
+            </div>
+
+            <div class="buttons">
                 <input type="text" id="rejectionReason" placeholder="Ablehngrund">
                 <button onclick="confirmRent('declined')" class="decline">Ablehnen</button>
             </div>

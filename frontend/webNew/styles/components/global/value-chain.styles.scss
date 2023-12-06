@@ -9,7 +9,7 @@ div.chain{
 
   :not(:last-child):after{
     content: "•";
-    margin: .5rem;
+    margin-inline: .5rem;
   }
 
   *{
@@ -20,9 +20,15 @@ div.chain{
 
   .isLink{
     text-decoration: underline;
+    cursor: pointer;
+
+    &:hover{
+      color: $gray900;
+    }
 
     &:after{
       text-decoration: none;
+      display: inline-block
     }
   }
 }
