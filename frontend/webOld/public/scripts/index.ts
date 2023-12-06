@@ -216,6 +216,13 @@ function generateTable() {
                         cellChip.classList.add("verification_chip")
                         cellChip.setAttribute("status", allRents[i]?.status)
                         cellChip.innerHTML = allRents[i]?.status
+
+                        if(allRents[i]?.status == "DECLINED"){
+                            cellChip.addEventListener("click", () => {
+                                //@ts-ignore
+                                PopupEngine.createModal({heading: "Ablehnungsnachricht", text: allRents[i]?.verification_message})
+                            })
+                        }
                         cell.appendChild(cellChip)
                         break
                 }

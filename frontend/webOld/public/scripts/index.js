@@ -68,7 +68,7 @@ function generateTable() {
         var row = document.createElement("tr");
         row.setAttribute("rent_id", String((_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id));
         columns.forEach(function (column) {
-            var _a, _b, _c, _d, _e, _f;
+            var _a, _b, _c, _d, _e, _f, _g;
             var cell = document.createElement("td");
             if (column.inputType !== "none") {
                 var cellinput_1 = document.createElement("input");
@@ -128,6 +128,12 @@ function generateTable() {
                         cellChip.classList.add("verification_chip");
                         cellChip.setAttribute("status", (_e = allRents[i]) === null || _e === void 0 ? void 0 : _e.status);
                         cellChip.innerHTML = (_f = allRents[i]) === null || _f === void 0 ? void 0 : _f.status;
+                        if (((_g = allRents[i]) === null || _g === void 0 ? void 0 : _g.status) == "DECLINED") {
+                            cellChip.addEventListener("click", function () {
+                                var _a;
+                                PopupEngine.createModal({ heading: "Ablehnungsnachricht", text: (_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.verification_message });
+                            });
+                        }
                         cell.appendChild(cellChip);
                         break;
                 }
