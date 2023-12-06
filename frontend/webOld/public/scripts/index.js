@@ -392,7 +392,7 @@ function importDataFromCsv(button) {
                 PopupEngine.createNotification({ text: "Successfully imported ".concat(importType) });
                 break;
             case 1204:
-                PopupEngine.createNotification({ text: "Konnte Sch\u00FCler nicht importieren weil das file " });
+                PopupEngine.createNotification({ text: "Konnte nicht importieren weil die filestruktur invalide ist" });
                 break;
         }
         requestAllStudents();

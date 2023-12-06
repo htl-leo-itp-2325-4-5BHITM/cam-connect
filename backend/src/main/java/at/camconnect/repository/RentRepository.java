@@ -27,7 +27,7 @@ public class RentRepository {
     @Inject
     MailClient client;
 
-    private final String FRONTEND_URL = "https://localhost:3000";
+    private final String FRONTEND_URL = "http://localhost:3000";
 
     @Transactional
     public void create(JsonObject rentJson){

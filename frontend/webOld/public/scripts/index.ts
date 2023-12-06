@@ -532,7 +532,7 @@ function importDataFromCsv(button:HTMLButtonElement) {
                     break
                 case 1204:
                     //@ts-ignore
-                    PopupEngine.createNotification({text: `Konnte Schüler nicht importieren weil das file `})
+                    PopupEngine.createNotification({text: `Konnte nicht importieren weil die filestruktur invalide ist`})
                     break
             }
             requestAllStudents()
