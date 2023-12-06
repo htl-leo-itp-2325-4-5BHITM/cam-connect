@@ -1,8 +1,7 @@
 package at.camconnect.boundary;
 
-import at.camconnect.errorSystem.CCError;
-import at.camconnect.errorSystem.CCException;
-import at.camconnect.errorSystem.CCResponse;
+import at.camconnect.statusSystem.CCException;
+import at.camconnect.statusSystem.CCResponse;
 import at.camconnect.enums.DeviceTypeEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.repository.DeviceTypeRepository;

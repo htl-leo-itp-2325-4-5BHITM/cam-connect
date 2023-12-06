@@ -1,7 +1,7 @@
 package at.camconnect.repository;
 
 import at.camconnect.enums.RentStatusEnum;
-import at.camconnect.errorSystem.CCException;
+import at.camconnect.statusSystem.CCException;
 import at.camconnect.model.Device;
 import at.camconnect.model.Rent;
 import at.camconnect.model.Student;

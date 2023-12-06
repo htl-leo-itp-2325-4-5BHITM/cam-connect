@@ -2,8 +2,6 @@ package at.camconnect.model.DeviceTypes;
 
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypes.attributes.TripodHead;
-import at.camconnect.errorSystem.CCException;
-import jakarta.json.JsonObject;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;

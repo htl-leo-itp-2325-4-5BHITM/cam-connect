@@ -1,4 +1,4 @@
-package at.camconnect.errorSystem;
+package at.camconnect.statusSystem;
 
 import jakarta.ws.rs.core.Response;
 import java.util.Map;
@@ -8,8 +8,8 @@ import java.util.Objects;
  * Custom CCError that communicates an issue to the API caller
  * Is packaged inside a CCResponseDTO by the CCResponse class
  */
-public class CCError {
-    private static final Map<Integer, String> ERROR_CODE_DETAILS = Map.ofEntries(
+public class CCStatus {
+    private static final Map<Integer, String> STATUS_CODE_DETAILS = Map.ofEntries(
             Map.entry(1000, "All good"),
             Map.entry(1001, "Something went wrong but an invalid error code was provided"),
 
@@ -29,26 +29,26 @@ public class CCError {
             Map.entry(1205, "Operation was not allowed")
     );
 
-    private int errorCode;
+    private int statusCode;
     private String details;
     private String message;
 
     /**
-     * creates a new error code meant to be returned by most api endpoints
-     * @param errorCode custom ccError code: see api doc for all options
+     * creates a new status object meant to be returned by most api endpoints
+     * @param statusCode custom ccError code: see api doc for all options
      * @param message error message that details what caused the error
      */
-    public CCError(int errorCode, String message) {
-        setErrorCode(errorCode);
+    public CCStatus(int statusCode, String message) {
+        setStatusCode(statusCode);
         setMessage(message);
     }
 
     /**
      * creates a new error code meant to be returned by most api endpoints
-     * @param errorCode custom ccError code: see api doc for all options
+     * @param statusCode custom ccError code: see api doc for all options
      */
-    public CCError(int errorCode) {
-        setErrorCode(errorCode);
+    public CCStatus(int statusCode) {
+        setStatusCode(statusCode);
         setMessage("");
     }
 
@@ -56,8 +56,8 @@ public class CCError {
      * creates a new error code meant to be returned by most api endpoints
      * @param exception CCException that should get converted to error
      */
-    public CCError(CCException exception) {
-        setErrorCode(exception.getError());
+    public CCStatus(CCException exception) {
+        setStatusCode(exception.getError());
         setMessage(exception.getMessage());
     }
 
@@ -66,8 +66,8 @@ public class CCError {
     }
 
     //region getter and setter
-    public int getErrorCode() {
-        return errorCode;
+    public int getStatusCode() {
+        return statusCode;
     }
 
     public String getDetails() {
@@ -83,13 +83,13 @@ public class CCError {
         this.message = message;
     }
 
-    private void setErrorCode(int errorCode){
-        if(!ERROR_CODE_DETAILS.containsKey(errorCode)) {
-            errorCode = 1001;
+    private void setStatusCode(int statusCode){
+        if(!STATUS_CODE_DETAILS.containsKey(statusCode)) {
+            statusCode = 1001;
         };
 
-        this.errorCode = errorCode;
-        this.details = ERROR_CODE_DETAILS.get(errorCode);
+        this.statusCode = statusCode;
+        this.details = STATUS_CODE_DETAILS.get(statusCode);
     }
     //endregion
 }
