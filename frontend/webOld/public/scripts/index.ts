@@ -127,6 +127,8 @@ const columns: column[] = [
     {name: "Paraphe Lehkraft", inputType: "text", cellType: "teacher_end"},
     {name: "Anmerkung", inputType: "text", cellType: "note"},
     {name: "VStatus", inputType: "none", cellType: "verification_status"},
+    {name: "DeletRow", inputType: "none", cellType: "none"}
+
 ]
 
 const statusResolved = {
@@ -138,7 +140,7 @@ const statusResolved = {
 }
 
 /**
- * Renders the Table to the html based on the data in the allRents array of Rent JSONs
+ * Renders the Table to the html based on thee data in the allRents array of Rent JSONs
  */
 function generateTable() {
     //Create the Heading Row based purely on the data in the columns constant
