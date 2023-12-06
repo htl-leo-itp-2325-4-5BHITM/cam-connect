@@ -1,5 +1,5 @@
 // @ts-ignore
-const APPLICATION_URL: string = "http://localhost:8080/api"
+const APPLICATION_URL: string = " https://2c14-185-51-129-49.ngrok.io/api"
 // @ts-ignore
 PopupEngine.init({textColor:"black", backgroundColor: "white", elemBackground: "#EEE"})
 

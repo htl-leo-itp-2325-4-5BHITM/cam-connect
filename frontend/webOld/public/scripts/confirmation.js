@@ -1,4 +1,4 @@
-var APPLICATION_URL = "http://localhost:8080/api";
+var APPLICATION_URL = " https://2c14-185-51-129-49.ngrok.io/api";
 PopupEngine.init({ textColor: "black", backgroundColor: "white", elemBackground: "#EEE" });
 var urlParams = new URLSearchParams(window.location.search);
 var rentId = urlParams.get("id");
