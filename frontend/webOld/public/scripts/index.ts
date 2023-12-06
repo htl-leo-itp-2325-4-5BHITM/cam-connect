@@ -489,7 +489,7 @@ function createRent() {
 }
 
 //DeleteRow
-function deleteRow(rentId) {
+function deleteRow(rentId:number) {
     const confirmation = confirm("Are you sure you want to delete this row?");
     if (confirmation) {
         fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/delete`, {

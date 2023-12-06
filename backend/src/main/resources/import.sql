@@ -1,4 +1,4 @@
-INSERT INTO student (student_id, firstname, lastname, password, school_class, username)
+/*INSERT INTO student (student_id, firstname, lastname, password, school_class, username)
 VALUES (NEXT VALUE FOR student_seq, 'Michael', 'Leisch', 'passwort1', '4BHITM', 'IT200269');
 INSERT INTO student (student_id, firstname, lastname, password, school_class, username)
 VALUES (NEXT VALUE FOR student_seq, 'Yanik', 'Kendler', 'passwort1', '4BHITM', 'IT200272');
@@ -18,7 +18,7 @@ VALUES (NEXT VALUE FOR teacher_seq, 'Mr.', 'Jones', 'pass123', 'mr_jones');
 INSERT INTO Teacher (teacher_id, firstname, lastname, password, username)
 VALUES (NEXT VALUE FOR teacher_seq, 'Dr.', 'Miller', 'teacherpass', 'dr_miller');
 INSERT INTO Teacher (teacher_id, firstname, lastname, password, username)
-VALUES (NEXT VALUE FOR teacher_seq, 'Mrs.', 'Brown', 'pass123', 'mrs_brown');
+VALUES (NEXT VALUE FOR teacher_seq, 'Mrs.', 'Brown', 'pass123', 'mrs_brown');*/
 
 insert into tag (tag_id, name, description)
 values (NEXT VALUE FOR tag_seq, 'Foto', 'Dieses Gerät ist am besten für Fotografie geeignet');
