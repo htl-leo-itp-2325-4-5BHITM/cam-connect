@@ -108,6 +108,7 @@ button.verification_button{
   cursor: pointer;
 }
 div.verification_chip{
+  padding: .5rem;
   color: #E6E6E6;
 
   &[status = "CONFIRMED"]{

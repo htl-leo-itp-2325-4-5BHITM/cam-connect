@@ -84,7 +84,7 @@ interface RentComplete {
     rent_end_planned: string,
     rent_end_actual: string,
     verification_code: string,
-    verification_status: string,
+    status: string,
     verification_message: string,
     note: string,
     accessory: string,
@@ -101,7 +101,7 @@ interface RentSimple {
     rent_end_planned: string,
     rent_end_actual: string,
     verification_code: string,
-    verification_status: string,
+    status: string,
     verification_message: string,
     note: string,
     accessory: string,
@@ -120,11 +120,9 @@ const columns: column[] = [
     {name: "Zubehör", inputType: "text", cellType: "accessory"},
     {name: "Entlehner*in + Klasse", inputType: "text", cellType: "student_id"},
     {name: "Entlehnung Datum", inputType: "date", cellType: "rent_start"},
-    {name: "Unterschrift Entlehner*in", inputType: "none", cellType: ""},
     {name: "Paraphe Lehkraft", inputType: "text", cellType: "teacher_start"},
     {name: "Rückgabe geplant", inputType: "date", cellType: "rent_end_planned"},
     {name: "Rückgabe tatsächlich", inputType: "date", cellType: "rent_end_actual"},
-    {name: "Unterschrift Entlehner*in", inputType: "none", cellType: ""},
     {name: "Paraphe Lehkraft", inputType: "text", cellType: "teacher_end"},
     {name: "Anmerkung", inputType: "text", cellType: "note"},
     {name: "VStatus", inputType: "none", cellType: "verification_status"},
@@ -200,7 +198,7 @@ function generateTable() {
             }
 
             if (column.cellType == "verification_status"){
-                switch (allRents[i]?.verification_status){
+                switch (allRents[i]?.status){
                     case null:
                     case undefined:
                     case "CREATED": // if not already requested
@@ -216,19 +214,16 @@ function generateTable() {
                     default:
                         let cellChip = document.createElement('div')
                         cellChip.classList.add("verification_chip")
-                        cellChip.setAttribute("status", allRents[i]?.verification_status)
-                        cellChip.innerHTML = allRents[i]?.verification_status
+                        cellChip.setAttribute("status", allRents[i]?.status)
+                        cellChip.innerHTML = allRents[i]?.status
                         cell.appendChild(cellChip)
                         break
                 }
             }
-
             row.appendChild(cell)
         })
-
         html.push(row)
     }
-
     table.append(...html)
 }
 
@@ -240,33 +235,6 @@ function sendVerificationRequest(rentId: number){
         .then(response => {
             return response.json()
         })
-        .then(data => {
-            console.log(data)
-            requestAllRents()
-        })
-        .catch(error => console.error(error));
-}
-
-function setVerificationStatus(verificationStatus: string){
-    const urlParams = new URLSearchParams(window.location.search)
-    let rentId = urlParams.get("id")
-    let code = urlParams.get("vcode")
-    let messageInput = document.querySelector("#rejectionReason") as HTMLInputElement
-    let verificationMessage = messageInput.value
-    console.log(rentId, code, verificationMessage, verificationStatus)
-
-    fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/confirm/`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            "verification_code": code,
-            "verification_status": verificationStatus,
-            "verification_message": verificationMessage
-        })
-    })
-        .then(response => response.json())
         .then(data => {
             console.log(data)
             requestAllRents()

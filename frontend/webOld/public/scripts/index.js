@@ -45,11 +45,9 @@ var columns = [
     { name: "Zubehör", inputType: "text", cellType: "accessory" },
     { name: "Entlehner*in + Klasse", inputType: "text", cellType: "student_id" },
     { name: "Entlehnung Datum", inputType: "date", cellType: "rent_start" },
-    { name: "Unterschrift Entlehner*in", inputType: "none", cellType: "" },
     { name: "Paraphe Lehkraft", inputType: "text", cellType: "teacher_start" },
     { name: "Rückgabe geplant", inputType: "date", cellType: "rent_end_planned" },
     { name: "Rückgabe tatsächlich", inputType: "date", cellType: "rent_end_actual" },
-    { name: "Unterschrift Entlehner*in", inputType: "none", cellType: "" },
     { name: "Paraphe Lehkraft", inputType: "text", cellType: "teacher_end" },
     { name: "Anmerkung", inputType: "text", cellType: "note" },
     { name: "VStatus", inputType: "none", cellType: "verification_status" },
@@ -112,7 +110,7 @@ function generateTable() {
                 cell.appendChild(cellinput_1);
             }
             if (column.cellType == "verification_status") {
-                switch ((_d = allRents[i]) === null || _d === void 0 ? void 0 : _d.verification_status) {
+                switch ((_d = allRents[i]) === null || _d === void 0 ? void 0 : _d.status) {
                     case null:
                     case undefined:
                     case "CREATED":
@@ -128,8 +126,8 @@ function generateTable() {
                     default:
                         var cellChip = document.createElement('div');
                         cellChip.classList.add("verification_chip");
-                        cellChip.setAttribute("status", (_e = allRents[i]) === null || _e === void 0 ? void 0 : _e.verification_status);
-                        cellChip.innerHTML = (_f = allRents[i]) === null || _f === void 0 ? void 0 : _f.verification_status;
+                        cellChip.setAttribute("status", (_e = allRents[i]) === null || _e === void 0 ? void 0 : _e.status);
+                        cellChip.innerHTML = (_f = allRents[i]) === null || _f === void 0 ? void 0 : _f.status;
                         cell.appendChild(cellChip);
                         break;
                 }
@@ -148,31 +146,6 @@ function sendVerificationRequest(rentId) {
         .then(function (response) {
         return response.json();
     })
-        .then(function (data) {
-        console.log(data);
-        requestAllRents();
-    })
-        .catch(function (error) { return console.error(error); });
-}
-function setVerificationStatus(verificationStatus) {
-    var urlParams = new URLSearchParams(window.location.search);
-    var rentId = urlParams.get("id");
-    var code = urlParams.get("vcode");
-    var messageInput = document.querySelector("#rejectionReason");
-    var verificationMessage = messageInput.value;
-    console.log(rentId, code, verificationMessage, verificationStatus);
-    fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/confirm/"), {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            "verification_code": code,
-            "verification_status": verificationStatus,
-            "verification_message": verificationMessage
-        })
-    })
-        .then(function (response) { return response.json(); })
         .then(function (data) {
         console.log(data);
         requestAllRents();
