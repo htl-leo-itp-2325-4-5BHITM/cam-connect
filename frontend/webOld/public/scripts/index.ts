@@ -498,6 +498,10 @@ function importDataFromCsv(button:HTMLButtonElement) {
                     //@ts-ignore
                     PopupEngine.createNotification({text: `Successfully imported ${importType}`})
                     break
+                case 1204:
+                    //@ts-ignore
+                    PopupEngine.createNotification({text: `Konnte Schüler nicht importieren weil das file `})
+                    break
             }
             requestAllStudents()
         })

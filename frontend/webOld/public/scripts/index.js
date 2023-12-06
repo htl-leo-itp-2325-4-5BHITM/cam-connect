@@ -154,6 +154,20 @@ function sendVerificationRequest(rentId) {
     })
         .catch(function (error) { return console.error(error); });
 }
+function setVerificationStatus(rentId, verification_status) {
+    fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/confirm/}"), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+        console.log(data);
+        requestAllRents();
+    })
+        .catch(function (error) { return console.error(error); });
+}
 var studentSelectionPopup = document.querySelector("#studentSelectionPopup");
 var studentSearchbar = document.querySelector('#studentSelectionPopup .search');
 studentSearchbar.addEventListener("keyup", function () {
@@ -347,6 +361,9 @@ function importDataFromCsv(button) {
         switch (data.ccError.errorCode) {
             case 1000:
                 PopupEngine.createNotification({ text: "Successfully imported ".concat(importType) });
+                break;
+            case 1204:
+                PopupEngine.createNotification({ text: "Konnte Sch\u00FCler nicht importieren weil das file " });
                 break;
         }
         requestAllStudents();
