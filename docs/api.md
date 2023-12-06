@@ -59,13 +59,13 @@ api
 
 - Every Endpoint returns a Response object with standard http Status code to indicate the general status of the request.
 - Every Response has a CCResponse DTO in its body.
-  - the `ccError` contains a CCError object that itself provides
-    - `errorCode` a Integer code referring to the specific error that occurred
-    - `details` a pre-defined String generally explaining the errorCode
+  - the `ccStatus` contains a CCError object that itself provides
+    - `statusCode` a Integer code referring to the specific error that occurred
+    - `details` a pre-defined String generally explaining the statusCode
     - `message` a case specific String explaing what exactly caused the error
-  - the `data` is optional and only existent if the errorCode is 1000 (ok)
+  - the `data` is optional and only existent if the statusCode is 1000 (ok)
 
-## CC Error System
+## CC Status System
 
 ### Endpoint structure
 - Every Endpoint should try/catch for a CCException and call the Repository function inside
@@ -80,13 +80,12 @@ api
   ```
 - Wherever a error occurs in the Repository a CCException should be thrown
   ```java
-  throw new CCException(errorCode);
-  throw new CCException(errorCode, "custom error message")
+  throw new CCException(statusCode);
+  throw new CCException(statusCode, "custom error message")
   ```
 
-### Accepted ErrorCodes
+### Accepted Status Codes
 - 1000: All good
-- 1001: Something went wrong but an invalid error code was provided (dont use this)
 - 1100: **Structure error**: Problems with the general request structure / syntax
 - 1101: Invalid id in getter
 - 1102: Invalid id in setter

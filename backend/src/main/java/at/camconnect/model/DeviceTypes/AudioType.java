@@ -1,10 +1,7 @@
 package at.camconnect.model.DeviceTypes;
 
-import at.camconnect.errorSystem.CCException;
 import at.camconnect.model.DeviceType;
-import jakarta.json.JsonObject;
 import jakarta.persistence.Entity;
-import jakarta.transaction.Transactional;
 
 @Entity
 public class AudioType extends DeviceType {

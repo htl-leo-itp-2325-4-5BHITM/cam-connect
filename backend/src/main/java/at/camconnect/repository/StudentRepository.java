@@ -1,6 +1,6 @@
 package at.camconnect.repository;
 
-import at.camconnect.errorSystem.CCException;
+import at.camconnect.statusSystem.CCException;
 import at.camconnect.model.Student;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -9,7 +9,6 @@ import jakarta.json.JsonObject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.io.*;
 import java.util.*;

@@ -1,10 +1,9 @@
 package at.camconnect.boundary;
 
-import at.camconnect.errorSystem.CCException;
-import at.camconnect.errorSystem.CCResponse;
+import at.camconnect.statusSystem.CCException;
+import at.camconnect.statusSystem.CCResponse;
 import at.camconnect.model.Rent;
 import at.camconnect.repository.RentRepository;
-import io.vertx.ext.mail.MailClient;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
