@@ -63,12 +63,15 @@ public class StudentRepository{
             String[] lineArray = line.split(";");
             if (lineArray.length <= 1) throw new CCException(1203);
 
-            //our friend \uFEFF is a invisible zero space character added to csv files when opening excel that throws off my validations :)
-            lineArray[0] = lineArray[0].replace("\uFEFF", "");
+            //removes characters like our friend \uFEFF a invisible zero space character added to csv files when opening excel that throws off my validations :)
+            lineArray[0] = lineArray[0].replaceAll("[^a-zA-Z_-]", "");
 
             //checks if the csv file matches the required structure
             if(lineArray.length != 6) throw new CCException(1204, "invalid line length");
-            if (!lineArray[0].equals("vorname") || !lineArray[1].equals("nachname") || !lineArray[2].equals("klasse") || !lineArray[3].equals("email") || !lineArray[4].equals("username") || !lineArray[5].equals("passwort")) throw new CCException(1204, "invalid header row");
+            if (!lineArray[0].equals("vorname") || !lineArray[1].equals("nachname") || !lineArray[2].equals("klasse") || !lineArray[3].equals("email") || !lineArray[4].equals("username") || !lineArray[5].equals("passwort")){
+                System.out.println("invalid header row: " + lineArray[0] + ", " + lineArray[1] + ", " + lineArray[2] + ", " + lineArray[3] + ", " + lineArray[4]);
+                throw new CCException(1204, "invalid header row: " + lineArray[0] + ", " + lineArray[1] + ", " + lineArray[2] + ", " + lineArray[3] + ", " + lineArray[4]);
+            }
 
             while ((line = reader.readLine()) != null) {
                 lineArray = line.split(";");

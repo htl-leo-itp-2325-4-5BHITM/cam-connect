@@ -76,9 +76,11 @@ public class RentRepository {
         String email = getById(id).getStudent().getEmail();
         message.setTo(email);
         message.setSubject("Bestätigung des Geräteverleih");
-        message.setText("Bitte bestätige den Verleih # in dem sie auf den Link klicken: ");
         String verification_code = getById(id).generateVerification_code();
-        message.setHtml("<a href='localhost:4200?verification_code=" + verification_code + "'>Bestätigen</a>");
+        String url = "http://localhost:3000/confirmVerification.html?vcode=" + verification_code + "&id=" + id;
+        //plaintext is als backup für den html content, wenn html möglich ist wird nur das angezeigt
+        message.setText("Bitte besuchen Sie " + url + " um ihren Verleih zu bestätigen");
+        message.setHtml("Bitte clicken Sie <a href=\"" + url + "\">hier</a> um den Verleih zu bestätigen");
 
         return message;
     }

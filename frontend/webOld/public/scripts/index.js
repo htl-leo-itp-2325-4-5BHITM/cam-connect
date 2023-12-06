@@ -373,6 +373,9 @@ function importDataFromCsv(button) {
             case 1000:
                 PopupEngine.createNotification({ text: "Successfully imported ".concat(importType) });
                 break;
+            case 1204:
+                PopupEngine.createNotification({ text: "Konnte Sch\u00FCler nicht importieren weil das file " });
+                break;
         }
         requestAllStudents();
     })
