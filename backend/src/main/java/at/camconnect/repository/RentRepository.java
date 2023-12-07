@@ -6,6 +6,7 @@ import at.camconnect.model.Device;
 import at.camconnect.model.Rent;
 import at.camconnect.model.Student;
 import at.camconnect.model.Teacher;
+import at.camconnect.statusSystem.CCResponse;
 import io.vertx.ext.mail.MailClient;
 import io.vertx.ext.mail.MailMessage;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -14,6 +15,7 @@ import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.core.Response;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -41,8 +43,13 @@ public class RentRepository {
     }
 
     @Transactional
-    public void remove(Long id){
-        em.remove(em.find(Rent.class, id));
+    public Response remove(Long id){
+        try {
+            em.remove(em.find(Rent.class, id));
+        } catch(CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
 
     public List<Rent> getAll(){
