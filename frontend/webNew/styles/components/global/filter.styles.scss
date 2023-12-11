@@ -7,7 +7,7 @@
 
 .filter-block {
   h2 {
-    color: $accentLight;
+    color: $accentDarkmodeLight;
     font-weight: 600;
     margin: 0;
   }
@@ -44,7 +44,7 @@
 
       &::before, &::after{
         content: "";
-        background-color: $accentLight;
+        background-color: $accentDarkmodeLight;
         position: absolute;
         right: 100%;
       }
