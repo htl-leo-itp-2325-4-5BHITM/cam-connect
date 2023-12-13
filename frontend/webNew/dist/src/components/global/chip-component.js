@@ -1,5 +1,7 @@
 import { render } from "lit-html";
 import styles from '../../../styles/components/global/chip.styles.scss';
+import { icon } from '@fortawesome/fontawesome-svg-core';
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 var Color;
 (function (Color) {
     Color["ACCENT"] = "accent";
@@ -47,7 +49,7 @@ class ChipComponent extends HTMLElement {
         if (removeable) {
             let removeDiv = document.createElement('div');
             removeDiv.classList.add("removeDiv");
-            removeDiv.innerHTML = "<i class=\"fa-solid fa-x\"></i>"; //todo x icon sieht man nicht :c
+            removeDiv.innerHTML = icon(faXmark).html[0];
             removeDiv.addEventListener('click', this.removeChip.bind(div));
             div.appendChild(removeDiv);
         }
