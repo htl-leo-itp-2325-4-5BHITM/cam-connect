@@ -241,11 +241,7 @@ VALUES (NEXT VALUE FOR camera_resolution_seq, '8K', '7680x4320');
 INSERT INTO CameraResolution (resolution_id, name, details)
 VALUES (NEXT VALUE FOR camera_resolution_seq, '12K', '12288x6912');
 
---TODO this is not how the table structure for DeviceType works:
--- if you insert one via the API you will see that the DeviceType contains only the names for the devices
--- the sub tables reference the original entry and store more detailed information
--- I rewrote the next 2 blocks to insert light types
-
+/*
 -- Test Inserts for DeviceType
 INSERT INTO DeviceType (type_id, name)
 VALUES (NEXT VALUE FOR device_type_seq, 'Aputure');
@@ -320,7 +316,7 @@ VALUES (1, 150, 1);
 INSERT INTO TripodType (type_id, height, head_id)
 VALUES (2, 180, 2);
 INSERT INTO TripodType (type_id, height, head_id)
-VALUES (3, 120, 3);
+VALUES (3, 120, 3);*/
 
 
 -- Test Inserts for Tag

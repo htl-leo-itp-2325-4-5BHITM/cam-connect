@@ -51,6 +51,7 @@ var columns = [
     { name: "Paraphe Lehkraft", inputType: "text", cellType: "teacher_end" },
     { name: "Anmerkung", inputType: "text", cellType: "note" },
     { name: "VStatus", inputType: "none", cellType: "verification_status" },
+    { name: "DeleteRow", inputType: "text", cellType: "delete_row" }
 ];
 var statusResolved = {
     "WAITING": "wartend",
@@ -113,8 +114,19 @@ function generateTable() {
                         });
                         cellinput_1.value = allRents[i][column.cellType] || "";
                         break;
+                    case "delete_row":
+                        var button = document.createElement('button');
+                        button.innerHTML = "Löschen";
+                        button.addEventListener("click", function () {
+                            var _a;
+                            removeRow((_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id);
+                        });
+                        cell.appendChild(button);
+                        break;
                 }
-                cell.appendChild(cellinput_1);
+                if (column.cellType != "delete_row") {
+                    cell.appendChild(cellinput_1);
+                }
             }
             if (column.cellType == "verification_status") {
                 switch ((_d = allRents[i]) === null || _d === void 0 ? void 0 : _d.status) {
@@ -170,6 +182,17 @@ function generateTable() {
         _loop_1(i);
     }
     table.append.apply(table, html);
+}
+function removeRow(rentId) {
+    fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/remove"))
+        .then(function (response) {
+        return response.json();
+    })
+        .then(function (data) {
+        console.log(data);
+        requestAllRents();
+    })
+        .catch(function (error) { return console.error(error); });
 }
 function sendVerificationRequest(rentId) {
     console.log(rentId);
@@ -392,7 +415,7 @@ function importDataFromCsv(button) {
                 PopupEngine.createNotification({ text: "Successfully imported ".concat(importType) });
                 break;
             case 1204:
-                PopupEngine.createNotification({ text: "Konnte Sch\u00FCler nicht importieren weil das file " });
+                PopupEngine.createNotification({ text: "Konnte nicht importieren weil die filestruktur invalide ist" });
                 break;
         }
         requestAllStudents();

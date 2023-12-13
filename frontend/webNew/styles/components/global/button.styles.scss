@@ -5,7 +5,7 @@
 }
 
 .cc-button{
-  background-color: $accent;
+  background-color: $accentDarkmode;
   font-size: 1.25rem;
   min-width: 10ch;
   border: 1px solid;
@@ -30,16 +30,16 @@
   }
 
   &[color = "accent"]{
-    border-color: $accentLight;
+    border-color: $accentDarkmodeLight;
     &[type = "filled"]{
-      background-color: $accent;
+      background-color: $accentDarkmode;
       color: $gray1000;
       &:hover{
-        background-color: $accentDark;
+        background-color: $accentDarkmodeDark;
       }
     }
     &[type = "outlined"]{
-      color: $accentLight;
+      color: $accentDarkmodeLight;
     }
   }
 

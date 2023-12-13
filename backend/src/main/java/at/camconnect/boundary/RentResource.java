@@ -71,10 +71,9 @@ public class RentResource {
     }
 
     @GET
-    @Path("/getbyid/{id: [0-9]+}")
+    @Path("/getbyid/{id: [0-9]+}/remove")
     public Response remove(@PathParam("id")Long id) {
-        rentRepository.remove(id);
-        return Response.ok().build();
+        return rentRepository.remove(id);
     }
 
     //region updates

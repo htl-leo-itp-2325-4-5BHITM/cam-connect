@@ -127,8 +127,7 @@ const columns: column[] = [
     {name: "Paraphe Lehkraft", inputType: "text", cellType: "teacher_end"},
     {name: "Anmerkung", inputType: "text", cellType: "note"},
     {name: "VStatus", inputType: "none", cellType: "verification_status"},
-    {name: "DeletRow", inputType: "none", cellType: "none"}
-
+    {name: "DeleteRow", inputType: "text", cellType: "delete_row"}
 ]
 
 const statusResolved = {
@@ -203,9 +202,19 @@ function generateTable() {
                         })
                         cellinput.value = allRents[i][column.cellType] || ""
                         break
+                    case "delete_row":
+                        let button = document.createElement('button');
+                        button.innerHTML = "Löschen"
+                        button.addEventListener("click", () => {
+                            removeRow(allRents[i]?.rent_id)
+                        })
+                        cell.appendChild(button)
+                        break
                 }
 
-                cell.appendChild(cellinput)
+                if(column.cellType != "delete_row"){
+                    cell.appendChild(cellinput)
+                }
             }
 
             if (column.cellType == "verification_status"){
@@ -261,6 +270,18 @@ function generateTable() {
         html.push(row)
     }
     table.append(...html)
+}
+
+function removeRow(rentId: number){
+    fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/remove`)
+        .then(response => {
+            return response.json()
+        })
+        .then(data => {
+            console.log(data)
+            requestAllRents()
+        })
+        .catch(error => console.error(error));
 }
 
 //endregion
@@ -534,7 +555,7 @@ function importDataFromCsv(button:HTMLButtonElement) {
                     break
                 case 1204:
                     //@ts-ignore
-                    PopupEngine.createNotification({text: `Konnte Schüler nicht importieren weil das file `})
+                    PopupEngine.createNotification({text: `Konnte nicht importieren weil die filestruktur invalide ist`})
                     break
             }
             requestAllStudents()
