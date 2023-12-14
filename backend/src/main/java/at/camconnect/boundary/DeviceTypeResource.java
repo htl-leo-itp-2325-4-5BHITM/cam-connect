@@ -12,7 +12,9 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-@Path("/api/devicetype")
+import java.util.List;
+
+@Path("/devicetype")
 public class DeviceTypeResource {
     @Inject
     DeviceTypeRepository deviceTypeRepository;
@@ -31,9 +33,22 @@ public class DeviceTypeResource {
     }
 
     @GET
+    @Path("/getall")
+    @Transactional
+    public Response getAll(){
+        List<DeviceType> result;
+        try{
+            result = deviceTypeRepository.getAll();
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok(result);
+    }
+
+    @GET
     @Path("/getbyid/{id: [0-9]+}")
     @Transactional
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") Long id){
         DeviceType result;
         try{
@@ -48,7 +63,6 @@ public class DeviceTypeResource {
     @GET
     @Path("/getbyid/{id: [0-9]+}/remove")
     @Transactional
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response remove(@PathParam("id") Long id){
         try{
             deviceTypeRepository.remove(id);
