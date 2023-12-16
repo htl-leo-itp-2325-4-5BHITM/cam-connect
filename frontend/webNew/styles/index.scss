@@ -1,6 +1,9 @@
 @import "variables.scss";
+@import "base.scss";
 
-:global nav{
+:global{
+
+nav{
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -8,13 +11,14 @@
   color: $gray800;
   font-weight: 400;
   background-color: $gray300;
-  padding: .8rem;
+  padding: 0.5rem 0.75rem;
 
-  div.logo::before{
-    background-color: $accent;
-    width: .5rem;
-    aspect-ratio: 1/1;
-    border-radius: 50%;
+  div.logo{
+    height: 1.5rem;
+
+    img{
+      height: 100%;
+    }
   }
 
   div.pageSelector {
@@ -25,7 +29,7 @@
     }
 
     p:first-child::after {
-      color: $accent;
+      color: $accentDarkmode;
       content: '•';
       padding-inline: .5rem;
     }
@@ -33,6 +37,15 @@
     p.active {
       color: $gray1000;
       font-weight: 600;
+    }
+  }
+
+  div.tools{
+    display: flex;
+    gap: 1rem;
+
+    svg{
+      height: 1.2rem;
     }
   }
 
@@ -53,6 +66,8 @@
       padding: .2rem;
     }
   }
+}
+
 }
 
 
