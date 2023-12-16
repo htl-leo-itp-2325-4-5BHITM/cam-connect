@@ -1,4 +1,7 @@
 var APPLICATION_URL = "http://localhost:8080/api";
+if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
+    APPLICATION_URL = "http://144.24.171.164/api";
+}
 var allRents = [];
 var allStudents = [];
 var allTeachers = [];
@@ -51,6 +54,7 @@ var columns = [
     { name: "Paraphe Lehkraft", inputType: "text", cellType: "teacher_end" },
     { name: "Anmerkung", inputType: "text", cellType: "note" },
     { name: "VStatus", inputType: "none", cellType: "verification_status" },
+    { name: "DeletRow", inputType: "none", cellType: "none" }
 ];
 var statusResolved = {
     "WAITING": "wartend",
@@ -378,7 +382,7 @@ function importDataFromCsv(button) {
     formData.append('file', file);
     console.log(formData, file);
     var importType = button.closest("div").getAttribute("data-import");
-    fetch("http://localhost:8080/api/".concat(importType, "/import"), {
+    fetch(APPLICATION_URL + "/".concat(importType, "/import"), {
         method: 'POST',
         body: formData,
     })
