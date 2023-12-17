@@ -9,6 +9,12 @@ body {
   text-align: center;
 }
 
+.verification {
+  display: none;
+}
+.verification[active=true] {
+  display: block;
+}
 .verification button {
   margin: 1rem;
   padding: 0.3rem;
@@ -26,6 +32,13 @@ body {
 .verification input {
   margin-left: 2rem;
   padding: 0.3rem;
+}
+
+.accepted {
+  display: none;
+}
+.accepted[active=true] {
+  display: block;
 }
 
 /*# sourceMappingURL=confirmation.css.map */

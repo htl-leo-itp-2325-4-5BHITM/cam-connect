@@ -7,6 +7,13 @@ const urlParams = new URLSearchParams(window.location.search)
 let rentId = urlParams.get("id")
 let code = urlParams.get("vcode")
 
+if (urlParams.get("isAccepted")){
+    document.querySelector(".accepted").setAttribute("active", "true");
+    confirmRent("confirmed")
+} else{
+    document.querySelector(".verification").setAttribute("active", "true");
+}
+
 fetch(APPLICATION_URL + `/rent/getbyid/${rentId}`)
     .then(result => {
         return result.json()
