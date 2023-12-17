@@ -1,35 +1,31 @@
-package at.camconnect.model.DeviceTypes.attributes;
+package at.camconnect.model;
 
-import at.camconnect.model.DeviceTypes.CameraType;
-import at.camconnect.model.DeviceTypes.DroneType;
 import jakarta.persistence.*;
 
 @Entity
-public class CameraResolution {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public abstract class DeviceTypeAttribute {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "camera_resolution_seq")
     @SequenceGenerator(name = "camera_resolution_seq", sequenceName = "CAMERA_RESOLUTION_SEQ", allocationSize = 1)
-    private long resolution_id;
-
+    private long attribute_id;
     private String name;
-
     private String details;
 
-    public CameraResolution(long resolution_id, String name, String details) {
-        this.resolution_id = resolution_id;
+    public DeviceTypeAttribute(String name, String details) {
         this.name = name;
         this.details = details;
     }
 
-    public CameraResolution() {
+    public DeviceTypeAttribute() {
     }
 
-    public long getResolution_id() {
-        return resolution_id;
+    public long getAttribute_id() {
+        return attribute_id;
     }
 
-    public void setResolution_id(long resolution_id) {
-        this.resolution_id = resolution_id;
+    public void setAttribute_id(long attribute_id) {
+        this.attribute_id = attribute_id;
     }
 
     public String getName() {

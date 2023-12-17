@@ -1,171 +1,175 @@
 @startuml
-   skinparam linetype ortho
+  skinparam linetype ortho
 
-   entity DeviceType {
-        * type_id: Long
-        --
-        * name: String
-        * image: image
-    }
+	entity DeviceType {
+		* type_id: Long
+		--
+		* name: String
+		* image: image
+	}
 
-    entity CameraType {
-        --
-        * sensor_id: Long
-        * resolution_id: Long
-        * mount_id: Long
-        * framerate: int
-        * autofocus: boolean
-    }
+	entity CameraType {
+		--
+		* sensor_id: Long
+		* resolution_id: Long
+		* mount_id: Long
+		* framerate: int
+		* autofocus: boolean
+	}
 
-    entity DroneType {
-        --
-        * sensor_id: Long
-        * resolution_id: Long
-        * max_range: int
-    }
+	entity DroneType {
+		--
+		* sensor_id: Long
+		* resolution_id: Long
+		* max_range: int
+	}
 
-    entity LensType {
-        --
-        * f_stop: double
-        * mount_id: Long
-        * focal_length: int
-    }
+	entity LensType {
+		--
+		* f_stop: double
+		* mount_id: Long
+		* focal_length: int
+	}
 
-    entity AudioType {
-        --
-        * windblocker: boolean
-        * wireless: boolean
-        * needs_recorder: boolean
-    }
+	entity AudioType {
+		--
+		* windblocker: boolean
+		* wireless: boolean
+		* needs_recorder: boolean
+	}
 
-    entity LightType {
-        --
-        * watts: int
-        * rgb: boolean
-        * variable_temperature: boolean
-    }
+	entity LightType {
+		--
+		* watts: int
+		* rgb: boolean
+		* variable_temperature: boolean
+	}
 
-    entity TripodType {
-        --
-        * height: int
-        * head_id: Long
-    }
+	entity TripodType {
+		--
+		* height: int
+		* head_id: Long
+	}
 
-    entity StabilizerType {
-        --
-        * max_weight: int
-        * number_of_axis: int
-    }
+	entity StabilizerType {
+		--
+		* max_weight: int
+		* number_of_axis: int
+	}
 
-    DeviceType <|-down- CameraType
-    DeviceType <|-down- AudioType
-    DeviceType <|-down- LightType
-    DeviceType <|-down- TripodType
-    DeviceType <|-down- StabilizerType
-    DeviceType <|-down- DroneType
-    DeviceType <|-down- LensType
+	DeviceType <|-down- CameraType
+	DeviceType <|-down- AudioType
+	DeviceType <|-down- LightType
+	DeviceType <|-down- TripodType
+	DeviceType <|-down- StabilizerType
+	DeviceType <|-down- DroneType
+	DeviceType <|-down- LensType
 
-    entity TripodHead {
-        * head_id: Long
-        --
-        * name: String
-    }
+	entity DeviceTypeAttribute {
+		* attribute_id: Long
+		--
+		* name: String
+		* details: String
+	}
 
-    entity LensMount {
-        * mount_id: Long
-        --
-        * name: String
-    }
+	entity TripodHead {
+	}
 
-    entity CameraSensor {
-        * sensor_id: Long
-        --
-        * name: String
-    }
+	entity LensMount {
+	}
 
-    entity CameraResolution {
-        * resolution_id: Long
-        --
-        * name: String
-        * details: String
-    }
+	entity CameraSensor {
+		--
+		* size: String
+	}
 
-    TripodType }o--|| TripodHead
-    LensType }o--|| LensMount
-    CameraType }o--|| LensMount
-    CameraType }o--|| CameraSensor
-    DroneType }o--|| CameraSensor
-    DroneType }o--|| CameraResolution
-    CameraType }o--|| CameraResolution
+	entity CameraResolution {
+		--
+		* resolution: String
+	}
 
-    entity Device {
-        * device_id: Long
-        --
-        * number: String
-        * type: Long
-        * serial: String
-        * note: String
-    }
+	DeviceTypeAttribute <|-up- TripodHead
+	DeviceTypeAttribute <|-up- LensMount
+	DeviceTypeAttribute <|-up- CameraSensor
+	DeviceTypeAttribute <|-up- CameraResolution
 
-    entity Rent{
-        * rent_id: Long
-        --
-        * student_id: Long
-        * device_id: Long
-        * teacher_id_start: Long
-        * teacher_id_end: Long
-        * rent_start: LocalDate
-        * rent_end_planned: LocalDate
-        * rent_end_actual: LocalDate
-        * status: RentStatus
-        * verification_code: String
-        * verification_message: String
-    }
 
-    entity Tag {
-        * tag_id : Long
-        --
-        * type_ids: List<DeviceType>
-        * name: String
-        * description: String
-    }
+	TripodType }o--|| TripodHead
+	LensType }o--|| LensMount
+	CameraType }o--|| LensMount
+	CameraType }o--|| CameraSensor
+	DroneType }o--|| CameraSensor
+	DroneType }o--|| CameraResolution
+	CameraType }o--|| CameraResolution
 
-    entity Student {
-        * student_id: Long
-        --
-        * firstname: String
-        * lastname: String
-        * school_class: String
-        * email: String
-        * password: String
-        * username: String
-        * favourites: List<DeviceType>
-    }
+	entity Device {
+		* device_id: Long
+		--
+		* number: String
+		* type: Long
+		* serial: String
+		* note: String
+	}
 
-    entity Teacher {
-        * teacher_id: Long
-        --
-        * firstname: String
-        * lastname: String
-        * password: String
-        * username: String
-    }
+	entity Rent{
+		* rent_id: Long
+		--
+		* student_id: Long
+		* device_id: Long
+		* teacher_id_start: Long
+		* teacher_id_end: Long
+		* rent_start: LocalDate
+		* rent_end_planned: LocalDate
+		* rent_end_actual: LocalDate
+		* status: RentStatus
+		* verification_code: String
+		* verification_message: String
+	}
 
-     entity DeviceSet {
-        * set_id: Long
-        --
-        * name: String
-        * device_types: List<DeviceType>
-    }
+	entity Tag {
+		* tag_id : Long
+		--
+		* type_ids: List<DeviceType>
+		* name: String
+		* description: String
+	}
 
-    Device }o-down-|| DeviceType
-    DeviceType }|-left-o{ DeviceSet
-    DeviceType }o-right-o{ Tag
+	entity Student {
+		* student_id: Long
+		--
+		* firstname: String
+		* lastname: String
+		* school_class: String
+		* email: String
+		* password: String
+		* username: String
+		* favourites: List<DeviceType>
+	}
 
-    Rent }o--|| Device
-    Rent }o-up-|| Student
-    Rent }o-right-|| Teacher
-    Rent }o-right-|| Teacher
+	entity Teacher {
+		* teacher_id: Long
+		--
+		* firstname: String
+		* lastname: String
+		* password: String
+		* username: String
+	}
 
-    Student }o--|| DeviceType
+	entity DeviceSet {
+		* set_id: Long
+		--
+		* name: String
+		* device_types: List<DeviceType>
+	}
+
+	Device }o-down-|| DeviceType
+	DeviceType }|-left-o{ DeviceSet
+	DeviceType }o-right-o{ Tag
+
+	Rent }o--|| Device
+	Rent }o-up-|| Student
+	Rent }o-right-|| Teacher
+	Rent }o-right-|| Teacher
+
+	Student }o--|| DeviceType
 @enduml
