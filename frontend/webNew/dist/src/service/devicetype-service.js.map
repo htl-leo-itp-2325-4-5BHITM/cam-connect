@@ -1,0 +1,1 @@
+{"version":3,"file":"devicetype-service.js","sourceRoot":"","sources":["../../../src/service/devicetype-service.ts"],"names":[],"mappings":"AAAA,qGAAqG;AAErG,0DAA0D","sourcesContent":["//service should request data implement and export interfaces and provide simple set update functions\r\n\r\n//index should simply link between components and services"]}

@@ -2,9 +2,9 @@
 let APPLICATION_URL: string = "http://localhost:8080/api"
 
 // Check if the protocol is either "http:" or "https:"
-if(window.location.protocol === 'http:' || window.location.protocol === 'https:'){
+/**if(window.location.protocol === 'http:' || window.location.protocol === 'https:'){
     APPLICATION_URL = "http://144.24.171.164/api"
-}
+}**/
 
 let allRents: RentComplete[] = []
 let allStudents: Student[] = []

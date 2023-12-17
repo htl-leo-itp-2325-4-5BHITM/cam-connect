@@ -97,10 +97,14 @@ public class RentRepository {
         String verification_code = getById(id).generateVerification_code();
         em.merge(getById(id));
 
-        String url = FRONTEND_URL + "/confirmVerification.html?vcode=" + verification_code + "&id=" + id;
+        String urlDecline = FRONTEND_URL + "/confirmVerification.html?vcode=" + verification_code + "&id=" + id;
+        String urlAccept = urlDecline + "&isAccepted=true";
+
         //plaintext is als backup für den html content, wenn html möglich ist wird nur das angezeigt
-        message.setText("Bitte besuchen Sie " + url + " um ihren Verleih zu bestätigen");
-        message.setHtml("Bitte clicken Sie <a href=\"" + url + "\">hier</a> um den Verleih zu bestätigen");
+        message.setText("Test");
+        message.setHtml("Bitte bestätige oder lehne deinen Verleih ab:<br>" +
+                "<div><a style='margin: 2rem; padding: .5rem 1rem; color: black;' href='" + urlAccept + "'>Bestätigen</a>" +
+                "<a style='margin: 2rem; padding: .5rem 1rem; color: black;' href='" + urlDecline + "'>Ablehnen</a></div>");
 
         return message;
     }

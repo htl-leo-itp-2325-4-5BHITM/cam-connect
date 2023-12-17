@@ -31,6 +31,12 @@ body{
 }
 
 .verification{
+  display: none;
+
+  &[active="true"]{
+    display: block;
+  }
+
   button{
     margin: 1rem;
     padding: .3rem;
@@ -51,5 +57,13 @@ body{
   input{
     margin-left: 2rem;
     padding: .3rem;
+  }
+}
+
+.accepted{
+  display: none;
+
+  &[active="true"]{
+    display: block;
   }
 }
