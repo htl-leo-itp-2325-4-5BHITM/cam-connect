@@ -209,10 +209,29 @@ function generateTable() {
                         break
                     case "delete_row":
                         let button = document.createElement('button');
-                        button.innerHTML = "Löschen"
-                        button.addEventListener("click", () => {
-                            removeRow(allRents[i]?.rent_id)
-                        })
+
+                        switch (allRents[i]?.status){
+                            case null:
+                            case undefined:
+                            case "CREATED":
+                            case "DECLINED":
+                            case "RETURNED":
+                                button.innerHTML = "Löschen"
+                                button.addEventListener("click", () => {
+                                    removeRow(allRents[i]?.rent_id)
+                                })
+                                break
+                            case "WAITING":
+                                button.disabled = true; button.innerHTML = "Löschen"
+                                break
+                            case "CONFIRMED":
+                                button.innerHTML = "Zurückgeben"
+                                button.addEventListener("click", () => {
+                                    returnRent(allRents[i]?.rent_id, allRents[i]?.verification_code)
+                                })
+                                break
+                        }
+
                         cell.appendChild(button)
                         break
                 }
@@ -276,6 +295,25 @@ function generateTable() {
     }
     table.append(...html)
 }
+
+function returnRent(rentId: number, code: string){
+    fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/confirm`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "verification_code": code || "",
+            "verification_status": "RETURNED",
+            "verification_message": " "
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            requestAllRents()
+        })
+        .catch(error => console.error(error));}
 
 function removeRow(rentId: number){
     fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/remove`)

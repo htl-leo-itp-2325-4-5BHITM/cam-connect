@@ -113,7 +113,7 @@ public class RentRepository {
     public void confirm(Long rentId, JsonObject jsonObject) {
         Rent rent = getById(rentId);
 
-        if(!rent.getStatus().equals(RentStatusEnum.WAITING)){
+        if(!rent.getStatus().equals(RentStatusEnum.WAITING) && !rent.getStatus().equals(RentStatusEnum.CONFIRMED)){
             throw new CCException(1205);
         }
 
@@ -129,7 +129,7 @@ public class RentRepository {
             throw new CCException(1106);
         }
 
-        Set<RentStatusEnum> allowedStatus = Set.of(RentStatusEnum.CONFIRMED, RentStatusEnum.DECLINED);
+        Set<RentStatusEnum> allowedStatus = Set.of(RentStatusEnum.CONFIRMED, RentStatusEnum.DECLINED, RentStatusEnum.RETURNED);
         // set only if the current status is allowed and if the verification_code is the same as provided
         if (allowedStatus.contains(verificationStatus) && rent.getVerification_code().equals(verificationCode)) {
             rent.setStatus(verificationStatus);

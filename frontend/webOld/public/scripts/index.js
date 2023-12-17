@@ -76,7 +76,7 @@ function generateTable() {
         var row = document.createElement("tr");
         row.setAttribute("rent_id", String((_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id));
         columns.forEach(function (column) {
-            var _a, _b, _c, _d, _e, _f, _g;
+            var _a, _b, _c, _d, _e, _f, _g, _h;
             var cell = document.createElement("td");
             if (column.inputType !== "none") {
                 var cellinput_1 = document.createElement("input");
@@ -116,11 +116,30 @@ function generateTable() {
                         break;
                     case "delete_row":
                         var button = document.createElement('button');
-                        button.innerHTML = "Löschen";
-                        button.addEventListener("click", function () {
-                            var _a;
-                            removeRow((_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id);
-                        });
+                        switch ((_d = allRents[i]) === null || _d === void 0 ? void 0 : _d.status) {
+                            case null:
+                            case undefined:
+                            case "CREATED":
+                            case "DECLINED":
+                            case "RETURNED":
+                                button.innerHTML = "Löschen";
+                                button.addEventListener("click", function () {
+                                    var _a;
+                                    removeRow((_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id);
+                                });
+                                break;
+                            case "WAITING":
+                                button.disabled = true;
+                                button.innerHTML = "Löschen";
+                                break;
+                            case "CONFIRMED":
+                                button.innerHTML = "Zurückgeben";
+                                button.addEventListener("click", function () {
+                                    var _a, _b;
+                                    returnRent((_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id, (_b = allRents[i]) === null || _b === void 0 ? void 0 : _b.verification_code);
+                                });
+                                break;
+                        }
                         cell.appendChild(button);
                         break;
                 }
@@ -129,7 +148,7 @@ function generateTable() {
                 }
             }
             if (column.cellType == "verification_status") {
-                switch ((_d = allRents[i]) === null || _d === void 0 ? void 0 : _d.status) {
+                switch ((_e = allRents[i]) === null || _e === void 0 ? void 0 : _e.status) {
                     case null:
                     case undefined:
                     case "CREATED":
@@ -145,9 +164,9 @@ function generateTable() {
                     default:
                         var cellChip = document.createElement('div');
                         cellChip.classList.add("verification_chip");
-                        cellChip.setAttribute("status", (_e = allRents[i]) === null || _e === void 0 ? void 0 : _e.status);
-                        cellChip.innerHTML = statusResolved[(_f = allRents[i]) === null || _f === void 0 ? void 0 : _f.status];
-                        if (((_g = allRents[i]) === null || _g === void 0 ? void 0 : _g.status) == "DECLINED") {
+                        cellChip.setAttribute("status", (_f = allRents[i]) === null || _f === void 0 ? void 0 : _f.status);
+                        cellChip.innerHTML = statusResolved[(_g = allRents[i]) === null || _g === void 0 ? void 0 : _g.status];
+                        if (((_h = allRents[i]) === null || _h === void 0 ? void 0 : _h.status) == "DECLINED") {
                             cellChip.setAttribute("data-popup-heading", "Ablehnungsnachricht");
                             cellChip.setAttribute("data-popup-text", "Anfrage nochmal senden");
                             cellChip.addEventListener("click", function () {
@@ -182,6 +201,25 @@ function generateTable() {
         _loop_1(i);
     }
     table.append.apply(table, html);
+}
+function returnRent(rentId, code) {
+    fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/confirm"), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "verification_code": code || "",
+            "verification_status": "RETURNED",
+            "verification_message": " "
+        })
+    })
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+        console.log(data);
+        requestAllRents();
+    })
+        .catch(function (error) { return console.error(error); });
 }
 function removeRow(rentId) {
     fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/remove"))

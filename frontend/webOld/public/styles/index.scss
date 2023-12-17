@@ -42,7 +42,13 @@ a{
 button{
   background-color: transparent;
   border: none;
-  color: hsl(0, 0, 0%)
+  color: hsl(0, 0, 0%);
+
+  &:disabled{
+    cursor: auto;
+    color: #b8b8b8;
+    border-color: #b8b8b8;
+  }
 }
 
 //endregion
