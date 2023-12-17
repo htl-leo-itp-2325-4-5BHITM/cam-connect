@@ -1,5 +1,5 @@
 import {html, render} from "lit-html"
-import styles from '../../../styles/components/global/button.styles.scss'
+import styles from '../../../styles/components/basic/button.styles.scss'
 
 enum Size {MEDIUM="medium", SMALL="small"}
 enum Type {FILLED="filled", OUTLINED="outlined"}

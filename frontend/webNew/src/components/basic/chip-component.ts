@@ -1,6 +1,6 @@
 import {html, render} from "lit-html"
 
-import styles from '../../../styles/components/global/chip.styles.scss'
+import styles from '../../../styles/components/basic/chip.styles.scss'
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 

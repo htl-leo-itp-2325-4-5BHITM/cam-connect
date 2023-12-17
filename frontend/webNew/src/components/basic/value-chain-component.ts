@@ -1,8 +1,8 @@
 import {html, render} from "lit-html"
 
-import styles from '../../../styles/components/global/select.styles.scss'
+import styles from '../../../styles/components/basic/value-chain.styles.scss'
 
-class SelectComponent extends HTMLElement {
+class ValueChainComponent extends HTMLElement {
     constructor() {
         super()
         const shadow = this.attachShadow({mode: "open"})
@@ -16,18 +16,19 @@ class SelectComponent extends HTMLElement {
     }
 
     render() {
-        render(this.select(), this.shadowRoot)
+        render(this.valueChain(), this.shadowRoot)
     }
 
-    select() {
-        const selectElements = this.querySelectorAll("cc-select-element")
+    valueChain() {
+        const selectElements = this.querySelectorAll("*")
         const div = document.createElement('div')
-        div.setAttribute("class", "select")
+        div.classList.add("chain")
 
         selectElements.forEach((elem) => {
             div.appendChild(elem)
         })
+
         return div
     }
 }
-customElements.define("cc-select", SelectComponent)
+customElements.define("cc-value-chain", ValueChainComponent)

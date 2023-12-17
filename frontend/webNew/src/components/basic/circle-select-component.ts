@@ -1,5 +1,5 @@
 import {html, render} from "lit-html"
-import styles from '../../../styles/components/global/circle-select.styles.scss'
+import styles from '../../../styles/components/basic/circle-select.styles.scss'
 
 enum Color {ACCENT="accent", GRAY="gray"}
 enum Type {SINGLE="single", MULTIPLE="multiple"}
