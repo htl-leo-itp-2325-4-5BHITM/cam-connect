@@ -12,13 +12,9 @@ public class TripodHead {
 
     private String name;
 
-    @ManyToOne
-    private TripodType tripodType;
-
-    public TripodHead(long head_id, String name, TripodType tripodType) {
+    public TripodHead(long head_id, String name) {
         this.head_id = head_id;
         this.name = name;
-        this.tripodType = tripodType;
     }
 
     public TripodHead() {
@@ -38,13 +34,5 @@ public class TripodHead {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public TripodType getTripodType() {
-        return tripodType;
-    }
-
-    public void setTripodType(TripodType tripodType) {
-        this.tripodType = tripodType;
     }
 }

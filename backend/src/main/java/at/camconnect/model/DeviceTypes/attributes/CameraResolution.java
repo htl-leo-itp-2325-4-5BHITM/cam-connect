@@ -15,18 +15,10 @@ public class CameraResolution {
 
     private String details;
 
-    @ManyToOne
-    private CameraType cameraType;
-
-    @ManyToOne
-    private DroneType droneType;
-
-    public CameraResolution(long resolution_id, String name, String details, CameraType cameraType, DroneType droneType) {
+    public CameraResolution(long resolution_id, String name, String details) {
         this.resolution_id = resolution_id;
         this.name = name;
         this.details = details;
-        this.cameraType = cameraType;
-        this.droneType = droneType;
     }
 
     public CameraResolution() {
@@ -54,21 +46,5 @@ public class CameraResolution {
 
     public void setDetails(String details) {
         this.details = details;
-    }
-
-    public CameraType getCameraType() {
-        return cameraType;
-    }
-
-    public void setCameraType(CameraType cameraType) {
-        this.cameraType = cameraType;
-    }
-
-    public DroneType getDroneType() {
-        return droneType;
-    }
-
-    public void setDroneType(DroneType droneType) {
-        this.droneType = droneType;
     }
 }
