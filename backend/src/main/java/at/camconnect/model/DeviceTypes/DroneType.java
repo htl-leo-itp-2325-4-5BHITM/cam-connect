@@ -1,8 +1,8 @@
 package at.camconnect.model.DeviceTypes;
 
 import at.camconnect.model.DeviceType;
-import at.camconnect.model.DeviceTypes.attributes.CameraResolution;
-import at.camconnect.model.DeviceTypes.attributes.CameraSensor;
+import at.camconnect.model.DeviceTypeAttributes.CameraResolution;
+import at.camconnect.model.DeviceTypeAttributes.CameraSensor;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
