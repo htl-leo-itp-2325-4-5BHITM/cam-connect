@@ -1,44 +1,36 @@
-import {html, render} from "lit-html"
+import {LitElement, html, PropertyValues} from 'lit'
+import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/button.styles.scss'
 
 enum Size {MEDIUM="medium", SMALL="small"}
 enum Type {FILLED="filled", OUTLINED="outlined"}
 enum Color {ACCENT="accent", GRAY="gray"}
 
-/**
- * @Param size: medium or small button
- * @Param type: filled or outlined button
- * @Param color: accent or gray button
- * @Param value: text content of the button
- */
-class ButtonComponent extends HTMLElement {
-    constructor() {
-        super()
-        const shadow = this.attachShadow({mode: "open"})
-        const style = document.createElement('style');
-        style.textContent = styles;
-        shadow.appendChild(style)
-    }
-    connectedCallback() {
-        this.render()
-    }
+@customElement('cc-button')
+export class ButtonComponent extends LitElement {
+    @property({type: Size})
+    size?: Size = Size.MEDIUM;
+
+    @property({type: Type})
+    type?: Type = Type.FILLED;
+
+    @property({type: Color})
+    color?: Color = Color.ACCENT;
+
+    @property({type: String})
+    value?: String = "Button";
 
     render() {
-        const size = this.getAttribute('size') as Size
-        const type = this.getAttribute('type') as Type
-        const color = this.getAttribute('color') as Color
-        const value = this.innerHTML
-        render(this.button(value, size, type, color), this.shadowRoot)
-    }
-
-    button (value, size, type, color) {
-        let button = document.createElement("button")
-        button.classList.add("cc-button")
-        button.setAttribute("color", color || "accent")
-        button.setAttribute("type", type || "filled")
-        button.setAttribute("size", size || "medium")
-        button.innerHTML = value || "Button"
-        return button;
+        return html`
+            <style>${styles}</style>
+            <button class="cc-button" color="${this.color}" type="${this.type}" size="${this.size}">
+                ${this.value}
+            </button>`
     }
 }
-customElements.define("cc-button", ButtonComponent)
+
+declare global {
+    interface HTMLElementTagNameMap {
+        "cc-button": ButtonComponent;
+    }
+}

@@ -1,4 +1,6 @@
-import { render } from "lit-html";
+import { __decorate } from "tslib";
+import { LitElement, html } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 import styles from '../../../styles/components/basic/button.styles.scss';
 var Size;
 (function (Size) {
@@ -15,39 +17,36 @@ var Color;
     Color["ACCENT"] = "accent";
     Color["GRAY"] = "gray";
 })(Color || (Color = {}));
-/**
- * @Param size: medium or small button
- * @Param type: filled or outlined button
- * @Param color: accent or gray button
- * @Param value: text content of the button
- */
-class ButtonComponent extends HTMLElement {
+let ButtonComponent = class ButtonComponent extends LitElement {
     constructor() {
-        super();
-        const shadow = this.attachShadow({ mode: "open" });
-        const style = document.createElement('style');
-        style.textContent = styles;
-        shadow.appendChild(style);
-    }
-    connectedCallback() {
-        this.render();
+        super(...arguments);
+        this.size = Size.MEDIUM;
+        this.type = Type.FILLED;
+        this.color = Color.ACCENT;
+        this.value = "Button";
     }
     render() {
-        const size = this.getAttribute('size');
-        const type = this.getAttribute('type');
-        const color = this.getAttribute('color');
-        const value = this.innerHTML;
-        render(this.button(value, size, type, color), this.shadowRoot);
+        return html `
+            <style>${styles}</style>
+            <button class="cc-button" color="${this.color}" type="${this.type}" size="${this.size}">
+                ${this.value}
+            </button>`;
     }
-    button(value, size, type, color) {
-        let button = document.createElement("button");
-        button.classList.add("cc-button");
-        button.setAttribute("color", color || "accent");
-        button.setAttribute("type", type || "filled");
-        button.setAttribute("size", size || "medium");
-        button.innerHTML = value || "Button";
-        return button;
-    }
-}
-customElements.define("cc-button", ButtonComponent);
+};
+__decorate([
+    property({ type: Size })
+], ButtonComponent.prototype, "size", void 0);
+__decorate([
+    property({ type: Type })
+], ButtonComponent.prototype, "type", void 0);
+__decorate([
+    property({ type: Color })
+], ButtonComponent.prototype, "color", void 0);
+__decorate([
+    property({ type: String })
+], ButtonComponent.prototype, "value", void 0);
+ButtonComponent = __decorate([
+    customElement('cc-button')
+], ButtonComponent);
+export { ButtonComponent };
 //# sourceMappingURL=button-component.js.map

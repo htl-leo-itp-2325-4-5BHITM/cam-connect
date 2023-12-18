@@ -1,44 +1,33 @@
-import {html, render} from "lit-html"
+import {LitElement, html, PropertyValues} from 'lit'
+import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/circle-select.styles.scss'
 
 enum Color {ACCENT="accent", GRAY="gray"}
 enum Type {SINGLE="single", MULTIPLE="multiple"}
 
-/**
- * @Param color: accent or gray selector
- * @Param type: single or multiple selector
- */
-class CircleSelectComponent extends HTMLElement {
-    constructor() {
-        super()
-        const style = document.createElement('style');
-        style.textContent = styles;
-        this.appendChild(style)
-    }
-    connectedCallback() {
-        const color = this.getAttribute("color") as Color
-        const type = this.getAttribute("type") as Type
 
-        this.appendChild(this.circleSelect(color, type))
-    }
+@customElement('cc-circle-select')
+export class CircleSelectComponent extends LitElement {
+    @property({type: Color})
+    color?: Color = Color.ACCENT;
 
-    circleSelect(color, type) {
-        const div = document.createElement("div")
-        div.classList.add(color || "accent")
-        div.classList.add(type || "single")
+    @property({type: Type})
+    type?: Type = Type.SINGLE;
 
-        const image = document.createElement("img")
-        //TODO possibly import svg at top and append as plain html so that it can be colored without the filter workaround
-        image.src = `../../assets/${div.classList.contains("active") ? "checked" : "unchecked"}_${type || "single"}.svg`
-        div.addEventListener("click", this.swapCheckbox.bind(this, image, type))
-        div.appendChild(image)
+    @property({type: Boolean})
+    checked?: Boolean = false;
 
-        return div
-    }
-
-    swapCheckbox(image, type) {
-        this.classList.toggle("active")
-        image.src = `../../assets/${this.classList.contains("active") ? "checked" : "unchecked"}_${type || "single"}.svg`
+    render() {
+        return html`
+            <style>${styles}</style>
+            <div @click="${this.checked = !this.checked}">
+                <img src="../../assets/${this.checked ? "checked" : "unchecked"}_${this.type}.svg" alt="">\
+            </div>`
     }
 }
-customElements.define("cc-circle-select", CircleSelectComponent)
+
+declare global {
+    interface HTMLElementTagNameMap {
+        "cc-circle-select": CircleSelectComponent;
+    }
+}
