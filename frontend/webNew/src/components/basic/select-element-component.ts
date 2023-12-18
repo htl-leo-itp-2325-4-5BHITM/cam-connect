@@ -1,36 +1,38 @@
-import {html, render} from "lit-html"
+import {LitElement, html, PropertyValues} from 'lit'
+import {customElement, property} from 'lit/decorators.js'
+import styles from '../../../styles/components/basic/select.styles.scss'
+import {SelectComponent} from "./select-component"
 
-class SelectElementComponent extends HTMLElement {
-    constructor() {
-        super()
-    }
-    connectedCallback() {
-        this.render()
+enum Status {CONFIRMED="bestätigt", WAITING="warten", DECLINED="abgelehnt"}
+
+@customElement('cc-select-element')
+export class SelectElementComponent extends LitElement {
+    @property({type: Boolean})
+    selected?: Boolean = false;
+
+    toggleOption(event) { //todo i don't really know how to get back into the shadow root to find the active element
+        const elem = event.currentTarget;
+        if (elem.closest(".select")) {
+            const select = elem.closest(".select");
+            const activeElement = select.querySelector(".active");
+            if (activeElement) {
+                activeElement.classList.remove("active");
+            }
+            elem.querySelector("select-element").classList.add("active");
+        }
     }
 
     render() {
-        const div = document.createElement("div")
-        div.classList.add("select-element")
-        div.addEventListener('click', this.toggleOption.bind(div))
-
-        const option = document.createElement("p")
-        option.innerHTML = this.innerHTML
-        div.appendChild(option)
-
-        if(!!this.getAttribute("selected")){
-            this.removeAttribute("selected")
-            div.classList.add("active")
-        }
-
-        this.innerHTML = ""
-        this.appendChild(div)
-    }
-
-    toggleOption() {
-        if(this.closest(".select").querySelector(".active")){
-            this.closest(".select").querySelector(".active").classList.remove("active")
-        }
-        this.classList.add("active")
+        return html`
+            <style>${styles}</style>
+            <div class="select-element ${this.selected ? "active" : ""}" @click="${this.toggleOption}">
+                <p>${this.innerHTML}</p>
+            </div>`
     }
 }
-customElements.define("cc-select-element", SelectElementComponent)
+
+declare global {
+    interface HTMLElementTagNameMap {
+        "cc-select-element": SelectElementComponent;
+    }
+}

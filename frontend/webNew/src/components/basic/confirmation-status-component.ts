@@ -1,40 +1,28 @@
-import {html, render} from "lit-html"
-
+import {LitElement, html, PropertyValues} from 'lit'
+import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/confirmation-status.styles.scss'
 
-enum Status {CONFIRMED="bestätigt", WAITING="warten", DECLINED="abgelehnt"}
+enum Status {CONFIRMED="bestätigt", WAITING="warten", DECLINED="abgelehnt", RETURNED="zurückgegeben"}
 
-/**
- * @Param status: is "bestätigt", "warten", "abgelehnt"
- * @Param isBig: if the status is big you see the text, otherwise not
- */
-class ConfirmationStatusComponent extends HTMLElement {
-    constructor() {
-        super()
-        const shadow = this.attachShadow({mode: "open"})
+@customElement('cc-confirmation-status')
+export class ConfirmationStatusComponent extends LitElement {
+    @property({type: Status})
+    status?: Status = Status.WAITING
 
-        const style = document.createElement('style')
-        style.textContent = styles
-        shadow.appendChild(style)
-    }
-    connectedCallback() {
-        this.render()
-    }
+    @property({type: Boolean})
+    isBig?: Boolean = false;
 
     render() {
-        const status = this.getAttribute('status') as Status
-        const isBig = this.getAttribute('isBig')
-        render(this.confirmationStatus(status, isBig), this.shadowRoot)
-    }
-    
-    confirmationStatus (status, isBig) {
-        let div = document.createElement('div')
-        div.classList.add("cc-confirmation-status")
-        div.setAttribute("status", status || "WAITING")
-        div.setAttribute("isBig", isBig || false)
-        div.innerHTML = isBig ? status ? status.toString() : "warten" : ""
-
-        return div
+        return html`
+            <style>${styles}</style>
+            <div class="cc-confirmation-status" status="${this.status}" isBig="${this.isBig}">
+                ${this.isBig ? this.status.toString() : ""}
+            </div>`
     }
 }
-customElements.define("cc-confirmation-status", ConfirmationStatusComponent)
+
+declare global {
+    interface HTMLElementTagNameMap {
+        "cc-confirmation-status": ConfirmationStatusComponent;
+    }
+}

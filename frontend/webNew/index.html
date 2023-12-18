@@ -28,20 +28,29 @@
 
     <cc-filter accountname="yanik kendler"></cc-filter>
     
-    <cc-button color="accent" size="large" type="filled"></cc-button>
-    <cc-button color="accent" size="large" type="outlined"></cc-button>
-    <cc-button color="gray" size="large" type="filled"></cc-button>
-    <cc-button color="gray" size="large" type="outlined"></cc-button>
+    <cc-button color="accent" size="big" type="filled"></cc-button>
+    <cc-button color="accent" size="small" type="outlined"></cc-button>
+    <cc-button color="accent" size="xsmall" type="text"></cc-button>
+    <cc-button color="gray" size="big" type="filled"></cc-button>
+    <cc-button color="gray" size="small" type="outlined"></cc-button>
+    <cc-button color="gray" size="xsmall" type="text"></cc-button>
 
     <cc-circle-select></cc-circle-select>
     <cc-circle-select type="multiple"></cc-circle-select>
     <cc-circle-select color="gray"></cc-circle-select>
 
     <cc-confirmation-status status="CONFIRMED" isBig="true"></cc-confirmation-status>
+    <cc-confirmation-status status="WAITING"></cc-confirmation-status>
+    <cc-confirmation-status status="DECLINED" isBig="true"></cc-confirmation-status>
+    <cc-confirmation-status status="RETURNED"></cc-confirmation-status>
+
 
     <cc-property-value></cc-property-value>
 
     <cc-select>
+        <cc-select-element>Test</cc-select-element>
+        <cc-select-element>Test</cc-select-element>
+        <cc-select-element>Test</cc-select-element>
     </cc-select>
 
     <cc-value-chain>
@@ -50,8 +59,7 @@
         <p>Peter</p>
     </cc-value-chain>
 
-    <cc-filter-element>test</cc-filter-element>
-
+    <cc-select-element>test</cc-select-element>
 
     <div style="display: flex;">
         <cc-chip color="accent" size="small"></cc-chip>
@@ -72,6 +80,10 @@
     <div style="display: flex;">
         <cc-chip color="gray" size="small" removeable="true"></cc-chip>
         <cc-chip color="gray" removeable="true"></cc-chip>
+    </div>
+    <div style="display: flex;">
+        <cc-chip color="lightgray" size="small" removeable="true"></cc-chip>
+        <cc-chip color="lightgray" removeable="true"></cc-chip>
     </div>
 </body>
 </html>

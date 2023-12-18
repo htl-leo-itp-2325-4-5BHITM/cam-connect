@@ -4,13 +4,15 @@ import { customElement, property } from 'lit/decorators.js';
 import styles from '../../../styles/components/basic/button.styles.scss';
 var Size;
 (function (Size) {
-    Size["MEDIUM"] = "medium";
+    Size["MEDIUM"] = "big";
     Size["SMALL"] = "small";
+    Size["XSMALL"] = "xsmall";
 })(Size || (Size = {}));
 var Type;
 (function (Type) {
     Type["FILLED"] = "filled";
     Type["OUTLINED"] = "outlined";
+    Type["TEXT"] = "text";
 })(Type || (Type = {}));
 var Color;
 (function (Color) {

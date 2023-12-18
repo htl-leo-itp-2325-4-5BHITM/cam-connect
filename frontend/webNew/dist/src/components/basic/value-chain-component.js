@@ -1,28 +1,19 @@
-import { render } from "lit-html";
+import { __decorate } from "tslib";
+import { LitElement, html } from 'lit';
+import { customElement } from 'lit/decorators.js';
 import styles from '../../../styles/components/basic/value-chain.styles.scss';
-class ValueChainComponent extends HTMLElement {
-    constructor() {
-        super();
-        const shadow = this.attachShadow({ mode: "open" });
-        const style = document.createElement('style');
-        style.textContent = styles;
-        shadow.appendChild(style);
-    }
-    connectedCallback() {
-        this.render();
-    }
+let ValueChainComponent = class ValueChainComponent extends LitElement {
     render() {
-        render(this.valueChain(), this.shadowRoot);
+        const selectElements = Array.from(this.querySelectorAll('*'));
+        return html `
+            <style>${styles}</style>
+            <div class="chain">
+                ${selectElements.map((value) => html `${value}`)}
+            </div>`;
     }
-    valueChain() {
-        const selectElements = this.querySelectorAll("*");
-        const div = document.createElement('div');
-        div.classList.add("chain");
-        selectElements.forEach((elem) => {
-            div.appendChild(elem);
-        });
-        return div;
-    }
-}
-customElements.define("cc-value-chain", ValueChainComponent);
+};
+ValueChainComponent = __decorate([
+    customElement('cc-value-chain')
+], ValueChainComponent);
+export { ValueChainComponent };
 //# sourceMappingURL=value-chain-component.js.map

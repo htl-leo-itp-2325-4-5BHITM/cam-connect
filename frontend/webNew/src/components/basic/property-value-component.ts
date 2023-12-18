@@ -1,43 +1,29 @@
-import {html, render} from "lit-html"
-
+import {LitElement, html, PropertyValues} from 'lit'
+import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/property-value.styles.scss'
 
-/**
- * @Param property: is the text which comes first
- * @Param value: is the text which comes after the property
- */
-class PropertyValueComponent extends HTMLElement {
-    constructor() {
-        super()
-        const shadow = this.attachShadow({mode: "open"})
+enum Status {CONFIRMED="bestätigt", WAITING="warten", DECLINED="abgelehnt"}
 
-        const style = document.createElement('style');
-        style.textContent = styles;
-        shadow.appendChild(style)
-    }
-    connectedCallback() {
-        this.render()
-    }
+@customElement('cc-property-value')
+export class PropertyValueComponent extends LitElement {
+    @property({type: String})
+    property?: String = 'Property';
+
+    @property({type: String})
+    value?: String = 'Value';
 
     render() {
-        const property = this.getAttribute("property")
-        const value = this.getAttribute("value")
-        render(this.rentStatus(property, value), this.shadowRoot)
-    }
-    
-    rentStatus(property, value) {
-        let div = document.createElement('div')
-
-        let propertyTag = document.createElement('p')
-        propertyTag.classList.add("property")
-        propertyTag.innerHTML = `${property || "Property"}: `
-        let valueTag = document.createElement('p')
-        valueTag.classList.add("value")
-        valueTag.innerHTML = value || "Value"
-
-        div.appendChild(propertyTag)
-        div.appendChild(valueTag)
-        return div
+        return html`
+            <style>${styles}</style>
+            <div>
+                <p class="property">${this.property}:</p>
+                <p class="value">${this.value}</p>
+            </div>`
     }
 }
-customElements.define("cc-property-value", PropertyValueComponent)
+
+declare global {
+    interface HTMLElementTagNameMap {
+        "cc-property-value": PropertyValueComponent;
+    }
+}

@@ -29,6 +29,10 @@
   &[color="GRAY"]{
     background-color: $gray500;
   }
+  &[color="LIGHTGRAY"]{
+    background-color: $gray700;
+    color: $gray300;
+  }
 
   &[size="BIG"]{
     font-size: 1.2rem;

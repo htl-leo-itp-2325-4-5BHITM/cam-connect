@@ -1,39 +1,36 @@
-import { render } from "lit-html";
+import { __decorate } from "tslib";
+import { LitElement, html } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 import styles from '../../../styles/components/basic/confirmation-status.styles.scss';
 var Status;
 (function (Status) {
     Status["CONFIRMED"] = "best\u00E4tigt";
     Status["WAITING"] = "warten";
     Status["DECLINED"] = "abgelehnt";
+    Status["RETURNED"] = "zur\u00FCckgegeben";
 })(Status || (Status = {}));
-/**
- * @Param status: is "bestätigt", "warten", "abgelehnt"
- * @Param isBig: if the status is big you see the text, otherwise not
- */
-class ConfirmationStatusComponent extends HTMLElement {
+let ConfirmationStatusComponent = class ConfirmationStatusComponent extends LitElement {
     constructor() {
-        super();
-        const shadow = this.attachShadow({ mode: "open" });
-        const style = document.createElement('style');
-        style.textContent = styles;
-        shadow.appendChild(style);
-    }
-    connectedCallback() {
-        this.render();
+        super(...arguments);
+        this.status = Status.WAITING;
+        this.isBig = false;
     }
     render() {
-        const status = this.getAttribute('status');
-        const isBig = this.getAttribute('isBig');
-        render(this.confirmationStatus(status, isBig), this.shadowRoot);
+        return html `
+            <style>${styles}</style>
+            <div class="cc-confirmation-status" status="${this.status}" isBig="${this.isBig}">
+                ${this.isBig ? this.status.toString() : ""}
+            </div>`;
     }
-    confirmationStatus(status, isBig) {
-        let div = document.createElement('div');
-        div.classList.add("cc-confirmation-status");
-        div.setAttribute("status", status || "WAITING");
-        div.setAttribute("isBig", isBig || false);
-        div.innerHTML = isBig ? status ? status.toString() : "warten" : "";
-        return div;
-    }
-}
-customElements.define("cc-confirmation-status", ConfirmationStatusComponent);
+};
+__decorate([
+    property({ type: Status })
+], ConfirmationStatusComponent.prototype, "status", void 0);
+__decorate([
+    property({ type: Boolean })
+], ConfirmationStatusComponent.prototype, "isBig", void 0);
+ConfirmationStatusComponent = __decorate([
+    customElement('cc-confirmation-status')
+], ConfirmationStatusComponent);
+export { ConfirmationStatusComponent };
 //# sourceMappingURL=confirmation-status-component.js.map

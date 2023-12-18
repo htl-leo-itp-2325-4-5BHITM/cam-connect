@@ -1,31 +1,42 @@
-class SelectElementComponent extends HTMLElement {
+import { __decorate } from "tslib";
+import { LitElement, html } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import styles from '../../../styles/components/basic/select.styles.scss';
+var Status;
+(function (Status) {
+    Status["CONFIRMED"] = "best\u00E4tigt";
+    Status["WAITING"] = "warten";
+    Status["DECLINED"] = "abgelehnt";
+})(Status || (Status = {}));
+let SelectElementComponent = class SelectElementComponent extends LitElement {
     constructor() {
-        super();
+        super(...arguments);
+        this.selected = false;
     }
-    connectedCallback() {
-        this.render();
+    toggleOption(event) {
+        const elem = event.currentTarget;
+        if (elem.closest(".select")) {
+            const select = elem.closest(".select");
+            const activeElement = select.querySelector(".active");
+            if (activeElement) {
+                activeElement.classList.remove("active");
+            }
+            elem.querySelector("select-element").classList.add("active");
+        }
     }
     render() {
-        const div = document.createElement("div");
-        div.classList.add("select-element");
-        div.addEventListener('click', this.toggleOption.bind(div));
-        const option = document.createElement("p");
-        option.innerHTML = this.innerHTML;
-        div.appendChild(option);
-        if (!!this.getAttribute("selected")) {
-            this.removeAttribute("selected");
-            div.classList.add("active");
-        }
-        this.innerHTML = "";
-        this.appendChild(div);
+        return html `
+            <style>${styles}</style>
+            <div class="select-element ${this.selected ? "active" : ""}" @click="${this.toggleOption}">
+                <p>${this.innerHTML}</p>
+            </div>`;
     }
-    toggleOption() {
-        if (this.closest(".select").querySelector(".active")) {
-            this.closest(".select").querySelector(".active").classList.remove("active");
-        }
-        this.classList.add("active");
-    }
-}
-customElements.define("cc-select-element", SelectElementComponent);
-export {};
+};
+__decorate([
+    property({ type: Boolean })
+], SelectElementComponent.prototype, "selected", void 0);
+SelectElementComponent = __decorate([
+    customElement('cc-select-element')
+], SelectElementComponent);
+export { SelectElementComponent };
 //# sourceMappingURL=select-element-component.js.map

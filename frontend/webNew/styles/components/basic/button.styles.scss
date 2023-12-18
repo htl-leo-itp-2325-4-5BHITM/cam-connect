@@ -24,9 +24,22 @@
     }
   }
 
+  &[type="text"]{
+    background: transparent;
+    border: none;
+
+    &[color="accent"]{
+      color: $accentDarkmode;
+    }
+  }
+
   &[size = "small"]{
     font-size: 1.125rem;
     min-width: 8ch;
+  }
+  &[size = "xsmall"]{
+    font-size: 1rem;
+    min-width: 6ch;
   }
 
   &[color = "accent"]{

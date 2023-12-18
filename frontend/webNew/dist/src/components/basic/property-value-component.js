@@ -1,37 +1,36 @@
-import { render } from "lit-html";
+import { __decorate } from "tslib";
+import { LitElement, html } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 import styles from '../../../styles/components/basic/property-value.styles.scss';
-/**
- * @Param property: is the text which comes first
- * @Param value: is the text which comes after the property
- */
-class PropertyValueComponent extends HTMLElement {
+var Status;
+(function (Status) {
+    Status["CONFIRMED"] = "best\u00E4tigt";
+    Status["WAITING"] = "warten";
+    Status["DECLINED"] = "abgelehnt";
+})(Status || (Status = {}));
+let PropertyValueComponent = class PropertyValueComponent extends LitElement {
     constructor() {
-        super();
-        const shadow = this.attachShadow({ mode: "open" });
-        const style = document.createElement('style');
-        style.textContent = styles;
-        shadow.appendChild(style);
-    }
-    connectedCallback() {
-        this.render();
+        super(...arguments);
+        this.property = 'Property';
+        this.value = 'Value';
     }
     render() {
-        const property = this.getAttribute("property");
-        const value = this.getAttribute("value");
-        render(this.rentStatus(property, value), this.shadowRoot);
+        return html `
+            <style>${styles}</style>
+            <div>
+                <p class="property">${this.property}:</p>
+                <p class="value">${this.value}</p>
+            </div>`;
     }
-    rentStatus(property, value) {
-        let div = document.createElement('div');
-        let propertyTag = document.createElement('p');
-        propertyTag.classList.add("property");
-        propertyTag.innerHTML = `${property || "Property"}: `;
-        let valueTag = document.createElement('p');
-        valueTag.classList.add("value");
-        valueTag.innerHTML = value || "Value";
-        div.appendChild(propertyTag);
-        div.appendChild(valueTag);
-        return div;
-    }
-}
-customElements.define("cc-property-value", PropertyValueComponent);
+};
+__decorate([
+    property({ type: String })
+], PropertyValueComponent.prototype, "property", void 0);
+__decorate([
+    property({ type: String })
+], PropertyValueComponent.prototype, "value", void 0);
+PropertyValueComponent = __decorate([
+    customElement('cc-property-value')
+], PropertyValueComponent);
+export { PropertyValueComponent };
 //# sourceMappingURL=property-value-component.js.map

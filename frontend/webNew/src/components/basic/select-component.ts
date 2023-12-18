@@ -1,33 +1,22 @@
-import {html, render} from "lit-html"
-
+import {LitElement, html, PropertyValues} from 'lit'
+import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/select.styles.scss'
 
-class SelectComponent extends HTMLElement {
-    constructor() {
-        super()
-        const shadow = this.attachShadow({mode: "open"})
-
-        const style = document.createElement('style');
-        style.textContent = styles;
-        shadow.appendChild(style)
-    }
-    connectedCallback() {
-        this.render()
-    }
-
+@customElement('cc-select')
+export class SelectComponent extends LitElement {
     render() {
-        render(this.select(), this.shadowRoot)
-    }
+        const selectElements = Array.from(this.querySelectorAll('cc-select-element'))
 
-    select() {
-        const selectElements = this.querySelectorAll("cc-select-element")
-        const div = document.createElement('div')
-        div.setAttribute("class", "select")
-
-        selectElements.forEach((elem) => {
-            div.appendChild(elem)
-        })
-        return div
+        return html`
+            <style>${styles}</style>
+            <div class="select">
+                ${selectElements.map((value) => html`${value}`)}
+            </div>`
     }
 }
-customElements.define("cc-select", SelectComponent)
+
+declare global {
+    interface HTMLElementTagNameMap {
+        "cc-select": SelectComponent;
+    }
+}

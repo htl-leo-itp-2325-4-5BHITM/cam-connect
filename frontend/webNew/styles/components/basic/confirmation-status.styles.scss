@@ -29,4 +29,7 @@
   &[status="DECLINED"]{
     background-color: $bad;
   }
+  &[status="RETURNED"]{
+    background-color: $gray600;
+  }
 }

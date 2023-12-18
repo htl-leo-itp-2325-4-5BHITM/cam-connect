@@ -2,8 +2,8 @@ import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/button.styles.scss'
 
-enum Size {MEDIUM="medium", SMALL="small"}
-enum Type {FILLED="filled", OUTLINED="outlined"}
+enum Size {MEDIUM="big", SMALL="small", XSMALL="xsmall"}
+enum Type {FILLED="filled", OUTLINED="outlined", TEXT="text"}
 enum Color {ACCENT="accent", GRAY="gray"}
 
 @customElement('cc-button')
