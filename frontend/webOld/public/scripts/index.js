@@ -203,7 +203,7 @@ function generateTable() {
     table.append.apply(table, html);
 }
 function returnRent(rentId, code) {
-    fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/confirm"), {
+    fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/return"), {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

@@ -297,7 +297,7 @@ function generateTable() {
 }
 
 function returnRent(rentId: number, code: string){
-    fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/confirm`, {
+    fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/return`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

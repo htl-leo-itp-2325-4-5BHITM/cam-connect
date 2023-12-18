@@ -5,12 +5,14 @@ import at.camconnect.statusSystem.CCResponse;
 import at.camconnect.model.Rent;
 import at.camconnect.repository.RentRepository;
 import jakarta.inject.Inject;
+import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import javax.print.attribute.standard.Media;
 import java.util.List;
 
 @Path("/api/rent")
@@ -65,6 +67,18 @@ public class RentResource {
         try {
             rentRepository.confirm(id, jsonObject);
         } catch(CCException ex) {
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/getbyid/{id: [0-9]+}/return")
+    public Response returnRent(@PathParam("id")Long id, JsonObject jsonObject){
+        try {
+            rentRepository.returnRent(id, jsonObject);
+        } catch(CCException ex){
             return CCResponse.error(ex);
         }
         return CCResponse.ok();

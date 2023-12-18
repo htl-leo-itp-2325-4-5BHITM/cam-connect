@@ -11,6 +11,7 @@ import io.vertx.ext.mail.MailClient;
 import io.vertx.ext.mail.MailMessage;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
 import jakarta.persistence.EntityManager;
@@ -101,7 +102,6 @@ public class RentRepository {
         String urlAccept = urlDecline + "&isAccepted=true";
 
         //plaintext is als backup für den html content, wenn html möglich ist wird nur das angezeigt
-        message.setText("Test");
         message.setHtml("Bitte bestätige oder lehne deinen Verleih ab:<br>" +
                 "<div><a style='margin: 2rem; padding: .5rem 1rem; color: black;' href='" + urlAccept + "'>Bestätigen</a>" +
                 "<a style='margin: 2rem; padding: .5rem 1rem; color: black;' href='" + urlDecline + "'>Ablehnen</a></div>");
@@ -138,6 +138,55 @@ public class RentRepository {
         } else{
             throw new CCException(1205, "Message: " + verificationMessage + ", Status: " + verificationStatus + ", Code: " + verificationCode);
         }
+    }
+
+    @Transactional
+    public void returnRent(Long rentId, JsonObject jsonObject){
+        Rent rent = getById(rentId);
+
+        if(!rent.getStatus().equals(RentStatusEnum.CONFIRMED)){
+            throw new CCException(1205);
+        }
+
+        String verificationCode;
+        String verificationMessage;
+        RentStatusEnum verificationStatus;
+
+        try{
+            verificationCode = jsonObject.getString("verification_code");
+            verificationMessage = jsonObject.getString("verification_message");
+            verificationStatus = RentStatusEnum.valueOf(jsonObject.getString("verification_status").toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new CCException(1106);
+        }
+
+        Set<RentStatusEnum> allowedStatus = Set.of(RentStatusEnum.RETURNED);
+        // set only if the current status is allowed and if the verification_code is the same as provided
+        if (allowedStatus.contains(verificationStatus) && rent.getVerification_code().equals(verificationCode)) {
+            rent.setStatus(verificationStatus);
+            rent.setVerification_message(verificationMessage);
+            em.merge(rent);
+        } else{
+            throw new CCException(1205, "Message: " + verificationMessage + ", Status: " + verificationStatus + ", Code: " + verificationCode);
+        }
+
+        MailMessage message = new MailMessage();
+        message.setFrom("signup.camconnect@gmail.com");
+        String email = rent.getStudent().getEmail();
+        message.setTo(email);
+        message.setSubject("Bestätigung der Gerät Rückgabe");
+        //plaintext is als backup für den html content, wenn html möglich ist wird nur das angezeigt
+        message.setHtml("Hiermit ist bestätigt, dass sie ihr Gerät der Lehrkraft zurückgegeben haben.");
+
+
+        client.sendMail(message, result -> {
+            if (result.succeeded()) {
+                System.out.println("Email sent successfully");
+            } else {
+                System.out.println("Failed to send email: " + result.cause());
+                throw new CCException(1200, "Failed to send mail");
+            }
+        });
     }
 
     @Transactional
