@@ -8,7 +8,7 @@ let FilterContainerComponent = class FilterContainerComponent extends LitElement
         this.name = 'Filterblock';
     }
     /**
-     * handles the users click ona filter option, highlights it and //TODO passes it back to the index.js
+     * handles the users click on a filter option, highlights it and //TODO passes it back to the index.js
      * @param e
      * @param option
      */
@@ -28,7 +28,7 @@ let FilterContainerComponent = class FilterContainerComponent extends LitElement
     }
 };
 __decorate([
-    property()
+    property({ type: String })
 ], FilterContainerComponent.prototype, "name", void 0);
 __decorate([
     property()

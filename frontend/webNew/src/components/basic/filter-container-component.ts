@@ -4,14 +4,14 @@ import styles from '../../../styles/components/basic/filter-container.styles.scs
 
 @customElement('cc-filter-container')
 export class FilterContainerComponent extends LitElement {
-    @property()
+    @property({type: String})
     name?: string = 'Filterblock';
 
     @property()
     options?;
 
     /**
-     * handles the users click ona filter option, highlights it and //TODO passes it back to the index.js
+     * handles the users click on a filter option, highlights it and //TODO passes it back to the index.js
      * @param e
      * @param option
      */

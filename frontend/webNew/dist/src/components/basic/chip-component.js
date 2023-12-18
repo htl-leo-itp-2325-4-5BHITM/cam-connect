@@ -1,4 +1,6 @@
-import { render } from "lit-html";
+import { __decorate } from "tslib";
+import { LitElement, html } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 import styles from '../../../styles/components/basic/chip.styles.scss';
 import { icon } from '@fortawesome/fontawesome-svg-core';
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -15,46 +17,39 @@ var Size;
     Size["SMALL"] = "small";
     Size["BIG"] = "big";
 })(Size || (Size = {}));
-/**
- * @Param status: is "verfügbar", "vergeben" oder "gesperrt"
- * @Param amount: is the amount of status types
- */
-class ChipComponent extends HTMLElement {
+let ChipComponent = class ChipComponent extends LitElement {
     constructor() {
-        super();
-        const shadow = this.attachShadow({ mode: "open" });
-        const style = document.createElement('style');
-        style.textContent = styles;
-        shadow.appendChild(style);
-    }
-    connectedCallback() {
-        this.render();
-    }
-    removeChip() {
-        this.remove();
+        super(...arguments);
+        this.color = Color.ACCENT;
+        this.size = Size.BIG;
+        this.removeable = false;
+        this.value = "Chip";
     }
     render() {
-        const color = this.getAttribute('color');
-        const size = this.getAttribute('size');
-        const removeable = this.getAttribute('removeAble');
-        const value = this.innerHTML || "Chip";
-        render(this.chip(color, size, removeable, value), this.shadowRoot);
+        return html `
+            <style>${styles}</style>
+            <div class="cc-chip ${this.removeable ? 'removeDiv' : ''}" color="${this.color}" size="${this.size}"
+                @click="${(e) => { e.target.remove(); }}">
+                ${this.value}
+                ${(this.removeable ? html `${icon(faXmark)}` : '')}
+            </div>`;
+        //todo fontawesome icon einfügen
     }
-    chip(color, size, removeable, value) {
-        let div = document.createElement('div');
-        div.classList.add("cc-chip");
-        div.setAttribute("color", color || "ACCENT");
-        div.setAttribute("size", size || "BIG");
-        div.innerHTML = value;
-        if (removeable) {
-            let removeDiv = document.createElement('div');
-            removeDiv.classList.add("removeDiv");
-            removeDiv.innerHTML = icon(faXmark).html[0];
-            removeDiv.addEventListener('click', this.removeChip.bind(div));
-            div.appendChild(removeDiv);
-        }
-        return div;
-    }
-}
-customElements.define("cc-chip", ChipComponent);
+};
+__decorate([
+    property({ type: Color })
+], ChipComponent.prototype, "color", void 0);
+__decorate([
+    property({ type: Size })
+], ChipComponent.prototype, "size", void 0);
+__decorate([
+    property({ type: Boolean })
+], ChipComponent.prototype, "removeable", void 0);
+__decorate([
+    property({ type: String })
+], ChipComponent.prototype, "value", void 0);
+ChipComponent = __decorate([
+    customElement('cc-chip')
+], ChipComponent);
+export { ChipComponent };
 //# sourceMappingURL=chip-component.js.map

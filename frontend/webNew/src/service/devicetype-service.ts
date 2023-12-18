@@ -100,5 +100,7 @@ interface TripodHead extends DeviceTypeAttribute{
 }
 //endregion
 
-function getAllDeviceTypes
+function getAllDeviceTypes () {
+
+}
 //index should simply link between components and services
