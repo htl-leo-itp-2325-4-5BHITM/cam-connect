@@ -12,6 +12,8 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.util.List;
+
 @Path("/api/devicetype")
 public class DeviceTypeResource {
     @Inject
@@ -38,6 +40,20 @@ public class DeviceTypeResource {
         DeviceType result;
         try{
             result = deviceTypeRepository.getById(id);
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok(result);
+    }
+
+    @GET
+    @Path("/getall")
+    @Transactional
+    public Response getall(){
+        List<DeviceType> result;
+        try{
+            result = deviceTypeRepository.getAll();
         }catch (CCException ex){
             return CCResponse.error(ex);
         }

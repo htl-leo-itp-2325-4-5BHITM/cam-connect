@@ -1,5 +1,4 @@
-//TODO find a way to import a whole folder of modules
-//dont think this is possible ^
+//components
 import "./components/basic/button-component"
 import "./components/basic/chip-component"
 import "./components/basic/confirmation-status-component"
@@ -11,13 +10,14 @@ import "./components/basic/select-component"
 import "./components/basic/value-chain-component"
 import "./components/layout/filter-component"
 
+//services
+import {getAllDeviceTypes} from "./service/devicetype-service";
+
+//css
 import "../styles/index.scss"
 
 //TODO check if we can use the same svg stuff here as in the components or othe way round
-import '@fortawesome/fontawesome-free/js/fontawesome'
-import '@fortawesome/fontawesome-free/js/solid'
-import '@fortawesome/fontawesome-free/js/regular'
-import '@fortawesome/fontawesome-free/js/brands'
+import '@fortawesome/fontawesome-free/js/all'
 
 //basically einfach default function file für erstellen clicken popups und alles
 
@@ -28,3 +28,5 @@ filterblock.options = [{name:"kamera"}, {name:"dings"}, {name:"halli"}]
 filters.appendChild(filterblock)
 
 document.body.appendChild(filters)
+
+console.log(await getAllDeviceTypes())

@@ -19,14 +19,11 @@ INSERT INTO Teacher (teacher_id, firstname, lastname, password, username)
 VALUES (NEXT VALUE FOR teacher_seq, 'Dr.', 'Miller', 'teacherpass', 'dr_miller');
 INSERT INTO Teacher (teacher_id, firstname, lastname, password, username)
 VALUES (NEXT VALUE FOR teacher_seq, 'Mrs.', 'Brown', 'pass123', 'mrs_brown');*/
-
-insert into tag (tag_id, name, description)
-values (NEXT VALUE FOR tag_seq, 'Foto', 'Dieses Gerät ist am besten für Fotografie geeignet');
-insert into tag (tag_id, name, description)
-values (NEXT VALUE FOR tag_seq, 'Video', 'Dieses Gerät ist am besten fürs filmen von Videos geeignet');
-insert into tag (tag_id, name, description)
-values (NEXT VALUE FOR tag_seq, 'Makro', 'Dieses Gerät ist spezifisch für Makrofotografie gedacht');
-
+/*
+insert into tag (tag_id, name, description) values (NEXT VALUE FOR tag_seq, 'Foto', 'Dieses Gerät ist am besten für Fotografie geeignet');
+insert into tag (tag_id, name, description) values (NEXT VALUE FOR tag_seq, 'Video', 'Dieses Gerät ist am besten fürs filmen von Videos geeignet');
+insert into tag (tag_id, name, description) values (NEXT VALUE FOR tag_seq, 'Makro', 'Dieses Gerät ist spezifisch für Makrofotografie gedacht');
+*/
 /*
 
 -- Insert sample data for LensMount
@@ -185,6 +182,7 @@ CREATE SEQUENCE tripod_type_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE tag_seq START WITH 1 INCREMENT BY 1;
 
 */
+/*
 -- Test Inserts for LensMount
 INSERT INTO LensMount (mount_id, name)
 VALUES (NEXT VALUE FOR lens_mount_seq, 'Canon EF');
@@ -317,7 +315,7 @@ INSERT INTO TripodType (type_id, height, head_id)
 VALUES (2, 180, 2);
 INSERT INTO TripodType (type_id, height, head_id)
 VALUES (3, 120, 3);*/
-
+*/
 
 -- Test Inserts for Tag
 --TODO change to static ids "NEXT VALUE FOR device_type_seq" will break everything
@@ -332,5 +330,5 @@ INSERT INTO Tag (tag_id, type_ids, name, description) VALUES
     (NEXT VALUE FOR tag_seq, [NEXT VALUE FOR device_type_seq, NEXT VALUE FOR device_type_seq, NEXT VALUE FOR device_type_seq], 'Drones', 'Devices for aerial photography');
 */
 
--- Test Inserts for Device
+-- Test Inserts for Device;
 

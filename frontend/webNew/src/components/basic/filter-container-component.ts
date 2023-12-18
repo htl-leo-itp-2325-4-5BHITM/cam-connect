@@ -11,9 +11,9 @@ export class FilterContainerComponent extends LitElement {
     options?;
 
     /**
-     * handles the users click ona filter option, highlights it and //TODO passes it back to the index.js
-     * @param e
-     * @param option
+     * handles the users click on filter option, highlights it and //TODO passes it back to the index.js
+     * @param e Click event
+     * @param option reference to the selected option
      */
     selectOption(e:Event, option){
         option.selected = !option.selected
