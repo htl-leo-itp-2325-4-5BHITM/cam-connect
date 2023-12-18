@@ -1,7 +1,9 @@
 # cam-connect conventions
 Please take the time to read this, I will tell you when its updated. 
 \
-If you follow these conventions we will have a better time writing code and the project can be handed off to the next group in a nice shape. 
+If you follow these conventions we will have a better time writing code and the project can be handed off to the next group in a nice shape.
+
+user stories can be found [here](https://school-space.notion.site/4c889b6df8a14f3f82b6824f652f1f3d?v=6db8b43a662a4b3bb87f1b68ae708395&pvs=4)
 
 ## General
 - cam-connect should be spelled with a dash and in lowercase wherever possible
