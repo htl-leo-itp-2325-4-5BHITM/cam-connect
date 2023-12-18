@@ -20,7 +20,7 @@ export class CircleSelectComponent extends LitElement {
     render() {
         return html`
             <style>${styles}</style>
-            <div @click="${this.checked = !this.checked}">
+            <div @click="${() => {this.checked = !this.checked}}" class="${this.type == Type.MULTIPLE ? 'multiple' : ''} ${this.color}">
                 <img src="../../assets/${this.checked ? "checked" : "unchecked"}_${this.type}.svg" alt="">\
             </div>`
     }
