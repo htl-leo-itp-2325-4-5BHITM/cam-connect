@@ -27,6 +27,6 @@ let filterblock = document.createElement("cc-filter-container")
 filterblock.options = [{name:"kamera"}, {name:"dings"}, {name:"halli"}]
 filters.appendChild(filterblock)
 
-document.body.appendChild(filters)
+document.querySelector('main').appendChild(filters)
 
 console.log(await getAllDeviceTypes())
