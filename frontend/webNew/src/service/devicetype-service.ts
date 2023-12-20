@@ -103,8 +103,7 @@ interface TripodHead extends DeviceTypeAttribute{
 
 export type DeviceTypeCollection = (AudioType | CameraType | DroneType | LensType | LightType | StabilizerType | TripodType)[]
 
-export function getAllDeviceTypes():Observable<DeviceTypeCollection>{
-    return new Observable((subscriber) => {
+export let allDeviceTypes:Observable<DeviceTypeCollection> = new Observable((subscriber) => {
         fetch(config.api_url + '/devicetype/getall')
             .then(response => {
                 handleError(response.status)
@@ -117,6 +116,5 @@ export function getAllDeviceTypes():Observable<DeviceTypeCollection>{
             .catch(error => {
                 console.error(error)
             })
-    });
-}
+    })
 //index should simply link between components and services
