@@ -2,13 +2,24 @@ import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/filter-container.styles.scss'
 
+export enum FilterOptionType {
+    DeviceType,
+}
+
+export interface FilterOption {
+    name: string,
+    selected?: boolean,
+    type: FilterOptionType,
+    id: number
+}
+
 @customElement('cc-filter-container')
 export class FilterContainerComponent extends LitElement {
     @property({type: String})
-    name?: string = 'Filterblock';
+    name?: string = 'Filterblock'
 
     @property()
-    options?;
+    options?: FilterOption[]
 
     /**
      * handles the users click on a filter option, highlights it and //TODO passes it back to the index.js
@@ -29,12 +40,12 @@ export class FilterContainerComponent extends LitElement {
                 ${this.options.map((option) => //loop over all options and map(return/create) an item for each
                         html`<p class="option" @click="${(e:Event) => {this.selectOption(e, option)}}">${option.name}</p>`
                 )}
-            </div>`;
+            </div>`
     }
 }
 
 declare global {
     interface HTMLElementTagNameMap {
-        "cc-filter-container": FilterContainerComponent;
+        "cc-filter-container": FilterContainerComponent
     }
 }

@@ -1,8 +1,9 @@
 //service should request data implement and export interfaces and provide simple set update functions
 import {config, handleError} from '../base'
+import {Observable} from "rxjs"
 
-//region devicetypes
-interface DeviceType{
+//region devicetype interfaces
+export interface DeviceType{
     type_id: number
     name: string
     image: string
@@ -100,17 +101,22 @@ interface TripodHead extends DeviceTypeAttribute{
 }
 //endregion
 
-export function getAllDeviceTypes(){
-    return fetch(config.api_url + '/devicetype/getall')
-        .then(response => {
-            handleError(response.status)
-            return response.json()
-        })
-        .then(data => {
-            return data
-        })
-        .catch(error => {
-            console.error(error)
-        })
+export type DeviceTypeCollection = (AudioType | CameraType | DroneType | LensType | LightType | StabilizerType | TripodType)[]
+
+export function getAllDeviceTypes():Observable<DeviceTypeCollection>{
+    return new Observable((subscriber) => {
+        fetch(config.api_url + '/devicetype/getall')
+            .then(response => {
+                handleError(response.status)
+                return response.json()
+            })
+            .then(result => {
+                console.log(result)
+                subscriber.next(result.data as DeviceTypeCollection)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    });
 }
 //index should simply link between components and services
