@@ -32,6 +32,7 @@ public class Rent {
     private LocalDate rent_start;
     private LocalDate rent_end_planned;
     private LocalDate rent_end_actual;
+    private LocalDate creation_date;
     private String verification_code;
     private String verification_message;
     private RentStatusEnum status;
@@ -53,6 +54,7 @@ public class Rent {
 
     public Rent() {
         rent_start = LocalDate.now();
+        creation_date = LocalDate.now();
         status = RentStatusEnum.CREATED;
     }
 
@@ -72,6 +74,7 @@ public class Rent {
                 ", rent_start=" + rent_start +
                 ", rent_end_planned=" + rent_end_planned +
                 ", rent_end_actual=" + rent_end_actual +
+                ", creation_date=" + creation_date +
                 ", status=" + status +
                 ", code=" + verification_code +
                 ", note='" + note + '\'' +
@@ -196,5 +199,10 @@ public class Rent {
     public void setVerification_message(String verification_message) {
         this.verification_message = verification_message;
     }
+
+    public LocalDate getCreation_date() {
+        return creation_date;
+    }
+
     //endregion
 }
