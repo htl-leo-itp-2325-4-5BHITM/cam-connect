@@ -27,7 +27,7 @@ let model = new Model()
 console.log(model.deviceTypes)
 
 setTimeout(function(){
-    console.log(model.observer.subscribe(data => {return data.deviceTypes}))
+/*    console.log(model.observer.subscribe(data => {return data.deviceTypes}))*/
 },2000)
 
 let filters = document.createElement('cc-filter');
