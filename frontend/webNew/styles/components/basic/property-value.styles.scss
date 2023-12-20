@@ -2,6 +2,17 @@
 
 div{
   display: flex;
+  gap: 1px;
+  color: $gray800;
+  font-size: 1rem;
+
+  &[size="big"] {
+    font-size: 1.125rem;
+  }
+  &[isLink="true"] .value {
+    cursor: pointer;
+    text-decoration: underline;
+  }
 }
 
 .property{

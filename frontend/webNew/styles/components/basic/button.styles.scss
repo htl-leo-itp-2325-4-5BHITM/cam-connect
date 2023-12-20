@@ -28,6 +28,11 @@
     background: transparent;
     border: none;
 
+    &:hover {
+      --hover-background: rgba(128, 128, 128, 0.2);
+        background-color: var(--hover-background);
+    }
+
     &[color="accent"]{
       color: $accentDarkmode;
     }
@@ -45,10 +50,10 @@
   &[color = "accent"]{
     border-color: $accentDarkmodeLight;
     &[type = "filled"]{
-      background-color: $accentDarkmode;
+      background-color: $accentDarkmodeDark;
       color: $gray1000;
       &:hover{
-        background-color: $accentDarkmodeDark;
+        background-color: $accentDarkmode;
       }
     }
     &[type = "outlined"]{

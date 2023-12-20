@@ -1,7 +1,7 @@
 //components
 import "./components/basic/button-component"
 import "./components/basic/chip-component"
-import "./components/basic/confirmation-status-component"
+import "./components/basic/rent-status-component"
 import "./components/basic/filter-container-component"
 import "./components/basic/circle-select-component"
 import "./components/basic/property-value-component"

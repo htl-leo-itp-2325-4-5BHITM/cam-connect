@@ -22,11 +22,12 @@ let FilterContainerComponent = class FilterContainerComponent extends LitElement
         elem.classList.toggle("selected");
     }
     render() {
+        var _a, _b;
         return html `
             <style>${styles}</style>
             <div class="filter-block">
-                <p class="heading">${this.name}</p>
-                ${this.options.map((option) => //loop over all options and map(return/create) an item for each
+                <p class="heading">${this.name} model:${(_a = this.model.deviceTypes[0]) === null || _a === void 0 ? void 0 : _a.name}</p>
+                ${(_b = this.options.value) === null || _b === void 0 ? void 0 : _b.map((option) => //loop over all options and map(return/create) an item for each
          html `<p class="option" @click="${(e) => { this.selectOption(e, option); }}">${option.name}</p>`)}
             </div>`;
     }
@@ -37,6 +38,9 @@ __decorate([
 __decorate([
     property()
 ], FilterContainerComponent.prototype, "options", void 0);
+__decorate([
+    property()
+], FilterContainerComponent.prototype, "model", void 0);
 FilterContainerComponent = __decorate([
     customElement('cc-filter-container')
 ], FilterContainerComponent);

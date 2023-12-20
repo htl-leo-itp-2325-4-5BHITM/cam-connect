@@ -2,7 +2,7 @@ import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/property-value.styles.scss'
 
-enum Status {CONFIRMED="bestätigt", WAITING="warten", DECLINED="abgelehnt"}
+enum Size {BIG, SMALL}
 
 @customElement('cc-property-value')
 export class PropertyValueComponent extends LitElement {
@@ -12,10 +12,16 @@ export class PropertyValueComponent extends LitElement {
     @property({type: String})
     value?: String = 'Value';
 
+    @property({type: Size})
+    size?: Size = Size.BIG
+
+    @property({type: Boolean})
+    isLink?: Boolean = false
+
     render() {
         return html`
             <style>${styles}</style>
-            <div>
+            <div size="${this.size}" isLink="${this.isLink}">
                 <p class="property">${this.property}:</p>
                 <p class="value">${this.value}</p>
             </div>`
