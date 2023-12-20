@@ -15,14 +15,15 @@ let SelectElementComponent = class SelectElementComponent extends LitElement {
     }
     toggleOption(event) {
         const elem = event.currentTarget;
-        if (elem.closest(".select")) {
+        console.log(elem);
+        if (elem.closest(".select")) { //todo i don't really know how to get out of the shadow root
             const select = elem.closest(".select");
             const activeElement = select.querySelector(".active");
             if (activeElement) {
                 activeElement.classList.remove("active");
             }
-            elem.querySelector("select-element").classList.add("active");
         }
+        event.target.classList.add("active");
     }
     render() {
         return html `

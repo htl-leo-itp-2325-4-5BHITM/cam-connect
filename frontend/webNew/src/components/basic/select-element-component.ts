@@ -10,16 +10,18 @@ export class SelectElementComponent extends LitElement {
     @property({type: Boolean})
     selected?: Boolean = false;
 
-    toggleOption(event) { //todo i don't really know how to get back into the shadow root to find the active element
+    toggleOption(event) {
         const elem = event.currentTarget;
-        if (elem.closest(".select")) {
+        console.log(elem)
+
+        if (elem.closest(".select")) { //todo i don't really know how to get out of the shadow root
             const select = elem.closest(".select");
             const activeElement = select.querySelector(".active");
             if (activeElement) {
                 activeElement.classList.remove("active");
             }
-            elem.querySelector("select-element").classList.add("active");
         }
+        (event.target as HTMLElement).classList.add("active");
     }
 
     render() {
