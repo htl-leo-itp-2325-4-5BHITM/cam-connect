@@ -1,6 +1,7 @@
 import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/filter-container.styles.scss'
+import Model, {AsyncController} from "../../model"
 
 export enum FilterOptionType {
     DeviceType,
@@ -19,7 +20,10 @@ export class FilterContainerComponent extends LitElement {
     name?: string = 'Filterblock'
 
     @property()
-    options?: FilterOption[]
+    options?: AsyncController<FilterOption[]>
+
+    @property()
+    model?: Model
 
     /**
      * handles the users click on a filter option, highlights it and //TODO passes it back to the index.js
@@ -36,8 +40,8 @@ export class FilterContainerComponent extends LitElement {
         return html`
             <style>${styles}</style>
             <div class="filter-block">
-                <p class="heading">${this.name}</p>
-                ${this.options.map((option) => //loop over all options and map(return/create) an item for each
+                <p class="heading">${this.name} model:${this.model.deviceTypes[0]?.name}</p>
+                ${this.options.value?.map((option) => //loop over all options and map(return/create) an item for each
                         html`<p class="option" @click="${(e:Event) => {this.selectOption(e, option)}}">${option.name}</p>`
                 )}
             </div>`

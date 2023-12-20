@@ -11,29 +11,32 @@ import "./components/basic/value-chain-component"
 import "./components/layout/filter-component"
 
 //services
-import {getAllDeviceTypes} from "./service/devicetype-service";
+import {allDeviceTypes} from "./service/devicetype-service";
 
 //css
 import "../styles/index.scss"
 
 //TODO check if we can use the same svg stuff here as in the components or othe way round
 import '@fortawesome/fontawesome-free/js/all'
-import Model from "./model"
+import Model, {AsyncController} from "./model"
 import {deviceTypeToFilterOption} from "./util"
+import {FilterOption} from "./components/basic/filter-container-component"
 
 //basically einfach default function file für erstellen clicken popups und alles
 
 let model = new Model()
+
 console.log(model.deviceTypes)
 
 setTimeout(function(){
-/*    console.log(model.observer.subscribe(data => {return data.deviceTypes}))*/
+    console.log(model.deviceTypes)
 },2000)
 
 let filters = document.createElement('cc-filter');
 
 let filterblock = document.createElement("cc-filter-container")
-filterblock.options = model.deviceTypes.map(deviceTypeToFilterOption)
+filterblock.options = new AsyncController(filterblock, allDeviceTypes, deviceTypeToFilterOption)
+filterblock.model = model
 filters.appendChild(filterblock)
 
 document.querySelector('main').appendChild(filters)
