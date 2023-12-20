@@ -76,12 +76,13 @@ function generateTable() {
         var row = document.createElement("tr");
         row.setAttribute("rent_id", String((_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id));
         columns.forEach(function (column) {
-            var _a, _b, _c, _d, _e, _f, _g, _h;
+            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
             var cell = document.createElement("td");
             if (column.inputType !== "none") {
                 var cellinput_1 = document.createElement("input");
                 cellinput_1.type = column.inputType;
                 cellinput_1.setAttribute("celltype", column.cellType);
+                cellinput_1.classList.add(column.cellType);
                 switch (column.cellType) {
                     case "student_id":
                         cellinput_1.addEventListener("mouseup", function () {
@@ -89,6 +90,8 @@ function generateTable() {
                             openStudentPicker(cellinput_1, (_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id);
                         });
                         cellinput_1.value = ((_b = (_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.student) === null || _b === void 0 ? void 0 : _b.firstname) || "";
+                        if (((_c = allRents[i]) === null || _c === void 0 ? void 0 : _c.status) == "CONFIRMED")
+                            cellinput_1.disabled = true;
                         break;
                     case "teacher_start":
                     case "teacher_end":
@@ -96,7 +99,9 @@ function generateTable() {
                             var _a;
                             openTeacherPicker(cellinput_1, (_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id, column.cellType + "_id");
                         });
-                        cellinput_1.value = ((_c = allRents[i][column.cellType]) === null || _c === void 0 ? void 0 : _c.lastname) || "";
+                        cellinput_1.value = ((_d = allRents[i][column.cellType]) === null || _d === void 0 ? void 0 : _d.lastname) || "";
+                        if (((_e = allRents[i]) === null || _e === void 0 ? void 0 : _e.status) == "CONFIRMED" && column.cellType != "teacher_end")
+                            cellinput_1.disabled = true;
                         break;
                     case "note":
                     case "accessory":
@@ -105,6 +110,8 @@ function generateTable() {
                             updateRent(cellinput_1, column.cellType, cellinput_1.value);
                         });
                         cellinput_1.value = allRents[i][column.cellType] || "";
+                        if (((_f = allRents[i]) === null || _f === void 0 ? void 0 : _f.status) == "CONFIRMED" && column.cellType != "note")
+                            cellinput_1.disabled = true;
                         break;
                     case "rent_start":
                     case "rent_end_planned":
@@ -113,10 +120,12 @@ function generateTable() {
                             updateRent(cellinput_1, column.cellType, cellinput_1.value);
                         });
                         cellinput_1.value = allRents[i][column.cellType] || "";
+                        if (((_g = allRents[i]) === null || _g === void 0 ? void 0 : _g.status) == "CONFIRMED" && column.cellType != "rent_end_actual")
+                            cellinput_1.disabled = true;
                         break;
                     case "delete_row":
                         var button = document.createElement('button');
-                        switch ((_d = allRents[i]) === null || _d === void 0 ? void 0 : _d.status) {
+                        switch ((_h = allRents[i]) === null || _h === void 0 ? void 0 : _h.status) {
                             case null:
                             case undefined:
                             case "CREATED":
@@ -148,7 +157,7 @@ function generateTable() {
                 }
             }
             if (column.cellType == "verification_status") {
-                switch ((_e = allRents[i]) === null || _e === void 0 ? void 0 : _e.status) {
+                switch ((_j = allRents[i]) === null || _j === void 0 ? void 0 : _j.status) {
                     case null:
                     case undefined:
                     case "CREATED":
@@ -164,9 +173,9 @@ function generateTable() {
                     default:
                         var cellChip = document.createElement('div');
                         cellChip.classList.add("verification_chip");
-                        cellChip.setAttribute("status", (_f = allRents[i]) === null || _f === void 0 ? void 0 : _f.status);
-                        cellChip.innerHTML = statusResolved[(_g = allRents[i]) === null || _g === void 0 ? void 0 : _g.status];
-                        if (((_h = allRents[i]) === null || _h === void 0 ? void 0 : _h.status) == "DECLINED") {
+                        cellChip.setAttribute("status", (_k = allRents[i]) === null || _k === void 0 ? void 0 : _k.status);
+                        cellChip.innerHTML = statusResolved[(_l = allRents[i]) === null || _l === void 0 ? void 0 : _l.status];
+                        if (((_m = allRents[i]) === null || _m === void 0 ? void 0 : _m.status) == "DECLINED") {
                             cellChip.setAttribute("data-popup-heading", "Ablehnungsnachricht");
                             cellChip.setAttribute("data-popup-text", "Anfrage nochmal senden");
                             cellChip.addEventListener("click", function () {

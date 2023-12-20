@@ -1,17 +1,20 @@
 //service should request data implement and export interfaces and provide simple set update functions
 import { config, handleError } from '../base';
-//endregion
+import { Observable } from "rxjs";
 export function getAllDeviceTypes() {
-    return fetch(config.api_url + '/devicetype/getall')
-        .then(response => {
-        handleError(response.status);
-        return response.json();
-    })
-        .then(data => {
-        return data;
-    })
-        .catch(error => {
-        console.error(error);
+    return new Observable((subscriber) => {
+        fetch(config.api_url + '/devicetype/getall')
+            .then(response => {
+            handleError(response.status);
+            return response.json();
+        })
+            .then(result => {
+            console.log(result);
+            subscriber.next(result.data);
+        })
+            .catch(error => {
+            console.error(error);
+        });
     });
 }
 //index should simply link between components and services

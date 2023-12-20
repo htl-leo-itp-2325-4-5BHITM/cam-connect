@@ -9,17 +9,21 @@ import "./components/basic/select-element-component";
 import "./components/basic/select-component";
 import "./components/basic/value-chain-component";
 import "./components/layout/filter-component";
-//services
-import { getAllDeviceTypes } from "./service/devicetype-service";
 //css
 import "../styles/index.scss";
 //TODO check if we can use the same svg stuff here as in the components or othe way round
 import '@fortawesome/fontawesome-free/js/all';
+import Model from "./model";
+import { deviceTypeToFilterOption } from "./util";
 //basically einfach default function file für erstellen clicken popups und alles
+let model = new Model();
+console.log(model.deviceTypes);
+setTimeout(function () {
+    /*    console.log(model.observer.subscribe(data => {return data.deviceTypes}))*/
+}, 2000);
 let filters = document.createElement('cc-filter');
 let filterblock = document.createElement("cc-filter-container");
-filterblock.options = [{ name: "kamera" }, { name: "dings" }, { name: "halli" }];
+filterblock.options = model.deviceTypes.map(deviceTypeToFilterOption);
 filters.appendChild(filterblock);
 document.querySelector('main').appendChild(filters);
-console.log(await getAllDeviceTypes());
 //# sourceMappingURL=index.js.map

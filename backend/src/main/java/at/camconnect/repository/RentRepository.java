@@ -184,6 +184,12 @@ public class RentRepository {
                 System.out.println("Email sent successfully");
             } else {
                 System.out.println("Failed to send email: " + result.cause());
+
+                // if the email failed to send we reset the status
+                rent.setStatus(RentStatusEnum.CREATED);
+                rent.setVerification_message("");
+                em.merge(rent);
+
                 throw new CCException(1200, "Failed to send mail");
             }
         });

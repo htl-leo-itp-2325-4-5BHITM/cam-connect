@@ -2,6 +2,10 @@ import { __decorate } from "tslib";
 import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import styles from '../../../styles/components/basic/filter-container.styles.scss';
+export var FilterOptionType;
+(function (FilterOptionType) {
+    FilterOptionType[FilterOptionType["DeviceType"] = 0] = "DeviceType";
+})(FilterOptionType || (FilterOptionType = {}));
 let FilterContainerComponent = class FilterContainerComponent extends LitElement {
     constructor() {
         super(...arguments);
