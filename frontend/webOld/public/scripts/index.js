@@ -1,4 +1,7 @@
 var APPLICATION_URL = "http://localhost:8080/api";
+if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
+    APPLICATION_URL = "http://144.24.171.164/api";
+}
 var allRents = [];
 var allStudents = [];
 var allTeachers = [];

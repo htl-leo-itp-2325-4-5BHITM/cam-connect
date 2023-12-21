@@ -15,7 +15,7 @@ import jakarta.ws.rs.core.Response;
 import javax.print.attribute.standard.Media;
 import java.util.List;
 
-@Path("/api/rent")
+@Path("/rent")
 public class RentResource {
     @Inject
     RentRepository rentRepository;

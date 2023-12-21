@@ -13,7 +13,7 @@ import jakarta.ws.rs.core.Response;
 
 import java.util.List;
 
-@Path("/api/device")
+@Path("/device")
 public class DeviceResource {
     @Inject
     DeviceRepository deviceRepository;
