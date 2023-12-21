@@ -4,74 +4,73 @@
 :global{
 
   nav{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-family: 'Quicksand', sans-serif;
-  color: $gray800;
-  font-weight: 400;
-  background-color: $gray300;
-  padding: 0.5rem 0.75rem;
-
-  div.logo{
-    height: 1.5rem;
-
-    img{
-      height: 100%;
-    }
-  }
-
-  div.pageSelector {
     display: flex;
-
-    p {
-      cursor: pointer;
-    }
-
-    p:first-child::after {
-      color: $accentDarkmode;
-      content: '•';
-      padding-inline: .5rem;
-    }
-
-    p.active {
-      color: $gray1000;
-      font-weight: 600;
-    }
-  }
-
-  div.tools{
-    display: flex;
-    gap: 1rem;
-
-    svg{
-      height: 1.2rem;
-    }
-  }
-
-  div.searchBar{
-    width: 22ch;
-    background-color: $gray400;
-    border-radius: .5rem;
-    display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
-    padding: .2rem;
+    font-family: 'Quicksand', sans-serif;
+    color: $gray800;
+    font-weight: 400;
+    background-color: $gray300;
+    padding: 0.5rem 0.75rem;
 
-    input{
-      color: $gray800;
-      background: transparent;
-      border: none;
-      border-bottom: 1px solid $gray800;
+    div.logo{
+      height: 1.5rem;
+
+      img{
+        height: 100%;
+      }
+    }
+
+    div.pageSelector {
+      display: flex;
+
+      p {
+        cursor: pointer;
+      }
+
+      p:first-child::after {
+        color: $accentDarkmode;
+        content: '•';
+        padding-inline: .5rem;
+      }
+
+      p.active {
+        color: $gray1000;
+        font-weight: 600;
+      }
+    }
+
+    div.tools{
+      display: flex;
+      gap: 1rem;
+
+      svg{
+        height: 1.2rem;
+      }
+    }
+
+    div.searchBar{
+      width: 22ch;
+      background-color: $gray400;
+      border-radius: .5rem;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
       padding: .2rem;
+
+      input{
+        color: $gray800;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid $gray800;
+        padding: .2rem;
+      }
     }
   }
-}
 
   main{
     display: flex;
   }
-
 }
 
 
