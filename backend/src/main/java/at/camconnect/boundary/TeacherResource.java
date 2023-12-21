@@ -16,7 +16,7 @@ import org.jboss.resteasy.reactive.RestForm;
 import java.io.File;
 import java.util.List;
 
-@Path("/api/teacher")
+@Path("/teacher")
 public class TeacherResource {
     @Inject
     TeacherRepository teacherRepository;

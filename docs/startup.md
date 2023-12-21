@@ -1,4 +1,13 @@
 ## Backend
+### database
+`docker pull postgres`
+
+`docker run --name postgres-container -e POSTGRES_PASSWORD=postgresdb -p 5432:5432 -v postgres-data:/var/lib/postgresql/data -d postgres`
+
+`docker exec -it postgres-container psql -U postgres`
+
+`create database camconnect;` ; is important
+
 ### initial
 To run the backend open the whole project in IntelliJ and run the module cam-connect-backend.
 \

@@ -1,5 +1,6 @@
 package at.camconnect.repository;
 
+import at.camconnect.model.Student;
 import at.camconnect.statusSystem.CCException;
 import at.camconnect.enums.DeviceTypeEnum;
 import at.camconnect.model.DeviceType;
@@ -14,6 +15,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
 import jakarta.persistence.EntityManager;
+
+import java.util.List;
 
 @ApplicationScoped
 public class DeviceTypeRepository {
@@ -40,6 +43,11 @@ public class DeviceTypeRepository {
         DeviceType deviceType = em.find(DeviceType.class, id);
         if (deviceType == null) throw new CCException(1101);
         return deviceType;
+    }
+
+    public List<DeviceType> getAll(){
+        List<DeviceType> deviceTypes = em.createQuery("SELECT d FROM DeviceType d", DeviceType.class).getResultList();
+        return deviceTypes;
     }
 
     public void checkForNull(DeviceType deviceType){

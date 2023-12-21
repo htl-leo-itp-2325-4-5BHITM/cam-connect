@@ -1,5 +1,10 @@
 // @ts-ignore
-const APPLICATION_URL: string = "http://localhost:8080/api"
+let APPLICATION_URL: string = "http://localhost:8080/api"
+
+// Check if the protocol is either "http:" or "https:"
+if(window.location.protocol === 'http:' || window.location.protocol === 'https:'){
+    APPLICATION_URL = "http://144.24.171.164/api"
+}
 
 let allRents: RentComplete[] = []
 let allStudents: Student[] = []
@@ -139,7 +144,7 @@ const statusResolved = {
 }
 
 /**
- * Renders the Table to the html based on the data in the allRents array of Rent JSONs
+ * Renders the Table to the html based on thee data in the allRents array of Rent JSONs
  */
 function generateTable() {
     //Create the Heading Row based purely on the data in the columns constant
@@ -539,7 +544,7 @@ function importDataFromCsv(button:HTMLButtonElement) {
 
     let importType = button.closest("div").getAttribute("data-import")
 
-    fetch(`http://localhost:8080/api/${importType}/import`, {
+    fetch(APPLICATION_URL + `/${importType}/import`, {
         method: 'POST',
         body: formData,
     })
