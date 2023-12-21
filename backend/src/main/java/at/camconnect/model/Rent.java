@@ -169,9 +169,6 @@ public class Rent {
     }
 
     public void setTeacher_end(Teacher teacherEnd) {
-        if(fullBlockStatus.contains(status)){
-            throw new CCException(1205);
-        }
         this.teacher_end = teacherEnd;
     }
 
@@ -202,9 +199,6 @@ public class Rent {
     }
 
     public void setRent_end_actual(LocalDate rent_end_actual) {
-        if(fullBlockStatus.contains(status)){
-            throw new CCException(1205);
-        }
         this.rent_end_actual = rent_end_actual;
     }
 
@@ -224,9 +218,6 @@ public class Rent {
     }
 
     public void setNote(String note) {
-        if(fullBlockStatus.contains(status)){
-            throw new CCException(1205);
-        }
         this.note = note;
     }
 
