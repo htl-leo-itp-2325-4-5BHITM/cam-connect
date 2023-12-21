@@ -232,13 +232,13 @@ function generateTable() {
                             case undefined:
                             case "CREATED":
                             case "DECLINED":
-                            case "RETURNED":
                                 button.innerHTML = "Löschen"
                                 button.addEventListener("click", () => {
                                     removeRow(allRents[i]?.rent_id)
                                 })
                                 break
                             case "WAITING":
+                            case "RETURNED":
                                 button.disabled = true; button.innerHTML = "Löschen"
                                 break
                             case "CONFIRMED":
@@ -333,19 +333,43 @@ function returnRent(rentId: number, code: string){
         .then(data => {
             console.log(data)
             requestAllRents()
+
+            if(data.ccStatus.statusCode == 1000){
+                //@ts-ignore
+                PopupEngine.createNotification({text: `Verleih wurde erfolgreich zurückgegeben`})
+            } else {
+                //@ts-ignore
+                PopupEngine.createNotification({text: `Es gab einen Fehler beim Zurückgeben des Verleihs`})
+            }
+
         })
         .catch(error => console.error(error));}
 
 function removeRow(rentId: number){
-    fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/remove`)
-        .then(response => {
-            return response.json()
-        })
-        .then(data => {
-            console.log(data)
-            requestAllRents()
-        })
-        .catch(error => console.error(error));
+    if(allRents[rentId]?.status != "WAITING" && allRents[rentId]?.status != "RETURNED"){
+        const confirmation = confirm("Are you sure you want to delete this row?");
+
+        if(confirmation){
+            fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/remove`)
+                .then(response => {
+                    return response.json()
+                })
+                .then(data => {
+                    console.log(data)
+                    requestAllRents()
+
+                    if(data.ccStatus.statusCode == 1000){
+                        //@ts-ignore
+                        PopupEngine.createNotification({text: `Verleih wurde erfolgreich gelöscht`})
+                    } else {
+                        //@ts-ignore
+                        PopupEngine.createNotification({text: `Es gab einen Fehler beim Löschen des Verleihs`})
+                    }
+
+                })
+                .catch(error => console.error(error));
+        }
+    }
 }
 //endregion
 
@@ -573,23 +597,6 @@ function createRent() {
         })
         .catch(error => console.error(error));
 }
-
-//DeleteRow
-function deleteRow(rentId:number) {
-    const confirmation = confirm("Are you sure you want to delete this row?");
-    if (confirmation) {
-        fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/delete`, {
-            method: 'DELETE',
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                requestAllRents(); // Refresh the table after deletion
-            })
-            .catch(error => console.error(error));
-    }
-}
-
 
 //region load csv update
 

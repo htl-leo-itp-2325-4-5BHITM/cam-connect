@@ -138,7 +138,6 @@ function generateTable() {
                             case undefined:
                             case "CREATED":
                             case "DECLINED":
-                            case "RETURNED":
                                 button.innerHTML = "Löschen";
                                 button.addEventListener("click", function () {
                                     var _a;
@@ -146,6 +145,7 @@ function generateTable() {
                                 });
                                 break;
                             case "WAITING":
+                            case "RETURNED":
                                 button.disabled = true;
                                 button.innerHTML = "Löschen";
                                 break;
@@ -238,19 +238,37 @@ function returnRent(rentId, code) {
         .then(function (data) {
         console.log(data);
         requestAllRents();
+        if (data.ccStatus.statusCode == 1000) {
+            PopupEngine.createNotification({ text: "Verleih wurde erfolgreich zur\u00FCckgegeben" });
+        }
+        else {
+            PopupEngine.createNotification({ text: "Es gab einen Fehler beim Zur\u00FCckgeben des Verleihs" });
+        }
     })
         .catch(function (error) { return console.error(error); });
 }
 function removeRow(rentId) {
-    fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/remove"))
-        .then(function (response) {
-        return response.json();
-    })
-        .then(function (data) {
-        console.log(data);
-        requestAllRents();
-    })
-        .catch(function (error) { return console.error(error); });
+    var _a, _b;
+    if (((_a = allRents[rentId]) === null || _a === void 0 ? void 0 : _a.status) != "WAITING" && ((_b = allRents[rentId]) === null || _b === void 0 ? void 0 : _b.status) != "RETURNED") {
+        var confirmation = confirm("Are you sure you want to delete this row?");
+        if (confirmation) {
+            fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/remove"))
+                .then(function (response) {
+                return response.json();
+            })
+                .then(function (data) {
+                console.log(data);
+                requestAllRents();
+                if (data.ccStatus.statusCode == 1000) {
+                    PopupEngine.createNotification({ text: "Verleih wurde erfolgreich gel\u00F6scht" });
+                }
+                else {
+                    PopupEngine.createNotification({ text: "Es gab einen Fehler beim L\u00F6schen des Verleihs" });
+                }
+            })
+                .catch(function (error) { return console.error(error); });
+        }
+    }
 }
 function sendVerificationRequest(rentId) {
     console.log(rentId);
@@ -438,20 +456,6 @@ function createRent() {
         closeStudentPicker();
     })
         .catch(function (error) { return console.error(error); });
-}
-function deleteRow(rentId) {
-    var confirmation = confirm("Are you sure you want to delete this row?");
-    if (confirmation) {
-        fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/delete"), {
-            method: 'DELETE',
-        })
-            .then(function (response) { return response.json(); })
-            .then(function (data) {
-            console.log(data);
-            requestAllRents();
-        })
-            .catch(function (error) { return console.error(error); });
-    }
 }
 function importDataFromCsv(button) {
     var file = button.closest("div").querySelector("input").files[0];
