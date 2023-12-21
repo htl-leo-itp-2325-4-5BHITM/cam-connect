@@ -224,7 +224,7 @@ public class Rent {
     }
 
     public void setNote(String note) {
-        if(specifiedStatus.contains(status)){
+        if(fullBlockStatus.contains(status)){
             throw new CCException(1205);
         }
         this.note = note;
