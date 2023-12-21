@@ -61,7 +61,7 @@ public class TeacherRepository {
             if (lineArray.length <= 1) throw new CCException(1203);
 
             //our friend \uFEFF is a invisible zero space character added to csv files when opening excel that throws off my validations :)
-            lineArray[0] = lineArray[0].replace("\uFEFF", "");
+            lineArray[0] = lineArray[0].replaceAll("[^a-zA-Z_-]", "");
 
             //checks if the csv file matches the required structure
             if(lineArray.length != 5) throw new CCException(1204, "invalid line length");
