@@ -23,7 +23,8 @@ import {FilterContainerComponent, FilterOption} from "./components/basic/filter-
 
 export let model = new Model()
 
-console.log(model.deviceTypes)
+console.log(model.deviceTypes.subscribe(data => {
+    console.log(data)}))
 
 setTimeout(function(){
     console.log(model.deviceTypes)

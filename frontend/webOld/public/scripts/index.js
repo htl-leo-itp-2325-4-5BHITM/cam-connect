@@ -102,9 +102,8 @@ function generateTable() {
                         });
                         cellinput_1.value = ((_e = allRents[i][column.cellType]) === null || _e === void 0 ? void 0 : _e.lastname) || "";
                         if (((_f = allRents[i]) === null || _f === void 0 ? void 0 : _f.status) == "CONFIRMED" || ((_g = allRents[i]) === null || _g === void 0 ? void 0 : _g.status) == "WAITING") {
-                            if (column.cellType !== "teacher_end") {
+                            if (column.cellType !== "teacher_end")
                                 cellinput_1.disabled = true;
-                            }
                         }
                         break;
                     case "note":
@@ -115,7 +114,9 @@ function generateTable() {
                         });
                         cellinput_1.value = allRents[i][column.cellType] || "";
                         if (((_h = allRents[i]) === null || _h === void 0 ? void 0 : _h.status) == "CONFIRMED" || ((_j = allRents[i]) === null || _j === void 0 ? void 0 : _j.status) == "WAITING") {
-                            cellinput_1.disabled = true;
+                            if (column.cellType !== "note") {
+                                cellinput_1.disabled = true;
+                            }
                         }
                         break;
                     case "rent_start":

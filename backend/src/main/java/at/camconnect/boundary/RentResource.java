@@ -95,7 +95,7 @@ public class RentResource {
     @Transactional
     @Path("/getbyid/{id: [0-9]+}/update")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateRent (@PathParam("id")Long id, JsonObject rent){
+    public Response update (@PathParam("id")Long id, JsonObject rent){
         try{
             rentRepository.update(id, rent);
         }catch (CCException ex){

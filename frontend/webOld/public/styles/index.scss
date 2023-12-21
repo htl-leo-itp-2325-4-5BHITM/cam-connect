@@ -102,6 +102,10 @@ table{
       height: 50%;
     }
 
+    &[disabled]{
+      cursor: not-allowed;
+    }
+
     &:focus-visible{
       background-color: rgba(179, 179, 179, 0.1);
       outline: .15rem solid gray;

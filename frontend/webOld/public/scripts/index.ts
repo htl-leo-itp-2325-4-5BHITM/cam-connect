@@ -195,9 +195,8 @@ function generateTable() {
                         })
                         cellinput.value = allRents[i][column.cellType]?.lastname || ""
                         if(allRents[i]?.status == "CONFIRMED" || allRents[i]?.status == "WAITING"){
-                            if(column.cellType !== "teacher_end") {
+                            if(column.cellType !== "teacher_end")
                                 cellinput.disabled = true
-                            }
                         }
                         break
                     case "note":
@@ -208,7 +207,9 @@ function generateTable() {
                         })
                         cellinput.value = allRents[i][column.cellType] || ""
                         if(allRents[i]?.status == "CONFIRMED" || allRents[i]?.status == "WAITING") {
-                            cellinput.disabled = true
+                            if(column.cellType !== "note") {
+                                cellinput.disabled = true
+                            }
                         }
                         break
                     case "rent_start":

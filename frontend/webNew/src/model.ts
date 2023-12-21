@@ -1,4 +1,4 @@
-import {allDeviceTypes, DeviceTypeCollection} from "./service/devicetype-service"
+import {DeviceTypeCollection} from "./service/devicetype-service"
 import { ReactiveController, ReactiveControllerHost } from 'lit';
 import {Observable, Subject, Subscription} from 'rxjs';
 import {deviceTypeToFilterOption} from "./util"

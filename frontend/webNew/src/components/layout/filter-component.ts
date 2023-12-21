@@ -9,7 +9,7 @@ export class FilterComponent extends LitElement {
     @property({type:String})
     accountname?: string = 'No username provided'
 
-    // Render the UI as a function of component state
+
     render() {
         return html`
             <style>${styles}</style>
