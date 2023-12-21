@@ -1,42 +1,37 @@
 import {allDeviceTypes, DeviceTypeCollection} from "./service/devicetype-service"
 import { ReactiveController, ReactiveControllerHost } from 'lit';
-import { Observable, Subscription } from 'rxjs';
+import {Observable, Subject, Subscription} from 'rxjs';
+import {deviceTypeToFilterOption} from "./util"
+import {FilterOption, FilterOptionType} from "./components/basic/filter-container-component"
 
-/**
- * basically a representation of all entities in the backend
- */
+
 interface RequestModel {
-    deviceTypes: DeviceTypeCollection
+    deviceTypes: Subject<DeviceTypeCollection>
+    deviceTypeFilterOptions: Subject<FilterOption[]>
 }
 
-export default class Model implements RequestModel {
-    observer: Observable<Model>
+export default class Model implements RequestModel{
+    deviceTypes = new Subject<DeviceTypeCollection>()
+    deviceTypeFilterOptions = new Subject<FilterOption[]>()
 
-    deviceTypes: DeviceTypeCollection = []
+    constructor() {}
 
-    constructor() {
-        this.observer = new Observable((subscriber) => {
-            allDeviceTypes.subscribe(deviceTypes => {this.deviceTypes = deviceTypes; subscriber.next(this)})
-        });
+    setDeviceTypes(deviceTypes: DeviceTypeCollection){
+        this.deviceTypes.next(deviceTypes)
+        this.deviceTypeFilterOptions.next(deviceTypes.map(deviceTypeToFilterOption))
     }
 }
 
-export class AsyncController<T> implements ReactiveController {
+export class ObservedProperty<T> implements ReactiveController {
     sub: Subscription | null = null;
-    value: T
 
-    constructor(private host: ReactiveControllerHost, private source: Observable<any>, private converterFunc?: (a: any) => T) {
+    constructor(private host: ReactiveControllerHost, private source: Observable<T>, public value?: T) {
         this.host.addController(this);
     }
 
     hostConnected() {
         this.sub = this.source.subscribe(value => {
-            if(this.converterFunc){
-                this.value = this.converterFunc(value)
-            }
-            else{
-                this.value = value;
-            }
+            this.value = value;
             this.host.requestUpdate()
         })
     }
