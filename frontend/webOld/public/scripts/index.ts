@@ -517,9 +517,9 @@ function searchForTeacherFromSelectInput(inputValue: string, rentId: number) {
         .then(function (data) {
             let teacherType = teacherSearchbar.getAttribute('teacher_type')
             console.log(data)
-            var html = [];
+            let html = [];
             data.forEach(function (teacher: Teacher) {
-                var selectionOption = document.createElement('p');
+                let selectionOption = document.createElement('p');
                 selectionOption.innerText = teacher.firstname + " " + teacher.lastname;
                 selectionOption.addEventListener("click", function () {
                     updateRent(selectionOption, teacherType, teacher.teacher_id, rentId);

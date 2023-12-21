@@ -43,7 +43,7 @@ export class FilterContainerComponent extends LitElement {
             <style>${styles}</style>
             <div class="filter-block">
                 <p class="heading">${this.name}</p>
-                ${this.options.value?.map((option) => //loop over all options and map(return/create) an item for each
+                ${this.options?.value?.map((option) => //loop over all options and map(return/create) an item for each
                         html`<p class="option" @click="${(e:Event) => {this.selectOption(e, option)}}">${option.name}</p>`
                 )}
             </div>`
