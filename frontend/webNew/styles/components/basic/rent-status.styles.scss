@@ -1,11 +1,11 @@
 @import "../../base";
 
 .cc-rent-status{
-  width: 1.4rem;
+  width: .875rem;
   aspect-ratio: 1/1;
   border-radius: 100%;
   padding: .125rem;
-  margin: 1rem;
+  margin: .25rem;
 
   &[isBig="true"]{
     font-size: 1rem;

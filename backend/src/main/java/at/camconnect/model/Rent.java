@@ -6,6 +6,7 @@ import at.camconnect.statusSystem.CCStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.Set;
 
@@ -35,7 +36,7 @@ public class Rent {
     private LocalDate rent_start;
     private LocalDate rent_end_planned;
     private LocalDate rent_end_actual;
-    private LocalDate creation_date;
+    private final LocalDateTime creation_date;
     private String verification_code;
     private String verification_message;
     private RentStatusEnum status;
@@ -63,7 +64,7 @@ public class Rent {
 
     public Rent() {
         rent_start = LocalDate.now();
-        creation_date = LocalDate.now();
+        creation_date = LocalDateTime.now();
         status = RentStatusEnum.CREATED;
     }
 
@@ -209,7 +210,7 @@ public class Rent {
         this.verification_message = verification_message;
     }
 
-    public LocalDate getCreation_date() {
+    public LocalDateTime getCreation_date() {
         return creation_date;
     }
 

@@ -93,7 +93,7 @@ table input[type=checkbox] {
   height: 50%;
 }
 table input[disabled] {
-  cursor: not-allowed;
+  color: gray;
 }
 table input:focus-visible {
   background-color: rgba(179, 179, 179, 0.1);

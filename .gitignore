@@ -1,7 +1,7 @@
 .DS_Store
 .mvn
 .idea
-*.css.map
+*.map
 
 node_modules
 package.json
