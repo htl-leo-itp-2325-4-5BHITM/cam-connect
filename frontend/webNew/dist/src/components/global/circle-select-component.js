@@ -30,6 +30,7 @@ class CircleSelectComponent extends HTMLElement {
         div.classList.add(color || "accent");
         div.classList.add(type || "single");
         const image = document.createElement("img");
+        //TODO possibly import svg at top and append as plain html so that it can be colored without the filter workaround
         image.src = `../../assets/${div.classList.contains("active") ? "checked" : "unchecked"}_${type || "single"}.svg`;
         div.addEventListener("click", this.swapCheckbox.bind(this, image, type));
         div.appendChild(image);

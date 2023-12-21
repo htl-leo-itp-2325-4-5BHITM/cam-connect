@@ -1,7 +1,7 @@
 package at.camconnect.model.DeviceTypes;
 
 import at.camconnect.model.DeviceType;
-import at.camconnect.model.DeviceTypes.attributes.LensMount;
+import at.camconnect.model.DeviceTypeAttributes.LensMount;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;

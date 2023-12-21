@@ -5,12 +5,14 @@ import at.camconnect.statusSystem.CCResponse;
 import at.camconnect.model.Rent;
 import at.camconnect.repository.RentRepository;
 import jakarta.inject.Inject;
+import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import javax.print.attribute.standard.Media;
 import java.util.List;
 
 @Path("/rent")
@@ -70,6 +72,18 @@ public class RentResource {
         return CCResponse.ok();
     }
 
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/getbyid/{id: [0-9]+}/return")
+    public Response returnRent(@PathParam("id")Long id, JsonObject jsonObject){
+        try {
+            rentRepository.returnRent(id, jsonObject);
+        } catch(CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
+    }
+
     @GET
     @Path("/getbyid/{id: [0-9]+}/remove")
     public Response remove(@PathParam("id")Long id) {
@@ -81,7 +95,7 @@ public class RentResource {
     @Transactional
     @Path("/getbyid/{id: [0-9]+}/update")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateRent (@PathParam("id")Long id, JsonObject rent){
+    public Response update (@PathParam("id")Long id, JsonObject rent){
         try{
             rentRepository.update(id, rent);
         }catch (CCException ex){

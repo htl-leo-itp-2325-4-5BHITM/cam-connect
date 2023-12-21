@@ -3,6 +3,13 @@ PopupEngine.init({ textColor: "black", backgroundColor: "white", elemBackground:
 var urlParams = new URLSearchParams(window.location.search);
 var rentId = urlParams.get("id");
 var code = urlParams.get("vcode");
+if (urlParams.get("isAccepted")) {
+    document.querySelector(".accepted").setAttribute("active", "true");
+    confirmRent("confirmed");
+}
+else {
+    document.querySelector(".verification").setAttribute("active", "true");
+}
 fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId))
     .then(function (result) {
     return result.json();

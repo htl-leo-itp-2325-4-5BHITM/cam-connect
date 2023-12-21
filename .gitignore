@@ -1,3 +1,8 @@
 .DS_Store
 .mvn
 .idea
+*.map
+
+node_modules
+package.json
+package-lock.json

@@ -1,10 +1,14 @@
 package at.camconnect.model;
 
 import at.camconnect.enums.RentStatusEnum;
+import at.camconnect.statusSystem.CCException;
+import at.camconnect.statusSystem.CCStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Random;
+import java.util.Set;
 
 @Entity
 public class Rent {
@@ -32,6 +36,7 @@ public class Rent {
     private LocalDate rent_start;
     private LocalDate rent_end_planned;
     private LocalDate rent_end_actual;
+    private final LocalDateTime creation_date;
     private String verification_code;
     private String verification_message;
     private RentStatusEnum status;
@@ -43,16 +48,23 @@ public class Rent {
     private String accessory;
     private String device_string;
 
+    Set<RentStatusEnum> specifiedStatus = Set.of(RentStatusEnum.CONFIRMED, RentStatusEnum.WAITING, RentStatusEnum.RETURNED);
+    Set<RentStatusEnum> fullBlockStatus = Set.of(RentStatusEnum.RETURNED);
+
     public String getDevice_string() {
         return device_string;
     }
 
     public void setDevice_string(String deviceString) {
+        if(specifiedStatus.contains(status)){
+            throw new CCException(1205);
+        }
         this.device_string = deviceString;
     }
 
     public Rent() {
         rent_start = LocalDate.now();
+        creation_date = LocalDateTime.now();
         status = RentStatusEnum.CREATED;
     }
 
@@ -72,6 +84,7 @@ public class Rent {
                 ", rent_start=" + rent_start +
                 ", rent_end_planned=" + rent_end_planned +
                 ", rent_end_actual=" + rent_end_actual +
+                ", creation_date=" + creation_date +
                 ", status=" + status +
                 ", code=" + verification_code +
                 ", note='" + note + '\'' +
@@ -196,5 +209,10 @@ public class Rent {
     public void setVerification_message(String verification_message) {
         this.verification_message = verification_message;
     }
+
+    public LocalDateTime getCreation_date() {
+        return creation_date;
+    }
+
     //endregion
 }

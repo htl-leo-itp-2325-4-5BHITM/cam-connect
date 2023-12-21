@@ -32,7 +32,7 @@ api
 │           ├── note : {value}
 │           └── type: {value}
 ├── devicetype -x
-│   ├── getall
+│   ├── getall -> [DeviceType]
 │   ├── create -x
 │   │   ├── lens : {f_stop, mount_id, focal_length}
 │   │   ├── camera : {sensor_id, resolution_id, mount_id}

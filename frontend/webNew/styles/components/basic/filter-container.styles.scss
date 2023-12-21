@@ -1,0 +1,65 @@
+@import "../../base";
+
+.filter-option, .filter-block {
+  display: flex;
+  flex-direction: column;
+}
+
+div.filter-block {
+  .heading {
+    color: $accentDarkmodeLight;
+    font-weight: 600;
+    margin: 0;
+    font-size: 1.25rem  ;
+  }
+
+  .option:last-child {
+    &::after{
+      height: 50%;
+    }
+  }
+
+  .option {
+    font-weight: 400 !important;
+    color: $gray800 !important;
+    font-size: 1.25rem !important;
+    position: relative;
+
+    cursor: pointer;
+    user-select: none;
+
+    $linewidth: .8rem;
+    margin-left: calc($linewidth + .5rem) !important;
+
+    &::before, &::after {
+      content: "";
+      background-color: $accentDarkmodeLight;
+      position: absolute;
+      right: 100%;
+    }
+
+    &::before {
+      height: .15rem;
+      width: $linewidth;
+      top: 50%;
+      transform: translateY(-50%);
+      margin-right: .15rem;
+    }
+
+    &::after {
+      height: 100%;
+      width: .15rem;
+      margin-right: $linewidth;
+    }
+
+    &:hover {
+      color: $gray900;
+    }
+
+    &.selected {
+      color: white !important;
+      font-weight: 600 !important;
+    }
+  }
+}
+

@@ -1,19 +1,50 @@
-$accent: #4095BF;
-$accentDark: #2F6C8E;
-$accentLight: #75B3D7;
-$gray100: #262626;
-$gray200: #2E2E2E;
-$gray300: #363636;
-$gray400: #424242;
-$gray500: #595959;
-$gray600: #8C8C8C;
-$gray700: #ADADAD;
-$gray800: #CCCCCC;
-$gray900: #E6E6E6;
-$gray1000: #FFFFFF;
-$badGrayTransparent: hsla(0, 30%, 27%, 0.8);
-$badGray: #663D3D;
-$bad: #B94646;
-$badLight: #FAE5E5;
-$mid: #CC8633;
-$good: #578656;
+/*TO UPDATE these open figma and from files>plugins>manage plugins run CSSGen*/
+
+$accentDarkmodeDark: hsla(201,50.3%,37.1%,1);
+$accentDarkmode: hsla(200,49.8%,50%,1);
+$accentDarkmodeLight: hsla(202,55.1%,65.1%,1);
+$gray100: hsla(0,0%,14.9%,1);
+$gray150: hsla(0,0%,16.9%,1);
+$gray200: hsla(0,0%,18%,1);
+$gray300: hsla(0,0%,21.2%,1);
+$gray350: hsla(0,0%,23.1%,1);
+$gray400: hsla(0,0%,25.9%,1);
+$gray500: hsla(0,0%,34.9%,1);
+$gray600: hsla(0,0%,54.9%,1);
+$gray700: hsla(0,0%,67.8%,1);
+$gray800: hsla(0,0%,80%,1);
+$gray900: hsla(0,0%,90.2%,1);
+$gray1000: hsla(0,0%,100%,1);
+$badGrayTransparent: hsla(0,30.4%,27.1%,0.800);
+$badGray: hsla(0,25.2%,32%,1);
+$bad: hsla(0,45.1%,50%,1);
+$badDark: hsla(0,45.1%,40%,1);
+$badLight: hsla(0,67.7%,93.9%,1);
+$mid: hsla(32,59.8%,40%,1);
+$midDark: hsla(32,59.5%,30%,1);
+$good: hsla(119,21.8%,43.1%,1);
+$goodDark: hsla(118,21.5%,32%,1);
+$overlay: hsla(0,0%,24.3%,0.200);
+
+@mixin overlayBlur() {
+  backdrop-filter : blur(12px);
+}
+@mixin elveationTopInner() {
+  box-shadow: inset 0px 6px 6px hsla(0,0%,0%,0.150);
+}
+@mixin elevationTopLeftInner() {
+  box-shadow: inset 6px 6px 6px hsla(0,0%,0%,0.150);
+}
+@mixin elevationLeftInner() {
+  box-shadow: inset 6px 0px 6px hsla(0,0%,0%,0.150);
+}
+@mixin elevationBottomInner() {
+  box-shadow: inset 0px -6px 6px hsla(0,0%,0%,0.150);
+}
+
+@mixin svgColorAccent() {
+  filter: invert(57%) sepia(97%) saturate(166%) hue-rotate(158deg) brightness(97%) contrast(97%);
+}
+@mixin svgColorGray() {
+  filter: invert(77%) sepia(1%) saturate(0%) hue-rotate(248deg) brightness(91%) contrast(88%);
+}

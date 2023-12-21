@@ -5,3 +5,6 @@ GET http://localhost:8080/api/rent/getbyid/1/sendconfirmation/it200269
 POST http://144.24.171.164/api/devicetype/create/light
 
 {"watts": 40, "name": "testo", "rgb": true, "variable_temperature":false}
+
+###
+POST http://144.24.171.164/api/rent/createempty

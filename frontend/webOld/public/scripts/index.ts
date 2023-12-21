@@ -175,6 +175,7 @@ function generateTable() {
                 let cellinput = document.createElement("input")
                 cellinput.type = column.inputType
                 cellinput.setAttribute("celltype", column.cellType) //what piece of data the cell displays (rent_start, student_id etc.)
+                cellinput.classList.add(column.cellType)
 
                 //registers eventlisteners and displays data from allRents for columns that are synced with the db
                 switch (column.cellType) {
@@ -183,6 +184,9 @@ function generateTable() {
                             openStudentPicker(cellinput, allRents[i]?.rent_id)
                         })
                         cellinput.value = allRents[i]?.student?.firstname || ""
+                        if(allRents[i]?.status == "CONFIRMED" || allRents[i]?.status == "WAITING") {
+                            cellinput.disabled = true
+                        }
                         break
                     case "teacher_start":
                     case "teacher_end":
@@ -190,6 +194,10 @@ function generateTable() {
                             openTeacherPicker(cellinput, allRents[i]?.rent_id, column.cellType + "_id")
                         })
                         cellinput.value = allRents[i][column.cellType]?.lastname || ""
+                        if(allRents[i]?.status == "CONFIRMED" || allRents[i]?.status == "WAITING"){
+                            if(column.cellType !== "teacher_end")
+                                cellinput.disabled = true
+                        }
                         break
                     case "note":
                     case "accessory":
@@ -198,6 +206,11 @@ function generateTable() {
                             updateRent(cellinput, column.cellType, cellinput.value)
                         })
                         cellinput.value = allRents[i][column.cellType] || ""
+                        if(allRents[i]?.status == "CONFIRMED" || allRents[i]?.status == "WAITING") {
+                            if(column.cellType !== "note") {
+                                cellinput.disabled = true
+                            }
+                        }
                         break
                     case "rent_start":
                     case "rent_end_planned":
@@ -206,15 +219,43 @@ function generateTable() {
                             updateRent(cellinput, column.cellType, cellinput.value)
                         })
                         cellinput.value = allRents[i][column.cellType] || ""
+                        if(allRents[i]?.status == "CONFIRMED" || allRents[i]?.status == "WAITING"){
+                            if(column.cellType !== "rent_end_actual") {
+                                cellinput.disabled = true
+                            }
+                        }
                         break
                     case "delete_row":
                         let button = document.createElement('button');
-                        button.innerHTML = "Löschen"
-                        button.addEventListener("click", () => {
-                            removeRow(allRents[i]?.rent_id)
-                        })
+
+                        switch (allRents[i]?.status){
+                            case null:
+                            case undefined:
+                            case "CREATED":
+                            case "DECLINED":
+                                button.innerHTML = "Löschen"
+                                button.addEventListener("click", () => {
+                                    removeRow(allRents[i]?.rent_id)
+                                })
+                                break
+                            case "WAITING":
+                            case "RETURNED":
+                                button.disabled = true; button.innerHTML = "Löschen"
+                                break
+                            case "CONFIRMED":
+                                button.innerHTML = "Zurückgeben"
+                                button.addEventListener("click", () => {
+                                    returnRent(allRents[i]?.rent_id, allRents[i]?.verification_code)
+                                })
+                                break
+                        }
+
                         cell.appendChild(button)
                         break
+                }
+
+                if(allRents[i]?.status == "RETURNED"){
+                    cellinput.disabled = true
                 }
 
                 if(column.cellType != "delete_row"){
@@ -277,18 +318,60 @@ function generateTable() {
     table.append(...html)
 }
 
-function removeRow(rentId: number){
-    fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/remove`)
-        .then(response => {
-            return response.json()
+function returnRent(rentId: number, code: string){
+    fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/return`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "verification_code": code || "",
+            "verification_status": "RETURNED",
+            "verification_message": " "
         })
+    })
+        .then(response => response.json())
         .then(data => {
             console.log(data)
             requestAllRents()
-        })
-        .catch(error => console.error(error));
-}
 
+            if(data.ccStatus.statusCode == 1000){
+                //@ts-ignore
+                PopupEngine.createNotification({text: `Verleih wurde erfolgreich zurückgegeben`})
+            } else {
+                //@ts-ignore
+                PopupEngine.createNotification({text: `Es gab einen Fehler beim Zurückgeben des Verleihs`})
+            }
+
+        })
+        .catch(error => console.error(error));}
+
+function removeRow(rentId: number){
+    if(allRents[rentId]?.status != "WAITING" && allRents[rentId]?.status != "RETURNED"){
+        const confirmation = confirm("Are you sure you want to delete this row?");
+
+        if(confirmation){
+            fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/remove`)
+                .then(response => {
+                    return response.json()
+                })
+                .then(data => {
+                    console.log(data)
+                    requestAllRents()
+
+                    if(data.ccStatus.statusCode == 1000){
+                        //@ts-ignore
+                        PopupEngine.createNotification({text: `Verleih wurde erfolgreich gelöscht`})
+                    } else {
+                        //@ts-ignore
+                        PopupEngine.createNotification({text: `Es gab einen Fehler beim Löschen des Verleihs`})
+                    }
+
+                })
+                .catch(error => console.error(error));
+        }
+    }
+}
 //endregion
 
 // region verification
@@ -434,9 +517,9 @@ function searchForTeacherFromSelectInput(inputValue: string, rentId: number) {
         .then(function (data) {
             let teacherType = teacherSearchbar.getAttribute('teacher_type')
             console.log(data)
-            var html = [];
+            let html = [];
             data.forEach(function (teacher: Teacher) {
-                var selectionOption = document.createElement('p');
+                let selectionOption = document.createElement('p');
                 selectionOption.innerText = teacher.firstname + " " + teacher.lastname;
                 selectionOption.addEventListener("click", function () {
                     updateRent(selectionOption, teacherType, teacher.teacher_id, rentId);
@@ -516,23 +599,6 @@ function createRent() {
         .catch(error => console.error(error));
 }
 
-//DeleteRow
-function deleteRow(rentId:number) {
-    const confirmation = confirm("Are you sure you want to delete this row?");
-    if (confirmation) {
-        fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/delete`, {
-            method: 'DELETE',
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                requestAllRents(); // Refresh the table after deletion
-            })
-            .catch(error => console.error(error));
-    }
-}
-
-
 //region load csv update
 
 function importDataFromCsv(button:HTMLButtonElement) {
@@ -544,7 +610,7 @@ function importDataFromCsv(button:HTMLButtonElement) {
 
     let importType = button.closest("div").getAttribute("data-import")
 
-    fetch(APPLICATION_URL + `/${importType}/import`, {
+    fetch( APPLICATION_URL + `/${importType}/import`, {
         method: 'POST',
         body: formData,
     })

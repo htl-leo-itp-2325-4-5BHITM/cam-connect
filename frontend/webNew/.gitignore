@@ -1,4 +1,6 @@
 package-lock.json
 node_modules/
 target/
+dist
 *.css
+*.map

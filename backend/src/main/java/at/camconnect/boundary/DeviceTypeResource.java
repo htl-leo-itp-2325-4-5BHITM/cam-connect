@@ -11,7 +11,6 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
 import java.util.List;
 
 @Path("/devicetype")
@@ -33,12 +32,12 @@ public class DeviceTypeResource {
     }
 
     @GET
-    @Path("/getall")
+    @Path("/getbyid/{id: [0-9]+}")
     @Transactional
-    public Response getAll(){
-        List<DeviceType> result;
+    public Response getById(@PathParam("id") Long id){
+        DeviceType result;
         try{
-            result = deviceTypeRepository.getAll();
+            result = deviceTypeRepository.getById(id);
         }catch (CCException ex){
             return CCResponse.error(ex);
         }
@@ -47,12 +46,12 @@ public class DeviceTypeResource {
     }
 
     @GET
-    @Path("/getbyid/{id: [0-9]+}")
+    @Path("/getall")
     @Transactional
-    public Response getById(@PathParam("id") Long id){
-        DeviceType result;
+    public Response getall(){
+        List<DeviceType> result;
         try{
-            result = deviceTypeRepository.getById(id);
+            result = deviceTypeRepository.getAll();
         }catch (CCException ex){
             return CCResponse.error(ex);
         }

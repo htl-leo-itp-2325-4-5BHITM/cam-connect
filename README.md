@@ -26,5 +26,6 @@ Diese Dokumente sind primär für die interne Verwendung gedacht und daher in En
 - [Änderungen/Updates](./docs/changelog.md)
 - [API Routen](./docs/api.md)
 - [Das Projekt starten](./docs/startup.md)
-- [Code Richtlinien](./docs/conventions.md)
+- [Richtlinien](./docs/conventions.md)
 - [Datenbankstruktur](./docs/uml.puml)
+- [Styleguide](./docs/style.md)

@@ -11,19 +11,20 @@
     </head>
 
     <body>
-        <main class="verification">
-            <h2>Möchtest du folgenden Verleih bestätigen</h2>
+        <div class="accepted">
+            <h2>Danke, dass Sie den Verleih bestätigt haben</h2>
+        </div>
+
+
+        <div class="verification">
+            <h2>Möchtest du folgenden Verleih Ablehnen?</h2>
 
             <div class="rentData"></div>
-
-            <div class="buttons">
-                <button onclick="confirmRent('confirmed')" class="accept">Zustimmen</button>
-            </div>
 
             <div class="buttons">
                 <input type="text" id="rejectionReason" placeholder="Ablehngrund">
                 <button onclick="confirmRent('declined')" class="decline">Ablehnen</button>
             </div>
-        </main>
+        </div>
     </body>
 </html>
