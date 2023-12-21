@@ -103,7 +103,7 @@ table{
     }
 
     &[disabled]{
-      cursor: not-allowed;
+      color: gray;
     }
 
     &:focus-visible{
