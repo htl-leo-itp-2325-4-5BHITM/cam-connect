@@ -189,17 +189,32 @@ function generateTable() {
                         }
                         break
                     case "teacher_start":
-                    case "teacher_end":
                         cellinput.addEventListener("mouseup", () => {
                             openTeacherPicker(cellinput, allRents[i]?.rent_id, column.cellType + "_id")
                         })
                         cellinput.value = allRents[i][column.cellType]?.lastname || ""
                         if(allRents[i]?.status == "CONFIRMED" || allRents[i]?.status == "WAITING"){
-                            if(column.cellType !== "teacher_end")
-                                cellinput.disabled = true
+                            cellinput.disabled = true
+                        }
+                        break
+                    case "teacher_end":
+                        cellinput.addEventListener("mouseup", () => {
+                            openTeacherPicker(cellinput, allRents[i]?.rent_id, column.cellType + "_id")
+                        })
+                        cellinput.value = allRents[i][column.cellType]?.lastname || ""
+                        if(allRents[i]?.status !== "CONFIRMED"){
+                            cellinput.disabled = true
                         }
                         break
                     case "note":
+                        cellinput.addEventListener("blur", () => {
+                            updateRent(cellinput, column.cellType, cellinput.value)
+                        })
+                        cellinput.value = allRents[i][column.cellType] || ""
+                        if(allRents[i]?.status !== "CONFIRMED"){
+                            cellinput.disabled = true
+                        }
+                        break
                     case "accessory":
                     case "device_string":
                         cellinput.addEventListener("blur", () => {
@@ -207,22 +222,26 @@ function generateTable() {
                         })
                         cellinput.value = allRents[i][column.cellType] || ""
                         if(allRents[i]?.status == "CONFIRMED" || allRents[i]?.status == "WAITING") {
-                            if(column.cellType !== "note") {
-                                cellinput.disabled = true
-                            }
+                            cellinput.disabled = true
                         }
                         break
                     case "rent_start":
                     case "rent_end_planned":
-                    case "rent_end_actual":
                         cellinput.addEventListener("input", () => {
                             updateRent(cellinput, column.cellType, cellinput.value)
                         })
                         cellinput.value = allRents[i][column.cellType] || ""
                         if(allRents[i]?.status == "CONFIRMED" || allRents[i]?.status == "WAITING"){
-                            if(column.cellType !== "rent_end_actual") {
-                                cellinput.disabled = true
-                            }
+                            cellinput.disabled = true
+                        }
+                        break
+                    case "rent_end_actual":
+                        cellinput.addEventListener("input", () => {
+                            updateRent(cellinput, column.cellType, cellinput.value)
+                        })
+                        cellinput.value = allRents[i][column.cellType] || ""
+                        if(allRents[i]?.status !== "CONFIRMED"){
+                            cellinput.disabled = true
                         }
                         break
                     case "delete_row":

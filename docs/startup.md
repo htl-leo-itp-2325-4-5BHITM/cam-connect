@@ -6,7 +6,13 @@
 
 `docker exec -it postgres-container psql -U postgres`
 
-`create database camconnect;` ; is important
+```
+create database camconnect;
+
+create user camconnect with password 'postgresdb';
+
+alter user camconnect with superuser;
+```
 
 ### initial
 To run the backend open the whole project in IntelliJ and run the module cam-connect-backend.
