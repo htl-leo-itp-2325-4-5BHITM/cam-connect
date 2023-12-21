@@ -1,10 +1,13 @@
 package at.camconnect.model;
 
 import at.camconnect.enums.RentStatusEnum;
+import at.camconnect.statusSystem.CCException;
+import at.camconnect.statusSystem.CCStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.Random;
+import java.util.Set;
 
 @Entity
 public class Rent {
@@ -44,11 +47,17 @@ public class Rent {
     private String accessory;
     private String device_string;
 
+    Set<RentStatusEnum> specifiedStatus = Set.of(RentStatusEnum.CONFIRMED, RentStatusEnum.WAITING, RentStatusEnum.RETURNED);
+    Set<RentStatusEnum> fullBlockStatus = Set.of(RentStatusEnum.RETURNED);
+
     public String getDevice_string() {
         return device_string;
     }
 
     public void setDevice_string(String deviceString) {
+        if(specifiedStatus.contains(status)){
+            throw new CCException(1205);
+        }
         this.device_string = deviceString;
     }
 
@@ -105,6 +114,9 @@ public class Rent {
     }
 
     public void setAccessory(String accessory) {
+        if(specifiedStatus.contains(status)){
+            throw new CCException(1205);
+        }
         this.accessory = accessory;
     }
 
@@ -113,6 +125,9 @@ public class Rent {
     }
 
     public void setRent_id(Long rent_id) {
+        if(specifiedStatus.contains(status)){
+            throw new CCException(1205);
+        }
         this.rent_id = rent_id;
     }
 
@@ -121,6 +136,9 @@ public class Rent {
     }
 
     public void setStudent(Student student) {
+        if(specifiedStatus.contains(status)){
+            throw new CCException(1205);
+        }
         this.student = student;
     }
 
@@ -129,6 +147,9 @@ public class Rent {
     }
 
     public void setDevice(Device device) {
+        if(specifiedStatus.contains(status)){
+            throw new CCException(1205);
+        }
         this.device = device;
     }
 
@@ -137,6 +158,9 @@ public class Rent {
     }
 
     public void setTeacher_start(Teacher teacherStart) {
+        if(specifiedStatus.contains(status)){
+            throw new CCException(1205);
+        }
         this.teacher_start = teacherStart;
     }
 
@@ -145,6 +169,9 @@ public class Rent {
     }
 
     public void setTeacher_end(Teacher teacherEnd) {
+        if(fullBlockStatus.contains(status)){
+            throw new CCException(1205);
+        }
         this.teacher_end = teacherEnd;
     }
 
@@ -153,6 +180,9 @@ public class Rent {
     }
 
     public void setRent_start(LocalDate rent_start) {
+        if(specifiedStatus.contains(status)){
+            throw new CCException(1205);
+        }
         this.rent_start = rent_start;
     }
 
@@ -161,6 +191,9 @@ public class Rent {
     }
 
     public void setRent_end_planned(LocalDate rent_end_planned) {
+        if(specifiedStatus.contains(status)){
+            throw new CCException(1205);
+        }
         this.rent_end_planned = rent_end_planned;
     }
 
@@ -169,6 +202,9 @@ public class Rent {
     }
 
     public void setRent_end_actual(LocalDate rent_end_actual) {
+        if(fullBlockStatus.contains(status)){
+            throw new CCException(1205);
+        }
         this.rent_end_actual = rent_end_actual;
     }
 
@@ -177,6 +213,9 @@ public class Rent {
     }
 
     public void setStatus(RentStatusEnum status) {
+        if(status.equals(RentStatusEnum.RETURNED) && getRent_end_actual() == null){
+            setRent_end_actual(LocalDate.now());
+        }
         this.status = status;
     }
 
@@ -185,6 +224,9 @@ public class Rent {
     }
 
     public void setNote(String note) {
+        if(specifiedStatus.contains(status)){
+            throw new CCException(1205);
+        }
         this.note = note;
     }
 

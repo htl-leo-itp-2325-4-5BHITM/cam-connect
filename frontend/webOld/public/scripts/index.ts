@@ -184,7 +184,9 @@ function generateTable() {
                             openStudentPicker(cellinput, allRents[i]?.rent_id)
                         })
                         cellinput.value = allRents[i]?.student?.firstname || ""
-                        if(allRents[i]?.status == "CONFIRMED") cellinput.disabled = true
+                        if(allRents[i]?.status == "CONFIRMED" || allRents[i]?.status == "WAITING") {
+                            cellinput.disabled = true
+                        }
                         break
                     case "teacher_start":
                     case "teacher_end":
@@ -192,7 +194,11 @@ function generateTable() {
                             openTeacherPicker(cellinput, allRents[i]?.rent_id, column.cellType + "_id")
                         })
                         cellinput.value = allRents[i][column.cellType]?.lastname || ""
-                        if(allRents[i]?.status == "CONFIRMED" && column.cellType != "teacher_end") cellinput.disabled = true
+                        if(allRents[i]?.status == "CONFIRMED" || allRents[i]?.status == "WAITING"){
+                            if(column.cellType !== "teacher_end") {
+                                cellinput.disabled = true
+                            }
+                        }
                         break
                     case "note":
                     case "accessory":
@@ -201,7 +207,9 @@ function generateTable() {
                             updateRent(cellinput, column.cellType, cellinput.value)
                         })
                         cellinput.value = allRents[i][column.cellType] || ""
-                        if(allRents[i]?.status == "CONFIRMED" && column.cellType != "note") cellinput.disabled = true
+                        if(allRents[i]?.status == "CONFIRMED" || allRents[i]?.status == "WAITING") {
+                            cellinput.disabled = true
+                        }
                         break
                     case "rent_start":
                     case "rent_end_planned":
@@ -210,7 +218,11 @@ function generateTable() {
                             updateRent(cellinput, column.cellType, cellinput.value)
                         })
                         cellinput.value = allRents[i][column.cellType] || ""
-                        if(allRents[i]?.status == "CONFIRMED" && column.cellType != "rent_end_actual") cellinput.disabled = true
+                        if(allRents[i]?.status == "CONFIRMED" || allRents[i]?.status == "WAITING"){
+                            if(column.cellType !== "rent_end_actual") {
+                                cellinput.disabled = true
+                            }
+                        }
                         break
                     case "delete_row":
                         let button = document.createElement('button');
@@ -239,6 +251,10 @@ function generateTable() {
 
                         cell.appendChild(button)
                         break
+                }
+
+                if(allRents[i]?.status == "RETURNED"){
+                    cellinput.disabled = true
                 }
 
                 if(column.cellType != "delete_row"){
