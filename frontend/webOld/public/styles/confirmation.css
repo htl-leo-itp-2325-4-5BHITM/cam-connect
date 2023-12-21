@@ -41,4 +41,17 @@ body {
   display: block;
 }
 
+.buttons {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  margin-inline: auto;
+  margin-top: 1rem;
+}
+
+#rejectionReason {
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
 /*# sourceMappingURL=confirmation.css.map */

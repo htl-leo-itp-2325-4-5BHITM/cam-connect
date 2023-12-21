@@ -94,21 +94,24 @@ public class RentRepository {
             FRONTEND_URL = "http://localhost:3000";
         }
 
+        Rent rent = getById(id);
+
         MailMessage message = new MailMessage();
         message.setFrom("signup.camconnect@gmail.com");
-        String email = getById(id).getStudent().getEmail();
+        String email = rent.getStudent().getEmail();
         message.setTo(email);
         message.setSubject("Bestätigung des Geräteverleih");
 
-        String verification_code = getById(id).generateVerification_code();
-        em.merge(getById(id));
+        String verification_code = rent.generateVerification_code();
+        em.merge(rent);
 
         String urlDecline = FRONTEND_URL + "/confirmVerification.html?vcode=" + verification_code + "&id=" + id;
         String urlAccept = urlDecline + "&isAccepted=true";
 
         //plaintext is als backup für den html content, wenn html möglich ist wird nur das angezeigt
         message.setHtml("Bitte bestätige oder lehne deinen Verleih ab:<br>" +
-                "<div><a style='margin: 2rem; padding: .5rem 1rem; color: black;' href='" + urlAccept + "'>Bestätigen</a>" +
+                "<p>" + rent.getDevice_string() + " mit Zubehör: " + rent.getAccessory() + " von: " + rent.getRent_start() + " bis: " + rent.getRent_end_planned() + "</p>" +
+                 "<div><a style='margin: 2rem; padding: .5rem 1rem; color: black;' href='" + urlAccept + "'>Bestätigen</a>" +
                 "<a style='margin: 2rem; padding: .5rem 1rem; color: black;' href='" + urlDecline + "'>Ablehnen</a></div>");
 
         return message;
@@ -181,7 +184,7 @@ public class RentRepository {
         message.setTo(email);
         message.setSubject("Bestätigung der Gerät Rückgabe");
         //plaintext is als backup für den html content, wenn html möglich ist wird nur das angezeigt
-        message.setHtml("Hiermit ist bestätigt, dass sie ihr Gerät der Lehrkraft zurückgegeben haben.");
+        message.setHtml("Ihr Verleih von " + rent.getDevice_string() + " vom: " + rent.getRent_start() + " bis: " + rent.getRent_end_actual() + ", wurde zurückgegeben.");
 
 
         client.sendMail(message, result -> {
