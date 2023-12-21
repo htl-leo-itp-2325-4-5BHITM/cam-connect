@@ -11,7 +11,6 @@ import io.vertx.ext.mail.MailClient;
 import io.vertx.ext.mail.MailMessage;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
 import jakarta.persistence.EntityManager;
@@ -29,8 +28,6 @@ public class RentRepository {
 
     @Inject
     MailClient client;
-
-    private final String FRONTEND_URL = "http://localhost:3000";
 
     @Transactional
     public void create(JsonObject rentJson){
@@ -71,7 +68,7 @@ public class RentRepository {
             throw new CCException(1205, "Email is already send");
         }
 
-        MailMessage message = generateMailMessage(id);
+        MailMessage message = generateConfirmationMailMessage(id);
         System.out.println(message.toJson());
 
         rent.setStatus(RentStatusEnum.WAITING);
@@ -88,7 +85,15 @@ public class RentRepository {
     }
 
     @Transactional
-    public MailMessage generateMailMessage(Long id) {
+    public MailMessage generateConfirmationMailMessage(Long id) {
+        String FRONTEND_URL = "http://144.24.171.164/public/";
+
+        String os = System.getProperty("os.name").toLowerCase();
+
+        if (os.contains("win")) {
+            FRONTEND_URL = "http://localhost:3000";
+        }
+
         MailMessage message = new MailMessage();
         message.setFrom("signup.camconnect@gmail.com");
         String email = getById(id).getStudent().getEmail();
@@ -230,21 +235,24 @@ public class RentRepository {
 
 
         if(validateJsonKey(rentJson,"status"))
-        try{
-            confirm(id, rentJson.getString("status"));
-        } catch(Exception ex){ throw new CCException(1105, "cannot update status " + ex.getMessage()); }
+            try{ confirm(id, rentJson.getString("status")); }
+            catch (CCException ccex){ throw ccex; }
+            catch(Exception ex){ throw new CCException(1105, "cannot update status " + ex.getMessage()); }
 
-        if(validateJsonKey(rentJson,"note")) try{
-            setNote(id, rentJson.getString("note"));
-        } catch(Exception ex){ throw new CCException(1105, "cannot update note " + ex.getMessage()); }
+        if(validateJsonKey(rentJson,"note"))
+            try{ setNote(id, rentJson.getString("note")); }
+            catch (CCException ccex){ throw ccex; }
+            catch(Exception ex){ throw new CCException(1105, "cannot update note " + ex.getMessage()); }
 
-        if(validateJsonKey(rentJson,"accessory")) try{
-            setAccessory(id, rentJson.getString("accessory"));
-        } catch(Exception ex){ throw new CCException(1105, "cannot update accessory " + ex.getMessage()); }
+        if(validateJsonKey(rentJson,"accessory"))
+            try{ setAccessory(id, rentJson.getString("accessory")); }
+            catch (CCException ccex){ throw ccex; }
+            catch(Exception ex){ throw new CCException(1105, "cannot update accessory " + ex.getMessage()); }
 
-        if(validateJsonKey(rentJson,"device_string")) try{
-            setDeviceString(id, rentJson.getString("device_string"));
-        } catch(Exception ex){ throw new CCException(1105, "cannot update device_string " + ex.getMessage()); }
+        if(validateJsonKey(rentJson,"device_string"))
+            try{ setDeviceString(id, rentJson.getString("device_string")); }
+            catch (CCException ccex){ throw ccex; }
+            catch(Exception ex){ throw new CCException(1105, "cannot update device_string " + ex.getMessage()); }
     }
 
     //region setter

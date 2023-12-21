@@ -73,7 +73,7 @@ public class TeacherRepository {
                 create(new Teacher(lineArray[0], lineArray[1], lineArray[2], lineArray[3], lineArray[4]));
             }
         } catch (IOException e) {
-            throw new CCException(1204, "File could not be read");
+            throw new CCException(1204, "File could not be read: " + e.getMessage());
         }
     }
 }

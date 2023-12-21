@@ -2,7 +2,7 @@
 let APPLICATION_URL: string = "http://localhost:8080/api"
 
 // Check if the protocol is either "http:" or "https:"
-if(window.location.protocol === 'http:' || window.location.protocol === 'https:'){
+if(window.location.hostname !== "localhost"){
     APPLICATION_URL = "http://144.24.171.164/api"
 }
 
@@ -348,28 +348,41 @@ function returnRent(rentId: number, code: string){
 
 function removeRow(rentId: number){
     if(allRents[rentId]?.status != "WAITING" && allRents[rentId]?.status != "RETURNED"){
-        const confirmation = confirm("Are you sure you want to delete this row?");
+        // @ts-ignore
+        PopupEngine.createModal({
+            heading: "Bestätigen",
+            text: "Sicher das sie diesen Eintrag Löschen wollen?",
 
-        if(confirmation){
-            fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/remove`)
-                .then(response => {
-                    return response.json()
-                })
-                .then(data => {
-                    console.log(data)
-                    requestAllRents()
+            buttons: [
+                {
+                    text: "löschen",
+                    action: () => {
+                        fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/remove`)
+                            .then(response => {
+                                return response.json()
+                            })
+                            .then(data => {
+                                console.log(data)
+                                requestAllRents()
 
-                    if(data.ccStatus.statusCode == 1000){
-                        //@ts-ignore
-                        PopupEngine.createNotification({text: `Verleih wurde erfolgreich gelöscht`})
-                    } else {
-                        //@ts-ignore
-                        PopupEngine.createNotification({text: `Es gab einen Fehler beim Löschen des Verleihs`})
-                    }
+                                if(data.ccStatus.statusCode == 1000){
+                                    //@ts-ignore
+                                    PopupEngine.createNotification({text: `Verleih wurde erfolgreich gelöscht`})
+                                } else {
+                                    //@ts-ignore
+                                    PopupEngine.createNotification({text: `Es gab einen Fehler beim Löschen des Verleihs`})
+                                }
 
-                })
-                .catch(error => console.error(error));
-        }
+                            })
+                            .catch(error => console.error(error));
+                    },
+                    closePopup: true
+                },
+                {
+                    text: "abbrechen",
+                },
+            ]
+        })
     }
 }
 //endregion
@@ -601,16 +614,20 @@ function createRent() {
 
 //region load csv update
 
-function importDataFromCsv(button:HTMLButtonElement) {
-    let file:File = button.closest("div").querySelector("input").files[0]
+let studentInput = document.querySelector('#schueler-in') as HTMLInputElement
+studentInput.addEventListener("input", () => {importDataFromCsv(studentInput, 'student')})
+
+let teacherInput = document.querySelector('#lehrer-in') as HTMLInputElement
+teacherInput.addEventListener("input", () => {importDataFromCsv(teacherInput, 'teacher')})
+
+function importDataFromCsv(input:HTMLInputElement, type:string) {
+    let file:File = input.files[0]
     const formData = new FormData()
     formData.append('file', file)
 
     console.log(formData, file)
 
-    let importType = button.closest("div").getAttribute("data-import")
-
-    fetch( APPLICATION_URL + `/${importType}/import`, {
+    fetch( APPLICATION_URL + `/${type}/import`, {
         method: 'POST',
         body: formData,
     })
@@ -622,7 +639,7 @@ function importDataFromCsv(button:HTMLButtonElement) {
             switch (data.ccStatus.statusCode){
                 case 1000:
                     //@ts-ignore
-                    PopupEngine.createNotification({text: `Successfully imported ${importType}`})
+                    PopupEngine.createNotification({text: `Successfully imported ${type}`})
                     break
                 case 1204:
                     //@ts-ignore
@@ -636,10 +653,6 @@ function importDataFromCsv(button:HTMLButtonElement) {
         })
 }
 
-let importButtonss = document.querySelectorAll('#import button') as NodeListOf<HTMLButtonElement>
-importButtonss.forEach(elem=>{
-    elem.addEventListener("click", ()=>{importDataFromCsv(elem)})
-})
 //endregion
 
 //region utlity

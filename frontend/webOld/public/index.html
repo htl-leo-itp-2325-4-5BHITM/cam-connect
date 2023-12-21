@@ -32,20 +32,12 @@
         <!--<button onclick="deleteRow(123)">Delete Row</button>-->
 
         <div id="import">
-            <div data-import="student">
-                <input type="file" accept=".csv" />
-                <button>Schüler Importieren</button>
-            </div>
+            <label for="schueler-in">Schüler: </label>
+            <input type="file" id="schueler-in" accept=".csv"/>
             <hr>
-            <div data-import="teacher">
-                <input type="file" accept=".csv" />
-                <button>Lehrer Importieren</button>
-            </div>
+            <label for="lehrer-in">Lehrer: </label>
+            <input type="file" id="lehrer-in" name="lehrer" accept=".csv"/>
             <hr>
-            <!--<div data-import="device">
-                <input type="file" accept=".csv" />
-                <button>Geräte Importieren</button>
-            </div>-->
         </div>
     </body>
 </html>

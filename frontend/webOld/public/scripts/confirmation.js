@@ -1,4 +1,7 @@
 var APPLICATION_URL = "http://localhost:8080/api";
+if (window.location.hostname !== "localhost") {
+    APPLICATION_URL = "http://144.24.171.164/api";
+}
 PopupEngine.init({ textColor: "black", backgroundColor: "white", elemBackground: "#EEE" });
 var urlParams = new URLSearchParams(window.location.search);
 var rentId = urlParams.get("id");

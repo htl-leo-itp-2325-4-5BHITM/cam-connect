@@ -1,5 +1,10 @@
 // @ts-ignore
-const APPLICATION_URL: string = "http://localhost:8080/api"
+let APPLICATION_URL: string = "http://localhost:8080/api"
+
+// Check if the protocol is either "http:" or "https:"
+if(window.location.hostname !== "localhost"){
+    APPLICATION_URL = "http://144.24.171.164/api"
+}
 // @ts-ignore
 PopupEngine.init({textColor:"black", backgroundColor: "white", elemBackground: "#EEE"})
 

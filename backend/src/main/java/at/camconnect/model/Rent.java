@@ -48,19 +48,9 @@ public class Rent {
     private String accessory;
     private String device_string;
 
+    //TODO change these names i have no idea what they mean
     Set<RentStatusEnum> specifiedStatus = Set.of(RentStatusEnum.CONFIRMED, RentStatusEnum.WAITING, RentStatusEnum.RETURNED);
     Set<RentStatusEnum> fullBlockStatus = Set.of(RentStatusEnum.RETURNED);
-
-    public String getDevice_string() {
-        return device_string;
-    }
-
-    public void setDevice_string(String deviceString) {
-        if(specifiedStatus.contains(status)){
-            throw new CCException(1205);
-        }
-        this.device_string = deviceString;
-    }
 
     public Rent() {
         rent_start = LocalDate.now();
@@ -208,6 +198,14 @@ public class Rent {
 
     public void setVerification_message(String verification_message) {
         this.verification_message = verification_message;
+    }
+
+    public String getDevice_string() {
+        return device_string;
+    }
+
+    public void setDevice_string(String deviceString) {
+        this.device_string = deviceString;
     }
 
     public LocalDateTime getCreation_date() {

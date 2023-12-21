@@ -45,8 +45,13 @@ public class RentResource {
 
     @GET
     @Path("/getbyid/{id: [0-9]+}")
-    public Rent getById(@PathParam("id")Long id) {
-        return rentRepository.getById(id);
+    public Response getById(@PathParam("id")Long id) {
+        try{
+            rentRepository.getById(id);
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
 
     @GET
