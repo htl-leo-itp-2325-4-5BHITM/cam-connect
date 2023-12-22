@@ -1,6 +1,6 @@
 package at.camconnect.repository;
 
-import at.camconnect.statusSystem.CCException;
+import at.camconnect.responseSystem.CCException;
 import at.camconnect.model.Device;
 import at.camconnect.model.DeviceType;
 import jakarta.enterprise.context.ApplicationScoped;

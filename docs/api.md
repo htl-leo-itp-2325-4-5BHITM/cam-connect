@@ -1,9 +1,9 @@
 # CamConnect API Doku
-
 - `routename/{pathparam}: {jsonkey, ?optional_jsonkey} -> ReturnValue`
 - `iamnotavalidroute -x`
+- `ihaveawavyarrowiamasocket ~>`
+- 
 ## Structure
-
 ```
 api
 ├── rent -x
@@ -53,6 +53,14 @@ api
 │           └── stabilizer : {name, max_weight, number_of_axis}
 ├── student -x
 └── teacher -x
+
+socket
+├── rents ~> [Rent]
+├── devices ~> [Device]
+├── devicetypes ~> [DeviceType]
+├── students ~> [Student]
+└── teachers ~> [Teacher]
+
 ```
 
 ## Response Structure

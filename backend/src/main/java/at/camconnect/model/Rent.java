@@ -1,8 +1,6 @@
 package at.camconnect.model;
 
 import at.camconnect.enums.RentStatusEnum;
-import at.camconnect.statusSystem.CCException;
-import at.camconnect.statusSystem.CCStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;

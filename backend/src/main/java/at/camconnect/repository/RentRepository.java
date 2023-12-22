@@ -1,12 +1,12 @@
 package at.camconnect.repository;
 
 import at.camconnect.enums.RentStatusEnum;
-import at.camconnect.statusSystem.CCException;
+import at.camconnect.responseSystem.CCException;
 import at.camconnect.model.Device;
 import at.camconnect.model.Rent;
 import at.camconnect.model.Student;
 import at.camconnect.model.Teacher;
-import at.camconnect.statusSystem.CCResponse;
+import at.camconnect.responseSystem.CCResponse;
 import io.vertx.ext.mail.MailClient;
 import io.vertx.ext.mail.MailMessage;
 import jakarta.enterprise.context.ApplicationScoped;

@@ -1,4 +1,4 @@
-package at.camconnect.statusSystem;
+package at.camconnect.responseSystem;
 
 /**
  * used to transfer both CCStatus and any data both at once

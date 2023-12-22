@@ -1,4 +1,4 @@
-package at.camconnect.statusSystem;
+package at.camconnect.responseSystem;
 
 import jakarta.ws.rs.core.Response;
 

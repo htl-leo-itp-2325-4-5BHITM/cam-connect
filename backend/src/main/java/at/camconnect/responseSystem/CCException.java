@@ -1,4 +1,4 @@
-package at.camconnect.statusSystem;
+package at.camconnect.responseSystem;
 
 /**
  * Exception that should be thrown anytime a problem should be passed on to the API response

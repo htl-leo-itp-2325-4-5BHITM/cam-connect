@@ -1,6 +1,6 @@
 package at.camconnect.repository;
 
-import at.camconnect.statusSystem.CCException;
+import at.camconnect.responseSystem.CCException;
 import at.camconnect.model.Teacher;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;

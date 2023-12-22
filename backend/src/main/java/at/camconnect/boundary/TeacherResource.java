@@ -1,7 +1,7 @@
 package at.camconnect.boundary;
 
-import at.camconnect.statusSystem.CCException;
-import at.camconnect.statusSystem.CCResponse;
+import at.camconnect.responseSystem.CCException;
+import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.model.Teacher;
 import at.camconnect.repository.TeacherRepository;
 import jakarta.inject.Inject;

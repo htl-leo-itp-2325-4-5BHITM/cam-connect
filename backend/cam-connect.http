@@ -1,5 +1,5 @@
 ###
-GET http://localhost:8080/api/rent/getbyid/1/sendconfirmation/it200269
+GET http://localhost:8080/api/devicetype/getall
 
 ###
 POST http://144.24.171.164/api/devicetype/create/light

@@ -1,18 +1,16 @@
 package at.camconnect.boundary;
 
-import at.camconnect.statusSystem.CCException;
-import at.camconnect.statusSystem.CCResponse;
+import at.camconnect.responseSystem.CCException;
+import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.model.Rent;
 import at.camconnect.repository.RentRepository;
 import jakarta.inject.Inject;
-import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import javax.print.attribute.standard.Media;
 import java.util.List;
 
 @Path("/rent")

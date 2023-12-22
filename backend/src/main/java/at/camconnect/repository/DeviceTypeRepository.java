@@ -1,7 +1,6 @@
 package at.camconnect.repository;
 
-import at.camconnect.model.Student;
-import at.camconnect.statusSystem.CCException;
+import at.camconnect.responseSystem.CCException;
 import at.camconnect.enums.DeviceTypeEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypes.*;
