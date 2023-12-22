@@ -4,19 +4,19 @@ import at.camconnect.model.DeviceType;
 import jakarta.persistence.Entity;
 
 @Entity
-public class AudioType extends DeviceType {
+public class MicrophoneType extends DeviceType {
     private boolean windblocker;
     private boolean wireless;
     private boolean needsRecorder;
 
-    public AudioType(String typeName, boolean windblocker, boolean wireless, boolean needsRecorder) {
+    public MicrophoneType(String typeName, boolean windblocker, boolean wireless, boolean needsRecorder) {
         super(typeName);
         this.windblocker = windblocker;
         this.wireless = wireless;
         this.needsRecorder = needsRecorder;
     }
 
-    public AudioType() {
+    public MicrophoneType() {
 
     }
 

@@ -11,8 +11,7 @@ import java.util.Set;
 @Entity
 public class Rent {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rent_seq")
-    @SequenceGenerator(name = "rent_seq", sequenceName = "RENT_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rent_id;
 
     @ManyToOne

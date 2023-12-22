@@ -11,7 +11,7 @@ public abstract class CCResponse {
      * @return Response object with status 200 and ccStatus 1000
      */
     public static Response ok(){
-        return Response.ok().entity(new CCResponseDTO(new CCStatus(1000, "The endpoint responded without encountering errors"), null)).build();
+        return Response.ok().entity(new CCResponseDTO(new CCStatus(1000, "The endpoint responded without encountering errors"),new CCResponseDetailDTO(null), null)).build();
     }
 
     /**
@@ -20,7 +20,7 @@ public abstract class CCResponse {
      * @return Response object with status 200 and ccStatus 1000
      */
     public static Response ok(Object data){
-        return Response.ok().entity(new CCResponseDTO(new CCStatus(1000, "The endpoint responded without encountering errors"), data)).build();
+        return Response.ok().entity(new CCResponseDTO(new CCStatus(1000, "The endpoint responded without encountering errors"), new CCResponseDetailDTO(data), data)).build();
     }
 
     /**
@@ -29,7 +29,7 @@ public abstract class CCResponse {
      * @return Response object with status 400
      */
     public static Response error(CCStatus ccStatus){
-        return Response.status(400).entity(new CCResponseDTO(ccStatus, null)).build();
+        return Response.status(400).entity(new CCResponseDTO(ccStatus, new CCResponseDetailDTO(null), null)).build();
     }
 
     /**
@@ -37,6 +37,6 @@ public abstract class CCResponse {
      * @return Response object with status 400
      */
     public static Response error(CCException exception){
-        return Response.status(400).entity(new CCResponseDTO(new CCStatus(exception), null)).build();
+        return Response.status(400).entity(new CCResponseDTO(new CCStatus(exception), new CCResponseDetailDTO(null), null)).build();
     }
 }

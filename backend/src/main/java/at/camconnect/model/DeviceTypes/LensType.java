@@ -8,12 +8,11 @@ import jakarta.persistence.ManyToOne;
 
 @Entity
 public class LensType extends DeviceType {
-    private double f_stop;
-    private int focal_length;
-
     @ManyToOne
     @JoinColumn(name = "mount_id")
     private LensMount lens_mount;
+    private double f_stop;
+    private int focal_length;
 
     public LensType(String typeName, double f_stop, LensMount lens_mount, int focal_length) {
         super(typeName);

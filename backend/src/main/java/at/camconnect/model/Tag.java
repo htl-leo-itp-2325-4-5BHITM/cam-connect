@@ -7,8 +7,7 @@ import java.util.List;
 @Entity
 public class Tag {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tag_seq")
-    @SequenceGenerator(name = "tag_seq", sequenceName = "TAG_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tag_id;
 
     @OneToMany

@@ -6,8 +6,7 @@ import jakarta.persistence.*;
 public class Teacher {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "device_teacher_seq")
-    @SequenceGenerator(name = "device_teacher_seq", sequenceName = "DEVICE_TEACHER_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long teacher_id;
     private String firstname;
     private String lastname;

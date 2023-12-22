@@ -7,8 +7,7 @@ import jakarta.persistence.*;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class DeviceType{
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "device_type_seq")
-    @SequenceGenerator(name = "device_type_seq", sequenceName = "DEVICE_TYPE_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long type_id;
     private String name;
     private String image;

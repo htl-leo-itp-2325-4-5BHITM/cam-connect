@@ -70,20 +70,20 @@ public class DeviceTypeRepository {
 
         switch(typeEnum){
             case audio:
-                AudioType audioType = em.find(AudioType.class, id);
+                MicrophoneType microphoneType = em.find(MicrophoneType.class, id);
 
                 try{
-                    audioType.setWindblocker(data.getBoolean("windblocker"));
+                    microphoneType.setWindblocker(data.getBoolean("windblocker"));
                 }catch (Exception ex){
                     throw new CCException(1106);
                 }
                 try{
-                    audioType.setWireless(data.getBoolean("wireless"));
+                    microphoneType.setWireless(data.getBoolean("wireless"));
                 }catch (Exception ex){
                     throw new CCException(1106);
                 }
                 try{
-                    audioType.setNeedsRecorder(data.getBoolean("recorder"));
+                    microphoneType.setNeedsRecorder(data.getBoolean("recorder"));
                 }catch (Exception ex){
                     throw new CCException(1106);
                 }
@@ -200,7 +200,7 @@ public class DeviceTypeRepository {
         //yes there are breaks missing, but they are unnecessary because of the returns
         switch (typeEnum) {
             case audio:
-                return AudioType.class;
+                return MicrophoneType.class;
             case camera:
                 return CameraType.class;
             case drone:

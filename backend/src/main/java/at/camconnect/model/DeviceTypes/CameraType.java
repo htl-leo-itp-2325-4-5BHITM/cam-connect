@@ -19,13 +19,17 @@ public class CameraType extends DeviceType {
     @ManyToOne
     @JoinColumn(name = "mount_id")
     private LensMount mount;
+    private int framerate;
+    private boolean autofocus;
     public CameraType() {
     }
-    public CameraType(String typeName, CameraSensor sensor, CameraResolution resolution, LensMount mount) {
+    public CameraType(String typeName, CameraSensor sensor, CameraResolution resolution, LensMount mount, int framerate, boolean autofocus) {
         super(typeName);
         this.sensor = sensor;
         this.resolution = resolution;
         this.mount = mount;
+        this.framerate = framerate;
+        this.autofocus = autofocus;
     }
 
 
@@ -51,5 +55,21 @@ public class CameraType extends DeviceType {
 
     public void setMount(LensMount mount) {
         this.mount = mount;
+    }
+
+    public int getFramerate() {
+        return framerate;
+    }
+
+    public void setFramerate(int framerate) {
+        this.framerate = framerate;
+    }
+
+    public boolean isAutofocus() {
+        return autofocus;
+    }
+
+    public void setAutofocus(boolean autofocus) {
+        this.autofocus = autofocus;
     }
 }

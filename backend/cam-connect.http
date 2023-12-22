@@ -2,7 +2,10 @@
 GET http://localhost:8080/api/devicetype/getall
 
 ###
-POST http://144.24.171.164/api/devicetype/create/light
+GET http://localhost:8080/api/devicetype/getbyid/1
+
+###
+POST http://localhost:8080/api/devicetype/create/light
 
 {"watts": 40, "name": "testo", "rgb": true, "variable_temperature":false}
 

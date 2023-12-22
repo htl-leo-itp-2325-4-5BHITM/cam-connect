@@ -6,7 +6,7 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
-          <factory-entry name="cam-connect_backend" />
+          <factory-entry name="cam-connect_backend" value="f9c72a71-35fc-4000-ba47-8306af456533" />
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>

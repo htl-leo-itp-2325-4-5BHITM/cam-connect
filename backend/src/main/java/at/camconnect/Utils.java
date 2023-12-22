@@ -2,7 +2,7 @@ package at.camconnect;
 
 import java.util.List;
 
-public class util {
+public class Utils {
     public static String getTypeOfObjectAsString(Object obj) {
         if (obj == null) {
             return "null";
@@ -14,7 +14,10 @@ public class util {
             if (list.isEmpty()) {
                 return "List<empty>";
             } else {
-                return "[" + list.get(0).getClass().getName() + "]";
+                String className = list.get(0).getClass().getName();
+                String[] parts = className.split("\\.");
+                className = className.replace("." + parts[parts.length-1], "");
+                return "[" + className + "]";
             }
         } else {
             // For other types

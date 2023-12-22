@@ -104,16 +104,22 @@ export interface TripodHead extends DeviceTypeAttribute{
 
 export type DeviceTypeCollection = (AudioType | CameraType | DroneType | LensType | LightType | StabilizerType | TripodType)[]
 
-fetch(config.api_url + '/devicetype/getall')
-    .then(response => {
-        handleError(response.status)
-        return response.json()
-    })
-    .then(result => {
-        console.log(result)
-        model.setDeviceTypes(result.data as DeviceTypeCollection)
-    })
-    .catch(error => {
-        console.error(error)
-    })
+export default class DevicetypeService{
+    static fetchAll(){
+        fetch(config.api_url + '/devicetype/getall')
+            .then(response => {
+                console.log(response)
+                handleError(response.status)
+                return response.json()
+            })
+            .then(result => {
+                console.log(result)
+                model.setDeviceTypes(result.data as DeviceTypeCollection)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
+}
+
 //index should simply link between components and services

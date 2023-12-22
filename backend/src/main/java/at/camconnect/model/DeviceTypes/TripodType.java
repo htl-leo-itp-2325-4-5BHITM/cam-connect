@@ -8,11 +8,10 @@ import jakarta.persistence.ManyToOne;
 
 @Entity
 public class TripodType extends DeviceType {
-    private double height;
-
     @ManyToOne
     @JoinColumn(name = "head_id")
     private TripodHead head;
+    private double height;
 
     public TripodType() {
     }
