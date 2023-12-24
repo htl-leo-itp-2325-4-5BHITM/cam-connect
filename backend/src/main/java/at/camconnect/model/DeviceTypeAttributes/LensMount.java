@@ -1,5 +1,6 @@
 package at.camconnect.model.DeviceTypeAttributes;
 
+import at.camconnect.dtos.DeviceTypeAttributeDTO;
 import at.camconnect.model.DeviceTypeAttribute;
 import jakarta.persistence.*;
 
@@ -11,4 +12,7 @@ public class LensMount extends DeviceTypeAttribute {
 
     public LensMount() {
     }
+
+    @Override
+    public void update(DeviceTypeAttributeDTO data) {}
 }

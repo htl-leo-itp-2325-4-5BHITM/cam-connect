@@ -1,5 +1,7 @@
 package at.camconnect.model;
 
+import at.camconnect.dtos.DeviceTypeAttributeDTO;
+import at.camconnect.dtos.DeviceTypeGlobal;
 import jakarta.persistence.*;
 
 @Entity
@@ -18,6 +20,8 @@ public abstract class DeviceTypeAttribute {
 
     public DeviceTypeAttribute() {
     }
+
+    abstract public void update(DeviceTypeAttributeDTO data);
 
     public long getAttribute_id() {
         return attribute_id;

@@ -1,8 +1,8 @@
 ###
-GET http://localhost:8080/api/devicetype/getallsdfsd
+GET http://localhost:8080/api/devicetype/getall
 
 ###
-GET http://localhost:8080/api/devicetype/getbyid/3
+GET http://localhost:8080/api/devicetype/getbyid/dsdf
 
 ###
 POST http://localhost:8080/api/devicetype/create/light
@@ -12,7 +12,7 @@ POST http://localhost:8080/api/devicetype/create/light
 ###
 POST http://localhost:8080/api/devicetype/getbyid/3/update
 
-{"watts": 40, "name": "peter", "rgb": "sdfd", "variable_temperature":false}
+{"watts": 40, "name": "peter", "rgb": false, "variable_temperature":false}
 
 ###
 POST http://144.24.171.164/api/rent/createempty
@@ -24,8 +24,3 @@ POST http://localhost:8080/api/devicetype/attribute/create/tripodhead
 
 ###
 GET http://localhost:8080/api/devicetype/attribute/getbyid/10
-
-###
-POST http://localhost:8080/api/devicetype/test
-
-{ "autofocus" : "string" }

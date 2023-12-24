@@ -20,6 +20,7 @@ public class CCStatus {
             Map.entry(1104, "Invalid argument structure/syntax/type in url"),
             Map.entry(1105, "Missing required data in body"),
             Map.entry(1106, "Invalid data structure/syntax/type in body"),
+            Map.entry(1107, "Invalid url provided"),
 
             Map.entry(1200, "Task was not performed"),
             Map.entry(1201, "Duplicate request"),

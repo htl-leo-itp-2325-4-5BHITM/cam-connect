@@ -1,9 +1,9 @@
 package at.camconnect.responseSystem;
 
 /**
- * used to transfer both CCStatus and any data both at once
+ * used to transfer a request status and any data at once
  * @param ccStatus custom cc status: check api doc for options
- * @param data any type of data
+ * @param details CCResponseDetail's like time and type of data
  */
-public record CCResponseDTO(CCStatus ccStatus, CCResponseDetailDTO details, Object data) {
+public record CCResponseDTO(CCStatus ccStatus, CCResponseDetailDTO details) {
 }

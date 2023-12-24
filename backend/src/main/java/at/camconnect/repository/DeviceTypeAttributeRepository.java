@@ -1,5 +1,8 @@
 package at.camconnect.repository;
 
+import at.camconnect.dtos.DeviceTypeAttributeDTO;
+import at.camconnect.dtos.DeviceTypeDTO;
+import at.camconnect.dtos.DeviceTypeGlobal;
 import at.camconnect.enums.DeviceTypeAttributeEnum;
 import at.camconnect.enums.DeviceTypeEnum;
 import at.camconnect.model.DeviceType;
@@ -42,12 +45,23 @@ public class DeviceTypeAttributeRepository {
         return deviceTypeAttribute;
     }
 
-    public List<DeviceTypeAttribute> getAll(){
-        return em.createQuery("SELECT d FROM DeviceTypeAttribute d", DeviceTypeAttribute.class).getResultList();
+    public DeviceTypeAttribute update(Long id, DeviceTypeAttributeDTO data){
+        DeviceTypeAttribute deviceTypeAttribute = getById(id); //should result in a child of DeviceTypeAttribute like CameraType
+
+        deviceTypeAttribute.setName(data.name());
+        deviceTypeAttribute.setDetails(data.details());
+
+        //just call the update method on whichever child class it is
+        deviceTypeAttribute.update(data);
+        return deviceTypeAttribute;
     }
 
     public void remove(Long id){
         em.remove(getById(id));
+    }
+
+    public List<DeviceTypeAttribute> getAll(){
+        return em.createQuery("SELECT d FROM DeviceTypeAttribute d", DeviceTypeAttribute.class).getResultList();
     }
 
     //region utility functions

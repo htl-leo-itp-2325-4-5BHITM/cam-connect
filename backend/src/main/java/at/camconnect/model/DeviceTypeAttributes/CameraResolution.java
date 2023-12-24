@@ -1,5 +1,6 @@
 package at.camconnect.model.DeviceTypeAttributes;
 
+import at.camconnect.dtos.DeviceTypeAttributeDTO;
 import at.camconnect.model.DeviceTypeAttribute;
 import jakarta.persistence.*;
 
@@ -13,6 +14,11 @@ public class CameraResolution extends DeviceTypeAttribute {
     }
 
     public CameraResolution() {
+    }
+
+    @Override
+    public void update(DeviceTypeAttributeDTO data) {
+        setResolution(data.resolution());
     }
 
     public String getResolution() {

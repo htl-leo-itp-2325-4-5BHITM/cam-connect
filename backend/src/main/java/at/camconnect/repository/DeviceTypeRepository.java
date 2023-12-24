@@ -61,28 +61,11 @@ public class DeviceTypeRepository {
         em.remove(getById(id));
     }
 
-    public void update(Long id, JsonObject jsonData){
-        /* Why JsonData and not DTO
-         * The main problem is that quarkus handles object mapping before any other exception, this means that
-         * when POSTing to the update endpoint with mismatched DTO format you would always get a meaningless 400 response
-         * I dove down the ExceptionMapper rabbit hole but even when overriding every all exceptions: there is no way to
-         * catch the json to class-instance conversion.
-         * In conclusion: we will keep this param as JsonData and catch the exception here so that we can manage it and
-         * properly pass it to a CCResponse.
-         */
-
-        //The JsonData is mapped to a generic DeviceTypeDTO that keeps all the ids as ids
-        DeviceTypeDTO data;
-        String dataString = String.valueOf(jsonData);
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            data = objectMapper.readValue(dataString, DeviceTypeDTO.class);
-        } catch (JsonProcessingException e) {
-            throw new CCException(1106, e.getMessage());
-        }
-
+    public DeviceType update(Long id, DeviceTypeDTO data){
         DeviceType deviceType = getById(id); //should result in a child of DeviceType like CameraType
+
         deviceType.setName(data.name());
+        deviceType.setImage(data.image());
 
         //The DeviceTypeDTO is converted into a DeviceType global which contains objects instead of ids
         DeviceTypeGlobal dataWithObjects = new DeviceTypeGlobal(
@@ -92,6 +75,7 @@ public class DeviceTypeRepository {
 
         //just call the update method on whichever child class it is
         deviceType.update(dataWithObjects);
+        return deviceType;
     }
 
     //region utility functions

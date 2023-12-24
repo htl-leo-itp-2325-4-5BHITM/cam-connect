@@ -15,9 +15,11 @@ import jakarta.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/devicetype")
+@Produces(MediaType.APPLICATION_JSON)
 public class DeviceTypeResource {
     @Inject
     DeviceTypeRepository deviceTypeRepository;
+
     @POST
     @Path("/create/{type: [A-z]+}")
     @Transactional
@@ -26,28 +28,6 @@ public class DeviceTypeResource {
         DeviceType result;
         try{
             result = deviceTypeRepository.create(type, data);
-        }catch (CCException ex){
-            return CCResponse.error(ex);
-        }
-
-        return CCResponse.ok(result);
-    }
-
-    @POST
-    @Path("/test")
-    @Transactional
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response test(DeviceTypeDTO data){
-        return Response.ok().build();
-    }
-
-    @GET
-    @Path("/getbyid/{id: [0-9]+}")
-    @Transactional
-    public Response getById(@PathParam("id") Long id){
-        DeviceType result;
-        try{
-            result = deviceTypeRepository.getById(id);
         }catch (CCException ex){
             return CCResponse.error(ex);
         }
@@ -70,25 +50,40 @@ public class DeviceTypeResource {
     }
 
     @GET
-    @Path("/getbyid/{id: [0-9]+}/remove")
+    @Path("/getbyid/{id: [0-9]+}")
     @Transactional
-    public Response remove(@PathParam("id") Long id){
+    public Response getById(@PathParam("id") Long id){
+        DeviceType result;
         try{
-            deviceTypeRepository.remove(id);
+            result = deviceTypeRepository.getById(id);
         }catch (CCException ex){
             return CCResponse.error(ex);
         }
 
-        return CCResponse.ok();
+        return CCResponse.ok(result);
     }
 
     @POST
     @Path("/getbyid/{id: [0-9]+}/update")
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("id") Long id, JsonObject data){ //leave as JsonObject NOT DTO
+    public Response update(@PathParam("id") Long id, DeviceTypeDTO data){
+        DeviceType result;
         try{
-            deviceTypeRepository.update(id, data);
+            result = deviceTypeRepository.update(id, data);
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok(result);
+    }
+
+    @GET
+    @Path("/getbyid/{id: [0-9]+}/remove")
+    @Transactional
+    public Response remove(@PathParam("id") Long id){
+        try{
+            deviceTypeRepository.remove(id);
         }catch (CCException ex){
             return CCResponse.error(ex);
         }
