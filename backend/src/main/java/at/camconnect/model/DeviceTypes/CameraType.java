@@ -1,9 +1,13 @@
 package at.camconnect.model.DeviceTypes;
 
+import at.camconnect.dtos.DeviceTypeDTO;
+import at.camconnect.dtos.DeviceTypeGlobal;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypeAttributes.CameraResolution;
 import at.camconnect.model.DeviceTypeAttributes.CameraSensor;
+import at.camconnect.model.DeviceTypeAttributes.CameraSystem;
 import at.camconnect.model.DeviceTypeAttributes.LensMount;
+import at.camconnect.responseSystem.CCException;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -19,15 +23,34 @@ public class CameraType extends DeviceType {
     @ManyToOne
     @JoinColumn(name = "mount_id")
     private LensMount mount;
+    @ManyToOne
+    @JoinColumn(name = "system_id")
+    private CameraSystem system;
     private int framerate;
     private boolean autofocus;
+
+    @Override
+    public void update(DeviceTypeGlobal data) {
+        try {
+            setAutofocus(data.autofocus());
+            setFramerate(data.framerate());
+            setMount(data.mount());
+            setResolution(data.resolution());
+            setSystem(data.system());
+            setSensor(data.sensor());
+        }catch (Exception ex){
+            throw new CCException(1106);
+        }
+    }
+
     public CameraType() {
     }
-    public CameraType(String typeName, CameraSensor sensor, CameraResolution resolution, LensMount mount, int framerate, boolean autofocus) {
+    public CameraType(String typeName, CameraSensor sensor, CameraResolution resolution, LensMount mount, CameraSystem system, int framerate, boolean autofocus) {
         super(typeName);
         this.sensor = sensor;
         this.resolution = resolution;
         this.mount = mount;
+        this.system = system;
         this.framerate = framerate;
         this.autofocus = autofocus;
     }
@@ -71,5 +94,13 @@ public class CameraType extends DeviceType {
 
     public void setAutofocus(boolean autofocus) {
         this.autofocus = autofocus;
+    }
+
+    public CameraSystem getSystem() {
+        return system;
+    }
+
+    public void setSystem(CameraSystem system) {
+        this.system = system;
     }
 }

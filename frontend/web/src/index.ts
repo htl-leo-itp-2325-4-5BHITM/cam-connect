@@ -31,7 +31,6 @@ model.deviceTypes.subscribe(data => {
 let filters = document.createElement('cc-filter');
 
 let filterblock = new FilterContainerComponent("hallo")
-filterblock.options = new ObservedProperty(filterblock, model.deviceTypeFilterOptions)
 filters.appendChild(filterblock)
 
 document.querySelector('main').appendChild(filters)

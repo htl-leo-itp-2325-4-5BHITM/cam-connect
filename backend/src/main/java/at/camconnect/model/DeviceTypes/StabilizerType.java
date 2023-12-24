@@ -1,6 +1,8 @@
 package at.camconnect.model.DeviceTypes;
 
+import at.camconnect.dtos.DeviceTypeGlobal;
 import at.camconnect.model.DeviceType;
+import at.camconnect.responseSystem.CCException;
 import jakarta.persistence.Entity;
 
 @Entity
@@ -13,6 +15,17 @@ public class StabilizerType extends DeviceType {
         this.max_weight = max_weight;
         this.number_of_axis = number_of_axis;
     }
+
+    @Override
+    public void update(DeviceTypeGlobal data) {
+        try{
+            setMax_weight(data.max_weight());
+            setNumber_of_axis(data.number_of_axis());
+        }catch (Exception ex){
+            throw new CCException(1106);
+        }
+    }
+
     public StabilizerType() {
     }
     public int getMax_weight() {

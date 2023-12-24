@@ -1,8 +1,8 @@
 ###
-GET http://localhost:8080/api/devicetype/getall
+GET http://localhost:8080/api/devicetype/getallsdfsd
 
 ###
-GET http://localhost:8080/api/devicetype/getbyid/1
+GET http://localhost:8080/api/devicetype/getbyid/3
 
 ###
 POST http://localhost:8080/api/devicetype/create/light
@@ -10,4 +10,22 @@ POST http://localhost:8080/api/devicetype/create/light
 {"watts": 40, "name": "testo", "rgb": true, "variable_temperature":false}
 
 ###
+POST http://localhost:8080/api/devicetype/getbyid/3/update
+
+{"watts": 40, "name": "peter", "rgb": "sdfd", "variable_temperature":false}
+
+###
 POST http://144.24.171.164/api/rent/createempty
+
+###
+POST http://localhost:8080/api/devicetype/attribute/create/tripodhead
+
+{"name": "ball head", "details": "allows adjustments in all directions and stuff"}
+
+###
+GET http://localhost:8080/api/devicetype/attribute/getbyid/10
+
+###
+POST http://localhost:8080/api/devicetype/test
+
+{ "autofocus" : "string" }

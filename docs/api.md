@@ -1,7 +1,7 @@
 # CamConnect API Doku
 - `routename/{pathparam}: {jsonkey, ?optional_jsonkey} -> ReturnValue`
 - `iamnotavalidroute -x`
-- `ihaveawavyarrowiamasocket ~>`
+- `iamasocketendpoint ~>`
 - 
 ## Structure
 ```
@@ -22,7 +22,7 @@ api
 │           ├── note : {value}
 │           └── status : {value}
 ├── device -x
-│   ├── create/ : {type_id, number, serial} -> [Device]
+│   ├── create : {type_id, number, serial} -> [Device]
 │   ├── getall -> [Device]
 │   └── getbyid/{rent_id}
 │       ├── remove
@@ -35,22 +35,32 @@ api
 │   ├── getall -> [DeviceType]
 │   ├── create -x
 │   │   ├── lens : {f_stop, mount_id, focal_length}
-│   │   ├── camera : {sensor_id, resolution_id, mount_id}
+│   │   ├── camera : {system_id, sensor_id, resolution_id, mount_id, framerate, autofocus}
 │   │   ├── drone : {sensor_id, resolution_id, max_range
 │   │   ├── audio : {windblocker, wireless, needs-recorder}
 │   │   ├── light : {watts, rbg, variable_temperatur}
 │   │   ├── tripod : {height, head_id}
 │   │   └── stabilizer : {max_weight, number_of_axis}
-│   └── getbyid/{type_id} -> DeviceType
-│       ├── remove
-│       └── update -x
-│           ├── lens : {name, f_stop, mount_id, focal_length}
-│           ├── camera : {name, sensor_id, resolution_id, mount_id}
-│           ├── drone : {name, sensor_id, resolution_id, max_range
-│           ├── audio : {name, windblocker, wireless, needs-recorder}
-│           ├── light : {name, watts, rbg, variable_temperatur}
-│           ├── tripod : {name, height, head_id}
-│           └── stabilizer : {name, max_weight, number_of_axis}
+│   ├── getbyid/{type_id} -> DeviceType
+│   │   ├── remove
+│   │   └── update -x
+│   │       ├── lens : {name, f_stop, mount_id, focal_length}
+│   │       ├── camera : {name, sensor_id, resolution_id, mount_id}
+│   │       ├── drone : {name, sensor_id, resolution_id, max_range
+│   │       ├── microphone : {name, windblocker, wireless, needs-recorder}
+│   │       ├── light : {name, watts, rbg, variable_temperatur}
+│   │       ├── tripod : {name, height, head_id}
+│   │       └── stabilizer : {name, max_weight, number_of_axis}
+│   └── attribute -x
+│       ├── getall -> [DeviceTypeAttribute]
+│       ├── create -x
+│       │   ├── cameraresolution : {name, details, resolution}
+│       │   ├── camerasensor : {name, details, size}
+│       │   ├── camerasystem : {name, details}
+│       │   ├── lensmount : {name, details}
+│       │   └── tripodhead : {name, details}
+│       └── getbyid/{attribute_id} -> DeviceTypeAttribute
+│           └── remove
 ├── student -x
 └── teacher -x
 

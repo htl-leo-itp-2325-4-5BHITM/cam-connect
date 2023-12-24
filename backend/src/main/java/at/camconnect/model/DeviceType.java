@@ -1,5 +1,7 @@
 package at.camconnect.model;
 
+import at.camconnect.dtos.DeviceTypeDTO;
+import at.camconnect.dtos.DeviceTypeGlobal;
 import jakarta.json.JsonObject;
 import jakarta.persistence.*;
 
@@ -11,6 +13,8 @@ public abstract class DeviceType{
     private Long type_id;
     private String name;
     private String image;
+
+    abstract public void update(DeviceTypeGlobal data);
 
     public String getImage() {
         return image;

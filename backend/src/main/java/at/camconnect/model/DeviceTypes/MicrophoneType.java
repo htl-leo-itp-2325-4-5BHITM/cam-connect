@@ -1,6 +1,8 @@
 package at.camconnect.model.DeviceTypes;
 
+import at.camconnect.dtos.DeviceTypeGlobal;
 import at.camconnect.model.DeviceType;
+import at.camconnect.responseSystem.CCException;
 import jakarta.persistence.Entity;
 
 @Entity
@@ -14,6 +16,17 @@ public class MicrophoneType extends DeviceType {
         this.windblocker = windblocker;
         this.wireless = wireless;
         this.needsRecorder = needsRecorder;
+    }
+
+    @Override
+    public void update(DeviceTypeGlobal data) {
+        try{
+            setWindblocker(data.windblocker());
+            setWireless(data.wireless());
+            setNeedsRecorder(data.needsrecorder());
+        }catch (Exception ex){
+            throw new CCException(1106);
+        }
     }
 
     public MicrophoneType() {

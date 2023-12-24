@@ -1,8 +1,10 @@
 package at.camconnect.model.DeviceTypes;
 
+import at.camconnect.dtos.DeviceTypeGlobal;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypeAttributes.CameraResolution;
 import at.camconnect.model.DeviceTypeAttributes.CameraSensor;
+import at.camconnect.responseSystem.CCException;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -22,6 +24,17 @@ public class DroneType extends DeviceType {
         this.sensor = sensor;
         this.resolution = resolution;
         this.max_range = max_range;
+    }
+
+    @Override
+    public void update(DeviceTypeGlobal data) {
+        try{
+            setMax_range(data.max_range());
+            setSensor(data.sensor());
+            setResolution(data.resolution());
+        }catch (Exception ex){
+            throw new CCException(1106);
+        }
     }
 
     public DroneType() {

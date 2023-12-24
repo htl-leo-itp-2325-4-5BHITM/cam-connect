@@ -1,31 +1,32 @@
 package at.camconnect.boundary;
 
-import at.camconnect.dtos.DeviceTypeDTO;
+import at.camconnect.enums.DeviceTypeAttributeEnum;
+import at.camconnect.model.DeviceTypeAttribute;
+import at.camconnect.repository.DeviceTypeAttributeRepository;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
-import at.camconnect.enums.DeviceTypeEnum;
-import at.camconnect.model.DeviceType;
-import at.camconnect.repository.DeviceTypeRepository;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
 import java.util.List;
 
-@Path("/devicetype")
-public class DeviceTypeResource {
+@Path("/devicetype/attribute")
+public class DeviceTypeAttributeResource {
     @Inject
-    DeviceTypeRepository deviceTypeRepository;
+    DeviceTypeAttributeRepository deviceTypeAttributeRepository;
+
     @POST
     @Path("/create/{type: [A-z]+}")
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response create(@PathParam("type") DeviceTypeEnum type, JsonObject data){//leave as JsonObject NOT DTO
-        DeviceType result;
+    public Response create(@PathParam("type") DeviceTypeAttributeEnum type, JsonObject data){
+        DeviceTypeAttribute result;
         try{
-            result = deviceTypeRepository.create(type, data);
+            result = deviceTypeAttributeRepository.create(type, data);
         }catch (CCException ex){
             return CCResponse.error(ex);
         }
@@ -33,21 +34,13 @@ public class DeviceTypeResource {
         return CCResponse.ok(result);
     }
 
-    @POST
-    @Path("/test")
-    @Transactional
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response test(DeviceTypeDTO data){
-        return Response.ok().build();
-    }
-
     @GET
     @Path("/getbyid/{id: [0-9]+}")
     @Transactional
     public Response getById(@PathParam("id") Long id){
-        DeviceType result;
+        DeviceTypeAttribute result;
         try{
-            result = deviceTypeRepository.getById(id);
+            result = deviceTypeAttributeRepository.getById(id);
         }catch (CCException ex){
             return CCResponse.error(ex);
         }
@@ -59,9 +52,9 @@ public class DeviceTypeResource {
     @Path("/getall")
     @Transactional
     public Response getall(){
-        List<DeviceType> result;
+        List<DeviceTypeAttribute> result;
         try{
-            result = deviceTypeRepository.getAll();
+            result = deviceTypeAttributeRepository.getAll();
         }catch (CCException ex){
             return CCResponse.error(ex);
         }
@@ -74,21 +67,7 @@ public class DeviceTypeResource {
     @Transactional
     public Response remove(@PathParam("id") Long id){
         try{
-            deviceTypeRepository.remove(id);
-        }catch (CCException ex){
-            return CCResponse.error(ex);
-        }
-
-        return CCResponse.ok();
-    }
-
-    @POST
-    @Path("/getbyid/{id: [0-9]+}/update")
-    @Transactional
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("id") Long id, JsonObject data){ //leave as JsonObject NOT DTO
-        try{
-            deviceTypeRepository.update(id, data);
+            deviceTypeAttributeRepository.remove(id);
         }catch (CCException ex){
             return CCResponse.error(ex);
         }

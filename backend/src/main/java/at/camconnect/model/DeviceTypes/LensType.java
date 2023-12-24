@@ -1,7 +1,9 @@
 package at.camconnect.model.DeviceTypes;
 
+import at.camconnect.dtos.DeviceTypeGlobal;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypeAttributes.LensMount;
+import at.camconnect.responseSystem.CCException;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -19,6 +21,17 @@ public class LensType extends DeviceType {
         this.f_stop = f_stop;
         this.lens_mount = lens_mount;
         this.focal_length = focal_length;
+    }
+
+    @Override
+    public void update(DeviceTypeGlobal data) {
+        try{
+            setF_stop(data.f_stop());
+            setFocal_length(data.focal_length());
+            setLens_mount(data.mount());
+        }catch (Exception ex){
+            throw new CCException(1106);
+        }
     }
 
     public LensType() {

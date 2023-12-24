@@ -13,7 +13,7 @@
 		* sensor_id: Long
 		* resolution_id: Long
 		* mount_id: Long
-		* camera_system_id: Long
+		* system_id: Long
 		* framerate: int
 		* autofocus: boolean
 	}

@@ -7,12 +7,10 @@ import {FilterOption, FilterOptionType} from "./components/basic/filter-containe
 
 interface RequestModel {
     deviceTypes: Subject<DeviceTypeCollection>
-    deviceTypeFilterOptions: Subject<FilterOption[]>
 }
 
 export default class Model implements RequestModel{
     deviceTypes = new Subject<DeviceTypeCollection>()
-    deviceTypeFilterOptions = new Subject<FilterOption[]>()
 
     constructor() {
         DevicetypeService.fetchAll()
@@ -20,7 +18,6 @@ export default class Model implements RequestModel{
 
     setDeviceTypes(deviceTypes: DeviceTypeCollection){
         this.deviceTypes.next(deviceTypes)
-        this.deviceTypeFilterOptions.next(deviceTypes.map(deviceTypeToFilterOption))
     }
 }
 
