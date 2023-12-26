@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class DeviceTypeAttribute {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "attribute_name")
     private long attribute_id;
     private String name;
     private String details;

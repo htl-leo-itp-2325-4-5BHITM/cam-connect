@@ -1,5 +1,6 @@
 package at.camconnect.boundary;
 
+import at.camconnect.dtos.AllDeviceTypeAttributesDTO;
 import at.camconnect.dtos.DeviceTypeAttributeDTO;
 import at.camconnect.dtos.DeviceTypeDTO;
 import at.camconnect.enums.DeviceTypeAttributeEnum;
@@ -42,7 +43,7 @@ public class DeviceTypeAttributeResource {
     @Path("/getall")
     @Transactional
     public Response getall(){
-        List<DeviceTypeAttribute> result;
+        AllDeviceTypeAttributesDTO result;
         try{
             result = deviceTypeAttributeRepository.getAll();
         }catch (CCException ex){

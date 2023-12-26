@@ -1,11 +1,11 @@
-//service should request data implement and export interfaces and provide simple set update functions
 import {config, handleError} from '../base'
-import {Observable} from "rxjs"
 import {model} from "../index"
+import {CameraResolution, CameraSensor, CameraSystem, LensMount, TripodHead} from "./deviceTypeAttribute-service"
 
 //region devicetype interfaces
 export interface DeviceType{
     type_id: number
+    dtype: string
     name: string
     image: string
 }
@@ -22,6 +22,9 @@ export interface CameraType extends DeviceType{
     sensor: CameraSensor
     resolution: CameraResolution
     mount: LensMount
+    system: CameraSystem
+    autofocus: boolean
+    framerate: number
 }
 export interface CameraTypeDTO extends DeviceType{
     sensor_id: number
@@ -80,40 +83,16 @@ export interface TripodTypeDTO extends DeviceType{
 
 //endregion interfaces
 
-//region devicetype attribute interfaces
-interface DeviceTypeAttribute{
-    attribute_id: number
-    name: string
-    details?: string
-}
-
-export interface CameraResolution extends DeviceTypeAttribute{
-    resolution: string
-}
-
-export interface CameraSensor extends DeviceTypeAttribute{
-    size: string
-}
-
-export interface LensMount extends DeviceTypeAttribute{
-}
-
-export interface TripodHead extends DeviceTypeAttribute{
-}
-//endregion
-
 export type DeviceTypeCollection = (AudioType | CameraType | DroneType | LensType | LightType | StabilizerType | TripodType)[]
 
-export default class DevicetypeService{
+export default class DeviceTypeService {
     static fetchAll(){
         fetch(config.api_url + '/devicetype/getall')
             .then(response => {
-                console.log(response)
                 handleError(response.status)
                 return response.json()
             })
             .then(result => {
-                console.log(result)
                 model.setDeviceTypes(result.data as DeviceTypeCollection)
             })
             .catch(error => {

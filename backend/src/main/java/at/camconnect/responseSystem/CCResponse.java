@@ -1,5 +1,8 @@
 package at.camconnect.responseSystem;
 
+import at.camconnect.responseSystem.dtos.CCDataResponseDTO;
+import at.camconnect.responseSystem.dtos.CCResponseDTO;
+import at.camconnect.responseSystem.dtos.CCResponseDetailDTO;
 import jakarta.ws.rs.core.Response;
 
 /**

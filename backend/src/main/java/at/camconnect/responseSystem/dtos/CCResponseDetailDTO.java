@@ -1,4 +1,4 @@
-package at.camconnect.responseSystem;
+package at.camconnect.responseSystem.dtos;
 
 import at.camconnect.Utils;
 

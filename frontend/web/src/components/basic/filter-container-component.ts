@@ -9,6 +9,7 @@ export enum FilterOptionType {
 
 export interface FilterOption {
     name: string,
+    details?: string
     selected?: boolean,
     type: FilterOptionType,
     id: number

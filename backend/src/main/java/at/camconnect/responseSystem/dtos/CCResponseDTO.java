@@ -1,4 +1,6 @@
-package at.camconnect.responseSystem;
+package at.camconnect.responseSystem.dtos;
+
+import at.camconnect.responseSystem.CCStatus;
 
 /**
  * used to transfer a request status and any data at once

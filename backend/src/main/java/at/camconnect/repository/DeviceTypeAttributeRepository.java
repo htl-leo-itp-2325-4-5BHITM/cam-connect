@@ -1,5 +1,6 @@
 package at.camconnect.repository;
 
+import at.camconnect.dtos.AllDeviceTypeAttributesDTO;
 import at.camconnect.dtos.DeviceTypeAttributeDTO;
 import at.camconnect.dtos.DeviceTypeDTO;
 import at.camconnect.dtos.DeviceTypeGlobal;
@@ -60,8 +61,13 @@ public class DeviceTypeAttributeRepository {
         em.remove(getById(id));
     }
 
-    public List<DeviceTypeAttribute> getAll(){
-        return em.createQuery("SELECT d FROM DeviceTypeAttribute d", DeviceTypeAttribute.class).getResultList();
+    public AllDeviceTypeAttributesDTO getAll(){
+        List<CameraResolution> cameraResolutions = em.createQuery("SELECT d FROM CameraResolution d", CameraResolution.class).getResultList();
+        List<CameraSensor> cameraSensors = em.createQuery("SELECT d FROM CameraSensor d", CameraSensor.class).getResultList();
+        List<CameraSystem> cameraSystems = em.createQuery("SELECT d FROM CameraSystem d", CameraSystem.class).getResultList();
+        List<LensMount> lensMounts = em.createQuery("SELECT d FROM LensMount d", LensMount.class).getResultList();
+        List<TripodHead> tripodHeads = em.createQuery("SELECT d FROM TripodHead d", TripodHead.class).getResultList();
+        return new AllDeviceTypeAttributesDTO(cameraResolutions, cameraSensors, cameraSystems, lensMounts, tripodHeads);
     }
 
     //region utility functions
