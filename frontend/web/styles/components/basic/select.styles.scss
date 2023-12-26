@@ -1,4 +1,4 @@
-@import "../../variables";
+@import "../../base";
 
 :host{
   all: initial;
@@ -6,9 +6,9 @@
 
 .select {
   display: flex;
-  font-size: 1.25rem;
-  font-weight: 400;
-  color: $gray800;
+  font-size: $fSizeDesktopLarge !important;
+  font-weight: 400 !important;
+  color: $gray800 !important;
 
   :not(:last-child):after{
     margin-inline: .5rem;
@@ -28,11 +28,11 @@ cc-select-element{
 .select-element p{
   cursor: pointer;
   &.active{
-    color: white;
-    font-weight: 600;
+    color: white !important;
+    font-weight: 600 !important;
   }
 
   &:hover{
-    color: $gray900;
+    color: $gray900 !important;
   }
 }

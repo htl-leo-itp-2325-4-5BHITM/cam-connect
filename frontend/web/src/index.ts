@@ -8,6 +8,7 @@ import "./components/basic/property-value-component"
 import "./components/basic/select-element-component"
 import "./components/basic/select-component"
 import "./components/basic/value-chain-component"
+import "./components/basic/line-component"
 import "./components/layout/filter-component"
 
 //css
@@ -27,6 +28,10 @@ model.deviceTypes.subscribe(data => {
 
 
 let filters = document.createElement('cc-filter');
+
+let deviceTypes = new FilterContainerComponent("Gerätetyp")
+deviceTypes.options = new ObservedProperty<FilterOption[]>(deviceTypes, model.deviceTypeAttributesAsFilterOptions.cameraResolutions)
+filters.appendChild(deviceTypes)
 
 let resolutions = new FilterContainerComponent("Auflösungen")
 resolutions.options = new ObservedProperty<FilterOption[]>(resolutions, model.deviceTypeAttributesAsFilterOptions.cameraResolutions)

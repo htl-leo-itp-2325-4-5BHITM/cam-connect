@@ -4,6 +4,7 @@ import styles from '../../../styles/components/basic/chip.styles.scss'
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { faXmark } from "@fortawesome/free-solid-svg-icons"
 import Fontawesome from 'lit-fontawesome'
+import {unsafeSVG} from 'lit/directives/unsafe-svg.js';
 
 enum Color {ACCENT="accent", GOOD="good", MID="mid", BAD="bad", GRAY="gray"}
 enum Size {SMALL="small", BIG="big"}
@@ -37,12 +38,19 @@ export class ChipComponent extends LitElement {
     render() {
         return html`
             <style>${styles}</style>
-            <div class="cc-chip ${this.removeable ? 'removeDiv' : ''}" color="${this.color}" size="${this.size}"
+            <div class="cc-chip" color="${this.color}" size="${this.size}"
                 @click="${this.removeChip}">
                 ${this.text}
-                ${this.removeable ? html`<span>&nbsp;x</span>` : ""}
+                ${this.removeable ? this.renderRemoveButton() : ""}
             </div>`
-        //todo fontawesome icon einfügen
+    }
+
+    renderRemoveButton(){
+        return html`
+            <div class="remove">
+                ${unsafeSVG(icon(faXmark).html[0])}
+            </div>
+        `
     }
 }
 

@@ -2,23 +2,23 @@ import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/button.styles.scss'
 
-enum Size {MEDIUM="big", SMALL="small", XSMALL="xsmall"}
-enum Type {FILLED="filled", OUTLINED="outlined", TEXT="text"}
-enum Color {ACCENT="accent", GRAY="gray"}
+export enum ButtonSize {BIG="big", SMALL="small", XSMALL="xsmall"}
+export enum ButtonType {FILLED="filled", OUTLINED="outlined", TEXT="text"}
+export enum ButtonColor {ACCENT="accent", GRAY="gray"}
 
 @customElement('cc-button')
 export class ButtonComponent extends LitElement {
-    @property({type: Size})
-    size?: Size = Size.MEDIUM;
+    @property({type: ButtonSize})
+    size?: ButtonSize = ButtonSize.BIG;
 
-    @property({type: Type})
-    type?: Type = Type.FILLED;
+    @property({type: ButtonType})
+    type?: ButtonType = ButtonType.FILLED;
 
-    @property({type: Color})
-    color?: Color = Color.ACCENT;
+    @property({type: ButtonColor})
+    color?: ButtonColor = ButtonColor.ACCENT;
 
     @property({type: String})
-    value?: String = "Button";
+    value?: String = this.innerText || "Button";
 
     render() {
         return html`

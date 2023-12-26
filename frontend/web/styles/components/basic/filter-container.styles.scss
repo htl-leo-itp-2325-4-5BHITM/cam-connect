@@ -6,11 +6,12 @@
 }
 
 div.filter-block {
+  padding-inline: .75rem; /*this may cause the small lines to get fucked up*/
   .heading {
     color: $accentDarkmodeLight;
     font-weight: 600;
     margin: 0;
-    font-size: 1.25rem  ;
+    font-size: $fSizeDesktopLarge  ;
   }
 
   .option:last-child {
@@ -22,14 +23,15 @@ div.filter-block {
   .option {
     font-weight: 400 !important;
     color: $gray800 !important;
-    font-size: 1.25rem !important;
+    font-size: $fSizeDesktopLarge !important;
     position: relative;
     transition: font-weight .2s, color .2s;
 
     cursor: pointer;
     user-select: none;
 
-    $linewidth: .8rem;
+    $linewidth: .6rem;
+    $thickness: .15rem;
     margin-left: calc($linewidth + .5rem) !important;
 
     &::before, &::after {
@@ -40,16 +42,16 @@ div.filter-block {
     }
 
     &::before {
-      height: .15rem;
+      height: $thickness;
       width: $linewidth;
       top: 50%;
       transform: translateY(-50%);
-      margin-right: .15rem;
+      margin-right: $thickness;
     }
 
     &::after {
       height: 100%;
-      width: .15rem;
+      width: $thickness;
       margin-right: $linewidth;
     }
 

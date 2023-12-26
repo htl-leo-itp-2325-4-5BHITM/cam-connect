@@ -22,8 +22,6 @@ html{
 
 body{
 	background-color: hsl(0,0%,10%);
-	color: hsl(0,0%,0%);
-	font-family: sans-serif;
 }
 
 ::selection{
@@ -39,7 +37,7 @@ a{
 button{
     background-color: transparent;
     border: none;
-    color: hsl(0, 0%, 100%)
+    color: hsl(0, 0%, 100%);
 }
 
 :global {
@@ -54,6 +52,7 @@ button{
         margin: calc(var(--padding) * -1);
 
         transition: background-color .2s;
+        animation: svg-cta-click 1s infinite;
 
         &:hover {
             --hover-background: rgba(128, 128, 128, 0.35);
@@ -61,13 +60,14 @@ button{
 
         &:active{
             --hover-background: rgba(128, 128, 128, 0.35);
-            animation: svg-cta-hover 1s infinite;
+            animation: svg-cta-click 1s infinite;
         }
     }
 }
 
-@keyframes svg-cta-hover {
-    0% {
+/*animation geht mit svg grad aus irgendeimnem grund ned*/
+@keyframes svg-cta-click {
+    1% {
         --padding: .4rem;
         background-color: green;
         scale: 0;

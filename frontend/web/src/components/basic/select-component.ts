@@ -10,7 +10,7 @@ export class SelectComponent extends LitElement {
         return html`
             <style>${styles}</style>
             <div class="select">
-                ${selectElements.map((value) => html`${value}`)}
+                <slot></slot>
             </div>`
     }
 }

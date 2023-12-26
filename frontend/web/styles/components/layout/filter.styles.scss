@@ -2,5 +2,26 @@
 
 :host{
   all: initial;
+  background-color: $gray200;
 }
+
+.cc-filter{
+  background-color: $gray200;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+
+  padding-block: .5rem;
+}
+
+.buttons, .sorts{
+  padding-inline: .75rem;
+  .buttons{
+
+  }
+  .sorts{
+
+  }
+}
+
 
