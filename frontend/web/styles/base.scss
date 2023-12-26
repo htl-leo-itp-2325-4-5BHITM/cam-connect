@@ -44,19 +44,42 @@ button{
 
 :global {
     svg.cta {
-        $padding: .4rem;
+        --padding: 0.4rem;
         --hover-background: transparent;
 
         cursor: pointer;
         background-color: var(--hover-background);
         border-radius: 50%;
-        padding: $padding;
-        margin: -$padding;
+        padding: var(--padding);
+        margin: calc(var(--padding) * -1);
 
         transition: background-color .2s;
 
         &:hover {
-            --hover-background: rgba(128, 128, 128, 0.2);
+            --hover-background: rgba(128, 128, 128, 0.35);
         }
+
+        &:active{
+            --hover-background: rgba(128, 128, 128, 0.35);
+            animation: svg-cta-hover 1s infinite;
+        }
+    }
+}
+
+@keyframes svg-cta-hover {
+    0% {
+        --padding: .4rem;
+        background-color: green;
+        scale: 0;
+    }
+    50% {
+        --padding: -0.5rem;
+        background-color: rebeccapurple;
+        scale: 1;
+    }
+    100% {
+        --padding: .4rem;
+        background-color: black;
+        scale: 0;
     }
 }

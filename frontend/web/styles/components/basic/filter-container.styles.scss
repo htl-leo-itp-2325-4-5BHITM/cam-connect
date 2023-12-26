@@ -24,6 +24,7 @@ div.filter-block {
     color: $gray800 !important;
     font-size: 1.25rem !important;
     position: relative;
+    transition: font-weight .2s, color .2s;
 
     cursor: pointer;
     user-select: none;

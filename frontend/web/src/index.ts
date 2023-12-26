@@ -18,8 +18,7 @@ import '@fortawesome/fontawesome-free/js/all'
 import Model, {ObservedProperty} from "./model"
 import {FilterContainerComponent, FilterOption} from "./components/basic/filter-container-component"
 
-//basically einfach default function file für erstellen clicken popups und alles
-
+//OMG its our single swouce of THWQUUUCE
 export let model = new Model()
 
 model.deviceTypes.subscribe(data => {

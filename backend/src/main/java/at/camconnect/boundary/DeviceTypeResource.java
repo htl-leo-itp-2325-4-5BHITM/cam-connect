@@ -1,5 +1,6 @@
 package at.camconnect.boundary;
 
+import at.camconnect.dtos.DeviceTypeCollection;
 import at.camconnect.dtos.DeviceTypeDTO;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
@@ -39,7 +40,7 @@ public class DeviceTypeResource {
     @Path("/getall")
     @Transactional
     public Response getall(){
-        List<DeviceType> result;
+        DeviceTypeCollection result;
         try{
             result = deviceTypeRepository.getAll();
         }catch (CCException ex){

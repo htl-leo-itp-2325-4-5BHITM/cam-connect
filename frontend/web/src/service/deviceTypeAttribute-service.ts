@@ -1,5 +1,5 @@
-import {config, handleError} from '../base'
 import {model} from "../index"
+import {apiQuery, ccResponse, config, handleCCError, handleHttpError} from "../base"
 
 //region interfaces
 export interface DevicetypeAttributeSource{
@@ -35,13 +35,9 @@ export interface DeviceTypeAttributeCollection{
 
 export default class DeviceTypeAttributeService{
     static fetchAll(){
-        fetch(config.api_url + '/devicetype/attribute/getall')
-            .then(response => {
-                handleError(response.status)
-                return response.json()
-            })
-            .then(result => {
-                model.setDeviceTypeAttributes(result.data as DeviceTypeAttributeCollection)
+        apiQuery<DeviceTypeAttributeCollection>("/devicetype/attribute/getall")
+            .then(data => {
+                model.setDeviceTypeAttributes(data)
             })
             .catch(error => {
                 console.error(error)

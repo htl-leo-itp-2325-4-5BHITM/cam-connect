@@ -1,10 +1,8 @@
 package at.camconnect.boundary;
 
-import at.camconnect.dtos.AllDeviceTypeAttributesDTO;
+import at.camconnect.dtos.DeviceTypeAttributeCollection;
 import at.camconnect.dtos.DeviceTypeAttributeDTO;
-import at.camconnect.dtos.DeviceTypeDTO;
 import at.camconnect.enums.DeviceTypeAttributeEnum;
-import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypeAttribute;
 import at.camconnect.repository.DeviceTypeAttributeRepository;
 import at.camconnect.responseSystem.CCException;
@@ -15,8 +13,6 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
-import java.util.List;
 
 @Path("/devicetype/attribute")
 @Produces(MediaType.APPLICATION_JSON)
@@ -43,7 +39,7 @@ public class DeviceTypeAttributeResource {
     @Path("/getall")
     @Transactional
     public Response getall(){
-        AllDeviceTypeAttributesDTO result;
+        DeviceTypeAttributeCollection result;
         try{
             result = deviceTypeAttributeRepository.getAll();
         }catch (CCException ex){

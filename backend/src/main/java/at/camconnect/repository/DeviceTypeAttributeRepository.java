@@ -1,15 +1,10 @@
 package at.camconnect.repository;
 
-import at.camconnect.dtos.AllDeviceTypeAttributesDTO;
+import at.camconnect.dtos.DeviceTypeAttributeCollection;
 import at.camconnect.dtos.DeviceTypeAttributeDTO;
-import at.camconnect.dtos.DeviceTypeDTO;
-import at.camconnect.dtos.DeviceTypeGlobal;
 import at.camconnect.enums.DeviceTypeAttributeEnum;
-import at.camconnect.enums.DeviceTypeEnum;
-import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypeAttribute;
 import at.camconnect.model.DeviceTypeAttributes.*;
-import at.camconnect.model.DeviceTypes.*;
 import at.camconnect.responseSystem.CCException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,13 +56,14 @@ public class DeviceTypeAttributeRepository {
         em.remove(getById(id));
     }
 
-    public AllDeviceTypeAttributesDTO getAll(){
+    public DeviceTypeAttributeCollection getAll(){
         List<CameraResolution> cameraResolutions = em.createQuery("SELECT d FROM CameraResolution d", CameraResolution.class).getResultList();
         List<CameraSensor> cameraSensors = em.createQuery("SELECT d FROM CameraSensor d", CameraSensor.class).getResultList();
         List<CameraSystem> cameraSystems = em.createQuery("SELECT d FROM CameraSystem d", CameraSystem.class).getResultList();
         List<LensMount> lensMounts = em.createQuery("SELECT d FROM LensMount d", LensMount.class).getResultList();
         List<TripodHead> tripodHeads = em.createQuery("SELECT d FROM TripodHead d", TripodHead.class).getResultList();
-        return new AllDeviceTypeAttributesDTO(cameraResolutions, cameraSensors, cameraSystems, lensMounts, tripodHeads);
+
+        return new DeviceTypeAttributeCollection(cameraResolutions, cameraSensors, cameraSystems, lensMounts, tripodHeads);
     }
 
     //region utility functions

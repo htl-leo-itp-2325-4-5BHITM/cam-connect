@@ -1,5 +1,6 @@
 package at.camconnect.repository;
 
+import at.camconnect.dtos.DeviceTypeCollection;
 import at.camconnect.dtos.DeviceTypeDTO;
 import at.camconnect.dtos.DeviceTypeGlobal;
 import at.camconnect.model.DeviceTypeAttribute;
@@ -27,16 +28,17 @@ public class DeviceTypeRepository {
 
     public DeviceType create(DeviceTypeEnum typeEnum, JsonObject data){
         /* Why JsonData and not DTO
-         * We use a single create endpoint to create lots of different types this just makes the process when calling
+         * We use a single create endpoint to create lots of different types: this makes the process when calling
          * the api very easy. If we were to use a DTO here we would either have to hardcode all the different routes, or
-         * switch case through the typeEnum and create a different entity with different params for each. Plus we would
-         * run into the poor type mismatching errors as described in the update function.
+         * switch case through the typeEnum and create a different entity with different params for each, this would then
+         * require a factory or a abstract create method that returns a instance.
          */
 
         DeviceType deviceType = null;
+
+        //use quarkus's built in object mapper to create a entity from the provided json
         String dataString = String.valueOf(data);
         ObjectMapper objectMapper = new ObjectMapper();
-
         try {
             deviceType = objectMapper.readValue(dataString, enumToClass(typeEnum));
         } catch (JsonProcessingException e) {
@@ -53,8 +55,16 @@ public class DeviceTypeRepository {
         return deviceType;
     }
 
-    public List<DeviceType> getAll(){
-        return em.createQuery("SELECT d FROM DeviceType d", DeviceType.class).getResultList();
+    public DeviceTypeCollection getAll(){
+        List<CameraType> cameraTypes = em.createQuery("SELECT d FROM CameraType d", CameraType.class).getResultList();
+        List<DroneType> droneTypes = em.createQuery("SELECT d FROM DroneType d", DroneType.class).getResultList();
+        List<LensType> lensTypes = em.createQuery("SELECT d FROM LensType d", LensType.class).getResultList();
+        List<LightType> lightTypes = em.createQuery("SELECT d FROM LightType d", LightType.class).getResultList();
+        List<MicrophoneType> microphoneTypes = em.createQuery("SELECT d FROM MicrophoneType d", MicrophoneType.class).getResultList();
+        List<StabilizerType> stabilizerTypes = em.createQuery("SELECT d FROM StabilizerType d", StabilizerType.class).getResultList();
+        List<TripodType> tripodTypes = em.createQuery("SELECT d FROM TripodType d", TripodType.class).getResultList();
+
+        return new DeviceTypeCollection(cameraTypes, droneTypes, lensTypes, lightTypes, microphoneTypes, stabilizerTypes, tripodTypes);
     }
 
     public void remove(Long id){

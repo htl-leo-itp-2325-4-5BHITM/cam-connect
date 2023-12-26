@@ -10,9 +10,9 @@ import Util from "./util"
 
 
 export default class Model{
-    deviceTypes = new Subject<DeviceTypeCollection>()
-    deviceTypeAttributes = new Subject<DeviceTypeAttributeCollection>()
-    deviceTypeAttributesAsFilterOptions = {
+    readonly deviceTypes = new Subject<DeviceTypeCollection>()
+    readonly deviceTypeAttributes = new Subject<DeviceTypeAttributeCollection>()
+    readonly deviceTypeAttributesAsFilterOptions = {
         cameraResolutions: new Subject<FilterOption[]>(),
         cameraSensors: new Subject<FilterOption[]>(),
         cameraSystems: new Subject<FilterOption[]>(),
@@ -31,6 +31,7 @@ export default class Model{
 
     setDeviceTypeAttributes(deviceTypeAttributes: DeviceTypeAttributeCollection){
         this.deviceTypeAttributes.next(deviceTypeAttributes)
+
         this.deviceTypeAttributesAsFilterOptions.cameraResolutions
             .next(deviceTypeAttributes.cameraResolutions
             .map(Util.deviceTypeAttributeToFilterOption))

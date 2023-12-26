@@ -1,4 +1,4 @@
-import {config, handleError} from '../base'
+import {apiQuery, config, handleCCError} from '../base'
 import {model} from "../index"
 import {CameraResolution, CameraSensor, CameraSystem, LensMount, TripodHead} from "./deviceTypeAttribute-service"
 
@@ -83,17 +83,20 @@ export interface TripodTypeDTO extends DeviceType{
 
 //endregion interfaces
 
-export type DeviceTypeCollection = (AudioType | CameraType | DroneType | LensType | LightType | StabilizerType | TripodType)[]
-
+export interface DeviceTypeCollection{
+    audioTypes: AudioType[]
+    cameraTypes: CameraType[]
+    droneTypes: DroneType[]
+    lensTypes: LensType[]
+    lighTypes: LightType[]
+    stabilizerTypes: StabilizerType[]
+    tripodHeads: TripodType[]
+}
 export default class DeviceTypeService {
     static fetchAll(){
-        fetch(config.api_url + '/devicetype/getall')
-            .then(response => {
-                handleError(response.status)
-                return response.json()
-            })
-            .then(result => {
-                model.setDeviceTypes(result.data as DeviceTypeCollection)
+        apiQuery<DeviceTypeCollection>("/devicetype/getall")
+            .then(data => {
+                model.setDeviceTypes(data)
             })
             .catch(error => {
                 console.error(error)
