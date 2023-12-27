@@ -1,5 +1,5 @@
 import {DeviceType} from "./service/deviceType-service"
-import {FilterOption, FilterOptionType} from "./components/basic/filter-container-component"
+import {FilterOption, FilterOptionType} from "./components/basic/filter-block-component"
 import {DeviceTypeAttribute} from "./service/deviceTypeAttribute-service"
 export default class Util{
     static deviceTypeToFilterOption(deviceTypes: DeviceType): FilterOption{
@@ -16,7 +16,7 @@ export default class Util{
 
         return {
             name: devicetypeAttribute.name,
-            details: devicetypeAttribute.details + extras,
+            details: devicetypeAttribute.details + " " + extras, //sorry if this space gets annoying at some point
             id: devicetypeAttribute.attribute_id,
             type: FilterOptionType[typeof devicetypeAttribute]
         }

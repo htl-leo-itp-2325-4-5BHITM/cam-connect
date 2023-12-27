@@ -2,6 +2,7 @@
 
 :host{
   all: initial;
+  height: fit-content;
 }
 
 .cc-button{
@@ -11,9 +12,8 @@
   border: 1px solid;
   border-radius: .3rem;
   padding: .1rem 1rem;
-  margin: .5rem;
   cursor: pointer;
-  transition: .2s all ease;
+  transition: .2s background-color, color ease;
 
   &[type = "outlined"]{
     border: 2px solid;

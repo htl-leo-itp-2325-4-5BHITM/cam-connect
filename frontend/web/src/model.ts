@@ -5,7 +5,7 @@ import DeviceTypeAttributeService, {
     DeviceTypeAttribute,
     DeviceTypeAttributeCollection
 } from "./service/deviceTypeAttribute-service"
-import {FilterOption} from "./components/basic/filter-container-component"
+import {FilterOption} from "./components/basic/filter-block-component"
 import Util from "./util"
 
 

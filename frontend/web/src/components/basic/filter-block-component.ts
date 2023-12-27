@@ -2,6 +2,7 @@ import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/filter-container.styles.scss'
 import Model, {ObservedProperty} from "../../model"
+import {Tooltip} from "../../base"
 
 export enum FilterOptionType {
     DeviceType,
@@ -16,7 +17,7 @@ export interface FilterOption {
 }
 
 @customElement('cc-filter-container')
-export class FilterContainerComponent extends LitElement {
+export class FilterBlockComponent extends LitElement {
     @property({type: String})
     name?: string = 'Filterblock'
 
@@ -45,7 +46,11 @@ export class FilterContainerComponent extends LitElement {
             <div class="filter-block">
                 <p class="heading">${this.name}</p>
                 ${this.options?.value?.map((option) => //loop over all options and map(return/create) an item for each
-                        html`<p class="option" @click="${(e:Event) => {this.selectOption(e, option)}}">${option.name}</p>`
+                        html`<p class="option" 
+                                @click="${(e:Event) => {this.selectOption(e, option); Tooltip.hide(0, true)}}"
+                                @mouseenter="${(e:Event) => {Tooltip.show(e.target as HTMLElement, option.details, 1000)}}"
+                                @mouseleave="${()=>{Tooltip.hide(0)}}"
+                        >${option.name}</p>`
                 )}
             </div>`
     }
@@ -53,6 +58,6 @@ export class FilterContainerComponent extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "cc-filter-container": FilterContainerComponent
+        "cc-filter-block": FilterBlockComponent
     }
 }

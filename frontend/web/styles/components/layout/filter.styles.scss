@@ -16,10 +16,10 @@
 
 .buttons, .sorts{
   padding-inline: .75rem;
-  .buttons{
-
+  &.buttons{
+    gap: .5rem;
   }
-  .sorts{
+  &.sorts{
 
   }
 }

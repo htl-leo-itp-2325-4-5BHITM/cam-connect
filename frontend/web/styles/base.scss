@@ -63,6 +63,18 @@ button{
             animation: svg-cta-click 1s infinite;
         }
     }
+
+    #tooltip{
+        position: absolute;
+        padding: .5rem;
+        background-color: $gray500;
+        box-sizing: border-box;
+        pointer-events: none;
+        cursor: default;
+        border-radius: .2rem;
+        opacity: 0;
+        max-width: 30ch;
+    }
 }
 
 /*animation geht mit svg grad aus irgendeimnem grund ned*/
