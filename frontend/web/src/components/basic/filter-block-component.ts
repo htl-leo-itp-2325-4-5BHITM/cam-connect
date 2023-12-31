@@ -4,15 +4,11 @@ import styles from '../../../styles/components/basic/filter-container.styles.scs
 import Model, {ObservedProperty} from "../../model"
 import {Tooltip} from "../../base"
 
-export enum FilterOptionType {
-    DeviceType,
-}
-
 export interface FilterOption {
     name: string,
     details?: string
     selected?: boolean,
-    type: FilterOptionType,
+    type: string,
     id: number
 }
 

@@ -22,6 +22,12 @@ import {FilterBlockComponent, FilterOption} from "./components/basic/filter-bloc
 //OMG its our single swouce of THWQUUUCE
 export let model = new Model()
 
+let deviceTypeFilter:FilterOption[] = [
+    {name: "Kamera", type: "CameraType", id: 0, details: "Kamera halt"},
+    {name: "Mikrofon", type: "MicrophoneType", id: 1, details: "Mikro halt"},
+    {name: "Objektiv", type: "LensType", id: 2, details: "Objektiv halt"}
+]
+
 model.deviceTypes.subscribe(data => {
     console.log(data)
 })

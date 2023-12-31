@@ -4,7 +4,6 @@ import {apiQuery, ccResponse, config, handleCCError, handleHttpError} from "../b
 //region interfaces
 export interface DevicetypeAttributeSource{
     attribute_id: number
-    dtype: number
     name: string
     details: string
 }

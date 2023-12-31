@@ -16,7 +16,7 @@ export interface ccResponse<T>{
 }
 
 /**
- * querys the backend and returnes the resulting data
+ * querys the backend and returns the resulting data
  * @param url
  */
 export function apiQuery<T>(url: string): Promise<T> {

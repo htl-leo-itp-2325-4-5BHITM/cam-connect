@@ -5,7 +5,6 @@ import {CameraResolution, CameraSensor, CameraSystem, LensMount, TripodHead} fro
 //region devicetype interfaces
 export interface DeviceType{
     type_id: number
-    dtype: string
     name: string
     image: string
 }
@@ -103,5 +102,3 @@ export default class DeviceTypeService {
             })
     }
 }
-
-//index should simply link between components and services
