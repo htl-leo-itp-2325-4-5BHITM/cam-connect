@@ -46,7 +46,7 @@ export default class Model{
     }
 
     /**
-     * When created a new instance gathers all the data from the API endpoints
+     * When its created, a new instance gathers all the data from the API endpoints
      */
     constructor() {
         DeviceTypeService.fetchAll()

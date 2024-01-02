@@ -4,7 +4,7 @@ import styles from '../../../styles/components/layout/filter.styles.scss'
 import {ButtonColor, ButtonSize, ButtonType} from '../basic/button-component'
 
 @customElement('cc-filter')
-export class FilterComponent extends LitElement {
+export class FilterSidebarComponent extends LitElement {
     @property({type:String})
     accountname?: string = 'No username provided'
 
@@ -35,6 +35,6 @@ export class FilterComponent extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "cc-filter": FilterComponent
+        "cc-filter-sidebar": FilterSidebarComponent
     }
 }

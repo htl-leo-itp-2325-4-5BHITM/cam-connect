@@ -8,8 +8,7 @@ export interface FilterOption {
     name: string,
     details?: string
     selected?: boolean,
-    type: string,
-    id: number
+    id: (number | string)
 }
 
 @customElement('cc-filter-container')
@@ -20,20 +19,24 @@ export class FilterBlockComponent extends LitElement {
     @property()
     options?: ObservedProperty<FilterOption[]>
 
+    @property()
+    selectOptionsUpdated: (options: FilterOption[]) => void = () => {}
+
     constructor(name: string) {
         super()
         this.name = name
     }
 
     /**
-     * handles the users click on a filter option, highlights it and //TODO passes it back to the index.js
+     * handles the users click on a filter option, highlights it and passes it back to the index.js
      * @param e
      * @param option
      */
-    selectOption(e:Event, option){
+    selectOption(e:Event, option:FilterOption){
         option.selected = !option.selected
         let elem = e.target as HTMLParagraphElement
         elem.classList.toggle("selected")
+        this.selectOptionsUpdated(this.options.value)
     }
 
     render() {
@@ -41,7 +44,7 @@ export class FilterBlockComponent extends LitElement {
             <style>${styles}</style>
             <div class="filter-block">
                 <p class="heading">${this.name}</p>
-                ${this.options?.value?.map((option) => //loop over all options and map(return/create) an item for each
+                ${this.options?.value?.map((option) => //loop over all options and map(return/create) a select option for each
                         html`<p class="option" 
                                 @click="${(e:Event) => {this.selectOption(e, option); Tooltip.hide(0, true)}}"
                                 @mouseenter="${(e:Event) => {Tooltip.show(e.target as HTMLElement, option.details, 1000)}}"
