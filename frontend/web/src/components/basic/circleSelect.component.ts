@@ -1,6 +1,6 @@
 import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
-import styles from '../../../styles/components/basic/circle-select.styles.scss'
+import styles from '../../../styles/components/basic/circleSelect.styles.scss'
 
 enum Color {ACCENT="accent", GRAY="gray"}
 enum Type {SINGLE="single", MULTIPLE="multiple"}

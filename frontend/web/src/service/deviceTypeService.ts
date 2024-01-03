@@ -1,6 +1,6 @@
 import {apiQuery, config, handleCCError} from '../base'
 import {model} from "../index"
-import {CameraResolution, CameraSensor, CameraSystem, LensMount, TripodHead} from "./deviceTypeAttribute-service"
+import {CameraResolution, CameraSensor, CameraSystem, LensMount, TripodHead} from "./deviceTypeAttributeService"
 
 //region devicetype interfaces
 export interface DeviceType{

@@ -1,7 +1,7 @@
-import DeviceTypeService, {DeviceTypeCollection} from "./service/deviceType-service"
+import DeviceTypeService, {DeviceTypeCollection} from "./service/deviceTypeService"
 import { ReactiveController, ReactiveControllerHost } from 'lit';
 import {map, Observable, Subject, Subscription} from 'rxjs';
-import DeviceTypeAttributeService, { DeviceTypeAttributeCollection } from "./service/deviceTypeAttribute-service"
+import DeviceTypeAttributeService, { DeviceTypeAttributeCollection } from "./service/deviceTypeAttributeService"
 import Util from "./util"
 
 /**
