@@ -1,11 +1,17 @@
 package at.camconnect.repository;
 
+<<<<<<< Updated upstream
 import at.camconnect.dtos.DeviceTypeCollection;
 import at.camconnect.dtos.DeviceTypeDTO;
 import at.camconnect.dtos.DeviceTypeGlobal;
 import at.camconnect.model.DeviceTypeAttribute;
 import at.camconnect.model.DeviceTypeAttributes.*;
 import at.camconnect.responseSystem.CCException;
+=======
+import at.camconnect.model.Student;
+import at.camconnect.socket.DeviceTypeSocket;
+import at.camconnect.statusSystem.CCException;
+>>>>>>> Stashed changes
 import at.camconnect.enums.DeviceTypeEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypes.*;
@@ -24,6 +30,7 @@ public class DeviceTypeRepository {
     EntityManager em;
 
     @Inject
+<<<<<<< Updated upstream
     DeviceTypeAttributeRepository deviceTypeAttributeRepository;
 
     public DeviceType create(DeviceTypeEnum typeEnum, JsonObject data){
@@ -34,6 +41,11 @@ public class DeviceTypeRepository {
          * require a factory or a abstract create method that returns a instance.
          */
 
+=======
+    DeviceTypeSocket deviceTypeSocket;
+
+    public void create(DeviceTypeEnum typeEnum, JsonObject data){
+>>>>>>> Stashed changes
         DeviceType deviceType = null;
 
         //use quarkus's built in object mapper to create a entity from the provided json
@@ -83,9 +95,116 @@ public class DeviceTypeRepository {
                 getAttribute(TripodHead.class, data.head_id()), getAttribute(LensMount.class, data.mount_id()), getAttribute(CameraResolution.class, data.resolution_id()), getAttribute(CameraSensor.class, data.sensor_id()), getAttribute(CameraSystem.class, data.system_id()),
                 data.type_id(), data.dtype(), data.image(), data.name());
 
+<<<<<<< Updated upstream
         //just call the update method on whichever child class it is
         deviceType.update(dataWithObjects);
         return deviceType;
+=======
+                try{
+                    cameraType.setSensor(em.find(CameraSensor.class, data.getInt("sensor_id")));
+                }catch (Exception ex){
+                    throw new CCException(1106);
+                }
+                try{
+                    cameraType.setMount(em.find(LensMount.class, data.getInt("mount_id")));
+                }catch (Exception ex){
+                    throw new CCException(1106);
+                }
+                try{
+                    cameraType.setResolution(em.find(CameraResolution.class, data.getInt("resolution_id")));
+                }catch (Exception ex){
+                    throw new CCException(1106);
+                }
+                break;
+            case drone:
+                DroneType droneType = em.find(DroneType.class, id);
+
+                try{
+                    droneType.setSensor(em.find(CameraSensor.class, data.getInt("sensor_id")));
+                }catch (Exception ex){
+                    throw new CCException(1106);
+                }
+                try{
+                    droneType.setResolution(em.find(CameraResolution.class, data.getInt("resolution_id")));
+                }catch (Exception ex){
+                    throw new CCException(1106);
+                }
+                try{
+                    droneType.setMax_range(data.getInt("max_range"));
+                }catch (Exception ex){
+                    throw new CCException(1106);
+                }
+                break;
+            case lens:
+                LensType lensType = em.find(LensType.class, id);
+
+                try{
+                    lensType.setFocal_length(data.getInt("focal_length"));
+                }catch (Exception ex){
+                    throw new CCException(1106);
+                }
+                try{
+                    lensType.setF_stop(data.getInt("f_stop"));
+                }catch (Exception ex){
+                    throw new CCException(1106);
+                }
+                try{
+                    lensType.setLens_mount(em.find(LensMount.class, data.getInt("mount_id")));
+                }catch (Exception ex){
+                    throw new CCException(1106);
+                }
+                break;
+            case light:
+                LightType lightType = em.find(LightType.class, id);
+
+                try{
+                    lightType.setRgb(data.getBoolean("rgb"));
+                }catch (Exception ex){
+                    throw new CCException(1106);
+                }
+                try{
+                    lightType.setWatts(data.getInt("watts"));
+                }catch (Exception ex){
+                    throw new CCException(1106);
+                }
+                try{
+                    lightType.setVariable_temperature(data.getBoolean("variable_temperatur"));
+                }catch (Exception ex){
+                    throw new CCException(1106);
+                }
+                break;
+            case stabilizer:
+                StabilizerType stabilizerType = em.find(StabilizerType.class, id);
+
+                try{
+                    stabilizerType.setNumber_of_axis(data.getInt("number_of_axis"));
+                }catch (Exception ex){
+                    throw new CCException(1106);
+                }
+                try{
+                    stabilizerType.setMax_weight(data.getInt("max_weight"));
+                }catch (Exception ex){
+                    throw new CCException(1106);
+                }
+                break;
+            case tripod:
+                TripodType tripodType = em.find(TripodType.class, id);
+
+                try{
+                    tripodType.setHeight(data.getInt("height"));
+                }catch (Exception ex){
+                    throw new CCException(1106);
+                }
+                try{
+                    tripodType.setHead(em.find(TripodHead.class, data.getInt("head_id")));
+                }catch (Exception ex){
+                    throw new CCException(1106);
+                }
+                break;
+        }
+
+
+>>>>>>> Stashed changes
     }
 
     //region utility functions
