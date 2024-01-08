@@ -2,7 +2,7 @@ package at.camconnect.socket;
 
 import at.camconnect.model.Rent;
 import at.camconnect.repository.RentRepository;
-import at.camconnect.statusSystem.CCResponse;
+import at.camconnect.responseSystem.CCResponse;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnOpen;

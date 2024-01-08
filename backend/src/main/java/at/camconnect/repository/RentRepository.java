@@ -1,22 +1,13 @@
 package at.camconnect.repository;
 
 import at.camconnect.enums.RentStatusEnum;
-<<<<<<< Updated upstream
 import at.camconnect.responseSystem.CCException;
-=======
 import at.camconnect.socket.RentSocket;
-import at.camconnect.statusSystem.CCException;
->>>>>>> Stashed changes
 import at.camconnect.model.Device;
 import at.camconnect.model.Rent;
 import at.camconnect.model.Student;
 import at.camconnect.model.Teacher;
-<<<<<<< Updated upstream
 import at.camconnect.responseSystem.CCResponse;
-=======
-import at.camconnect.statusSystem.CCResponse;
-import at.camconnect.statusSystem.CCStatus;
->>>>>>> Stashed changes
 import io.vertx.ext.mail.MailClient;
 import io.vertx.ext.mail.MailMessage;
 import jakarta.enterprise.context.ApplicationScoped;
