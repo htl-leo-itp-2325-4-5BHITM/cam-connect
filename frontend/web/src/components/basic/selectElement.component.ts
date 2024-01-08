@@ -1,7 +1,7 @@
 import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/select.styles.scss'
-import {SelectComponent} from "./select-component"
+import {SelectComponent} from "./select.component"
 
 enum Status {CONFIRMED="bestätigt", WAITING="warten", DECLINED="abgelehnt"}
 

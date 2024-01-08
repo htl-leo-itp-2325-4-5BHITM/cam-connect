@@ -8,31 +8,24 @@
   display: flex;
   font-size: $fSizeDesktopLarge !important;
   font-weight: 400 !important;
-  color: $gray800 !important;
 
-  :not(:last-child):after{
-    margin-inline: .5rem;
-    content: "•";
+  ::slotted(*){
+    cursor: pointer;
+    color: $gray800 !important;
+    user-select: none;
   }
 
-  p{
-    margin: 0;
+  ::slotted(*:hover){
+    color: $gray900 !important;
   }
-}
 
-cc-select-element{
-  display: flex;
-  align-items: center;
-}
-
-.select-element p{
-  cursor: pointer;
-  &.active{
+  ::slotted(*.selected){
     color: white !important;
     font-weight: 600 !important;
   }
 
-  &:hover{
-    color: $gray900 !important;
+  ::slotted(*:not(:last-child)):after{
+    margin-inline: .3rem;
+    content: "•";
   }
 }

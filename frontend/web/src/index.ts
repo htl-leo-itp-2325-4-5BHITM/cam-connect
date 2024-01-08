@@ -1,25 +1,25 @@
 //components
-import "./components/basic/button-component"
-import "./components/basic/chip-component"
-import "./components/basic/rent-status-component"
-import "./components/basic/filter-block-component"
-import "./components/basic/circle-select-component"
-import "./components/basic/property-value-component"
-import "./components/basic/select-element-component"
-import "./components/basic/select-component"
-import "./components/basic/value-chain-component"
-import "./components/basic/line-component"
-import {FilterBlockComponent, FilterOption} from "./components/basic/filter-block-component"
+import "./components/basic/button.component"
+import "./components/basic/chip.component"
+import "./components/basic/rentStatus.component"
+import "./components/basic/filterBlock.component"
+import "./components/basic/circleSelect.component"
+import "./components/basic/propertyValue.component"
+import "./components/basic/selectElement.component"
+import "./components/basic/select.component"
+import "./components/basic/valueChain.component"
+import "./components/basic/line.component"
+import {FilterBlockComponent, FilterOption} from "./components/basic/filterBlock.component"
 
 //css
 import "../styles/index.scss"
 
-//TODO check if we can use the same svg stuff here as in the components or othe way round
+
 import '@fortawesome/fontawesome-free/js/all'
 import Model, {ObservedProperty} from "./model"
-import {from, BehaviorSubject} from 'rxjs';
-import "./components/layout/filterSidebar-component"
-import {FilterSidebarComponent} from "./components/layout/filterSidebar-component"
+import {BehaviorSubject} from 'rxjs';
+import "./components/layout/filterSidebar.component"
+import {FilterSidebarComponent} from "./components/layout/filterSidebar.component"
 import Util from "./util"
 
 //OMG its our single swouce of THWQUUUCE
@@ -37,13 +37,15 @@ let deviceTypeFilterSubject = new BehaviorSubject([
 ])
 
 model.deviceTypes.subscribe(data => {
-    console.log(data)
 })
 
 
-let filterSidebar = new FilterSidebarComponent();
+let filterSidebar = new FilterSidebarComponent("Michael Leisch");
 
-let filterHtml = {
+/**
+ * Contains all the filter elements for
+ */
+let filterElements = {
     resolutions: new FilterBlockComponent("Auflösungen"),
     sensors: new FilterBlockComponent("Sensoren"),
     systems: new FilterBlockComponent("Kameratypen"),
@@ -53,40 +55,50 @@ let filterHtml = {
 
 let deviceTypes = new FilterBlockComponent("Gerätetyp")
 deviceTypes.options = new ObservedProperty<FilterOption[]>(deviceTypes, deviceTypeFilterSubject)
-deviceTypes.selectOptionsUpdated = setFilterHtmlVisibility
+deviceTypes.selectOptionsUpdated = (options) => {setFilterHtmlVisibility(options)}
 deviceTypes.setAttribute("slot", "primaryFilters")
 filterSidebar.appendChild(deviceTypes)
 
-filterHtml.resolutions.options = new ObservedProperty<FilterOption[]>(filterHtml.resolutions, model.deviceTypeAttributesAsFilterOptions.cameraResolutions)
-filterSidebar.appendChild(filterHtml.resolutions)
-filterHtml.sensors.options = new ObservedProperty<FilterOption[]>(filterHtml.sensors, model.deviceTypeAttributesAsFilterOptions.cameraSensors)
-filterSidebar.appendChild(filterHtml.sensors)
-filterHtml.systems.options = new ObservedProperty<FilterOption[]>(filterHtml.systems, model.deviceTypeAttributesAsFilterOptions.cameraSystems)
-filterSidebar.appendChild(filterHtml.systems)
-filterHtml.lensMounts.options = new ObservedProperty<FilterOption[]>(filterHtml.lensMounts, model.deviceTypeAttributesAsFilterOptions.lensMounts)
-filterSidebar.appendChild(filterHtml.lensMounts)
-filterHtml.tripodHeads.options = new ObservedProperty<FilterOption[]>(filterHtml.tripodHeads, model.deviceTypeAttributesAsFilterOptions.tripodHeads)
-filterSidebar.appendChild(filterHtml.tripodHeads)
+filterElements.resolutions.options = new ObservedProperty<FilterOption[]>(filterElements.resolutions, model.deviceTypeAttributesAsFilterOptions.cameraResolutions)
+filterSidebar.appendChild(filterElements.resolutions)
+filterElements.sensors.options = new ObservedProperty<FilterOption[]>(filterElements.sensors, model.deviceTypeAttributesAsFilterOptions.cameraSensors)
+filterSidebar.appendChild(filterElements.sensors)
+filterElements.systems.options = new ObservedProperty<FilterOption[]>(filterElements.systems, model.deviceTypeAttributesAsFilterOptions.cameraSystems)
+filterSidebar.appendChild(filterElements.systems)
+filterElements.lensMounts.options = new ObservedProperty<FilterOption[]>(filterElements.lensMounts, model.deviceTypeAttributesAsFilterOptions.lensMounts)
+filterSidebar.appendChild(filterElements.lensMounts)
+filterElements.tripodHeads.options = new ObservedProperty<FilterOption[]>(filterElements.tripodHeads, model.deviceTypeAttributesAsFilterOptions.tripodHeads)
+filterSidebar.appendChild(filterElements.tripodHeads)
 
 /**
  * displays or hides filters so that only the ones that belong with the general selection are visibly
  * @param options filteroptions provided by the general devicetype filter
  */
 function setFilterHtmlVisibility(options: FilterOption[]){
+    //we should probably publish this to the modle and make it available for the future
     let deviceTypeIsSelected = {
         camera: Util.getItemByIdFromJsonArray<FilterOption>(options, "camera").selected,
         drone: Util.getItemByIdFromJsonArray<FilterOption>(options, "drone").selected,
         lens: Util.getItemByIdFromJsonArray<FilterOption>(options, "lens").selected,
         light: Util.getItemByIdFromJsonArray<FilterOption>(options, "light").selected,
         microphone: Util.getItemByIdFromJsonArray<FilterOption>(options, "microphone").selected,
-        stabilisator: Util.getItemByIdFromJsonArray<FilterOption>(options, "stabilizer").selected,
+        stabilizer: Util.getItemByIdFromJsonArray<FilterOption>(options, "stabilizer").selected,
         tripod: Util.getItemByIdFromJsonArray<FilterOption>(options, "tripod").selected,
     }
-    filterHtml.resolutions.style.display = deviceTypeIsSelected.camera || deviceTypeIsSelected.drone ? "" : "none"
-    filterHtml.sensors.style.display = deviceTypeIsSelected.camera || deviceTypeIsSelected.drone ? "" : "none"
-    filterHtml.systems.style.display = deviceTypeIsSelected.camera ? "" : "none"
-    filterHtml.lensMounts.style.display = deviceTypeIsSelected.camera || deviceTypeIsSelected.lens ? "" : "none"
-    filterHtml.tripodHeads.style.display = deviceTypeIsSelected.tripod ? "" : "none"
+
+    const allFalse = Object.values(deviceTypeIsSelected).every(value => value !== true ); //not checking for == false since it can be undefined
+
+    if (allFalse) {
+        Object.keys(deviceTypeIsSelected).forEach(key => {
+            deviceTypeIsSelected[key] = true;
+        });
+    }
+
+    filterElements.resolutions.style.display = deviceTypeIsSelected.camera || deviceTypeIsSelected.drone ? "" : "none"
+    filterElements.sensors.style.display = deviceTypeIsSelected.camera || deviceTypeIsSelected.drone ? "" : "none"
+    filterElements.systems.style.display = deviceTypeIsSelected.camera ? "" : "none"
+    filterElements.lensMounts.style.display = deviceTypeIsSelected.camera || deviceTypeIsSelected.lens ? "" : "none"
+    filterElements.tripodHeads.style.display = deviceTypeIsSelected.tripod ? "" : "none"
 }
 
 

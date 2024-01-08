@@ -1,6 +1,6 @@
-import {DeviceType} from "./service/deviceType-service"
-import {FilterOption} from "./components/basic/filter-block-component"
-import {DeviceTypeAttribute} from "./service/deviceTypeAttribute-service"
+import {DeviceType} from "./service/deviceTypeService"
+import {FilterOption} from "./components/basic/filterBlock.component"
+import {DeviceTypeAttribute} from "./service/deviceTypeAttributeService"
 export default class Util{
     static deviceTypeToFilterOption(deviceTypes: DeviceType): FilterOption{
         return {

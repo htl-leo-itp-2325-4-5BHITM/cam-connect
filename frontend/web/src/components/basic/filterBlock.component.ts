@@ -1,6 +1,6 @@
 import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
-import styles from '../../../styles/components/basic/filter-container.styles.scss'
+import styles from '../../../styles/components/basic/filterBlock.styles.scss'
 import Model, {ObservedProperty} from "../../model"
 import {Tooltip} from "../../base"
 
