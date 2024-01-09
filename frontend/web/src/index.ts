@@ -14,7 +14,6 @@ import {FilterBlockComponent, FilterOption} from "./components/basic/filterBlock
 //css
 import "../styles/index.scss"
 
-
 import '@fortawesome/fontawesome-free/js/all'
 import Model, {ObservedProperty} from "./model"
 import {BehaviorSubject} from 'rxjs';
