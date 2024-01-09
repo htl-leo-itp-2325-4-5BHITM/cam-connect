@@ -32,7 +32,7 @@ export class ChipComponent extends LitElement {
             <style>${styles}</style>
             <div class="cc-chip" color="${this.color}" size="${this.size}"
                 @click="${this.removeChip}">
-                ${this.text}
+                ${this.innerHTML}
                 ${this.removeable ? this.renderRemoveButton() : ""}
             </div>`
     }

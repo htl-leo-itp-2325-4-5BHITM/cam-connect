@@ -8,7 +8,7 @@ export class SelectComponent extends LitElement {
     options!: Array<HTMLElement>
 
     @property()
-    optionSelected = (option: HTMLElement) => {};
+    optionSelected: (option: HTMLElement) => void = () => {}
 
     render() {
         return html`
@@ -21,7 +21,6 @@ export class SelectComponent extends LitElement {
     updated() {
         this.options.forEach(option => {
             option.addEventListener("click", ()=>{this.selectOption(option)})
-            console.log(option)
         })
     }
 

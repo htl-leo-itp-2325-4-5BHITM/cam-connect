@@ -2,6 +2,7 @@ package at.camconnect.repository;
 
 import at.camconnect.enums.RentStatusEnum;
 import at.camconnect.responseSystem.CCException;
+import at.camconnect.socket.RentSocket;
 import at.camconnect.model.Device;
 import at.camconnect.model.Rent;
 import at.camconnect.model.Student;
@@ -29,15 +30,20 @@ public class RentRepository {
     @Inject
     MailClient client;
 
+    @Inject
+    RentSocket rentSocket;
+
     @Transactional
     public void create(JsonObject rentJson){
         Rent rent = new Rent(em.find(Student.class, rentJson.getInt("student_id")));
         em.persist(rent);
+        rentSocket.broadcast(getAll());
     }
 
     @Transactional
     public void createEmpty(){
         em.persist(new Rent());
+        rentSocket.broadcast(getAll());
     }
 
     @Transactional
@@ -47,6 +53,7 @@ public class RentRepository {
         } catch(CCException ex){
             return CCResponse.error(ex);
         }
+        rentSocket.broadcast(getAll());
         return CCResponse.ok();
     }
 
@@ -195,6 +202,8 @@ public class RentRepository {
                 throw new CCException(1200, "Failed to send mail");
             }
         });
+
+        rentSocket.broadcast(getAll());
     }
 
     @Transactional
@@ -256,6 +265,53 @@ public class RentRepository {
             try{ setDeviceString(id, rentJson.getString("device_string")); }
             catch (CCException ccex){ throw ccex; }
             catch(Exception ex){ throw new CCException(1105, "cannot update device_string " + ex.getMessage()); }
+
+        rentSocket.broadcast(getAll());
+    }
+
+    @Transactional
+    public void updateAttribute(String attribute, Long rentId, JsonObject data){
+        Rent rent = em.find(Rent.class, rentId);
+
+        switch (attribute){
+            case "student":
+                Student student = em.find(Student.class, data.getInt("value"));
+                rent.setStudent(student);
+                break;
+            case "device":
+                Device device = em.find(Device.class, data.getInt("value"));
+                rent.setDevice(device);
+                break;
+            case "teacherstart":
+                Teacher teacherStart = em.find(Teacher.class, data.getInt("value"));
+                rent.setTeacher_start(teacherStart);
+                break;
+            case "teacherend":
+                Teacher teacherEnd = em.find(Teacher.class, data.getInt("value"));
+                rent.setTeacher_end(teacherEnd);
+                break;
+            case "rentstart":
+                LocalDate rentStart = LocalDate.parse(data.getString("value"));
+                rent.setRent_start(rentStart);
+                break;
+            case "rentendplanned":
+                LocalDate rentEndPlanned = LocalDate.parse(data.getString("value"));
+                rent.setRent_end_planned(rentEndPlanned);
+                break;
+            case "rentendactual":
+                LocalDate rentEndActual = LocalDate.parse(data.getString("value"));
+                rent.setRent_end_actual(rentEndActual);
+                break;
+            case "note":
+                rent.setNote(data.getString("value"));
+                break;
+            case "status":
+                RentStatusEnum status = RentStatusEnum.valueOf(data.getString("value"));
+                rent.setStatus(status);
+                break;
+        }
+
+        rentSocket.broadcast(getAll());
     }
 
     //region setter
@@ -324,9 +380,6 @@ public class RentRepository {
         }
 
         rent.setStatus(verificationStatus);
-    }
-    public void setVerificationCode(Long rentId, String verification_code){
-        Rent rent = getById(rentId);
     }
     //endregion
 

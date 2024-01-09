@@ -27,10 +27,10 @@ export class FilterSidebarComponent extends LitElement {
                 </div>
                 <cc-line></cc-line>
                 <div class="sorts">
-                    <cc-select>
+                    <cc-selects>
                         <p class="selected">raster</p>
                         <p>liste</p>
-                    </cc-select>
+                    </cc-selects>
                 </div>
                 <cc-line></cc-line>
                 <slot name="primaryFilters"></slot>
