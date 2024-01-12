@@ -13,7 +13,7 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
           cache: 'maven'
-      - run: java -version^
+      - run: java -version
       - name: build backend
         working-directory: ./backend
         run: |
