@@ -15,6 +15,8 @@ export interface ccResponse<T>{
     data: T
 }
 
+export enum ColorEnum {ACCENT="accent", GOOD="good", MID="mid", BAD="bad", GRAY="gray"}
+
 /**
  * querys the backend and returns the resulting data
  * @param url

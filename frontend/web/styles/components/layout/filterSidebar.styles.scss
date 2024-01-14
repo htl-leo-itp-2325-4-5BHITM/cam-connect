@@ -9,7 +9,7 @@
   display: flex;
   flex-direction: column;
   gap: .5rem;
-  padding-top: .5rem;
+  padding-top: .5rem !important;
 
   box-sizing: border-box;
 }
@@ -17,9 +17,6 @@
 .buttons, .sorts{
   padding-inline: .75rem;
 
-  &.buttons{
-    gap: .5rem;
-  }
   &.sorts{
 
   }

@@ -1,0 +1,41 @@
+@import "../../base";
+
+:host{
+  all: initial;
+  display: flex;
+  justify-content: space-between;
+}
+
+label{
+
+}
+
+.toggle{
+  --knob-size: 1rem;
+  background-color: $gray500;
+  width: calc(var(--knob-size) * 1.75);
+  height: fit-content;
+  border-radius: 10rem;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 3px;
+
+  &.on{
+    background-color: $accentDarkmode;
+
+    .knob{
+      margin-left: calc(var(--knob-size) * 0.75);
+    }
+  }
+
+  .knob{
+    height: var(--knob-size);
+    width: var(--knob-size);
+    background-color: $gray900;
+    border-radius: 50%;
+    transition: margin-left .2s ease-in-out;
+  }
+}

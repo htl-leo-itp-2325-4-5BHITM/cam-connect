@@ -16,33 +16,32 @@ export class FilterSidebarComponent extends LitElement {
     render() {
         return html`
             <style>${styles}</style>
-            <div class="cc-filter">
-                <div class="buttons">
-                    <cc-button size="${ButtonSize.BIG}" color="${ButtonColor.ACCENT}" type="${ButtonType.FILLED}">Neuer
-                        Verleih
-                    </cc-button>
-                    <cc-button size="${ButtonSize.BIG}" color="${ButtonColor.ACCENT}" type="${ButtonType.OUTLINED}">
-                        Multi Verleih
-                    </cc-button>
-                </div>
-                <cc-line></cc-line>
-                <div class="sorts">
-                    <cc-selects>
-                        <p class="selected">raster</p>
-                        <p>liste</p>
-                    </cc-selects>
-                </div>
-                <cc-line></cc-line>
-                <slot name="primaryFilters"></slot>
-                <cc-line></cc-line>
-                <div class="secondaryFilters">
-                    <slot></slot>
-                </div>
+            <div class="buttons">
+                <cc-button size="${ButtonSize.BIG}" color="${ButtonColor.ACCENT}" type="${ButtonType.FILLED}">Neuer
+                    Verleih
+                </cc-button>
+                <cc-button size="${ButtonSize.BIG}" color="${ButtonColor.ACCENT}" type="${ButtonType.OUTLINED}">
+                    Multi Verleih
+                </cc-button>
+            </div>
+            <cc-line></cc-line>
+            <div class="sorts">
+                <cc-select>
+                    <p class="selected">raster</p>
+                    <p>liste</p>
+                </cc-select>
+                <cc-toggle>Nur verfügbare anzeigen</cc-toggle>
+            </div>
+            <cc-line></cc-line>
+            <slot name="primaryFilters"></slot>
+            <cc-line></cc-line>
+            <div class="secondaryFilters">
+                <slot></slot>
+            </div>
 
-                <div class="user">
-                    <img src="../../../assets/user-icon-default.svg" alt="user">
-                    <p>${(this.accountname)}</p>
-                </div>
+            <div class="user">
+                <img src="../../../assets/user-icon-default.svg" alt="user">
+                <p>${(this.accountname)}</p>
             </div>
         `
     }

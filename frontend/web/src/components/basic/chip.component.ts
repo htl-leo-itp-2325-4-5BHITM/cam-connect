@@ -4,14 +4,14 @@ import styles from '../../../styles/components/basic/chip.styles.scss'
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { faXmark } from "@fortawesome/free-solid-svg-icons"
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
+import {ColorEnum} from "../../base"
 
-enum Color {ACCENT="accent", GOOD="good", MID="mid", BAD="bad", GRAY="gray"}
 enum Size {SMALL="small", BIG="big"}
 
 @customElement('cc-chip')
 export class ChipComponent extends LitElement {
-    @property({type: Color})
-    color?: Color = Color.ACCENT
+    @property({type: ColorEnum})
+    color?: ColorEnum = ColorEnum.ACCENT
 
     @property({type: Size})
     size?: Size = Size.BIG

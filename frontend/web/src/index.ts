@@ -9,7 +9,9 @@ import "./components/basic/selectElement.component"
 import "./components/basic/select.component"
 import "./components/basic/valueChain.component"
 import "./components/basic/line.component"
-import {FilterBlockComponent, FilterOption} from "./components/basic/filterBlock.component"
+import "./components/basic/toggle.component"
+
+import "./components/layout/filterSidebar.component"
 
 //css
 import "../styles/index.scss"
@@ -17,9 +19,9 @@ import "../styles/index.scss"
 import '@fortawesome/fontawesome-free/js/all'
 import Model, {ObservedProperty} from "./model"
 import {BehaviorSubject} from 'rxjs';
-import "./components/layout/filterSidebar.component"
 import {FilterSidebarComponent} from "./components/layout/filterSidebar.component"
 import Util from "./util"
+import {FilterBlockComponent, FilterOption} from "./components/basic/filterBlock.component"
 
 //OMG its our single swouce of THWQUUUCE
 export let model = new Model()
