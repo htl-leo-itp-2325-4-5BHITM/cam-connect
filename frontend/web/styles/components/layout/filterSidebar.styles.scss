@@ -18,13 +18,18 @@
   padding-inline: .75rem;
 
   &.sorts{
-
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
   }
 }
 
 .secondaryFilters{
   padding-block: .5rem;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
 }
 
 .user{
