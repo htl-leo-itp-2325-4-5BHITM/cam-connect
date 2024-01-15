@@ -7,6 +7,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
+import jakarta.websocket.server.ServerEndpoint;
 import jakarta.ws.rs.Path;
 
 import java.net.Socket;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Path("/socket/rent")
+@ServerEndpoint("/socket/rent")
 @ApplicationScoped
 public class RentSocket {
     List<Session> sessions = new ArrayList<>();

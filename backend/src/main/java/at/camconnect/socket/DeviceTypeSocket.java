@@ -6,12 +6,13 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
+import jakarta.websocket.server.ServerEndpoint;
 import jakarta.ws.rs.Path;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Path("/socket/devicetype")
+@ServerEndpoint("/socket/devicetype")
 @ApplicationScoped
 public class DeviceTypeSocket {
     List<Session> sessions = new ArrayList<>();
