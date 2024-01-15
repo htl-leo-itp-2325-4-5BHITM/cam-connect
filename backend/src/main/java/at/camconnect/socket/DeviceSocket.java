@@ -18,11 +18,13 @@ public class DeviceSocket {
 
     @OnOpen
     public void onOpen(Session session) {
+        System.out.println("Socket opened: " + session);
         sessions.add(session);
     }
 
     @OnClose
     public void onClose(Session session) {
+        System.out.println("Socket closed: " + session);
         sessions.remove(session);
     }
 
