@@ -37,17 +37,11 @@ public class Rent {
     private String verification_code;
     private String verification_message;
     private RentStatusEnum status;
-
-
     private String note;
 
     //TODO remove these when moving to new UI permanatly - also remove them in repo resource and update functions
     private String accessory;
     private String device_string;
-
-    //TODO change these names i have no idea what they mean
-    Set<RentStatusEnum> specifiedStatus = Set.of(RentStatusEnum.CONFIRMED, RentStatusEnum.WAITING, RentStatusEnum.RETURNED);
-    Set<RentStatusEnum> fullBlockStatus = Set.of(RentStatusEnum.RETURNED);
 
     public Rent() {
         rent_start = LocalDate.now();

@@ -3,6 +3,7 @@ import { ReactiveController, ReactiveControllerHost } from 'lit';
 import {map, Observable, Subject, Subscription} from 'rxjs';
 import DeviceTypeAttributeService, { DeviceTypeAttributeCollection } from "./service/deviceTypeAttribute.service"
 import Util from "./util"
+import DeviceService, {Device} from "./service/device.service"
 
 /**
  * An instance of this class is our singular data provider. It interfaces between the individual service classes which
@@ -14,9 +15,9 @@ import Util from "./util"
  *  - a setter function that sets the data in the RXJS Subject and sends an update to all subscribers.
  */
 export default class Model{
+    readonly devices = new Subject<Device[]>()
     readonly deviceTypes = new Subject<DeviceTypeCollection>()
     readonly deviceTypeAttributes = new Subject<DeviceTypeAttributeCollection>()
-
     /**
      * This is a representation of all the deviceTypeAttributes split up and transformed into FilterOptions that can be
      * used by the filter-block-component.
@@ -49,11 +50,15 @@ export default class Model{
      * When its created, a new instance gathers all the data from the API endpoints
      */
     constructor() {
+        DeviceService.fetchAll()
         DeviceTypeService.fetchAll()
         DeviceTypeAttributeService.fetchAll()
     }
 
     //region setter functions: used by the service classes to set the data in the model to whatever the api returned
+    setDevices(devices: Device[]){
+        this.devices.next(devices)
+    }
     setDeviceTypes(deviceTypes: DeviceTypeCollection){
         this.deviceTypes.next(deviceTypes)
     }
@@ -61,6 +66,7 @@ export default class Model{
     setDeviceTypeAttributes(deviceTypeAttributes: DeviceTypeAttributeCollection){
         this.deviceTypeAttributes.next(deviceTypeAttributes)
     }
+
     //endregion
 }
 
