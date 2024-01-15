@@ -2,7 +2,11 @@ package at.camconnect.socket;
 
 import at.camconnect.model.Device;
 import at.camconnect.model.DeviceType;
+import at.camconnect.repository.DeviceRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
@@ -15,6 +19,9 @@ import java.util.List;
 @ApplicationScoped
 public class DeviceSocket {
     List<Session> sessions = new ArrayList<>();
+
+    @Inject
+    ObjectMapper objectMapper;
 
     @OnOpen
     public void onOpen(Session session) {
@@ -29,9 +36,15 @@ public class DeviceSocket {
     }
 
     public void broadcast(List<Device> response) {
-
+        String responseString = "";
+        try{
+            responseString = objectMapper.writeValueAsString(response);
+        }catch (JsonProcessingException ex){
+            responseString = "ewow";
+        }
+        String finalResponseString = responseString;
         sessions.forEach(s -> {
-            s.getAsyncRemote().sendObject("response", result -> {
+            s.getAsyncRemote().sendObject(finalResponseString, result -> {
                if (result.getException() != null){
                    System.out.println("Unable to send message: " + result.getException());
                }
