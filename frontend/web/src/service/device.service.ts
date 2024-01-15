@@ -1,9 +1,24 @@
 import {model} from "../index"
-import {apiQuery} from "../base"
+import {apiQuery, config} from "../base"
 import {DeviceType} from "./deviceType.service"
-import {io, Socket} from "socket.io-client"
 
-const socket: Socket = io();
+var connected = false;
+var socket;
+
+connect()
+function connect() {
+    if (! connected) {
+        socket = new WebSocket("ws://localhost:8080/api/socket/devices");
+
+        socket.onopen = function() {
+            connected = true;
+            console.log("connected")
+        };
+        socket.onmessage = function(m) {
+            console.log("Got message: " + m.data);
+        };
+    }
+}
 
 export interface Device{
     serial: string
@@ -21,8 +36,5 @@ export interface DeviceDTO{
 
 export default class DeviceService{
     static fetchAll(){
-        socket.on("noArg", (data: Device[]) => {
-            model.setDevices(data)
-        });
     }
 }

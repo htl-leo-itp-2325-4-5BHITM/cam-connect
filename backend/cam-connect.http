@@ -24,3 +24,11 @@ POST http://localhost:8080/api/devicetype/attribute/create/tripodhead
 
 ###
 GET http://localhost:8080/api/devicetype/attribute/getbyid/10
+
+###
+GET http://localhost:8080/api/device/getall
+
+###
+POST http://localhost:8080/api/device/create
+
+{"serial": "bla", "number": "a45", "note": "nix"}

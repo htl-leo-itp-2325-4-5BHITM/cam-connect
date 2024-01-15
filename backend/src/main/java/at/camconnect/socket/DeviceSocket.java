@@ -11,7 +11,7 @@ import jakarta.websocket.server.ServerEndpoint;
 import java.util.ArrayList;
 import java.util.List;
 
-@ServerEndpoint("/socket/device")
+@ServerEndpoint("/socket/devices")
 @ApplicationScoped
 public class DeviceSocket {
     List<Session> sessions = new ArrayList<>();
@@ -27,8 +27,9 @@ public class DeviceSocket {
     }
 
     public void broadcast(List<Device> response) {
+
         sessions.forEach(s -> {
-            s.getAsyncRemote().sendObject(response, result -> {
+            s.getAsyncRemote().sendObject("response", result -> {
                if (result.getException() != null){
                    System.out.println("Unable to send message: " + result.getException());
                }
