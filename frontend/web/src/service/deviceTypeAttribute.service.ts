@@ -1,5 +1,5 @@
 import {model} from "../index"
-import {apiQuery, ccResponse, config, handleCCError, handleHttpError} from "../base"
+import {apiQuery} from "../base"
 
 //region interfaces
 export interface DevicetypeAttributeSource{

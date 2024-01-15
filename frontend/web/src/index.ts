@@ -37,7 +37,7 @@ let deviceTypeFilterSubject = new BehaviorSubject([
     {name: "Stativ", id: "tripod", details: "dings"},
 ])
 
-model.deviceTypes.subscribe(data => {
+model.devices.subscribe(data => {
     console.log(data)
 })
 
