@@ -1,20 +1,19 @@
 package at.camconnect.socket;
 
+import at.camconnect.model.Device;
 import at.camconnect.model.DeviceType;
-import at.camconnect.model.Rent;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
 import jakarta.websocket.server.ServerEndpoint;
-import jakarta.ws.rs.Path;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@ServerEndpoint("/socket/devicetype")
+@ServerEndpoint("/socket/device")
 @ApplicationScoped
-public class DeviceTypeSocket {
+public class DeviceSocket {
     List<Session> sessions = new ArrayList<>();
 
     @OnOpen
@@ -27,7 +26,7 @@ public class DeviceTypeSocket {
         sessions.remove(session);
     }
 
-    public void broadcast(List<DeviceType> response) {
+    public void broadcast(List<Device> response) {
         sessions.forEach(s -> {
             s.getAsyncRemote().sendObject(response, result -> {
                if (result.getException() != null){

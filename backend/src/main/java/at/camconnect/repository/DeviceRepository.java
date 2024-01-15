@@ -3,6 +3,7 @@ package at.camconnect.repository;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.model.Device;
 import at.camconnect.model.DeviceType;
+import at.camconnect.socket.DeviceSocket;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
@@ -19,14 +20,19 @@ public class DeviceRepository {
     @Inject
     EntityManager em;
 
+    @Inject
+    DeviceSocket deviceSocket;
+
     @Transactional
     public void create(Device device){
         em.persist(device);
+        deviceSocket.broadcast(getAll());
     }
 
     @Transactional
     public void remove(Long id){
         em.remove(getById(id));
+        deviceSocket.broadcast(getAll());
     }
 
     @Transactional
@@ -46,6 +52,7 @@ public class DeviceRepository {
         try{
             setType(id, data.getInt("number"));
         } catch(Exception ex){ System.out.println(ex.getMessage()); }
+        deviceSocket.broadcast(getAll());
     }
 
     public Device getById(long id){
@@ -65,22 +72,26 @@ public class DeviceRepository {
     public void setNumber(long rentId, String number) {
         Device device = getById(rentId);
         device.setNumber(number);
+        deviceSocket.broadcast(getAll());
     }
 
     public void setSerial(long rentId, String serial) {
         Device device = getById(rentId);
         device.setSerial(serial);
+        deviceSocket.broadcast(getAll());
     }
 
     public void setNote(long rentId, String serial) {
         Device device = getById(rentId);
         device.setNote(serial);
+        deviceSocket.broadcast(getAll());
     }
 
     public void setType(long rentId, int type) {
         Device device = getById(rentId);
         DeviceType deviceType = em.find(DeviceType.class, type);
         device.setType(deviceType);
+        deviceSocket.broadcast(getAll());
     }
 
     public boolean importDevices(InputStream fileInputStream) {
