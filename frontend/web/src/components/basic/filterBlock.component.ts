@@ -27,6 +27,21 @@ export class FilterBlockComponent extends LitElement {
         this.name = name
     }
 
+    render() {
+        return html`
+            <style>${styles}</style>
+            <div class="filter-block">
+                <p class="heading">${this.name}<span class="clear" @click="${this.clearSelection}">löschen</span></p>
+                ${this.options?.value?.map((option) => //loop over all options and map(return/create) a select option for each
+                        html`<p class="option ${option.selected ? 'selected' : ''}" 
+                                @click="${(e:Event) => {this.selectOption(e, option); Tooltip.hide(0, true)}}"
+                                @mouseenter="${(e:Event) => {Tooltip.show(e.target as HTMLElement, option.details, 1000)}}"
+                                @mouseleave="${()=>{Tooltip.hide(0)}}"
+                        >${option.name}</p>`
+                )}
+            </div>`
+    }
+
     /**
      * handles the users click on a filter option, highlights it and passes it back to the index.js
      * @param e
@@ -34,24 +49,16 @@ export class FilterBlockComponent extends LitElement {
      */
     selectOption(e:Event, option:FilterOption){
         option.selected = !option.selected
-        let elem = e.target as HTMLParagraphElement
-        elem.classList.toggle("selected")
         this.selectOptionsUpdated(this.options.value)
+        this.requestUpdate()
     }
 
-    render() {
-        return html`
-            <style>${styles}</style>
-            <div class="filter-block">
-                <p class="heading">${this.name}</p>
-                ${this.options?.value?.map((option) => //loop over all options and map(return/create) a select option for each
-                        html`<p class="option" 
-                                @click="${(e:Event) => {this.selectOption(e, option); Tooltip.hide(0, true)}}"
-                                @mouseenter="${(e:Event) => {Tooltip.show(e.target as HTMLElement, option.details, 1000)}}"
-                                @mouseleave="${()=>{Tooltip.hide(0)}}"
-                        >${option.name}</p>`
-                )}
-            </div>`
+    clearSelection(){
+        this.options.value.forEach(option => {
+            option.selected = false
+        })
+        this.selectOptionsUpdated(this.options.value)
+        this.requestUpdate()
     }
 }
 

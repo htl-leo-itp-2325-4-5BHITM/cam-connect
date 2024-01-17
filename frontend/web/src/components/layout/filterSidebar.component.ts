@@ -1,7 +1,7 @@
 import {LitElement, css, html} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/filterSidebar.styles.scss'
-import {ButtonColor, ButtonSize, ButtonType} from '../basic/button.component'
+import {ButtonColor, ButtonComponent, ButtonSize, ButtonType} from '../basic/button.component'
 
 @customElement('cc-filter')
 export class FilterSidebarComponent extends LitElement {
@@ -31,6 +31,7 @@ export class FilterSidebarComponent extends LitElement {
                     <p>liste</p>
                 </cc-select>
                 <cc-toggle>Nur verfügbare anzeigen</cc-toggle>
+                <cc-button type="${ButtonType.UNDERLINED}" color="${ButtonColor.GRAY}">Filter zurücksetzten</cc-button>
             </div>
             <cc-line></cc-line>
             <slot name="primaryFilters"></slot>

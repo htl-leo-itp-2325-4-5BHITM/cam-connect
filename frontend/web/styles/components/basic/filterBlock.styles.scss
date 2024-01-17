@@ -10,7 +10,19 @@ div.filter-block {
   .heading {
     color: $accentDarkmodeLight;
     font-weight: 600;
-    font-size: $fSizeDesktopLarge  ;
+    font-size: $fSizeDesktopLarge;
+
+    span.clear{
+      color: $gray600;
+      text-decoration: underline;
+      margin-left: .5rem;
+      font-size: $fSizeDesktopDefault;
+      cursor: pointer;
+
+      &:hover{
+        color: $gray700;
+      }
+    }
   }
 
   .option:last-child {

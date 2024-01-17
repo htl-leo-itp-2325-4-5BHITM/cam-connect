@@ -1,6 +1,5 @@
 import {model} from "../index"
-import {apiQuery} from "../base"
-import {DeviceType} from "./deviceType.service"
+import {api} from "../base"
 import {Device} from "./device.service"
 
 enum RentStatus {CREATED, WAITING, CONFIRMED, DECLINED, RETURNED}
@@ -38,9 +37,9 @@ export interface RentDTO{
 
 export default class DeviceService{
     static fetchAll(){
-        apiQuery<Device[]>("/devicetype/attribute/getall")
+        api.fetchData<Device[]>("/devicetype/attribute/getall")
             .then(data => {
-                model.setDevices(data)
+                model.loadDevices(data)
             })
             .catch(error => {
                 console.error(error)

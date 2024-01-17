@@ -1,6 +1,7 @@
 import {DeviceType} from "./service/deviceType.service"
 import {FilterOption} from "./components/basic/filterBlock.component"
 import {DeviceTypeAttribute} from "./service/deviceTypeAttribute.service"
+import * as repl from "repl"
 export default class Util{
     static deviceTypeToFilterOption(deviceTypes: DeviceType): FilterOption{
         return {
@@ -41,13 +42,26 @@ export default class Util{
           id property.
         - the id can be either a number or a string its type is a union type of string and number
      */
-    static getItemByIdFromJsonArray<T extends {id:(number | string)}>(data: T[], id: (number | string)):T {
+
+    //TODO constrain the generic so that it has to have a propperly named id column, something like: extends {[keyName]:(number | string)}
+    static getItemByKeynameFromJsonArray<T>(data: T[], id: (number | string), keyName: string = "id"):T {
         for (let i = 0; i < data.length; i++) {
-            if(data[i]?.id === id){
+            if(data[i][keyName] === id){
                 return data[i]
             }
         }
         return null
+    }
+
+    //TODO constrain the generic so that it has to have a propperly named id column, something like: extends {[keyName]:(number | string)}
+    static replaceItemByIdInJsonArray<T>(data: T[], replacement: T, id: (number | string), keyName: string = "id"):T[] {
+        for (let i = 0; i < data.length; i++) {
+            if(data[i][keyName] === id){
+                data[i] = replacement
+                return data
+            }
+        }
+        return data
     }
 }
 

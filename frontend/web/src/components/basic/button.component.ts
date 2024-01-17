@@ -3,7 +3,7 @@ import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/button.styles.scss'
 
 export enum ButtonSize {BIG="big", SMALL="small", XSMALL="xsmall"}
-export enum ButtonType {FILLED="filled", OUTLINED="outlined", TEXT="text"}
+export enum ButtonType {FILLED="filled", OUTLINED="outlined", TEXT="text", UNDERLINED="underlined"}
 export enum ButtonColor {ACCENT="accent", GRAY="gray"}
 
 @customElement('cc-button')

@@ -1,6 +1,6 @@
 import DeviceTypeService, {DeviceTypeCollection} from "./service/deviceType.service"
 import { ReactiveController, ReactiveControllerHost } from 'lit';
-import {map, Observable, Subject, Subscription} from 'rxjs';
+import {BehaviorSubject, lastValueFrom, map, Observable, Subject, Subscription} from 'rxjs';
 import DeviceTypeAttributeService, { DeviceTypeAttributeCollection } from "./service/deviceTypeAttribute.service"
 import Util from "./util"
 import DeviceService, {Device} from "./service/device.service"
@@ -12,12 +12,12 @@ import DeviceService, {Device} from "./service/device.service"
  *  - a readonly variable that is a RXJS Subject. This Subject can be accessed by using Model.subjectName.subscribe()
  *    this means that every time the data in the Subject updates all the variables that have subscribed to the subject
  *    also update.
- *  - a setter function that sets the data in the RXJS Subject and sends an update to all subscribers.
+ *  - a load function that sets the data in the RXJS Subject and sends an update to all subscribers.
  */
 export default class Model{
-    readonly devices = new Subject<Device[]>()
-    readonly deviceTypes = new Subject<DeviceTypeCollection>()
-    readonly deviceTypeAttributes = new Subject<DeviceTypeAttributeCollection>()
+    readonly devices = new BehaviorSubject<Device[]>([])
+    readonly deviceTypes = new BehaviorSubject<DeviceTypeCollection>({audioTypes: [], cameraTypes: [], droneTypes: [], lensTypes: [], lighTypes: [], stabilizerTypes: [], tripodHeads: []})
+    readonly deviceTypeAttributes = new BehaviorSubject<DeviceTypeAttributeCollection>({cameraResolutions: [], cameraSensors: [], cameraSystems: [], lensMounts: [], tripodHeads: []})
     /**
      * This is a representation of all the deviceTypeAttributes split up and transformed into FilterOptions that can be
      * used by the filter-block-component.
@@ -55,18 +55,31 @@ export default class Model{
         DeviceTypeAttributeService.fetchAll()
     }
 
-    //region setter functions: used by the service classes to set the data in the model to whatever the api returned
-    setDevices(devices: Device[]){
+    //region load functions: used by the service classes to set the data in the model to whatever the api returned
+    loadDevices(devices: Device[]){
         this.devices.next(devices)
     }
-    setDeviceTypes(deviceTypes: DeviceTypeCollection){
+    loadDeviceTypes(deviceTypes: DeviceTypeCollection){
         this.deviceTypes.next(deviceTypes)
     }
 
-    setDeviceTypeAttributes(deviceTypeAttributes: DeviceTypeAttributeCollection){
+    loadDeviceTypeAttributes(deviceTypeAttributes: DeviceTypeAttributeCollection){
         this.deviceTypeAttributes.next(deviceTypeAttributes)
     }
 
+    //endregion
+
+    //region update functions
+
+    //sry i cant really test this rn it might throw ewows :3
+    async updateDevice(device: Device){
+        DeviceService.update(device)
+
+        let devices = await lastValueFrom(this.devices)
+        console.log(devices)
+        let updatedDevices = Util.replaceItemByIdInJsonArray<Device>(devices, device, device.device_id, "device_id")
+        this.devices.next(updatedDevices)
+    }
     //endregion
 }
 

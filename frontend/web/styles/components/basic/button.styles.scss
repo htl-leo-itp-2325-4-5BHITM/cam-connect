@@ -27,6 +27,19 @@
     --color-text: #{$gray900};
   }
 
+  &[size = "big"]{
+    font-size: $fSizeDesktopLarge;
+    min-width: 8ch;
+  }
+  &[size = "small"]{
+    font-size: $fSizeDesktopMedium;
+    min-width: 8ch;
+  }
+  &[size = "xsmall"]{
+    font-size: $fSizeDesktopDefault;
+    min-width: 6ch;
+  }
+
   &[type = "filled"]{
     background-color: var(--color-main);
     border: 1px solid var(--color-light);
@@ -63,17 +76,23 @@
       background-color: rgba(128, 128, 128, 0.2);
     }
   }
+  &[type = "underlined"]{
+    background-color: transparent;
+    border: none;
+    color: var(--color-text);
+    text-decoration: underline;
+    min-width: 0;
+    padding-inline: .2rem;
+    margin-inline: -.2rem;
+    font-weight: 400;
+    text-underline-offset: .1rem;
 
-  &[size = "big"]{
-    font-size: $fSizeDesktopLarge;
-    min-width: 8ch;
-  }
-  &[size = "small"]{
-    font-size: $fSizeDesktopMedium;
-    min-width: 8ch;
-  }
-  &[size = "xsmall"]{
-    font-size: $fSizeDesktopDefault;
-    min-width: 6ch;
+    &[color = "accent"]{
+      color: var(--color-light);
+    }
+
+    &:hover {
+      color: $gray1000;
+    }
   }
 }

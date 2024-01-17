@@ -1,4 +1,4 @@
-import {apiQuery, config, handleCCError} from '../base'
+import {api} from '../base'
 import {model} from "../index"
 import {CameraResolution, CameraSensor, CameraSystem, LensMount, TripodHead} from "./deviceTypeAttribute.service"
 
@@ -93,9 +93,9 @@ export interface DeviceTypeCollection{
 }
 export default class DeviceTypeService {
     static fetchAll(){
-        apiQuery<DeviceTypeCollection>("/devicetype/getall")
+        api.fetchData<DeviceTypeCollection>("/devicetype/getall")
             .then(data => {
-                model.setDeviceTypes(data)
+                model.loadDeviceTypes(data)
             })
             .catch(error => {
                 console.error(error)
