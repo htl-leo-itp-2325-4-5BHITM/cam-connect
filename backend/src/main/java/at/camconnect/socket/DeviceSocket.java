@@ -36,12 +36,14 @@ public class DeviceSocket {
     }
 
     public void broadcast(List<Device> response) {
+        //convert data to a string (json-string)
         String responseString = "";
         try{
             responseString = objectMapper.writeValueAsString(response);
         }catch (JsonProcessingException ex){
             responseString = "ewow";
         }
+
         String finalResponseString = responseString;
         sessions.forEach(s -> {
             s.getAsyncRemote().sendObject(finalResponseString, result -> {
