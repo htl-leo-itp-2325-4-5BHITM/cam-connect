@@ -1,9 +1,6 @@
 import {model} from "../index"
 import {apiQuery} from "../base"
 import {DeviceType} from "./deviceType.service"
-import {io, Socket} from "socket.io-client"
-
-const socket: Socket = io();
 
 export interface Device{
     serial: string
@@ -21,8 +18,6 @@ export interface DeviceDTO{
 
 export default class DeviceService{
     static fetchAll(){
-        socket.on("noArg", (data: Device[]) => {
-            model.setDevices(data)
-        });
+
     }
 }

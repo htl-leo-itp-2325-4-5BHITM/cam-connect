@@ -20,10 +20,13 @@ export class ButtonComponent extends LitElement {
     @property({type: String})
     value?: String = this.innerText || "Button";
 
+    @property()
+    test: () => void = () => {}
+
     render() {
         return html`
             <style>${styles}</style>
-            <button class="cc-button" color="${this.color}" type="${this.type}" size="${this.size}">
+            <button class="cc-button" color="${this.color}" type="${this.type}" @click="${this.test}" size="${this.size}">
                 ${this.value}
             </button>`
     }

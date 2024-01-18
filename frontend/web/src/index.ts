@@ -12,6 +12,7 @@ import "./components/basic/line.component"
 import "./components/basic/toggle.component"
 
 import "./components/layout/filterSidebar.component"
+import "./components/layout/navbar.component"
 
 //css
 import "../styles/index.scss"
@@ -22,7 +23,17 @@ import {BehaviorSubject} from 'rxjs';
 import {FilterSidebarComponent} from "./components/layout/filterSidebar.component"
 import Util from "./util"
 import {FilterBlockComponent, FilterOption} from "./components/basic/filterBlock.component"
+import {NavbarComponent} from "./components/layout/navbar.component"
+import {RentListComponent} from "./components/layout/rentList.component"
 
+//region navbar
+let navbar = new NavbarComponent();
+let optionSelected = navbar.optionSelected
+
+document.querySelector('nav').appendChild(navbar)
+//endregion
+
+//region sidebar
 //OMG its our single swouce of THWQUUUCE
 export let model = new Model()
 
@@ -103,5 +114,11 @@ function setFilterHtmlVisibility(options: FilterOption[]){
     filterElements.tripodHeads.style.display = deviceTypeIsSelected.tripod ? "" : "none"
 }
 
-
 document.querySelector('main').appendChild(filterSidebar)
+//endregion
+
+//region rent list
+let rentList = new RentListComponent()
+
+document.querySelector('main').appendChild(rentList)
+//endregion

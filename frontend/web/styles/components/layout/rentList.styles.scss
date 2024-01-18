@@ -1,0 +1,24 @@
+@import "../../base";
+
+:host {
+  all: initial;
+  width: 100%;
+
+  .toolbar{
+    display: flex;
+    justify-content: end;
+    background: $gray250;
+    padding-block: .5rem;
+
+    svg{
+      height: 1rem;
+      margin-right: .3rem;
+    }
+
+    div{
+      display: flex;
+      align-items: center;
+      margin-right: 1rem;
+    }
+  }
+}

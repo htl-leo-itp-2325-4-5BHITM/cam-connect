@@ -1,10 +1,7 @@
 import {model} from "../index"
 import {apiQuery} from "../base"
 import {DeviceType} from "./deviceType.service"
-import {io, Socket} from "socket.io-client"
 import {Device} from "./device.service"
-
-const socket: Socket = io();
 
 enum RentStatus {CREATED, WAITING, CONFIRMED, DECLINED, RETURNED}
 export interface Rent{
@@ -41,9 +38,6 @@ export interface RentDTO{
 
 export default class DeviceService{
     static fetchAll(){
-        socket.on("noArg", () => {
-
-        });
         apiQuery<Device[]>("/devicetype/attribute/getall")
             .then(data => {
                 model.setDevices(data)
