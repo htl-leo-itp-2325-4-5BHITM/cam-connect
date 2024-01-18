@@ -1,5 +1,5 @@
 import {model} from "../index"
-import {apiQuery} from "../base"
+import {api} from "../base"
 
 //region interfaces
 export interface DevicetypeAttributeSource{
@@ -34,9 +34,9 @@ export interface DeviceTypeAttributeCollection{
 
 export default class DeviceTypeAttributeService{
     static fetchAll(){
-        apiQuery<DeviceTypeAttributeCollection>("/devicetype/attribute/getall")
+        api.fetchData<DeviceTypeAttributeCollection>("/devicetype/attribute/getall")
             .then(data => {
-                model.setDeviceTypeAttributes(data)
+                model.loadDeviceTypeAttributes(data)
             })
             .catch(error => {
                 console.error(error)

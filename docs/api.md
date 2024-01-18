@@ -62,14 +62,14 @@ api
 │       └── getbyid/{attribute_id} -> DeviceTypeAttribute
 │           └── remove
 ├── student -x
-└── teacher -x
-
-socket
-├── rents ~> [Rent]
-├── devices ~> [Device]
-├── devicetypes ~> [DeviceType]
-├── students ~> [Student]
-└── teachers ~> [Teacher]
+├── teacher -x
+└── socket
+    ├── rents ~> [Rent]
+    ├── devices ~> [Device]
+    ├── devicetypes ~> [DeviceType]
+    ├── students ~> [Student]
+    └── teachers ~> [Teacher]
+  
 
 ```
 

@@ -63,9 +63,6 @@ public class DeviceRepository {
 
     public List<Device> getAll(){
         List<Device> devices = em.createQuery("SELECT d FROM Device d", Device.class).getResultList();
-        if(devices.isEmpty()){
-            throw new CCException(1202);
-        }
         return devices;
     }
 

@@ -52,7 +52,6 @@ model.devices.subscribe(data => {
     console.log(data)
 })
 
-
 let filterSidebar = new FilterSidebarComponent("Michael Leisch");
 
 /**
@@ -90,13 +89,13 @@ filterSidebar.appendChild(filterElements.tripodHeads)
 function setFilterHtmlVisibility(options: FilterOption[]){
     //we should probably publish this to the modle and make it available for the future
     let deviceTypeIsSelected = {
-        camera: Util.getItemByIdFromJsonArray<FilterOption>(options, "camera").selected,
-        drone: Util.getItemByIdFromJsonArray<FilterOption>(options, "drone").selected,
-        lens: Util.getItemByIdFromJsonArray<FilterOption>(options, "lens").selected,
-        light: Util.getItemByIdFromJsonArray<FilterOption>(options, "light").selected,
-        microphone: Util.getItemByIdFromJsonArray<FilterOption>(options, "microphone").selected,
-        stabilizer: Util.getItemByIdFromJsonArray<FilterOption>(options, "stabilizer").selected,
-        tripod: Util.getItemByIdFromJsonArray<FilterOption>(options, "tripod").selected,
+        camera: Util.getItemByKeynameFromJsonArray<FilterOption>(options, "camera").selected,
+        drone: Util.getItemByKeynameFromJsonArray<FilterOption>(options, "drone").selected,
+        lens: Util.getItemByKeynameFromJsonArray<FilterOption>(options, "lens").selected,
+        light: Util.getItemByKeynameFromJsonArray<FilterOption>(options, "light").selected,
+        microphone: Util.getItemByKeynameFromJsonArray<FilterOption>(options, "microphone").selected,
+        stabilizer: Util.getItemByKeynameFromJsonArray<FilterOption>(options, "stabilizer").selected,
+        tripod: Util.getItemByKeynameFromJsonArray<FilterOption>(options, "tripod").selected,
     }
 
     const allFalse = Object.values(deviceTypeIsSelected).every(value => value !== true ); //not checking for == false since it can be undefined
