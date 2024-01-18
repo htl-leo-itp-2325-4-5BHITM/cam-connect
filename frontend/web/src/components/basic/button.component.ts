@@ -2,14 +2,14 @@ import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/button.styles.scss'
 
-export enum ButtonSize {BIG="big", SMALL="small", XSMALL="xsmall"}
+export enum ButtonSize {BIG="big", MEDIUM="medium", SMALL="small"}
 export enum ButtonType {FILLED="filled", OUTLINED="outlined", TEXT="text", UNDERLINED="underlined"}
 export enum ButtonColor {ACCENT="accent", GRAY="gray"}
 
 @customElement('cc-button')
 export class ButtonComponent extends LitElement {
     @property({type: ButtonSize})
-    size?: ButtonSize = ButtonSize.BIG;
+    size?: ButtonSize = ButtonSize.MEDIUM;
 
     @property({type: ButtonType})
     type?: ButtonType = ButtonType.FILLED;

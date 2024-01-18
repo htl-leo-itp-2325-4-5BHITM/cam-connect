@@ -24,9 +24,9 @@ export class NavbarComponent extends LitElement {
             </cc-select>
 
             <div class="tools">
-                ${unsafeSVG(icon(faMagnifyingGlass).html[0])}
-                ${unsafeSVG(icon(faArrowRotateRight).html[0])}
-                ${unsafeSVG(icon(faCircleQuestion).html[0])}
+                <div class="cta-icon">${unsafeSVG(icon(faMagnifyingGlass).html[0])}</div>
+                <div class="cta-icon">${unsafeSVG(icon(faArrowRotateRight).html[0])}</div>
+                <div class="cta-icon">${unsafeSVG(icon(faCircleQuestion).html[0])}</div>
             </div>
         `
     }

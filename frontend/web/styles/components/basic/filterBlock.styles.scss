@@ -10,7 +10,7 @@ div.filter-block {
   .heading {
     color: $accentDarkmodeLight;
     font-weight: 600;
-    font-size: $fSizeDesktopLarge;
+    font-size: $fSizeDesktopMedium;
 
     span.clear{
       color: $gray600;
@@ -34,7 +34,7 @@ div.filter-block {
   .option {
     font-weight: 400 !important;
     color: $gray800 !important;
-    font-size: $fSizeDesktopLarge !important;
+    font-size: $fSizeDesktopMedium !important;
     position: relative;
     transition: font-weight .2s, color .2s;
 
@@ -42,7 +42,7 @@ div.filter-block {
     user-select: none;
 
     $linewidth: .6rem;
-    $thickness: .15rem;
+    $thickness: 2px;
     margin-left: calc($linewidth + .5rem) !important;
 
     &::before, &::after {

@@ -27,10 +27,8 @@ import {NavbarComponent} from "./components/layout/navbar.component"
 import {RentListComponent} from "./components/layout/rentList.component"
 
 //region navbar
-let navbar = new NavbarComponent();
+let navbar = document.querySelector('cc-navbar');
 let optionSelected = navbar.optionSelected
-
-document.querySelector('nav').appendChild(navbar)
 //endregion
 
 //region sidebar
@@ -52,7 +50,8 @@ model.devices.subscribe(data => {
     console.log(data)
 })
 
-let filterSidebar = new FilterSidebarComponent("Michael Leisch");
+let filterSidebar = document.querySelector('cc-filter-sidebar');
+filterSidebar.accountname = "Michael Leisch"
 
 /**
  * Contains all the filter elements for
@@ -112,8 +111,6 @@ function setFilterHtmlVisibility(options: FilterOption[]){
     filterElements.lensMounts.style.display = deviceTypeIsSelected.camera || deviceTypeIsSelected.lens ? "" : "none"
     filterElements.tripodHeads.style.display = deviceTypeIsSelected.tripod ? "" : "none"
 }
-
-document.querySelector('main').appendChild(filterSidebar)
 //endregion
 
 //region rent list

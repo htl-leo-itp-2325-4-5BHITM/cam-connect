@@ -3,7 +3,7 @@ import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/filterSidebar.styles.scss'
 import {ButtonColor, ButtonComponent, ButtonSize, ButtonType} from '../basic/button.component'
 
-@customElement('cc-filter')
+@customElement('cc-filter-sidebar')
 export class FilterSidebarComponent extends LitElement {
     @property({type:String})
     accountname?: string = 'No username provided'
@@ -17,10 +17,10 @@ export class FilterSidebarComponent extends LitElement {
         return html`
             <style>${styles}</style>
             <div class="buttons">
-                <cc-button size="${ButtonSize.BIG}" color="${ButtonColor.ACCENT}" type="${ButtonType.FILLED}">Neuer
+                <cc-button size="${ButtonSize.MEDIUM}" color="${ButtonColor.ACCENT}" type="${ButtonType.FILLED}">Neuer
                     Verleih
                 </cc-button>
-                <cc-button size="${ButtonSize.BIG}" color="${ButtonColor.ACCENT}" type="${ButtonType.OUTLINED}">
+                <cc-button size="${ButtonSize.MEDIUM}" color="${ButtonColor.ACCENT}" type="${ButtonType.OUTLINED}">
                     Multi Verleih
                 </cc-button>
             </div>
@@ -31,7 +31,7 @@ export class FilterSidebarComponent extends LitElement {
                     <p>liste</p>
                 </cc-select>
                 <cc-toggle>Nur verfügbare anzeigen</cc-toggle>
-                <cc-button type="${ButtonType.UNDERLINED}" color="${ButtonColor.GRAY}">Filter zurücksetzten</cc-button>
+                <cc-button size="${ButtonSize.MEDIUM}" type="${ButtonType.UNDERLINED}" color="${ButtonColor.GRAY}">Filter zurücksetzten</cc-button>
             </div>
             <cc-line></cc-line>
             <slot name="primaryFilters"></slot>

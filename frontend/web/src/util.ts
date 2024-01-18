@@ -54,7 +54,7 @@ export default class Util{
     }
 
     //TODO constrain the generic so that it has to have a propperly named id column, something like: extends {[keyName]:(number | string)}
-    static replaceItemByIdInJsonArray<T>(data: T[], replacement: T, id: (number | string), keyName: string = "id"):T[] {
+    static replaceItemByIdInJsonArray<T>(data: T[], replacement: T, id: (number | string), keyName: keyof T):T[] {
         for (let i = 0; i < data.length; i++) {
             if(data[i][keyName] === id){
                 data[i] = replacement

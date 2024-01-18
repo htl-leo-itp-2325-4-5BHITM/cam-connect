@@ -31,11 +31,11 @@
     font-size: $fSizeDesktopLarge;
     min-width: 8ch;
   }
-  &[size = "small"]{
+  &[size = "medium"]{
     font-size: $fSizeDesktopMedium;
     min-width: 8ch;
   }
-  &[size = "xsmall"]{
+  &[size = "small"]{
     font-size: $fSizeDesktopDefault;
     min-width: 6ch;
   }
