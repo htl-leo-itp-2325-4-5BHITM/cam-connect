@@ -1,5 +1,5 @@
 name: cam-connect deployment
-run-name: deplayoing camconnect
+run-name: deploying cam-connect
 on: [push]
 jobs:
   Explore-GitHub-Actions:
@@ -11,7 +11,7 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
           cache: 'maven'
-          cache-dependency-path: 'sub-project/pom.xml' # optional
+          cache-dependency-path: 'cam-connect/pom.xml' # optional
       - name: Build with Maven
         run: mvn -B package
         working-directory: backend
