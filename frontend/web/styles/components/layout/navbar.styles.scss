@@ -1,0 +1,46 @@
+@import "../../base";
+
+:host{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: $gray800;
+  font-weight: 400;
+  background-color: $gray300;
+  padding: 0.5rem 0.75rem !important;
+
+  div.logo{
+    height: 1.5rem;
+
+    img{
+      height: 100%;
+    }
+  }
+
+  div.tools{
+    display: flex;
+    gap: 1rem;
+
+    svg{
+      height: 1.2rem;
+    }
+  }
+
+  div.searchBar{
+    width: 22ch;
+    background-color: $gray400;
+    border-radius: .5rem;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: .2rem;
+
+    input{
+      color: $gray800;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid $gray800;
+      padding: .2rem;
+    }
+  }
+}

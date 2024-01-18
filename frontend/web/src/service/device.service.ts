@@ -20,6 +20,7 @@ export interface DeviceDTO{
 
 export default class DeviceService{
     static fetchAll(){
+
         api.fetchData<Device[]>("/device/getall")
             .then(data => {
                 model.loadDevices(data)
