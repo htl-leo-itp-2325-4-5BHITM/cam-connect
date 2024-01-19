@@ -4,13 +4,10 @@ import styles from '../../../styles/components/layout/navbar.styles.scss'
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { faMagnifyingGlass, faArrowRotateRight, faCircleQuestion } from "@fortawesome/free-solid-svg-icons"
+import {model} from "../../index"
 
 @customElement('cc-navbar')
 export class NavbarComponent extends LitElement {
-
-    @property()
-    optionSelected: String = "Equipment"
-
     render() {
         return html`
             <style>${styles}</style>
@@ -18,9 +15,9 @@ export class NavbarComponent extends LitElement {
                 <img src="assets/logo/cc-wordmark-white.svg" alt="cam-connect">
             </div>
 
-            <cc-select .optionSelected = "${(elem) => {this.optionSelected = elem.innerHTML}}">
-                <p class="selected">Equipment</p>
-                <p>Verleihliste</p>
+            <cc-select .optionSelected = "${(elem) => {model.updatePage(elem.dataset.page)}}">
+                <p class="selected" data-page="equipment">Equipment</p>
+                <p data-page="rents">Verleihliste</p>
             </cc-select>
 
             <div class="tools">

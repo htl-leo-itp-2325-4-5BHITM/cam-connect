@@ -5,6 +5,8 @@ import DeviceTypeAttributeService, { DeviceTypeAttributeCollection } from "./ser
 import Util from "./util"
 import DeviceService, {Device} from "./service/device.service"
 
+export enum Pages { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar" }
+
 /**
  * An instance of this class is our singular data provider. It interfaces between the individual service classes which
  * do the actual api calling, and the components or other usages in the index file that display the data.
@@ -15,6 +17,8 @@ import DeviceService, {Device} from "./service/device.service"
  *  - a load function that sets the data in the RXJS Subject and sends an update to all subscribers.
  */
 export default class Model{
+    readonly page = new BehaviorSubject<Pages>(Pages.EQUIPMENT)
+
     readonly devices = new BehaviorSubject<Device[]>([])
     readonly deviceTypes = new BehaviorSubject<DeviceTypeCollection>({audioTypes: [], cameraTypes: [], droneTypes: [], lensTypes: [], lighTypes: [], stabilizerTypes: [], tripodHeads: []})
     readonly deviceTypeAttributes = new BehaviorSubject<DeviceTypeAttributeCollection>({cameraResolutions: [], cameraSensors: [], cameraSystems: [], lensMounts: [], tripodHeads: []})
@@ -76,9 +80,12 @@ export default class Model{
         DeviceService.update(device)
 
         let devices = await lastValueFrom(this.devices)
-        console.log(devices)
         let updatedDevices = Util.replaceItemByIdInJsonArray<Device>(devices, device, device.device_id, "device_id")
         this.devices.next(updatedDevices)
+    }
+
+    updatePage(page: Pages){
+        this.page.next(page)
     }
     //endregion
 }

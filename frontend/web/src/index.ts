@@ -13,6 +13,7 @@ import "./components/basic/toggle.component"
 
 import "./components/layout/filterSidebar.component"
 import "./components/layout/navbar.component"
+import "./components/layout/rentList.component"
 
 //css
 import "../styles/index.scss"
@@ -28,7 +29,6 @@ import {RentListComponent} from "./components/layout/rentList.component"
 
 //region navbar
 let navbar = document.querySelector('cc-navbar');
-let optionSelected = navbar.optionSelected
 //endregion
 
 //region sidebar
@@ -46,7 +46,7 @@ let deviceTypeFilterSubject = new BehaviorSubject([
     {name: "Stativ", id: "tripod", details: "dings"},
 ])
 
-model.devices.subscribe(data => {
+model.page.subscribe(data => {
     console.log(data)
 })
 
@@ -114,7 +114,5 @@ function setFilterHtmlVisibility(options: FilterOption[]){
 //endregion
 
 //region rent list
-let rentList = new RentListComponent()
-
-document.querySelector('main').appendChild(rentList)
+let rentList = document.querySelector('cc-rent-list')
 //endregion
