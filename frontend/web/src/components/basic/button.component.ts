@@ -18,7 +18,7 @@ export class ButtonComponent extends LitElement {
     color?: ButtonColor = ButtonColor.ACCENT;
 
     @property({type: String})
-    value?: String = this.innerText || "Button";
+    text?: String = this.innerHTML || "Button";
 
     @property()
     test: () => void = () => {}
@@ -27,7 +27,9 @@ export class ButtonComponent extends LitElement {
         return html`
             <style>${styles}</style>
             <button class="cc-button" color="${this.color}" type="${this.type}" @click="${this.test}" size="${this.size}">
-                ${this.value}
+                <slot name="left"></slot>
+                ${this.text}
+                <slot name="right"></slot>
             </button>`
     }
 }
