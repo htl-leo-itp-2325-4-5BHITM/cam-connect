@@ -102,10 +102,23 @@
     }
   }
 
+  &[type = "text"], &[type="underlined"], &[type="outlined"] {
+    &[color="accent"] {
+      ::slotted(*) {
+        color: var(--color-light) !important;
+      }
+    }
+
+    &[color="gray"] {
+      ::slotted(*) {
+        color: var(--color-text) !important;
+      }
+    }
+  }
+
   ::slotted(*){
-    color: var(--color-text) !important;
-    font-weight: 400 !important;
     opacity: 80%;
+    font-weight: 400 !important;
   }
 
   &[color = "accent"]{
