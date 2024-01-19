@@ -13,7 +13,6 @@ export class RentListComponent extends LitElement {
     render() {
         return html`
             <style>${styles}</style>
-            <cc-toolbar></cc-toolbar>
             
             <div class="devices">
                 <div class="student">

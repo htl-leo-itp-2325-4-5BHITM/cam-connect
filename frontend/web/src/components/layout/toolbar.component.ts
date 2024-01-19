@@ -3,13 +3,20 @@ import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/toolbar.styles.scss'
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
-import { faTrash } from "@fortawesome/free-solid-svg-icons"
+import { faTrash, faCamera } from "@fortawesome/free-solid-svg-icons"
+import {ObservedProperty, Pages} from "../../model"
 
 @customElement('cc-toolbar')
 export class ToolbarComponent extends LitElement {
     //todo bind with global variable of navigation location
+    @property()
+    page?: ObservedProperty<Pages>
+
     render() {
-        return this.renderRentListBar()
+        switch (this.page.value) {
+            case Pages.EQUIPMENT: return this.renderEquipmentBar(); break;
+            case Pages.RENTS: return this.renderRentListBar(); break;
+        }
     }
 
     renderRentListBar(){
@@ -34,16 +41,25 @@ export class ToolbarComponent extends LitElement {
         return html`
             <style>${styles}</style>
             <div>
-                ${unsafeSVG(icon(faTrash).html[0])}
-                Auswahl aufheben
+                <div>
+                    <img src="../../../assets/icon/circle-plus.svg"/>
+                    Gerät(e)hinzufügen
+                </div>
+                <div>
+                    ${unsafeSVG(icon(faCamera).html[0])}
+                    Gerätetyphinzufügen
+                </div>
             </div>
+            
             <div>
-                ${unsafeSVG(icon(faTrash).html[0])}
-                Löschen
-            </div>
-            <div>
-                ${unsafeSVG(icon(faTrash).html[0])}
-                Zurückgeben
+                <div>
+                    <cc-circle-select></cc-circle-select>
+                    Auswahlaufheben
+                </div>
+                <div>
+                    ${unsafeSVG(icon(faTrash).html[0])}
+                    Gerät(e)löschen
+                </div> 
             </div>
         `
     }
