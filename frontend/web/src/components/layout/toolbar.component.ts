@@ -3,29 +3,40 @@ import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/toolbar.styles.scss'
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
-import { faTrash } from "@fortawesome/free-solid-svg-icons"
+import { faTrash, faCamera } from "@fortawesome/free-solid-svg-icons"
+import {ObservedProperty, Pages} from "../../model"
+import {ButtonColor, ButtonSize, ButtonType} from "../basic/button.component"
 
 @customElement('cc-toolbar')
 export class ToolbarComponent extends LitElement {
-    //todo bind with global variable of navigation location
+    @property()
+    page?: ObservedProperty<Pages>
+
     render() {
-        return this.renderRentListBar()
+        switch (this.page.value) {
+            case Pages.EQUIPMENT: return this.renderEquipmentBar(); break;
+            case Pages.RENTS: return this.renderRentListBar(); break;
+        }
     }
 
     renderRentListBar(){
         return html`
             <style>${styles}</style>
-            <div>
-                <img src="../../../assets/icon/select_circle.svg">
-                Auswahlaufheben
-            </div>
-            <div>
-                ${unsafeSVG(icon(faTrash).html[0])}
-                Löschen
-            </div>
-            <div>
-                <img src="../../../assets/icon/return.svg">
-                Zurückgeben
+            <div class="main rentlist">
+                <cc-button size="${ButtonSize.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
+                    <img slot="left" src="../../../assets/icon/select_circle.svg">
+                    Auswahlaufheben
+                </cc-button>
+                
+                <cc-button size="${ButtonSize.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
+                    <div slot="left">${unsafeSVG(icon(faTrash).html[0])}</div>
+                    Löschen
+                </cc-button>
+    
+                <cc-button size="${ButtonSize.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
+                    <img slot="left" src="../../../assets/icon/return.svg">
+                    Zurückgeben
+                </cc-button>
             </div>
         `
     }
@@ -33,17 +44,30 @@ export class ToolbarComponent extends LitElement {
     renderEquipmentBar() {
         return html`
             <style>${styles}</style>
-            <div>
-                ${unsafeSVG(icon(faTrash).html[0])}
-                Auswahl aufheben
-            </div>
-            <div>
-                ${unsafeSVG(icon(faTrash).html[0])}
-                Löschen
-            </div>
-            <div>
-                ${unsafeSVG(icon(faTrash).html[0])}
-                Zurückgeben
+            <div class="main equipment">
+                <div>
+                    <cc-button size="${ButtonSize.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
+                        <img slot="left" src="../../../assets/icon/circle-plus.svg"/>
+                        Gerät(e)hinzufügen
+                    </cc-button>
+    
+                    <cc-button size="${ButtonSize.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
+                        <div slot="left">${unsafeSVG(icon(faCamera).html[0])}</div>
+                        Gerätetyp hinzufügen
+                    </cc-button>
+                </div>
+                
+                <div>
+                    <cc-button size="${ButtonSize.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
+                        <cc-circle-select slot="left"></cc-circle-select>
+                        Auswahl aufheben
+                    </cc-button>
+    
+                    <cc-button size="${ButtonSize.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
+                        <div slot="left">${unsafeSVG(icon(faTrash).html[0])}</div>
+                        Gerät(e) löschen
+                    </cc-button>
+                </div>
             </div>
         `
     }

@@ -6,6 +6,7 @@ import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { faMagnifyingGlass, faArrowRotateRight, faCircleQuestion } from "@fortawesome/free-solid-svg-icons"
 import {model} from "../../index"
 
+
 @customElement('cc-navbar')
 export class NavbarComponent extends LitElement {
     render() {
@@ -18,6 +19,7 @@ export class NavbarComponent extends LitElement {
             <cc-select .optionSelected = "${(elem) => {model.updatePage(elem.dataset.page)}}">
                 <p class="selected" data-page="equipment">Equipment</p>
                 <p data-page="rents">Verleihliste</p>
+                <p data-page="calendar">Kalender</p>
             </cc-select>
 
             <div class="tools">

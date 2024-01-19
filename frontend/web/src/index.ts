@@ -20,7 +20,7 @@ import "./components/layout/rentList.component"
 import "../styles/index.scss"
 
 import '@fortawesome/fontawesome-free/js/all'
-import Model, {ObservedProperty} from "./model"
+import Model, {ObservedProperty, Pages} from "./model"
 import {BehaviorSubject} from 'rxjs';
 import {FilterSidebarComponent} from "./components/layout/filterSidebar.component"
 import Util from "./util"
@@ -28,13 +28,22 @@ import {FilterBlockComponent, FilterOption} from "./components/basic/filterBlock
 import {NavbarComponent} from "./components/layout/navbar.component"
 import {RentListComponent} from "./components/layout/rentList.component"
 
+export let model = new Model()
+model.page.subscribe(data => {
+    console.log(data)
+})
+
 //region navbar
 let navbar = document.querySelector('cc-navbar');
 //endregion
 
+//region toolbar
+let toolbar = document.querySelector('cc-toolbar')
+toolbar.page = new ObservedProperty<Pages>(toolbar, model.page)
+//endregion
+
 //region sidebar
 //OMG its our single swouce of THWQUUUCE
-export let model = new Model()
 
 //TODO details
 let deviceTypeFilterSubject = new BehaviorSubject([
@@ -47,11 +56,7 @@ let deviceTypeFilterSubject = new BehaviorSubject([
     {name: "Stativ", id: "tripod", details: "dings"},
 ])
 
-model.page.subscribe(data => {
-    console.log(data)
-})
-
-let filterSidebar = document.querySelector('cc-filter-sidebar');
+let filterSidebar = document.querySelector('cc-filter-sidebar')
 filterSidebar.accountname = "Michael Leisch"
 
 /**
