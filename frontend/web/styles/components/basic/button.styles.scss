@@ -110,7 +110,7 @@
 
   &[color = "accent"]{
     &[type = "text"], &[type="underlined"], &[type="outlined"]{
-      ::slotted(svg) {
+      ::slotted(svg, img) {
         opacity: 100%;
         path{
           @include svgColorAccent;

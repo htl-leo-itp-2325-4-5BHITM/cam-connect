@@ -1,16 +1,20 @@
 @import "../../base";
 
-:host{
+div.main{
   display: flex;
   justify-content: space-between;
+  align-items: center;
   background: $gray250;
   box-shadow: 6px 6px 6px 0px rgba(0, 0, 0, 0.15) inset;
   padding: .5rem !important;
 
+  &.rentlist{
+    justify-content: end;
+  }
+
   svg, img{
     height: 1rem;
     aspect-ratio: 1/1;
-    margin-right: .3rem;
     @include svgColorAccent;
 
     path{
@@ -21,6 +25,5 @@
   div{
     display: flex;
     align-items: center;
-    margin-right: 1rem;
   }
 }
