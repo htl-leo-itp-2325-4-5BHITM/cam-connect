@@ -44,30 +44,34 @@ button{
     color: hsl(0, 0%, 100%);
 }
 
-:global {
-    .cta-icon { /*TODO fix this selector*/
-        --padding: 0.4rem;
-        --hover-background: transparent;
+.cta-icon {
+    --padding: 0.4rem;
+    --hover-background: transparent;
 
-        cursor: pointer;
-        background-color: var(--hover-background);
-        border-radius: 50%;
-        padding: var(--padding);
-        margin: calc(var(--padding) * -1);
+    cursor: pointer;
+    background-color: var(--hover-background);
+    border-radius: 50%;
+    padding: var(--padding);
+    margin: calc(var(--padding) * -1);
 
-        transition: background-color .2s;
-        animation: svg-cta-click 1s infinite;
+    aspect-ratio: 1;
+    height: fit-content;
 
-        &:hover {
-            --hover-background: rgba(128, 128, 128, 0.35);
-        }
+    transition: background-color .2s;
 
-        &:active{
-            --hover-background: rgba(128, 128, 128, 0.35);
-            animation: svg-cta-click 1s infinite;
-        }
+    /*outline: 1px solid red;*/
+
+    &:hover {
+        --hover-background: rgba(128, 128, 128, 0.35);
     }
 
+    &:active{
+        --hover-background: rgba(128, 128, 128, 0.35);
+        animation: svg-cta-click 1s infinite;
+    }
+}
+
+:global {
     #tooltip{
         position: absolute;
         padding: .5rem;

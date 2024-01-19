@@ -11,7 +11,7 @@ import "./components/basic/valueChain.component"
 import "./components/basic/line.component"
 import "./components/basic/toggle.component"
 
-import "./components/layout/filterSidebar.component"
+import "./components/layout/sidebar.component"
 import "./components/layout/navbar.component"
 import "./components/layout/toolbar.component"
 import "./components/layout/rentList.component"
@@ -22,7 +22,7 @@ import "../styles/index.scss"
 import '@fortawesome/fontawesome-free/js/all'
 import Model, {ObservedProperty, Pages} from "./model"
 import {BehaviorSubject} from 'rxjs';
-import {FilterSidebarComponent} from "./components/layout/filterSidebar.component"
+import {SidebarComponent} from "./components/layout/sidebar.component"
 import Util from "./util"
 import {FilterBlockComponent, FilterOption} from "./components/basic/filterBlock.component"
 import {NavbarComponent} from "./components/layout/navbar.component"
@@ -56,7 +56,7 @@ let deviceTypeFilterSubject = new BehaviorSubject([
     {name: "Stativ", id: "tripod", details: "dings"},
 ])
 
-let filterSidebar = document.querySelector('cc-filter-sidebar')
+let filterSidebar = document.querySelector('cc-sidebar')
 filterSidebar.accountname = "Michael Leisch"
 
 /**

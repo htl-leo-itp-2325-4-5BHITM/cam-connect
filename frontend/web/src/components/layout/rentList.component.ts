@@ -17,13 +17,13 @@ export class RentListComponent extends LitElement {
             
             <div class="devices">
                 <div class="student">
-                    ${this.getHeading("Michael Leisch", "4BHITM")}
+                    ${this.generateHeading("Michael Leisch", "4BHITM")}
                 </div>
             </div>
         `
     }
 
-    getHeading(name, classes) {
+    generateHeading(name, classes) {
         return html`
             <div class="heading">
                 <div class="leftSide">

@@ -2,9 +2,10 @@ import {LitElement, css, html} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/filterSidebar.styles.scss'
 import {ButtonColor, ButtonComponent, ButtonSize, ButtonType} from '../basic/button.component'
+import {SelectSize} from "../basic/select.component"
 
-@customElement('cc-filter-sidebar')
-export class FilterSidebarComponent extends LitElement {
+@customElement('cc-sidebar')
+export class SidebarComponent extends LitElement {
     @property({type:String})
     accountname?: string = 'No username provided'
 
@@ -26,7 +27,7 @@ export class FilterSidebarComponent extends LitElement {
             </div>
             <cc-line></cc-line>
             <div class="sorts">
-                <cc-select>
+                <cc-select size="${SelectSize.BIG}">
                     <p class="selected">raster</p>
                     <p>liste</p>
                 </cc-select>
@@ -50,6 +51,6 @@ export class FilterSidebarComponent extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "cc-filter-sidebar": FilterSidebarComponent
+        "cc-sidebar": SidebarComponent
     }
 }

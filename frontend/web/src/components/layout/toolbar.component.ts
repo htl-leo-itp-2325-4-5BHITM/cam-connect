@@ -14,8 +14,8 @@ export class ToolbarComponent extends LitElement {
 
     render() {
         switch (this.page.value) {
-            case Pages.EQUIPMENT: return this.renderEquipmentBar(); break;
-            case Pages.RENTS: return this.renderRentListBar(); break;
+            case Pages.EQUIPMENT: return this.renderEquipmentBar();
+            case Pages.RENTS: return this.renderRentListBar();
         }
     }
 

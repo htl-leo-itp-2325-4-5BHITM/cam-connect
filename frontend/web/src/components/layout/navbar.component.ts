@@ -6,7 +6,6 @@ import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { faMagnifyingGlass, faArrowRotateRight, faCircleQuestion } from "@fortawesome/free-solid-svg-icons"
 import {model} from "../../index"
 
-
 @customElement('cc-navbar')
 export class NavbarComponent extends LitElement {
     render() {

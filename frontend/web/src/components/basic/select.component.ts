@@ -2,10 +2,15 @@ import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, queryAssignedElements, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/select.styles.scss'
 
+export enum SelectSize {BIG="big", DEFAULT="default", SMALL="small"}
+
 @customElement('cc-select')
 export class SelectComponent extends LitElement {
     @queryAssignedElements()
     options!: Array<HTMLElement>
+
+    @property()
+    size:SelectSize = SelectSize.DEFAULT
 
     @property()
     optionSelected: (option: HTMLElement) => void = () => {}
@@ -13,7 +18,7 @@ export class SelectComponent extends LitElement {
     render() {
         return html`
             <style>${styles}</style>
-            <div class="select">
+            <div class="select" size="${this.size}">
                 <slot></slot>
             </div>`
     }

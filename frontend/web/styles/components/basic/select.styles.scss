@@ -5,14 +5,25 @@
 }
 
 .select {
+  &[size="big"]{
+    --f-size: #{$fSizeDesktopMedium};
+  }
+  &[size="default"]{
+    --f-size: #{$fSizeDesktopDefault};
+  }
+  &[size="small"]{
+    --f-size: #{$fSizeDesktopSmall};
+  }
+
   display: flex;
-  font-size: $fSizeDesktopMedium !important;
+  font-size: var(--f-size) !important;
   font-weight: 400 !important;
 
   ::slotted(*){
     cursor: pointer;
     color: $gray800 !important;
     user-select: none;
+    font-size: var(--f-size) !important;
   }
 
   ::slotted(*:hover){
