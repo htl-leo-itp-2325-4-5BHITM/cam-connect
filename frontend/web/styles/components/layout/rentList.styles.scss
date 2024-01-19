@@ -19,7 +19,7 @@
 
   img{
     height: 1.5rem;
-    @include svgColorAccent;
+    @include imgIconColorAccent;
   }
 
   div{

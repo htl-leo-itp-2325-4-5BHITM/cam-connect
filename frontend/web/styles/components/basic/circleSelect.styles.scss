@@ -11,10 +11,10 @@ div{
   }
 
   &.accent img {
-    @include svgColorAccent
+    @include imgIconColorAccent
   }
   &.gray img {
-    @include svgColorGray
+    @include imgIconColorGray800
   }
 
   img{

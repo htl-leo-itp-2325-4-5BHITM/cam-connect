@@ -107,6 +107,13 @@
       ::slotted(*) {
         color: var(--color-light) !important;
       }
+
+      ::slotted(svg){
+        @include imgIconColorAccent;
+      }
+      ::slotted(img){
+        @include imgIconColorAccent;
+      }
     }
 
     &[color="gray"] {
@@ -116,19 +123,25 @@
     }
   }
 
-  ::slotted(*){
+  ::slotted(*:not(.icon, svg, img)){
     opacity: 80%;
     font-weight: 400 !important;
   }
 
-  &[color = "accent"]{
-    &[type = "text"], &[type="underlined"], &[type="outlined"]{
-      ::slotted(svg) {
-        opacity: 100%;
-        path{
-          @include svgColorAccent;
-        }
-      }
-    }
+  ::slotted(svg){
+    @include imgIconColorGray800;
+  }
+  ::slotted(img){
+    @include imgIconColorGray800;
+  }
+
+
+
+  ::slotted(.icon) {
+    @include imgIconColorGray800;
+  }
+
+  ::slotted(.icon.accent) {
+    @include imgIconColorAccent;
   }
 }

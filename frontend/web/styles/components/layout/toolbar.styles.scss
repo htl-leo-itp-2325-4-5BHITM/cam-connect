@@ -11,7 +11,7 @@
     height: 1rem;
     aspect-ratio: 1/1;
     margin-right: .3rem;
-    @include svgColorAccent;
+    @include imgIconColorAccent;
 
     path{
       color: $accentDarkmode;

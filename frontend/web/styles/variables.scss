@@ -48,9 +48,9 @@ $overlay: hsla(0,0%,24.3%,0.200);
   box-shadow: inset 0px -6px 6px hsla(0,0%,0%,0.150);
 }
 
-@mixin svgColorAccent() {
+@mixin imgIconColorAccent() {
   filter: invert(57%) sepia(97%) saturate(166%) hue-rotate(158deg) brightness(97%) contrast(97%);
 }
-@mixin svgColorGray() {
-  filter: invert(77%) sepia(1%) saturate(0%) hue-rotate(248deg) brightness(91%) contrast(88%);
+@mixin imgIconColorGray800() {
+  filter: invert(100%) brightness(80%);
 }

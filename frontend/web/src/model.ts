@@ -54,6 +54,10 @@ export default class Model{
      * When its created, a new instance gathers all the data from the API endpoints
      */
     constructor() {
+        this.queryData()
+    }
+
+    queryData(){
         DeviceService.fetchAll()
         DeviceTypeService.fetchAll()
         DeviceTypeAttributeService.fetchAll()
