@@ -3,22 +3,35 @@
 :host {
   all: initial;
   flex-grow: 1;
+}
 
-  .toolbar{
+.student{
+  padding: 1rem;
+}
+
+.heading{
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid $gray500;
+  border-radius: 0.75rem 0.75rem 0rem 0.75rem;
+  background-color: $gray300;
+  padding: .25rem .5rem;
+
+  img{
+    height: 1.5rem;
+    @include svgColorAccent;
+  }
+
+  div{
     display: flex;
-    justify-content: end;
-    background: $gray250;
-    padding-block: .5rem;
+    align-items: center;
 
-    svg{
-      height: 1rem;
-      margin-right: .3rem;
+    p, cc-button, cc-circle-select{
+      margin-inline: .2rem;
     }
+  }
 
-    div{
-      display: flex;
-      align-items: center;
-      margin-right: 1rem;
-    }
+  .leftSide p:first-child{
+    font-weight: bold;
   }
 }
