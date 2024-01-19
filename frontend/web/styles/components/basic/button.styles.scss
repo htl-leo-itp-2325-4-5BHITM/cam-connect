@@ -101,4 +101,21 @@
       color: $gray1000;
     }
   }
+
+  ::slotted(*){
+    color: var(--color-text) !important;
+    font-weight: 400 !important;
+    opacity: 80%;
+  }
+
+  &[color = "accent"]{
+    &[type = "text"], &[type="underlined"], &[type="outlined"]{
+      ::slotted(svg) {
+        opacity: 100%;
+        path{
+          @include svgColorAccent;
+        }
+      }
+    }
+  }
 }
