@@ -41,7 +41,7 @@ button{
 }
 
 :global {
-    .cta-icon {
+    .cta-icon { /*TODO fix this selector*/
         --padding: 0.4rem;
         --hover-background: transparent;
 

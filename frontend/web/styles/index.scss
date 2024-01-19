@@ -12,10 +12,16 @@
     height: 100%;
   }
 
-  main{
+  .sidebar-container{
     display: flex;
     height: 100%;
     overflow:hidden;
+  }
+
+  main{
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
   }
 }
 
