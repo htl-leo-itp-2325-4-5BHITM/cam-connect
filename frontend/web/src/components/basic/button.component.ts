@@ -18,7 +18,7 @@ export class ButtonComponent extends LitElement {
     color?: ButtonColor = ButtonColor.ACCENT;
 
     @property({type: String})
-    text?: String = this.innerHTML || "Button";
+    text?: String = this.innerText || "Button";
 
     @property()
     test: () => void = () => {}

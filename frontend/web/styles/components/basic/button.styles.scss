@@ -17,6 +17,8 @@
   -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;
 
   display: flex;
+  justify-content: center;
+  align-items: center;
   gap: .5rem;
 
   &[color = "accent"]{
@@ -70,6 +72,7 @@
     border: none;
     color: var(--color-text);
     margin: 2px;
+    min-width: 0;
 
     &[color = "accent"]{
       color: var(--color-light);

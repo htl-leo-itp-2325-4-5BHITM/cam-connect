@@ -15,12 +15,12 @@
 }
 
 .buttons, .sorts{
+  display: flex;
   padding-inline: .75rem;
+  gap: .5rem;
 
   &.sorts{
-    display: flex;
     flex-direction: column;
-    gap: .5rem;
   }
 }
 
