@@ -39,6 +39,10 @@ module.exports = {
                     },
                 ],
             },
+            {
+                test: /\.svg$/,
+                loader: 'svg-inline-loader'
+            }
         ]
     },
     devtool: "cheap-module-source-map",

@@ -13,6 +13,7 @@ import "./components/basic/toggle.component"
 
 import "./components/layout/filterSidebar.component"
 import "./components/layout/navbar.component"
+import "./components/layout/toolbar.component"
 
 //css
 import "../styles/index.scss"

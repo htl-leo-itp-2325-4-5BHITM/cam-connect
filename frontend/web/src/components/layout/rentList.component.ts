@@ -4,6 +4,8 @@ import styles from '../../../styles/components/layout/rentList.styles.scss'
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { faTrash } from "@fortawesome/free-solid-svg-icons"
+import {ButtonColor} from "../basic/button.component"
+import {CircleSelectType} from "../basic/circleSelect.component"
 
 @customElement('cc-rent-list')
 export class RentListComponent extends LitElement {
@@ -11,20 +13,7 @@ export class RentListComponent extends LitElement {
     render() {
         return html`
             <style>${styles}</style>
-            <div class="toolbar">
-                <div>
-                    ${unsafeSVG(icon(faTrash).html[0])}
-                    Auswahl aufheben
-                </div>
-                <div>
-                    ${unsafeSVG(icon(faTrash).html[0])}
-                    Löschen
-                </div>
-                <div>
-                    ${unsafeSVG(icon(faTrash).html[0])}
-                    Zurückgeben
-                </div>
-            </div>
+            <cc-toolbar></cc-toolbar>
             
             <div class="devices">
                 <div class="student">
@@ -38,12 +27,14 @@ export class RentListComponent extends LitElement {
         return html`
             <div class="heading">
                 <div class="leftSide">
-                    <p class="bold">${name}</p>
+                    <p>${name}</p>
+                    <p>•</p>
                     <p>${classes}</p>
                 </div>
                 <div class="rightSide">
                     <cc-button>Verleih erstellen</cc-button>
-                    <cc-button>Details anzeigen</cc-button>
+                    <cc-button color="${ButtonColor.GRAY}">Details anzeigen</cc-button>
+                    <cc-circle-select type="${CircleSelectType.MULTIPLE}"></cc-circle-select>
                 </div>
             </div>
         `
