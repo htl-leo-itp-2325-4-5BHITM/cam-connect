@@ -24,17 +24,23 @@ export class ToolbarComponent extends LitElement {
             <style>${styles}</style>
             <div class="main rentlist">
                 <cc-button size="${ButtonSize.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
-                    <img slot="left" src="../../../assets/icon/select_circle.svg">
-                    Auswahlaufheben
+                    <div slot="left" class="icon accent">
+                        <img slot="left" src="../../../assets/icon/select_circle.svg">
+                    </div>
+                    Auswahl aufheben
                 </cc-button>
                 
                 <cc-button size="${ButtonSize.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
-                    <div slot="left">${unsafeSVG(icon(faTrash).html[0])}</div>
+                    <div slot="left" class="icon accent">
+                        ${unsafeSVG(icon(faTrash).html[0])}
+                    </div>
                     Löschen
                 </cc-button>
     
                 <cc-button size="${ButtonSize.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
-                    <img slot="left" src="../../../assets/icon/return.svg">
+                    <div slot="left" class="icon accent">
+                        <img slot="left" src="../../../assets/icon/return.svg">                    
+                    </div>
                     Zurückgeben
                 </cc-button>
             </div>
@@ -47,24 +53,30 @@ export class ToolbarComponent extends LitElement {
             <div class="main equipment">
                 <div>
                     <cc-button size="${ButtonSize.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
-                        <img slot="left" src="../../../assets/icon/circle-plus.svg"/>
-                        Gerät(e)hinzufügen
+                        <div slot="left" class="icon accent">
+                            <img slot="left" src="../../../assets/icon/circle-plus.svg"/>
+                        </div>
+                        Gerät(e) hinzufügen
                     </cc-button>
     
                     <cc-button size="${ButtonSize.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
-                        <div slot="left">${unsafeSVG(icon(faCamera).html[0])}</div>
+                        <div slot="left" class="icon accent">
+                            ${unsafeSVG(icon(faCamera).html[0])}
+                        </div>
                         Gerätetyp hinzufügen
                     </cc-button>
                 </div>
                 
                 <div>
                     <cc-button size="${ButtonSize.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
-                        <cc-circle-select slot="left"></cc-circle-select>
+                        <div slot="left" class="icon accent">
+                            <cc-circle-select slot="left"></cc-circle-select>
+                        </div>
                         Auswahl aufheben
                     </cc-button>
     
                     <cc-button size="${ButtonSize.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
-                        <div slot="left">${unsafeSVG(icon(faTrash).html[0])}</div>
+                        <div slot="left" class="icon accent">${unsafeSVG(icon(faTrash).html[0])}</div>
                         Gerät(e) löschen
                     </cc-button>
                 </div>

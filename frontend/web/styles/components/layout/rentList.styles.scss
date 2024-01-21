@@ -38,6 +38,10 @@
 
 .entries{
   padding-left: 2.6rem;
+
+  .entry:last-child{
+    border-radius: 0rem 0rem 0rem 0.75rem;
+  }
 }
 
 .entry{
@@ -49,6 +53,21 @@
   align-items: center;
   justify-content: space-between;
 
+  &.DECLINED{
+    border-top: 1px solid var(--gray400, #424242);
+    background: linear-gradient(90deg, #423333 22.57%, #663D3D 99.01%);
+
+    input{
+      border-radius: 0.25rem;
+      border: 1px solid var(--gray500, #595959);
+      background: var(--badGrayTransparent, rgba(90, 48, 48, 0.80));
+    }
+
+    label{
+      color: $gray800;
+    }
+  }
+
   div{
     display: flex;
     align-items: center;
@@ -58,14 +77,41 @@
 
     p:last-child{
       color: white;
-      font-weight: bold;
+      font-weight: 500;
     }
   }
 
+  label{
+    margin-inline: .25rem;
+    color: $gray600;
+
+    &.line{
+      margin: 0;
+      color: $accentDarkmodeLight;
+    }
+  }
+
+  cc-chip{
+    margin-right: 1rem;
+  }
+
   input{
-    background: transparent;
-    font-size: $fSizeDesktopLarge;
-    letter-spacing: 0.09rem;
-    width: 4ch;
+    padding: 0rem 0.1875rem 0rem 0.25rem;
+    border-radius: 0.25rem;
+    border: 1px solid $gray500;
+    background: $gray300;
+
+    &[type = "text"]{
+      width: 10ch;
+    }
+
+    &[type = "number"]{
+      width: 4ch;
+    }
+
+    &.customDate{
+      width: 4ch;
+      text-align: center;
+    }
   }
 }

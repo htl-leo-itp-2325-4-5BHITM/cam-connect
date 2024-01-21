@@ -2,7 +2,7 @@ import {model} from "../index"
 import {api} from "../base"
 import {Device} from "./device.service"
 
-enum RentStatus {CREATED, WAITING, CONFIRMED, DECLINED, RETURNED}
+export enum RentStatus {CREATED, WAITING, CONFIRMED, DECLINED, RETURNED}
 export interface Rent{
     rent_id: number
     student: string
