@@ -39,9 +39,59 @@ insert into device (type_id, note, number, serial) values
     (2, '', 'B02', '323846264338327'),
     (1, '', 'A03', '589793238462643'),
     (2, 'Backup camera', 'B03', '846264338327950'),
-                                                       (3, 'Professional use', 'C02', '643383279502884'),
-                                                       (4, 'Travel photography', 'D02', '795028841971520'),
-                                                       (1, '', 'A04', '169399375105820'),
-                                                       (2, 'Secondary camera', 'B04', '582097494459230'),
-                                                       (3, 'Studio setup', 'C03', '781640628620899'),
-                                                       (4, 'Wildlife photography', 'D03', '862803482534211');
+    (3, 'Professional use', 'C02', '643383279502884'),
+    (4, 'Travel photography', 'D02', '795028841971520'),
+    (2, 'Secondary camera', 'B04', '582097494459230'),
+    (3, 'Studio setup', 'C03', '781640628620899'),
+    (4, 'Wildlife photography', 'D03', '862803482534211');
+
+
+
+
+INSERT INTO student (email, firstname, lastname, password, school_class, username)
+VALUES
+    ('student1@example.com', 'John', 'Doe', 'password123', 'Class A', 'john_doe'),
+    ('student2@example.com', 'Jane', 'Smith', 'securepass', 'Class B', 'jane_smith');
+
+-- Inserting data into teacher table
+INSERT INTO teacher (email, firstname, lastname, password, username)
+VALUES
+    ('teacher1@example.com', 'Professor', 'Smith', 'teacherpass', 'prof_smith'),
+    ('teacher2@example.com', 'Dr.', 'Johnson', 'secureteacher', 'dr_johnson');
+
+-- Inserting data into student_devicetype table
+INSERT INTO student_devicetype (student_student_id, favourites_type_id)
+VALUES
+    (1, 1),  -- Student 1 likes DeviceType 1
+    (1, 2),  -- Student 1 likes DeviceType 2
+    (2, 3);  -- Student 2 likes DeviceType 3
+
+-- Inserting data into tag table
+INSERT INTO tag (description, name)
+VALUES
+    ('Cameras for Photography', 'Photography'),
+    ('Devices for Videography', 'Videography');
+
+-- Inserting data into tag_devicetype table
+INSERT INTO tag_devicetype (tag_tag_id, type_type_id)
+VALUES
+    (1, 1),  -- Tag 'Photography' associated with DeviceType 1
+    (2, 2);  -- Tag 'Videography' associated with DeviceType 2
+
+-- Inserting data into rent table
+INSERT INTO rent (
+    rent_end_actual, rent_end_planned, rent_start, status, creation_date,
+    device_id, rent_id, student_id, teacher_id_end, teacher_id_start,
+    accessory, device_string, note, verification_code, verification_message
+)
+VALUES
+    ('2024-02-01', '2024-02-15', '2024-01-15', 1, CURRENT_TIMESTAMP,
+     1, 1, 1, 1, 2, 'Tripod', 'Camera rental for event', 'Event Coverage', 'ABC123', 'Rental Approved'),
+    ('2024-03-01', '2024-03-15', '2024-02-15', 0, CURRENT_TIMESTAMP,
+     2, 2, 2, 2, 1, 'Lens', 'Lens rental for project', 'Project Photography', 'XYZ789', 'Rental Pending Approval'),
+    ('2024-04-01', '2024-04-15', '2024-03-15', 1, CURRENT_TIMESTAMP,
+     3, 3, 2, 1, 2, 'Battery Pack', 'Additional power for shoot', 'Outdoor Photography', 'PQR456', 'Rental Approved'),
+    ('2024-05-01', '2024-05-15', '2024-04-15', 0, CURRENT_TIMESTAMP,
+     1, 4, 1, 2, 1, 'Microphone', 'Audio enhancement for video', 'Video Production', 'LMN789', 'Rental Pending Approval'),
+    ('2024-06-01', '2024-06-15', '2024-05-15', 2, CURRENT_TIMESTAMP,
+     2, 5, 2, 1, 2, 'Tripod', 'Stable support for shooting', 'Documentary Film', 'XYZ123', 'Rental Rejected');
