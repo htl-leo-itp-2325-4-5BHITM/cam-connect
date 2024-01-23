@@ -26,6 +26,7 @@ public class DeviceTypeRepository {
     @Inject
     DeviceTypeAttributeRepository deviceTypeAttributeRepository;
 
+
     public DeviceType create(DeviceTypeEnum typeEnum, JsonObject data){
         /* Why JsonData and not DTO
          * We use a single create endpoint to create lots of different types: this makes the process when calling

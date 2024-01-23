@@ -35,11 +35,11 @@ export interface RentDTO{
     note: string
 }
 
-export default class DeviceService{
+export default class RentService{
     static fetchAll(){
-        api.fetchData<Device[]>("/devicetype/attribute/getall")
+        api.fetchData<Rent[]>("/rent/getall")
             .then(data => {
-                model.loadDevices(data)
+                model.loadRents(data)
             })
             .catch(error => {
                 console.error(error)

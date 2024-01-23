@@ -4,6 +4,7 @@ import {BehaviorSubject, lastValueFrom, map, Observable, Subject, Subscription} 
 import DeviceTypeAttributeService, { DeviceTypeAttributeCollection } from "./service/deviceTypeAttribute.service"
 import Util from "./util"
 import DeviceService, {Device} from "./service/device.service"
+import RentService, {Rent} from "./service/rent.service"
 
 export enum Pages { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar" }
 
@@ -18,6 +19,8 @@ export enum Pages { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar" }
  */
 export default class Model{
     readonly page = new BehaviorSubject<Pages>(Pages.EQUIPMENT)
+
+    readonly rents = new BehaviorSubject(<Rent[]>([]))
 
     readonly devices = new BehaviorSubject<Device[]>([])
     readonly deviceTypes = new BehaviorSubject<DeviceTypeCollection>({audioTypes: [], cameraTypes: [], droneTypes: [], lensTypes: [], lighTypes: [], stabilizerTypes: [], tripodHeads: []})
@@ -58,9 +61,14 @@ export default class Model{
     }
 
     queryData(){
+        RentService.fetchAll()
         DeviceService.fetchAll()
         DeviceTypeService.fetchAll()
         DeviceTypeAttributeService.fetchAll()
+    }
+
+    loadRents(rent: Rent[]){
+        this.rents.next(rent)
     }
 
     //region load functions: used by the service classes to set the data in the model to whatever the api returned

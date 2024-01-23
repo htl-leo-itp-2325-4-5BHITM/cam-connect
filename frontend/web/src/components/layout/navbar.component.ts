@@ -5,6 +5,7 @@ import { icon } from '@fortawesome/fontawesome-svg-core'
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { faMagnifyingGlass, faArrowRotateRight, faCircleQuestion } from "@fortawesome/free-solid-svg-icons"
 import {model} from "../../index"
+import {SelectSize} from "../basic/select.component"
 
 @customElement('cc-navbar')
 export class NavbarComponent extends LitElement {
@@ -15,7 +16,7 @@ export class NavbarComponent extends LitElement {
                 <img src="assets/logo/cc-wordmark-white.svg" alt="cam-connect">
             </div>
 
-            <cc-select .optionSelected = "${(elem) => {model.updatePage(elem.dataset.page)}}">
+            <cc-select size="${SelectSize.SMALL}" .optionSelected = "${(elem) => {model.updatePage(elem.dataset.page)}}">
                 <p class="selected" data-page="equipment">Equipment</p>
                 <p data-page="rents">Verleihliste</p>
                 <p data-page="calendar">Kalender</p>

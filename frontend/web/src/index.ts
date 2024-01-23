@@ -15,6 +15,7 @@ import "./components/layout/sidebar.component"
 import "./components/layout/navbar.component"
 import "./components/layout/toolbar.component"
 import "./components/layout/rentList.component"
+import "./components/layout/rentListEntry.component"
 
 //css
 import "../styles/index.scss"

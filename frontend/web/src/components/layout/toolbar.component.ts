@@ -23,7 +23,7 @@ export class ToolbarComponent extends LitElement {
         return html`
             <style>${styles}</style>
             <div class="main rentlist">
-                <cc-button size="${ButtonSize.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
+                <cc-button size="${ButtonSize.SMALL }" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
                     <div slot="left" class="icon accent">
                         <img slot="left" src="../../../assets/icon/select_circle.svg">
                     </div>
@@ -51,19 +51,12 @@ export class ToolbarComponent extends LitElement {
         return html`
             <style>${styles}</style>
             <div class="main equipment">
-                <div>
-                    <cc-button size="${ButtonSize.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
-                        <div slot="left" class="icon accent">
-                            <img slot="left" src="../../../assets/icon/circle-plus.svg"/>
-                        </div>
-                        Gerät(e) hinzufügen
-                    </cc-button>
-    
+                <div>    
                     <cc-button size="${ButtonSize.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
                         <div slot="left" class="icon accent">
                             ${unsafeSVG(icon(faCamera).html[0])}
                         </div>
-                        Gerätetyp hinzufügen
+                        Geräte bearbeiten
                     </cc-button>
                 </div>
                 
