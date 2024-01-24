@@ -13,9 +13,8 @@ export interface FilterOption {
 }
 
 @customElement('cc-filter-container')
-export class FilterBlockComponent extends LitElement {
-    @property({type: String})
-    name?: string = this.innerHTML || 'Filterblock'
+export class FilterContainerComponent extends LitElement {
+    name: string = this.innerHTML
 
     @property()
     options?: Observable<FilterOption[]>
@@ -24,10 +23,13 @@ export class FilterBlockComponent extends LitElement {
     @property()
     onUpdate: (options: FilterOption[]) => void = () => {}
 
-    constructor(name: string) {
+    constructor() {
         super()
-        this.name = name
+    }
 
+    connectedCallback() {
+        super.connectedCallback();
+        console.log("connected")
         this.theOptions = new ObservedProperty<FilterOption[]>(this, this.options)
     }
 
@@ -68,6 +70,6 @@ export class FilterBlockComponent extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "cc-filter-block": FilterBlockComponent
+        "cc-filter-container": FilterContainerComponent
     }
 }

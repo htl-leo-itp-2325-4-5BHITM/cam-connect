@@ -2,7 +2,7 @@
 import "./components/basic/button.component"
 import "./components/basic/chip.component"
 import "./components/basic/rentStatus.component"
-import "./components/basic/filterBlock.component"
+import "./components/basic/filterContainer.component"
 import "./components/basic/circleSelect.component"
 import "./components/basic/propertyValue.component"
 import "./components/basic/selectElement.component"
@@ -16,45 +16,35 @@ import "./components/layout/navbar.component"
 import "./components/layout/toolbar.component"
 import "./components/layout/rentList.component"
 
-import "./components/app.component"
 import "./components/page/equipment.component"
 import "./components/page/rent.component"
 import "./components/page/calendar.component"
 
+import "./components/app.component"
+
 //css
+import '../styles/index.scss'
 import '@fortawesome/fontawesome-free/js/all'
 import Model, {ObservedProperty, PageEnum} from "./model"
 import {BehaviorSubject} from 'rxjs';
 import {SidebarComponent} from "./components/layout/sidebar.component"
 import Util from "./util"
-import {FilterBlockComponent, FilterOption} from "./components/basic/filterBlock.component"
+import {FilterContainerComponent, FilterOption} from "./components/basic/filterContainer.component"
 import {NavbarComponent} from "./components/layout/navbar.component"
 import {RentListComponent} from "./components/layout/rentList.component"
 
+//OMG its our single swouce of THWQUUUCE
 export let model = new Model()
 model.page.subscribe(data => {
     console.log(data)
 })
 
-//region navbar
-let navbar = document.querySelector('cc-navbar');
-//endregion
+setTimeout(() => {
+    const app = document.createElement("cc-app")
+    document.body.appendChild(app)
+},100)
 
 //region sidebar
-//OMG its our single swouce of THWQUUUCE
-
-/*
-filterElements.resolutions.options = new ObservedProperty<FilterOption[]>(filterElements.resolutions, model.deviceTypeAttributesAsFilterOptions.cameraResolutions)
-filterSidebar.appendChild(filterElements.resolutions)
-filterElements.sensors.options = new ObservedProperty<FilterOption[]>(filterElements.sensors, model.deviceTypeAttributesAsFilterOptions.cameraSensors)
-filterSidebar.appendChild(filterElements.sensors)
-filterElements.systems.options = new ObservedProperty<FilterOption[]>(filterElements.systems, model.deviceTypeAttributesAsFilterOptions.cameraSystems)
-filterSidebar.appendChild(filterElements.systems)
-filterElements.lensMounts.options = new ObservedProperty<FilterOption[]>(filterElements.lensMounts, model.deviceTypeAttributesAsFilterOptions.lensMounts)
-filterSidebar.appendChild(filterElements.lensMounts)
-filterElements.tripodHeads.options = new ObservedProperty<FilterOption[]>(filterElements.tripodHeads, model.deviceTypeAttributesAsFilterOptions.tripodHeads)
-filterSidebar.appendChild(filterElements.tripodHeads)
-*/
 
 /**
  * displays or hides filters so that only the ones that belong with the general selection are visibly

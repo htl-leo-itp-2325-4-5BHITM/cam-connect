@@ -1,6 +1,6 @@
 import {LitElement, html} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
-import styles from '../../../styles/components/app.styles.scss'
+import styles from '../../../styles/components/page/calendar.styles.scss'
 import {model} from "../../index"
 import {PageEnum} from "../../model"
 

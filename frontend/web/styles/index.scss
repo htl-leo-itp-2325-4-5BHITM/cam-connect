@@ -1,12 +1,10 @@
-@import "../base";
-
-:host{
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
+@import "base";
 
 :global{
+  body{
+    height: 100svh;
+  }
+
   .test{
     background-color: black;
     width: 5rem;
@@ -14,5 +12,3 @@
     @include imgIconColorAccent
   }
 }
-
-

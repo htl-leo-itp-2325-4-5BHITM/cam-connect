@@ -22,13 +22,13 @@ export class AppComponent extends LitElement {
         switch (this.selectedPage.value) {
             case PageEnum.EQUIPMENT: page = html`<cc-equipment></cc-equipment>`; break
             case PageEnum.RENTS: page = html`<cc-rent></cc-rent>`; break
-            case PageEnum.CALENDAR: page = html`<cc-rent></cc-rent>`; break
+            case PageEnum.CALENDAR: page = html`<cc-calendar></cc-calendar>`; break
         }
 
         return html`
             <style>${styles}</style>
-            ${page}
             <cc-navbar></cc-navbar>
+            ${page}
         `
     }
 }

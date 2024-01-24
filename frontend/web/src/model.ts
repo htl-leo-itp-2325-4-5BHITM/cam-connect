@@ -4,7 +4,7 @@ import {BehaviorSubject, lastValueFrom, map, Observable, Subject, Subscription} 
 import DeviceTypeAttributeService, { DeviceTypeAttributeCollection } from "./service/deviceTypeAttribute.service"
 import Util from "./util"
 import DeviceService, {Device} from "./service/device.service"
-import {FilterOption} from "./components/basic/filterBlock.component"
+import {FilterOption} from "./components/basic/filterContainer.component"
 
 export enum PageEnum { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar" }
 

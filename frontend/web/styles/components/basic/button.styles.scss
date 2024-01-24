@@ -106,6 +106,7 @@
     &[color="accent"] {
       ::slotted(*) {
         color: var(--color-light) !important;
+        margin: 0;
       }
 
       ::slotted(svg){
