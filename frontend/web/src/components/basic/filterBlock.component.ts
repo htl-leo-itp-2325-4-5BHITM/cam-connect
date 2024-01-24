@@ -3,6 +3,7 @@ import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/filterBlock.styles.scss'
 import Model, {ObservedProperty} from "../../model"
 import {Tooltip} from "../../base"
+import {Observable} from "rxjs"
 
 export interface FilterOption {
     name: string,
@@ -14,17 +15,20 @@ export interface FilterOption {
 @customElement('cc-filter-container')
 export class FilterBlockComponent extends LitElement {
     @property({type: String})
-    name?: string = 'Filterblock'
+    name?: string = this.innerHTML || 'Filterblock'
 
     @property()
-    options?: ObservedProperty<FilterOption[]>
+    options?: Observable<FilterOption[]>
+    private theOptions: ObservedProperty<FilterOption[]>
 
     @property()
-    selectOptionsUpdated: (options: FilterOption[]) => void = () => {}
+    onUpdate: (options: FilterOption[]) => void = () => {}
 
     constructor(name: string) {
         super()
         this.name = name
+
+        this.theOptions = new ObservedProperty<FilterOption[]>(this, this.options)
     }
 
     render() {
@@ -32,7 +36,7 @@ export class FilterBlockComponent extends LitElement {
             <style>${styles}</style>
             <div class="filter-block">
                 <p class="heading">${this.name}<span class="clear" @click="${this.clearSelection}">löschen</span></p>
-                ${this.options?.value?.map((option) => //loop over all options and map(return/create) a select option for each
+                ${this.theOptions?.value?.map((option) => //loop over all options and map(return/create) a select option for each
                         html`<p class="option ${option.selected ? 'selected' : ''}" 
                                 @click="${(e:Event) => {this.selectOption(e, option); Tooltip.hide(0, true)}}"
                                 @mouseenter="${(e:Event) => {Tooltip.show(e.target as HTMLElement, option.details, 1000)}}"
@@ -49,15 +53,15 @@ export class FilterBlockComponent extends LitElement {
      */
     selectOption(e:Event, option:FilterOption){
         option.selected = !option.selected
-        this.selectOptionsUpdated(this.options.value)
+        this.onUpdate(this.theOptions.value)
         this.requestUpdate()
     }
 
     clearSelection(){
-        this.options.value.forEach(option => {
+        this.theOptions.value.forEach(option => {
             option.selected = false
         })
-        this.selectOptionsUpdated(this.options.value)
+        this.onUpdate(this.theOptions.value)
         this.requestUpdate()
     }
 }

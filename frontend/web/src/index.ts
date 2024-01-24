@@ -16,11 +16,14 @@ import "./components/layout/navbar.component"
 import "./components/layout/toolbar.component"
 import "./components/layout/rentList.component"
 
-//css
-import "../styles/index.scss"
+import "./components/app.component"
+import "./components/page/equipment.component"
+import "./components/page/rent.component"
+import "./components/page/calendar.component"
 
+//css
 import '@fortawesome/fontawesome-free/js/all'
-import Model, {ObservedProperty, Pages} from "./model"
+import Model, {ObservedProperty, PageEnum} from "./model"
 import {BehaviorSubject} from 'rxjs';
 import {SidebarComponent} from "./components/layout/sidebar.component"
 import Util from "./util"
@@ -37,45 +40,10 @@ model.page.subscribe(data => {
 let navbar = document.querySelector('cc-navbar');
 //endregion
 
-//region toolbar
-let toolbar = document.querySelector('cc-toolbar')
-toolbar.page = new ObservedProperty<Pages>(toolbar, model.page)
-//endregion
-
 //region sidebar
 //OMG its our single swouce of THWQUUUCE
 
-//TODO details
-let deviceTypeFilterSubject = new BehaviorSubject([
-    {name: "Kamera", id: "camera", details: "Kamera halt"},
-    {name: "Drone", id: "drone", details: "Drone halt"},
-    {name: "Objektiv", id: "lens", details: "Objektiv halt"},
-    {name: "Licht", id: "light", details: "Objektiv halt"},
-    {name: "Mikrofon", id: "microphone", details: "Mikro halt"},
-    {name: "Stabilisator", id: "stabilizer", details: "Stablisationsysteme"},
-    {name: "Stativ", id: "tripod", details: "dings"},
-])
-
-let filterSidebar = document.querySelector('cc-sidebar')
-filterSidebar.accountname = "Michael Leisch"
-
-/**
- * Contains all the filter elements for
- */
-let filterElements = {
-    resolutions: new FilterBlockComponent("Auflösungen"),
-    sensors: new FilterBlockComponent("Sensoren"),
-    systems: new FilterBlockComponent("Kameratypen"),
-    lensMounts: new FilterBlockComponent("Objektiv Anschlüsse"),
-    tripodHeads: new FilterBlockComponent("Stativköpfe")
-}
-
-let deviceTypes = new FilterBlockComponent("Gerätetyp")
-deviceTypes.options = new ObservedProperty<FilterOption[]>(deviceTypes, deviceTypeFilterSubject)
-deviceTypes.selectOptionsUpdated = (options) => {setFilterHtmlVisibility(options)}
-deviceTypes.setAttribute("slot", "primaryFilters")
-filterSidebar.appendChild(deviceTypes)
-
+/*
 filterElements.resolutions.options = new ObservedProperty<FilterOption[]>(filterElements.resolutions, model.deviceTypeAttributesAsFilterOptions.cameraResolutions)
 filterSidebar.appendChild(filterElements.resolutions)
 filterElements.sensors.options = new ObservedProperty<FilterOption[]>(filterElements.sensors, model.deviceTypeAttributesAsFilterOptions.cameraSensors)
@@ -86,12 +54,13 @@ filterElements.lensMounts.options = new ObservedProperty<FilterOption[]>(filterE
 filterSidebar.appendChild(filterElements.lensMounts)
 filterElements.tripodHeads.options = new ObservedProperty<FilterOption[]>(filterElements.tripodHeads, model.deviceTypeAttributesAsFilterOptions.tripodHeads)
 filterSidebar.appendChild(filterElements.tripodHeads)
+*/
 
 /**
  * displays or hides filters so that only the ones that belong with the general selection are visibly
  * @param options filteroptions provided by the general devicetype filter
  */
-function setFilterHtmlVisibility(options: FilterOption[]){
+/*function setFilterHtmlVisibility(options: FilterOption[]){
     //we should probably publish this to the modle and make it available for the future
     let deviceTypeIsSelected = {
         camera: Util.getItemByKeynameFromJsonArray<FilterOption>(options, "camera").selected,
@@ -116,9 +85,5 @@ function setFilterHtmlVisibility(options: FilterOption[]){
     filterElements.systems.style.display = deviceTypeIsSelected.camera ? "" : "none"
     filterElements.lensMounts.style.display = deviceTypeIsSelected.camera || deviceTypeIsSelected.lens ? "" : "none"
     filterElements.tripodHeads.style.display = deviceTypeIsSelected.tripod ? "" : "none"
-}
-//endregion
-
-//region rent list
-let rentList = document.querySelector('cc-rent-list')
+}*/
 //endregion

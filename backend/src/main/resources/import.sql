@@ -15,4 +15,4 @@ insert into DEVICETYPE (dtype, name, system_id, resolution_id, sensor_id, mount_
 insert into device (type_id, note, number, serial) values
     (1, '', 'A01', '141592653589793'),
     (1, '', 'A02', '238462643383279'),
-    (2, '', 'B01', '419715028869399')
+    (2, '', 'B01', '419715028869399');
