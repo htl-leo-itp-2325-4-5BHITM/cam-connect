@@ -9,9 +9,12 @@
 }
 
 label{
-  font-size: $fSizeDesktopMedium !important;
   cursor: inherit;
   font-weight: 400;
+  transition: background-color .2s;
+  border-radius: .3rem;
+  padding: .1rem .2rem;
+  margin: -.1rem -.2rem;
 }
 
 .toggle{
@@ -25,6 +28,8 @@ label{
   align-items: center;
   justify-content: flex-start;
   padding: 3px;
+  position: relative;
+  z-index: 1;
 
   &.on{
     background-color: $accentDarkmode;
@@ -40,5 +45,34 @@ label{
     background-color: $gray900;
     border-radius: 50%;
     transition: margin-left .2s ease-in-out;
+    position: relative;
+    z-index: 2;
+
+    &::before{
+      --padding: 1rem;
+      content: "";
+      position: absolute;
+      /*top: calc(var(--padding) / -2);
+      left: calc(var(--padding) / -2);*/
+      /*background-color: $hoverBackground;
+      padding: var(--padding) !important;*/
+      inset: -.5rem;
+      border: .5rem solid $hoverBackground;
+      background-color: transparent;
+      border-radius: 50%;
+      opacity: 0;
+      transition: opacity .2s;
+      z-index: -1;
+    }
+  }
+}
+
+:host(:hover) {
+  .knob::before {
+    opacity: 1;
+  }
+
+  label{
+    background-color: $hoverBackgroundLight;
   }
 }

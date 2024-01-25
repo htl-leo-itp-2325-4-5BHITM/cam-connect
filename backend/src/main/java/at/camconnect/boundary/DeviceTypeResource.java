@@ -39,7 +39,7 @@ public class DeviceTypeResource {
     @GET
     @Path("/getall")
     @Transactional
-    public Response getall(){
+    public Response getAll(){
         DeviceTypeCollection result;
         try{
             result = deviceTypeRepository.getAll();

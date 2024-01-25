@@ -44,37 +44,11 @@ button{
     color: hsl(0, 0%, 100%);
 }
 
-.cta-icon {
-    --padding: 0.4rem;
-    --hover-background: transparent;
-
-    cursor: pointer;
-    background-color: var(--hover-background);
-    border-radius: 50%;
-    padding: var(--padding);
-    margin: calc(var(--padding) * -1);
-
-    aspect-ratio: 1;
-    height: fit-content;
-
-    transition: background-color .2s;
-
-    /*outline: 1px solid red;*/
-
-    &:hover {
-        --hover-background: rgba(128, 128, 128, 0.35);
-    }
-
-    &:active{
-        --hover-background: rgba(128, 128, 128, 0.35);
-        animation: svg-cta-click 1s infinite;
-    }
-}
 
 :global {
     #tooltip{
         position: absolute;
-        padding: .5rem;
+        padding: .4rem;
         background-color: $gray500;
         box-sizing: border-box;
         pointer-events: none;
@@ -85,6 +59,7 @@ button{
         top: 0;
         left: 0;
         z-index: 100;
+        font-size: $fSizeDesktopSmall;
     }
 }
 

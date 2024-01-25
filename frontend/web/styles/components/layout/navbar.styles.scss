@@ -7,7 +7,7 @@
   color: $gray800;
   font-weight: 400;
   background-color: $gray300;
-  padding: 0.5rem 0.75rem !important;
+  padding: 0.3rem 0.75rem !important;
   box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.15);
 
   div.logo{
@@ -20,6 +20,7 @@
 
   div.tools{
     display: flex;
+    align-items: center;
     gap: 1rem;
 
     svg{

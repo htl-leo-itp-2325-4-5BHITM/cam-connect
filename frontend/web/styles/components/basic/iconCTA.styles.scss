@@ -1,0 +1,30 @@
+:host{
+    --padding: 0.4rem;
+    --hover-background: transparent;
+
+    cursor: pointer;
+    background-color: var(--hover-background);
+    border-radius: 50%;
+    padding: var(--padding) !important;
+    margin: calc(var(--padding) * -1) !important;
+
+    aspect-ratio: 1;
+    height: fit-content;
+    width: fit-content;
+
+    display: grid;
+    place-content: center;
+
+    transition: background-color .2s;
+
+    /*outline:1px solid red;*/
+
+    &:active{
+        --hover-background: $hoverBackground;
+        animation: svg-cta-click 1s infinite;
+    }
+}
+
+:host(:hover){
+    --hover-background: rgba(128, 128, 128, 0.35);
+}

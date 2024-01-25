@@ -63,7 +63,7 @@ export class ToolbarComponent extends LitElement {
                 <div>
                     <cc-button size="${ButtonSize.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
                         <div slot="left" class="icon accent">
-                            <cc-circle-select slot="left"></cc-circle-select>
+                            <img slot="left" src="../../../assets/icon/select_circle.svg" alt="+">
                         </div>
                         Auswahl aufheben
                     </cc-button>

@@ -30,7 +30,8 @@ export class api{
                 return response.json() as Promise<ccResponse<T>>
             })
             .then(result => {
-                handleCCError(result.ccStatus.statusCode, result.ccStatus.details, url)
+                if(result.ccStatus) handleCCError(result.ccStatus.statusCode, result.ccStatus.details, url)
+                else console.error("no ccResponse object received from", url, "only got:", result)
                 return result.data
             })
     }
@@ -79,6 +80,7 @@ export class Tooltip {
         this.tooltip.style.left = bounds.left + "px"
 
         if (Date.now() - this.lastTimeHidden < 100) { //if the last tooltip was closed less the 100ms ago
+            /*this.lastTimeHidden = Date.now()*/
             this.tooltip.style.transitionDelay = "50ms" //show the tooltip after 50ms only
         }
         else {
@@ -86,13 +88,23 @@ export class Tooltip {
         }
 
         this.tooltip.style.opacity = String(1)
+
+        this.timeoutFallback = setTimeout(() => {
+            this.hide(500)
+        },10000)
     }
 
+    /**
+     * Hides the visible tooltip after a specified amount of time
+     * @param delay
+     * @param resetting use when you want an action to reset the "show tooltips instantly when another was just hovered"
+     * behaviour. For example when an element is clicked you dont want it to additionally display a tooltip
+     */
     static hide(delay: number, resetting: boolean = false){
         this.tooltip.style.transitionDelay = delay + "ms"
         this.tooltip.style.opacity = String(0)
 
-        //if the current tooltip started displaying more then 500ms ago - the tooltip was actually shown
+        //if the current tooltip started displaying more than 500ms ago (the tooltip was actually shown)
         //prevents quickly moving over the items from opening the tooltip
         if(Date.now() - this.lastTimeShown > 500)
             this.lastTimeHidden = Date.now()

@@ -37,7 +37,7 @@
     min-width: 8ch;
   }
   &[size = "medium"]{
-    font-size: $fSizeDesktopMedium;
+    font-size: $fSizeDesktopDefault;
     min-width: 8ch;
   }
   &[size = "small"]{
@@ -71,15 +71,16 @@
     background-color: transparent;
     border: none;
     color: var(--color-text);
-    margin: 2px;
+
     min-width: 0;
+    padding-inline: .3rem;
 
     &[color = "accent"]{
       color: var(--color-light);
     }
 
     &:hover {
-      background-color: rgba(128, 128, 128, 0.2);
+      background-color: $hoverBackgroundLight;
     }
   }
   &[type = "underlined"]{
@@ -87,18 +88,20 @@
     border: none;
     color: var(--color-text);
     text-decoration: underline;
+    font-weight: 400;
+    text-underline-offset: .1rem;
+
     min-width: 0;
     padding-inline: .2rem;
     margin-inline: -.2rem;
-    font-weight: 400;
-    text-underline-offset: .1rem;
+    margin-block: -.1rem;
 
     &[color = "accent"]{
       color: var(--color-light);
     }
 
     &:hover {
-      color: $gray1000;
+      background-color: $hoverBackgroundLight;
     }
   }
 

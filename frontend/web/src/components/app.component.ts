@@ -17,8 +17,6 @@ export class AppComponent extends LitElement {
     render() {
         let page = html``
 
-        console.log(this.selectedPage.value)
-
         switch (this.selectedPage.value) {
             case PageEnum.EQUIPMENT: page = html`<cc-equipment></cc-equipment>`; break
             case PageEnum.RENTS: page = html`<cc-rent></cc-rent>`; break

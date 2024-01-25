@@ -3,7 +3,8 @@ import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/navbar.styles.scss'
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
-import { faMagnifyingGlass, faArrowRotateRight, faCircleQuestion } from "@fortawesome/free-solid-svg-icons"
+import { faMagnifyingGlass, faArrowRotateRight } from "@fortawesome/free-solid-svg-icons"
+import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons"
 import {model} from "../../index"
 import {SelectSize} from "../basic/select.component"
 
@@ -23,9 +24,9 @@ export class NavbarComponent extends LitElement {
             </cc-select>
 
             <div class="tools">
-                <div class="cta-icon">${unsafeSVG(icon(faMagnifyingGlass).html[0])}</div>
-                <div class="cta-icon">${unsafeSVG(icon(faArrowRotateRight).html[0])}</div>
-                <div class="cta-icon">${unsafeSVG(icon(faCircleQuestion).html[0])}</div>
+                <icon-cta>${unsafeSVG(icon(faMagnifyingGlass).html[0])}</icon-cta>
+                <icon-cta>${unsafeSVG(icon(faArrowRotateRight).html[0])}</icon-cta>
+                <icon-cta>${unsafeSVG(icon(faCircleQuestion).html[0])}</icon-cta>
             </div>
         `
     }

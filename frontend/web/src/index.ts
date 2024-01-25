@@ -10,6 +10,7 @@ import "./components/basic/select.component"
 import "./components/basic/valueChain.component"
 import "./components/basic/line.component"
 import "./components/basic/toggle.component"
+import "./components/basic/iconCTA.component"
 
 import "./components/layout/sidebar.component"
 import "./components/layout/navbar.component"
@@ -25,14 +26,7 @@ import "./components/app.component"
 
 //css
 import '../styles/index.scss'
-import '@fortawesome/fontawesome-free/js/all'
 import Model, {ObservedProperty, PageEnum} from "./model"
-import {BehaviorSubject} from 'rxjs';
-import {SidebarComponent} from "./components/layout/sidebar.component"
-import Util from "./util"
-import {FilterContainerComponent, FilterOption} from "./components/basic/filterContainer.component"
-import {NavbarComponent} from "./components/layout/navbar.component"
-import {RentListComponent} from "./components/layout/rentList.component"
 
 //OMG its our single swouce of THWQUUUCE
 export let model = new Model()

@@ -1,5 +1,6 @@
 package at.camconnect.boundary;
 
+import at.camconnect.dtos.DeviceTypeCollection;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.model.Rent;
@@ -44,8 +45,16 @@ public class RentResource {
 
     @GET
     @Path("/getall")
-    public List<Rent> getAll() {
-        return rentRepository.getAll();
+    @Transactional
+    public Response getAll(){
+        List<Rent> result;
+        try{
+            result = rentRepository.getAll();
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok(result);
     }
 
     @GET

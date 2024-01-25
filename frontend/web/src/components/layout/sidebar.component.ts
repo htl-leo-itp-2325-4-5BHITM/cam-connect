@@ -27,7 +27,7 @@ export class SidebarComponent extends LitElement {
             </div>
             <cc-line></cc-line>
             <div class="sorts">
-                <cc-select size="${SelectSize.BIG}">
+                <cc-select size="${SelectSize.DEFAULT}">
                     <p class="selected">raster</p>
                     <p>liste</p>
                 </cc-select>

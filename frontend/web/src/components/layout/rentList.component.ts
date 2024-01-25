@@ -23,7 +23,7 @@ export class RentListComponent extends LitElement {
 
     generateStudent(){
         return html`
-            <rent-list-entry></rent-list-entry>
+            <cc-rent-list-entry></cc-rent-list-entry>
         `
     }
 }

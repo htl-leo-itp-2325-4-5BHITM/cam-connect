@@ -10,13 +10,12 @@ div.filter-block {
   .heading {
     color: $accentDarkmodeLight;
     font-weight: 600;
-    font-size: $fSizeDesktopMedium;
 
     span.clear{
       color: $gray600;
       text-decoration: underline;
       margin-left: .5rem;
-      font-size: $fSizeDesktopDefault;
+      font-size: $fSizeDesktopSmall;
       cursor: pointer;
 
       &:hover{
@@ -34,7 +33,6 @@ div.filter-block {
   .option {
     font-weight: 400 !important;
     color: $gray800 !important;
-    font-size: $fSizeDesktopMedium !important;
     position: relative;
     transition: font-weight .2s, color .2s;
 

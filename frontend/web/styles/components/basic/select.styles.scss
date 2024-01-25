@@ -6,7 +6,7 @@
 
 .select {
   &[size="big"]{
-    --f-size: #{$fSizeDesktopMedium};
+    --f-size: #{$fSizeDesktopLarge};
   }
   &[size="default"]{
     --f-size: #{$fSizeDesktopDefault};

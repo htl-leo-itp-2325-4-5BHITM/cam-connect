@@ -1,6 +1,6 @@
 import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
-import styles from '../../../styles/components/basic/filterBlock.styles.scss'
+import styles from '../../../styles/components/basic/filterContainer.styles.scss'
 import Model, {ObservedProperty} from "../../model"
 import {Tooltip} from "../../base"
 import {Observable} from "rxjs"
@@ -29,7 +29,6 @@ export class FilterContainerComponent extends LitElement {
 
     connectedCallback() {
         super.connectedCallback();
-        console.log("connected")
         this.theOptions = new ObservedProperty<FilterOption[]>(this, this.options)
     }
 
