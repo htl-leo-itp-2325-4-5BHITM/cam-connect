@@ -32,7 +32,7 @@
 		* focal_length: int
 	}
 
-	entity AudioType {
+	entity MicrophoneType {
 		--
 		* windblocker: boolean
 		* wireless: boolean

@@ -9,13 +9,13 @@ import jakarta.persistence.Entity;
 public class MicrophoneType extends DeviceType {
     private boolean windblocker;
     private boolean wireless;
-    private boolean needsRecorder;
+    private boolean needs_recorder;
 
-    public MicrophoneType(String typeName, boolean windblocker, boolean wireless, boolean needsRecorder) {
+    public MicrophoneType(String typeName, boolean windblocker, boolean wireless, boolean needs_recorder) {
         super(typeName);
         this.windblocker = windblocker;
         this.wireless = wireless;
-        this.needsRecorder = needsRecorder;
+        this.needs_recorder = needs_recorder;
     }
 
     @Override
@@ -23,7 +23,7 @@ public class MicrophoneType extends DeviceType {
         try{
             setWindblocker(data.windblocker());
             setWireless(data.wireless());
-            setNeedsRecorder(data.needsrecorder());
+            setNeeds_recorder(data.needsrecorder());
         }catch (Exception ex){
             throw new CCException(1106);
         }
@@ -49,11 +49,11 @@ public class MicrophoneType extends DeviceType {
         this.wireless = wireless;
     }
 
-    public boolean isNeedsRecorder() {
-        return needsRecorder;
+    public boolean isNeeds_recorder() {
+        return needs_recorder;
     }
 
-    public void setNeedsRecorder(boolean needsRecorder) {
-        this.needsRecorder = needsRecorder;
+    public void setNeeds_recorder(boolean needsRecorder) {
+        this.needs_recorder = needsRecorder;
     }
 }
