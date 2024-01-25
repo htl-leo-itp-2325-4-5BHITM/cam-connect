@@ -5,8 +5,9 @@ import DeviceTypeAttributeService, { DeviceTypeAttributeCollection } from "./ser
 import Util from "./util"
 import DeviceService, {Device} from "./service/device.service"
 import RentService, {Rent} from "./service/rent.service"
+import {FilterOption} from "./components/basic/filterContainer.component"
 
-export enum Pages { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar" }
+export enum PageEnum { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar" }
 
 /**
  * An instance of this class is our singular data provider. It interfaces between the individual service classes which
@@ -18,7 +19,7 @@ export enum Pages { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar" }
  *  - a load function that sets the data in the RXJS Subject and sends an update to all subscribers.
  */
 export default class Model{
-    readonly page = new BehaviorSubject<Pages>(Pages.EQUIPMENT)
+    readonly page = new BehaviorSubject<PageEnum>(PageEnum.EQUIPMENT)
 
     readonly rents = new BehaviorSubject(<Rent[]>([]))
 
@@ -52,6 +53,17 @@ export default class Model{
             map(deviceTypeAttributes => deviceTypeAttributes.tripodHeads.map(Util.deviceTypeAttributeToFilterOption))
         )
     }
+
+    //TODO details
+    readonly deviceTypeNameFilterOptions = new BehaviorSubject<FilterOption[]>([
+        {name: "Kamera", id: "camera", details: "Kamera halt"},
+        {name: "Drone", id: "drone", details: "Drone halt"},
+        {name: "Objektiv", id: "lens", details: "Objektiv halt"},
+        {name: "Licht", id: "light", details: "Objektiv halt"},
+        {name: "Mikrofon", id: "microphone", details: "Mikro halt"},
+        {name: "Stabilisator", id: "stabilizer", details: "Stablisationsysteme"},
+        {name: "Stativ", id: "tripod", details: "dings"},
+    ])
 
     /**
      * When its created, a new instance gathers all the data from the API endpoints
@@ -96,7 +108,7 @@ export default class Model{
         this.devices.next(updatedDevices)
     }
 
-    updatePage(page: Pages){
+    updatePage(page: PageEnum){
         this.page.next(page)
     }
     //endregion

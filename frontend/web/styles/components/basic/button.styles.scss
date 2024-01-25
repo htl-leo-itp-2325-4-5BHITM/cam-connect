@@ -41,7 +41,7 @@
     min-width: 8ch;
   }
   &[size = "small"]{
-    font-size: $fSizeDesktopDefault;
+    font-size: $fSizeDesktopSmall;
     min-width: 6ch;
   }
 
@@ -106,6 +106,7 @@
     &[color="accent"] {
       ::slotted(*) {
         color: var(--color-light) !important;
+        margin: 0;
       }
 
       ::slotted(svg){

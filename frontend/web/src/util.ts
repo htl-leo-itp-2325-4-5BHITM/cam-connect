@@ -1,5 +1,5 @@
 import {DeviceType} from "./service/deviceType.service"
-import {FilterOption} from "./components/basic/filterBlock.component"
+import {FilterOption} from "./components/basic/filterContainer.component"
 import {DeviceTypeAttribute} from "./service/deviceTypeAttribute.service"
 import * as repl from "repl"
 export default class Util{
