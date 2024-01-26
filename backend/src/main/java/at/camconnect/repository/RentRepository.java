@@ -37,8 +37,8 @@ public class RentRepository {
     RentSocket rentSocket;
 
     @Transactional
-    public void create(JsonObject rentJson){
-        Rent rent = new Rent(em.find(Student.class, rentJson.getInt("student_id")));
+    public void create(RentDTO rentData){
+        Rent rent = new Rent(em.find(Student.class, rentData.student_id()));
         em.persist(rent);
         rentSocket.broadcast(getAll());
     }
