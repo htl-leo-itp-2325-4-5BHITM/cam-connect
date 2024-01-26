@@ -9,21 +9,25 @@ import {CircleSelectType} from "../basic/circleSelect.component"
 import {ColorEnum} from "../../base"
 import {Rent, RentStatus} from "../../service/rent.service"
 import {Device} from "../../service/device.service"
+import {model} from "../../index";
 
 @customElement('cc-rent-list')
 export class RentListComponent extends LitElement {
-
     render() {
+        let count = 0;
+
         return html`
             <style>${styles}</style>
             
-            ${this.generateStudent()}
+            ${model.rents.value.map(rent => {
+                return this.generateStudent(count++)
+            })}
         `
     }
 
-    generateStudent(){
+    generateStudent(count: number){
         return html`
-            <cc-rent-list-entry></cc-rent-list-entry>
+            <cc-rent-list-entry rentNumber="${count}"></cc-rent-list-entry>
         `
     }
 }

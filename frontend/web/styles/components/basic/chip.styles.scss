@@ -6,6 +6,8 @@
 
 .cc-chip{
   display: flex;
+  gap: 0.5rem;
+  flex-direction: column;
   justify-content: space-between;
   color: white;
   font-size: $fSizeDesktopSmall;
@@ -35,6 +37,16 @@
 
   &[size="BIG"]{
     font-size: 1.2rem;
+  }
+
+  &[expandable="true"]{
+    cursor: pointer;
+  }
+
+  h2{
+    font-size: $fSizeDesktopSmall;
+    font-weight: 600;
+    letter-spacing: 0.08rem;
   }
 
   .remove{

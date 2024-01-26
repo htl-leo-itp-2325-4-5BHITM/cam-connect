@@ -1,14 +1,16 @@
 import {model} from "../index"
 import {api} from "../base"
 import {Device} from "./device.service"
+import {Teacher} from "./teacher.service";
+import {Student} from "./student.service";
 
-export enum RentStatus {CREATED, WAITING, CONFIRMED, DECLINED, RETURNED}
+export enum RentStatus {CREATED="CREATED", WAITING="WAITING", CONFIRMED="CONFIRMED", DECLINED="DECLINED", RETURNED="RETURNED"}
 export interface Rent{
     rent_id: number
-    student: string
+    student: Student
     device: Device
-    teacher_start: string
-    teacher_end: string
+    teacher_start: Teacher
+    teacher_end: Teacher
     rent_start: Date
     rent_end_planned: Date
     rent_end_actual: Date
@@ -19,25 +21,14 @@ export interface Rent{
     note: string
 }
 
-export interface RentDTO{
-    rent_id: number
-    student_id: number
-    device_id: number
-    teacher_start: string
-    teacher_end: string
-    rent_start: Date
-    rent_end_planned: Date
-    rent_end_actual: Date
-    creation_date: Date
-    verification_code: string
-    verification_message: string
-    status: RentStatus
-    note: string
+export interface RentsByStudentDTO{
+    student: Student
+    rentList: [Rent]
 }
 
 export default class RentService{
     static fetchAll(){
-        api.fetchData<Rent[]>("/rent/getall")
+        api.fetchData<RentsByStudentDTO[]>("/rent/getall")
             .then(data => {
                 model.loadRents(data)
             })
