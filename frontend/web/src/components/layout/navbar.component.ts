@@ -17,7 +17,7 @@ export class NavbarComponent extends LitElement {
                 <img src="assets/logo/cc-wordmark-white.svg" alt="cam-connect">
             </div>
 
-            <cc-select size="${SelectSize.SMALL}" .optionSelected = "${(elem) => {model.updatePage(elem.dataset.page)}}">
+            <cc-select size="${SelectSize.DEFAULT}" .optionSelected = "${(elem) => {model.updatePage(elem.dataset.page)}}">
                 <p class="selected" data-page="equipment">Equipment</p>
                 <p data-page="rents">Verleihliste</p>
                 <p data-page="calendar">Kalender</p>

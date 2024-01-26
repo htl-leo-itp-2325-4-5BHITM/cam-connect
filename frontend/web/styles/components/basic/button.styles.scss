@@ -10,11 +10,8 @@
   min-width: 10ch;
   height: fit-content;
   border-radius: .3rem;
-  padding-inline: 1rem;
-  padding-block: .1rem;
   cursor: pointer;
   transition: .2s background-color, color, border ease;
-  -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;
 
   display: flex;
   justify-content: center;
@@ -22,7 +19,7 @@
   gap: .5rem;
 
   &[color = "accent"]{
-    --color-main: #{$accentDarkmode};
+    --color-main: #{$accentDarkmodeDark};
     --color-light: #{$accentDarkmodeLight};
     --color-text: #{$gray1000};
   }
@@ -35,28 +32,33 @@
   &[size = "big"]{
     font-size: $fSizeDesktopLarge;
     min-width: 8ch;
+    padding-inline: 1rem;
+    padding-block: .2rem;
   }
   &[size = "medium"]{
     font-size: $fSizeDesktopDefault;
     min-width: 8ch;
+    padding-inline: 1rem;
+    padding-block: .1rem;
   }
   &[size = "small"]{
     font-size: $fSizeDesktopSmall;
     min-width: 6ch;
+    padding-inline: 1rem;
+    padding-block: .1rem;
   }
 
   &[type = "filled"]{
     background-color: var(--color-main);
-    border: 1px solid var(--color-light);
+    box-shadow: 0 0 0 1px var(--color-light) inset;
     color: var(--color-text);
-    padding-block: calc(.1rem + 1px); /*compensates for the thicker border on outlined*/
 
     &:hover {
     }
   }
   &[type = "outlined"]{
     background-color: transparent;
-    border: 2px solid var(--color-light);
+    box-shadow: 0 0 0 1.5px var(--color-light) inset;
     color: var(--color-text);
 
     &[color = "accent"]{
