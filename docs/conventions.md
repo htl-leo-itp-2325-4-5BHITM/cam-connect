@@ -20,7 +20,7 @@ user stories can be found [here](https://school-space.notion.site/4c889b6df8a14f
 - Commit often, this just safes your work to your local git
   - commit messages 
     - should be precise and short
-    - should start with the issue number your working on or with "hotfix:", "refactor:" or something similar when not working on any issue
+    - should start with the issue number your working on or with "hotfix:", "refactor:", "minor:" or something similar when not working on any issue
     - `#0 Updated Workflow section in convetions.md`
   - if many things were changed write a description
 - Push at the end of each workday and when leaving school .-.
