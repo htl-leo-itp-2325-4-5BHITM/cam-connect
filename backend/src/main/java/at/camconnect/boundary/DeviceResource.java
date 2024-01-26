@@ -1,5 +1,6 @@
 package at.camconnect.boundary;
 
+import at.camconnect.dtos.DeviceDTO;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.model.Device;
@@ -69,8 +70,8 @@ public class DeviceResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces
     @Transactional
-    public Response update(@PathParam("id")Long id, JsonObject data){
-        deviceRepository.update(id, data);
+    public Response update(@PathParam("id")Long id, DeviceDTO deviceDTO){
+        deviceRepository.update(id, deviceDTO);
         return Response.ok().build();
     }
 
@@ -79,8 +80,8 @@ public class DeviceResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces
     @Transactional
-    public Response updateNumber(@PathParam("id")Long id, JsonObject data){
-        deviceRepository.setNumber(id, data.getString("value"));
+    public Response updateNumber(@PathParam("id")Long id, DeviceDTO deviceDTO){
+        deviceRepository.setNumber(id, deviceDTO.number());
         return Response.ok().build();
     }
 
@@ -89,8 +90,8 @@ public class DeviceResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces
     @Transactional
-    public Response updateSerial(@PathParam("id")Long id, JsonObject data){
-        deviceRepository.setSerial(id, data.getString("value"));
+    public Response updateSerial(@PathParam("id")Long id, DeviceDTO deviceDTO){
+        deviceRepository.setSerial(id, deviceDTO.serial());
         return Response.ok().build();
     }
 
@@ -99,8 +100,8 @@ public class DeviceResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces
     @Transactional
-    public Response updateNote(@PathParam("id")Long id, JsonObject data){
-        deviceRepository.setNote(id, data.getString("value"));
+    public Response updateNote(@PathParam("id")Long id, DeviceDTO deviceDTO){
+        deviceRepository.setNote(id, deviceDTO.note());
         return Response.ok().build();
     }
 
@@ -109,8 +110,8 @@ public class DeviceResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces
     @Transactional
-    public Response updateType(@PathParam("id")Long id, JsonObject data){
-        deviceRepository.setType(id, data.getInt("value"));
+    public Response updateType(@PathParam("id")Long id, DeviceDTO deviceDTO){
+        deviceRepository.setType(id, deviceDTO.type_id());
         return Response.ok().build();
     }
 }

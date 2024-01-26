@@ -1,5 +1,6 @@
 package at.camconnect.repository;
 
+import at.camconnect.dtos.DeviceDTO;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.model.Device;
 import at.camconnect.model.DeviceType;
@@ -36,21 +37,21 @@ public class DeviceRepository {
     }
 
     @Transactional
-    public void update(Long id, JsonObject data) {
+    public void update(Long id, DeviceDTO data) {
         try{
-            setNumber(id, data.getString("number"));
+            setNumber(id, data.number());
         } catch(Exception ex){ System.out.println(ex.getMessage()); }
 
         try{
-            setNote(id, data.getString("note"));
+            setNote(id, data.note());
         } catch(Exception ex){ System.out.println(ex.getMessage()); }
 
         try{
-            setSerial(id, data.getString("serial"));
+            setSerial(id, data.serial());
         } catch(Exception ex){ System.out.println(ex.getMessage()); }
 
         try{
-            setType(id, data.getInt("number"));
+            setType(id, data.type_id());
         } catch(Exception ex){ System.out.println(ex.getMessage()); }
         deviceSocket.broadcast(getAll());
     }

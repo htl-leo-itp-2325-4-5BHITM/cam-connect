@@ -1,5 +1,6 @@
 package at.camconnect.repository;
 
+import at.camconnect.dtos.StudentDTO;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.model.Student;
 
@@ -44,9 +45,9 @@ public class StudentRepository{
         return students;
     }
 
-    public List<Student> search(JsonObject searchParams){
+    public List<Student> search(StudentDTO studentDTO){
         Query q = em.createQuery("SELECT s FROM Student s WHERE upper(s.firstname) LIKE :firstname || '%' ", Student.class)
-                .setParameter("firstname", searchParams.getString("firstname").toUpperCase())
+                .setParameter("firstname", studentDTO.firstname().toUpperCase())
                 .setMaxResults(10);
         return (List<Student>) q.getResultList();
     }

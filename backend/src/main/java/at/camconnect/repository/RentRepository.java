@@ -1,5 +1,6 @@
 package at.camconnect.repository;
 
+import at.camconnect.dtos.RentDTO;
 import at.camconnect.dtos.RentsByStudentDTO;
 import at.camconnect.enums.RentStatusEnum;
 import at.camconnect.responseSystem.CCException;
@@ -36,8 +37,8 @@ public class RentRepository {
     RentSocket rentSocket;
 
     @Transactional
-    public void create(JsonObject rentJson){
-        Rent rent = new Rent(em.find(Student.class, rentJson.getInt("student_id")));
+    public void create(RentDTO rentDTO){
+        Rent rent = new Rent(em.find(Student.class, rentDTO.student_id()));
         em.persist(rent);
         rentSocket.broadcast(getAll());
     }
@@ -140,7 +141,7 @@ public class RentRepository {
     }
 
     @Transactional
-    public void confirm(Long rentId, JsonObject jsonObject) {
+    public void confirm(Long rentId, RentDTO rentDTO) {
         Rent rent = getById(rentId);
 
         if(!rent.getStatus().equals(RentStatusEnum.WAITING) && !rent.getStatus().equals(RentStatusEnum.CONFIRMED)){
@@ -152,9 +153,9 @@ public class RentRepository {
         RentStatusEnum verificationStatus;
 
         try{
-            verificationCode = jsonObject.getString("verification_code");
-            verificationMessage = jsonObject.getString("verification_message");
-            verificationStatus = RentStatusEnum.valueOf(jsonObject.getString("verification_status").toUpperCase());
+            verificationCode = rentDTO.verification_code();
+            verificationMessage = rentDTO.verification_message();
+            verificationStatus = rentDTO.status();
         } catch (IllegalArgumentException e) {
             throw new CCException(1106);
         }
@@ -171,7 +172,7 @@ public class RentRepository {
     }
 
     @Transactional
-    public void returnRent(Long rentId, JsonObject jsonObject){
+    public void returnRent(Long rentId, RentDTO rentDTO){
         Rent rent = getById(rentId);
 
         if(!rent.getStatus().equals(RentStatusEnum.CONFIRMED)){
@@ -183,9 +184,9 @@ public class RentRepository {
         RentStatusEnum verificationStatus;
 
         try{
-            verificationCode = jsonObject.getString("verification_code");
-            verificationMessage = jsonObject.getString("verification_message");
-            verificationStatus = RentStatusEnum.valueOf(jsonObject.getString("verification_status").toUpperCase());
+            verificationCode = rentDTO.verification_code();
+            verificationMessage = rentDTO.verification_message();
+            verificationStatus = rentDTO.status();
         } catch (IllegalArgumentException e) {
             throw new CCException(1106);
         }
@@ -285,43 +286,43 @@ public class RentRepository {
     }
 
     @Transactional
-    public void updateAttribute(String attribute, Long rentId, JsonObject data){
+    public void updateAttribute(String attribute, Long rentId, RentDTO rentDTO){
         Rent rent = em.find(Rent.class, rentId);
 
         switch (attribute){
             case "student":
-                Student student = em.find(Student.class, data.getInt("value"));
+                Student student = em.find(Student.class, rentDTO.student_id());
                 rent.setStudent(student);
                 break;
             case "device":
-                Device device = em.find(Device.class, data.getInt("value"));
+                Device device = em.find(Device.class, rentDTO.device_id());
                 rent.setDevice(device);
                 break;
             case "teacherstart":
-                Teacher teacherStart = em.find(Teacher.class, data.getInt("value"));
+                Teacher teacherStart = em.find(Teacher.class, rentDTO.teacher_id_start());
                 rent.setTeacher_start(teacherStart);
                 break;
             case "teacherend":
-                Teacher teacherEnd = em.find(Teacher.class, data.getInt("value"));
+                Teacher teacherEnd = em.find(Teacher.class, rentDTO.teacher_id_end());
                 rent.setTeacher_end(teacherEnd);
                 break;
             case "rentstart":
-                LocalDate rentStart = LocalDate.parse(data.getString("value"));
+                LocalDate rentStart = rentDTO.rent_start();
                 rent.setRent_start(rentStart);
                 break;
             case "rentendplanned":
-                LocalDate rentEndPlanned = LocalDate.parse(data.getString("value"));
+                LocalDate rentEndPlanned = rentDTO.rent_end_planned();
                 rent.setRent_end_planned(rentEndPlanned);
                 break;
             case "rentendactual":
-                LocalDate rentEndActual = LocalDate.parse(data.getString("value"));
+                LocalDate rentEndActual = rentDTO.rent_end_actual();
                 rent.setRent_end_actual(rentEndActual);
                 break;
             case "note":
-                rent.setNote(data.getString("value"));
+                rent.setNote(rentDTO.note());
                 break;
             case "status":
-                RentStatusEnum status = RentStatusEnum.valueOf(data.getString("value"));
+                RentStatusEnum status = rentDTO.status();
                 rent.setStatus(status);
                 break;
         }
