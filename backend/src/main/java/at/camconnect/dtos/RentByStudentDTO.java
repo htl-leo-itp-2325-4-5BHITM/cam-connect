@@ -5,12 +5,12 @@ import at.camconnect.model.Student;
 
 import java.util.List;
 
-public record RentsByStudentDTO(Student student, List<Rent> rentList) {
+public record RentByStudentDTO(Student student, List<Rent> rentList) {
 
-    public RentsByStudentDTO {
+    public RentByStudentDTO {
     }
 
-    public RentsByStudentDTO(Student student) {
+    public RentByStudentDTO(Student student) {
         this(student, null);
     }
 }

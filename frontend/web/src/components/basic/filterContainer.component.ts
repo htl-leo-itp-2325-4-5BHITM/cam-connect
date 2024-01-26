@@ -9,12 +9,13 @@ export interface FilterOption {
     name: string,
     details?: string
     selected?: boolean,
-    id: (number | string)
+    id: (string | number)
 }
 
 @customElement('cc-filter-container')
 export class FilterContainerComponent extends LitElement {
     name: string = this.innerHTML
+    visibility: string[] = []
 
     @property()
     options?: Observable<FilterOption[]>
@@ -53,9 +54,18 @@ export class FilterContainerComponent extends LitElement {
      * @param option
      */
     selectOption(e:Event, option:FilterOption){
+        console.log("option selected")
         option.selected = !option.selected
         this.onUpdate(this.theOptions.value)
         this.requestUpdate()
+    }
+
+    getSelectedOptionsAsIdArray():(string | number)[] {
+        let optionsAsIdArray:(string | number)[] = []
+        this.theOptions.value.forEach(option => {
+            if(option.selected) optionsAsIdArray.push(option.id)
+        })
+        return optionsAsIdArray
     }
 
     clearSelection(){

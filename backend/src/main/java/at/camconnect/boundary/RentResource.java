@@ -1,9 +1,8 @@
 package at.camconnect.boundary;
 
-import at.camconnect.dtos.DeviceTypeCollection;
+import at.camconnect.dtos.RentByStudentDTO;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
-import at.camconnect.model.Rent;
 import at.camconnect.repository.RentRepository;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
@@ -13,13 +12,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import java.io.IOException;
-import java.util.Map;
-import jakarta.enterprise.context.ApplicationScoped;
-import net.bytebuddy.asm.Advice;
 
 @Path("/rent")
 public class RentResource {
@@ -47,7 +39,7 @@ public class RentResource {
     @Path("/getall")
     @Transactional
     public Response getAll(){
-        List<Rent> result;
+        List<RentByStudentDTO> result;
         try{
             result = rentRepository.getAll();
         }catch (CCException ex){

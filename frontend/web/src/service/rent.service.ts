@@ -21,14 +21,14 @@ export interface Rent{
     note: string
 }
 
-export interface RentsByStudentDTO{
+export interface RentByStudentDTO {
     student: Student
     rentList: [Rent]
 }
 
 export default class RentService{
     static fetchAll(){
-        api.fetchData<RentsByStudentDTO[]>("/rent/getall")
+        api.fetchData<RentByStudentDTO[]>("/rent/getall")
             .then(data => {
                 model.loadRents(data)
             })

@@ -1,13 +1,21 @@
 import {LitElement, css, html} from 'lit'
-import {customElement, property} from 'lit/decorators.js'
+import {customElement, property, queryAssignedElements} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/filterSidebar.styles.scss'
 import {ButtonColor, ButtonComponent, ButtonSize, ButtonType} from '../basic/button.component'
 import {SelectSize} from "../basic/select.component"
+import {FilterContainerComponent} from "../basic/filterContainer.component"
+import {filter} from "rxjs"
 
 @customElement('cc-sidebar')
 export class SidebarComponent extends LitElement {
     @property({type:String})
     accountname?: string = 'No username provided'
+
+    @queryAssignedElements({slot: "primaryFilters"})
+    primaryFilters!: Array<HTMLElement>;
+
+    @queryAssignedElements({slot: "secondaryFilters"})
+    secondaryFilters!: Array<HTMLElement>;
 
     constructor(username: string) {
         super()
@@ -35,10 +43,10 @@ export class SidebarComponent extends LitElement {
                 <cc-button size="${ButtonSize.MEDIUM}" type="${ButtonType.UNDERLINED}" color="${ButtonColor.GRAY}">Filter zurücksetzten</cc-button>
             </div>
             <cc-line></cc-line>
-            <slot name="primaryFilters"></slot>
+            <slot name="primaryFilters" @slotchange=${this.handlePrimaryFilterChange}></slot>
             <cc-line></cc-line>
             <div class="secondaryFilters">
-                <slot></slot>
+                <slot name="secondaryFilters"></slot>
             </div>
 
             <div class="user">
@@ -46,6 +54,32 @@ export class SidebarComponent extends LitElement {
                 <p>${(this.accountname)}</p>
             </div>
         `
+    }
+
+    setSecondaryFilterVisibility(){
+        console.log("setSecondaryFilterVisibility")
+
+        let selectedPrimaryFilters: (string | number)[] = []
+        this.primaryFilters.forEach((filter: FilterContainerComponent) => {
+            selectedPrimaryFilters = selectedPrimaryFilters.concat(filter.getSelectedOptionsAsIdArray())
+        })
+
+        console.log(selectedPrimaryFilters)
+
+        this.secondaryFilters.forEach((filter: FilterContainerComponent) => {
+            if(filter.visibility.length == 0 || selectedPrimaryFilters.length == 0 || filter.visibility.some(visibilityRequirement => selectedPrimaryFilters.includes(visibilityRequirement))) {
+                filter.style.display = "flex"
+            }
+            else {
+                filter.style.display = "none"
+            }
+        })
+    }
+
+    handlePrimaryFilterChange(){
+        this.primaryFilters.forEach((filter: FilterContainerComponent) => {
+            filter.onUpdate = () => {this.setSecondaryFilterVisibility()}
+        })
     }
 }
 

@@ -1,6 +1,6 @@
 package at.camconnect.repository;
 
-import at.camconnect.dtos.RentsByStudentDTO;
+import at.camconnect.dtos.RentByStudentDTO;
 import at.camconnect.enums.RentStatusEnum;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.socket.RentSocket;
@@ -59,20 +59,20 @@ public class RentRepository {
         return CCResponse.ok();
     }
 
-    public List<RentsByStudentDTO> getAll(){
+    public List<RentByStudentDTO> getAll(){
         List<Student> students = em.createQuery(
                 "SELECT s FROM Rent r" +
                     " join Student s on r.student.student_id = s.student_id" +
                         " group by s.student_id", Student.class).getResultList();
 
-        List<RentsByStudentDTO> result = new LinkedList<>();
+        List<RentByStudentDTO> result = new LinkedList<>();
 
         for (Student student : students) {
             List<Rent> rents = em.createQuery(
                     "SELECT r FROM Rent r" +
                             " where r.student.student_id = ?1", Rent.class).setParameter(1, student.getStudent_id()).getResultList();
 
-            result.add(new RentsByStudentDTO(student, rents));
+            result.add(new RentByStudentDTO(student, rents));
         }
         return result;
     }

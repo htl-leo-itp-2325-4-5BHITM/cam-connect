@@ -13,11 +13,11 @@ export class RentComponent extends LitElement {
             <style>${styles}</style>
             <cc-sidebar accountname="wird später mal ein observable">
                 <cc-filter-container slot="primaryFilters" .options="${model.deviceTypeNameFilterOptions}">Gerätetyp</cc-filter-container>
-                <cc-filter-container .options="${model.deviceTypeAttributesAsFilterOptions.cameraResolutions}" visibility="${[]}">Auflösungen</cc-filter-container>
-                <cc-filter-container .options="${model.deviceTypeAttributesAsFilterOptions.cameraSensors}">Sensoren</cc-filter-container>
-                <cc-filter-container .options="${model.deviceTypeAttributesAsFilterOptions.cameraSystems}">Kameratypen</cc-filter-container>
-                <cc-filter-container .options="${model.deviceTypeAttributesAsFilterOptions.lensMounts}">Objektiv Anschlüsse</cc-filter-container>
-                <cc-filter-container .options="${model.deviceTypeAttributesAsFilterOptions.tripodHeads}">Stativköpfe</cc-filter-container>
+                <cc-filter-container slot="secondaryFilters" .options="${model.deviceTypeAttributesAsFilterOptions.cameraResolutions}" .visibility="${["camera", "drone"]}">Auflösungen</cc-filter-container>
+                <cc-filter-container slot="secondaryFilters" .options="${model.deviceTypeAttributesAsFilterOptions.cameraSensors}" .visibility="${["camera"]}">Sensoren</cc-filter-container>
+                <cc-filter-container slot="secondaryFilters" .options="${model.deviceTypeAttributesAsFilterOptions.cameraSystems}" .visibility="${["camera"]}">Kameratypen</cc-filter-container>
+                <cc-filter-container slot="secondaryFilters" .options="${model.deviceTypeAttributesAsFilterOptions.lensMounts}" .visibility="${["camera", "lens"]}">Objektiv Anschlüsse</cc-filter-container>
+                <cc-filter-container slot="secondaryFilters" .options="${model.deviceTypeAttributesAsFilterOptions.tripodHeads}" .visibility="${["tripod"]}">Stativköpfe</cc-filter-container>
             </cc-sidebar>
             <main>
                 <cc-toolbar page="${PageEnum.EQUIPMENT}"></cc-toolbar>

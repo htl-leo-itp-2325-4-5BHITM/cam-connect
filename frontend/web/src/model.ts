@@ -4,7 +4,7 @@ import {BehaviorSubject, lastValueFrom, map, Observable, Subject, Subscription} 
 import DeviceTypeAttributeService, { DeviceTypeAttributeCollection } from "./service/deviceTypeAttribute.service"
 import Util from "./util"
 import DeviceService, {Device} from "./service/device.service"
-import RentService, {Rent, RentsByStudentDTO} from "./service/rent.service"
+import RentService, {Rent, RentByStudentDTO} from "./service/rent.service"
 import {FilterOption} from "./components/basic/filterContainer.component"
 import {Teacher} from "./service/teacher.service";
 import {Student} from "./service/student.service";
@@ -23,7 +23,7 @@ export enum PageEnum { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar"
 export default class Model{
     readonly page = new BehaviorSubject<PageEnum>(PageEnum.EQUIPMENT)
 
-    readonly rents = new BehaviorSubject(<RentsByStudentDTO[]>([]))
+    readonly rents = new BehaviorSubject(<RentByStudentDTO[]>([]))
 
     readonly teachers = new BehaviorSubject(<Teacher[]>([]))
 
@@ -85,7 +85,7 @@ export default class Model{
         DeviceTypeAttributeService.fetchAll()
     }
 
-    loadRents(rent: RentsByStudentDTO[]){
+    loadRents(rent: RentByStudentDTO[]){
         this.rents.next(rent)
     }
 
