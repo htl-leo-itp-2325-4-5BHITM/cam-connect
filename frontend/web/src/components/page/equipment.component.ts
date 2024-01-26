@@ -25,7 +25,7 @@ export class RentComponent extends LitElement {
             <main>
                 <cc-toolbar page="${PageEnum.EQUIPMENT}"></cc-toolbar>
                 <p>equipement page</p>
-                <cc-button type="underlined">Buttoin</cc-button>
+                <cc-button type="underlined" test="${console.log('clicked')}">Buttoin</cc-button>
                 <cc-button type="text">Buttoin</cc-button>
             </main>
         `
