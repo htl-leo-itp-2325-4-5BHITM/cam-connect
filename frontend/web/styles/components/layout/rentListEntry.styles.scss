@@ -73,12 +73,14 @@
     display: flex;
     align-items: center;
     gap: 0.1rem;
+    font-weight: 400;
     color: $gray800;
     font-size: $fSizeDesktopDefault;
 
     p:last-child{
       color: white;
       font-weight: 500;
+      margin-left: .2rem;
     }
   }
 
@@ -103,16 +105,16 @@
     background: $gray300;
 
     &[type = "text"]{
-      width: 10ch;
+      width: 12ch;
     }
 
-    &[type = "number"]{
+    &.number{
       width: 4ch;
     }
 
     &.customDate{
-      width: 4ch;
-      text-align: center;
+      width: 6.5ch;
+      text-align: left;
     }
   }
 }

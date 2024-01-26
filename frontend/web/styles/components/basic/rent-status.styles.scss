@@ -18,17 +18,17 @@
     padding: 0.125rem 0.25rem;
   }
 
-  &[status="CONFIRMED"]{
+  &[status="1"]{
     background-color: $good;
   }
-  &[status="WAITING"]{
+  &[status="2"]{
     background-color: $mid;
   }
-  &[status="DECLINED"]{
+  &[status="3"]{
     background-color: $bad;
     cursor: pointer;
   }
-  &[status="RETURNED"]{
+  &[status="4"]{
     background-color: $gray600;
   }
 }

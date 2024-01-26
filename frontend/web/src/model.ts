@@ -4,8 +4,10 @@ import {BehaviorSubject, lastValueFrom, map, Observable, Subject, Subscription} 
 import DeviceTypeAttributeService, { DeviceTypeAttributeCollection } from "./service/deviceTypeAttribute.service"
 import Util from "./util"
 import DeviceService, {Device} from "./service/device.service"
-import RentService, {Rent} from "./service/rent.service"
+import RentService, {Rent, RentsByStudentDTO} from "./service/rent.service"
 import {FilterOption} from "./components/basic/filterContainer.component"
+import {Teacher} from "./service/teacher.service";
+import {Student} from "./service/student.service";
 
 export enum PageEnum { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar" }
 
@@ -21,7 +23,11 @@ export enum PageEnum { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar"
 export default class Model{
     readonly page = new BehaviorSubject<PageEnum>(PageEnum.EQUIPMENT)
 
-    readonly rents = new BehaviorSubject(<Rent[]>([]))
+    readonly rents = new BehaviorSubject(<RentsByStudentDTO[]>([]))
+
+    readonly teachers = new BehaviorSubject(<Teacher[]>([]))
+
+    readonly students = new BehaviorSubject(<Student[]>([]))
 
     readonly devices = new BehaviorSubject<Device[]>([])
     readonly deviceTypes = new BehaviorSubject<DeviceTypeCollection>({audioTypes: [], cameraTypes: [], droneTypes: [], lensTypes: [], lighTypes: [], stabilizerTypes: [], tripodHeads: []})
@@ -79,8 +85,16 @@ export default class Model{
         DeviceTypeAttributeService.fetchAll()
     }
 
-    loadRents(rent: Rent[]){
+    loadRents(rent: RentsByStudentDTO[]){
         this.rents.next(rent)
+    }
+
+    loadTeachers(teacher: Teacher[]){
+        this.teachers.next(teacher)
+    }
+
+    loadStudents(student: Student[]){
+        this.students.next(student)
     }
 
     //region load functions: used by the service classes to set the data in the model to whatever the api returned

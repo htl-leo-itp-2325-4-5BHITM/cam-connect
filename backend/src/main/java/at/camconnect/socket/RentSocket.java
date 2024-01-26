@@ -1,5 +1,6 @@
 package at.camconnect.socket;
 
+import at.camconnect.dtos.RentsByStudentDTO;
 import at.camconnect.model.Rent;
 import at.camconnect.repository.RentRepository;
 import at.camconnect.responseSystem.CCResponse;
@@ -32,7 +33,7 @@ public class RentSocket {
         sessions.remove(session);
     }
 
-    public void broadcast(List<Rent> response) {
+    public void broadcast(List<RentsByStudentDTO> response) {
         sessions.forEach(s -> {
             s.getAsyncRemote().sendObject(response, result -> {
                if (result.getException() != null){
