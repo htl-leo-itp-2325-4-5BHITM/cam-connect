@@ -1,5 +1,7 @@
 package at.camconnect.boundary;
 
+import at.camconnect.dtos.DeviceTypeCollection;
+import at.camconnect.dtos.RentDTO;
 import at.camconnect.dtos.RentByStudentDTO;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
@@ -22,7 +24,7 @@ public class RentResource {
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response createRent(JsonObject rent) {
+    public Response createRent(RentDTO rent) {
         rentRepository.create(rent);
         return Response.ok().build();
     }
@@ -74,9 +76,9 @@ public class RentResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/getbyid/{id: [0-9]+}/confirm")
-    public Response confirm(@PathParam("id") Long id, JsonObject jsonObject) {
+    public Response confirm(@PathParam("id") Long id, RentDTO rentDTO) {
         try {
-            rentRepository.confirm(id, jsonObject);
+            rentRepository.confirm(id, rentDTO);
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }
@@ -86,9 +88,9 @@ public class RentResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/getbyid/{id: [0-9]+}/return")
-    public Response returnRent(@PathParam("id") Long id, JsonObject jsonObject) {
+    public Response returnRent(@PathParam("id") Long id, RentDTO rentDTO) {
         try {
-            rentRepository.returnRent(id, jsonObject);
+            rentRepository.returnRent(id, rentDTO);
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }
@@ -118,7 +120,7 @@ public class RentResource {
     @Transactional
     @Path("/getbyid/{id: [0-9]+}/update/{attribute}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("id") Long id, JsonObject rent, @PathParam("attribute") String attribute) {
+    public Response update(@PathParam("id") Long id, RentDTO rent, @PathParam("attribute") String attribute) {
         try {
             rentRepository.updateAttribute(attribute, id, rent);
         } catch (CCException ex) {
