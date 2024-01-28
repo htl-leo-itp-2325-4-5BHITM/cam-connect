@@ -17,6 +17,8 @@ import "./components/layout/navbar.component"
 import "./components/layout/toolbar.component"
 import "./components/layout/rentList.component"
 import "./components/layout/rentListEntry.component"
+import "./components/layout/deviceList.component"
+import "./components/layout/deviceListEntry.component"
 
 import "./components/page/equipment.component"
 import "./components/page/rent.component"

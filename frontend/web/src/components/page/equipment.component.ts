@@ -21,11 +21,7 @@ export class RentComponent extends LitElement {
             </cc-sidebar>
             <main>
                 <cc-toolbar page="${PageEnum.EQUIPMENT}"></cc-toolbar>
-                <p>equipement page</p>
-                <cc-button size="${ButtonSize.BIG}">Buttoin</cc-button>
-                <cc-button size="${ButtonSize.MEDIUM}">Buttoin</cc-button>
-                <cc-button size="${ButtonSize.SMALL}">Buttoin</cc-button>
-                <cc-button type="text">Buttoin</cc-button>
+                <cc-device-list></cc-device-list>
             </main>
         `
     }

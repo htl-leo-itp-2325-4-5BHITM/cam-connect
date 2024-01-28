@@ -15,6 +15,10 @@ div{
   }
 }
 
+.property, .value{
+  margin: 0;
+}
+
 .property{
   color: $gray800;
   font-weight: 400;
