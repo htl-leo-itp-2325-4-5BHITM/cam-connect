@@ -34,7 +34,7 @@ export class RentListEntryComponent extends LitElement {
                 <div class="details">
                     <cc-property-value property="Sensor" value="Full-Frame" isLink></cc-property-value>
                     <cc-property-value property="Auflösung" value="4k Video, 5k Foto"></cc-property-value>
-                    <cc-property-value property="Maximale-Framerate" value="100fps"></cc-property-value>
+                    <cc-property-value property="Maximale-Framerate" value="185fps"></cc-property-value>
                     <cc-property-value property="Mount" value="L-Mount" isLink></cc-property-value>
                     <cc-property-value property="Autofokus" value="Ja"></cc-property-value>
                 </div>

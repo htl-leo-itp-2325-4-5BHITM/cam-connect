@@ -26,8 +26,8 @@ export class SidebarComponent extends LitElement {
         return html`
             <style>${styles}</style>
             <div class="buttons">
-                <cc-button size="${ButtonSize.MEDIUM}" color="${ButtonColor.ACCENT}" type="${ButtonType.FILLED}">Neuer
-                    Verleih
+                <cc-button size="${ButtonSize.MEDIUM}" color="${ButtonColor.ACCENT}" type="${ButtonType.FILLED}">
+                    Neuer Verleih
                 </cc-button>
                 <cc-button size="${ButtonSize.MEDIUM}" color="${ButtonColor.ACCENT}" type="${ButtonType.OUTLINED}">
                     Multi Verleih
