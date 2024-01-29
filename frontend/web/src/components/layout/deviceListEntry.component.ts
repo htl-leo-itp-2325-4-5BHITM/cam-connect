@@ -42,12 +42,13 @@ export class RentListEntryComponent extends LitElement {
                     <img src="../../../assets/tempCamera.png" alt="">
                 </div>
             </section>
-
             
             <div class="bottom">
                 <cc-chip color="${ColorEnum.GOOD}">7 Verfügbar</cc-chip>
                 <cc-button type="${ButtonType.OUTLINED}">Verleihen</cc-button>
             </div>
+            
+            <cc-circle-select></cc-circle-select>
         `
     }
 }

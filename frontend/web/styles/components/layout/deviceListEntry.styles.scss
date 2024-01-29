@@ -14,6 +14,7 @@
   border-radius: 1.125rem;
   border: 1px solid $gray400;
   background: $gray200;
+  position: relative;
 
   h3{
     font-size: $fSizeDesktopDefault;
@@ -40,8 +41,8 @@
       justify-content: center;
 
       img{
-        height: 70%;
-        width: 70%;
+        width: 7.5vw;
+        height: 6vw;
       }
     }
   }
@@ -59,5 +60,11 @@
     display: flex;
     padding-top: .75rem !important;
     gap: 1rem;
+  }
+
+  cc-circle-select{
+    position: absolute;
+    top: 5%;
+    left: 90%;
   }
 }
