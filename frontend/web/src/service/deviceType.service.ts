@@ -87,7 +87,7 @@ export interface DeviceTypeCollection{
     cameraTypes: CameraType[]
     droneTypes: DroneType[]
     lensTypes: LensType[]
-    lighTypes: LightType[]
+    lightTypes: LightType[]
     stabilizerTypes: StabilizerType[]
     tripodHeads: TripodType[]
 }
