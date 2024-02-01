@@ -6,13 +6,7 @@ import {CircleSelectType} from "../basic/circleSelect.component"
 import {ColorEnum, SizeEnum} from "../../base"
 import {model} from "../../index";
 import {Rent, RentStatus} from "../../service/rent.service";
-
-let rentStatusToString = new Map([
-        [RentStatus.CONFIRMED, "Bestätigt"],
-        [RentStatus.WAITING, "Warte auf Bestätigung"],
-        [RentStatus.DECLINED, "Abgelehnt"],
-        [RentStatus.RETURNED, "Zurückgegeben"],
-    ])
+import {ChipType} from "../basic/chip.component"
 
 @customElement('cc-rent-list-entry')
 export class RentListEntryComponent extends LitElement {
@@ -35,15 +29,15 @@ export class RentListEntryComponent extends LitElement {
         `
     }
 
-    generateHeading(name, classes) {
+    generateHeading(name: string, schoolClass: string) {
         return html`
             <div class="heading">
-                <div class="leftSide">
+                <div class="left">
                     <p>${name}</p>
                     <p>•</p>
-                    <p>${classes}</p>
+                    <p>${schoolClass}</p>
                 </div>
-                <div class="rightSide">
+                <div class="right">
                     <cc-button>Verleih erstellen</cc-button>
                     <cc-button color="${ButtonColor.GRAY}">Details anzeigen</cc-button>
                     <cc-circle-select type="${CircleSelectType.MULTIPLE}" @click="${this.selectAll}"></cc-circle-select>
@@ -72,11 +66,14 @@ export class RentListEntryComponent extends LitElement {
 
                 <div>
                     <cc-button color="${rent.status == RentStatus.DECLINED ? ColorEnum.GRAY : ColorEnum.ACCENT}" 
-                               type="${ButtonType.TEXT}">
-                        ${this.rentStatusToButtonText(rent.status)}
+                               type="${ButtonType.TEXT}" 
+                               text="${this.rentStatusToButtonText(rent.status)}">
                     </cc-button>
                     
-                    <cc-chip color="${this.rentStatusToColor(rent.status)}" size="${SizeEnum.BIG}" expandable="${rent.status == RentStatus.DECLINED}" text="${rentStatusToString[rent.status]}">
+                    <cc-chip color="${this.rentStatusToColor(rent.status)}" 
+                             type="${rent.status == RentStatus.DECLINED ? ChipType.EXPANDABLE : ChipType.EXPANDABLE}" 
+                             text="${this.rentStatusAsString(rent.status)}"
+                    >
                         <div class="detail">
                             <h2>angegebener Ablehngrund</h2>
                             <p>${rent.verification_message}</p>
@@ -84,7 +81,7 @@ export class RentListEntryComponent extends LitElement {
                         </div>
                     </cc-chip>
                     
-                    <cc-circle-select @click="${this.checkAllSelects}"></cc-circle-select>
+                    <cc-circle-select @click="${this.autoCheckMultipleSelect}"></cc-circle-select>
                 </div>
             </div>
         `
@@ -107,8 +104,13 @@ export class RentListEntryComponent extends LitElement {
         }
     }
 
-    openError(){
-
+    rentStatusAsString(status: RentStatus) {
+        switch (status) {
+            case RentStatus.CONFIRMED: return "Bestätigt"
+            case RentStatus.WAITING: return "Warte auf Bestätigung"
+            case RentStatus.DECLINED: return "Abgelehnt"
+            case RentStatus.RETURNED: return "Zurückgegeben"
+        }
     }
 
     selectAll(elem) {
@@ -123,7 +125,7 @@ export class RentListEntryComponent extends LitElement {
      * this function detects if all selects are checked or not
      * if so the multiple select gets checked as well
      */
-    checkAllSelects() {
+    autoCheckMultipleSelect() {
         let multiple = this.shadowRoot.querySelector(`cc-circle-select`)
         multiple.checked = true
 

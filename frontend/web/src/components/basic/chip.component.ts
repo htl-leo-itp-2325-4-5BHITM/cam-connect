@@ -36,7 +36,6 @@ export class ChipComponent extends LitElement {
         if(this.hasAttribute('@click') && this.type == ChipType.DEFAULT){
             this.type = ChipType.CLICKABLE
         }
-        console.log(this.text)
     }
 
     render() {
