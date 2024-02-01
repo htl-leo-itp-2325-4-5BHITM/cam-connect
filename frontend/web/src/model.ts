@@ -30,7 +30,7 @@ export default class Model{
     readonly students = new BehaviorSubject(<Student[]>([]))
 
     readonly devices = new BehaviorSubject<Device[]>([])
-    readonly deviceTypes = new BehaviorSubject<DeviceTypeCollection>({audioTypes: [], cameraTypes: [], droneTypes: [], lensTypes: [], lighTypes: [], stabilizerTypes: [], tripodHeads: []})
+    readonly deviceTypes = new BehaviorSubject<DeviceTypeCollection>({audioTypes: [], cameraTypes: [], droneTypes: [], lensTypes: [], lightTypes: [], stabilizerTypes: [], tripodHeads: []})
     readonly deviceTypeAttributes = new BehaviorSubject<DeviceTypeAttributeCollection>({cameraResolutions: [], cameraSensors: [], cameraSystems: [], lensMounts: [], tripodHeads: []})
     /**
      * This is a representation of all the deviceTypeAttributes split up and transformed into FilterOptions that can be
