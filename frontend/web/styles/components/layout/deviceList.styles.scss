@@ -1,11 +1,17 @@
 @import "../../base";
 
+$gap: 1rem;
+
 :host {
   all: initial;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  padding: 1rem !important;
+  columns: 3;
+  column-gap: $gap;
+  padding: $gap !important;
 
-  overflow: auto;
+  overflow-y: auto;
+}
+
+:host > *{
+  break-inside: avoid;
+  margin-bottom: $gap;
 }

@@ -30,9 +30,11 @@ export class ChipComponent extends LitElement {
     detail?: HTMLElement
 
     isExpanded: boolean = false
+    nonExpandedBounds
 
     constructor() {
         super()
+        //automatically set type to clickable if element has @click assigned on call
         if(this.hasAttribute('@click') && this.type == ChipType.DEFAULT){
             this.type = ChipType.CLICKABLE
         }
@@ -60,15 +62,27 @@ export class ChipComponent extends LitElement {
 
     handleClick() {
         if(this.type == ChipType.EXPANDABLE) {
-            this.isExpanded = !this.isExpanded
-            this.style.minHeight = this.clientHeight + "px"
-            this.style.minWidth = this.clientWidth + "px"
-            this.requestUpdate()
-            setTimeout(() => {
 
-            },)
-            this.style.minHeight = "auto"
-            this.style.minWidth = "auto"
+            if(this.isExpanded){
+                this.animate([
+                    {maxHeight: "100px", maxWidth: "100px"},
+                    {maxHeight: this.nonExpandedBounds.height + "px", maxWidth: this.nonExpandedBounds.width + "px"}
+                ], {iterations: 1, duration: 500, fill: "forwards"})
+
+                setTimeout(() => {
+                    this.requestUpdate()
+                },500)
+            }
+            else{
+                this.requestUpdate()
+                this.nonExpandedBounds = this.getBoundingClientRect()
+                this.animate([
+                    {maxHeight: this.nonExpandedBounds.height + "px", maxWidth: this.nonExpandedBounds.width + "px"},
+                    {maxHeight: "1000px", maxWidth: "1000px"}
+                ], {iterations: 1, duration: 5000, fill: "forwards"})
+            }
+
+            this.isExpanded = !this.isExpanded
         }
         else if(this.type == ChipType.REMOVABLE) this.remove()
     }

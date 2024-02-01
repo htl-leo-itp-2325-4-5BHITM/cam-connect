@@ -11,6 +11,13 @@ import {Student} from "./service/student.service";
 
 export enum PageEnum { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar" }
 
+export interface AppState {
+    page: PageEnum,
+    newRentModalOpen: boolean
+}
+
+type AppStatePartial = Partial<AppState>
+
 /**
  * An instance of this class is our singular data provider. It interfaces between the individual service classes which
  * do the actual api calling, and the components or other usages in the index file that display the data.
@@ -21,8 +28,6 @@ export enum PageEnum { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar"
  *  - a load function that sets the data in the RXJS Subject and sends an update to all subscribers.
  */
 export default class Model{
-    readonly page = new BehaviorSubject<PageEnum>(PageEnum.EQUIPMENT)
-
     readonly rents = new BehaviorSubject(<RentByStudentDTO[]>([]))
 
     readonly teachers = new BehaviorSubject(<Teacher[]>([]))
@@ -59,6 +64,12 @@ export default class Model{
             map(deviceTypeAttributes => deviceTypeAttributes.tripodHeads.map(Util.deviceTypeAttributeToFilterOption))
         )
     }
+
+    readonly appState = new BehaviorSubject<AppState>({
+        page: PageEnum.EQUIPMENT,
+        newRentModalOpen: false
+    })
+
 
     //TODO details
     readonly deviceTypeNameFilterOptions = new BehaviorSubject<FilterOption[]>([
@@ -113,6 +124,10 @@ export default class Model{
 
     //region update functions
 
+    updateAppState(data: AppStatePartial){
+        this.appState.next(Object.assign({}, this.appState.value, data))
+    }
+
     //sry i cant really test this rn it might throw ewows :3
     async updateDevice(device: Device){
         DeviceService.update(device)
@@ -120,10 +135,6 @@ export default class Model{
         let devices = await lastValueFrom(this.devices)
         let updatedDevices = Util.replaceItemByIdInJsonArray<Device>(devices, device, device.device_id, "device_id")
         this.devices.next(updatedDevices)
-    }
-
-    updatePage(page: PageEnum){
-        this.page.next(page)
     }
     //endregion
 }

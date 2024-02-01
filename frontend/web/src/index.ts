@@ -34,7 +34,7 @@ import Model, {ObservedProperty, PageEnum} from "./model"
 
 //OMG its our single swouce of THWQUUUCE
 export let model = new Model()
-model.page.subscribe(data => {
+model.appState.subscribe(data => {
     console.log(data)
 })
 

@@ -3,6 +3,7 @@
 :host {
   all: initial;
   transition: all $transitionTimeLong;
+  overflow: hidden;
 }
 
 .cc-chip{
@@ -11,7 +12,6 @@
   flex-direction: column;
   justify-content: space-between;
   color: white;
-  font-size: $fSizeDesktopSmall;
   border-radius: .25rem;
   width: fit-content;
   padding: .1rem .2rem;
@@ -39,10 +39,10 @@
   }
 
   &[size="big"]{
-    font-size: $fSizeDesktopLarge;
+    font-size: $fSizeDesktopDefault;
   }
   &[size="medium"]{
-    font-size: $fSizeDesktopDefault;
+    font-size: $fSizeDesktopSmall;
   }
   &[size="small"]{
     font-size: $fSizeDesktopSmall;
