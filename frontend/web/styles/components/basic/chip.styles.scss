@@ -2,7 +2,6 @@
 
 :host {
   all: initial;
-  user-select: none;
   transition: all $transitionTimeLong;
 }
 
@@ -39,10 +38,6 @@
     --hover-background: #{$gray400};
   }
 
-  &:hover{
-    background-color: var(--hover-background);
-  }
-
   &[size="big"]{
     font-size: $fSizeDesktopLarge;
   }
@@ -55,6 +50,11 @@
 
   &[type="expandable"], &[type="clickable"], &[type="removable"]{
     cursor: pointer;
+    user-select: none;
+
+    &:hover{
+      background-color: var(--hover-background);
+    }
   }
 
   h2{
