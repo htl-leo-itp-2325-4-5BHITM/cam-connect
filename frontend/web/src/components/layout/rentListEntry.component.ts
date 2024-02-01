@@ -3,10 +3,10 @@ import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/rentListEntry.styles.scss'
 import {ButtonColor, ButtonType} from "../basic/button.component"
 import {CircleSelectType} from "../basic/circleSelect.component"
-import {ColorEnum} from "../../base"
-import {ChipSize} from "../basic/chip.component";
+import {ColorEnum, SizeEnum} from "../../base"
 import {model} from "../../index";
 import {Rent, RentStatus} from "../../service/rent.service";
+import {ChipType} from "../basic/chip.component"
 
 @customElement('cc-rent-list-entry')
 export class RentListEntryComponent extends LitElement {
@@ -29,15 +29,15 @@ export class RentListEntryComponent extends LitElement {
         `
     }
 
-    generateHeading(name, classes) {
+    generateHeading(name: string, schoolClass: string) {
         return html`
             <div class="heading">
-                <div class="leftSide">
+                <div class="left">
                     <p>${name}</p>
                     <p>•</p>
-                    <p>${classes}</p>
+                    <p>${schoolClass}</p>
                 </div>
-                <div class="rightSide">
+                <div class="right">
                     <cc-button>Verleih erstellen</cc-button>
                     <cc-button color="${ButtonColor.GRAY}">Details anzeigen</cc-button>
                     <cc-circle-select type="${CircleSelectType.MULTIPLE}" @click="${this.selectAll}"></cc-circle-select>
@@ -65,12 +65,15 @@ export class RentListEntryComponent extends LitElement {
                 </div>
 
                 <div>
-                    <cc-button color="${rent.status == RentStatus.DECLINED ? ColorEnum.GRAY : ColorEnum.ACCENT}" type="${ButtonType.TEXT}" text="${this.getButtonTextOfStatus(rent.status)}"></cc-button>
+                    <cc-button color="${rent.status == RentStatus.DECLINED ? ColorEnum.GRAY : ColorEnum.ACCENT}" 
+                               type="${ButtonType.TEXT}" 
+                               text="${this.rentStatusToButtonText(rent.status)}">
+                    </cc-button>
                     
-                    <cc-chip color="${this.getColorOfStatus(rent.status)}" size="${ChipSize.BIG}" expandable="${rent.status == RentStatus.DECLINED}">
-                        <div>
-                           ${this.getStringOfStatus(rent.status)}
-                        </div>
+                    <cc-chip color="${this.rentStatusToColor(rent.status)}" 
+                             type="${rent.status == RentStatus.DECLINED ? ChipType.EXPANDABLE : ChipType.EXPANDABLE}" 
+                             text="${this.rentStatusAsString(rent.status)}"
+                    >
                         <div class="detail">
                             <h2>angegebener Ablehngrund</h2>
                             <p>${rent.verification_message}</p>
@@ -78,13 +81,13 @@ export class RentListEntryComponent extends LitElement {
                         </div>
                     </cc-chip>
                     
-                    <cc-circle-select @click="${this.checkAllSelects}"></cc-circle-select>
+                    <cc-circle-select @click="${this.autoCheckMultipleSelect}"></cc-circle-select>
                 </div>
             </div>
         `
     }
 
-    getButtonTextOfStatus(status: RentStatus){
+    rentStatusToButtonText(status: RentStatus){
         switch (status) {
             case RentStatus.CONFIRMED: return "Zurückgeben"
             case RentStatus.DECLINED:
@@ -92,16 +95,7 @@ export class RentListEntryComponent extends LitElement {
         }
     }
 
-    getStringOfStatus(status: RentStatus){
-        switch (status) {
-            case RentStatus.CONFIRMED: return "Bestätigt"
-            case RentStatus.WAITING: return "Warte auf Bestätigung"
-            case RentStatus.DECLINED: return "Abgelehnt"
-            case RentStatus.RETURNED: return "Zurückgegeben"
-        }
-    }
-
-    getColorOfStatus(status: RentStatus) {
+    rentStatusToColor(status: RentStatus) {
         switch (status) {
             case RentStatus.CONFIRMED: return ColorEnum.GOOD
             case RentStatus.WAITING: return ColorEnum.MID
@@ -110,8 +104,13 @@ export class RentListEntryComponent extends LitElement {
         }
     }
 
-    openError(){
-
+    rentStatusAsString(status: RentStatus) {
+        switch (status) {
+            case RentStatus.CONFIRMED: return "Bestätigt"
+            case RentStatus.WAITING: return "Warte auf Bestätigung"
+            case RentStatus.DECLINED: return "Abgelehnt"
+            case RentStatus.RETURNED: return "Zurückgegeben"
+        }
     }
 
     selectAll(elem) {
@@ -126,7 +125,7 @@ export class RentListEntryComponent extends LitElement {
      * this function detects if all selects are checked or not
      * if so the multiple select gets checked as well
      */
-    checkAllSelects() {
+    autoCheckMultipleSelect() {
         let multiple = this.shadowRoot.querySelector(`cc-circle-select`)
         multiple.checked = true
 

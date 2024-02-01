@@ -18,6 +18,8 @@ export interface ccResponse<T>{
 
 export enum ColorEnum {ACCENT="accent", GOOD="good", MID="mid", BAD="bad", GRAY="gray"}
 
+export enum SizeEnum {BIG="big", MEDIUM="medium", SMALL="small"}
+
 export class api{
     /**
      * querys the backend and returns the resulting data

@@ -13,6 +13,10 @@ export class CalendarComponent extends LitElement {
             <main>
                 <cc-toolbar page="${PageEnum.CALENDAR}"></cc-toolbar>
                 <p>calendar page</p>
+                <cc-chip type="expandable" text="chippy">
+                    <h3>hallo</h3>
+                    <p>welt</p>
+                </cc-chip>
             </main>
         `
     }

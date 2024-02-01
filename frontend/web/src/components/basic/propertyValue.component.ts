@@ -1,8 +1,8 @@
 import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/property-value.styles.scss'
+import {SizeEnum} from "../../base"
 
-enum Size {BIG, SMALL}
 
 @customElement('cc-property-value')
 export class PropertyValueComponent extends LitElement {
@@ -12,8 +12,8 @@ export class PropertyValueComponent extends LitElement {
     @property({type: String})
     value?: String = 'Value';
 
-    @property({type: Size})
-    size?: Size = Size.BIG
+    @property({type: SizeEnum})
+    size?: SizeEnum = SizeEnum.MEDIUM
 
     @property({type: Boolean})
     isLink?: Boolean = false

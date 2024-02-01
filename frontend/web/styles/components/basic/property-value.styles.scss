@@ -7,12 +7,22 @@ div{
   font-size: 1rem;
 
   &[size="big"] {
-    font-size: 1.125rem;
+    font-size: $fSizeDesktopLarge;
+  }
+  &[size="medium"] {
+    font-size: $fSizeDesktopDefault;
+  }
+  &[size="small"] {
+    font-size: $fSizeDesktopSmall;
   }
   &[isLink="true"] .value {
     cursor: pointer;
     text-decoration: underline;
   }
+}
+
+.property, .value{
+  margin: 0;
 }
 
 .property{

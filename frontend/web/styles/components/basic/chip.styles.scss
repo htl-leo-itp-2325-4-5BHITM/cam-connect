@@ -2,6 +2,7 @@
 
 :host {
   all: initial;
+  transition: all $transitionTimeLong;
 }
 
 .cc-chip{
@@ -14,33 +15,46 @@
   border-radius: .25rem;
   width: fit-content;
   padding: .1rem .2rem;
+  transition: background-color $transitionTimeShort;
 
   &[color="ACCENT"]{
     background-color: $accentDarkmode;
+    --hover-background: #{$accentDarkmodeDark};
   }
   &[color="GOOD"]{
     background-color: $good;
+    --hover-background: #{$goodDark};
   }
   &[color="MID"]{
     background-color: $mid;
+    --hover-background: #{$midDark};
   }
   &[color="BAD"]{
     background-color: $bad;
+    --hover-background: #{$badDark};
   }
   &[color="GRAY"]{
     background-color: $gray500;
-  }
-  &[color="LIGHTGRAY"]{
-    background-color: $gray700;
-    color: $gray300;
+    --hover-background: #{$gray400};
   }
 
-  &[size="BIG"]{
-    font-size: 1.2rem;
+  &[size="big"]{
+    font-size: $fSizeDesktopLarge;
+  }
+  &[size="medium"]{
+    font-size: $fSizeDesktopDefault;
+  }
+  &[size="small"]{
+    font-size: $fSizeDesktopSmall;
   }
 
-  &[expandable="true"]{
+  &[type="expandable"], &[type="clickable"], &[type="removable"]{
     cursor: pointer;
+    user-select: none;
+
+    &:hover{
+      background-color: var(--hover-background);
+    }
   }
 
   h2{

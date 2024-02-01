@@ -4,6 +4,18 @@ div{
   display: grid;
   place-content: center;
   cursor: pointer;
+  user-select: none;
+
+  margin: -.4rem;
+  padding: .4rem;
+
+  border-radius: 50%;
+
+  transition: background-color $hoverBackgroundTransitionTime;
+
+  &:hover{
+    background-color: $hoverBackground;
+  }
 
   &.multiple img{
     width: 1.6rem;

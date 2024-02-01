@@ -4,27 +4,24 @@ import styles from '../../../styles/components/basic/chip.styles.scss'
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { faXmark } from "@fortawesome/free-solid-svg-icons"
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
-import {ColorEnum} from "../../base"
+import {ColorEnum, SizeEnum} from "../../base"
 import {ButtonComponent} from "./button.component";
 
-export enum ChipSize {SMALL="small", BIG="big"}
+export enum ChipType { EXPANDABLE="expandable", REMOVABLE="removable", CLICKABLE="clickable", DEFAULT="default" }
 
 @customElement('cc-chip')
 export class ChipComponent extends LitElement {
     @property({type: ColorEnum})
     color?: ColorEnum = ColorEnum.ACCENT
 
-    @property({type: ChipSize})
-    size?: ChipSize = ChipSize.BIG
-
-    @property({type: Boolean})
-    removeable?: Boolean = false
+    @property({type: SizeEnum})
+    size?: SizeEnum = SizeEnum.MEDIUM
 
     @property({type: String})
-    text?: String = "Chip"
+    text?: String = this.innerText || "Chip";
 
-    @property({type: Boolean, converter: (value) => value === '' || value === 'true'})
-    expandable?: Boolean = false
+    @property()
+    type: ChipType = ChipType.DEFAULT
 
     @property({type: HTMLElement})
     base?: HTMLElement
@@ -32,23 +29,48 @@ export class ChipComponent extends LitElement {
     @property({type: HTMLElement})
     detail?: HTMLElement
 
-    render() {
-        this.base = this.querySelector("div") ? this.querySelector("div") : this
-        this.detail = this.querySelector(".detail")
+    isExpanded: boolean = false
 
-        return html`
-            <style>${styles}</style>
-             <div class="cc-chip" color="${this.color}" size="${this.size}" expandable="${this.expandable}" @click="${this.handleClick}">
-                ${this.querySelector("div") ? this.querySelector("div") : this.innerHTML}
-                ${this.removeable ? this.renderRemoveButton() : ""}
-            </div>
-        `
+    constructor() {
+        super()
+        if(this.hasAttribute('@click') && this.type == ChipType.DEFAULT){
+            this.type = ChipType.CLICKABLE
+        }
+    }
+
+    render() {
+        if(this.isExpanded){
+            return html`
+                <style>${styles}</style>
+                 <div class="cc-chip" color="${this.color}" size="${this.size}" type="${this.type}" @click="${this.handleClick}">
+                     expanded
+                    <slot></slot>
+                </div>
+            `
+        } else{
+            return html`
+                <style>${styles}</style>
+                 <div class="cc-chip" color="${this.color}" size="${this.size}" type="${this.type}" @click="${this.handleClick}">
+                    ${this.text}
+                    ${this.type == ChipType.REMOVABLE ? this.renderRemoveButton() : ""}
+                </div>
+            `
+        }
     }
 
     handleClick() {
-        if(this.expandable) this.toggleDetails()
-        if(this.removeable === false) return
-        this.remove()
+        if(this.type == ChipType.EXPANDABLE) {
+            this.isExpanded = !this.isExpanded
+            this.style.minHeight = this.clientHeight + "px"
+            this.style.minWidth = this.clientWidth + "px"
+            this.requestUpdate()
+            setTimeout(() => {
+
+            },)
+            this.style.minHeight = "auto"
+            this.style.minWidth = "auto"
+        }
+        else if(this.type == ChipType.REMOVABLE) this.remove()
     }
 
     renderRemoveButton(){
@@ -57,21 +79,6 @@ export class ChipComponent extends LitElement {
                 ${unsafeSVG(icon(faXmark).html[0])}
             </div>
         `
-    }
-
-    isOpen?: boolean = false
-    toggleDetails() {
-        this.isOpen = !this.isOpen
-        console.log(this.isOpen)
-
-        if(this.isOpen){
-            this.shadowRoot.querySelector(".cc-chip").innerHTML = this.detail.innerHTML
-        } else{
-            this.shadowRoot.querySelector(".cc-chip").innerHTML = `
-                ${this.base.innerHTML}
-                ${this.removeable ? this.renderRemoveButton() : ""}
-            `
-        }
     }
 }
 

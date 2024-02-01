@@ -5,7 +5,8 @@ import { icon } from '@fortawesome/fontawesome-svg-core'
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { faTrash, faCamera } from "@fortawesome/free-solid-svg-icons"
 import {ObservedProperty, PageEnum} from "../../model"
-import {ButtonColor, ButtonSize, ButtonType} from "../basic/button.component"
+import {ButtonColor, ButtonType} from "../basic/button.component"
+import {SizeEnum} from "../../base"
 
 @customElement('cc-toolbar')
 export class ToolbarComponent extends LitElement {
@@ -23,21 +24,21 @@ export class ToolbarComponent extends LitElement {
         return html`
             <style>${styles}</style>
             <div class="main rentlist">
-                <cc-button size="${ButtonSize.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
+                <cc-button size="${SizeEnum.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
                     <div slot="left" class="icon accent">
                         <img slot="left" src="../../../assets/icon/select_circle.svg" alt="+">
                     </div>
                     Auswahl aufheben
                 </cc-button>
                 
-                <cc-button size="${ButtonSize.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
+                <cc-button size="${SizeEnum.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
                     <div slot="left" class="icon accent">
                         ${unsafeSVG(icon(faTrash).html[0])}
                     </div>
                     Löschen
                 </cc-button>
     
-                <cc-button size="${ButtonSize.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
+                <cc-button size="${SizeEnum.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
                     <div slot="left" class="icon accent">
                         <img slot="left" src="../../../assets/icon/return.svg" alt="<-">                    
                     </div>
@@ -52,7 +53,7 @@ export class ToolbarComponent extends LitElement {
             <style>${styles}</style>
             <div class="main equipment">
                 <div>
-                    <cc-button size="${ButtonSize.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
+                    <cc-button size="${SizeEnum.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
                         <div slot="left" class="icon accent">
                             ${unsafeSVG(icon(faCamera).html[0])}
                         </div>
@@ -61,14 +62,14 @@ export class ToolbarComponent extends LitElement {
                 </div>
                 
                 <div>
-                    <cc-button size="${ButtonSize.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
+                    <cc-button size="${SizeEnum.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
                         <div slot="left" class="icon accent">
                             <img slot="left" src="../../../assets/icon/select_circle.svg" alt="+">
                         </div>
                         Auswahl aufheben
                     </cc-button>
     
-                    <cc-button size="${ButtonSize.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
+                    <cc-button size="${SizeEnum.SMALL}" color="${ButtonColor.GRAY}" type="${ButtonType.TEXT}">
                         <div slot="left" class="icon accent">${unsafeSVG(icon(faTrash).html[0])}</div>
                         Gerät(e) löschen
                     </cc-button>

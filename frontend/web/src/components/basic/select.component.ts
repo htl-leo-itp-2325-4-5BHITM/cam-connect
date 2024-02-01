@@ -1,8 +1,7 @@
 import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, queryAssignedElements, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/select.styles.scss'
-
-export enum SelectSize {BIG="big", DEFAULT="default", SMALL="small"}
+import {SizeEnum} from "../../base"
 
 @customElement('cc-select')
 export class SelectComponent extends LitElement {
@@ -10,7 +9,7 @@ export class SelectComponent extends LitElement {
     options!: Array<HTMLElement>
 
     @property()
-    size:SelectSize = SelectSize.DEFAULT
+    size:SizeEnum = SizeEnum.MEDIUM
 
     @property()
     optionSelected: (option: HTMLElement) => void = () => {}

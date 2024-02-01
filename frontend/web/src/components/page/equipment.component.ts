@@ -3,8 +3,6 @@ import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/page/equipment.styles.scss'
 import {model} from "../../index"
 import {PageEnum} from "../../model"
-import {FilterContainerComponent} from "../basic/filterContainer.component"
-import {ButtonSize} from "../basic/button.component"
 
 @customElement('cc-equipment')
 export class RentComponent extends LitElement {
@@ -21,11 +19,7 @@ export class RentComponent extends LitElement {
             </cc-sidebar>
             <main>
                 <cc-toolbar page="${PageEnum.EQUIPMENT}"></cc-toolbar>
-                <p>equipement page</p>
-                <cc-button size="${ButtonSize.BIG}">Buttoin</cc-button>
-                <cc-button size="${ButtonSize.MEDIUM}">Buttoin</cc-button>
-                <cc-button size="${ButtonSize.SMALL}">Buttoin</cc-button>
-                <cc-button type="text">Buttoin</cc-button>
+                <cc-device-list></cc-device-list>
             </main>
         `
     }
