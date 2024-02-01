@@ -1,8 +1,7 @@
 import {LitElement, css, html} from 'lit'
 import {customElement, property, queryAssignedElements} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/createRent.styles.scss'
-import {ButtonColor, ButtonComponent, ButtonSize, ButtonType} from '../basic/button.component'
-import {SelectSize} from "../basic/select.component"
+import {ButtonColor, ButtonComponent, ButtonType} from '../basic/button.component'
 import {FilterContainerComponent} from "../basic/filterContainer.component"
 import {filter} from "rxjs"
 import {ColorEnum} from "../../base"

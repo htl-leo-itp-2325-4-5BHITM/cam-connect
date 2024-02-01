@@ -3,8 +3,7 @@ import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/rentListEntry.styles.scss'
 import {ButtonColor, ButtonType} from "../basic/button.component"
 import {CircleSelectType} from "../basic/circleSelect.component"
-import {ColorEnum} from "../../base"
-import {ChipSize} from "../basic/chip.component";
+import {ColorEnum, SizeEnum} from "../../base"
 import {model} from "../../index";
 import {Rent, RentStatus} from "../../service/rent.service";
 
@@ -67,7 +66,7 @@ export class RentListEntryComponent extends LitElement {
                 <div>
                     <cc-button color="${rent.status == RentStatus.DECLINED ? ColorEnum.GRAY : ColorEnum.ACCENT}" type="${ButtonType.TEXT}" text="${this.getButtonTextOfStatus(rent.status)}"></cc-button>
                     
-                    <cc-chip color="${this.getColorOfStatus(rent.status)}" size="${ChipSize.BIG}" expandable="${rent.status == RentStatus.DECLINED}">
+                    <cc-chip color="${this.getColorOfStatus(rent.status)}" size="${SizeEnum.BIG}" expandable="${rent.status == RentStatus.DECLINED}">
                         <div>
                            ${this.getStringOfStatus(rent.status)}
                         </div>

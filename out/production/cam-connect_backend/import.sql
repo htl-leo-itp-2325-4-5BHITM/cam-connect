@@ -19,6 +19,11 @@ insert into devicetypeattribute(dtype, name, details) values ('LensMount', 'Niko
 insert into devicetypeattribute(dtype, name, details) values ('LensMount', 'L-Mount', 'Wird benutzt von Lumix, Leica und Blackmagic. Geignet für alle sensor größen bis inklusive full frame');
 insert into devicetypeattribute(dtype, name, details) values ('LensMount', 'Micro Four Thirds', 'Für den micro four thirds sensor');
 
+-- Tripod Heads
+insert into devicetypeattribute(dtype, name, details) values ('TripodHead', '2 axis', '2 achsen ajustierbar');
+insert into devicetypeattribute(dtype, name, details) values ('TripodHead', '3 axis', '3 achsen ajustierbar');
+insert into devicetypeattribute(dtype, name, details) values ('TripodHead', 'Ballhead', 'In alle richtungen adjustierbarer Kugelkopf');
+
 INSERT INTO tag (description, name)
 VALUES
     ('Foto', 'Dieses Gerät ist am besten für Fotografie geeignet'),

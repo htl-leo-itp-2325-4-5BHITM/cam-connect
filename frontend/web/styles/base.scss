@@ -18,14 +18,11 @@ img, svg, path{
 img{
     width:100%;
     display: block;
+    object-fit: contain;
 }
 
 html{
     scroll-behavior: smooth;
-}
-
-body{
-	background-color: hsl(0,0%,10%);
 }
 
 ::selection{

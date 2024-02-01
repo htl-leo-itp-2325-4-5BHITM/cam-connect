@@ -28,22 +28,11 @@
 
   section {
     display: flex;
+    gap: .5rem;
 
     div{
-      &:first-child{
-        width: 60%;
-      }
-      &:last-child{
-        width: 40%;
-      }
-
       display: flex;
       justify-content: center;
-
-      img{
-        width: 7.5vw;
-        height: 6vw;
-      }
     }
   }
 
@@ -53,6 +42,7 @@
     gap: .1rem;
     border-top: 1px solid $gray500;
     padding-top: .5rem;
+    width: 70%;
   }
 
   .bottom{
@@ -64,7 +54,7 @@
 
   cc-circle-select{
     position: absolute;
-    top: 5%;
-    left: 90%;
+    top: .8rem;
+    right: .8rem;
   }
 }
