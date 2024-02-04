@@ -11,10 +11,8 @@
 label{
   cursor: inherit;
   font-weight: 400;
-  transition: background-color .2s;
-  border-radius: .3rem;
-  padding: .1rem .2rem;
-  margin: -.1rem -.2rem;
+  transition: background-color $transitionTimeShort;
+  @include textBackgroundHoverPreparation
 }
 
 .toggle{
@@ -39,6 +37,17 @@ label{
     }
   }
 
+  &::before{
+    content: "";
+    position: absolute;
+    inset: -.3rem;
+    background-color: $hoverBackgroundLight;
+    border-radius: calc(var(--knob-size) + .3rem);
+    opacity: 0;
+    transition: opacity .2s;
+    z-index: -1;
+  }
+
   .knob{
     height: var(--knob-size);
     width: var(--knob-size);
@@ -49,13 +58,8 @@ label{
     z-index: 2;
 
     &::before{
-      --padding: 1rem;
       content: "";
       position: absolute;
-      /*top: calc(var(--padding) / -2);
-      left: calc(var(--padding) / -2);*/
-      /*background-color: $hoverBackground;
-      padding: var(--padding) !important;*/
       inset: -.5rem;
       border: .5rem solid $hoverBackground;
       background-color: transparent;
@@ -68,7 +72,11 @@ label{
 }
 
 :host(:hover) {
-  .knob::before {
+  /*.knob::before {
+    opacity: 1;
+  }*/
+
+  .toggle::before{
     opacity: 1;
   }
 

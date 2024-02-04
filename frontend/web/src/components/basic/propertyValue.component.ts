@@ -1,6 +1,6 @@
 import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
-import styles from '../../../styles/components/basic/property-value.styles.scss'
+import styles from '../../../styles/components/basic/propertyValue.styles.scss'
 import {SizeEnum} from "../../base"
 
 
@@ -21,10 +21,10 @@ export class PropertyValueComponent extends LitElement {
     render() {
         return html`
             <style>${styles}</style>
-            <div size="${this.size}" isLink="${this.isLink}">
-                <p class="property">${this.property}:</p>
-                <p class="value">${this.value}</p>
-            </div>`
+            <p size="${this.size}" isLink="${this.isLink}">
+                <span class="property">${this.property}:</span>
+                <span class="value">${this.value}</span>
+            </p>`
     }
 }
 

@@ -7,6 +7,12 @@
   background-color: $gray100;
 }
 
+.sidebar-container{
+  display: flex;
+  height: 100%;
+  overflow:hidden;
+}
+
 :global{
   .test{
     background-color: black;

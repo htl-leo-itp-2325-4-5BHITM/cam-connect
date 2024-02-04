@@ -10,12 +10,9 @@ export class RentComponent extends LitElement {
     render() {
         return html`
             <style>${styles}</style>
-            <cc-sidebar accountname="wird später mal ein observable">
-            </cc-sidebar>
-            <main>
-                <cc-toolbar page="${PageEnum.RENTS}"></cc-toolbar>
-                <cc-rent-list></cc-rent-list>
-            </main>
+            
+            <cc-toolbar page="${PageEnum.RENTS}"></cc-toolbar>
+            <cc-rent-list></cc-rent-list>
         `
     }
 }

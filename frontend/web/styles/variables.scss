@@ -4,7 +4,7 @@ $fSizeDesktopSmall: 0.9rem;
 $fSizeDesktopTiny: 0.8rem;
 
 $transitionTimeShort: 200ms;
-$transitionTimeMedium: 350ms;
+$transitionTimeMedium: 300ms;
 $transitionTimeLong: 500ms;
 
 $accentDarkmodeDark: hsla(201,50.3%,37.1%,1);
@@ -39,6 +39,12 @@ $overlay: hsla(0,0%,24.3%,0.200);
 $hoverBackground: hsla(0, 0%, 50%, 0.35);
 $hoverBackgroundLight: hsla(0, 0%, 50%, 0.2);
 $hoverBackgroundTransitionTime: #{$transitionTimeShort};
+
+@mixin textBackgroundHoverPreparation() {
+  border-radius: .3rem;
+  padding: .1rem .2rem !important;
+  margin: -.1rem -.2rem !important;
+}
 
 @mixin overlayBlur() {
   backdrop-filter : blur(12px);
