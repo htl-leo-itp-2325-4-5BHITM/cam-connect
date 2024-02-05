@@ -6,6 +6,8 @@ $gap: 1rem;
   all: initial;
   columns: 4;
   column-gap: $gap;
+  /*column-fill: balance;
+  break-inside: avoid;*/
   padding: $gap !important;
 
   overflow-y: auto;

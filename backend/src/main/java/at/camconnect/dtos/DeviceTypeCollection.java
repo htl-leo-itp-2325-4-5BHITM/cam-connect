@@ -1,6 +1,6 @@
 package at.camconnect.dtos;
 
-import at.camconnect.model.DeviceTypes.*;
+import at.camconnect.model.DeviceTypeVariants.*;
 
 import java.util.List;
 

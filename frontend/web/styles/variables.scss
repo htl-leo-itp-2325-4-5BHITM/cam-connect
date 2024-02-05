@@ -44,6 +44,7 @@ $hoverBackgroundTransitionTime: #{$transitionTimeShort};
   border-radius: .3rem;
   padding: .1rem .2rem !important;
   margin: -.1rem -.2rem !important;
+  background-color: transparent;
 }
 
 @mixin overlayBlur() {

@@ -82,7 +82,7 @@ export interface TripodTypeDTO extends DeviceType{
 
 //endregion interfaces
 
-export interface DeviceTypeCollection{
+export interface DeviceTypeVariantCollection {
     audioTypes: AudioType[]
     cameraTypes: CameraType[]
     droneTypes: DroneType[]
@@ -93,7 +93,7 @@ export interface DeviceTypeCollection{
 }
 export default class DeviceTypeService {
     static fetchAll(){
-        api.fetchData<DeviceTypeCollection>("/devicetype/getall")
+        api.fetchData<DeviceTypeVariantCollection>("/devicetype/getall")
             .then(data => {
                 model.loadDeviceTypes(data)
             })
