@@ -1,6 +1,6 @@
 import {model} from "../index"
 import {config, api} from "../base"
-import {DeviceType, DeviceTypeCollection} from "./deviceType.service"
+import {DeviceType, DeviceTypeVariantCollection} from "./deviceType.service"
 
 export interface Device{
     device_id: number

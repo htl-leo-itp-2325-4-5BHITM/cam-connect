@@ -1,6 +1,5 @@
-package at.camconnect.model.DeviceTypes;
+package at.camconnect.model.DeviceTypeVariants;
 
-import at.camconnect.dtos.DeviceTypeDTO;
 import at.camconnect.dtos.DeviceTypeGlobal;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypeAttributes.CameraResolution;

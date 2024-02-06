@@ -13,23 +13,18 @@ public class Rent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rent_id;
-
     @ManyToOne
     @JoinColumn(name = "student_id")
     private Student student;
-
     @ManyToOne
     @JoinColumn(name = "device_id")
     private Device device;
-
     @ManyToOne
     @JoinColumn(name = "teacher_id_start")
     private Teacher teacher_start;
-
     @ManyToOne
     @JoinColumn(name = "teacher_id_end")
     private Teacher teacher_end;
-
     private LocalDate rent_start;
     private LocalDate rent_end_planned;
     private LocalDate rent_end_actual;

@@ -1,4 +1,4 @@
-package at.camconnect.model.DeviceTypes;
+package at.camconnect.model.DeviceTypeVariants;
 
 import at.camconnect.dtos.DeviceTypeGlobal;
 import at.camconnect.model.DeviceType;
