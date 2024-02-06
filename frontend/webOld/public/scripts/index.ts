@@ -24,6 +24,7 @@ function requestAllStudents() {
         })
         .then((data) => {
             allStudents = data
+            console.log(data)
 
             //TODO do this with promises
             requestAllTeachers()
@@ -39,6 +40,8 @@ function requestAllTeachers() {
         })
         .then(data => {
             allTeachers = data
+            console.log(data)
+
 
             requestAllRents()
         })
@@ -47,12 +50,13 @@ function requestAllTeachers() {
 
 function requestAllRents() {
     allRents = []
-    fetch(APPLICATION_URL + "/rent/getall")
+    fetch(APPLICATION_URL + "/rent/getallsinglelist")
         .then(result => {
             return result.json()
         })
         .then(data => {
-            allRents = data
+            allRents = data.data
+            console.log(data)
 
             generateTable()
         })
@@ -344,7 +348,7 @@ function returnRent(rentId: number, code: string){
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            "verification_code": code || "",
+            "verification_code": code || "lasdnhfgköj",
             "verification_status": "RETURNED",
             "verification_message": " "
         })

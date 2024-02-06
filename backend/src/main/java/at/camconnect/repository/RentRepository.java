@@ -60,6 +60,10 @@ public class RentRepository {
         return CCResponse.ok();
     }
 
+    public List<Rent> getAllSingleList(){
+        return em.createQuery("SELECT r FROM Rent r", Rent.class).getResultList();
+    }
+
     public List<RentByStudentDTO> getAll(){
         List<Student> students = em.createQuery(
                 "SELECT s FROM Rent r" +
@@ -175,31 +179,13 @@ public class RentRepository {
     public void returnRent(Long rentId, RentDTO rentDTO){
         Rent rent = getById(rentId);
 
+        //instant return if already confirmed
         if(!rent.getStatus().equals(RentStatusEnum.CONFIRMED)){
             throw new CCException(1205);
         }
 
-        String verificationCode;
-        String verificationMessage;
-        RentStatusEnum verificationStatus;
-
-        try{
-            verificationCode = rentDTO.verification_code();
-            verificationMessage = rentDTO.verification_message();
-            verificationStatus = rentDTO.status();
-        } catch (IllegalArgumentException e) {
-            throw new CCException(1106);
-        }
-
-        Set<RentStatusEnum> allowedStatus = Set.of(RentStatusEnum.RETURNED);
-        // set only if the current status is allowed and if the verification_code is the same as provided
-        if (allowedStatus.contains(verificationStatus) && rent.getVerification_code().equals(verificationCode)) {
-            rent.setStatus(verificationStatus);
-            rent.setVerification_message(verificationMessage);
-            em.merge(rent);
-        } else{
-            throw new CCException(1205, "Message: " + verificationMessage + ", Status: " + verificationStatus + ", Code: " + verificationCode);
-        }
+        rent.setStatus(RentStatusEnum.RETURNED);
+        em.merge(rent);
 
         MailMessage message = new MailMessage();
         message.setFrom("signup.camconnect@gmail.com");

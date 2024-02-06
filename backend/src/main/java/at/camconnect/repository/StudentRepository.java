@@ -46,8 +46,9 @@ public class StudentRepository{
     }
 
     public List<Student> search(StudentDTO studentDTO){
-        Query q = em.createQuery("SELECT s FROM Student s WHERE upper(s.firstname) LIKE :firstname || '%' ", Student.class)
+        Query q = em.createQuery("SELECT s FROM Student s WHERE upper(s.firstname) LIKE :firstname || '%' and upper(s.lastname) like :lastname || '%'", Student.class)
                 .setParameter("firstname", studentDTO.firstname().toUpperCase())
+                .setParameter("lastname", studentDTO.lastname().toUpperCase())
                 .setMaxResults(10);
         return (List<Student>) q.getResultList();
     }
@@ -67,16 +68,16 @@ public class StudentRepository{
             lineArray[0] = lineArray[0].replaceAll("[^a-zA-Z_-]", "");
 
             //checks if the csv file matches the required structure
-            if(lineArray.length != 6) throw new CCException(1204, "invalid line length");
-            if (!lineArray[0].equals("vorname") || !lineArray[1].equals("nachname") || !lineArray[2].equals("klasse") || !lineArray[3].equals("email") || !lineArray[4].equals("username") || !lineArray[5].equals("passwort")){
-                System.out.println("invalid header row: " + lineArray[0] + ", " + lineArray[1] + ", " + lineArray[2] + ", " + lineArray[3] + ", " + lineArray[4]);
-                throw new CCException(1204, "invalid header row: " + lineArray[0] + ", " + lineArray[1] + ", " + lineArray[2] + ", " + lineArray[3] + ", " + lineArray[4]);
+            if(lineArray.length != 4) throw new CCException(1204, "invalid line length");
+            if (!lineArray[0].equals("Klasse") || !lineArray[1].equals("Familienname") || !lineArray[2].equals("Vorname") || !lineArray[3].equals("Email 1 (Schüler)")){
+                System.out.println("invalid header row: " + lineArray[0] + ", " + lineArray[1] + ", " + lineArray[2] + ", " + lineArray[3]);
+                throw new CCException(1204, "invalid header row: " + lineArray[0] + ", " + lineArray[1] + ", " + lineArray[2] + ", " + lineArray[3]);
             }
 
             while ((line = reader.readLine()) != null) {
                 lineArray = line.split(";");
-                if(lineArray.length != 6) break;
-                create(new Student(lineArray[0], lineArray[1], lineArray[2], lineArray[3], lineArray[4], lineArray[5]));
+                if(lineArray.length != 4) break;
+                create(new Student(lineArray[0], lineArray[1], lineArray[2], lineArray[3]));
             }
         } catch (IOException e) {
             throw new CCException(1204, "File could not be read");

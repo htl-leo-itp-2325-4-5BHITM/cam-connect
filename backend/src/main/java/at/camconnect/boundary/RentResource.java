@@ -3,6 +3,7 @@ package at.camconnect.boundary;
 import at.camconnect.dtos.DeviceTypeCollection;
 import at.camconnect.dtos.RentDTO;
 import at.camconnect.dtos.RentByStudentDTO;
+import at.camconnect.model.Rent;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.repository.RentRepository;
@@ -35,6 +36,19 @@ public class RentResource {
     public Response createRentEmpty() {
         rentRepository.createEmpty();
         return Response.ok().build();
+    }
+
+    @GET
+    @Path("/getallsinglelist")
+    public Response getAllSingleList(){
+        List<Rent> result;
+        try{
+            result = rentRepository.getAllSingleList();
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok(result);
     }
 
     @GET

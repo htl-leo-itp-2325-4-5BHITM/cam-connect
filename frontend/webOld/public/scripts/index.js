@@ -1,5 +1,5 @@
 var APPLICATION_URL = "http://localhost:8080/api";
-if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
+if (window.location.hostname !== "localhost") {
     APPLICATION_URL = "http://144.24.171.164/api";
 }
 var allRents = [];
@@ -15,6 +15,7 @@ function requestAllStudents() {
     })
         .then(function (data) {
         allStudents = data;
+        console.log(data);
         requestAllTeachers();
     })
         .catch(function (error) { return console.error(error); });
@@ -27,18 +28,20 @@ function requestAllTeachers() {
     })
         .then(function (data) {
         allTeachers = data;
+        console.log(data);
         requestAllRents();
     })
         .catch(function (error) { return console.error(error); });
 }
 function requestAllRents() {
     allRents = [];
-    fetch(APPLICATION_URL + "/rent/getall")
+    fetch(APPLICATION_URL + "/rent/getallsinglelist")
         .then(function (result) {
         return result.json();
     })
         .then(function (data) {
-        allRents = data;
+        allRents = data.data;
+        console.log(data);
         generateTable();
     })
         .catch(function (error) { return console.error(error); });
@@ -253,7 +256,7 @@ function returnRent(rentId, code) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            "verification_code": code || "",
+            "verification_code": code || "lasdnhfgköj",
             "verification_status": "RETURNED",
             "verification_message": " "
         })
@@ -274,24 +277,36 @@ function returnRent(rentId, code) {
 function removeRow(rentId) {
     var _a, _b;
     if (((_a = allRents[rentId]) === null || _a === void 0 ? void 0 : _a.status) != "WAITING" && ((_b = allRents[rentId]) === null || _b === void 0 ? void 0 : _b.status) != "RETURNED") {
-        var confirmation = confirm("Are you sure you want to delete this row?");
-        if (confirmation) {
-            fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/remove"))
-                .then(function (response) {
-                return response.json();
-            })
-                .then(function (data) {
-                console.log(data);
-                requestAllRents();
-                if (data.ccStatus.statusCode == 1000) {
-                    PopupEngine.createNotification({ text: "Verleih wurde erfolgreich gel\u00F6scht" });
-                }
-                else {
-                    PopupEngine.createNotification({ text: "Es gab einen Fehler beim L\u00F6schen des Verleihs" });
-                }
-            })
-                .catch(function (error) { return console.error(error); });
-        }
+        PopupEngine.createModal({
+            heading: "Bestätigen",
+            text: "Sicher das sie diesen Eintrag Löschen wollen?",
+            buttons: [
+                {
+                    text: "löschen",
+                    action: function () {
+                        fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/remove"))
+                            .then(function (response) {
+                            return response.json();
+                        })
+                            .then(function (data) {
+                            console.log(data);
+                            requestAllRents();
+                            if (data.ccStatus.statusCode == 1000) {
+                                PopupEngine.createNotification({ text: "Verleih wurde erfolgreich gel\u00F6scht" });
+                            }
+                            else {
+                                PopupEngine.createNotification({ text: "Es gab einen Fehler beim L\u00F6schen des Verleihs" });
+                            }
+                        })
+                            .catch(function (error) { return console.error(error); });
+                    },
+                    closePopup: true
+                },
+                {
+                    text: "abbrechen",
+                },
+            ]
+        });
     }
 }
 function sendVerificationRequest(rentId) {
@@ -481,13 +496,16 @@ function createRent() {
     })
         .catch(function (error) { return console.error(error); });
 }
-function importDataFromCsv(button) {
-    var file = button.closest("div").querySelector("input").files[0];
+var studentInput = document.querySelector('#schueler-in');
+studentInput.addEventListener("input", function () { importDataFromCsv(studentInput, 'student'); });
+var teacherInput = document.querySelector('#lehrer-in');
+teacherInput.addEventListener("input", function () { importDataFromCsv(teacherInput, 'teacher'); });
+function importDataFromCsv(input, type) {
+    var file = input.files[0];
     var formData = new FormData();
     formData.append('file', file);
     console.log(formData, file);
-    var importType = button.closest("div").getAttribute("data-import");
-    fetch(APPLICATION_URL + "/".concat(importType, "/import"), {
+    fetch(APPLICATION_URL + "/".concat(type, "/import"), {
         method: 'POST',
         body: formData,
     })
@@ -498,7 +516,7 @@ function importDataFromCsv(button) {
         console.log(data);
         switch (data.ccStatus.statusCode) {
             case 1000:
-                PopupEngine.createNotification({ text: "Successfully imported ".concat(importType) });
+                PopupEngine.createNotification({ text: "Successfully imported ".concat(type) });
                 break;
             case 1204:
                 PopupEngine.createNotification({ text: "Konnte nicht importieren weil die filestruktur invalide ist" });
@@ -510,10 +528,6 @@ function importDataFromCsv(button) {
         console.error(error);
     });
 }
-var importButtonss = document.querySelectorAll('#import button');
-importButtonss.forEach(function (elem) {
-    elem.addEventListener("click", function () { importDataFromCsv(elem); });
-});
 function findRentById(id) {
     var res = null;
     allRents.forEach(function (rent) {

@@ -23,13 +23,11 @@ public class Student {
     public Student() {
     }
 
-    public Student(String firstname, String lastname, String school_class, String email, String password, String username) {
+    public Student( String school_class, String lastname, String firstname, String email) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.school_class = school_class;
         this.email = email;
-        setPassword(password);
-        this.username = username;
     }
 
     @Override
