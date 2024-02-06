@@ -16,7 +16,11 @@
         <section class="sheet padding-10mm">
             <table>
             </table>
-            <button id="createRent" onclick="createRent()">erstellen</button>
+        </section>
+
+        <section class="sheet padding-10mm">
+            <table>
+            </table>
         </section>
 
         <div id="studentSelectionPopup">
@@ -29,15 +33,14 @@
             <div class="teacherList"></div>
         </div>
 
-        <!--<button onclick="deleteRow(123)">Delete Row</button>-->
-
-        <div id="import">
+        <div id="controlls">
             <label for="schueler-in">Schüler: </label>
             <input type="file" id="schueler-in" accept=".csv"/>
-            <hr>
+
             <label for="lehrer-in">Lehrer: </label>
             <input type="file" id="lehrer-in" name="lehrer" accept=".csv"/>
-            <hr>
+
+            <button id="createRent" onclick="createRent()">erstellen</button>
         </div>
     </body>
 </html>

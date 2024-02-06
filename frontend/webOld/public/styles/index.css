@@ -3,8 +3,8 @@
   size: A4 landscape;
 }
 @media print {
-  #import, #createRent {
-    display: none;
+  #controlls, #createRent {
+    display: none !important;
   }
 }
 * {
@@ -26,7 +26,7 @@ body {
   background-color: hsl(0, 0%, 20%);
   color: hsl(0, 0%, 0%);
   font-family: sans-serif;
-  overflow: hidden;
+  overflow: scroll;
 }
 
 ::selection {
@@ -167,26 +167,25 @@ button {
   cursor: pointer;
 }
 
-#import {
+#controlls {
   display: flex;
-  flex-direction: column;
-  position: absolute;
+  position: fixed;
+  align-items: center;
   left: 0;
   bottom: 0;
   background-color: #EEE;
   padding: 0.5rem;
-  padding-bottom: 2rem;
   border-top-right-radius: 0.5rem;
   box-shadow: 0 0 0.5rem 0.3rem rgba(0, 0, 0, 0.4);
 }
-#import * {
+#controlls * {
   font-size: 0.9rem;
 }
-#import div {
+#controlls div {
   display: flex;
   gap: 1rem;
 }
-#import hr {
+#controlls hr {
   margin-block: 0.3rem;
 }
 

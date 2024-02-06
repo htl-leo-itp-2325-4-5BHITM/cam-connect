@@ -71,7 +71,7 @@ public class RentRepository {
         for (Student student : students) {
             List<Rent> rents = em.createQuery(
                     "SELECT r FROM Rent r" +
-                            " where r.student.student_id = ?1", Rent.class).setParameter(1, student.getStudent_id()).getResultList();
+                            " where r.student.student_id = :studentId", Rent.class).setParameter("studentId", student.getStudent_id()).getResultList();
 
             result.add(new RentByStudentDTO(student, rents));
         }
