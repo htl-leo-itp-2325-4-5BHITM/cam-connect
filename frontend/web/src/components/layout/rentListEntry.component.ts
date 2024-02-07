@@ -1,9 +1,9 @@
 import {html, LitElement} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/rentListEntry.styles.scss'
-import {ButtonColor, ButtonType} from "../basic/button.component"
+import { ButtonType} from "../basic/button.component"
 import {CircleSelectType} from "../basic/circleSelect.component"
-import {ColorEnum, SizeEnum} from "../../base"
+import {ColorEnum, SimpleColorEnum, SizeEnum} from "../../base"
 import {model} from "../../index";
 import {Rent, RentStatus} from "../../service/rent.service";
 import {ChipType} from "../basic/chip.component"
@@ -39,7 +39,7 @@ export class RentListEntryComponent extends LitElement {
                 </div>
                 <div class="right">
                     <cc-button>Verleih erstellen</cc-button>
-                    <cc-button color="${ButtonColor.GRAY}">Details anzeigen</cc-button>
+                    <cc-button color="${SimpleColorEnum.GRAY}">Details anzeigen</cc-button>
                     <cc-circle-select type="${CircleSelectType.MULTIPLE}" @click="${this.selectAll}"></cc-circle-select>
                 </div>
             </div>

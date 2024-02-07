@@ -1,10 +1,9 @@
 import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/button.styles.scss'
-import {SizeEnum} from "../../base"
+import {SimpleColorEnum, SizeEnum} from "../../base"
 
 export enum ButtonType {FILLED="filled", OUTLINED="outlined", TEXT="text", UNDERLINED="underlined"}
-export enum ButtonColor {ACCENT="accent", GRAY="gray"}
 
 /**
  * Buttons accept any element inside them to be assigned a slot="" of left or right. These will be placed before or after the text.
@@ -20,8 +19,8 @@ export class ButtonComponent extends LitElement {
     @property({type: ButtonType})
     type?: ButtonType = ButtonType.FILLED;
 
-    @property({type: ButtonColor})
-    color?: ButtonColor = ButtonColor.ACCENT;
+    @property({type: SimpleColorEnum})
+    color?: SimpleColorEnum = SimpleColorEnum.ACCENT;
 
     @property({type: String})
     text?: String = this.innerText || "Button";

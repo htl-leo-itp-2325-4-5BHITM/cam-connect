@@ -47,6 +47,7 @@ export class AppComponent extends LitElement {
             <cc-navbar></cc-navbar>
             <div class="sidebar-container">
                 ${sidebar}
+                <cc-create-rent></cc-create-rent>
                 ${page}
             </div>
         `

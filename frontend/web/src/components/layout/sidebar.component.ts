@@ -1,10 +1,10 @@
 import {LitElement, css, html} from 'lit'
 import {customElement, property, queryAssignedElements} from 'lit/decorators.js'
-import styles from '../../../styles/components/layout/filterSidebar.styles.scss'
-import {ButtonColor, ButtonComponent, ButtonType} from '../basic/button.component'
+import styles from '../../../styles/components/layout/sidebar.styles.scss'
+import { ButtonComponent, ButtonType} from '../basic/button.component'
 import {FilterContainerComponent} from "../basic/filterContainer.component"
 import {filter} from "rxjs"
-import {SizeEnum} from "../../base"
+import {SimpleColorEnum, SizeEnum} from "../../base"
 
 @customElement('cc-sidebar')
 export class SidebarComponent extends LitElement {
@@ -26,10 +26,10 @@ export class SidebarComponent extends LitElement {
         return html`
             <style>${styles}</style>
             <div class="buttons">
-                <cc-button size="${SizeEnum.MEDIUM}" color="${ButtonColor.ACCENT}" type="${ButtonType.FILLED}">
+                <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.FILLED}">
                     Neuer Verleih
                 </cc-button>
-                <cc-button size="${SizeEnum.MEDIUM}" color="${ButtonColor.ACCENT}" type="${ButtonType.OUTLINED}">
+                <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.OUTLINED}">
                     Multi Verleih
                 </cc-button>
             </div>
@@ -40,7 +40,7 @@ export class SidebarComponent extends LitElement {
                     <p>liste</p>
                 </cc-select>
                 <cc-toggle>Nur verfügbare anzeigen</cc-toggle>
-                <cc-button size="${SizeEnum.MEDIUM}" type="${ButtonType.UNDERLINED}" color="${ButtonColor.GRAY}">Filter zurücksetzten</cc-button>
+                <cc-button size="${SizeEnum.MEDIUM}" type="${ButtonType.UNDERLINED}" color="${SimpleColorEnum.GRAY}">Filter zurücksetzten</cc-button>
             </div>
             <cc-line></cc-line>
             <slot name="primaryFilters" @slotchange=${this.handlePrimaryFilterChange}></slot>

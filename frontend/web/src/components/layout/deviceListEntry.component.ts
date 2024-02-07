@@ -1,7 +1,7 @@
 import {html, LitElement} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/deviceListEntry.styles.scss'
-import {ButtonColor, ButtonType} from "../basic/button.component"
+import { ButtonType} from "../basic/button.component"
 import {CircleSelectType} from "../basic/circleSelect.component"
 import {ColorEnum} from "../../base"
 import {model} from "../../index";

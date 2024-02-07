@@ -1,23 +1,23 @@
 import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, queryAssignedElements, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/select.styles.scss'
-import {SizeEnum} from "../../base"
+import {SimpleColorEnum, SizeEnum} from "../../base"
 
 @customElement('cc-select')
 export class SelectComponent extends LitElement {
     @queryAssignedElements()
     options!: Array<HTMLElement>
-
     @property()
     size:SizeEnum = SizeEnum.MEDIUM
-
+    @property()
+    spacerColor:SimpleColorEnum = SimpleColorEnum.GRAY
     @property()
     optionSelected: (option: HTMLElement) => void = () => {}
 
     render() {
         return html`
             <style>${styles}</style>
-            <div class="select" size="${this.size}">
+            <div class="select" size="${this.size}" spacerColor="${this.spacerColor}">
                 <slot></slot>
             </div>`
     }

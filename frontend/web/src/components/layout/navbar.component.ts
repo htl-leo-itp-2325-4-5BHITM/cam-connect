@@ -6,7 +6,7 @@ import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { faMagnifyingGlass, faArrowRotateRight } from "@fortawesome/free-solid-svg-icons"
 import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons"
 import {model} from "../../index"
-import {SizeEnum} from "../../base"
+import {SimpleColorEnum, SizeEnum} from "../../base"
 
 @customElement('cc-navbar')
 export class NavbarComponent extends LitElement {
@@ -17,7 +17,7 @@ export class NavbarComponent extends LitElement {
                 <img src="assets/logo/cc-wordmark-white.svg" alt="cam-connect">
             </div>
 
-            <cc-select size="${SizeEnum.MEDIUM}" .optionSelected = "${(elem) => {model.updateAppState({page: elem.dataset.page})}}">
+            <cc-select size="${SizeEnum.MEDIUM}" spacerColor="${SimpleColorEnum.ACCENT}" .optionSelected = "${(elem) => {model.updateAppState({page: elem.dataset.page})}}">
                 <p class="selected" data-page="equipment">Equipment</p>
                 <p data-page="rents">Verleihliste</p>
                 <p data-page="calendar">Kalender</p>

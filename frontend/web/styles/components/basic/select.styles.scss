@@ -20,6 +20,13 @@
     --f-size: #{$fSizeDesktopSmall};
   }
 
+  &[spacerColor="gray"]{
+    --spacerColor: #{$gray800};
+  }
+  &[spacerColor="accent"]{
+    --spacerColor: #{$accentDarkmode};
+  }
+
   ::slotted(*){
     cursor: pointer;
     color: $gray800 !important;
@@ -39,6 +46,7 @@
   }
 
   ::slotted(*:not(:last-child)):after{
+    color: var(--spacerColor);
     margin-inline: .2rem;
     width: 1ch;
     text-align: center;
