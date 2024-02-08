@@ -24,6 +24,7 @@ fetch(APPLICATION_URL + `/rent/getbyid/${rentId}`)
         return result.json()
     })
     .then((data) => {
+        data = data.data
         console.log(data)
         document.querySelector('.rentData').innerHTML = `
             <p>${data.student.firstname} ${data.student.lastname}</p>
@@ -44,7 +45,7 @@ function confirmRent(verificationStatus: string){
         },
         body: JSON.stringify({
             "verification_code": code || "",
-            "verification_status": verificationStatus || "",
+            "status": verificationStatus.toUpperCase() || "",
             "verification_message": verificationMessage || ""
         })
     })
@@ -60,6 +61,10 @@ function confirmRent(verificationStatus: string){
                         //@ts-ignore
                         PopupEngine.createModal({text: `Verleihung wurde erfolgreich abgelehnt. Sie können diese Seite nun schließen.`})
                     }
+                    break
+                case 1106:
+                    //@ts-ignore
+                    PopupEngine.createModal({text: data.ccStatus.message})
                     break
                 case 1205:
                     //@ts-ignore

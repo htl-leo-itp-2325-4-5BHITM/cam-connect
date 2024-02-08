@@ -282,7 +282,7 @@ function removeRow(rentId) {
             text: "Sicher das sie diesen Eintrag Löschen wollen?",
             buttons: [
                 {
-                    text: "löschen",
+                    text: "Löschen",
                     action: function () {
                         fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/remove"))
                             .then(function (response) {
@@ -303,7 +303,7 @@ function removeRow(rentId) {
                     closePopup: true
                 },
                 {
-                    text: "abbrechen",
+                    text: "Abbrechen",
                 },
             ]
         });

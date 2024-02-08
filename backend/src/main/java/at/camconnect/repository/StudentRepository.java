@@ -46,11 +46,15 @@ public class StudentRepository{
     }
 
     public List<Student> search(StudentDTO studentDTO){
-        Query q = em.createQuery("SELECT s FROM Student s WHERE upper(s.firstname) LIKE :firstname || '%' and upper(s.lastname) like :lastname || '%'", Student.class)
-                .setParameter("firstname", studentDTO.firstname().toUpperCase())
-                .setParameter("lastname", studentDTO.lastname().toUpperCase())
-                .setMaxResults(10);
-        return (List<Student>) q.getResultList();
+        return em.createQuery(
+                        "SELECT s FROM Student s " +
+                                "WHERE UPPER(s.firstname) LIKE :searchTerm OR UPPER(s.lastname) LIKE :searchTerm " +
+                                "OR UPPER(CONCAT(s.firstname, ' ', s.lastname)) LIKE :searchTerm",
+                        Student.class)
+                .setParameter("searchTerm", studentDTO.firstname().toUpperCase() + "%")
+                .setMaxResults(10)
+                .getResultList();
+
     }
 
     public void importStudents(File file) {
