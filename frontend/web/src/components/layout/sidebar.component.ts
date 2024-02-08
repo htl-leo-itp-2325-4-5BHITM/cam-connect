@@ -5,6 +5,7 @@ import { ButtonComponent, ButtonType} from '../basic/button.component'
 import {FilterContainerComponent} from "../basic/filterContainer.component"
 import {filter} from "rxjs"
 import {SimpleColorEnum, SizeEnum} from "../../base"
+import {model} from "../../index"
 
 @customElement('cc-sidebar')
 export class SidebarComponent extends LitElement {
@@ -26,7 +27,7 @@ export class SidebarComponent extends LitElement {
         return html`
             <style>${styles}</style>
             <div class="buttons">
-                <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.FILLED}">
+                <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.FILLED}" @click="${this.openCreateRentMenu}">
                     Neuer Verleih
                 </cc-button>
                 <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.OUTLINED}">
@@ -54,6 +55,10 @@ export class SidebarComponent extends LitElement {
                 <p>${(this.accountname)}</p>
             </div>
         `
+    }
+
+    openCreateRentMenu(){
+        model.updateAppState({createRentModalOpen: true})
     }
 
     setSecondaryFilterVisibility(){

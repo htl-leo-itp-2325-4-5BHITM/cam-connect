@@ -6,63 +6,66 @@
   background-color: $gray150;
 
   height: 100%;
-  width: 30%;
   display: flex;
   flex-direction: column;
 
   box-sizing: border-box;
   box-shadow: 6px 6px 6px 0px rgba(0, 0, 0, 0.15) inset;
 
-  .heading{
-    font-size: $fSizeDesktopDefault;
-    padding: 0.625rem 0.75rem;
-    text-align: center;
+  overflow-x: hidden;
 
-    background: $gray350;
-    box-shadow: 0px 0px 6px 4px rgba(0, 0, 0, 0.15);
-  }
+  transition: width $transitionTimeLong;
+}
 
-  .list{
+.top{
+  font-size: $fSizeDesktopDefault;
+  padding: 0.625rem 0.75rem;
+  text-align: center;
+
+  background: $gray250;
+  box-shadow: 0px 0px 6px 4px rgba(0, 0, 0, 0.15);
+}
+
+.list{
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  margin-inline: 1rem;
+}
+
+div{
+  display: flex;
+
+  input{
     display: flex;
-    flex-direction: column;
-    gap: .5rem;
-    margin-inline: 1rem;
-  }
+    padding: 0.125rem 0.25rem;
+    align-items: center;
+    gap: 0.2rem;
+    width: 8ch;
 
-  div{
-    display: flex;
+    background: transparent;
+    border-radius: 0.25rem;
+    border: 1px solid $gray500;
 
-    input{
-      display: flex;
-      padding: 0.125rem 0.25rem;
-      align-items: center;
-      gap: 0.2rem;
+    label{
+      color: $accentDarkmode;
+    }
+
+    &.number{
+      width: 3ch;
+    }
+
+    &[type = "date"]{
       width: 8ch;
-
-      background: transparent;
-      border-radius: 0.25rem;
-      border: 1px solid $gray500;
-
-      label{
-        color: $accentDarkmode;
-      }
-
-      &.number{
-        width: 3ch;
-      }
-
-      &[type = "date"]{
-        width: 8ch;
-      }
     }
   }
+}
 
-  cc-button, cc-line, cc-chip{
-    margin-block: .2rem !important;
-    margin-left: 1rem !important;
-  }
+cc-button, cc-line, cc-chip{
+  margin-block: .2rem !important;
+  margin-left: 1rem !important;
+}
 
-  cc-chip{
-    margin-top: .5rem !important;
-  }
+cc-chip{
+  margin-top: .5rem !important;
 }

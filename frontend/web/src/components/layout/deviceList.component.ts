@@ -2,9 +2,11 @@ import {LitElement, css, html} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/deviceList.styles.scss'
 import {model} from "../../index";
+import {WidthResizeObserver} from "../../base"
 
 @customElement('cc-device-list')
 export class DeviceListComponent extends LitElement {
+    size: WidthResizeObserver
     render() {
         let count = 0;
 
@@ -15,6 +17,11 @@ export class DeviceListComponent extends LitElement {
                 return this.generateStudent(count++)
             })}
         `
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
+        this.size = new WidthResizeObserver(this, [{size: 0, key: "small"}, {size: 600, key: "medium"}, {size: 900, key: "large"}, {size: 1200, key: "xLarge"}])
     }
 
     generateStudent(count: number){

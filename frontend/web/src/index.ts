@@ -22,10 +22,6 @@ import "./components/layout/rentListEntry.component"
 import "./components/layout/deviceList.component"
 import "./components/layout/deviceListEntry.component"
 
-import "./components/page/equipment.component"
-import "./components/page/rent.component"
-import "./components/page/calendar.component"
-
 import "./components/app.component"
 
 //css

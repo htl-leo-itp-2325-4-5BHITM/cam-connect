@@ -67,6 +67,44 @@ export function handleHttpError(statusCode: number, url:string){
     console.log("fatal server error occured trying to reach endpoint: ", url, "statusCode: ", statusCode)
 }
 
+interface breakpoint {
+    size: number,
+    key: string
+}
+
+export class WidthResizeObserver {
+    source: HTMLElement
+    breakpoints: breakpoint[]
+    constructor(source: HTMLElement, breakpoints: breakpoint[]) {
+        this.source = source
+        this.breakpoints = breakpoints.sort((a, b) => a.size - b.size)
+
+        new ResizeObserver(() => {
+            window.requestAnimationFrame(() => {
+                let newSize = this.breakpoints.at(-1).key;
+
+                for (let i = 0; i < this.breakpoints.length; i++) {
+                    const breakpoint = this.breakpoints[i];
+                    if (this.source.clientWidth > breakpoint.size && this.source.clientWidth < this.breakpoints[i + 1]?.size) {
+                        console.log("match", breakpoint.key)
+                        newSize = breakpoint.key;
+                        break;
+                    }
+                }
+
+                console.log(newSize)
+
+                if (this.source.getAttribute("size") !== newSize) {
+                    this.source.setAttribute("size", newSize); // Update size attribute only if it has changed
+                }
+            })
+        }).observe(this.source)
+
+        console.log(source, breakpoints)
+    }
+}
+
+
 export class Tooltip {
     static tooltip:HTMLElement = document.querySelector("#tooltip")
     static lastTimeHidden = 0

@@ -30,14 +30,14 @@ export class AppComponent extends LitElement {
                     <cc-filter-container slot="secondaryFilters" .options="${model.deviceTypeAttributesAsFilterOptions.tripodHeads}" .visibility="${["tripod"]}">Stativköpfe</cc-filter-container>
                 </cc-sidebar>
                 `
-                page = html`<cc-equipment></cc-equipment>`
+                page = html`<cc-device-list class="content"></cc-device-list>`
                 break
             case PageEnum.RENTS:
-                page = html`<cc-rent></cc-rent>`
+                page = html`<cc-rent-list class="content"></cc-rent-list>`
                 sidebar = html`<cc-sidebar accountname="wird später mal ein observable"></cc-sidebar>`
                 break
             case PageEnum.CALENDAR:
-                page = html`<cc-calendar></cc-calendar>`
+                page = html`<cc-calendar class="content"></cc-calendar>`
                 sidebar = html`<cc-sidebar accountname="wird später mal ein observable"></cc-sidebar>`
                 break
         }
@@ -45,8 +45,9 @@ export class AppComponent extends LitElement {
         return html`
             <style>${styles}</style>
             <cc-navbar></cc-navbar>
-            <div class="sidebar-container">
-                ${sidebar}
+            ${sidebar}
+            <div class="toolbar-container">
+                <cc-toolbar page="${this.appState.value.page}"></cc-toolbar>
                 <cc-create-rent></cc-create-rent>
                 ${page}
             </div>

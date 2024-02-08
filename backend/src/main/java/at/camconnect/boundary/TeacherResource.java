@@ -29,8 +29,8 @@ public class TeacherResource {
         teacherRepository.create(t);
         return Response.ok().build();
     }
-
-    @POST
+    
+    @POST   
     @Path("/remove")
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional

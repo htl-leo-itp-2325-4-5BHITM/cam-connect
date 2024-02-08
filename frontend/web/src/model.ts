@@ -13,7 +13,7 @@ export enum PageEnum { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar"
 
 export interface AppState {
     page: PageEnum,
-    newRentModalOpen: boolean
+    createRentModalOpen: boolean
 }
 
 type AppStatePartial = Partial<AppState>
@@ -67,7 +67,7 @@ export default class Model{
 
     readonly appState = new BehaviorSubject<AppState>({
         page: PageEnum.EQUIPMENT,
-        newRentModalOpen: false
+        createRentModalOpen: false
     })
 
 

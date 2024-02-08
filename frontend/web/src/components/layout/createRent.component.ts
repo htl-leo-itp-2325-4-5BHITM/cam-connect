@@ -1,18 +1,31 @@
 import {LitElement, css, html} from 'lit'
 import {customElement, property, queryAssignedElements} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/createRent.styles.scss'
-import {ColorEnum} from "../../base"
+import {ColorEnum, SizeEnum} from "../../base"
 import {ButtonType} from "../basic/button.component"
+import {AppState, ObservedProperty} from "../../model"
+import {model} from "../../index"
 
 @customElement('cc-create-rent')
 export class CreateRentComponent extends LitElement {
     @property({type: Boolean})
-    isOpen?: boolean = false
+    appState: ObservedProperty<AppState>
+
+    constructor() {
+        super()
+        this.appState = new ObservedProperty<AppState>(this, model.appState)
+    }
 
     render() {
         return html`
             <style>${styles}</style>
-            <div class="heading">
+            <style>
+                :host {
+                    width: ${this.appState.value.createRentModalOpen ? "fit-content" : "0"};
+                }
+            </style>
+            
+            <div class="top">
                 <h2>Verleih erstellen</h2>
             </div>
             
@@ -37,6 +50,15 @@ export class CreateRentComponent extends LitElement {
             <cc-button color="${ColorEnum.ACCENT}" type="${ButtonType.OUTLINED}">
                 Gerät Hinzufügen
             </cc-button>
+            
+            
+            <div class="bottom">
+                <cc-button size="${SizeEnum.BIG}" color="${ColorEnum.ACCENT}" type="${ButtonType.OUTLINED}" 
+                           @click="${()=>{model.updateAppState({createRentModalOpen: false})}}">
+                    abbrechen
+                </cc-button>
+                <cc-button color="${ColorEnum.ACCENT}" type="${ButtonType.FILLED}">Erstellen</cc-button>
+            </div>
         `
     }
 }

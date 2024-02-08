@@ -21,6 +21,7 @@ export class CircleSelectComponent extends LitElement {
         this.checked = !this.checked;
     }
 
+    //TODO steal click effect logic from iconCTA (and possibly move that to a custom class in base) to steal the subtle upscale effect
     render() {
         return html`
             <style>${styles}</style>
