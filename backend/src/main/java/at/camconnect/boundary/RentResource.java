@@ -68,12 +68,13 @@ public class RentResource {
     @GET
     @Path("/getbyid/{id: [0-9]+}")
     public Response getById(@PathParam("id") Long id) {
+        Rent rent;
         try {
-            rentRepository.getById(id);
+            rent = rentRepository.getById(id);
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }
-        return CCResponse.ok();
+        return CCResponse.ok(rent);
     }
 
     @GET
@@ -92,6 +93,8 @@ public class RentResource {
     @Path("/getbyid/{id: [0-9]+}/confirm")
     public Response confirm(@PathParam("id") Long id, RentDTO rentDTO) {
         try {
+            System.out.println(id);
+            System.out.println(rentDTO);
             rentRepository.confirm(id, rentDTO);
         } catch (CCException ex) {
             return CCResponse.error(ex);

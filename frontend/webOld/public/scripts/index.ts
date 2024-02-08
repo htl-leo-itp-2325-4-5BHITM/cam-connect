@@ -378,7 +378,7 @@ function removeRow(rentId: number){
 
             buttons: [
                 {
-                    text: "löschen",
+                    text: "Löschen",
                     action: () => {
                         fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/remove`)
                             .then(response => {
@@ -402,7 +402,7 @@ function removeRow(rentId: number){
                     closePopup: true
                 },
                 {
-                    text: "abbrechen",
+                    text: "Abbrechen",
                 },
             ]
         })

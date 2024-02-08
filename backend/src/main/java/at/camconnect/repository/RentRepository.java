@@ -158,12 +158,13 @@ public class RentRepository {
 
         try{
             verificationCode = rentDTO.verification_code();
-            verificationMessage = rentDTO.verification_message();
             verificationStatus = rentDTO.status();
+            verificationMessage = rentDTO.verification_message();
         } catch (IllegalArgumentException e) {
             throw new CCException(1106);
         }
 
+        System.out.println("Status " + verificationStatus);
         Set<RentStatusEnum> allowedStatus = Set.of(RentStatusEnum.CONFIRMED, RentStatusEnum.DECLINED, RentStatusEnum.RETURNED);
         // set only if the current status is allowed and if the verification_code is the same as provided
         if (allowedStatus.contains(verificationStatus) && rent.getVerification_code().equals(verificationCode)) {
