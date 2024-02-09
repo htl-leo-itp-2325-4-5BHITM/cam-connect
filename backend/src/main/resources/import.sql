@@ -67,29 +67,29 @@ insert into device (type_id, note, number, serial) values
 
 -- User inserts will break when moving to different user system
 -- Students
-INSERT INTO student (email, firstname, lastname, password, school_class, username)
+/*INSERT INTO student (email, firstname, lastname, password, school_class, username)
 VALUES
     ('student1@example.com', 'John', 'Doe', 'password123', 'Class A', 'john_doe'),
-    ('student2@example.com', 'Jane', 'Smith', 'securepass', 'Class B', 'jane_smith');
+    ('student2@example.com', 'Jane', 'Smith', 'securepass', 'Class B', 'jane_smith');*/
 
 -- Inserting data into teacher table
 INSERT INTO teacher (email, firstname, lastname, password, username)
 VALUES
-    ('teacher1@example.com', 'Professor', 'Smith', 'teacherpass', 'prof_smith'),
-    ('teacher2@example.com', 'Dr.', 'Johnson', 'secureteacher', 'dr_johnson');
+    ('m.huemer@htl-leonding.ac.at', 'Martin', 'Huemer', 'dff', 'mh'),
+    ('p.engleitner@htl-leonding.ac.at', 'Particia', 'Engleitner', 'ff', 'pe');
 
 -- favourites
-INSERT INTO student_devicetype (student_student_id, favourites_type_id)
+/*INSERT INTO student_devicetype (student_student_id, favourites_type_id)
 VALUES
     (1, 1),  -- Student 1 likes DeviceType 1
     (1, 2),  -- Student 1 likes DeviceType 2
-    (2, 3);  -- Student 2 likes DeviceType 3
+    (2, 3);  -- Student 2 likes DeviceType 3*/
 
 -- Inserting data into rent table
-INSERT INTO rent (rent_end_actual, rent_end_planned, rent_start, status, creation_date, device_id, student_id, teacher_id_end, teacher_id_start, accessory, device_string, note, verification_code)
+/*INSERT INTO rent (rent_end_actual, rent_end_planned, rent_start, status, creation_date, device_id, student_id, teacher_id_end, teacher_id_start, accessory, device_string, note, verification_code)
 VALUES
     ('2024-02-01', '2024-02-15', '2024-01-15', 2, CURRENT_TIMESTAMP, 1, 1, 1, 2, 'Tripod', 'Camera rental for event', 'Event Coverage', 'lasdnhfgköj'),
     ('2024-03-01', '2024-03-15', '2024-02-15', 3, CURRENT_TIMESTAMP, 2, 2, 2, 1, 'Lens', 'Lens rental for project', 'Project Photography', 'lasdnhfgköj'),
     ('2024-04-01', '2024-04-15', '2024-03-15', 1, CURRENT_TIMESTAMP, 3, 2, 1, 2, 'Battery Pack', 'Additional power for shoot', 'Outdoor Photography', 'lasdnhfgköj'),
     ('2024-05-01', '2024-05-15', '2024-04-15', 4, CURRENT_TIMESTAMP, 1, 1, 2, 1, 'Microphone', 'Audio enhancement for video', 'Video Production', 'lasdnhfgköj'),
-    ('2024-06-01', '2024-06-15', '2024-05-15', 2, CURRENT_TIMESTAMP, 2, 2, 1, 2, 'Tripod', 'Stable support for shooting', 'Documentary Film', 'lasdnhfgköj');
+    ('2024-06-01', '2024-06-15', '2024-05-15', 2, CURRENT_TIMESTAMP, 2, 2, 1, 2, 'Tripod', 'Stable support for shooting', 'Documentary Film', 'lasdnhfgköj');*/

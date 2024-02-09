@@ -72,11 +72,11 @@ public class StudentRepository{
             lineArray[0] = lineArray[0].replaceAll("[^a-zA-Z_-]", "");
 
             //checks if the csv file matches the required structure
-            if(lineArray.length != 4) throw new CCException(1204, "invalid line length");
+            /*if(lineArray.length != 4) throw new CCException(1204, "invalid line length");
             if (!lineArray[0].equals("Klasse") || !lineArray[1].equals("Familienname") || !lineArray[2].equals("Vorname") || !lineArray[3].equals("Email 1 (Schüler)")){
                 System.out.println("invalid header row: " + lineArray[0] + ", " + lineArray[1] + ", " + lineArray[2] + ", " + lineArray[3]);
                 throw new CCException(1204, "invalid header row: " + lineArray[0] + ", " + lineArray[1] + ", " + lineArray[2] + ", " + lineArray[3]);
-            }
+            }*/
 
             while ((line = reader.readLine()) != null) {
                 lineArray = line.split(";");

@@ -1,7 +1,7 @@
 @page { size: A4 landscape }
 
 @media print {
-  #controlls, #createRent{
+  #controls{
     display: none !important;
   }
 }
@@ -183,7 +183,7 @@ button{
   cursor: pointer;
 }
 
-#controlls{
+#controls{
   display: flex;
   position: fixed;
   align-items: center;
@@ -193,6 +193,7 @@ button{
   padding: .5rem;
   border-top-right-radius: .5rem;
   box-shadow: 0 0 .5rem .3rem rgba(0, 0, 0, 0.4);
+  z-index: 1000;
 
   *{
     font-size: .9rem;

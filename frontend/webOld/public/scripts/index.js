@@ -68,17 +68,25 @@ var statusResolved = {
 };
 function generateTable() {
     var _a;
-    var headingHtml = document.createElement("tr");
+    var pages = document.querySelector(".pages");
+    pages.innerHTML = "";
+    var headingHtml = "<tr>";
     columns.forEach(function (column) {
         var headRow = document.createElement("th");
         headRow.innerText = column.name;
-        headingHtml.appendChild(headRow);
+        headingHtml += headRow.outerHTML;
     });
-    var table = document.querySelector('table');
-    table.innerHTML = "";
-    table.appendChild(headingHtml);
-    var html = [];
+    headingHtml += "</tr>";
+    var table;
     var _loop_1 = function (i) {
+        if (i % 15 == 0) {
+            var page = document.createElement("section");
+            page.classList.add("sheet", "padding-10mm");
+            table = document.createElement('table');
+            page.appendChild(table);
+            table.innerHTML = headingHtml;
+            pages.appendChild(page);
+        }
         var row = document.createElement("tr");
         row.setAttribute("rent_id", String((_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id));
         columns.forEach(function (column) {
@@ -242,12 +250,11 @@ function generateTable() {
             }
             row.appendChild(cell);
         });
-        html.push(row);
+        table.appendChild(row);
     };
-    for (var i = 0; i < Math.min(allRents.length, 20); i++) {
+    for (var i = 0; i < allRents.length; i++) {
         _loop_1(i);
     }
-    table.append.apply(table, html);
 }
 function returnRent(rentId, code) {
     fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/return"), {

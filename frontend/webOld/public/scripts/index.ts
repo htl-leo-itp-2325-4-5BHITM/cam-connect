@@ -151,23 +151,34 @@ const statusResolved = {
  * Renders the Table to the html based on thee data in the allRents array of Rent JSONs
  */
 function generateTable() {
+    let pages = document.querySelector(".pages")
+    pages.innerHTML = ""
+
     //Create the Heading Row based purely on the data in the columns constant
-    let headingHtml = document.createElement("tr")
+    let headingHtml = "<tr>"
 
     columns.forEach(column => {
         let headRow = document.createElement("th")
         headRow.innerText = column.name
-        headingHtml.appendChild(headRow)
+        headingHtml += headRow.outerHTML
     })
 
-
-    let table = document.querySelector('table')
-    table.innerHTML = ""
-    table.appendChild(headingHtml)
+    headingHtml += "</tr>"
 
     //creates the main content
-    let html: Element[] = []
-    for (let i = 0; i < Math.min(allRents.length, 20); i++) { //run over either all the entries in allRents or 20 (max that fits on the page)
+    let table
+    for (let i = 0; i < allRents.length; i++) { //run over all the entries in allRents
+        if(i % 15 == 0){ //create a new page if
+            let page = document.createElement("section")
+            page.classList.add("sheet","padding-10mm")
+
+            table = document.createElement('table')
+            page.appendChild(table)
+            table.innerHTML = headingHtml
+
+            pages.appendChild(page)
+        }
+
         let row = document.createElement("tr")
         row.setAttribute("rent_id", String(allRents[i]?.rent_id))
 
@@ -336,9 +347,8 @@ function generateTable() {
             }
             row.appendChild(cell)
         })
-        html.push(row)
+        table.appendChild(row)
     }
-    table.append(...html)
 }
 
 function returnRent(rentId: number, code: string){
