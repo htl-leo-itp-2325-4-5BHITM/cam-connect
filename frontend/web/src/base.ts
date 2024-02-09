@@ -16,6 +16,11 @@ export interface ccResponse<T>{
     data: T
 }
 
+interface resizeBreakpoint {
+    size: number,
+    key: string
+}
+
 export enum ColorEnum {ACCENT="accent", GOOD="good", MID="mid", BAD="bad", GRAY="gray"}
 export enum SimpleColorEnum {ACCENT="accent", GRAY="gray"}
 export enum SizeEnum {BIG="big", MEDIUM="medium", SMALL="small"}
@@ -28,11 +33,11 @@ export class api{
     static fetchData<T>(url: string): Promise<T> {
         return fetch(config.api_url + url)
             .then(response => {
-                handleHttpError(response.status, url)
+                this.handleHttpError(response.status, url)
                 return response.json() as Promise<ccResponse<T>>
             })
             .then(result => {
-                if(result.ccStatus) handleCCError(result.ccStatus.statusCode, result.ccStatus.details, url)
+                if(result.ccStatus) this.handleCCError(result.ccStatus.statusCode, result.ccStatus.details, url)
                 else console.error("no ccResponse object received from", url, "only got:", result)
                 return result.data
             })
@@ -53,11 +58,11 @@ export class api{
             body: JSON.stringify(data),
         })
         .then(response => {
-            handleHttpError(response.status, path)
+            this.handleHttpError(response.status, path)
             return response.json() as Promise<ccResponse<T>>
         })
         .then(result => {
-            handleCCError(result.ccStatus.statusCode, result.ccStatus.details, path)
+            this.handleCCError(result.ccStatus.statusCode, result.ccStatus.details, path)
             return result.data
         })
     }
@@ -71,35 +76,30 @@ export class api{
             body: JSON.stringify(data),
         })
         .then(response => {
-            handleHttpError(response.status, path)
+            this.handleHttpError(response.status, path)
             return response.json() as Promise<ccResponse<T>>
         })
         .then(result => {
-            handleCCError(result.ccStatus.statusCode, result.ccStatus.details, path)
+            this.handleCCError(result.ccStatus.statusCode, result.ccStatus.details, path)
             return result.data
         })
     }
-}
 
-export function handleCCError(statusCode: number, details: string, url:string) {
-    if(statusCode == 1000) return
-    console.log("something went wrong in the backend trying to reach endpoint: ", url, "statusCode: ", statusCode + ". Details:", details)
-}
+    static handleCCError(statusCode: number, details: string, url:string) {
+        if(statusCode == 1000) return
+        console.log("something went wrong in the backend trying to reach endpoint: ", url, "statusCode: ", statusCode + ". Details:", details)
+    }
 
-export function handleHttpError(statusCode: number, url:string){
-    if(statusCode >= 200 && statusCode < 300) return
-    console.log("fatal server error occured trying to reach endpoint: ", url, "statusCode: ", statusCode)
-}
-
-interface breakpoint {
-    size: number,
-    key: string
+    static handleHttpError(statusCode: number, url:string){
+        if(statusCode >= 200 && statusCode < 300) return
+        console.log("fatal server error occured trying to reach endpoint: ", url, "statusCode: ", statusCode)
+    }
 }
 
 export class WidthResizeObserver {
     source: HTMLElement
-    breakpoints: breakpoint[]
-    constructor(source: HTMLElement, breakpoints: breakpoint[]) {
+    breakpoints: resizeBreakpoint[]
+    constructor(source: HTMLElement, breakpoints: resizeBreakpoint[]) {
         this.source = source
         this.breakpoints = breakpoints.sort((a, b) => a.size - b.size)
 
@@ -127,7 +127,6 @@ export class WidthResizeObserver {
         console.log(source, breakpoints)
     }
 }
-
 
 export class Tooltip {
     static tooltip:HTMLElement = document.querySelector("#tooltip")
@@ -177,4 +176,9 @@ export class Tooltip {
             this.lastTimeHidden = 0
         }
     }
+}
+
+export class KeyBindHelper {
+    static keybinds: Map<string, Function> = new Map()
+
 }
