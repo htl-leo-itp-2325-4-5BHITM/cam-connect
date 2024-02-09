@@ -36,4 +36,14 @@ export default class RentService{
                 console.error(error)
             })
     }
+
+    static create(rent: Rent){
+        api.createItem("/rent", rent)
+            .then(() => {
+                RentService.fetchAll()
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
 }

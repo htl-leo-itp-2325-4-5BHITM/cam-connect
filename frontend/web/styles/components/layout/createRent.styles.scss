@@ -4,15 +4,14 @@
   all: initial;
 
   background-color: $gray150;
+  -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;
+  box-shadow: 6px 6px 6px 0px rgba(0, 0, 0, 0.15) inset;
 
   height: 100%;
   display: flex;
   flex-direction: column;
-
-  box-sizing: border-box;
-  box-shadow: 6px 6px 6px 0px rgba(0, 0, 0, 0.15) inset;
-
   overflow-x: hidden;
+  gap: 0.5rem;
 
   transition: width $transitionTimeLong;
 }
@@ -33,8 +32,9 @@
   margin-inline: 1rem;
 }
 
-div{
+.globaltime{
   display: flex;
+  flex-wrap: nowrap;
 
   input{
     display: flex;
@@ -61,11 +61,54 @@ div{
   }
 }
 
-cc-button, cc-line, cc-chip{
-  margin-block: .2rem !important;
-  margin-left: 1rem !important;
+.device, .globaltime .dateInputArea{
+  display: flex;
+  padding: 0.25rem !important;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0.25rem;
+  border: 1px solid var(--gray350, #3B3B3B);
+  background: var(--gray300, #363636);
+
+  div{
+    display: flex;
+  }
+
+  input{
+    display: flex;
+    padding: 0.125rem 0.25rem;
+    align-items: center;
+    gap: 0.2rem;
+    width: 8ch;
+
+    background: transparent;
+    border-radius: 0.25rem;
+    border: 1px solid $gray500;
+
+    label{
+      color: $accentDarkmode;
+    }
+
+    &.number{
+      width: 3ch;
+    }
+
+    &[type = "date"]{
+      width: 8ch;
+    }
+  }
+
+  svg{
+    height: 1rem;
+    color: $gray900;
+  }
 }
 
-cc-chip{
-  margin-top: .5rem !important;
+.bottom{
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem;
+  background: $gray400;
+  margin-top: auto;
+  height: 2rem;
 }

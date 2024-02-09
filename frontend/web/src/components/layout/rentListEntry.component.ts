@@ -17,14 +17,18 @@ export class RentListEntryComponent extends LitElement {
         let rent = model.rents.value[this.rentNumber]
         console.log(rent)
 
+        /* should be used below, commented out for now cause its throwing errors
+        ${rent.rentList.map(rent => {
+                    return this.generateRent(rent)
+                })}
+        */
+
         return html`
             <style>${styles}</style>
 
             ${this.generateHeading(rent.student.firstname + " " + rent.student.lastname, rent.student.school_class)}
             <div class="entries">
-                ${rent.rentList.map(rent => {
-                    return this.generateRent(rent)
-                })}
+                
             </div>
         `
     }

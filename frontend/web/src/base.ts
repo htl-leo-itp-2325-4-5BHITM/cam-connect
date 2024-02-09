@@ -38,8 +38,32 @@ export class api{
             })
     }
 
+    /**
+     * updates the data at the specified path with the given id.
+     * @param path should start with a / will automatically be surrounded by the api url and get and update paths
+     * @param id
+     * @param data
+     */
     static updateData<T>(path: string, id: number, data: T): Promise<T> {
         return fetch(`${config.api_url}${path}/getbyid/${id}/update`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => {
+            handleHttpError(response.status, path)
+            return response.json() as Promise<ccResponse<T>>
+        })
+        .then(result => {
+            handleCCError(result.ccStatus.statusCode, result.ccStatus.details, path)
+            return result.data
+        })
+    }
+
+    static createItem<T>(path: string, data: T): Promise<T> {
+        return fetch(`${config.api_url}${path}/create`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

@@ -56,7 +56,8 @@ function requestAllRents() {
         })
         .then(data => {
             allRents = data.data
-            console.log(data)
+
+            if(allRents.length == 0) createRent()
 
             generateTable()
         })
@@ -135,8 +136,8 @@ const columns: column[] = [
     {name: "Rückgabe tatsächlich", inputType: "date", cellType: "rent_end_actual"},
     {name: "Paraphe Lehkraft", inputType: "text", cellType: "teacher_end"},
     {name: "Anmerkung", inputType: "text", cellType: "note"},
-    {name: "VStatus", inputType: "none", cellType: "verification_status"},
-    {name: "DeleteRow", inputType: "text", cellType: "delete_row"}
+    {name: "Status", inputType: "none", cellType: "verification_status"},
+    {name: "Eintrag Löschen", inputType: "text", cellType: "delete_row"}
 ]
 
 const statusResolved = {
@@ -198,7 +199,7 @@ function generateTable() {
                         cellinput.addEventListener("mouseup", () => {
                             openStudentPicker(cellinput, allRents[i]?.rent_id)
                         })
-                        cellinput.value = allRents[i]?.student?.firstname || ""
+                        cellinput.value = allRents[i]?.student?.firstname ? `${allRents[i]?.student?.firstname} ${allRents[i]?.student?.lastname}` : ""
                         if(allRents[i]?.status == "CONFIRMED" || allRents[i]?.status == "WAITING") {
                             cellinput.disabled = true
                         }
@@ -242,7 +243,7 @@ function generateTable() {
                         break
                     case "rent_start":
                     case "rent_end_planned":
-                        cellinput.addEventListener("input", () => {
+                        cellinput.addEventListener("blur", () => {
                             updateRent(cellinput, column.cellType, cellinput.value)
                         })
                         cellinput.value = allRents[i][column.cellType] || ""
@@ -251,7 +252,7 @@ function generateTable() {
                         }
                         break
                     case "rent_end_actual":
-                        cellinput.addEventListener("input", () => {
+                        cellinput.addEventListener("blur", () => {
                             updateRent(cellinput, column.cellType, cellinput.value)
                         })
                         cellinput.value = allRents[i][column.cellType] || ""
@@ -450,7 +451,7 @@ function openStudentPicker(input: HTMLInputElement, rentId: number) {
     studentSelectionPopup.querySelector("input").setAttribute("rent_id", String(rentId))
 
     let bounds = input.getBoundingClientRect()
-    studentSelectionPopup.style.top = bounds.top + "px"
+    studentSelectionPopup.style.top = bounds.top + window.scrollY + "px"
     studentSelectionPopup.style.left = bounds.left + "px"
 
     studentSelectionPopup.style.display = "block"
@@ -528,7 +529,7 @@ function openTeacherPicker(input: HTMLInputElement, rentId: number, teacherType:
     teacherSelectionPopup.querySelector("input").setAttribute("rent_id", String(rentId));
     teacherSelectionPopup.querySelector("input").setAttribute("teacher_type", teacherType);
     var bounds = input.getBoundingClientRect();
-    teacherSelectionPopup.style.top = bounds.top + "px";
+    teacherSelectionPopup.style.top = bounds.top + window.scrollY + "px";
     teacherSelectionPopup.style.left = bounds.left + "px";
     teacherSelectionPopup.style.display = "block";
     teacherSearchbar.focus();

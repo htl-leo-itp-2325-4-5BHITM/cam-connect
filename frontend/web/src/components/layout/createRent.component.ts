@@ -1,10 +1,13 @@
 import {LitElement, css, html} from 'lit'
-import {customElement, property, queryAssignedElements} from 'lit/decorators.js'
+import { customElement, property } from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/createRent.styles.scss'
 import {ColorEnum, SizeEnum} from "../../base"
 import {ButtonType} from "../basic/button.component"
 import {AppState, ObservedProperty} from "../../model"
 import {model} from "../../index"
+import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
+import { icon } from '@fortawesome/fontawesome-svg-core'
+import { faMagnifyingGlass, faCircleArrowDown } from "@fortawesome/free-solid-svg-icons"
 
 @customElement('cc-create-rent')
 export class CreateRentComponent extends LitElement {
@@ -34,32 +37,55 @@ export class CreateRentComponent extends LitElement {
             <cc-line></cc-line>
             
             <div class="list">
-                <div>
+                <div class="globaltime">
                     Globale Zeit setzen:
-                    <div>
+                    <div class="dateInputArea">
                         <input type="date">
-                        <label for="" class="line">-</label>
+                        <span class="line">-</span>
                         <input type="date">
+                        <icon-cta>${unsafeSVG(icon(faCircleArrowDown).html[0])}</icon-cta>
                     </div>
                 </div>
-                <cc-create-device-entry></cc-create-device-entry>
-                <cc-create-device-entry></cc-create-device-entry>
-                <cc-create-device-entry></cc-create-device-entry>
+                
+                <div class="device">
+                    <div>
+                        <input type="text" value="Lumix s5ii">
+                        <input type="text" value="24" class="number">
+                    </div>
+    
+                    <div>
+                        <input type="date">
+                        <span class="line">-</span>
+                        <input type="date">
+                    </div>
+    
+                    <icon-cta>${unsafeSVG(icon(faMagnifyingGlass).html[0])}</icon-cta>
+                </div>
             </div>
 
-            <cc-button color="${ColorEnum.ACCENT}" type="${ButtonType.OUTLINED}">
-                Gerät Hinzufügen
-            </cc-button>
+            <div class="addDevice">
+                <cc-button class="primary" color="${ColorEnum.ACCENT}" type="${ButtonType.OUTLINED}">
+                    Gerät Hinzufügen
+                </cc-button>
+                <cc-button color="${ColorEnum.GRAY}" type="${ButtonType.OUTLINED}">
+                    Zubehör
+                </cc-button>
+            </div>
             
             
             <div class="bottom">
+                <cc-button size="${SizeEnum.BIG}" color="${ColorEnum.ACCENT}" type="${ButtonType.FILLED}" 
+                           @click="${this.createRent}"
+                >Verleih Erstellen</cc-button>
                 <cc-button size="${SizeEnum.BIG}" color="${ColorEnum.ACCENT}" type="${ButtonType.OUTLINED}" 
-                           @click="${()=>{model.updateAppState({createRentModalOpen: false})}}">
-                    abbrechen
-                </cc-button>
-                <cc-button color="${ColorEnum.ACCENT}" type="${ButtonType.FILLED}">Erstellen</cc-button>
+                           @click="${()=>{model.updateAppState({createRentModalOpen: false})}}"
+                >Abbrechen</cc-button>
             </div>
         `
+    }
+
+    createRent() {
+        console.log("rent created")
     }
 }
 
