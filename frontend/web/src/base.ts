@@ -16,11 +16,6 @@ export interface ccResponse<T>{
     data: T
 }
 
-interface resizeBreakpoint {
-    size: number,
-    key: string
-}
-
 export enum ColorEnum {ACCENT="accent", GOOD="good", MID="mid", BAD="bad", GRAY="gray"}
 export enum SimpleColorEnum {ACCENT="accent", GRAY="gray"}
 export enum SizeEnum {BIG="big", MEDIUM="medium", SMALL="small"}
@@ -96,10 +91,14 @@ export class api{
     }
 }
 
+interface ResizeBreakpoint {
+    size: number,
+    key: string
+}
 export class WidthResizeObserver {
     source: HTMLElement
-    breakpoints: resizeBreakpoint[]
-    constructor(source: HTMLElement, breakpoints: resizeBreakpoint[]) {
+    breakpoints: ResizeBreakpoint[]
+    constructor(source: HTMLElement, breakpoints: ResizeBreakpoint[]) {
         this.source = source
         this.breakpoints = breakpoints.sort((a, b) => a.size - b.size)
 
@@ -123,8 +122,6 @@ export class WidthResizeObserver {
                 }
             })
         }).observe(this.source)
-
-        console.log(source, breakpoints)
     }
 }
 
@@ -139,7 +136,9 @@ export class Tooltip {
         this.tooltip.innerText = text
 
         const bounds = elem.getBoundingClientRect()
-        this.tooltip.style.top = bounds.top - this.tooltip.clientHeight + "px" //align the bottom of the toolip with the top of the hovered elem
+        let topOffset = bounds.top - this.tooltip.clientHeight
+        if(topOffset < 0) topOffset = bounds.bottom + 5
+        this.tooltip.style.top = topOffset + "px" //align the bottom of the toolip with the top of the hovered elem
         this.tooltip.style.left = bounds.left + "px"
 
         if (Date.now() - this.lastTimeHidden < 100) { //if the last tooltip was closed less the 100ms ago
@@ -178,7 +177,35 @@ export class Tooltip {
     }
 }
 
-export class KeyBindHelper {
-    static keybinds: Map<string, Function> = new Map()
+export interface KeyBoardShortCut {
+    keys: string[],
+    action: ()=> void
+}
 
+export class KeyBoardShortCut {
+    private static shortCuts: KeyBoardShortCut[] = []
+    private static pressedKeys:Set<string> = new Set() //all currently pressed keys
+
+    static register(keys: (string[] | string[][]), action: () => void){
+        if(!Array.isArray(keys[0])) keys = [keys] as string[][]
+        keys.forEach(combi => {
+            this.shortCuts.push({keys: combi, action: action})
+        })
+    }
+
+    static {
+        window.addEventListener("keydown", (event: KeyboardEvent) => {
+            this.pressedKeys.add(event.key.toLowerCase()) //add the pressed key to set
+            this.shortCuts.forEach(shortCut => { //check for every shortcut if all keys are currently pressed
+                if(shortCut.keys.every(key => this.pressedKeys.has(key))){
+                    shortCut.action()
+                }
+            })
+
+            console.log(this.pressedKeys)
+        })
+        window.addEventListener("keyup", (event: KeyboardEvent) => {
+            this.pressedKeys.delete(event.key.toLowerCase()) //remove the released key from set
+        })
+    }
 }

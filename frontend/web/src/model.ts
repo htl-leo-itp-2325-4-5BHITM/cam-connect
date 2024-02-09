@@ -13,7 +13,9 @@ export enum PageEnum { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar"
 
 export interface AppState {
     page: PageEnum,
-    createRentModalOpen: boolean
+    createRentModalOpen: boolean,
+    createMultiRentModalOpen: boolean,
+    cancelCurrentAction: () => void,
 }
 
 type AppStatePartial = Partial<AppState>
@@ -67,7 +69,9 @@ export default class Model{
 
     readonly appState = new BehaviorSubject<AppState>({
         page: PageEnum.EQUIPMENT,
-        createRentModalOpen: false
+        createMultiRentModalOpen: false,
+        createRentModalOpen: false,
+        cancelCurrentAction: void {}
     })
 
 
@@ -125,6 +129,8 @@ export default class Model{
     //region update functions
 
     updateAppState(data: AppStatePartial){
+        if(data.createRentModalOpen == true) data.cancelCurrentAction = () => this.updateAppState({createRentModalOpen: false})
+
         this.appState.next(Object.assign({}, this.appState.value, data))
     }
 

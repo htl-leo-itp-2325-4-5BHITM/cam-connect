@@ -4,7 +4,7 @@ import styles from '../../../styles/components/layout/sidebar.styles.scss'
 import { ButtonComponent, ButtonType} from '../basic/button.component'
 import {FilterContainerComponent} from "../basic/filterContainer.component"
 import {filter} from "rxjs"
-import {SimpleColorEnum, SizeEnum} from "../../base"
+import {SimpleColorEnum, SizeEnum, Tooltip} from "../../base"
 import {model} from "../../index"
 
 @customElement('cc-sidebar')
@@ -27,8 +27,11 @@ export class SidebarComponent extends LitElement {
         return html`
             <style>${styles}</style>
             <div class="buttons">
-                <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.FILLED}" @click="${this.openCreateRentMenu}">
-                    Neuer Verleih
+                <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.FILLED}" 
+                           @click="${this.openCreateRentMenu}"
+                           @mouseenter="${(e) => {Tooltip.show(e.target, 'shift+n oder ^', 1500)}}"
+                           @mouseleave="${()=>{Tooltip.hide(0)}}"
+                >Neuer Verleih
                 </cc-button>
                 <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.OUTLINED}">
                     Multi Verleih

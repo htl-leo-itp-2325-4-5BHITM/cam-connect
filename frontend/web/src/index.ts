@@ -26,6 +26,7 @@ import "./components/app.component"
 //css
 import '../styles/index.scss'
 import Model, {ObservedProperty, PageEnum} from "./model"
+import {KeyBoardShortCut} from "./base"
 
 //OMG its our single swouce of THWQUUUCE
 export let model = new Model()

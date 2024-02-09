@@ -33,6 +33,10 @@ export class SelectComponent extends LitElement {
         option.classList.add("selected")
         this.optionSelected(option)
     }
+
+    selectOptionByIndex(index:number){
+        this.selectOption(this.options[index])
+    }
 }
 
 declare global {

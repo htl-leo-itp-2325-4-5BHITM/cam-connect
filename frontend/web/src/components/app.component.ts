@@ -3,6 +3,7 @@ import {customElement, property} from 'lit/decorators.js'
 import styles from '../../styles/components/app.styles.scss'
 import {model} from "../index"
 import {AppState, ObservedProperty, PageEnum} from "../model"
+import {KeyBoardShortCut} from "../base"
 
 @customElement('cc-app')
 export class AppComponent extends LitElement {
@@ -12,6 +13,13 @@ export class AppComponent extends LitElement {
     constructor() {
         super();
         this.appState = new ObservedProperty<AppState>(this, model.appState)
+
+        KeyBoardShortCut.register([["shift", "n"], ["dead"]], () => {model.updateAppState({createRentModalOpen: true})})
+        KeyBoardShortCut.register([["escape"]], () => {model.appState.value.cancelCurrentAction()})
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
     }
 
     render() {

@@ -6,7 +6,8 @@ import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { faMagnifyingGlass, faArrowRotateRight } from "@fortawesome/free-solid-svg-icons"
 import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons"
 import {model} from "../../index"
-import {SimpleColorEnum, SizeEnum} from "../../base"
+import {KeyBoardShortCut, SimpleColorEnum, SizeEnum, Tooltip} from "../../base"
+import {PageEnum} from "../../model"
 
 @customElement('cc-navbar')
 export class NavbarComponent extends LitElement {
@@ -17,10 +18,21 @@ export class NavbarComponent extends LitElement {
                 <img src="assets/logo/cc-wordmark-white.svg" alt="cam-connect">
             </div>
 
-            <cc-select size="${SizeEnum.MEDIUM}" spacerColor="${SimpleColorEnum.ACCENT}" .optionSelected = "${(elem) => {model.updateAppState({page: elem.dataset.page})}}">
-                <p class="selected" data-page="equipment">Equipment</p>
-                <p data-page="rents">Verleihliste</p>
-                <p data-page="calendar">Kalender</p>
+            <cc-select size="${SizeEnum.MEDIUM}" spacerColor="${SimpleColorEnum.ACCENT}" 
+                       .optionSelected = "${(elem) => {model.updateAppState({page: elem.dataset.page})}}"
+            >
+                <p class="selected" data-page="equipment" 
+                   @mouseenter="${(e) => {Tooltip.show(e.target, 'shift+e oder 1', 1500)}}" 
+                   @mouseleave="${()=>{Tooltip.hide(0)}}"
+                >Equipment</p>
+                <p data-page="rents"
+                   @mouseenter="${(e) => {Tooltip.show(e.target, 'shift+v oder 2', 1500)}}"
+                   @mouseleave="${()=>{Tooltip.hide(0)}}"
+                >Verleihliste</p>
+                <p data-page="calendar"
+                   @mouseenter="${(e) => {Tooltip.show(e.target, 'shift+c oder 3', 1500)}}"
+                   @mouseleave="${()=>{Tooltip.hide(0)}}"
+                >Kalender</p>
             </cc-select>
 
             <div class="tools">
@@ -29,6 +41,18 @@ export class NavbarComponent extends LitElement {
                 <icon-cta>${unsafeSVG(icon(faCircleQuestion).html[0])}</icon-cta>
             </div>
         `
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
+        KeyBoardShortCut.register([["shift", "e"], ["1"]], () => {this.selectNavItem(0)})
+        KeyBoardShortCut.register([["shift", "v"], ["2"]], () => {this.selectNavItem(1)})
+        KeyBoardShortCut.register([["shift", "c"], ["3"]], () => {this.selectNavItem(2)})
+    }
+
+    selectNavItem(pageIndex: number) {
+        let select = this.renderRoot.querySelector("cc-select")
+        select.selectOptionByIndex(pageIndex)
     }
 }
 
