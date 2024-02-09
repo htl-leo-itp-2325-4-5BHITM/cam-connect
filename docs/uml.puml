@@ -13,6 +13,7 @@
 		* sensor_id: Long
 		* resolution_id: Long
 		* mount_id: Long
+		* system_id: Long
 		* framerate: int
 		* autofocus: boolean
 	}
@@ -31,7 +32,7 @@
 		* focal_length: int
 	}
 
-	entity AudioType {
+	entity MicrophoneType {
 		--
 		* windblocker: boolean
 		* wireless: boolean

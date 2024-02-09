@@ -1,0 +1,36 @@
+@import "../../variables";
+
+div{
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+  user-select: none;
+
+  margin: -.4rem;
+  padding: .4rem;
+
+  border-radius: 50%;
+
+  transition: background-color $hoverBackgroundTransitionTime;
+
+  &:hover{
+    background-color: $hoverBackground;
+  }
+
+  &.multiple img{
+    width: 1.6rem;
+  }
+
+  &.accent img {
+    @include imgIconColorAccent
+  }
+  &.gray img {
+    @include imgIconColorGray800
+  }
+
+  img{
+    width: 1.2rem;
+    aspect-ratio: 1/1;
+  }
+}
+

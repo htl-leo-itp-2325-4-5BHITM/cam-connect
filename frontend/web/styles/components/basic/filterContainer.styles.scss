@@ -1,0 +1,77 @@
+@import "../../base";
+
+.filter-option, .filter-block {
+  display: flex;
+  flex-direction: column;
+}
+
+div.filter-block {
+  padding-inline: .75rem; /*this may cause the small lines to get fucked up*/
+  .heading {
+    color: $accentDarkmodeLight;
+    font-weight: 600;
+
+    span.clear{
+      color: $gray600;
+      text-decoration: underline;
+      margin-left: .5rem;
+      font-size: $fSizeDesktopSmall;
+      cursor: pointer;
+
+      &:hover{
+        color: $gray700;
+      }
+    }
+  }
+
+  .option:last-child {
+    &::after{
+      height: 50%;
+    }
+  }
+
+  .option {
+    font-weight: 400 !important;
+    color: $gray800 !important;
+    position: relative;
+    transition: font-weight .2s, color .2s;
+
+    cursor: pointer;
+    user-select: none;
+
+    $linewidth: .6rem;
+    $thickness: 2px;
+    margin-left: calc($linewidth + .5rem) !important;
+
+    &::before, &::after {
+      content: "";
+      background-color: $accentDarkmodeLight;
+      position: absolute;
+      right: 100%;
+    }
+
+    &::before {
+      height: $thickness;
+      width: $linewidth;
+      top: 50%;
+      transform: translateY(-50%);
+      margin-right: $thickness;
+    }
+
+    &::after {
+      height: 100%;
+      width: $thickness;
+      margin-right: $linewidth;
+    }
+
+    &:hover {
+      color: $gray1000 !important;
+    }
+
+    &.selected {
+      color: white !important;
+      font-weight: 600 !important;
+    }
+  }
+}
+

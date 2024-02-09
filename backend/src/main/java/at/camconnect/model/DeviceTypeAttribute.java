@@ -1,13 +1,14 @@
 package at.camconnect.model;
 
+import at.camconnect.dtos.DeviceTypeAttributeDTO;
+import at.camconnect.dtos.DeviceTypeGlobal;
 import jakarta.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class DeviceTypeAttribute {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "camera_resolution_seq")
-    @SequenceGenerator(name = "camera_resolution_seq", sequenceName = "CAMERA_RESOLUTION_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "attribute_name")
     private long attribute_id;
     private String name;
     private String details;
@@ -19,6 +20,8 @@ public abstract class DeviceTypeAttribute {
 
     public DeviceTypeAttribute() {
     }
+
+    abstract public void update(DeviceTypeAttributeDTO data);
 
     public long getAttribute_id() {
         return attribute_id;

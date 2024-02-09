@@ -1,12 +1,15 @@
 package at.camconnect.repository;
 
+import at.camconnect.dtos.RentDTO;
+import at.camconnect.dtos.RentByStudentDTO;
 import at.camconnect.enums.RentStatusEnum;
-import at.camconnect.statusSystem.CCException;
+import at.camconnect.responseSystem.CCException;
+import at.camconnect.socket.RentSocket;
 import at.camconnect.model.Device;
 import at.camconnect.model.Rent;
 import at.camconnect.model.Student;
 import at.camconnect.model.Teacher;
-import at.camconnect.statusSystem.CCResponse;
+import at.camconnect.responseSystem.CCResponse;
 import io.vertx.ext.mail.MailClient;
 import io.vertx.ext.mail.MailMessage;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,6 +21,7 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -29,15 +33,20 @@ public class RentRepository {
     @Inject
     MailClient client;
 
+    @Inject
+    RentSocket rentSocket;
+
     @Transactional
-    public void create(JsonObject rentJson){
-        Rent rent = new Rent(em.find(Student.class, rentJson.getInt("student_id")));
+    public void create(RentDTO rentData){
+        Rent rent = new Rent(em.find(Student.class, rentData.student_id()));
         em.persist(rent);
+        rentSocket.broadcast(getAll());
     }
 
     @Transactional
     public void createEmpty(){
         em.persist(new Rent());
+        rentSocket.broadcast(getAll());
     }
 
     @Transactional
@@ -47,12 +56,26 @@ public class RentRepository {
         } catch(CCException ex){
             return CCResponse.error(ex);
         }
+        rentSocket.broadcast(getAll());
         return CCResponse.ok();
     }
 
-    public List<Rent> getAll(){
-        List<Rent> rents = em.createQuery("SELECT r FROM Rent r", Rent.class).getResultList();
-        return rents;
+    public List<RentByStudentDTO> getAll(){
+        List<Student> students = em.createQuery(
+                "SELECT s FROM Rent r" +
+                    " join Student s on r.student.student_id = s.student_id" +
+                        " group by s.student_id", Student.class).getResultList();
+
+        List<RentByStudentDTO> result = new LinkedList<>();
+
+        for (Student student : students) {
+            List<Rent> rents = em.createQuery(
+                    "SELECT r FROM Rent r" +
+                            " where r.student.student_id = ?1", Rent.class).setParameter(1, student.getStudent_id()).getResultList();
+
+            result.add(new RentByStudentDTO(student, rents));
+        }
+        return result;
     }
 
     public Rent getById(Long id){
@@ -118,7 +141,7 @@ public class RentRepository {
     }
 
     @Transactional
-    public void confirm(Long rentId, JsonObject jsonObject) {
+    public void confirm(Long rentId, RentDTO rentDTO) {
         Rent rent = getById(rentId);
 
         if(!rent.getStatus().equals(RentStatusEnum.WAITING) && !rent.getStatus().equals(RentStatusEnum.CONFIRMED)){
@@ -130,9 +153,9 @@ public class RentRepository {
         RentStatusEnum verificationStatus;
 
         try{
-            verificationCode = jsonObject.getString("verification_code");
-            verificationMessage = jsonObject.getString("verification_message");
-            verificationStatus = RentStatusEnum.valueOf(jsonObject.getString("verification_status").toUpperCase());
+            verificationCode = rentDTO.verification_code();
+            verificationMessage = rentDTO.verification_message();
+            verificationStatus = rentDTO.status();
         } catch (IllegalArgumentException e) {
             throw new CCException(1106);
         }
@@ -149,7 +172,7 @@ public class RentRepository {
     }
 
     @Transactional
-    public void returnRent(Long rentId, JsonObject jsonObject){
+    public void returnRent(Long rentId, RentDTO rentDTO){
         Rent rent = getById(rentId);
 
         if(!rent.getStatus().equals(RentStatusEnum.CONFIRMED)){
@@ -161,9 +184,9 @@ public class RentRepository {
         RentStatusEnum verificationStatus;
 
         try{
-            verificationCode = jsonObject.getString("verification_code");
-            verificationMessage = jsonObject.getString("verification_message");
-            verificationStatus = RentStatusEnum.valueOf(jsonObject.getString("verification_status").toUpperCase());
+            verificationCode = rentDTO.verification_code();
+            verificationMessage = rentDTO.verification_message();
+            verificationStatus = rentDTO.status();
         } catch (IllegalArgumentException e) {
             throw new CCException(1106);
         }
@@ -195,6 +218,8 @@ public class RentRepository {
                 throw new CCException(1200, "Failed to send mail");
             }
         });
+
+        rentSocket.broadcast(getAll());
     }
 
     @Transactional
@@ -256,6 +281,53 @@ public class RentRepository {
             try{ setDeviceString(id, rentJson.getString("device_string")); }
             catch (CCException ccex){ throw ccex; }
             catch(Exception ex){ throw new CCException(1105, "cannot update device_string " + ex.getMessage()); }
+
+        rentSocket.broadcast(getAll());
+    }
+
+    @Transactional
+    public void updateAttribute(String attribute, Long rentId, RentDTO rentDTO){
+        Rent rent = em.find(Rent.class, rentId);
+
+        switch (attribute){
+            case "student":
+                Student student = em.find(Student.class, rentDTO.student_id());
+                rent.setStudent(student);
+                break;
+            case "device":
+                Device device = em.find(Device.class, rentDTO.device_id());
+                rent.setDevice(device);
+                break;
+            case "teacherstart":
+                Teacher teacherStart = em.find(Teacher.class, rentDTO.teacher_id_start());
+                rent.setTeacher_start(teacherStart);
+                break;
+            case "teacherend":
+                Teacher teacherEnd = em.find(Teacher.class, rentDTO.teacher_id_end());
+                rent.setTeacher_end(teacherEnd);
+                break;
+            case "rentstart":
+                LocalDate rentStart = rentDTO.rent_start();
+                rent.setRent_start(rentStart);
+                break;
+            case "rentendplanned":
+                LocalDate rentEndPlanned = rentDTO.rent_end_planned();
+                rent.setRent_end_planned(rentEndPlanned);
+                break;
+            case "rentendactual":
+                LocalDate rentEndActual = rentDTO.rent_end_actual();
+                rent.setRent_end_actual(rentEndActual);
+                break;
+            case "note":
+                rent.setNote(rentDTO.note());
+                break;
+            case "status":
+                RentStatusEnum status = rentDTO.status();
+                rent.setStatus(status);
+                break;
+        }
+
+        rentSocket.broadcast(getAll());
     }
 
     //region setter
@@ -324,9 +396,6 @@ public class RentRepository {
         }
 
         rent.setStatus(verificationStatus);
-    }
-    public void setVerificationCode(Long rentId, String verification_code){
-        Rent rent = getById(rentId);
     }
     //endregion
 

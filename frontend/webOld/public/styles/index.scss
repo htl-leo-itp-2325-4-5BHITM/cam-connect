@@ -2,7 +2,7 @@
 
 @media print {
   #import, #createRent{
-    display: none;
+    display: none !important;
   }
 }
 

@@ -20,7 +20,7 @@ user stories can be found [here](https://school-space.notion.site/4c889b6df8a14f
 - Commit often, this just safes your work to your local git
   - commit messages 
     - should be precise and short
-    - should start with the issue number your working on or with "hotfix:", "refactor:" or something similar when not working on any issue
+    - should start with the issue number your working on or with "hotfix:", "refactor:", "minor:" or something similar when not working on any issue
     - `#0 Updated Workflow section in convetions.md`
   - if many things were changed write a description
 - Push at the end of each workday and when leaving school .-.
@@ -34,30 +34,36 @@ user stories can be found [here](https://school-space.notion.site/4c889b6df8a14f
   - if necessary the [feature list](../README.md/#features) will be updated
 
 ## Code and file formatting
-- use camelCase for folder names
-- use camelCase (or PascalCase for classes) for filenames, and css class names
-- `{` brackets should be on the same lines as the code they belong to
-- use snake_case for database variables
-  - whenever a variable is used as an foreign key it should be named simply `<object>` when it contains a entity and `<object>_id` when it contains the id. This should be the case everywhere.
-  - these _ names should be kept the same all throughout the project. Eg. when passing them to the frontend.
 - every major piece of code: ifs, loops, functions, css selectors etc. should be seperated by a empty line from the previous
 - condition nesting should be avoided, instead invert the condition and return early
 - every major function should have a jsdoc comment overtop of it this should discribe
   - what the function does
   - what it returns
   - if necessary: what the params are used for
-- every condition (if, while, switch) that is not immediately clear should have a comment explaining the condition 
-in the same line as the bracket
+- every condition (if, while, switch) that is not immediately clear should have a comment explaining the condition
+  in the same line as the bracket
 - every codeblock which contents are not immediately clear should have a comment explaining its content overtop of it
 - if you can't complete a piece of code right now, add a `//TODO` comment
-- every major, bigger block of functions (all that create a new entry, all that display refresh and edit the devices, etc.) 
-should be wrapped in a `//region name ..code here.. //endregion` that way they can be folded in webstorm
+- every major, bigger block of functions (all that create a new entry, all that display refresh and edit the devices, etc.)
+  should be wrapped in a `//region name ..code here.. //endregion` that way they can be folded in webstorm
 - when using variables which uses are not immediatly clear add a comment on the same line to explain or on the line above to explain for multiple
 - script, style and mockup files belonging together should have the same name
 - Id should be written like this `thingId`
-- functions that create a new thing should be named `createSomething` 
-- functions that search for something should be named `searchForSomething` 
-- functions that get a specific thing by a specific param should be named `getAllSomethings` / `getSomethingByID`
+
+## Names
+- use camelCase for folder names
+- use camelCase (or PascalCase for classes) for filenames, and css class names
+- `{` brackets should be on the same lines as the code they belong to
+- use snake_case for database variables
+  - whenever a variable is used as an foreign key it should be named simply `<object>` when it contains a entity and `<object>_id` when it contains the id. This should be the case everywhere.
+  - these _ names should be kept the same all throughout the project. Eg. when passing them to the frontend.
+
+### Function names
+- functions that create a new thing should be named `createSomething`
+- functions that search for something should be named `searchForSomething`
+- functions that get a specific thing that already exists by a specific param should be named `getAllSomethings` / `getSomethingByID`
+- functions that use existing data to calculate a result should be named `calculateSomthing`
+- functions that convert one thing to another should be named `somethingToSomething` or `somethingAsSomething`
 
 this example is very basic, some of the comments are not needed here, but you get the idea
 ```JS
@@ -98,7 +104,7 @@ function checkLogin(){
 - use .innerText instead of .innerHtml whenever you dont want to add elements to the DOM, this way you avoid injections
 - use `string` instead of `String` whenever possible
 
-### SCSS specific
+### CSS specific
 - there should be a base stylesheet whenever multiple pages need the same style
 - don't nest multiple container selectors only sub items or pseudo selectors
 - classnames and similar should be camelCase
@@ -112,7 +118,13 @@ function checkLogin(){
 - use grids and their gap property
 - use `aspect-ratio: 1` for squares
 - use width/height `fit-content` for auto scaling
-- for recoloring svgs you can use this generator https://codepen.io/sosuke/pen/Pjoqqp
+- check if a variable already exists for what you are setting, transition times colors fontsizes etc. all have variables
+- containers that simply group a few pieces of content together inside a container should have the class "left", "right" etc.
+- do not use :last-child or simmilar selectors for non lists:
+  - these should only be used to select the last element of an *unknown* number of items in a list
+  - these should not be used for selecting predefined sub containers, text boxes or simmilar
+  - since these dont target specific containers but any item of that type they can easily lead to unexpected results
+- 
 
 For those that don't know scss this will seem weird, it's actually pretty easy
 ```SCSS

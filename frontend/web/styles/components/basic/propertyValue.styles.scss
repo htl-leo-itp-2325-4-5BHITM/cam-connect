@@ -1,0 +1,32 @@
+@import "../../base";
+
+p{
+  gap: 1px;
+  color: $gray800;
+
+  &[size="big"] {
+    font-size: $fSizeDesktopLarge !important;
+  }
+  &[size="medium"] {
+    font-size: $fSizeDesktopDefault !important;
+  }
+  &[size="small"] {
+    font-size: $fSizeDesktopSmall !important;
+  }
+  &[isLink="true"] .value {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}
+
+.property{
+  color: $gray800;
+  font-weight: 400 !important;
+  padding-right: .2rem !important;
+}
+
+.value{
+  color: white;
+  font-weight: 500 !important;
+  white-space: break-spaces;
+}

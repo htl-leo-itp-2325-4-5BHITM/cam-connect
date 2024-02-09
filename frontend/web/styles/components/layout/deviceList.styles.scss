@@ -1,0 +1,29 @@
+@import "../../base";
+
+$gap: 1rem;
+
+:host {
+  all: initial;
+  columns: 4;
+  column-gap: $gap;
+  padding: $gap !important;
+
+  overflow-y: auto;
+
+  @media screen and (max-width: 1300px) {
+    columns: 3;
+  }
+
+  @media screen and (max-width: 1100px) {
+    columns: 2;
+  }
+
+  @media screen and (max-width: 900px) {
+    columns: 1;
+  }
+}
+
+:host > *{
+  break-inside: avoid;
+  margin-bottom: $gap;
+}

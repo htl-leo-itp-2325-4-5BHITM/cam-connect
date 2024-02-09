@@ -1,0 +1,154 @@
+@import "../../base";
+
+:host{
+  all: initial;
+  height: fit-content;
+}
+
+.cc-button{
+  font-size: $fSizeDesktopLarge;
+  min-width: 10ch;
+  height: fit-content;
+  border-radius: .3rem;
+  cursor: pointer;
+  transition: .2s background-color, color, border ease;
+  white-space: nowrap;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: .5rem;
+
+  &[color = "accent"]{
+    --color-main: #{$accentDarkmodeDark};
+    --color-light: #{$accentDarkmodeLight};
+    --color-text: #{$gray1000};
+  }
+  &[color = "gray"] {
+    --color-main: #{$gray300};
+    --color-light: #{$gray600};
+    --color-text: #{$gray900};
+  }
+
+  &[size = "big"]{
+    font-size: $fSizeDesktopLarge;
+    min-width: 8ch;
+    padding-inline: 1rem;
+    padding-block: .2rem;
+  }
+  &[size = "medium"]{
+    font-size: $fSizeDesktopDefault;
+    min-width: 8ch;
+    padding-inline: 1rem;
+    padding-block: .1rem;
+  }
+  &[size = "small"]{
+    font-size: $fSizeDesktopSmall;
+    min-width: 6ch;
+    padding-inline: 1rem;
+    padding-block: .1rem;
+  }
+
+  &[type = "filled"]{
+    background-color: var(--color-main);
+    box-shadow: 0 0 0 1px var(--color-light) inset;
+    color: var(--color-text);
+
+    &:hover {
+    }
+  }
+  &[type = "outlined"]{
+    background-color: transparent;
+    box-shadow: 0 0 0 1.5px var(--color-light) inset;
+    color: var(--color-text);
+
+    &[color = "accent"]{
+      color: var(--color-light);
+    }
+
+    &:hover{
+      background: $gray100;
+    }
+  }
+  &[type = "text"]{
+    background-color: transparent;
+    border: none;
+    color: var(--color-text);
+
+    min-width: 0;
+    padding-inline: .3rem;
+
+    &[color = "accent"]{
+      color: var(--color-light);
+    }
+
+    &:hover {
+      background-color: $hoverBackground;
+    }
+  }
+  &[type = "underlined"]{
+    background-color: transparent;
+    border: none;
+    color: var(--color-text);
+    text-decoration: underline;
+    font-weight: 400;
+    text-underline-offset: .1rem;
+
+    min-width: 0;
+    padding-inline: .2rem;
+    margin-inline: -.2rem;
+    margin-block: -.1rem;
+
+    &[color = "accent"]{
+      color: var(--color-light);
+    }
+
+    &:hover {
+      background-color: $hoverBackgroundLight;
+    }
+  }
+
+  &[type = "text"], &[type="underlined"], &[type="outlined"] {
+    &[color="accent"] {
+      ::slotted(*) {
+        color: var(--color-light) !important;
+        margin: 0;
+      }
+
+      ::slotted(svg){
+        @include imgIconColorAccent;
+      }
+      ::slotted(img){
+        @include imgIconColorAccent;
+      }
+    }
+
+    &[color="gray"] {
+      ::slotted(*) {
+        color: var(--color-text) !important;
+      }
+    }
+  }
+
+  ::slotted(*:not(.icon, svg, img)){
+    opacity: 80%;
+    font-weight: 400 !important;
+  }
+
+  ::slotted(svg){
+    @include imgIconColorGray800;
+  }
+  ::slotted(img){
+    @include imgIconColorGray800;
+  }
+
+
+
+  ::slotted(.icon) {
+    @include imgIconColorGray800;
+  }
+
+  ::slotted(.icon.accent) {
+    @include imgIconColorAccent;
+  }
+}

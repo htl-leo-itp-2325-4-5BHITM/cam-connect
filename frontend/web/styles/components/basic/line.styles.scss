@@ -1,0 +1,22 @@
+@import "../../base";
+
+.cc-line{
+  width: auto;
+  height: 1px;
+  display: block;
+
+  &[type="vertical"]{
+    width: 1px;
+    height: 100%;
+  }
+
+  &[color="500"]{
+    background-color: $gray500;
+  }
+  &[color="600"]{
+    background-color: $gray600;
+  }
+  &[color="800"]{
+    background-color: $gray800;
+  }
+}

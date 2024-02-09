@@ -1,0 +1,14 @@
+@import "base";
+
+:global{
+  body{
+    height: 100svh;
+  }
+
+  .test{
+    background-color: black;
+    width: 5rem;
+    height: 5rem;
+    @include imgIconColorAccent
+  }
+}

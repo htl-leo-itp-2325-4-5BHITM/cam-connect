@@ -1,11 +1,11 @@
 package at.camconnect.boundary;
 
-import at.camconnect.statusSystem.CCException;
-import at.camconnect.statusSystem.CCResponse;
+import at.camconnect.dtos.StudentDTO;
+import at.camconnect.responseSystem.CCException;
+import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.model.Student;
 import at.camconnect.repository.StudentRepository;
 import jakarta.inject.Inject;
-import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -62,8 +62,8 @@ public class StudentResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public List<Student> search(JsonObject data){
-        return studentRepository.search(data);
+    public List<Student> search(StudentDTO studentDTO){
+        return studentRepository.search(studentDTO);
     }
 
     @GET

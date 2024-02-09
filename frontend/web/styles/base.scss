@@ -1,0 +1,80 @@
+@import "./variables";
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+*:not(img, svg, path){
+    margin: 0;
+    padding: 0;
+    font: inherit;
+    accent-color: $accentDarkmode;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+    color: $gray1000;
+}
+
+img, svg, path{
+    color: black;
+}
+
+img{
+    width:100%;
+    display: block;
+    object-fit: contain;
+}
+
+html{
+    scroll-behavior: smooth;
+}
+
+::selection{
+    background-color: $accentDarkmodeLight;
+    color: hsl(0, 0%, 0%);
+}
+
+a{
+    text-decoration: none;
+    color: inherit;
+}
+
+button{
+    background-color: transparent;
+    border: none;
+    color: hsl(0, 0%, 100%);
+}
+
+
+:global {
+    #tooltip{
+        position: absolute;
+        padding: .4rem;
+        background-color: $gray500;
+        box-sizing: border-box;
+        pointer-events: none;
+        cursor: default;
+        border-radius: .2rem;
+        opacity: 0;
+        max-width: 30ch;
+        top: 0;
+        left: 0;
+        z-index: 100;
+        font-size: $fSizeDesktopSmall;
+    }
+}
+
+/*animation geht mit svg grad aus irgendeimnem grund ned*/
+@keyframes svg-cta-click {
+    1% {
+        --padding: .4rem;
+        background-color: green;
+        scale: 0;
+    }
+    50% {
+        --padding: -0.5rem;
+        background-color: rebeccapurple;
+        scale: 1;
+    }
+    100% {
+        --padding: .4rem;
+        background-color: black;
+        scale: 0;
+    }
+}

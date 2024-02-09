@@ -1,0 +1,13 @@
+@import "../../base";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  all: initial;
+  flex-grow: 1;
+  padding-inline: 1rem !important;
+
+  cc-rent-list-entry {
+    margin: 1rem !important;
+  }
+}

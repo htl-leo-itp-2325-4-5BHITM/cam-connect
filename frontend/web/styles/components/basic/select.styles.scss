@@ -1,0 +1,48 @@
+@import "../../base";
+
+:host{
+  all: initial;
+}
+
+.select {
+  display: flex;
+  font-size: var(--f-size) !important;
+  font-weight: 400 !important;
+  gap: calc(1ch + .4rem);
+
+  &[size="big"]{
+    --f-size: #{$fSizeDesktopLarge};
+  }
+  &[size="default"]{
+    --f-size: #{$fSizeDesktopDefault};
+  }
+  &[size="small"]{
+    --f-size: #{$fSizeDesktopSmall};
+  }
+
+  ::slotted(*){
+    cursor: pointer;
+    color: $gray800 !important;
+    user-select: none;
+    font-size: var(--f-size) !important;
+    transition: background-color $transitionTimeShort;
+    @include textBackgroundHoverPreparation
+  }
+
+  ::slotted(*:hover){
+    background-color: $hoverBackground;
+  }
+
+  ::slotted(*.selected){
+    color: white !important;
+    font-weight: 500 !important;
+  }
+
+  ::slotted(*:not(:last-child)):after{
+    margin-inline: .2rem;
+    width: 1ch;
+    text-align: center;
+    content: "•";
+    position: absolute;
+  }
+}

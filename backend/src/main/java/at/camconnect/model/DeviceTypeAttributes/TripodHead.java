@@ -1,5 +1,6 @@
 package at.camconnect.model.DeviceTypeAttributes;
 
+import at.camconnect.dtos.DeviceTypeAttributeDTO;
 import at.camconnect.model.DeviceTypeAttribute;
 import jakarta.persistence.*;
 
@@ -11,4 +12,7 @@ public class TripodHead extends DeviceTypeAttribute {
 
     public TripodHead() {
     }
+
+    @Override
+    public void update(DeviceTypeAttributeDTO data) {}
 }

@@ -1,8 +1,10 @@
 package at.camconnect.repository;
 
-import at.camconnect.statusSystem.CCException;
+import at.camconnect.dtos.DeviceDTO;
+import at.camconnect.responseSystem.CCException;
 import at.camconnect.model.Device;
 import at.camconnect.model.DeviceType;
+import at.camconnect.socket.DeviceSocket;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
@@ -19,33 +21,39 @@ public class DeviceRepository {
     @Inject
     EntityManager em;
 
+    @Inject
+    DeviceSocket deviceSocket;
+
     @Transactional
     public void create(Device device){
         em.persist(device);
+        deviceSocket.broadcast(getAll());
     }
 
     @Transactional
     public void remove(Long id){
         em.remove(getById(id));
+        deviceSocket.broadcast(getAll());
     }
 
     @Transactional
-    public void update(Long id, JsonObject data) {
+    public void update(Long id, DeviceDTO data) {
         try{
-            setNumber(id, data.getString("number"));
+            setNumber(id, data.number());
         } catch(Exception ex){ System.out.println(ex.getMessage()); }
 
         try{
-            setNote(id, data.getString("note"));
+            setNote(id, data.note());
         } catch(Exception ex){ System.out.println(ex.getMessage()); }
 
         try{
-            setSerial(id, data.getString("serial"));
+            setSerial(id, data.serial());
         } catch(Exception ex){ System.out.println(ex.getMessage()); }
 
         try{
-            setType(id, data.getInt("number"));
+            setType(id, data.type_id());
         } catch(Exception ex){ System.out.println(ex.getMessage()); }
+        deviceSocket.broadcast(getAll());
     }
 
     public Device getById(long id){
@@ -56,31 +64,32 @@ public class DeviceRepository {
 
     public List<Device> getAll(){
         List<Device> devices = em.createQuery("SELECT d FROM Device d", Device.class).getResultList();
-        if(devices.isEmpty()){
-            throw new CCException(1202);
-        }
         return devices;
     }
 
     public void setNumber(long rentId, String number) {
         Device device = getById(rentId);
         device.setNumber(number);
+        deviceSocket.broadcast(getAll());
     }
 
     public void setSerial(long rentId, String serial) {
         Device device = getById(rentId);
         device.setSerial(serial);
+        deviceSocket.broadcast(getAll());
     }
 
     public void setNote(long rentId, String serial) {
         Device device = getById(rentId);
         device.setNote(serial);
+        deviceSocket.broadcast(getAll());
     }
 
     public void setType(long rentId, int type) {
         Device device = getById(rentId);
         DeviceType deviceType = em.find(DeviceType.class, type);
         device.setType(deviceType);
+        deviceSocket.broadcast(getAll());
     }
 
     public boolean importDevices(InputStream fileInputStream) {

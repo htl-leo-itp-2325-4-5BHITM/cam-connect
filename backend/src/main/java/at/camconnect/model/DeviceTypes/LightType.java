@@ -1,6 +1,8 @@
 package at.camconnect.model.DeviceTypes;
 
+import at.camconnect.dtos.DeviceTypeGlobal;
 import at.camconnect.model.DeviceType;
+import at.camconnect.responseSystem.CCException;
 import jakarta.persistence.Entity;
 
 @Entity
@@ -14,6 +16,17 @@ public class LightType extends DeviceType {
         this.watts = watts;
         this.rgb = rgb;
         this.variable_temperature = variable_temperature;
+    }
+
+    @Override
+    public void update(DeviceTypeGlobal data) {
+        try{
+            setRgb(data.rgb());
+            setWatts(data.watts());
+            setVariable_temperature(data.variable_temperature());
+        }catch (Exception ex){
+            throw new CCException(1106);
+        }
     }
 
     public LightType() {

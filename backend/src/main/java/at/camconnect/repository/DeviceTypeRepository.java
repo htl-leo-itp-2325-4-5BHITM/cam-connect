@@ -1,14 +1,14 @@
 package at.camconnect.repository;
 
-import at.camconnect.model.Student;
-import at.camconnect.statusSystem.CCException;
+import at.camconnect.dtos.DeviceTypeCollection;
+import at.camconnect.dtos.DeviceTypeDTO;
+import at.camconnect.dtos.DeviceTypeGlobal;
+import at.camconnect.model.DeviceTypeAttribute;
+import at.camconnect.model.DeviceTypeAttributes.*;
+import at.camconnect.responseSystem.CCException;
 import at.camconnect.enums.DeviceTypeEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypes.*;
-import at.camconnect.model.DeviceTypeAttributes.CameraResolution;
-import at.camconnect.model.DeviceTypeAttributes.CameraSensor;
-import at.camconnect.model.DeviceTypeAttributes.LensMount;
-import at.camconnect.model.DeviceTypeAttributes.TripodHead;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,13 +23,23 @@ public class DeviceTypeRepository {
     @Inject
     EntityManager em;
 
-    public void create(DeviceTypeEnum typeEnum, JsonObject data){
+    @Inject
+    DeviceTypeAttributeRepository deviceTypeAttributeRepository;
+
+
+    public DeviceType create(DeviceTypeEnum typeEnum, JsonObject data){
+        /* Why JsonData and not DTO
+         * We use a single create endpoint to create lots of different types: this makes the process when calling
+         * the api very easy. If we were to use a DTO here we would either have to hardcode all the different routes, or
+         * switch case through the typeEnum and create a different entity with different params for each, this would then
+         * require a factory or a abstract create method that returns a instance.
+         */
+
         DeviceType deviceType = null;
 
+        //use quarkus's built in object mapper to create a entity from the provided json
         String dataString = String.valueOf(data);
         ObjectMapper objectMapper = new ObjectMapper();
-
-
         try {
             deviceType = objectMapper.readValue(dataString, enumToClass(typeEnum));
         } catch (JsonProcessingException e) {
@@ -37,6 +47,7 @@ public class DeviceTypeRepository {
         }
 
         em.persist(deviceType);
+        return deviceType;
     }
 
     public DeviceType getById(Long id) {
@@ -45,163 +56,45 @@ public class DeviceTypeRepository {
         return deviceType;
     }
 
-    public List<DeviceType> getAll(){
-        List<DeviceType> deviceTypes = em.createQuery("SELECT d FROM DeviceType d", DeviceType.class).getResultList();
-        return deviceTypes;
-    }
+    public DeviceTypeCollection getAll(){
+        List<CameraType> cameraTypes = em.createQuery("SELECT d FROM CameraType d", CameraType.class).getResultList();
+        List<DroneType> droneTypes = em.createQuery("SELECT d FROM DroneType d", DroneType.class).getResultList();
+        List<LensType> lensTypes = em.createQuery("SELECT d FROM LensType d", LensType.class).getResultList();
+        List<LightType> lightTypes = em.createQuery("SELECT d FROM LightType d", LightType.class).getResultList();
+        List<MicrophoneType> microphoneTypes = em.createQuery("SELECT d FROM MicrophoneType d", MicrophoneType.class).getResultList();
+        List<StabilizerType> stabilizerTypes = em.createQuery("SELECT d FROM StabilizerType d", StabilizerType.class).getResultList();
+        List<TripodType> tripodTypes = em.createQuery("SELECT d FROM TripodType d", TripodType.class).getResultList();
 
-    public void checkForNull(DeviceType deviceType){
-        if (deviceType == null) throw new CCException(1101);
+        return new DeviceTypeCollection(cameraTypes, droneTypes, lensTypes, lightTypes, microphoneTypes, stabilizerTypes, tripodTypes);
     }
 
     public void remove(Long id){
         em.remove(getById(id));
     }
 
-    //I know this guy is brutal but I cant split it into the individual models cause of the id to entity conversion
-    public void update(Long id, DeviceTypeEnum typeEnum, JsonObject data){
-        //not only sets the name but by running the "getById" also checks for invalid ids
-        //note: I did not find a way to reduce to a single em.find because of how java extends works
-        DeviceType deviceType = getById(id);
-        try{
-            deviceType.setName(data.getString("name"));
-        }catch (Exception ex){
-            throw new CCException(1106);
-        }
+    public DeviceType update(Long id, DeviceTypeDTO data){
+        DeviceType deviceType = getById(id); //should result in a child of DeviceType like CameraType
 
-        switch(typeEnum){
-            case audio:
-                AudioType audioType = em.find(AudioType.class, id);
+        deviceType.setName(data.name());
+        deviceType.setImage(data.image());
 
-                try{
-                    audioType.setWindblocker(data.getBoolean("windblocker"));
-                }catch (Exception ex){
-                    throw new CCException(1106);
-                }
-                try{
-                    audioType.setWireless(data.getBoolean("wireless"));
-                }catch (Exception ex){
-                    throw new CCException(1106);
-                }
-                try{
-                    audioType.setNeedsRecorder(data.getBoolean("recorder"));
-                }catch (Exception ex){
-                    throw new CCException(1106);
-                }
-                break;
-            case camera:
-                CameraType cameraType = em.find(CameraType.class, id);
+        //The DeviceTypeDTO is converted into a DeviceType global which contains objects instead of ids
+        DeviceTypeGlobal dataWithObjects = new DeviceTypeGlobal(
+                data.autofocus(), data.f_stop(), data.focal_length(), data.framerate(), data.height(), data.max_range(), data.max_weight(), data.needsrecorder(), data.number_of_axis(), data.autofocus(), data.variable_temperature(), data.watts(), data.windblocker(), data.wireless(),
+                getAttribute(TripodHead.class, data.head_id()), getAttribute(LensMount.class, data.mount_id()), getAttribute(CameraResolution.class, data.resolution_id()), getAttribute(CameraSensor.class, data.sensor_id()), getAttribute(CameraSystem.class, data.system_id()),
+                data.type_id(), data.dtype(), data.image(), data.name());
 
-                try{
-                    cameraType.setSensor(em.find(CameraSensor.class, data.getInt("sensor_id")));
-                }catch (Exception ex){
-                    throw new CCException(1106);
-                }
-                try{
-                    cameraType.setMount(em.find(LensMount.class, data.getInt("mount_id")));
-                }catch (Exception ex){
-                    throw new CCException(1106);
-                }
-                try{
-                    cameraType.setResolution(em.find(CameraResolution.class, data.getInt("resolution_id")));
-                }catch (Exception ex){
-                    throw new CCException(1106);
-                }
-                break;
-            case drone:
-                DroneType droneType = em.find(DroneType.class, id);
-
-                try{
-                    droneType.setSensor(em.find(CameraSensor.class, data.getInt("sensor_id")));
-                }catch (Exception ex){
-                    throw new CCException(1106);
-                }
-                try{
-                    droneType.setResolution(em.find(CameraResolution.class, data.getInt("resolution_id")));
-                }catch (Exception ex){
-                    throw new CCException(1106);
-                }
-                try{
-                    droneType.setMax_range(data.getInt("max_range"));
-                }catch (Exception ex){
-                    throw new CCException(1106);
-                }
-                break;
-            case lens:
-                LensType lensType = em.find(LensType.class, id);
-
-                try{
-                    lensType.setFocal_length(data.getInt("focal_length"));
-                }catch (Exception ex){
-                    throw new CCException(1106);
-                }
-                try{
-                    lensType.setF_stop(data.getInt("f_stop"));
-                }catch (Exception ex){
-                    throw new CCException(1106);
-                }
-                try{
-                    lensType.setLens_mount(em.find(LensMount.class, data.getInt("mount_id")));
-                }catch (Exception ex){
-                    throw new CCException(1106);
-                }
-                break;
-            case light:
-                LightType lightType = em.find(LightType.class, id);
-
-                try{
-                    lightType.setRgb(data.getBoolean("rgb"));
-                }catch (Exception ex){
-                    throw new CCException(1106);
-                }
-                try{
-                    lightType.setWatts(data.getInt("watts"));
-                }catch (Exception ex){
-                    throw new CCException(1106);
-                }
-                try{
-                    lightType.setVariable_temperature(data.getBoolean("variable_temperatur"));
-                }catch (Exception ex){
-                    throw new CCException(1106);
-                }
-                break;
-            case stabilizer:
-                StabilizerType stabilizerType = em.find(StabilizerType.class, id);
-
-                try{
-                    stabilizerType.setNumber_of_axis(data.getInt("number_of_axis"));
-                }catch (Exception ex){
-                    throw new CCException(1106);
-                }
-                try{
-                    stabilizerType.setMax_weight(data.getInt("max_weight"));
-                }catch (Exception ex){
-                    throw new CCException(1106);
-                }
-                break;
-            case tripod:
-                TripodType tripodType = em.find(TripodType.class, id);
-
-                try{
-                    tripodType.setHeight(data.getInt("height"));
-                }catch (Exception ex){
-                    throw new CCException(1106);
-                }
-                try{
-                    tripodType.setHead(em.find(TripodHead.class, data.getInt("head_id")));
-                }catch (Exception ex){
-                    throw new CCException(1106);
-                }
-                break;
-        }
+        //just call the update method on whichever child class it is
+        deviceType.update(dataWithObjects);
+        return deviceType;
     }
 
     //region utility functions
     private Class<? extends DeviceType> enumToClass(DeviceTypeEnum typeEnum) {
         //yes there are breaks missing, but they are unnecessary because of the returns
         switch (typeEnum) {
-            case audio:
-                return AudioType.class;
+            case microphone:
+                return MicrophoneType.class;
             case camera:
                 return CameraType.class;
             case drone:
@@ -217,6 +110,12 @@ public class DeviceTypeRepository {
         }
 
         throw new CCException(1104);
+    }
+
+    //basically a wrapper for em.find but filters out nulls
+    private <T> T getAttribute(Class<T> type, Long id){
+        if(id == null) return null;
+        return em.find(type, id);
     }
 
     //endregion

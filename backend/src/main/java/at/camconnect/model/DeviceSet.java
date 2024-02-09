@@ -9,8 +9,7 @@ public class DeviceSet {
 
     private String name;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "device_set_seq")
-    @SequenceGenerator(name = "device_set_seq", sequenceName = "DEVICE_SET_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToMany(fetch = FetchType.EAGER)

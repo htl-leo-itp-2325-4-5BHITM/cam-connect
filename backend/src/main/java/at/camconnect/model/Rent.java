@@ -1,8 +1,6 @@
 package at.camconnect.model;
 
 import at.camconnect.enums.RentStatusEnum;
-import at.camconnect.statusSystem.CCException;
-import at.camconnect.statusSystem.CCStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -13,8 +11,7 @@ import java.util.Set;
 @Entity
 public class Rent {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rent_seq")
-    @SequenceGenerator(name = "rent_seq", sequenceName = "RENT_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rent_id;
 
     @ManyToOne
@@ -40,17 +37,11 @@ public class Rent {
     private String verification_code;
     private String verification_message;
     private RentStatusEnum status;
-
-
     private String note;
 
     //TODO remove these when moving to new UI permanatly - also remove them in repo resource and update functions
     private String accessory;
     private String device_string;
-
-    //TODO change these names i have no idea what they mean
-    Set<RentStatusEnum> specifiedStatus = Set.of(RentStatusEnum.CONFIRMED, RentStatusEnum.WAITING, RentStatusEnum.RETURNED);
-    Set<RentStatusEnum> fullBlockStatus = Set.of(RentStatusEnum.RETURNED);
 
     public Rent() {
         rent_start = LocalDate.now();

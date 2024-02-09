@@ -1,5 +1,7 @@
 package at.camconnect.model;
 
+import at.camconnect.dtos.DeviceTypeDTO;
+import at.camconnect.dtos.DeviceTypeGlobal;
 import jakarta.json.JsonObject;
 import jakarta.persistence.*;
 
@@ -7,11 +9,12 @@ import jakarta.persistence.*;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class DeviceType{
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "device_type_seq")
-    @SequenceGenerator(name = "device_type_seq", sequenceName = "DEVICE_TYPE_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long type_id;
     private String name;
     private String image;
+
+    abstract public void update(DeviceTypeGlobal data);
 
     public String getImage() {
         return image;

@@ -1,0 +1,34 @@
+@import "../../base";
+
+.cc-rent-status{
+  width: .875rem;
+  aspect-ratio: 1/1;
+  border-radius: 100%;
+  padding: .125rem;
+  margin: .25rem;
+
+  &[isBig="true"]{
+    font-size: $fSizeDesktopSmall;
+    font-weight: 600;
+    letter-spacing: 0.08rem;
+    color: $gray1000;
+    border-radius: .25rem;
+    width: fit-content;
+    aspect-ratio: auto;
+    padding: 0.125rem 0.25rem;
+  }
+
+  &[status="1"]{
+    background-color: $good;
+  }
+  &[status="2"]{
+    background-color: $mid;
+  }
+  &[status="3"]{
+    background-color: $bad;
+    cursor: pointer;
+  }
+  &[status="4"]{
+    background-color: $gray600;
+  }
+}
