@@ -61,7 +61,7 @@ public class RentRepository {
     }
 
     public List<Rent> getAllSingleList(){
-        return em.createQuery("SELECT r FROM Rent r", Rent.class).getResultList();
+        return em.createQuery("SELECT r FROM Rent r order by r.creation_date", Rent.class).getResultList();
     }
 
     public List<RentByStudentDTO> getAll(){
