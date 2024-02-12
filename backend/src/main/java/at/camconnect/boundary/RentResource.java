@@ -1,6 +1,5 @@
 package at.camconnect.boundary;
 
-import at.camconnect.dtos.DeviceTypeCollection;
 import at.camconnect.dtos.RentDTO;
 import at.camconnect.dtos.RentByStudentDTO;
 import at.camconnect.model.Rent;
@@ -81,7 +80,7 @@ public class RentResource {
     @Path("/getbyid/{id: [0-9]+}/sendconfirmation")
     public Response sendConfirmation(@PathParam("id") Long id) {
         try {
-            rentRepository.sendConfirmation(id);
+            rentRepository.requestConfirmationMail(id);
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }
@@ -93,8 +92,6 @@ public class RentResource {
     @Path("/getbyid/{id: [0-9]+}/confirm")
     public Response confirm(@PathParam("id") Long id, RentDTO rentDTO) {
         try {
-            System.out.println(id);
-            System.out.println(rentDTO);
             rentRepository.confirm(id, rentDTO);
         } catch (CCException ex) {
             return CCResponse.error(ex);

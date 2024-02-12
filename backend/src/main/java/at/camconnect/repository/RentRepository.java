@@ -88,11 +88,16 @@ public class RentRepository {
         return result;
     }
 
+    /**
+     * Sends a confirmation mail to the student
+     * @param id the id of the rent
+     * @return the sent mail
+     */
     @Transactional
-    public MailClient sendConfirmation(Long id){
+    public MailClient requestConfirmationMail(Long id){
         Rent rent = getById(id);
         if(rent.getStatus().equals(RentStatusEnum.WAITING)){
-            throw new CCException(1205, "Email is already send");
+            throw new CCException(1205, "Email is already sent or rent is already confirmed");
         }
 
         MailMessage message = generateConfirmationMailMessage(id);
