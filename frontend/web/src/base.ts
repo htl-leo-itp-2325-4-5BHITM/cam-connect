@@ -109,13 +109,10 @@ export class WidthResizeObserver {
                 for (let i = 0; i < this.breakpoints.length; i++) {
                     const breakpoint = this.breakpoints[i];
                     if (this.source.clientWidth > breakpoint.size && this.source.clientWidth < this.breakpoints[i + 1]?.size) {
-                        console.log("match", breakpoint.key)
                         newSize = breakpoint.key;
                         break;
                     }
                 }
-
-                console.log(newSize)
 
                 if (this.source.getAttribute("size") !== newSize) {
                     this.source.setAttribute("size", newSize); // Update size attribute only if it has changed
@@ -202,7 +199,7 @@ export class KeyBoardShortCut {
                 }
             })
 
-            console.log(this.pressedKeys)
+            //console.log(this.pressedKeys)
         })
         window.addEventListener("keyup", (event: KeyboardEvent) => {
             this.pressedKeys.delete(event.key.toLowerCase()) //remove the released key from set
