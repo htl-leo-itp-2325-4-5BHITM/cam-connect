@@ -5,30 +5,24 @@ import { ButtonType} from "../basic/button.component"
 import {CircleSelectType} from "../basic/circleSelect.component"
 import {ColorEnum, SimpleColorEnum, SizeEnum} from "../../base"
 import {model} from "../../index";
-import {Rent, RentStatus} from "../../service/rent.service";
+import {Rent, RentByStudentDTO, RentStatus} from "../../service/rent.service";
 import {ChipType} from "../basic/chip.component"
+import {LineType} from "../basic/line.component"
 
 @customElement('cc-rent-list-entry')
 export class RentListEntryComponent extends LitElement {
     @property()
-    rentNumber?: number
+    rent?: RentByStudentDTO
 
     render() {
-        let rent = model.rents.value[this.rentNumber]
-        console.log(rent)
-
-        /* should be used below, commented out for now cause its throwing errors
-        ${rent.rentList.map(rent => {
-                    return this.generateRent(rent)
-                })}
-        */
-
         return html`
             <style>${styles}</style>
 
-            ${this.generateHeading(rent.student.firstname + " " + rent.student.lastname, rent.student.school_class)}
+            ${this.generateHeading(this.rent.student.firstname + " " + this.rent.student.lastname, this.rent.student.school_class)}
             <div class="entries">
-                
+                ${this.rent.rentList.map(rent => {
+                    return this.generateRent(rent)
+                })}
             </div>
         `
     }
@@ -43,8 +37,8 @@ export class RentListEntryComponent extends LitElement {
                 </div>
                 <div class="right">
                     <cc-button>Verleih erstellen</cc-button>
-                    <cc-button color="${SimpleColorEnum.GRAY}">Details anzeigen</cc-button>
-                    <cc-circle-select type="${CircleSelectType.MULTIPLE}" @click="${this.selectAll}"></cc-circle-select>
+                    <cc-button color="${SimpleColorEnum.GRAY}" size="${SizeEnum.SMALL}">Details anzeigen</cc-button>
+                    <cc-circle-select type="${CircleSelectType.MULTIPLE}" size="${SizeEnum.SMALL}" @click="${this.selectAll}"></cc-circle-select>
                 </div>
             </div>
         `
@@ -56,36 +50,32 @@ export class RentListEntryComponent extends LitElement {
                 <div>
                     <input type="text" value="${rent.device.type.name}">
                     <input type="text" class="number" value="${rent.device.number}">
-                    <label for="">|</label>
+                    <cc-line type="${LineType.VERTICAL}"></cc-line>
                     <input type="date" class="customDate" value="${rent.rent_start}"/>
-                    <label for="" class="line">-</label>
+                    <cc-line type="${LineType.VERTICAL}"></cc-line>
                     <input type="date" class="customDate" value="${rent.rent_end_actual || rent.rent_end_planned}"/>
-                    <label for="">|</label>
+                    <cc-line type="${LineType.VERTICAL}"></cc-line>
 
-                    <div>
-                        <p>Erstellt von:</p>
-                        <p>${rent.teacher_start.firstname.charAt(0) + ". " + rent.teacher_start.lastname}</p>
-                    </div>
+                    <cc-property-value size="${SizeEnum.SMALL}" property="Erstellt von" value="${rent.teacher_start.firstname.charAt(0)}. ${rent.teacher_start.lastname}"></cc-property-value>
                 </div>
 
                 <div>
                     <cc-button color="${rent.status == RentStatus.DECLINED ? ColorEnum.GRAY : ColorEnum.ACCENT}" 
-                               type="${ButtonType.TEXT}" 
+                               type="${ButtonType.TEXT}" size="${SizeEnum.SMALL}"
                                text="${this.rentStatusToButtonText(rent.status)}">
                     </cc-button>
                     
-                    <cc-chip color="${this.rentStatusToColor(rent.status)}" 
+                    <cc-chip color="${this.rentStatusToColor(rent.status)}" size="${SizeEnum.SMALL}"
                              type="${rent.status == RentStatus.DECLINED ? ChipType.EXPANDABLE : ChipType.EXPANDABLE}" 
-                             text="${this.rentStatusAsString(rent.status)}"
-                    >
+                             text="${this.rentStatusAsString(rent.status)}">
                         <div class="detail">
                             <h2>angegebener Ablehngrund</h2>
                             <p>${rent.verification_message}</p>
-                            <cc-button type="${ButtonType.OUTLINED}" color="${ColorEnum.GRAY}">Bestätigung erneut Anfragen</cc-button>
+                            <cc-button type="${ButtonType.OUTLINED}" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}">Bestätigung erneut Anfragen</cc-button>
                         </div>
                     </cc-chip>
                     
-                    <cc-circle-select @click="${this.autoCheckMultipleSelect}"></cc-circle-select>
+                    <cc-circle-select @click="${this.autoCheckMultipleSelect}" size="${SizeEnum.SMALL}"></cc-circle-select>
                 </div>
             </div>
         `

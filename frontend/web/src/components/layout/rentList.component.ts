@@ -2,6 +2,7 @@ import {LitElement, css, html} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/rentList.styles.scss'
 import {model} from "../../index";
+import {Rent, RentByStudentDTO} from "../../service/rent.service"
 
 @customElement('cc-rent-list')
 export class RentListComponent extends LitElement {
@@ -12,14 +13,8 @@ export class RentListComponent extends LitElement {
             <style>${styles}</style>
             
             ${model.rents.value.map(rent => {
-                return this.generateStudent(count++)
+                return html`<cc-rent-list-entry .rent="${rent}"></cc-rent-list-entry>`
             })}
-        `
-    }
-
-    generateStudent(count: number){
-        return html`
-            <cc-rent-list-entry rentNumber="${count}"></cc-rent-list-entry>
         `
     }
 }

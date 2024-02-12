@@ -63,7 +63,7 @@
       background: var(--badGrayTransparent, rgba(90, 48, 48, 0.80));
     }
 
-    label {
+    span {
       color: $gray800;
     }
   }
@@ -75,7 +75,7 @@
     gap: 0.1rem;
     font-weight: 400;
     color: $gray800;
-    font-size: $fSizeDesktopDefault;
+    font-size: $fSizeDesktopSmall;
 
     p:last-child{
       color: white;
@@ -84,7 +84,7 @@
     }
   }
 
-  label{
+  span{
     margin-inline: .25rem;
     color: $gray600;
 
