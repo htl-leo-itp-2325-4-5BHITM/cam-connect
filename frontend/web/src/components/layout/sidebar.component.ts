@@ -13,10 +13,10 @@ export class SidebarComponent extends LitElement {
     accountname?: string = 'No username provided'
 
     @queryAssignedElements({slot: "primaryFilters"})
-    primaryFilters!: Array<HTMLElement>;
+    private primaryFilters!: Array<HTMLElement>;
 
     @queryAssignedElements({slot: "secondaryFilters"})
-    secondaryFilters!: Array<HTMLElement>;
+    private secondaryFilters!: Array<HTMLElement>;
 
     constructor(username: string) {
         super()

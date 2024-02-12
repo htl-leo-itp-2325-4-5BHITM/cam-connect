@@ -71,7 +71,7 @@ export default class Model{
         page: PageEnum.EQUIPMENT,
         createMultiRentModalOpen: false,
         createRentModalOpen: false,
-        cancelCurrentAction: void {}
+        cancelCurrentAction: () => {}
     })
 
 

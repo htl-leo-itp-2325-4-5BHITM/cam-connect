@@ -1,4 +1,5 @@
 @import "../../base";
+@import "../../datePickerOverride.styles";
 
 :host{
   all: initial;
@@ -99,8 +100,11 @@
   }
 
   svg{
-    height: 1rem;
-    color: $gray900;
+    height: 1.2rem;
+
+    path{
+      color: $gray900;
+    }
   }
 }
 

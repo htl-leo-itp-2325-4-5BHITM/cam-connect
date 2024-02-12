@@ -18,9 +18,7 @@ export class RentListEntryComponent extends LitElement {
         console.log(rent)
 
         /* should be used below, commented out for now cause its throwing errors
-        ${rent.rentList.map(rent => {
-                    return this.generateRent(rent)
-                })}
+
         */
 
         return html`
@@ -28,7 +26,9 @@ export class RentListEntryComponent extends LitElement {
 
             ${this.generateHeading(rent.student.firstname + " " + rent.student.lastname, rent.student.school_class)}
             <div class="entries">
-                
+                ${rent.rentList.map(rent => {
+                    return this.generateRent(rent)
+                })}
             </div>
         `
     }

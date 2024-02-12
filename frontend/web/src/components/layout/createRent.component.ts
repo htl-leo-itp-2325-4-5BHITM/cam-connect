@@ -1,13 +1,19 @@
-import {LitElement, css, html} from 'lit'
+import {LitElement, css, html, PropertyValues} from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/createRent.styles.scss'
+
 import {ColorEnum, SizeEnum} from "../../base"
 import {ButtonType} from "../basic/button.component"
 import {AppState, ObservedProperty} from "../../model"
 import {model} from "../../index"
+
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { icon } from '@fortawesome/fontawesome-svg-core'
-import { faMagnifyingGlass, faCircleArrowDown } from "@fortawesome/free-solid-svg-icons"
+import { faXmark, faCircleArrowDown } from "@fortawesome/free-solid-svg-icons"
+
+import AirDatepicker from 'air-datepicker';
+import 'air-datepicker/air-datepicker.css';
+import localeEn from 'air-datepicker/locale/en';
 
 @customElement('cc-create-rent')
 export class CreateRentComponent extends LitElement {
@@ -17,6 +23,14 @@ export class CreateRentComponent extends LitElement {
     constructor() {
         super()
         this.appState = new ObservedProperty<AppState>(this, model.appState)
+    }
+
+    protected firstUpdated(_changedProperties: PropertyValues) {
+        super.firstUpdated(_changedProperties);
+        let globalInput = this.renderRoot.querySelector('.globaltime input') as HTMLInputElement
+        new AirDatepicker(globalInput, {
+            locale: localeEn,
+        })
     }
 
     render() {
@@ -40,9 +54,7 @@ export class CreateRentComponent extends LitElement {
                 <div class="globaltime">
                     Globale Zeit setzen:
                     <div class="dateInputArea">
-                        <input type="date">
-                        <span class="line">-</span>
-                        <input type="date">
+                        <input type="text">
                         <icon-cta>${unsafeSVG(icon(faCircleArrowDown).html[0])}</icon-cta>
                     </div>
                 </div>
@@ -54,12 +66,10 @@ export class CreateRentComponent extends LitElement {
                     </div>
     
                     <div>
-                        <input type="date">
-                        <span class="line">-</span>
-                        <input type="date">
+                        <input class="date">
                     </div>
     
-                    <icon-cta>${unsafeSVG(icon(faMagnifyingGlass).html[0])}</icon-cta>
+                    <icon-cta>${unsafeSVG(icon(faXmark).html[0])}</icon-cta>
                 </div>
             </div>
 
@@ -71,7 +81,6 @@ export class CreateRentComponent extends LitElement {
                     Zubehör
                 </cc-button>
             </div>
-            
             
             <div class="bottom">
                 <cc-button size="${SizeEnum.BIG}" color="${ColorEnum.ACCENT}" type="${ButtonType.FILLED}" 
