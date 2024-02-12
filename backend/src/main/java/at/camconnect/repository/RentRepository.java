@@ -1,5 +1,6 @@
 package at.camconnect.repository;
 
+import at.camconnect.dtos.CreateRentDTO;
 import at.camconnect.dtos.RentDTO;
 import at.camconnect.dtos.RentByStudentDTO;
 import at.camconnect.enums.RentStatusEnum;
@@ -37,9 +38,18 @@ public class RentRepository {
     RentSocket rentSocket;
 
     @Transactional
-    public void create(RentDTO rentData){
-        Rent rent = new Rent(em.find(Student.class, rentData.student_id()));
-        em.persist(rent);
+    public void create(List<CreateRentDTO> rentData){
+        for(CreateRentDTO currRent : rentData){
+            Rent rent = new Rent(
+                    em.find(Student.class, currRent.student_id()),
+                    em.find(Device.class, currRent.device_id()),
+                    em.find(Teacher.class, currRent.teacher_start_id()),
+                    currRent.rent_start(),
+                    currRent.note(),
+                    currRent.accessory(),
+                    currRent.device_string());
+            em.persist(rent);
+        }
         rentSocket.broadcast(getAll());
     }
 

@@ -1,5 +1,7 @@
 package at.camconnect.boundary;
 
+import at.camconnect.dtos.CreateRentDTO;
+import at.camconnect.dtos.DeviceTypeCollection;
 import at.camconnect.dtos.RentDTO;
 import at.camconnect.dtos.RentByStudentDTO;
 import at.camconnect.model.Rent;
@@ -24,8 +26,12 @@ public class RentResource {
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response createRent(RentDTO rent) {
-        rentRepository.create(rent);
+    public Response createRent(List<CreateRentDTO> rent) {
+        try{
+            rentRepository.create(rent);
+        } catch(CCException ex){
+            return CCResponse.error(ex);
+        }
         return Response.ok().build();
     }
 
