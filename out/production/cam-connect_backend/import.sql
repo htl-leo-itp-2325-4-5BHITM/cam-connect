@@ -67,10 +67,10 @@ insert into device (type_id, note, number, serial) values
 
 -- User inserts will break when moving to different user system
 -- Students
-/*INSERT INTO student (email, firstname, lastname, password, school_class, username)
+INSERT INTO student (email, firstname, lastname, password, school_class, username)
 VALUES
     ('student1@example.com', 'John', 'Doe', 'password123', 'Class A', 'john_doe'),
-    ('student2@example.com', 'Jane', 'Smith', 'securepass', 'Class B', 'jane_smith');*/
+    ('student2@example.com', 'Jane', 'Smith', 'securepass', 'Class B', 'jane_smith');
 
 -- Inserting data into teacher table
 INSERT INTO teacher (email, firstname, lastname, password, username)
@@ -79,11 +79,11 @@ VALUES
     ('p.engleitner@htl-leonding.ac.at', 'Particia', 'Engleitner', 'ff', 'pe');
 
 -- favourites
-/*INSERT INTO student_devicetype (student_student_id, favourites_type_id)
+INSERT INTO student_devicetype (student_student_id, favourites_type_id)
 VALUES
     (1, 1),  -- Student 1 likes DeviceType 1
     (1, 2),  -- Student 1 likes DeviceType 2
-    (2, 3);  -- Student 2 likes DeviceType 3*/
+    (2, 3);  -- Student 2 likes DeviceType 3
 
 -- Inserting data into rent table
 INSERT INTO rent (rent_end_actual, rent_end_planned, rent_start, status, creation_date, device_id, student_id, teacher_id_end, teacher_id_start, accessory, device_string, note, verification_code)

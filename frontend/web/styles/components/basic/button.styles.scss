@@ -33,20 +33,20 @@
   &[size = "big"]{
     font-size: $fSizeDesktopLarge;
     min-width: 8ch;
-    padding-inline: 1rem;
-    padding-block: .2rem;
+    padding-inline: 1rem !important;
+    padding-block: .2rem !important;
   }
   &[size = "medium"]{
     font-size: $fSizeDesktopDefault;
     min-width: 8ch;
-    padding-inline: 1rem;
-    padding-block: .1rem;
+    padding-inline: 1rem !important;
+    padding-block: .1rem !important;
   }
   &[size = "small"]{
     font-size: $fSizeDesktopSmall;
     min-width: 6ch;
-    padding-inline: 1rem;
-    padding-block: .1rem;
+    padding-inline: 1rem !important;
+    padding-block: .1rem !important;
   }
 
   &[type = "filled"]{
@@ -76,7 +76,7 @@
     color: var(--color-text);
 
     min-width: 0;
-    padding-inline: .3rem;
+    padding-inline: .3rem !important;
 
     &[color = "accent"]{
       color: var(--color-light);
@@ -141,8 +141,6 @@
   ::slotted(img){
     @include imgIconColorGray800;
   }
-
-
 
   ::slotted(.icon) {
     @include imgIconColorGray800;

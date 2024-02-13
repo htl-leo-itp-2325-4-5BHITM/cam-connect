@@ -12,7 +12,6 @@ import { icon } from '@fortawesome/fontawesome-svg-core'
 import { faXmark, faCircleArrowDown } from "@fortawesome/free-solid-svg-icons"
 
 import AirDatepicker from 'air-datepicker';
-import 'air-datepicker/air-datepicker.css';
 import localeEn from 'air-datepicker/locale/en';
 
 @customElement('cc-create-rent')
@@ -30,6 +29,10 @@ export class CreateRentComponent extends LitElement {
         let globalInput = this.renderRoot.querySelector('.globaltime input') as HTMLInputElement
         new AirDatepicker(globalInput, {
             locale: localeEn,
+            range: true,
+            dateFormat: "dd.MM",
+            multipleDatesSeparator: ' - ',
+            /*visible: true,*/
         })
     }
 
@@ -54,7 +57,7 @@ export class CreateRentComponent extends LitElement {
                 <div class="globaltime">
                     Globale Zeit setzen:
                     <div class="dateInputArea">
-                        <input type="text">
+                        <input type="text" class="date">
                         <icon-cta>${unsafeSVG(icon(faCircleArrowDown).html[0])}</icon-cta>
                     </div>
                 </div>
