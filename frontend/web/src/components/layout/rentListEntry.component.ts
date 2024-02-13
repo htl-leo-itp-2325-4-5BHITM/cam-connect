@@ -8,13 +8,15 @@ import {model} from "../../index";
 import {Rent, RentByStudentDTO, RentStatus} from "../../service/rent.service";
 import {ChipType} from "../basic/chip.component"
 import {LineType} from "../basic/line.component"
+import {queryAssignedElements} from "lit/decorators";
 
 @customElement('cc-rent-list-entry')
 export class RentListEntryComponent extends LitElement {
     @property()
     rent?: RentByStudentDTO
 
-    selectedRents?: Rent[]
+    @property()
+    selectedRents: Rent[] = [];
 
     render() {
         return html`
@@ -122,21 +124,18 @@ export class RentListEntryComponent extends LitElement {
      * if so the multiple select gets checked as well
      */
     autoCheckMultipleSelect(rent: Rent) {
-        let isSelected = false;
-
-        if(this.selectedRents){
-            this.selectedRents.forEach((currRent) => {
-                if(currRent.rent_id == rent.rent_id){
-                    isSelected = true;
-                }
-            })
-        }
-
-        if(!isSelected) this.selectedRents.push(rent)
-        console.log(this.selectedRents)
-
         let multiple = this.shadowRoot.querySelector(`cc-circle-select`)
         multiple.checked = true
+
+        let index = this.selectedRents.findIndex(curr => curr.rent_id === rent.rent_id);
+
+        if (index !== -1) {
+            this.selectedRents.splice(index,  1);
+        } else {
+            this.selectedRents.push(rent);
+        }
+
+        console.log(this.selectedRents);
 
         this.shadowRoot.querySelectorAll("cc-circle-select").forEach(select => {
             if(select.getAttribute("type") != CircleSelectType.MULTIPLE){
