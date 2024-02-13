@@ -14,6 +14,8 @@ export class RentListEntryComponent extends LitElement {
     @property()
     rent?: RentByStudentDTO
 
+    selectedRents?: Rent[]
+
     render() {
         return html`
             <style>${styles}</style>
@@ -75,7 +77,7 @@ export class RentListEntryComponent extends LitElement {
                         </div>
                     </cc-chip>
                     
-                    <cc-circle-select @click="${this.autoCheckMultipleSelect}" size="${SizeEnum.SMALL}"></cc-circle-select>
+                    <cc-circle-select @click="${() => {this.autoCheckMultipleSelect(rent)}}" size="${SizeEnum.SMALL}"></cc-circle-select>
                 </div>
             </div>
         `
@@ -119,7 +121,20 @@ export class RentListEntryComponent extends LitElement {
      * this function detects if all selects are checked or not
      * if so the multiple select gets checked as well
      */
-    autoCheckMultipleSelect() {
+    autoCheckMultipleSelect(rent: Rent) {
+        let isSelected = false;
+
+        if(this.selectedRents){
+            this.selectedRents.forEach((currRent) => {
+                if(currRent.rent_id == rent.rent_id){
+                    isSelected = true;
+                }
+            })
+        }
+
+        if(!isSelected) this.selectedRents.push(rent)
+        console.log(this.selectedRents)
+
         let multiple = this.shadowRoot.querySelector(`cc-circle-select`)
         multiple.checked = true
 
