@@ -21,7 +21,6 @@
 .top{
   font-size: $fSizeDesktopDefault;
   padding: 0.625rem 0.75rem;
-  text-align: center;
 
   background: $gray250;
   box-shadow: 0px 0px 6px 4px rgba(0, 0, 0, 0.15);
@@ -62,11 +61,6 @@
   }
 
   input{
-    display: flex;
-    padding: 0.125rem 0.25rem;
-    align-items: center;
-    gap: 0.2rem;
-
     background: transparent;
     border-radius: 0.25rem;
     border: 1px solid $gray500;

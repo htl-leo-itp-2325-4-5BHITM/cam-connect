@@ -22,7 +22,8 @@ export class SelectComponent extends LitElement {
             </div>`
     }
 
-    updated() {
+    protected firstUpdated(_changedProperties: PropertyValues) {
+        super.firstUpdated(_changedProperties);
         this.options.forEach(option => {
             option.addEventListener("click", ()=>{this.selectOption(option)})
         })

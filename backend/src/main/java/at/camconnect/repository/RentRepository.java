@@ -46,7 +46,6 @@ public class RentRepository {
                     em.find(Teacher.class, currRent.teacher_start_id()),
                     currRent.rent_start(),
                     currRent.note(),
-                    currRent.accessory(),
                     currRent.device_string());
             em.persist(rent);
         }
@@ -75,6 +74,9 @@ public class RentRepository {
     }
 
     public List<RentByStudentDTO> getAll(){
+        //INFO
+        //this is currently just joining to half the db and not using a propper DTO,
+        // this might cause performance problems in the future but is fine for now
         List<Student> students = em.createQuery(
                 "SELECT s FROM Rent r" +
                     " join Student s on r.student.student_id = s.student_id" +
