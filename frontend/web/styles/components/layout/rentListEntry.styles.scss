@@ -29,6 +29,10 @@
     p, cc-button, cc-circle-select{
       margin-inline: .2rem;
     }
+
+    cc-circle-select{
+      margin-left: auto;
+    }
   }
 
   .leftSide p:first-child{
