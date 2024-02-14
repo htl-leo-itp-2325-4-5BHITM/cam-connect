@@ -13,7 +13,7 @@ export class RentListEntryComponent extends LitElement {
     @property()
     rent: Rent
 
-    @property()
+    @property({ type: Boolean, reflect: true })
     checked: boolean = false
 
     protected firstUpdated(_changedProperties: PropertyValues) {
@@ -62,7 +62,12 @@ export class RentListEntryComponent extends LitElement {
     selectRent(elem){
         elem.checked = !elem.checked
 
-        model.addSelectedRentEntry(this)
+        if(elem.checked){
+            model.addSelectedRentEntry(this)
+        } else{
+            model.removeSelectedRentEntry(this)
+        }
+
         console.log(model.appState.value.selectedRentEntries)
     }
 

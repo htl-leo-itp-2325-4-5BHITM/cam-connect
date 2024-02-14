@@ -143,6 +143,12 @@ export default class Model{
         this.updateAppState({selectedRentEntries: selected})
     }
 
+    removeSelectedRentEntry(rentEntry: RentListEntryComponent){
+        let selected = this.appState.value.selectedRentEntries
+        selected.delete(rentEntry)
+        this.updateAppState({selectedRentEntries: selected})
+    }
+
     //sry i cant really test this rn it might throw ewows :3
     async updateDevice(device: Device){
         DeviceService.update(device)

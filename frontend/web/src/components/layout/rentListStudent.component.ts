@@ -62,11 +62,12 @@ export class RentListStudentComponent extends LitElement {
     }
 
     selectAll(elem) {
-        this.shadowRoot.querySelectorAll("cc-rent-list-entry").forEach(select => {
-            select.checked = elem.target.checked
+        let targetCheck = elem.target.checked
+        this.shadowRoot.querySelectorAll("cc-rent-list-entry").forEach(rentListEntry => {
+            if(rentListEntry.checked != targetCheck){
+                rentListEntry.selectRent(rentListEntry)
+            }
         })
-
-        this.getSelectedRents()
     }
 
     /**
@@ -82,18 +83,6 @@ export class RentListStudentComponent extends LitElement {
                 multiple.checked = false
             }
         })
-    }
-
-    getSelectedRents() {
-        console.log("getter")
-        let selectedRents : Rent[] = []
-        this.shadowRoot.querySelectorAll("cc-rent-list-entry").forEach(select => {
-            if(select.checked == true){
-                selectedRents.push(select.rent)
-            }
-        })
-
-        console.log(selectedRents)
     }
 }
 
