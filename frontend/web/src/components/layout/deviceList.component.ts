@@ -3,16 +3,26 @@ import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/deviceList.styles.scss'
 import {model} from "../../index";
 import {WidthResizeObserver} from "../../base"
+import {ObservedProperty} from "../../model"
+import {Device} from "../../service/device.service"
+import {RentByStudentDTO} from "../../service/rent.service"
 
 @customElement('cc-device-list')
 export class DeviceListComponent extends LitElement {
+    @property()
+    private devices: ObservedProperty<Device[]>
+
+    constructor() {
+        super()
+        this.devices = new ObservedProperty<Device[]>(this, model.devices)
+    }
     render() {
         let count = 0;
 
         return html`
             <style>${styles}</style>
             
-            ${model.devices.value.map(device => {
+            ${this.devices.value.map(device => {
                 return this.generateStudent(count++)
             })}
         `

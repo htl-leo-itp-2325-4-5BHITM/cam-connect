@@ -55,7 +55,7 @@ export class AppComponent extends LitElement {
             <cc-navbar></cc-navbar>
             ${sidebar}
             <div class="toolbar-container">
-                <cc-toolbar page="${this.appState.value.page}"></cc-toolbar>
+                <cc-toolbar></cc-toolbar>
                 <cc-create-rent></cc-create-rent>
                 ${page}
             </div>

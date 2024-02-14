@@ -68,7 +68,7 @@ export default class Model{
     }
 
     readonly appState = new BehaviorSubject<AppState>({
-        page: PageEnum.EQUIPMENT,
+        page: PageEnum.RENTS,
         createMultiRentModalOpen: false,
         createRentModalOpen: false,
         cancelCurrentAction: () => {}

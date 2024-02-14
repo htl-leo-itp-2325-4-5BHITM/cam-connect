@@ -13,7 +13,9 @@
   overflow-x: hidden;
   gap: 0.5rem;
 
-  transition: width $transitionTimeLong;
+  width: fit-content;
+
+  transition: max-width $transitionTimeLong, opacity $transitionTimeMedium;
 }
 
 .top{
@@ -40,7 +42,7 @@
   justify-content: right;
 
   svg path{
-    color: $accentDarkmodeLight;
+    color: $accentDarkmodeLight !important;
   }
 }
 

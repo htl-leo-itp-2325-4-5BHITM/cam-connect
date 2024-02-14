@@ -13,11 +13,15 @@ import { faXmark, faCircleArrowDown } from "@fortawesome/free-solid-svg-icons"
 
 import AirDatepicker from 'air-datepicker';
 import localeEn from 'air-datepicker/locale/en';
+import {Rent} from "../../service/rent.service"
 
 @customElement('cc-create-rent')
 export class CreateRentComponent extends LitElement {
     @property({type: Boolean})
-    appState: ObservedProperty<AppState>
+    private appState: ObservedProperty<AppState>
+
+    @property()
+    rents: Rent[] = []
 
     constructor() {
         super()
@@ -41,7 +45,8 @@ export class CreateRentComponent extends LitElement {
             <style>${styles}</style>
             <style>
                 :host {
-                    width: ${this.appState.value.createRentModalOpen ? "fit-content" : "0"};
+                    max-width: ${this.appState.value.createRentModalOpen ? "50vw" : "0"};
+                    opacity: ${this.appState.value.createRentModalOpen ? 1 : 0};
                 }
             </style>
             
@@ -62,18 +67,22 @@ export class CreateRentComponent extends LitElement {
                     </div>
                 </div>
                 
-                <div class="device">
-                    <div>
-                        <input type="text" value="Lumix s5ii">
-                        <input type="text" value="24" class="number">
-                    </div>
-    
-                    <div>
-                        <input class="date">
-                    </div>
-    
-                    <icon-cta>${unsafeSVG(icon(faXmark).html[0])}</icon-cta>
-                </div>
+                ${this.rents.map(rent => {
+                    return html`
+                        <div class="device">
+                            <div>
+                                <input type="text" value="${rent.device.type.name}">
+                                <input type="text" value="${rent.device.number}" class="number">
+                            </div>
+
+                            <div>
+                                <input class="date">
+                            </div>
+
+                            <icon-cta>${unsafeSVG(icon(faXmark).html[0])}</icon-cta>
+                        </div>
+                    `
+                })}
             </div>
 
             <div class="addDevice">
@@ -94,6 +103,11 @@ export class CreateRentComponent extends LitElement {
                 >Abbrechen</cc-button>
             </div>
         `
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
+
     }
 
     createRent() {
