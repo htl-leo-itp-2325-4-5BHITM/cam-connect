@@ -74,6 +74,9 @@ public class RentRepository {
     }
 
     public List<RentByStudentDTO> getAll(){
+        //INFO
+        //this is currently just joining to half the db and not using a propper DTO,
+        // this might cause performance problems in the future but is fine for now
         List<Student> students = em.createQuery(
                 "SELECT s FROM Rent r" +
                     " join Student s on r.student.student_id = s.student_id" +

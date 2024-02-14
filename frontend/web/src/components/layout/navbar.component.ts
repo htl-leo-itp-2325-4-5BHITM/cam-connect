@@ -8,6 +8,7 @@ import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons"
 import {model} from "../../index"
 import {KeyBoardShortCut, SimpleColorEnum, SizeEnum, Tooltip} from "../../base"
 import {AppState, ObservedProperty, PageEnum} from "../../model"
+import {SelectComponent} from "../basic/select.component"
 
 @customElement('cc-navbar')
 export class NavbarComponent extends LitElement {
@@ -27,7 +28,8 @@ export class NavbarComponent extends LitElement {
             </div>
 
             <cc-select size="${SizeEnum.MEDIUM}" spacerColor="${SimpleColorEnum.ACCENT}" 
-                       .optionSelected = "${(elem) => {model.updateAppState({page: elem.dataset.page})}}"
+                       .optionSelected = "${(elem) => {
+                           console.log('updating appstate'); model.updateAppState({page: elem.dataset.page})}}"
             >
                 <p data-page="equipment" class="${this.appState.value.page == PageEnum.EQUIPMENT ? 'selected' : ''}"
                    @mouseenter="${(e) => {Tooltip.show(e.target, 'shift+e oder 1', 1500)}}" 
@@ -53,13 +55,17 @@ export class NavbarComponent extends LitElement {
 
     connectedCallback() {
         super.connectedCallback();
+        console.log("navbar connectedCallback")
+        //INFO
+        //this might cause a nasty bug where the event listener is registered multiple times but is fine for now
+        //since the nav doesnt change
         KeyBoardShortCut.register([["shift", "e"], ["1"]], () => {this.selectNavItem(0)})
         KeyBoardShortCut.register([["shift", "v"], ["2"]], () => {this.selectNavItem(1)})
         KeyBoardShortCut.register([["shift", "c"], ["3"]], () => {this.selectNavItem(2)})
     }
 
     selectNavItem(pageIndex: number) {
-        let select = this.renderRoot.querySelector("cc-select")
+        let select: SelectComponent = this.renderRoot.querySelector("cc-select")
         select.selectOptionByIndex(pageIndex)
     }
 }
