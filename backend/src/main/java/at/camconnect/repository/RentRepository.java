@@ -46,7 +46,6 @@ public class RentRepository {
                     em.find(Teacher.class, currRent.teacher_start_id()),
                     currRent.rent_start(),
                     currRent.note(),
-                    currRent.accessory(),
                     currRent.device_string());
             em.persist(rent);
         }
