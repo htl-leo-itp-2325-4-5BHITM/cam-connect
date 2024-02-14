@@ -4,17 +4,23 @@ import styles from '../../../styles/components/layout/toolbar.styles.scss'
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { faTrash, faCamera } from "@fortawesome/free-solid-svg-icons"
-import { PageEnum} from "../../model"
+import {AppState, ObservedProperty, PageEnum} from "../../model"
 import { ButtonType} from "../basic/button.component"
 import {SimpleColorEnum, SizeEnum} from "../../base"
+import {model} from "../../index"
 
 @customElement('cc-toolbar')
 export class ToolbarComponent extends LitElement {
     @property()
-    page?: PageEnum
+    appState : ObservedProperty<AppState>
+
+    constructor() {
+        super()
+        this.appState = new ObservedProperty<AppState>(this, model.appState)
+    }
 
     render() {
-        switch (this.page) {
+        switch (this.appState.value.page) {
             case PageEnum.EQUIPMENT: return this.renderEquipmentBar();
             case PageEnum.RENTS: return this.renderRentListBar();
         }

@@ -7,10 +7,18 @@ import { faMagnifyingGlass, faArrowRotateRight } from "@fortawesome/free-solid-s
 import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons"
 import {model} from "../../index"
 import {KeyBoardShortCut, SimpleColorEnum, SizeEnum, Tooltip} from "../../base"
-import {PageEnum} from "../../model"
+import {AppState, ObservedProperty, PageEnum} from "../../model"
 
 @customElement('cc-navbar')
 export class NavbarComponent extends LitElement {
+    @property()
+    private appState: ObservedProperty<AppState>
+
+    constructor() {
+        super()
+        this.appState = new ObservedProperty<AppState>(this, model.appState)
+    }
+
     render() {
         return html`
             <style>${styles}</style>
@@ -21,15 +29,15 @@ export class NavbarComponent extends LitElement {
             <cc-select size="${SizeEnum.MEDIUM}" spacerColor="${SimpleColorEnum.ACCENT}" 
                        .optionSelected = "${(elem) => {model.updateAppState({page: elem.dataset.page})}}"
             >
-                <p class="selected" data-page="equipment" 
+                <p data-page="equipment" class="${this.appState.value.page == PageEnum.EQUIPMENT ? 'selected' : ''}"
                    @mouseenter="${(e) => {Tooltip.show(e.target, 'shift+e oder 1', 1500)}}" 
                    @mouseleave="${()=>{Tooltip.hide(0)}}"
                 >Equipment</p>
-                <p data-page="rents"
+                <p data-page="rents" class="${this.appState.value.page == PageEnum.RENTS ? 'selected' : ''}"
                    @mouseenter="${(e) => {Tooltip.show(e.target, 'shift+v oder 2', 1500)}}"
                    @mouseleave="${()=>{Tooltip.hide(0)}}"
                 >Verleihliste</p>
-                <p data-page="calendar"
+                <p data-page="calendar" class="${this.appState.value.page == PageEnum.CALENDAR ? 'selected' : ''}"
                    @mouseenter="${(e) => {Tooltip.show(e.target, 'shift+c oder 3', 1500)}}"
                    @mouseleave="${()=>{Tooltip.hide(0)}}"
                 >Kalender</p>

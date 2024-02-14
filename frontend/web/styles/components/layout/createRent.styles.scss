@@ -1,5 +1,4 @@
 @import "../../base";
-@import "../../datePickerOverride.styles";
 
 :host{
   all: initial;
@@ -14,7 +13,9 @@
   overflow-x: hidden;
   gap: 0.5rem;
 
-  transition: width $transitionTimeLong;
+  width: fit-content;
+
+  transition: max-width $transitionTimeLong, opacity $transitionTimeMedium;
 }
 
 .top{
@@ -36,40 +37,25 @@
 .globaltime{
   display: flex;
   flex-wrap: nowrap;
+  align-items: center;
+  gap: .5rem;
+  justify-content: right;
 
-  input{
-    display: flex;
-    padding: 0.125rem 0.25rem;
-    align-items: center;
-    gap: 0.2rem;
-    width: 8ch;
-
-    background: transparent;
-    border-radius: 0.25rem;
-    border: 1px solid $gray500;
-
-    label{
-      color: $accentDarkmode;
-    }
-
-    &.number{
-      width: 3ch;
-    }
-
-    &[type = "date"]{
-      width: 8ch;
-    }
+  svg path{
+    color: $accentDarkmodeLight !important;
   }
 }
 
 .device, .globaltime .dateInputArea{
   display: flex;
   padding: 0.25rem !important;
+  padding-right: .5rem !important;
   justify-content: space-between;
   align-items: center;
   border-radius: 0.25rem;
   border: 1px solid var(--gray350, #3B3B3B);
   background: var(--gray300, #363636);
+  gap: .5rem;
 
   div{
     display: flex;
@@ -80,14 +66,14 @@
     padding: 0.125rem 0.25rem;
     align-items: center;
     gap: 0.2rem;
-    width: 8ch;
 
     background: transparent;
     border-radius: 0.25rem;
     border: 1px solid $gray500;
 
-    label{
-      color: $accentDarkmode;
+    &.date{
+      width: 10ch;
+      text-align: center;
     }
 
     &.number{
@@ -104,6 +90,18 @@
 
     path{
       color: $gray900;
+    }
+  }
+}
+
+.addDevice{
+  display: flex;
+
+  cc-button:first-of-type {
+    width: 100%;
+
+    &::part(button){
+      width: 100%;
     }
   }
 }

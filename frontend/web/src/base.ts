@@ -192,17 +192,28 @@ export class KeyBoardShortCut {
 
     static {
         window.addEventListener("keydown", (event: KeyboardEvent) => {
+            //console.log(event.target)
+            if(event.target instanceof HTMLInputElement) return
             this.pressedKeys.add(event.key.toLowerCase()) //add the pressed key to set
             this.shortCuts.forEach(shortCut => { //check for every shortcut if all keys are currently pressed
+                //if more option keys are pressed then required dont execute the action
+                //console.log(shortCut.keys.length, this.pressedKeys.size)
+                if(shortCut.keys.length != this.pressedKeys.size) return
                 if(shortCut.keys.every(key => this.pressedKeys.has(key))){
                     shortCut.action()
+                    event.preventDefault()
                 }
             })
 
             //console.log(this.pressedKeys)
         })
+
         window.addEventListener("keyup", (event: KeyboardEvent) => {
             this.pressedKeys.delete(event.key.toLowerCase()) //remove the released key from set
+        })
+
+        window.addEventListener("blur", () => {
+            this.pressedKeys.clear()
         })
     }
 }

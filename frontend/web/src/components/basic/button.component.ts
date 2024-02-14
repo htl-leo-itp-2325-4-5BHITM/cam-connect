@@ -28,7 +28,7 @@ export class ButtonComponent extends LitElement {
     render() {
         return html`
             <style>${styles}</style>
-            <button class="cc-button" color="${this.color}" type="${this.type}" size="${this.size}">
+            <button class="cc-button" part="button" color="${this.color}" type="${this.type}" size="${this.size}">
                 <slot name="left"></slot>
                 ${this.text}
                 <slot name="right"></slot>
