@@ -17,8 +17,12 @@ div{
     background-color: $hoverBackground;
   }
 
+  img{
+    width: 1.2rem;
+    aspect-ratio: 1/1;
+  }
   &.multiple img{
-    width: 1.6rem;
+    width: 1.4rem;
   }
 
   &.accent img {
@@ -26,11 +30,6 @@ div{
   }
   &.gray img {
     @include imgIconColorGray800
-  }
-
-  img{
-    width: 1.2rem;
-    aspect-ratio: 1/1;
   }
 }
 
