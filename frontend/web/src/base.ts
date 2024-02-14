@@ -192,7 +192,7 @@ export class KeyBoardShortCut {
 
     static {
         window.addEventListener("keydown", (event: KeyboardEvent) => {
-            //console.log(event.target)
+            console.log(event.target)
             if(event.target instanceof HTMLInputElement) return
             this.pressedKeys.add(event.key.toLowerCase()) //add the pressed key to set
             this.shortCuts.forEach(shortCut => { //check for every shortcut if all keys are currently pressed

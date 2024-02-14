@@ -59,7 +59,7 @@
 	}
 
 	DeviceType <|-down- CameraType
-	DeviceType <|-down- AudioType
+	DeviceType <|-down- MicrophoneType
 	DeviceType <|-down- LightType
 	DeviceType <|-down- TripodType
 	DeviceType <|-down- StabilizerType

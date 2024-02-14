@@ -1,22 +1,21 @@
 @import "../../base";
 
-.cc-line{
+:host {
   width: auto;
   height: 1px;
   display: block;
+}
 
-  &[type="vertical"]{
+:host([type="vertical"]){
     width: 1px;
-    height: 100%;
-  }
+}
 
-  &[color="500"]{
-    background-color: $gray500;
-  }
-  &[color="600"]{
-    background-color: $gray600;
-  }
-  &[color="800"]{
-    background-color: $gray800;
-  }
+:host([color="500"]){
+  background-color: $gray500;
+}
+:host([color="600"]){
+  background-color: $gray600;
+}
+:host([color="800"]){
+  background-color: $gray800;
 }
