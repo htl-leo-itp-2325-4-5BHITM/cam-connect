@@ -43,22 +43,19 @@ div{
   }
 }
 
-span{
-  margin-inline: .25rem;
-  color: $gray600;
-
-  &.line{
-    margin: 0;
-    color: $accentDarkmodeLight;
-  }
-}
-
 cc-chip{
   margin-right: 1rem;
 }
 
+cc-line{
+  margin-inline: .5rem;
+}
+
 input{
+  display: flex;
   padding: 0rem 0.1875rem 0rem 0.25rem;
+  align-items: center;
+  gap: 0.2rem;
   border-radius: 0.25rem;
   border: 1px solid $gray500;
   background: $gray300;
@@ -71,8 +68,25 @@ input{
     width: 4ch;
   }
 
-  &.customDate{
-    width: 6.5ch;
-    text-align: left;
+  &.date{
+    width: 10ch;
+    text-align: center;
+  }
+
+  &[disabled="true"]{
+    background: transparent;
+    border: none;
+  }
+}
+
+.globaltime{
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: .5rem;
+  justify-content: right;
+
+  svg path{
+    color: $accentDarkmodeLight !important;
   }
 }

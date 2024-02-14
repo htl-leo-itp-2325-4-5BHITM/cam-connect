@@ -17,6 +17,7 @@
   border-radius: 0.75rem 0.75rem 0rem 0.75rem;
   background-color: $gray300;
   padding: .25rem;
+  font-size: $fSizeDesktopSmall;
 
   img{
     height: 1.5rem;
@@ -27,6 +28,10 @@
     display: flex;
     align-items: center;
 
+    p{
+      color: $gray900;
+    }
+
     p, cc-button, cc-circle-select{
       margin-inline: .2rem;
     }
@@ -36,7 +41,7 @@
     }
   }
 
-  .leftSide p:first-child{
+  .left p.bold{
     font-weight: bold;
   }
 }

@@ -30,12 +30,15 @@ import '../styles/datePickerOverride.scss'
 
 import Model, {ObservedProperty, PageEnum} from "./model"
 import {KeyBoardShortCut} from "./base"
+import PopupEngine from "./popupEngine";
 
 //OMG its our single swouce of THWQUUUCE
 export let model = new Model()
 model.appState.subscribe(data => {
     console.log(data)
 })
+
+PopupEngine.init()
 
 setTimeout(() => {
     const app = document.createElement("cc-app")

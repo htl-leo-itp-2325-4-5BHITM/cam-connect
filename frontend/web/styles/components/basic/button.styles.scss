@@ -54,7 +54,7 @@
     box-shadow: 0 0 0 1px var(--color-light) inset;
     color: var(--color-text);
 
-    &:hover {
+    &:not([disabled]):hover {
     }
   }
   &[type = "outlined"]{
@@ -66,7 +66,7 @@
       color: var(--color-light);
     }
 
-    &:hover{
+    &:not([disabled]):hover{
       background: $gray100;
     }
   }
@@ -82,7 +82,7 @@
       color: var(--color-light);
     }
 
-    &:hover {
+    &:not([disabled]):hover {
       background-color: $hoverBackground;
     }
   }
@@ -103,7 +103,7 @@
       color: var(--color-light);
     }
 
-    &:hover {
+    &:not([disabled]):hover {
       background-color: $hoverBackgroundLight;
     }
   }
@@ -128,6 +128,11 @@
         color: var(--color-text) !important;
       }
     }
+  }
+
+  &[disabled]{
+    opacity: 50%;
+    cursor: default;
   }
 
   ::slotted(*:not(.icon, svg, img)){

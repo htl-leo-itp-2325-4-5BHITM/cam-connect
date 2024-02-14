@@ -5,8 +5,13 @@ import {ButtonType} from "../basic/button.component"
 import {ColorEnum, SizeEnum} from "../../base"
 import {Rent, RentStatus} from "../../service/rent.service";
 import {ChipType} from "../basic/chip.component"
-import {LineType} from "../basic/line.component"
+import {LineColor, LineType} from "../basic/line.component"
 import {model} from "../../index"
+import AirDatepicker from "air-datepicker";
+import localeEn from "air-datepicker/locale/en";
+import {faCircleArrowDown} from "@fortawesome/free-solid-svg-icons";
+import {icon} from "@fortawesome/fontawesome-svg-core";
+import {unsafeSVG} from "lit/directives/unsafe-svg.js";
 
 @customElement('cc-rent-list-entry')
 export class RentListEntryComponent extends LitElement {
@@ -20,6 +25,18 @@ export class RentListEntryComponent extends LitElement {
         super.firstUpdated(_changedProperties);
 
         this.setAttribute("status", this.rent.status)
+
+        let startDate = this.rent.rent_start
+        let endDate = this.rent.rent_end_actual || this.rent.rent_end_planned
+
+        let globalInput = this.renderRoot.querySelector('.globaltime input') as HTMLInputElement
+        new AirDatepicker(globalInput, {
+            locale: localeEn,
+            range: true,
+            dateFormat: "dd.MM",
+            multipleDatesSeparator: ' - ',
+            selectedDates: [startDate, endDate]
+        })
     }
 
     render() {
@@ -27,14 +44,16 @@ export class RentListEntryComponent extends LitElement {
             <style>${styles}</style>
 
             <div>
-                <input type="text" value="${this.rent.device.type.name}">
-                <input type="text" class="number" value="${this.rent.device.number}">
-                <cc-line type="${LineType.VERTICAL}"></cc-line>
-                <input type="date" class="customDate" value="${this.rent.rent_start}"/>
-                <cc-line type="${LineType.VERTICAL}"></cc-line>
-                <input type="date" class="customDate" value="${this.rent.rent_end_actual || this.rent.rent_end_planned}"/>
-                <cc-line type="${LineType.VERTICAL}"></cc-line>
-
+                <input type="text" value="${this.rent.device.type.name}" disabled="${this.rent.status == RentStatus.WAITING}">
+                <input type="text" class="number" value="${this.rent.device.number}" disabled="${this.rent.status == RentStatus.WAITING}">
+                <cc-line color=${this.rent.status == RentStatus.DECLINED ? LineColor.LIGHT : LineColor.LIGHTER} type="${LineType.VERTICAL}"></cc-line>
+                <div class="globaltime">
+                    <div class="dateInputArea">
+                        <input type="text" class="date" disabled="${this.rent.status == RentStatus.WAITING}">
+                        <icon-cta>${unsafeSVG(icon(faCircleArrowDown).html[0])}</icon-cta>
+                    </div>
+                </div>
+                <cc-line color=${this.rent.status == RentStatus.DECLINED ? LineColor.LIGHT : LineColor.LIGHTER} type="${LineType.VERTICAL}"></cc-line>
                 <cc-property-value size="${SizeEnum.SMALL}" property="Erstellt von" value="${this.rent.teacher_start.firstname.charAt(0)}. ${this.rent.teacher_start.lastname}"></cc-property-value>
             </div>
 
@@ -54,21 +73,19 @@ export class RentListEntryComponent extends LitElement {
                     </div>
                 </cc-chip>
                 
-                <cc-circle-select @click="${() => {this.selectRent(this)}}" .checked="${this.checked}" size="${SizeEnum.SMALL}"></cc-circle-select>
+                <cc-circle-select @click="${() => {this.toggleRentCheck()}}" .checked="${this.checked}" size="${SizeEnum.SMALL}"></cc-circle-select>
             </div>
         `
     }
 
-    selectRent(elem){
-        elem.checked = !elem.checked
+    toggleRentCheck(){
+        this.checked = !this.checked
 
-        if(elem.checked){
+        if(this.checked){
             model.addSelectedRentEntry(this)
         } else{
             model.removeSelectedRentEntry(this)
         }
-
-        console.log(model.appState.value.selectedRentEntries)
     }
 
     rentStatusToButtonText(status: RentStatus){
