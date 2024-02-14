@@ -49,11 +49,12 @@ public class Rent {
         this.student = student;
     }
 
-    public Rent(Student student, Device device, Teacher teacher_start, LocalDate rent_start, String note, String device_string) {
+    public Rent(Student student, Device device, Teacher teacher_start, LocalDate rent_start, LocalDate rent_end_planned, String note, String device_string) {
         this.student = student;
         this.device = device;
         this.teacher_start = teacher_start;
         this.rent_start = rent_start;
+        this.rent_end_planned = rent_end_planned;
         this.creation_date = LocalDateTime.now();
         this.note = note;
         this.device_string = device_string;

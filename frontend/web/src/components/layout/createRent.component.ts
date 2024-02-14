@@ -13,7 +13,7 @@ import { faXmark, faCircleArrowDown } from "@fortawesome/free-solid-svg-icons"
 
 import AirDatepicker from 'air-datepicker';
 import localeEn from 'air-datepicker/locale/en';
-import {Rent} from "../../service/rent.service"
+import {CreateRentDTO, Rent} from "../../service/rent.service"
 
 @customElement('cc-create-rent')
 export class CreateRentComponent extends LitElement {
@@ -21,7 +21,7 @@ export class CreateRentComponent extends LitElement {
     private appState: ObservedProperty<AppState>
 
     @property()
-    rents: Rent[] = []
+    student_id: number
 
     constructor() {
         super()
@@ -67,26 +67,11 @@ export class CreateRentComponent extends LitElement {
                     </div>
                 </div>
                 
-                ${this.rents.map(rent => {
-                    return html`
-                        <div class="device">
-                            <div>
-                                <input type="text" value="${rent.device.type.name}">
-                                <input type="text" value="${rent.device.number}" class="number">
-                            </div>
-
-                            <div>
-                                <input class="date">
-                            </div>
-
-                            <icon-cta>${unsafeSVG(icon(faXmark).html[0])}</icon-cta>
-                        </div>
-                    `
-                })}
+                <div class="deviceList"></div>
             </div>
 
             <div class="addDevice">
-                <cc-button class="primary" color="${ColorEnum.ACCENT}" type="${ButtonType.OUTLINED}">
+                <cc-button class="primary" color="${ColorEnum.ACCENT}" type="${ButtonType.OUTLINED}" @click="${this.addDevice}">
                     Gerät Hinzufügen
                 </cc-button>
                 <cc-button color="${ColorEnum.GRAY}" type="${ButtonType.OUTLINED}">
@@ -105,9 +90,11 @@ export class CreateRentComponent extends LitElement {
         `
     }
 
-    connectedCallback() {
-        super.connectedCallback();
-
+    addDevice() {
+        console.log("device added")
+        let newDevice = document.createElement("cc-create-rent-device-entry")
+        console.log(newDevice)
+        this.shadowRoot.querySelector(".deviceList").appendChild(newDevice)
     }
 
     createRent() {

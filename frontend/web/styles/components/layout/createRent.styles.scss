@@ -39,13 +39,9 @@
   align-items: center;
   gap: .5rem;
   justify-content: right;
-
-  svg path{
-    color: $accentDarkmodeLight !important;
-  }
 }
 
-.device, .globaltime .dateInputArea{
+.globaltime .dateInputArea{
   display: flex;
   padding: 0.25rem !important;
   padding-right: .5rem !important;
@@ -83,7 +79,7 @@
     height: 1.2rem;
 
     path{
-      color: $gray900;
+      color: $accentDarkmodeLight;
     }
   }
 }

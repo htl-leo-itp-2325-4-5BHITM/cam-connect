@@ -26,6 +26,16 @@ export interface RentByStudentDTO {
     rentList: [Rent]
 }
 
+export interface CreateRentDTO {
+    student_id: number
+    device_id: number
+    teacher_start_id: number
+    rent_start: Date
+    rent_end_planned: Date
+    note: string
+    device_string: string
+}
+
 export default class RentService{
     static fetchAll(){
         api.fetchData<RentByStudentDTO[]>("/rent/getall")
