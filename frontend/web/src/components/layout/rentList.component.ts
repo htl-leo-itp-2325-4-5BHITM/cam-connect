@@ -7,13 +7,11 @@ import {Rent, RentByStudentDTO} from "../../service/rent.service"
 @customElement('cc-rent-list')
 export class RentListComponent extends LitElement {
     render() {
-        let count = 0;
-
         return html`
             <style>${styles}</style>
             
-            ${model.rents.value.map(rent => {
-                return html`<cc-rent-list-entry .rent="${rent}"></cc-rent-list-entry>`
+            ${model.rents.value.map(rentByStudent => {
+                return html`<cc-rent-list-student .rentByStudent="${rentByStudent}"></cc-rent-list-student>`
             })}
         `
     }

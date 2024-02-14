@@ -14,8 +14,8 @@ export class CircleSelectComponent extends LitElement {
     @property({type: CircleSelectType})
     type?: CircleSelectType = CircleSelectType.SINGLE;
 
-    @property({type: Boolean, reflect: true})
-    checked?: Boolean = false;
+    @property({ type: Boolean, reflect: true })
+    checked?: boolean = false;
 
     toggleSelect() {
         this.checked = !this.checked;

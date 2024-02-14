@@ -8,6 +8,7 @@ import RentService, {Rent, RentByStudentDTO} from "./service/rent.service"
 import {FilterOption} from "./components/basic/filterContainer.component"
 import {Teacher} from "./service/teacher.service";
 import {Student} from "./service/student.service";
+import {RentListEntryComponent} from "./components/layout/rentListEntry.component"
 
 export enum PageEnum { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar" }
 
@@ -15,6 +16,7 @@ export interface AppState {
     page: PageEnum,
     createRentModalOpen: boolean,
     createMultiRentModalOpen: boolean,
+    selectedRentEntries: Set<RentListEntryComponent>,
     cancelCurrentAction: () => void,
 }
 
@@ -71,6 +73,7 @@ export default class Model{
         page: PageEnum.EQUIPMENT,
         createMultiRentModalOpen: false,
         createRentModalOpen: false,
+        selectedRentEntries: new Set<RentListEntryComponent>(),
         cancelCurrentAction: () => {}
     })
 
@@ -132,6 +135,12 @@ export default class Model{
         if(data.createRentModalOpen == true) data.cancelCurrentAction = () => this.updateAppState({createRentModalOpen: false})
 
         this.appState.next(Object.assign({}, this.appState.value, data))
+    }
+
+    addSelectedRentEntry(rentEntry: RentListEntryComponent){
+        let selected = this.appState.value.selectedRentEntries
+        selected.add(rentEntry)
+        this.updateAppState({selectedRentEntries: selected})
     }
 
     //sry i cant really test this rn it might throw ewows :3
