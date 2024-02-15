@@ -120,7 +120,13 @@ public class RentResource {
     @GET
     @Path("/getbyid/{id: [0-9]+}/remove")
     public Response remove(@PathParam("id") Long id) {
-        return rentRepository.remove(id);
+        try{
+            rentRepository.remove(id);
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok();
     }
 
     @POST

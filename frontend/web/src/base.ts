@@ -20,7 +20,7 @@ export enum ColorEnum {ACCENT="accent", GOOD="good", MID="mid", BAD="bad", GRAY=
 export enum SimpleColorEnum {ACCENT="accent", GRAY="gray"}
 export enum SizeEnum {BIG="big", MEDIUM="medium", SMALL="small"}
 
-export class api{
+export class Api {
     /**
      * querys the backend and returns the resulting data
      * @param url
@@ -36,30 +36,6 @@ export class api{
                 else console.error("no ccResponse object received from", url, "only got:", result)
                 return result.data
             })
-    }
-
-    /**
-     * updates the data at the specified path with the given id.
-     * @param path should start with a / will automatically be surrounded by the api url and get and update paths
-     * @param id
-     * @param data
-     */
-    static updateData<T>(path: string, id: number, data: T): Promise<T> {
-        return fetch(`${config.api_url}${path}/getbyid/${id}/update`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        })
-        .then(response => {
-            this.handleHttpError(response.status, path)
-            return response.json() as Promise<ccResponse<T>>
-        })
-        .then(result => {
-            this.handleCCError(result.ccStatus.statusCode, result.ccStatus.details, path)
-            return result.data
-        })
     }
 
     static createItem<T>(path: string, data: T): Promise<T> {
@@ -78,6 +54,32 @@ export class api{
             this.handleCCError(result.ccStatus.statusCode, result.ccStatus.details, path)
             return result.data
         })
+    }
+
+    /**
+     * updates the data at the specified path with the given id.
+     * @param path should start with a / will automatically be surrounded by the api url, the getbyid and optionally the operation
+     * @param operation
+     * @param id
+     * @param data
+     */
+    static async getById<T>(path: string, id: number, operation: string = "", data?: T): Promise<T> {
+        let response: Response
+        if(data)
+            response = await fetch(`${config.api_url}${path}/getbyid/${id}${operation}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
+        else
+            response = await fetch(`${config.api_url}${path}/getbyid/${id}${operation}`)
+
+        this.handleHttpError(response.status, path + operation)
+        let result = await response.json() as ccResponse<T>
+        if(result.ccStatus) this.handleCCError(result.ccStatus.statusCode, result.ccStatus.details, path + operation)
+        return result.data
     }
 
     static handleCCError(statusCode: number, details: string, url:string) {

@@ -60,11 +60,7 @@ public class RentRepository {
 
     @Transactional
     public Response remove(Long id){
-        try {
-            em.remove(em.find(Rent.class, id));
-        } catch(CCException ex){
-            return CCResponse.error(ex);
-        }
+        em.remove(getById(id));
         rentSocket.broadcast(getAll());
         return CCResponse.ok();
     }

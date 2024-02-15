@@ -1,5 +1,5 @@
 import {model} from "../index"
-import {api} from "../base"
+import {Api} from "../base"
 
 export interface Student{
     student_id: number,
@@ -14,7 +14,7 @@ export interface Student{
 
 export default class RentService{
     static fetchAll(){
-        api.fetchData<Student[]>("/student/getall")
+        Api.fetchData<Student[]>("/student/getall")
             .then(data => {
                 model.loadStudents(data)
             })
