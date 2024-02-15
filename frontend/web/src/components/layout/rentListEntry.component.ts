@@ -24,8 +24,6 @@ export class RentListEntryComponent extends LitElement {
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
 
-        this.setAttribute("status", this.rent.status)
-
         let startDate = this.rent.rent_start
         let endDate = this.rent.rent_end_actual || this.rent.rent_end_planned
 
@@ -37,6 +35,11 @@ export class RentListEntryComponent extends LitElement {
             multipleDatesSeparator: ' - ',
             selectedDates: [startDate, endDate]
         })
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
+        this.setAttribute("status", this.rent.status)
     }
 
     render() {

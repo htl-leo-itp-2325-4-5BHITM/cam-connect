@@ -54,16 +54,13 @@ export class CreateRentComponent extends LitElement {
     render() {
         return html`
             <style>${styles}</style>
-            <div class="device">
-                <div>
-                    <input type="text" value="${this.data.device_string}">
-                    <input type="text" value="00" class="number">
-                </div>
+            <div class="left">
+                <input type="text" value="${this.data.device_string}" class="name">
+                <input type="text" value="00" class="number">
+            </div>
 
-                <div>
-                    <input class="date">
-                </div>
-
+            <div class="right">
+                <input class="date">
                 <icon-cta>${unsafeSVG(icon(faXmark).html[0])}</icon-cta>
             </div>
         `

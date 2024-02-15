@@ -11,14 +11,20 @@
     background: var(--gray300, #363636);
     gap: .5rem;
 
-    div{
+    div.left, div.right{
         display: flex;
+        gap: .5rem;
     }
 
     input{
         background: transparent;
         border-radius: 0.25rem;
         border: 1px solid $gray500;
+        padding-inline: .3rem;
+
+        &.name{
+            width: 10ch;
+        }
 
         &.date{
             width: 10ch;

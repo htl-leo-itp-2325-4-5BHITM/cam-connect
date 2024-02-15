@@ -132,8 +132,6 @@ export default class Model{
     //region update functions
 
     updateAppState(data: AppStatePartial){
-        if(data.createRentModalOpen == true) data.cancelCurrentAction = () => this.updateAppState({createRentModalOpen: false})
-
         this.appState.next(Object.assign({}, this.appState.value, data))
     }
 
