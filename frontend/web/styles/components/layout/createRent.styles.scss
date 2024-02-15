@@ -30,7 +30,13 @@
   display: flex;
   flex-direction: column;
   gap: .5rem;
-  margin-inline: 1rem;
+  margin-inline: .5rem;
+
+  .deviceList{
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+  }
 }
 
 .globaltime{
@@ -57,9 +63,7 @@
   }
 
   input{
-    background: transparent;
-    border-radius: 0.25rem;
-    border: 1px solid $gray500;
+    padding-inline: .2rem;
 
     &.date{
       width: 10ch;
@@ -68,10 +72,6 @@
 
     &.number{
       width: 3ch;
-    }
-
-    &[type = "date"]{
-      width: 8ch;
     }
   }
 
@@ -84,8 +84,11 @@
   }
 }
 
-.addDevice{
+.buttons{
   display: flex;
+  margin-inline: .5rem;
+  margin-top: 1rem;
+  gap: .5rem;
 
   cc-button:first-of-type {
     width: 100%;

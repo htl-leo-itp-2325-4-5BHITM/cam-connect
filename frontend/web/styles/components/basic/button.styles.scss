@@ -19,6 +19,8 @@
   align-items: center;
   gap: .5rem;
 
+  user-select: none;
+
   &[color = "accent"]{
     --color-main: #{$accentDarkmodeDark};
     --color-light: #{$accentDarkmodeLight};

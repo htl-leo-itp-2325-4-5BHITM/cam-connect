@@ -9,19 +9,15 @@
     border-radius: 0.25rem;
     border: 1px solid var(--gray350, #3B3B3B);
     background: var(--gray300, #363636);
-    gap: .5rem;
+    gap: 1rem;
 
     div.left, div.right{
         display: flex;
         gap: .5rem;
+        align-items: center;
     }
 
     input{
-        background: transparent;
-        border-radius: 0.25rem;
-        border: 1px solid $gray500;
-        padding-inline: .3rem;
-
         &.name{
             width: 10ch;
         }
@@ -29,14 +25,11 @@
         &.date{
             width: 10ch;
             text-align: center;
+            padding-inline: .2rem;
         }
 
         &.number{
             width: 3ch;
-        }
-
-        &[type = "date"]{
-            width: 8ch;
         }
     }
 
@@ -46,5 +39,11 @@
         path{
             color: $gray900;
         }
+    }
+}
+
+:host([type = "string"]){
+    .left, .left input{
+        flex: 1;
     }
 }

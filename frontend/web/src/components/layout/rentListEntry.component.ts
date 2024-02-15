@@ -19,6 +19,9 @@ export class RentListEntryComponent extends LitElement {
     @property()
     rent: Rent
 
+   /* @property({reflect: true})
+    status: RentStatus = this.rent.status*/
+
     @property({ type: Boolean, reflect: true })
     checked: boolean = false
 
@@ -38,8 +41,8 @@ export class RentListEntryComponent extends LitElement {
         })
     }
 
-    connectedCallback() {
-        super.connectedCallback();
+    protected performUpdate() {
+        super.performUpdate();
         this.setAttribute("status", this.rent.status)
     }
 

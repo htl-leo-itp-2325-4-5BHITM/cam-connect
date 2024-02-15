@@ -39,8 +39,20 @@ button{
     background-color: transparent;
     border: none;
     color: hsl(0, 0%, 100%);
+    padding-inline: .3rem;
 }
 
+input{
+    border-radius: 0.25rem;
+    border: 1px solid $gray500;
+    padding-inline: .3rem;
+    background-color: transparent;
+
+    &:focus{
+        border-color: $accentDarkmode;
+        outline: 1px solid $accentDarkmode;
+    }
+}
 
 :global {
     #tooltip{

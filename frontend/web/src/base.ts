@@ -202,8 +202,8 @@ export class KeyBoardShortCut {
                 //console.log(shortCut.keys.length, this.pressedKeys.size)
                 if(shortCut.keys.length != this.pressedKeys.size) return
                 if(shortCut.keys.every(key => this.pressedKeys.has(key))){
+                    event.preventDefault() //TODO this is not working
                     shortCut.action()
-                    event.preventDefault()
                 }
             })
 
