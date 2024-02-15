@@ -8,7 +8,7 @@ import {AppState, ObservedProperty, PageEnum} from "../../model"
 import {ButtonType} from "../basic/button.component"
 import {SimpleColorEnum, SizeEnum} from "../../base"
 import {model} from "../../index"
-import {RentStatus} from "../../service/rent.service";
+import RentService, {RentStatus} from "../../service/rent.service";
 import PopupEngine from "../../popupEngine";
 
 @customElement('cc-toolbar')
@@ -99,7 +99,7 @@ export class ToolbarComponent extends LitElement {
                     text: "Ja",
                     action: (data) => {
                         model.appState.value.selectedRentEntries.forEach((entry) => {
-                            entry.removeRent()
+                            RentService.remove(entry.rent)
                         })
                     },
                     closePopup: true
@@ -108,9 +108,6 @@ export class ToolbarComponent extends LitElement {
                     text: "Nein",
                 },
             ]
-        })
-        model.appState.value.selectedRentEntries.forEach((entry) => {
-            console.log(entry)
         })
     }
 
@@ -122,7 +119,7 @@ export class ToolbarComponent extends LitElement {
                     text: "Ja",
                     action: (data) => {
                         model.appState.value.selectedRentEntries.forEach((entry) => {
-                            entry.returnRent()
+                            RentService.return(entry.rent)
                         })
                     },
                     closePopup: true

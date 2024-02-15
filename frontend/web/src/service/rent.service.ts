@@ -56,4 +56,24 @@ export default class RentService{
                 console.error(error)
             })
     }
+
+    static remove(rent: Rent){
+        Api.getById("/rent", rent.rent_id, "/remove")
+            .then(() => {
+                RentService.fetchAll()
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
+
+    static return(rent: Rent){
+        Api.getById("/return", rent.rent_id, "/return", rent)
+            .then(() => {
+                RentService.fetchAll()
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
 }
