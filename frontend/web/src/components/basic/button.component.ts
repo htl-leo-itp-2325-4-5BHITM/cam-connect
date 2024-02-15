@@ -14,21 +14,24 @@ export enum ButtonType {FILLED="filled", OUTLINED="outlined", TEXT="text", UNDER
 @customElement('cc-button')
 export class ButtonComponent extends LitElement {
     @property({type: SizeEnum})
-    size?: SizeEnum = SizeEnum.MEDIUM;
+    size?: SizeEnum = SizeEnum.MEDIUM
 
     @property({type: ButtonType})
-    type?: ButtonType = ButtonType.FILLED;
+    type?: ButtonType = ButtonType.FILLED
 
     @property({type: SimpleColorEnum})
-    color?: SimpleColorEnum = SimpleColorEnum.ACCENT;
+    color?: SimpleColorEnum = SimpleColorEnum.ACCENT
 
     @property({type: String})
-    text?: String = this.innerText || "Button";
+    text?: String = this.innerText || "Button"
+
+    @property({type: Boolean})
+    disabled?: boolean = false
 
     render() {
         return html`
             <style>${styles}</style>
-            <button class="cc-button" part="button" color="${this.color}" type="${this.type}" size="${this.size}">
+            <button class="cc-button" part="button" color="${this.color}" type="${this.type}" size="${this.size}" .disabled="${this.disabled}">
                 <slot name="left"></slot>
                 ${this.text}
                 <slot name="right"></slot>

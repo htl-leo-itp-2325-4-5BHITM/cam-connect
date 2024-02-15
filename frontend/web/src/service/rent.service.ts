@@ -1,5 +1,5 @@
 import {model} from "../index"
-import {api} from "../base"
+import {Api} from "../base"
 import {Device} from "./device.service"
 import {Teacher} from "./teacher.service";
 import {Student} from "./student.service";
@@ -38,7 +38,7 @@ export interface CreateRentDTO {
 
 export default class RentService{
     static fetchAll(){
-        api.fetchData<RentByStudentDTO[]>("/rent/getall")
+        Api.fetchData<RentByStudentDTO[]>("/rent/getall")
             .then(data => {
                 model.loadRents(data)
             })
@@ -48,7 +48,7 @@ export default class RentService{
     }
 
     static create(rent: Rent){
-        api.createItem("/rent", rent)
+        Api.createItem("/rent", rent)
             .then(() => {
                 RentService.fetchAll()
             })

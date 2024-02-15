@@ -1,4 +1,4 @@
-import {api} from '../base'
+import {Api} from '../base'
 import {model} from "../index"
 import {CameraResolution, CameraSensor, CameraSystem, LensMount, TripodHead} from "./deviceTypeAttribute.service"
 
@@ -93,7 +93,7 @@ export interface DeviceTypeVariantCollection {
 }
 export default class DeviceTypeService {
     static fetchAll(){
-        api.fetchData<DeviceTypeVariantCollection>("/devicetype/getall")
+        Api.fetchData<DeviceTypeVariantCollection>("/devicetype/getall")
             .then(data => {
                 model.loadDeviceTypes(data)
             })

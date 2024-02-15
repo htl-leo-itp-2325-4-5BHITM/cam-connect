@@ -2,9 +2,8 @@ import {html, LitElement, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/rentListStudent.styles.scss'
 import {CircleSelectType} from "../basic/circleSelect.component"
-import {ColorEnum, SimpleColorEnum, SizeEnum} from "../../base"
-import {Rent, RentByStudentDTO, RentStatus} from "../../service/rent.service";
-import {RentListEntryComponent} from "./rentListEntry.component"
+import {SimpleColorEnum, SizeEnum} from "../../base"
+import {RentByStudentDTO, RentStatus} from "../../service/rent.service";
 import {model} from "../../index"
 import {AppState, ObservedProperty} from "../../model"
 
@@ -39,7 +38,9 @@ export class RentListStudentComponent extends LitElement {
             ${this.generateHeading(student.firstname + " " + student.lastname, student.school_class)}
             <div class="entries">
                 ${rentList.map(rent => {
-                    return html`<cc-rent-list-entry .rent="${rent}"></cc-rent-list-entry>`
+                    if(rent.status != RentStatus.RETURNED){
+                        return html`<cc-rent-list-entry .rent="${rent}"></cc-rent-list-entry>`
+                    }
                 })}
             </div>`
     }
@@ -48,12 +49,12 @@ export class RentListStudentComponent extends LitElement {
         return html`
             <div class="heading">
                 <div class="left">
-                    <p>${name}</p>
+                    <p class="bold">${name}</p>
                     <p>•</p>
                     <p>${schoolClass}</p>
                 </div>
                 <div class="right">
-                    <cc-button>Verleih erstellen</cc-button>
+                    <cc-button size="${SizeEnum.SMALL}">Verleih erstellen</cc-button>
                     <cc-button color="${SimpleColorEnum.GRAY}" size="${SizeEnum.SMALL}">Details anzeigen</cc-button>
                     <cc-circle-select type="${CircleSelectType.MULTIPLE}" size="${SizeEnum.SMALL}" @click="${this.selectAll}"></cc-circle-select>
                 </div>
@@ -65,7 +66,7 @@ export class RentListStudentComponent extends LitElement {
         let targetCheck = elem.target.checked
         this.shadowRoot.querySelectorAll("cc-rent-list-entry").forEach(rentListEntry => {
             if(rentListEntry.checked != targetCheck){
-                rentListEntry.selectRent(rentListEntry)
+                rentListEntry.toggleRentCheck()
             }
         })
     }
@@ -75,6 +76,8 @@ export class RentListStudentComponent extends LitElement {
      * if so the multiple select gets checked as well
      */
     autoCheckMultipleSelect() {
+        if (this.shadowRoot.querySelectorAll("cc-rent-list-entry").length == 0) return false
+
         let multiple = this.shadowRoot.querySelector(`cc-circle-select`)
         multiple.checked = true
 

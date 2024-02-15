@@ -1,5 +1,5 @@
 import {model} from "../index"
-import {config, api} from "../base"
+import {config, Api} from "../base"
 import {DeviceType, DeviceTypeVariantCollection} from "./deviceType.service"
 
 export interface Device{
@@ -21,7 +21,7 @@ export interface DeviceDTO{
 export default class DeviceService{
     static fetchAll(){
 
-        api.fetchData<Device[]>("/device/getall")
+        Api.fetchData<Device[]>("/device/getall")
             .then(data => {
                 model.loadDevices(data)
             })
@@ -42,7 +42,7 @@ export default class DeviceService{
     }
 
     static update(device: Device){
-        api.updateData<Device>("/device", device.device_id, device)
+        Api.getById<Device>("/device", device.device_id, "/update", device)
             .then(data => {
                 console.log("updated", data)
             })
