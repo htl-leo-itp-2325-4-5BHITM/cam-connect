@@ -97,7 +97,11 @@ export class ToolbarComponent extends LitElement {
             buttons: [
                 {
                     text: "Ja",
-                    action: (data) => {console.log(data.inputValues[0], data.inputValues[1])},
+                    action: (data) => {
+                        model.appState.value.selectedRentEntries.forEach((entry) => {
+                            entry.removeRent()
+                        })
+                    },
                     closePopup: true
                 },
                 {
@@ -116,16 +120,17 @@ export class ToolbarComponent extends LitElement {
             buttons: [
                 {
                     text: "Ja",
-                    action: (data) => {console.log(data.inputValues[0], data.inputValues[1])},
+                    action: (data) => {
+                        model.appState.value.selectedRentEntries.forEach((entry) => {
+                            entry.returnRent()
+                        })
+                    },
                     closePopup: true
                 },
                 {
                     text: "Nein",
                 },
             ]
-        })
-        model.appState.value.selectedRentEntries.forEach((entry) => {
-            console.log(entry)
         })
     }
 

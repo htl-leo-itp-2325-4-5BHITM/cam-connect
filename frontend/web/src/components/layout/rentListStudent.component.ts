@@ -76,6 +76,8 @@ export class RentListStudentComponent extends LitElement {
      * if so the multiple select gets checked as well
      */
     autoCheckMultipleSelect() {
+        if (this.shadowRoot.querySelectorAll("cc-rent-list-entry").length == 0) return false
+
         let multiple = this.shadowRoot.querySelector(`cc-circle-select`)
         multiple.checked = true
 

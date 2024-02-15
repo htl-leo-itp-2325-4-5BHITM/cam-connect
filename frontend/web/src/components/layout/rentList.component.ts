@@ -17,7 +17,7 @@ export class RentListComponent extends LitElement {
         return html`
             <style>${styles}</style>
             
-            ${model.rents.value.map(rentByStudent => {
+            ${this.rents.value.map(rentByStudent => {
                 return html`<cc-rent-list-student .rentByStudent="${rentByStudent}"></cc-rent-list-student>`
             })}
         `
