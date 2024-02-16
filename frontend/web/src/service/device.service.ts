@@ -1,6 +1,7 @@
 import {model} from "../index"
-import {config, Api} from "../base"
+import {config, Api, ccResponse} from "../base"
 import {DeviceType, DeviceTypeVariantCollection} from "./deviceType.service"
+import {RentByStudentDTO} from "./rent.service"
 
 export interface Device{
     device_id: number
@@ -32,11 +33,9 @@ export default class DeviceService{
     static createSocketConnection(){
         let socket = new WebSocket(config.socket_url + "/socket/devices");
 
-        socket.onopen = function() {
-            console.info("Device socket connected")
-        }
-        socket.onmessage = function(m) {
-            model.loadDevices(JSON.parse(m.data))
+        socket.onmessage = (m) => {
+            let result = JSON.parse(m.data) as ccResponse<Device[]>
+            model.loadDevices(result.data)
         }
     }
 

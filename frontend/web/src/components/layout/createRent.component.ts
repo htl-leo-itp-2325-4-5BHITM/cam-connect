@@ -123,7 +123,10 @@ export class CreateRentComponent extends LitElement {
 
     createRent() {
         let data: CreateRentDTO[] = []
-        this.devices.forEach(device => {
+
+        for (let i = 0; i < this.devices.size; i++) {
+            let device = Array.from(this.devices)[i]
+            if(!device.validate()) return
             data.push({
                 student_id: 1,
                 teacher_start_id: 1,
@@ -133,7 +136,8 @@ export class CreateRentComponent extends LitElement {
                 rent_start: device.data.rent_start,
                 rent_end_planned: device.data.rent_end_planned
             })
-        })
+        }
+
         Api.createItem<CreateRentDTO[]>("/rent", data).then(result => {
             console.log(result)
             this.close()

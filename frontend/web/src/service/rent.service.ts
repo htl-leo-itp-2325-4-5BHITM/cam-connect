@@ -1,5 +1,5 @@
 import {model} from "../index"
-import {Api, config} from "../base"
+import {Api, ccResponse, config} from "../base"
 import {Device} from "./device.service"
 import {Teacher} from "./teacher.service";
 import {Student} from "./student.service";
@@ -36,8 +36,8 @@ export interface CreateRentDTO {
     device_string: string
 }
 
-export default class RentService{
-    static fetchAll(){
+export default class RentService {
+    static fetchAll() {
         Api.fetchData<RentByStudentDTO[]>("/rent/getall")
             .then(data => {
                 model.loadRents(data)
@@ -47,19 +47,16 @@ export default class RentService{
             })
     }
 
-    static createSocketConnection(){
+    static createSocketConnection() {
         let socket = new WebSocket(config.socket_url + "/socket/rents");
 
-        socket.onopen = function() {
-            console.info("Rent socket connected")
-        }
-        socket.onmessage = function(m) {
-            console.log("message recieved")
-            model.loadRents(JSON.parse(m.data))
+        socket.onmessage = (m) => {
+            let result = JSON.parse(m.data) as ccResponse<RentByStudentDTO[]>
+            model.loadRents(result.data)
         }
     }
 
-    static create(rent: Rent){
+    static create(rent: Rent) {
         Api.createItem("/rent", rent)
             .then(() => {
                 RentService.fetchAll()
@@ -69,7 +66,7 @@ export default class RentService{
             })
     }
 
-    static remove(rent: Rent){
+    static remove(rent: Rent) {
         Api.getById("/rent", rent.rent_id, "/remove")
             .then(() => {
                 RentService.fetchAll()
@@ -79,7 +76,7 @@ export default class RentService{
             })
     }
 
-    static return(rent: Rent){
+    static return(rent: Rent) {
         Api.getById("/return", rent.rent_id, "/return", rent)
             .then(() => {
                 RentService.fetchAll()

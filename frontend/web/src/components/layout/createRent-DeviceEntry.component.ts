@@ -43,7 +43,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
         this.type = type
         this.parent = parent
         this.appState = new ObservedProperty<AppState>(this, model.appState)
-        this.data = {
+        this.data = { //TODO yeah we have a general issue with the data structure here.. we have no clue about device_id in the frontend, the create dto needs devicetype and number
             device_id: 0,
             device_string: "",
             rent_start: new Date(),
@@ -55,6 +55,10 @@ export class CreateRentDeviceEntryComponent extends LitElement {
         super.firstUpdated(_changedProperties);
         let input = this.renderRoot.querySelector('.date') as HTMLInputElement
 
+        //TODO ask huemer if we want to allow dates in the past
+        //there might be a case where someone wants to log a rent that they conduted in the past
+        //it probably makes most sense to only allow ones in the future
+        //airdatepicker does allow a min value
         this.datePicker = new AirDatepicker(input, {
             locale: localeEn,
             range: true,
@@ -93,6 +97,21 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                 <icon-cta @click="${() => {this.parent.removeDevice(this)}}">${unsafeSVG(icon(faXmark).html[0])}</icon-cta>
             </div>
         `
+    }
+
+    validate():boolean {
+        if(this.type == "string"){
+            if(this.data.device_string == ""){
+                return false
+            }
+        }
+        else if(this.type == "default"){
+            if(this.data.device_id == 0){
+                return false
+            }
+        }
+
+        return true
     }
 }
 

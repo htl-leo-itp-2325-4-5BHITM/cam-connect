@@ -35,9 +35,9 @@ import PopupEngine from "./popupEngine";
 
 //OMG its our single swouce of THWQUUUCE
 export let model = new Model()
-model.appState.subscribe(data => {
+/*model.appState.subscribe(data => {
     console.log(data)
-})
+})*/
 
 PopupEngine.init()
 
