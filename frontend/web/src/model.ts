@@ -94,6 +94,8 @@ export default class Model{
      */
     constructor() {
         this.queryData()
+        DeviceService.createSocketConnection()
+        RentService.createSocketConnection()
     }
 
     queryData(){
@@ -145,15 +147,6 @@ export default class Model{
         let selected = this.appState.value.selectedRentEntries
         selected.delete(rentEntry)
         this.updateAppState({selectedRentEntries: selected})
-    }
-
-    //sry i cant really test this rn it might throw ewows :3
-    async updateDevice(device: Device){
-        DeviceService.update(device)
-
-        let devices = await lastValueFrom(this.devices)
-        let updatedDevices = Util.replaceItemByIdInJsonArray<Device>(devices, device, device.device_id, "device_id")
-        this.devices.next(updatedDevices)
     }
     //endregion
 }

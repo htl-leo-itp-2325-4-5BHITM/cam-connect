@@ -38,7 +38,7 @@ export class Api {
             })
     }
 
-    static createItem<T>(path: string, data: T): Promise<T> {
+    static createItem<T>(path: string, data: T): Promise<any> {
         return fetch(`${config.api_url}${path}/create`, {
             method: "POST",
             headers: {
@@ -48,11 +48,11 @@ export class Api {
         })
         .then(response => {
             this.handleHttpError(response.status, path)
-            return response.json() as Promise<ccResponse<T>>
+            return response.json()
         })
         .then(result => {
             this.handleCCError(result.ccStatus.statusCode, result.ccStatus.details, path)
-            return result.data
+            return result
         })
     }
 

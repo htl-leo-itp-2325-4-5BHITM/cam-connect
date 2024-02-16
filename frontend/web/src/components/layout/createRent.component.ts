@@ -2,7 +2,7 @@ import {LitElement, css, html, PropertyValues} from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/createRent.styles.scss'
 
-import {ColorEnum, SizeEnum} from "../../base"
+import {Api, ColorEnum, SizeEnum} from "../../base"
 import {ButtonType} from "../basic/button.component"
 import {AppState, ObservedProperty} from "../../model"
 import {model} from "../../index"
@@ -15,6 +15,7 @@ import AirDatepicker from 'air-datepicker';
 import localeEn from 'air-datepicker/locale/en';
 import {CreateRentDeviceEntryComponent, RentDeviceEntryComponentType} from "./createRent-DeviceEntry.component"
 import PopupEngine from "../../popupEngine"
+import {CreateRentDTO} from "../../service/rent.service"
 
 @customElement('cc-create-rent')
 export class CreateRentComponent extends LitElement {
@@ -98,6 +99,7 @@ export class CreateRentComponent extends LitElement {
         `
     }
 
+    //TODO add shortcut for this
     addDevice(type: RentDeviceEntryComponentType = "default") {
         let newDevice = new CreateRentDeviceEntryComponent(this, type)
         this.devices.add(newDevice)
@@ -120,7 +122,23 @@ export class CreateRentComponent extends LitElement {
     }
 
     createRent() {
-        console.log("rent created")
+        let data: CreateRentDTO[] = []
+        this.devices.forEach(device => {
+            data.push({
+                student_id: 1,
+                teacher_start_id: 1,
+                device_string: device.data.device_string,
+                note: "", //TODO add support for this
+                device_id: 1,
+                rent_start: device.data.rent_start,
+                rent_end_planned: device.data.rent_end_planned
+            })
+        })
+        Api.createItem<CreateRentDTO[]>("/rent", data).then(result => {
+            console.log(result)
+            this.close()
+        })
+
     }
 
     cancel(){
@@ -129,10 +147,20 @@ export class CreateRentComponent extends LitElement {
             heading: "Verleih erstellen abbrechen",
             text: "Möchtest du den Vorgang wirklich abbrechen? Alle eingegebenen Daten gehen verloren.",
             buttons: [
-                {text: "Ja", action: () => {model.updateAppState({createRentModalOpen: false})}},
+                {text: "Ja", action: () => {
+                        this.close()
+                    }
+                },
                 {text: "Nein"}
             ]
         })
+    }
+
+    close(){
+        model.updateAppState({createRentModalOpen: false})
+        this.devices.forEach(device => device.remove())
+        this.devices.clear()
+        this.addDevice()
     }
 }
 

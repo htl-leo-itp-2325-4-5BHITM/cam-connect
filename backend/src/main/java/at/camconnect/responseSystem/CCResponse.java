@@ -14,7 +14,7 @@ public abstract class CCResponse {
      * @return Response object with status 200 and ccStatus 1000
      */
     public static Response ok(){
-        return Response.ok().entity(new CCResponseDTO(new CCStatus(1000, "The endpoint responded without encountering errors"),new CCResponseDetailDTO())).build();
+        return Response.ok().entity(new CCResponseDTO(new CCStatus(1000, "The endpoint responded without encountering errors"), new CCResponseDetailDTO())).build();
     }
 
     /**

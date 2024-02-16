@@ -84,7 +84,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
         return html`
             <style>${styles}</style>
             <div class="left">
-                <input type="text" value="${this.data.device_string}" class="name" placeholder="Name">
+                <input type="text" value="" class="name" placeholder="Name">
                 <input type="text" value="" class="number" placeholder="Nr.">
             </div>
 

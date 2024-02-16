@@ -20,7 +20,6 @@ export interface DeviceDTO{
 
 export default class DeviceService{
     static fetchAll(){
-
         Api.fetchData<Device[]>("/device/getall")
             .then(data => {
                 model.loadDevices(data)
@@ -34,7 +33,7 @@ export default class DeviceService{
         let socket = new WebSocket(config.socket_url + "/socket/devices");
 
         socket.onopen = function() {
-            console.log("connected")
+            console.info("Device socket connected")
         }
         socket.onmessage = function(m) {
             model.loadDevices(JSON.parse(m.data))

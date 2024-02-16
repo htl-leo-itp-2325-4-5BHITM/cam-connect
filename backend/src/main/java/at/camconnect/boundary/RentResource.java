@@ -32,7 +32,7 @@ public class RentResource {
         } catch(CCException ex){
             return CCResponse.error(ex);
         }
-        return Response.ok().build();
+        return CCResponse.ok();
     }
 
     @POST

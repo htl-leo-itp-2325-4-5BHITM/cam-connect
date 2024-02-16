@@ -3,6 +3,9 @@ package at.camconnect.socket;
 import at.camconnect.model.Device;
 import at.camconnect.model.DeviceType;
 import at.camconnect.repository.DeviceRepository;
+import at.camconnect.responseSystem.CCStatus;
+import at.camconnect.responseSystem.dtos.CCDataResponseDTO;
+import at.camconnect.responseSystem.dtos.CCResponseDetailDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -35,8 +38,10 @@ public class DeviceSocket {
         sessions.remove(session);
     }
 
-    public void broadcast(List<Device> response) {
-        //convert data to a string (json-string)
+    public void broadcast(List<Device> data) {
+        CCDataResponseDTO response = new CCDataResponseDTO(new CCStatus(1000), new CCResponseDetailDTO(data), data);
+
+        //convert to a string (json-string)
         String responseString = "";
         try{
             responseString = objectMapper.writeValueAsString(response);

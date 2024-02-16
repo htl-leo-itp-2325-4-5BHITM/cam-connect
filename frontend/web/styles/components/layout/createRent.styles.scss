@@ -54,8 +54,8 @@
   justify-content: space-between;
   align-items: center;
   border-radius: 0.25rem;
-  border: 1px solid var(--gray350, #3B3B3B);
-  background: var(--gray300, #363636);
+  border: 1px solid $gray400;
+  background: $gray350;
   gap: .5rem;
 
   div{
@@ -64,15 +64,9 @@
 
   input{
     padding-inline: .2rem;
-
-    &.date{
-      width: 10ch;
-      text-align: center;
-    }
-
-    &.number{
-      width: 3ch;
-    }
+    width: 10ch;
+    text-align: center;
+    color: $gray800;
   }
 
   svg{

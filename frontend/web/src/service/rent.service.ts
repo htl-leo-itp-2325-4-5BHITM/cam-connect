@@ -1,5 +1,5 @@
 import {model} from "../index"
-import {Api} from "../base"
+import {Api, config} from "../base"
 import {Device} from "./device.service"
 import {Teacher} from "./teacher.service";
 import {Student} from "./student.service";
@@ -45,6 +45,18 @@ export default class RentService{
             .catch(error => {
                 console.error(error)
             })
+    }
+
+    static createSocketConnection(){
+        let socket = new WebSocket(config.socket_url + "/socket/rents");
+
+        socket.onopen = function() {
+            console.info("Rent socket connected")
+        }
+        socket.onmessage = function(m) {
+            console.log("message recieved")
+            model.loadRents(JSON.parse(m.data))
+        }
     }
 
     static create(rent: Rent){

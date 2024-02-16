@@ -58,7 +58,7 @@ public class Rent {
         this.creation_date = LocalDateTime.now();
         this.note = note;
         this.device_string = device_string;
-        this.status = RentStatusEnum.CREATED;
+        this.status = RentStatusEnum.WAITING;
     }
 
     @Override
