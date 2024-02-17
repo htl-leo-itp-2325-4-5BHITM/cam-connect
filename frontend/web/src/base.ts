@@ -1,3 +1,5 @@
+import * as trace_events from "trace_events"
+
 export const config = {
     api_url: "http://localhost:8080/api",
     socket_url: "ws://localhost:8080/api"
@@ -28,10 +30,10 @@ export class Api {
     static fetchData<T>(url: string): Promise<T> {
         return fetch(config.api_url + url)
             .then(response => {
-                this.handleHttpError(response.status, url)
+                this.handleHttpError(response.status, response.url)
                 return response.json() as Promise<ccResponse<T>>
             })
-            .then(result => {
+            .then((result: ccResponse<T>) => {
                 if(result.ccStatus) this.handleCCError(result.ccStatus.statusCode, result.ccStatus.details, url)
                 else console.error("no ccResponse object received from", url, "only got:", result)
                 return result.data
@@ -47,10 +49,10 @@ export class Api {
             body: JSON.stringify(data),
         })
         .then(response => {
-            this.handleHttpError(response.status, path)
+            this.handleHttpError(response.status, response.url)
             return response.json()
         })
-        .then(result => {
+        .then((result: ccResponse<any>) => {
             this.handleCCError(result.ccStatus.statusCode, result.ccStatus.details, path)
             return result
         })
@@ -76,20 +78,22 @@ export class Api {
         else
             response = await fetch(`${config.api_url}${path}/getbyid/${id}${operation}`)
 
-        this.handleHttpError(response.status, path + operation)
+        this.handleHttpError(response.status, response.url)
         let result = await response.json() as ccResponse<T>
         if(result.ccStatus) this.handleCCError(result.ccStatus.statusCode, result.ccStatus.details, path + operation)
         return result.data
     }
 
-    static handleCCError(statusCode: number, details: string, url:string) {
-        if(statusCode == 1000) return
+    static handleCCError(statusCode: number, details: string, url:string): boolean {
+        if(statusCode == 1000) return true
         console.log("something went wrong in the backend trying to reach endpoint: ", url, "statusCode: ", statusCode + ". Details:", details)
+        return false
     }
 
-    static handleHttpError(statusCode: number, url:string){
-        if(statusCode >= 200 && statusCode < 300) return
+    static handleHttpError(statusCode: number, url:string):boolean{
+        if(statusCode >= 200 && statusCode < 300) return true
         console.log("fatal server error occured trying to reach endpoint: ", url, "statusCode: ", statusCode)
+        return false
     }
 }
 
@@ -202,7 +206,7 @@ export class KeyBoardShortCut {
                 //console.log(shortCut.keys.length, this.pressedKeys.size)
                 if(shortCut.keys.length != this.pressedKeys.size) return
                 if(shortCut.keys.every(key => this.pressedKeys.has(key))){
-                    event.preventDefault() //TODO this is not working
+                    //event.preventDefault() //TODO this is not working
                     shortCut.action()
                 }
             })

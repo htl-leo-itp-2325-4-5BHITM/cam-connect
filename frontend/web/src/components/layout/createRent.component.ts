@@ -80,7 +80,7 @@ export class CreateRentComponent extends LitElement {
             </div>
 
             <div class="buttons">
-                <cc-button class="primary" color="${ColorEnum.ACCENT}" type="${ButtonType.OUTLINED}" @click="${this.addDevice}">
+                <cc-button class="primary" color="${ColorEnum.ACCENT}" type="${ButtonType.OUTLINED}" @click="${() => {this.addDevice('default')}}">
                     Gerät Hinzufügen
                 </cc-button>
                 <cc-button color="${ColorEnum.GRAY}" type="${ButtonType.OUTLINED}" @click="${() => {this.addDevice('string')}}">
@@ -121,22 +121,18 @@ export class CreateRentComponent extends LitElement {
         })
     }
 
-    createRent() {
+    async createRent() {
         let data: CreateRentDTO[] = []
 
         for (let i = 0; i < this.devices.size; i++) {
             let device = Array.from(this.devices)[i]
-            if(!device.validate()) return
-            data.push({
-                student_id: 1,
-                teacher_start_id: 1,
-                device_string: device.data.device_string,
-                note: "", //TODO add support for this
-                device_id: 1,
-                rent_start: device.data.rent_start,
-                rent_end_planned: device.data.rent_end_planned
-            })
+
+            let isValid = await device.validate()
+            if(!isValid) return
+            data.push(device.toJson())
         }
+
+        if(data.length == 0) return
 
         Api.createItem<CreateRentDTO[]>("/rent", data).then(result => {
             console.log(result)

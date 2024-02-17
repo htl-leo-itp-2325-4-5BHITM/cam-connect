@@ -28,12 +28,13 @@ export interface RentByStudentDTO {
 
 export interface CreateRentDTO {
     student_id: number
-    device_id: number
+    device_type_id?: number
+    device_number?: string
+    device_string?: string
     teacher_start_id: number
     rent_start: Date
     rent_end_planned: Date
     note: string
-    device_string: string
 }
 
 export default class RentService {

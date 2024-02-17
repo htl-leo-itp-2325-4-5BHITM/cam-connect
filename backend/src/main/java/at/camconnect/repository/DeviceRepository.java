@@ -62,6 +62,38 @@ public class DeviceRepository {
         return device;
     }
 
+    public Device getByNumberAndType(String number, Long type_id){
+        Device device;
+        try{
+            device = em.createQuery("select d from Device d where type.id = :type_id and number = :number", Device.class)
+                    .setParameter("type_id", type_id)
+                    .setParameter("number", number)
+                    .getSingleResult();
+        }
+        catch (Exception ex){
+            throw new CCException(1101);
+        }
+
+        if (device == null) throw new CCException(1101);
+
+        return device;
+    }
+
+    public boolean validateNumberAndType(String number, Long type_id){
+        Long count;
+        try{
+            count = em.createQuery("select count(d) from Device d where type.id = :type_id and number = :number", Long.class)
+                    .setParameter("type_id", type_id)
+                    .setParameter("number", number)
+                    .getSingleResult();
+        }
+        catch (Exception ex){
+            throw new CCException(1200);
+        }
+
+        return count > 0;
+    }
+
     public List<Device> getAll(){
         List<Device> devices = em.createQuery("SELECT d FROM Device d", Device.class).getResultList();
         return devices;

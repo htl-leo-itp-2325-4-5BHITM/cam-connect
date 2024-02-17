@@ -18,6 +18,7 @@ import jakarta.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/rent")
+@Produces(MediaType.APPLICATION_JSON)
 public class RentResource {
     @Inject
     RentRepository rentRepository;
@@ -25,7 +26,6 @@ public class RentResource {
     @POST
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Transactional
     public Response createRent(List<CreateRentDTO> rent) {
         try{
             rentRepository.create(rent);
@@ -37,7 +37,7 @@ public class RentResource {
 
     @POST
     @Path("/createempty")
-    @Transactional
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response createRentEmpty() {
         rentRepository.createEmpty();
         return Response.ok().build();
@@ -58,7 +58,6 @@ public class RentResource {
 
     @GET
     @Path("/getall")
-    @Transactional
     public Response getAll(){
         List<RentByStudentDTO> result;
         try{
@@ -130,7 +129,6 @@ public class RentResource {
     }
 
     @POST
-    @Transactional
     @Path("/getbyid/{id: [0-9]+}/update/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Long id, JsonObject rent) {
@@ -143,7 +141,6 @@ public class RentResource {
     }
 
     @POST
-    @Transactional
     @Path("/getbyid/{id: [0-9]+}/update/{attribute}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Long id, RentDTO rent, @PathParam("attribute") String attribute) {

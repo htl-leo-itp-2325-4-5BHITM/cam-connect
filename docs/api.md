@@ -2,13 +2,15 @@
 - `routename/{pathparam}: {jsonkey, ?optional_jsonkey} -> ReturnValue`
 - `iamnotavalidroute -x`
 - `iamasocketendpoint ~>`
-- 
+
 ## Structure
 ```
 api
 ├── rent -x
 │   ├── create -> Rent
 │   ├── getall -> [Rent]
+│   ├── getbynumberandtype/{number}/{type_id} -> Rent
+│   ├── validatenumberandtype/{number}/{type_id} -> boolean
 │   └── getbyid/{rent_id} -> Rent
 │       ├── remove
 │       └── update : ?{Rent: student_id.. }
@@ -111,7 +113,7 @@ api
 - 1104: Invalid argument structure/syntax/type in url
 - 1105: Missing required data in body
 - 1106: Invalid data structure/syntax/type in body
-- 1106: Invalid URL provided
+- 1107: Invalid URL provided
 - 1200: **Task was not performed**: The data provided was structurally / syntactically correct but the requested action cant be performed.
 - 1201: Duplicate request
 - 1202: The data provided to the endpoint returned no results

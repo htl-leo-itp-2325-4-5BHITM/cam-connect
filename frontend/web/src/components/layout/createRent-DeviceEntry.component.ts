@@ -12,9 +12,12 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons"
 import AirDatepicker from 'air-datepicker';
 import localeEn from 'air-datepicker/locale/en';
 import {CreateRentComponent} from "./createRent.component"
+import {CreateRentDTO} from "../../service/rent.service"
+import {Api, ccResponse, config} from "../../base"
 
 export interface CreateRentDeviceEntryData {
-    device_id: number
+    device_type_id: number
+    device_number: string
     device_string: string
     rent_start: Date
     rent_end_planned: Date
@@ -33,6 +36,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
     @property()
     parent: CreateRentComponent
 
+    //TODO this will eventually be part of the data object as a type enum
     @property({reflect: true})
     type: RentDeviceEntryComponentType = "default"
 
@@ -44,10 +48,11 @@ export class CreateRentDeviceEntryComponent extends LitElement {
         this.parent = parent
         this.appState = new ObservedProperty<AppState>(this, model.appState)
         this.data = { //TODO yeah we have a general issue with the data structure here.. we have no clue about device_id in the frontend, the create dto needs devicetype and number
-            device_id: 0,
+            device_number: "",
+            device_type_id: -1,
             device_string: "",
             rent_start: new Date(),
-            rent_end_planned: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+            rent_end_planned: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
         }
     }
 
@@ -56,7 +61,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
         let input = this.renderRoot.querySelector('.date') as HTMLInputElement
 
         //TODO ask huemer if we want to allow dates in the past
-        //there might be a case where someone wants to log a rent that they conduted in the past
+        //there might be a case where someone wants to log a rent that they conducted in the past
         //it probably makes most sense to only allow ones in the future
         //airdatepicker does allow a min value
         this.datePicker = new AirDatepicker(input, {
@@ -84,34 +89,70 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                     <icon-cta @click="${() => {this.parent.removeDevice(this)}}">${unsafeSVG(icon(faXmark).html[0])}</icon-cta>
                 </div>
             `
-
-        return html`
-            <style>${styles}</style>
-            <div class="left">
-                <input type="text" value="" class="name" placeholder="Name">
-                <input type="text" value="" class="number" placeholder="Nr.">
-            </div>
-
-            <div class="right">
-                <input class="date">
-                <icon-cta @click="${() => {this.parent.removeDevice(this)}}">${unsafeSVG(icon(faXmark).html[0])}</icon-cta>
-            </div>
-        `
+        else if(this.type == "default")
+            return html`
+                <style>${styles}</style>
+                <div class="left">
+                    <input type="text" value="" class="name" placeholder="Name" 
+                           @blur="${(e) => {this.data.device_type_id = e.target.value}}">
+                    <input type="text" value="" class="number" placeholder="Nr." 
+                           @blur="${(e) => {this.data.device_number = e.target.value}}">
+                </div>
+    
+                <div class="right">
+                    <input class="date">
+                    <icon-cta @click="${() => {this.parent.removeDevice(this)}}">${unsafeSVG(icon(faXmark).html[0])}</icon-cta>
+                </div>
+            `
     }
 
-    validate():boolean {
+    async validate():Promise<boolean> {
         if(this.type == "string"){
             if(this.data.device_string == ""){
                 return false
             }
         }
         else if(this.type == "default"){
-            if(this.data.device_id == 0){
+            if(this.data.device_number == "" || this.data.device_type_id == -1){
+                return false
+            }
+            let response = await fetch(`${config.api_url}/device/validatenumberandtype/${this.data.device_number}/${this.data.device_type_id}`)
+            Api.handleHttpError(response.status, response.url)
+            let result = await response.json() as ccResponse<boolean>
+            if(result.ccStatus) Api.handleCCError(result.ccStatus.statusCode, result.ccStatus.details, "/device/validatenumberandtype")
+
+            if(result.data == false) {
                 return false
             }
         }
 
         return true
+    }
+
+    toJson(): CreateRentDTO {
+        //TODO add support for notes
+        //TODO include type enum
+
+        if(this.type == "string")
+            return {
+                student_id: 1,
+                teacher_start_id: 1,
+                device_string: this.data.device_string,
+                note: "",
+                rent_start: this.data.rent_start,
+                rent_end_planned: this.data.rent_end_planned
+            }
+
+        else if(this.type == "default")
+            return {
+                student_id: 1,
+                teacher_start_id: 1,
+                device_type_id: this.data.device_type_id,
+                device_number: this.data.device_number,
+                note: "",
+                rent_start: this.data.rent_start,
+                rent_end_planned: this.data.rent_end_planned
+            }
     }
 }
 

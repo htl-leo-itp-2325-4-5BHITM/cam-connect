@@ -37,17 +37,20 @@ public class RentRepository {
     @Inject
     RentSocket rentSocket;
 
+    @Inject
+    DeviceRepository deviceRepository;
+
     @Transactional
-    public void create(List<CreateRentDTO> rentData){
-        for(CreateRentDTO currRent : rentData){
+    public void create(List<CreateRentDTO> rentList){
+        for(CreateRentDTO rentDTO : rentList){
             Rent rent = new Rent(
-                    em.find(Student.class, currRent.student_id()),
-                    em.find(Device.class, currRent.device_id()),
-                    em.find(Teacher.class, currRent.teacher_start_id()),
-                    currRent.rent_start(),
-                    currRent.rent_end_planned(),
-                    currRent.note(),
-                    currRent.device_string());
+                    em.find(Student.class, rentDTO.student_id()),
+                    deviceRepository.getByNumberAndType(rentDTO.device_number(), rentDTO.device_type_id()),
+                    em.find(Teacher.class, rentDTO.teacher_start_id()),
+                    rentDTO.rent_start(),
+                    rentDTO.rent_end_planned(),
+                    rentDTO.note(),
+                    rentDTO.device_string());
             em.persist(rent);
         }
         rentSocket.broadcast(getAll());
