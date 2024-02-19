@@ -129,11 +129,13 @@ export class CreateRentComponent extends LitElement {
 
             let isValid = await device.validate()
             if(!isValid) return
-            data.push(device.toJson())
+            data.push(device.toRentObject())
+            console.log("adding")
         }
 
         if(data.length == 0) return
 
+        console.log(data)
         Api.createItem<CreateRentDTO[]>("/rent", data).then(result => {
             console.log(result)
             this.close()

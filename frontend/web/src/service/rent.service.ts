@@ -6,9 +6,11 @@ import {Student} from "./student.service";
 
 export enum RentStatus {CREATED="CREATED", WAITING="WAITING", CONFIRMED="CONFIRMED", DECLINED="DECLINED", RETURNED="RETURNED"}
 export interface Rent{
+    type: RentTypeEnum
     rent_id: number
     student: Student
-    device: Device
+    device?: Device
+    device_string?: string
     teacher_start: Teacher
     teacher_end: Teacher
     rent_start: Date
@@ -26,7 +28,10 @@ export interface RentByStudentDTO {
     rentList: [Rent]
 }
 
+export enum RentTypeEnum { DEFAULT="DEFAULT", STRING="STRING" }
+
 export interface CreateRentDTO {
+    type: RentTypeEnum,
     student_id: number
     device_type_id?: number
     device_number?: string
@@ -42,6 +47,7 @@ export default class RentService {
         Api.fetchData<RentByStudentDTO[]>("/rent/getall")
             .then(data => {
                 model.loadRents(data)
+                console.log(data as RentByStudentDTO[])
             })
             .catch(error => {
                 console.error(error)

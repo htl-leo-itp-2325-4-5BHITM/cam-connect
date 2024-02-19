@@ -4,6 +4,7 @@ import at.camconnect.dtos.CreateRentDTO;
 import at.camconnect.dtos.RentDTO;
 import at.camconnect.dtos.RentByStudentDTO;
 import at.camconnect.enums.RentStatusEnum;
+import at.camconnect.enums.RentTypeEnum;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.socket.RentSocket;
 import at.camconnect.model.Device;
@@ -43,14 +44,30 @@ public class RentRepository {
     @Transactional
     public void create(List<CreateRentDTO> rentList){
         for(CreateRentDTO rentDTO : rentList){
-            Rent rent = new Rent(
-                    em.find(Student.class, rentDTO.student_id()),
-                    deviceRepository.getByNumberAndType(rentDTO.device_number(), rentDTO.device_type_id()),
-                    em.find(Teacher.class, rentDTO.teacher_start_id()),
-                    rentDTO.rent_start(),
-                    rentDTO.rent_end_planned(),
-                    rentDTO.note(),
-                    rentDTO.device_string());
+            Rent rent;
+            if(rentDTO.type() == RentTypeEnum.DEFAULT){
+                rent = new Rent(
+                        em.find(Student.class, rentDTO.student_id()),
+                        deviceRepository.getByNumberAndType(rentDTO.device_number(), rentDTO.device_type_id()),
+                        em.find(Teacher.class, rentDTO.teacher_start_id()),
+                        rentDTO.rent_start(),
+                        rentDTO.rent_end_planned(),
+                        rentDTO.note()
+                );
+            } else if (rentDTO.type() == RentTypeEnum.STRING){
+                rent = new Rent(
+                        em.find(Student.class, rentDTO.student_id()),
+                        rentDTO.device_string(),
+                        em.find(Teacher.class, rentDTO.teacher_start_id()),
+                        rentDTO.rent_start(),
+                        rentDTO.rent_end_planned(),
+                        rentDTO.note()
+                );
+            }
+            else{
+                throw new CCException(1206, "Rent type was invalid");
+            }
+
             em.persist(rent);
         }
         rentSocket.broadcast(getAll());
@@ -87,7 +104,9 @@ public class RentRepository {
         for (Student student : students) {
             List<Rent> rents = em.createQuery(
                     "SELECT r FROM Rent r" +
-                            " where r.student.student_id = :studentId", Rent.class).setParameter("studentId", student.getStudent_id()).getResultList();
+                            " where r.student.student_id = :studentId", Rent.class)
+                    .setParameter("studentId", student.getStudent_id())
+                    .getResultList();
 
             result.add(new RentByStudentDTO(student, rents));
         }

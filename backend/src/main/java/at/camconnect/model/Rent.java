@@ -1,6 +1,7 @@
 package at.camconnect.model;
 
 import at.camconnect.enums.RentStatusEnum;
+import at.camconnect.enums.RentTypeEnum;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -13,6 +14,9 @@ public class Rent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rent_id;
+
+    @Enumerated(EnumType.STRING)
+    private RentTypeEnum type;
     @ManyToOne
     @JoinColumn(name = "student_id")
     private Student student;
@@ -33,23 +37,22 @@ public class Rent {
     private String verification_message;
     private RentStatusEnum status;
     private String note;
+    private String device_string;
 
     //TODO remove these when moving to new UI permanatly - also remove them in repo resource and update functions
     private String accessory;
-    private String device_string;
 
-    public Rent() {
+    public Rent() { //TODO remove when moving to new ui
         rent_start = LocalDate.now();
         creation_date = LocalDateTime.now();
         status = RentStatusEnum.CREATED;
     }
 
-    public Rent(Student student) {
-        this();
-        this.student = student;
-    }
-
-    public Rent(Student student, Device device, Teacher teacher_start, LocalDate rent_start, LocalDate rent_end_planned, String note, String device_string) {
+    /**
+     * Rent with device as object
+     */
+    public Rent(Student student, Device device, Teacher teacher_start, LocalDate rent_start, LocalDate rent_end_planned, String note) {
+        this.type = RentTypeEnum.DEFAULT;
         this.student = student;
         this.device = device;
         this.teacher_start = teacher_start;
@@ -57,7 +60,21 @@ public class Rent {
         this.rent_end_planned = rent_end_planned;
         this.creation_date = LocalDateTime.now();
         this.note = note;
+        this.status = RentStatusEnum.WAITING;
+    }
+
+    /**
+     * Rent with device as string
+     */
+    public Rent(Student student, String device_string, Teacher teacher_start, LocalDate rent_start, LocalDate rent_end_planned, String note) {
+        this.type = RentTypeEnum.STRING;
+        this.student = student;
         this.device_string = device_string;
+        this.teacher_start = teacher_start;
+        this.rent_start = rent_start;
+        this.rent_end_planned = rent_end_planned;
+        this.creation_date = LocalDateTime.now();
+        this.note = note;
         this.status = RentStatusEnum.WAITING;
     }
 
@@ -208,6 +225,14 @@ public class Rent {
 
     public LocalDateTime getCreation_date() {
         return creation_date;
+    }
+
+    public RentTypeEnum getType() {
+        return type;
+    }
+
+    public void setType(RentTypeEnum type) {
+        this.type = type;
     }
 
     //endregion

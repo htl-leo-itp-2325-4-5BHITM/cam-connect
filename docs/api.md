@@ -120,3 +120,4 @@ api
 - 1203: File is empty
 - 1204: File has Invalid Structure
 - 1205: Operation was not allowed
+- 1206: Invalid Data provided

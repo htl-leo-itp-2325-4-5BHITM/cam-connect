@@ -28,6 +28,7 @@
   }
 }
 
+//TODO cleanup this selector
 div{
   display: flex;
   align-items: center;
@@ -42,13 +43,8 @@ div{
     margin-left: .2rem;
   }
 
-
-  &.deviceInfos span{
-    margin-inline: .1rem;
-
-    input.date{
-      width: 6ch;
-    }
+  &.deviceInfos, &.time{
+    gap: 0.5rem;
   }
 }
 

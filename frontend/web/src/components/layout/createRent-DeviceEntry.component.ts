@@ -12,7 +12,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons"
 import AirDatepicker from 'air-datepicker';
 import localeEn from 'air-datepicker/locale/en';
 import {CreateRentComponent} from "./createRent.component"
-import {CreateRentDTO} from "../../service/rent.service"
+import {CreateRentDTO, RentTypeEnum} from "../../service/rent.service"
 import {Api, ccResponse, config} from "../../base"
 
 export interface CreateRentDeviceEntryData {
@@ -129,22 +129,12 @@ export class CreateRentDeviceEntryComponent extends LitElement {
         return true
     }
 
-    toJson(): CreateRentDTO {
+    toRentObject(): CreateRentDTO {
         //TODO add support for notes
-        //TODO include type enum
 
-        if(this.type == "string")
+        if(this.type == "default"){
             return {
-                student_id: 1,
-                teacher_start_id: 1,
-                device_string: this.data.device_string,
-                note: "",
-                rent_start: this.data.rent_start,
-                rent_end_planned: this.data.rent_end_planned
-            }
-
-        else if(this.type == "default")
-            return {
+                type: RentTypeEnum.DEFAULT,
                 student_id: 1,
                 teacher_start_id: 1,
                 device_type_id: this.data.device_type_id,
@@ -153,6 +143,18 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                 rent_start: this.data.rent_start,
                 rent_end_planned: this.data.rent_end_planned
             }
+        }
+        else if(this.type == "string"){
+            return {
+                type: RentTypeEnum.STRING,
+                student_id: 1,
+                teacher_start_id: 1,
+                device_string: this.data.device_string,
+                note: "",
+                rent_start: this.data.rent_start,
+                rent_end_planned: this.data.rent_end_planned
+            }
+        }
     }
 }
 

@@ -2,25 +2,19 @@ import {html, LitElement, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/rentListEntry.styles.scss'
 import {ButtonType} from "../basic/button.component"
-import {ColorEnum, config, SizeEnum} from "../../base"
-import RentService, {Rent, RentStatus} from "../../service/rent.service";
+import {ColorEnum, SizeEnum} from "../../base"
+import RentService, {Rent, RentStatus, RentTypeEnum} from "../../service/rent.service";
 import {ChipType} from "../basic/chip.component"
 import {model} from "../../index"
 import AirDatepicker from "air-datepicker";
 import localeEn from "air-datepicker/locale/en";
 import {LineColor, LineType} from "../basic/line.component"
-import {unsafeSVG} from "lit/directives/unsafe-svg.js"
-import {icon} from "@fortawesome/fontawesome-svg-core"
-import {faCircleArrowDown} from "@fortawesome/free-solid-svg-icons"
 import PopupEngine from "../../popupEngine"
 
 @customElement('cc-rent-list-entry')
 export class RentListEntryComponent extends LitElement {
     @property()
     rent: Rent
-
-   /* @property({reflect: true})
-    status: RentStatus = this.rent.status*/
 
     @property({ type: Boolean, reflect: true })
     checked: boolean = false
@@ -31,7 +25,8 @@ export class RentListEntryComponent extends LitElement {
         let startDate = this.rent.rent_start
         let endDate = this.rent.rent_end_actual || this.rent.rent_end_planned
 
-        let globalInput = this.renderRoot.querySelector('.globaltime input') as HTMLInputElement
+        //TODO this will probably not work if the rent changes from waiting to declined
+        let globalInput = this.renderRoot.querySelector('.date') as HTMLInputElement
         new AirDatepicker(globalInput, {
             locale: localeEn,
             range: true,
@@ -51,10 +46,11 @@ export class RentListEntryComponent extends LitElement {
             <style>${styles}</style>
             
             <div>    
-                ${this.getRentInfoSection()}
+                ${this.generateRentContent()}
             </div>
 
             <div>
+                <!--TODO move this code into a more readable generator functioin-->
                 <cc-button color="${this.rent.status == RentStatus.DECLINED ? ColorEnum.GRAY : ColorEnum.ACCENT}" 
                            type="${ButtonType.TEXT}" size="${SizeEnum.SMALL}"
                            @click="${this.rent.status == RentStatus.DECLINED ? this.removeRent : this.rent.status == RentStatus.CONFIRMED ? this.returnRent : ''}"
@@ -75,40 +71,71 @@ export class RentListEntryComponent extends LitElement {
             </div>
         `
     }
-
-    getRentInfoSection() {
-        if(this.rent.status == RentStatus.DECLINED) {
+    /*
+     * @Michi sidenote
+     * I renamed this function from getRentInfoSection since:
+     * it's not a simply getting a result but generating the result
+     * it's not really about the info tbh this is just the content of the entry
+     * saying it's a section is about as descriptive as saying that is html
+     *
+     * my function name is not perfect either, but you get the idea that this function generates the content of the rent
+     */
+    generateRentContent() {
+        if(this.rent.status == RentStatus.DECLINED) { //editable rent
             return html`
-                <input type="text" value="${this.rent.device.type.name}">
-                <input type="text" class="number" value="${this.rent.device.number}">
+                ${this.rent.type == RentTypeEnum.DEFAULT ?
+                        html`
+                            <input type="text" value="${this.rent.device.type.name}">
+                            <input type="text" class="number" value="${this.rent.device.number}">
+                        ` :
+                        html`
+                            <input type="text" value="${this.rent.device_string}" placeholder="Name">
+                        `
+                }
+                
                 <cc-line color=${LineColor.LIGHT} type="${LineType.VERTICAL}"></cc-line>
-                <div class="globaltime">
-                    <div class="dateInputArea">
-                        <input type="text" class="date">
-                        <icon-cta>${unsafeSVG(icon(faCircleArrowDown).html[0])}</icon-cta>
-                    </div>
-                </div>
+ 
+                <input type="text" class="date">
+                
                 <cc-line color=${LineColor.LIGHT} type="${LineType.VERTICAL}"></cc-line>
-                <cc-property-value size="${SizeEnum.SMALL}" property="Erstellt von" value="${this.rent.teacher_start.firstname.charAt(0)}. ${this.rent.teacher_start.lastname}"></cc-property-value>`
-        } else {
+                
+                <cc-property-value size="${SizeEnum.SMALL}" property="Erstellt von" 
+                                   value="${this.rent.teacher_start.firstname.charAt(0)}. ${this.rent.teacher_start.lastname}">
+                </cc-property-value>`
+        } else { //static rent
+/*
+            console.log(this.rent.rent_start.toLocaleDateString("de-DE", {day: '2-digit', month: '2-digit'}))
+*/
             return html`
-                <div class="deviceInfos">
-                    <span>${this.rent.device.type.name}</span>
-                    <span>•</span>
-                    <span>${this.rent.device.number}</span>
-                </div>
+                ${this.rent.type == RentTypeEnum.DEFAULT ?
+                        html`
+                            <div class="deviceInfos">
+                                <span>${this.rent.device.type.name}</span>
+                                <span>•</span>
+                                <span>${this.rent.device.number}</span>
+                            </div>
+                        ` :
+                        html`
+                            <p>${this.rent.device_string}</p>
+                        `
+                }
+                
                 
                 <cc-line color=${LineColor.LIGHTER} type="${LineType.VERTICAL}"></cc-line>
-                <div class="globaltime">
-                    <div class="dateInputArea">
-                        <input type="text" class="date" disabled>
-                        <icon-cta>${unsafeSVG(icon(faCircleArrowDown).html[0])}</icon-cta>
-                    </div>
+                
+                <div class="time">
+                    <span>
+                        ${this.rent.rent_start}
+                    </span>
+                    <span>-</span>
+                    <span>${this.rent.rent_end_planned}</span>
                 </div>
+                
                 <cc-line color=${LineColor.LIGHTER} type="${LineType.VERTICAL}"></cc-line>
                 
                 <cc-property-value size="${SizeEnum.SMALL}" property="Erstellt von"
-                                   value="${this.rent.teacher_start.firstname.charAt(0)}. ${this.rent.teacher_start.lastname}"></cc-property-value>`
+                                   value="${this.rent.teacher_start.firstname.charAt(0)}. ${this.rent.teacher_start.lastname}">
+                </cc-property-value>`
         }
     }
 
