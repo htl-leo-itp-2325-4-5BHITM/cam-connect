@@ -116,6 +116,8 @@ export class CreateRentDeviceEntryComponent extends LitElement {
             if(this.data.device_number == "" || this.data.device_type_id == -1){
                 return false
             }
+            const anyThingButNumbers = /\D/
+            if(anyThingButNumbers.test(String(this.data.device_type_id))) return false
             let response = await fetch(`${config.api_url}/device/validatenumberandtype/${this.data.device_number}/${this.data.device_type_id}`)
             Api.handleHttpError(response.status, response.url)
             let result = await response.json() as ccResponse<boolean>
