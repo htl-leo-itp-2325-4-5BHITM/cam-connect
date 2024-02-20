@@ -2,7 +2,7 @@ import {LitElement, css, html, PropertyValues} from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/createRent-DeviceEntry.styles.scss'
 
-import {AppState, ObservedProperty} from "../../model"
+import {ObservedProperty} from "../../model"
 import {model} from "../../index"
 
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
@@ -14,6 +14,7 @@ import localeEn from 'air-datepicker/locale/en';
 import {CreateRentComponent} from "./createRent.component"
 import {CreateRentDTO, RentTypeEnum} from "../../service/rent.service"
 import {Api, ccResponse, config} from "../../base"
+import {AppState} from "../../service/AppState"
 
 export interface CreateRentDeviceEntryData {
     device_type_id: number
@@ -27,9 +28,6 @@ export type RentDeviceEntryComponentType = "default" | "string"
 
 @customElement('cc-create-rent-device-entry')
 export class CreateRentDeviceEntryComponent extends LitElement {
-    @property({type: Boolean})
-    private appState: ObservedProperty<AppState>
-
     @property()
     data: CreateRentDeviceEntryData
 
@@ -46,7 +44,6 @@ export class CreateRentDeviceEntryComponent extends LitElement {
         super()
         this.type = type
         this.parent = parent
-        this.appState = new ObservedProperty<AppState>(this, model.appState)
         this.data = { //TODO yeah we have a general issue with the data structure here.. we have no clue about device_id in the frontend, the create dto needs devicetype and number
             device_number: "",
             device_type_id: -1,
@@ -107,6 +104,8 @@ export class CreateRentDeviceEntryComponent extends LitElement {
     }
 
     async validate():Promise<boolean> {
+        //TODO add error highlighting
+
         if(this.type == "string"){
             if(this.data.device_string == ""){
                 return false

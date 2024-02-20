@@ -4,7 +4,7 @@ import styles from '../../../styles/components/layout/toolbar.styles.scss'
 import {icon} from '@fortawesome/fontawesome-svg-core'
 import {unsafeSVG} from 'lit/directives/unsafe-svg.js';
 import {faCamera, faTrash} from "@fortawesome/free-solid-svg-icons"
-import {AppState, ObservedProperty, PageEnum} from "../../model"
+import { ObservedProperty, PageEnum} from "../../model"
 import {ButtonType} from "../basic/button.component"
 import {SimpleColorEnum, SizeEnum} from "../../base"
 import {model} from "../../index"
@@ -13,16 +13,12 @@ import PopupEngine from "../../popupEngine";
 
 @customElement('cc-toolbar')
 export class ToolbarComponent extends LitElement {
-    @property()
-    appState : ObservedProperty<AppState>
-
     constructor() {
         super()
-        this.appState = new ObservedProperty<AppState>(this, model.appState)
     }
 
     render() {
-        switch (this.appState.value.page) {
+        switch (model.appState.page) {
             case PageEnum.EQUIPMENT: return this.renderEquipmentBar();
             case PageEnum.RENTS: return this.renderRentListBar();
         }
@@ -30,7 +26,7 @@ export class ToolbarComponent extends LitElement {
 
     renderRentListBar(){
         let buttonsDisabled = {
-            uncheckAll: this.appState.value.selectedRentEntries.size == 0,
+            uncheckAll: model.appState.selectedRentEntries.size == 0,
             remove: this.isButtonDisabled(RentStatus.DECLINED),
             return: this.isButtonDisabled(RentStatus.CONFIRMED)
         }
@@ -74,10 +70,10 @@ export class ToolbarComponent extends LitElement {
     }
 
     isButtonDisabled(status: RentStatus) {
-        if (this.appState.value.selectedRentEntries.size == 0) return true
+        if (model.appState.selectedRentEntries.size == 0) return true
 
         let isDisabled = false;
-        this.appState.value.selectedRentEntries.forEach((selected) => {
+        model.appState.selectedRentEntries.forEach((selected) => {
             if(selected.rent.status != status){
                 return isDisabled = true;
             }
@@ -86,7 +82,7 @@ export class ToolbarComponent extends LitElement {
     }
 
     uncheckAll() {
-        model.appState.value.selectedRentEntries.forEach((entry) => {
+        model.appState.selectedRentEntries.forEach((entry) => {
             entry.toggleRentCheck()
         })
     }
@@ -98,7 +94,7 @@ export class ToolbarComponent extends LitElement {
                 {
                     text: "Ja",
                     action: (data) => {
-                        model.appState.value.selectedRentEntries.forEach((entry) => {
+                        model.appState.selectedRentEntries.forEach((entry) => {
                             RentService.remove(entry.rent)
                         })
                     },
@@ -118,7 +114,7 @@ export class ToolbarComponent extends LitElement {
                 {
                     text: "Ja",
                     action: (data) => {
-                        model.appState.value.selectedRentEntries.forEach((entry) => {
+                        model.appState.selectedRentEntries.forEach((entry) => {
                             RentService.return(entry.rent)
                         })
                     },

@@ -143,9 +143,9 @@ export class RentListEntryComponent extends LitElement {
         this.checked = !this.checked
 
         if(this.checked){
-            model.addSelectedRentEntry(this)
+            model.appState.addSelectedRentEntry(this)
         } else{
-            model.removeSelectedRentEntry(this)
+            model.appState.removeSelectedRentEntry(this)
         }
     }
 

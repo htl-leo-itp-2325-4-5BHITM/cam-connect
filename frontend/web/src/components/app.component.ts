@@ -2,20 +2,17 @@ import {LitElement, html} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../styles/components/app.styles.scss'
 import {model} from "../index"
-import {AppState, ObservedProperty, PageEnum} from "../model"
+import {ObservedProperty, PageEnum} from "../model"
 import {KeyBoardShortCut} from "../base"
+import {AppState} from "../service/AppState"
 
 @customElement('cc-app')
 export class AppComponent extends LitElement {
-    @property()
-    appState: ObservedProperty<AppState>
-
     constructor() {
         super();
-        this.appState = new ObservedProperty<AppState>(this, model.appState)
 
-        KeyBoardShortCut.register([["shift", "n"], ["<"]], () => {model.updateAppState({createRentModalOpen: true})})
-        KeyBoardShortCut.register(["escape"], () => {model.appState.value.cancelCurrentAction()})
+        KeyBoardShortCut.register([["shift", "n"], ["<"]], () => {model.appState.openCreateRentModal()})
+        KeyBoardShortCut.register(["escape"], () => {model.appState.cancelCurrentAction()})
     }
 
     connectedCallback() {
@@ -26,7 +23,7 @@ export class AppComponent extends LitElement {
         let page = html``
         let sidebar = html``
 
-        switch (this.appState.value.page) {
+        switch (model.appState.page) {
             case PageEnum.EQUIPMENT:
                 sidebar = html`
                 <cc-sidebar accountname="wird später mal ein observable">

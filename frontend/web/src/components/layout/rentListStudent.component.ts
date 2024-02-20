@@ -5,25 +5,23 @@ import {CircleSelectType} from "../basic/circleSelect.component"
 import {SimpleColorEnum, SizeEnum} from "../../base"
 import {RentByStudentDTO, RentStatus} from "../../service/rent.service";
 import {model} from "../../index"
-import {AppState, ObservedProperty} from "../../model"
+import { ObservedProperty} from "../../model"
 
 @customElement('cc-rent-list-student')
 export class RentListStudentComponent extends LitElement {
     @property()
     rentByStudent?: RentByStudentDTO
 
-    @property({type: Boolean})
-    appState: ObservedProperty<AppState>
 
     constructor() {
         super()
-        this.appState = new ObservedProperty<AppState>(this, model.appState)
     }
 
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
 
-        model.appState.subscribe(data => {
+
+        model.appState.selectedRentEntriesChange.subscribe(data => {
             this.autoCheckMultipleSelect()
         })
     }

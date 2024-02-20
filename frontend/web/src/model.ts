@@ -9,18 +9,9 @@ import {FilterOption} from "./components/basic/filterContainer.component"
 import {Teacher} from "./service/teacher.service";
 import {Student} from "./service/student.service";
 import {RentListEntryComponent} from "./components/layout/rentListEntry.component"
+import {AppState} from "./service/AppState"
 
 export enum PageEnum { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar" }
-
-export interface AppState {
-    page: PageEnum,
-    createRentModalOpen: boolean,
-    createMultiRentModalOpen: boolean,
-    selectedRentEntries: Set<RentListEntryComponent>,
-    cancelCurrentAction: () => void,
-}
-
-type AppStatePartial = Partial<AppState>
 
 /**
  * An instance of this class is our singular data provider. It interfaces between the individual service classes which
@@ -32,6 +23,8 @@ type AppStatePartial = Partial<AppState>
  *  - a load function that sets the data in the RXJS Subject and sends an update to all subscribers.
  */
 export default class Model{
+    readonly appState = new AppState()
+
     readonly rents = new BehaviorSubject(<RentByStudentDTO[]>([]))
 
     readonly teachers = new BehaviorSubject(<Teacher[]>([]))
@@ -69,15 +62,6 @@ export default class Model{
         )
     }
 
-    readonly appState = new BehaviorSubject<AppState>({
-        page: PageEnum.RENTS,
-        createMultiRentModalOpen: false,
-        createRentModalOpen: false,
-        selectedRentEntries: new Set<RentListEntryComponent>(),
-        cancelCurrentAction: () => {}
-    })
-
-
     //TODO details
     readonly deviceTypeNameFilterOptions = new BehaviorSubject<FilterOption[]>([
         {name: "Kamera", id: "camera", details: "Kamera halt"},
@@ -87,7 +71,7 @@ export default class Model{
         {name: "Mikrofon", id: "microphone", details: "Mikro halt"},
         {name: "Stabilisator", id: "stabilizer", details: "Stablisationsysteme"},
         {name: "Stativ", id: "tripod", details: "dings"},
-    ])
+    ] as const)
 
     /**
      * When its created, a new instance gathers all the data from the API endpoints
@@ -105,6 +89,7 @@ export default class Model{
         DeviceTypeAttributeService.fetchAll()
     }
 
+    //region load functions: used by the service classes to set the data in the model to whatever the api returned
     loadRents(rent: RentByStudentDTO[]){
         this.rents.next(rent)
     }
@@ -117,7 +102,6 @@ export default class Model{
         this.students.next(student)
     }
 
-    //region load functions: used by the service classes to set the data in the model to whatever the api returned
     loadDevices(devices: Device[]){
         this.devices.next(devices)
     }
@@ -133,21 +117,6 @@ export default class Model{
 
     //region update functions
 
-    updateAppState(data: AppStatePartial){
-        this.appState.next(Object.assign({}, this.appState.value, data))
-    }
-
-    addSelectedRentEntry(rentEntry: RentListEntryComponent){
-        let selected = this.appState.value.selectedRentEntries
-        selected.add(rentEntry)
-        this.updateAppState({selectedRentEntries: selected})
-    }
-
-    removeSelectedRentEntry(rentEntry: RentListEntryComponent){
-        let selected = this.appState.value.selectedRentEntries
-        selected.delete(rentEntry)
-        this.updateAppState({selectedRentEntries: selected})
-    }
     //endregion
 }
 
@@ -156,10 +125,12 @@ export default class Model{
  * This is used by the components in order to easily pass data from the API to the component.
  */
 export class ObservedProperty<T> implements ReactiveController {
-    sub: Subscription | null = null;
+    private sub: Subscription | null = null
+    public value: T
 
     //registers a controller (a instance of this class) on the host (a component)
-    constructor(private host: ReactiveControllerHost, private source: Observable<T>, public value?: T) {
+    constructor(private host: ReactiveControllerHost, private source: Observable<T>, value?: T) {
+        this.value = value
         this.host.addController(this);
     }
 

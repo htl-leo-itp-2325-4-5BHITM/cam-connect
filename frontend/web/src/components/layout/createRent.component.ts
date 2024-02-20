@@ -4,7 +4,7 @@ import styles from '../../../styles/components/layout/createRent.styles.scss'
 
 import {Api, ColorEnum, SizeEnum} from "../../base"
 import {ButtonType} from "../basic/button.component"
-import {AppState, ObservedProperty} from "../../model"
+import {ObservedProperty} from "../../model"
 import {model} from "../../index"
 
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
@@ -20,9 +20,6 @@ import {CreateRentDTO} from "../../service/rent.service"
 @customElement('cc-create-rent')
 export class CreateRentComponent extends LitElement {
     @property()
-    private appState: ObservedProperty<AppState>
-
-    @property()
     student_id: number
 
     devices: Set<CreateRentDeviceEntryComponent> = new Set()
@@ -31,7 +28,6 @@ export class CreateRentComponent extends LitElement {
 
     constructor() {
         super()
-        this.appState = new ObservedProperty<AppState>(this, model.appState)
     }
 
     protected firstUpdated(_changedProperties: PropertyValues) {
@@ -59,8 +55,8 @@ export class CreateRentComponent extends LitElement {
             <style>${styles}</style>
             <style>
                 :host {
-                    max-width: ${this.appState.value.createRentModalOpen ? "50vw" : "0"};
-                    opacity: ${this.appState.value.createRentModalOpen ? 1 : 0};
+                    max-width: ${model.appState.createRentModalOpen ? "50vw" : "0"};
+                    opacity: ${model.appState.createRentModalOpen ? 1 : 0};
                 }
             </style>
             
@@ -150,22 +146,11 @@ export class CreateRentComponent extends LitElement {
     }
 
     cancel(){
-        //TODO move all this into the AppState class within the setter for createRentModalOpen
-        PopupEngine.createModal({
-            heading: "Verleih erstellen abbrechen",
-            text: "Möchtest du den Vorgang wirklich abbrechen? Alle eingegebenen Daten gehen verloren.",
-            buttons: [
-                {text: "Ja", action: () => {
-                        this.close()
-                    }
-                },
-                {text: "Nein"}
-            ]
-        })
+        model.appState.closeCreateRentModal()
     }
 
     close(){
-        model.updateAppState({createRentModalOpen: false})
+        model.appState.closeCreateRentModal(true)
         this.devices.forEach(device => device.remove())
         this.devices.clear()
         this.addDevice()
