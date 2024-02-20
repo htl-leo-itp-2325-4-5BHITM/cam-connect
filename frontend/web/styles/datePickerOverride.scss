@@ -9,6 +9,7 @@
     --adp-color-other-month: #{$gray600};
     --adp-color: #{$gray800};
     --adp-cell-background-color-selected: #{$accentDarkmode};
+    --adp-background-color-selected-other-month: #{$accentDarkmodeLight};
   }
 
   .air-datepicker--pointer::after{

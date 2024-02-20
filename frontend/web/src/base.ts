@@ -198,15 +198,23 @@ export class KeyBoardShortCut {
 
     static {
         window.addEventListener("keydown", (event: KeyboardEvent) => {
-            //console.log(event.target)
+
+            let focusedElem = event.target as Element
+            while (focusedElem != undefined) {
+                let newFocusedElem = focusedElem?.shadowRoot?.activeElement
+                if(newFocusedElem instanceof HTMLInputElement) return
+                if(newFocusedElem == undefined) break
+                focusedElem = newFocusedElem
+            }
+
             if(event.target instanceof HTMLInputElement) return
             this.pressedKeys.add(event.key.toLowerCase()) //add the pressed key to set
             this.shortCuts.forEach(shortCut => { //check for every shortcut if all keys are currently pressed
                 //if more option keys are pressed then required dont execute the action
                 //console.log(shortCut.keys.length, this.pressedKeys.size)
                 if(shortCut.keys.length != this.pressedKeys.size) return
-                if(shortCut.keys.every(key => this.pressedKeys.has(key))){
-                    //event.preventDefault() //TODO this is not working
+                if(shortCut.keys.every(key => this.pressedKeys.has(key.toLowerCase()))){
+                    event.preventDefault()
                     shortCut.action()
                 }
             })

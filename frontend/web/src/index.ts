@@ -50,8 +50,7 @@ setTimeout(() => {
 
 //lol i just wanna keep this code arround cause i like it.. i dug arround trying to find a way to prevent keybinds
 // from happening when you are in an input field.. then i realized that keydown has a event.target property
-/*
-setInterval(()=>{
+/*setInterval(()=>{
     let focusedElem = document.activeElement
     while (focusedElem != undefined) {
         let newFocusedElem = focusedElem?.shadowRoot?.activeElement

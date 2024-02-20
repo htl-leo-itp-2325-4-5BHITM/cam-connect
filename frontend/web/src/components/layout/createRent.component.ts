@@ -12,7 +12,7 @@ import { icon } from '@fortawesome/fontawesome-svg-core'
 import { faXmark, faCircleArrowDown } from "@fortawesome/free-solid-svg-icons"
 
 import AirDatepicker from 'air-datepicker';
-import localeEn from 'air-datepicker/locale/en';
+import localeDe from 'air-datepicker/locale/de';
 import {CreateRentDeviceEntryComponent, RentDeviceEntryComponentType} from "./createRent-DeviceEntry.component"
 import PopupEngine from "../../popupEngine"
 import {CreateRentDTO} from "../../service/rent.service"
@@ -38,13 +38,18 @@ export class CreateRentComponent extends LitElement {
         super.firstUpdated(_changedProperties);
         let globalInput = this.renderRoot.querySelector('.globaltime input') as HTMLInputElement
         this.globalDatePicker = new AirDatepicker(globalInput, {
-            locale: localeEn,
+            locale: localeDe,
             range: true,
             dateFormat: "dd.MM",
             multipleDatesSeparator: ' - ',
-            selectedDates: [new Date(), new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)],
+            selectedDates: [new Date('January 29, 2024'), new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)],
             autoClose: true,
+            moveToOtherMonthsOnSelect: false,
+            toggleSelected: false,
             /*visible: true,*/
+            onHide: () => {
+                if(this.globalDatePicker.selectedDates.length <= 1) this.globalDatePicker.show()
+            }
         })
         this.addDevice()
     }
@@ -100,6 +105,7 @@ export class CreateRentComponent extends LitElement {
     }
 
     //TODO add shortcut for this
+    //we might want to pass the currently selected global date to the new device
     addDevice(type: RentDeviceEntryComponentType = "default") {
         let newDevice = new CreateRentDeviceEntryComponent(this, type)
         this.devices.add(newDevice)

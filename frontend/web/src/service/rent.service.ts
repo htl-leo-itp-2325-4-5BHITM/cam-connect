@@ -13,10 +13,10 @@ export interface Rent{
     device_string?: string
     teacher_start: Teacher
     teacher_end: Teacher
-    rent_start: Date
-    rent_end_planned: Date
-    rent_end_actual: Date
-    creation_date: Date
+    rent_start: string //should be date but couldnt get that to work
+    rent_end_planned: string //should be date but couldnt get that to work
+    rent_end_actual: string //should be date but couldnt get that to work
+    creation_date: string //should be date but couldnt get that to work
     verification_code: string
     verification_message: string
     status: RentStatus
@@ -37,8 +37,8 @@ export interface CreateRentDTO {
     device_number?: string
     device_string?: string
     teacher_start_id: number
-    rent_start: Date
-    rent_end_planned: Date
+    rent_start: string //should be date but couldnt get that to work
+    rent_end_planned: string //should be date but couldnt get that to work
     note: string
 }
 

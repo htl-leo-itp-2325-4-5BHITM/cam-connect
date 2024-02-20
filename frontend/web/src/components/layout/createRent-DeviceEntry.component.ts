@@ -140,8 +140,8 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                 device_type_id: this.data.device_type_id,
                 device_number: this.data.device_number,
                 note: "",
-                rent_start: this.data.rent_start,
-                rent_end_planned: this.data.rent_end_planned
+                rent_start: this.data.rent_start.toISOString(),
+                rent_end_planned: this.data.rent_end_planned.toISOString()
             }
         }
         else if(this.type == "string"){
@@ -151,8 +151,8 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                 teacher_start_id: 1,
                 device_string: this.data.device_string,
                 note: "",
-                rent_start: this.data.rent_start,
-                rent_end_planned: this.data.rent_end_planned
+                rent_start: this.data.rent_start.toISOString(),
+                rent_end_planned: this.data.rent_end_planned.toISOString()
             }
         }
     }
