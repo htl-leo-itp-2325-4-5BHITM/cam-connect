@@ -6,6 +6,8 @@ import {FilterContainerComponent} from "../basic/filterContainer.component"
 import {filter} from "rxjs"
 import {SimpleColorEnum, SizeEnum, Tooltip} from "../../base"
 import {model} from "../../index"
+import {ObservedProperty} from "../../model"
+import {AppState} from "../../service/AppState"
 
 @customElement('cc-sidebar')
 export class SidebarComponent extends LitElement {
@@ -18,8 +20,12 @@ export class SidebarComponent extends LitElement {
     @queryAssignedElements({slot: "secondaryFilters"})
     private secondaryFilters!: Array<HTMLElement>;
 
+    @property()
+    private appState: ObservedProperty<AppState>
+
     constructor(username: string) {
         super()
+        this.appState = new ObservedProperty<AppState>(this, model.appState)
         this.accountname = username
     }
 
@@ -29,7 +35,7 @@ export class SidebarComponent extends LitElement {
             <div class="buttons">
                 <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.FILLED}" 
                            @click="${this.openCreateRentMenu}"
-                           @mouseenter="${(e) => {Tooltip.show(e.target, 'shift+n oder ^', 1500)}}"
+                           @mouseenter="${(e) => {Tooltip.show(e.target, 'shift+n oder <', 1000)}}"
                            @mouseleave="${()=>{Tooltip.hide(0)}}"
                 >Neuer Verleih
                 </cc-button>
@@ -61,7 +67,8 @@ export class SidebarComponent extends LitElement {
     }
 
     openCreateRentMenu(){
-        model.appState.openCreateRentModal()
+        this.appState.value.openCreateRentModal()
+        this.appState.value.update()
     }
 
     setSecondaryFilterVisibility(){

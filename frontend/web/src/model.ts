@@ -23,7 +23,7 @@ export enum PageEnum { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar"
  *  - a load function that sets the data in the RXJS Subject and sends an update to all subscribers.
  */
 export default class Model{
-    readonly appState = new AppState()
+    readonly appState = new BehaviorSubject(<AppState>(new AppState()))
 
     readonly rents = new BehaviorSubject(<RentByStudentDTO[]>([]))
 
@@ -116,6 +116,10 @@ export default class Model{
     //endregion
 
     //region update functions
+
+    updateAppState(appState: AppState){
+        this.appState.next(appState)
+    }
 
     //endregion
 }

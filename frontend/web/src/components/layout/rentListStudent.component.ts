@@ -21,8 +21,8 @@ export class RentListStudentComponent extends LitElement {
         super.firstUpdated(_changedProperties);
 
 
-        model.appState.selectedRentEntriesChange.subscribe(data => {
-            this.autoCheckMultipleSelect()
+        model.appState.subscribe(data => {
+            this.autoCheckSelectAll()
         })
     }
 
@@ -70,11 +70,11 @@ export class RentListStudentComponent extends LitElement {
     }
 
     /**
-     * this function detects if all selects are checked or not
+     * this function checks if all rent entries of a student are selected or not
      * if so the multiple select gets checked as well
      */
-    autoCheckMultipleSelect() {
-        if (this.shadowRoot.querySelectorAll("cc-rent-list-entry").length == 0) return false
+    autoCheckSelectAll() {
+        if (this.shadowRoot.querySelectorAll("cc-rent-list-entry").length == 0) return
 
         let multiple = this.shadowRoot.querySelector(`cc-circle-select`)
         multiple.checked = true

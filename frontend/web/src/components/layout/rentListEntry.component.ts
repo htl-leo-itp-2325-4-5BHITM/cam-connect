@@ -10,6 +10,8 @@ import AirDatepicker from "air-datepicker";
 import localeEn from "air-datepicker/locale/en";
 import {LineColor, LineType} from "../basic/line.component"
 import PopupEngine from "../../popupEngine"
+import {ObservedProperty} from "../../model"
+import {AppState} from "../../service/AppState"
 
 @customElement('cc-rent-list-entry')
 export class RentListEntryComponent extends LitElement {
@@ -18,6 +20,14 @@ export class RentListEntryComponent extends LitElement {
 
     @property({ type: Boolean, reflect: true })
     checked: boolean = false
+
+    @property()
+    private appState: ObservedProperty<AppState>
+
+    constructor() {
+        super()
+        this.appState = new ObservedProperty<AppState>(this, model.appState)
+    }
 
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
@@ -143,10 +153,12 @@ export class RentListEntryComponent extends LitElement {
         this.checked = !this.checked
 
         if(this.checked){
-            model.appState.addSelectedRentEntry(this)
+            this.appState.value.addSelectedRentEntry(this)
         } else{
-            model.appState.removeSelectedRentEntry(this)
+            this.appState.value.removeSelectedRentEntry(this)
         }
+
+        this.appState.value.update()
     }
 
     removeRent() {

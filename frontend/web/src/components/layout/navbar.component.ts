@@ -9,11 +9,16 @@ import {model} from "../../index"
 import {KeyBoardShortCut, SimpleColorEnum, SizeEnum, Tooltip} from "../../base"
 import { ObservedProperty, PageEnum} from "../../model"
 import { SelectComponent } from "../basic/select.component"
+import {AppState} from "../../service/AppState"
 
 @customElement('cc-navbar')
 export class NavbarComponent extends LitElement {
+    @property()
+    private appState: ObservedProperty<AppState>
+
     constructor() {
         super()
+        this.appState = new ObservedProperty<AppState>(this, model.appState)
     }
 
     render() {
@@ -25,18 +30,18 @@ export class NavbarComponent extends LitElement {
 
             <cc-select size="${SizeEnum.MEDIUM}" spacerColor="${SimpleColorEnum.ACCENT}" 
                        .optionSelected = "${(elem) => {
-                           console.log('updating appstate'); model.appState.page = elem.dataset.page
+                           this.appState.value.page = elem.dataset.page
                        }
             }">
-                <p data-page="equipment" class="${model.appState.page == PageEnum.EQUIPMENT ? 'selected' : ''}"
+                <p data-page="equipment" class="${this.appState.value.page == PageEnum.EQUIPMENT ? 'selected' : ''}"
                    @mouseenter="${(e) => {Tooltip.show(e.target, 'shift+e oder 1', 1500)}}" 
                    @mouseleave="${()=>{Tooltip.hide(0)}}"
                 >Equipment</p>
-                <p data-page="rents" class="${model.appState.page == PageEnum.RENTS ? 'selected' : ''}"
+                <p data-page="rents" class="${this.appState.value.page == PageEnum.RENTS ? 'selected' : ''}"
                    @mouseenter="${(e) => {Tooltip.show(e.target, 'shift+v oder 2', 1500)}}"
                    @mouseleave="${()=>{Tooltip.hide(0)}}"
                 >Verleihliste</p>
-                <p data-page="calendar" class="${model.appState.page == PageEnum.CALENDAR ? 'selected' : ''}"
+                <p data-page="calendar" class="${this.appState.value.page == PageEnum.CALENDAR ? 'selected' : ''}"
                    @mouseenter="${(e) => {Tooltip.show(e.target, 'shift+c oder 3', 1500)}}"
                    @mouseleave="${()=>{Tooltip.hide(0)}}"
                 >Kalender</p>

@@ -8,11 +8,16 @@ import {AppState} from "../service/AppState"
 
 @customElement('cc-app')
 export class AppComponent extends LitElement {
+    @property()
+    private appState: ObservedProperty<AppState>
+
     constructor() {
         super();
 
-        KeyBoardShortCut.register([["shift", "n"], ["<"]], () => {model.appState.openCreateRentModal()})
-        KeyBoardShortCut.register(["escape"], () => {model.appState.cancelCurrentAction()})
+        this.appState = new ObservedProperty<AppState>(this, model.appState)
+
+        KeyBoardShortCut.register([["shift", "n"], ["<"]], () => {this.appState.value.openCreateRentModal(); this.appState.value.update()})
+        KeyBoardShortCut.register(["escape"], () => {this.appState.value.cancelCurrentAction()})
     }
 
     connectedCallback() {
@@ -23,7 +28,7 @@ export class AppComponent extends LitElement {
         let page = html``
         let sidebar = html``
 
-        switch (model.appState.page) {
+        switch (this.appState.value.page) {
             case PageEnum.EQUIPMENT:
                 sidebar = html`
                 <cc-sidebar accountname="wird später mal ein observable">

@@ -795,7 +795,7 @@ export default class PopupEngine{
 	 * @param {*} closeAction will be run if specified
 	 * @param {*} data that will be handed to the specified action
 	 */
-	static closeModal(closePopup = true, closeAction, data: ModalCallbackData){
+	static closeModal(closePopup:boolean = true, closeAction = (data) => {}, data: ModalCallbackData = {}){
 		//get values of inputs
 		if(this.modalContent.querySelector(".popupEngineModalInputs")){
 			let inputValues = []
@@ -805,9 +805,7 @@ export default class PopupEngine{
 			data.inputValues = inputValues
 		}
 
-		if(closeAction){
-			closeAction(data)
-		}
+		closeAction(data)
 
 		if(closePopup){
 			this.modal.style.display = "none"

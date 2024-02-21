@@ -10,23 +10,28 @@ import {SimpleColorEnum, SizeEnum} from "../../base"
 import {model} from "../../index"
 import RentService, {RentStatus} from "../../service/rent.service";
 import PopupEngine from "../../popupEngine";
+import {AppState} from "../../service/AppState"
 
 @customElement('cc-toolbar')
 export class ToolbarComponent extends LitElement {
+
+    @property()
+    private appState: ObservedProperty<AppState>
+
     constructor() {
         super()
+        this.appState = new ObservedProperty<AppState>(this, model.appState)
     }
-
     render() {
-        switch (model.appState.page) {
+        switch (this.appState.value.page) {
             case PageEnum.EQUIPMENT: return this.renderEquipmentBar();
             case PageEnum.RENTS: return this.renderRentListBar();
         }
     }
 
     renderRentListBar(){
-        let buttonsDisabled = {
-            uncheckAll: model.appState.selectedRentEntries.size == 0,
+        let isButtonDisabled = {
+            uncheckAll: this.appState.value.selectedRentEntries.size == 0,
             remove: this.isButtonDisabled(RentStatus.DECLINED),
             return: this.isButtonDisabled(RentStatus.CONFIRMED)
         }
@@ -44,21 +49,22 @@ export class ToolbarComponent extends LitElement {
                 </div>
 
                 <div>
-                    <cc-button @click="${this.uncheckAll}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" .disabled="${buttonsDisabled.uncheckAll}">
+                    <cc-button @click="${this.uncheckAll}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" 
+                               type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.uncheckAll}">
                         <div slot="left" class="icon accent">
                             <img slot="left" src="../../../assets/icon/select_circle.svg" alt="+">
                         </div>
                         Auswahl aufheben
                     </cc-button>
                     
-                    <cc-button @click="${this.removeSelection}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" .disabled="${buttonsDisabled.remove}">
+                    <cc-button @click="${this.removeSelection}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.remove}">
                         <div slot="left" class="icon accent">
                             ${unsafeSVG(icon(faTrash).html[0])}
                         </div>
                         Löschen
                     </cc-button>
         
-                    <cc-button @click="${this.returnSelection}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" .disabled="${buttonsDisabled.return}">
+                    <cc-button @click="${this.returnSelection}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.return}">
                         <div slot="left" class="icon accent">
                             <img slot="left" src="../../../assets/icon/return.svg" alt="<-">                    
                         </div>
@@ -70,10 +76,10 @@ export class ToolbarComponent extends LitElement {
     }
 
     isButtonDisabled(status: RentStatus) {
-        if (model.appState.selectedRentEntries.size == 0) return true
+        if (this.appState.value.selectedRentEntries.size == 0) return true
 
         let isDisabled = false;
-        model.appState.selectedRentEntries.forEach((selected) => {
+        this.appState.value.selectedRentEntries.forEach((selected) => {
             if(selected.rent.status != status){
                 return isDisabled = true;
             }
@@ -82,7 +88,7 @@ export class ToolbarComponent extends LitElement {
     }
 
     uncheckAll() {
-        model.appState.selectedRentEntries.forEach((entry) => {
+        this.appState.value.selectedRentEntries.forEach((entry) => {
             entry.toggleRentCheck()
         })
     }
@@ -94,7 +100,7 @@ export class ToolbarComponent extends LitElement {
                 {
                     text: "Ja",
                     action: (data) => {
-                        model.appState.selectedRentEntries.forEach((entry) => {
+                        this.appState.value.selectedRentEntries.forEach((entry) => {
                             RentService.remove(entry.rent)
                         })
                     },
@@ -114,7 +120,7 @@ export class ToolbarComponent extends LitElement {
                 {
                     text: "Ja",
                     action: (data) => {
-                        model.appState.selectedRentEntries.forEach((entry) => {
+                        this.appState.value.selectedRentEntries.forEach((entry) => {
                             RentService.return(entry.rent)
                         })
                     },

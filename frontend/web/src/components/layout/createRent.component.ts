@@ -16,6 +16,7 @@ import localeDe from 'air-datepicker/locale/de';
 import {CreateRentDeviceEntryComponent, RentDeviceEntryComponentType} from "./createRent-DeviceEntry.component"
 import PopupEngine from "../../popupEngine"
 import {CreateRentDTO} from "../../service/rent.service"
+import {AppState} from "../../service/AppState"
 
 @customElement('cc-create-rent')
 export class CreateRentComponent extends LitElement {
@@ -26,8 +27,12 @@ export class CreateRentComponent extends LitElement {
 
     globalDatePicker: AirDatepicker
 
+    @property()
+    private appState: ObservedProperty<AppState>
+
     constructor() {
         super()
+        this.appState = new ObservedProperty<AppState>(this, model.appState)
     }
 
     protected firstUpdated(_changedProperties: PropertyValues) {
@@ -55,8 +60,8 @@ export class CreateRentComponent extends LitElement {
             <style>${styles}</style>
             <style>
                 :host {
-                    max-width: ${model.appState.createRentModalOpen ? "50vw" : "0"};
-                    opacity: ${model.appState.createRentModalOpen ? 1 : 0};
+                    max-width: ${this.appState.value.createRentModalOpen ? "50vw" : "0"};
+                    opacity: ${this.appState.value.createRentModalOpen ? 1 : 0};
                 }
             </style>
             
@@ -146,11 +151,13 @@ export class CreateRentComponent extends LitElement {
     }
 
     cancel(){
-        model.appState.closeCreateRentModal()
+        this.appState.value.closeCreateRentModal()
+        this.appState.value.update()
     }
 
     close(){
-        model.appState.closeCreateRentModal(true)
+        this.appState.value.closeCreateRentModal(true)
+        this.appState.value.update()
         this.devices.forEach(device => device.remove())
         this.devices.clear()
         this.addDevice()
