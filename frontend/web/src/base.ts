@@ -5,6 +5,12 @@ export const config = {
     socket_url: "ws://localhost:8080/api"
 }
 
+export const Regex = {
+    anyThingButNumbers: /\D/,
+    empty: /^\s*$/,
+    onlySpecialChars: /^[^a-zA-Z0-9]*$/,
+}
+
 export interface ccResponse<T>{
     ccStatus: {
         statusCode: number
@@ -182,18 +188,27 @@ export class Tooltip {
 
 export interface KeyBoardShortCut {
     keys: string[],
-    action: ()=> void
+    action: ()=> void,
+    identifier?: string
 }
 
 export class KeyBoardShortCut {
     private static shortCuts: KeyBoardShortCut[] = []
     private static pressedKeys:Set<string> = new Set() //all currently pressed keys
 
-    static register(keys: (string[] | string[][]), action: () => void){
+    static register(keys: (string[] | string[][]), action: () => void, identifier?: string){
         if(!Array.isArray(keys[0])) keys = [keys] as string[][]
         keys.forEach(combi => {
-            this.shortCuts.push({keys: combi, action: action})
+            this.shortCuts.push({keys: combi, action: action, identifier: identifier})
         })
+    }
+
+    /**
+     * removes a registered shortcut by its identifier
+     * @param identifier
+     */
+    static remove(identifier: string){
+        this.shortCuts = this.shortCuts.filter(shortCut => shortCut.identifier !== identifier)
     }
 
     static {

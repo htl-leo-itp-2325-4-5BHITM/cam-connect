@@ -43,7 +43,7 @@ export default class Util{
         - the id can be either a number or a string its type is a union type of string and number
      */
 
-    //TODO constrain the generic so that it has to have a propperly named id column, something like: extends {[keyName]:(number | string)}
+    //TODO constrain the generic so that it has to have a properly named id column, something like: extends {[keyName]:(number | string)}
     static getItemByKeynameFromJsonArray<T>(data: T[], id: (number | string), keyName: string = "id"):T {
         for (let i = 0; i < data.length; i++) {
             if(data[i][keyName] === id){
@@ -53,7 +53,7 @@ export default class Util{
         return null
     }
 
-    //TODO constrain the generic so that it has to have a propperly named id column, something like: extends {[keyName]:(number | string)}
+    //TODO constrain the generic so that it has to have a properly named id column, something like: extends {[keyName]:(number | string)}
     static replaceItemByIdInJsonArray<T>(data: T[], replacement: T, id: (number | string), keyName: keyof T):T[] {
         for (let i = 0; i < data.length; i++) {
             if(data[i][keyName] === id){

@@ -5,6 +5,8 @@ import {BehaviorSubject, Subject} from "rxjs"
 import {Teacher} from "./teacher.service"
 import {model} from "../index"
 import {forEachResolvedProjectReference} from "ts-loader/dist/instances"
+import {CreateRentComponent} from "../components/layout/createRent.component"
+import {KeyBoardShortCut} from "../base"
 
 interface actionCancellation {
     identifier: string,
@@ -17,12 +19,13 @@ export class AppState{
     private _createMultiRentModalOpen: boolean = false
     private _selectedRentEntries: Set<RentListEntryComponent> = new Set<RentListEntryComponent>()
     private _cancelCurrentAction: actionCancellation[] = []
+    private _createRentComponent: CreateRentComponent
 
     /**
      * there is a really small chance here that this falls victim to a race condition
      * bascially it could happen that the component about to call update()
      */
-    update(){
+    private update(){
         model.updateAppState(this)
     }
 
@@ -32,39 +35,22 @@ export class AppState{
 
     set page(value: PageEnum) {
         this._page = value
+        this.update()
     }
 
-    closeCreateRentModal(overrideChecks: boolean = false){
-        if(overrideChecks){
-            this._createRentModalOpen = false
-            return
-        }
-
-        this.addCurrentActionCancellation(()=>{
-            PopupEngine.closeModal(true, () => {this.removeCurrentActionCancellation("popup")})
-        }, "popup")
-
-        PopupEngine.createModal({
-            heading: "Verleih erstellen abbrechen",
-            text: "Möchtest du den Vorgang wirklich abbrechen? Alle eingegebenen Daten gehen verloren.",
-            buttons: [
-                {text: "Ja", action: () => {
-                        this._createRentModalOpen = false
-                        this.removeCurrentActionCancellation("createRentModal")
-                        this.update()
-                    }
-                },
-                {text: "Nein", action: () => {
-                        this.removeCurrentActionCancellation("popup")
-                        this.update()
-                    }}
-            ]
-        })
+    closeCreateRentModal(){
+        this._createRentModalOpen = false
+        KeyBoardShortCut.remove("addDevice")
+        this.update()
     }
 
     openCreateRentModal(){
-        this.addCurrentActionCancellation(this.closeCreateRentModal, "createRentModal")
+        //super weird behavior here: when passing only the function referemce instead of an anonymous function
+        //the "this" reference in the CreateRent class will be the AppState, try adding a log of "this" in the cancel method
+        this.addCurrentActionCancellation(() => { this.createRentComponent.cancel() }, "createRentModal")
+        KeyBoardShortCut.register(["shift", "g"], () => {this.createRentComponent.addDevice()}, "addDevice")
         this._createRentModalOpen = true
+        this.update()
     }
 
     get createRentModalOpen(): boolean {
@@ -77,6 +63,7 @@ export class AppState{
 
     set createMultiRentModalOpen(value: boolean) {
         this._createMultiRentModalOpen = value
+        this.update()
     }
 
     get selectedRentEntries(): Set<RentListEntryComponent> {
@@ -85,10 +72,12 @@ export class AppState{
 
     addSelectedRentEntry(rentEntry: RentListEntryComponent){
         this.selectedRentEntries.add(rentEntry)
+        this.update()
     }
 
     removeSelectedRentEntry(rentEntry: RentListEntryComponent){
         this.selectedRentEntries.delete(rentEntry)
+        this.update()
     }
 
     get cancelCurrentAction(): () => void {
@@ -106,6 +95,7 @@ export class AppState{
      */
     addCurrentActionCancellation(action: () => void, identifier: string){
         this._cancelCurrentAction.push({identifier: identifier, action: action})
+        this.update()
     }
 
     /**
@@ -120,5 +110,15 @@ export class AppState{
                 this._cancelCurrentAction.splice(index, this._cancelCurrentAction.length - index)
             }
         })
+        this.update()
+    }
+
+    get createRentComponent(): CreateRentComponent {
+        return this._createRentComponent
+    }
+
+    set createRentComponent(value: CreateRentComponent) {
+        this._createRentComponent = value
+        this.update()
     }
 }

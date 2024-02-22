@@ -47,10 +47,23 @@ input{
     border: 1px solid $gray500;
     padding-inline: .3rem;
     background-color: transparent;
+    outline-color: transparent;
 
-    &:focus{
+    transition: outline-color $transitionTimeShort, border-color $transitionTimeShort;
+
+    &:focus-visible{
         border-color: $accentDarkmode;
         outline: 1px solid $accentDarkmode;
+    }
+
+    &.error{
+        outline: 1px solid $badDark;
+        border-color: $badDark;
+
+        &:focus-visible{
+            border-color: $bad;
+            outline-color: $bad;
+        }
     }
 }
 

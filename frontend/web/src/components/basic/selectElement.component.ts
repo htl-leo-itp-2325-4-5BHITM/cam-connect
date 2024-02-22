@@ -5,7 +5,7 @@ import {SelectComponent} from "./select.component"
 
 enum Status {CONFIRMED="bestätigt", WAITING="warten", DECLINED="abgelehnt"}
 
-//TODO @michi check if this is deprecated
+//TODO @michi i think this whole component is not needed
 
 @customElement('cc-select-element')
 export class SelectElementComponent extends LitElement {

@@ -157,8 +157,6 @@ export class RentListEntryComponent extends LitElement {
         } else{
             this.appState.value.removeSelectedRentEntry(this)
         }
-
-        this.appState.value.update()
     }
 
     removeRent() {

@@ -68,7 +68,6 @@ export class SidebarComponent extends LitElement {
 
     openCreateRentMenu(){
         this.appState.value.openCreateRentModal()
-        this.appState.value.update()
     }
 
     setSecondaryFilterVisibility(){

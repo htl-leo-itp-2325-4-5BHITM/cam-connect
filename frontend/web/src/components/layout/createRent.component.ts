@@ -53,6 +53,7 @@ export class CreateRentComponent extends LitElement {
             }
         })
         this.addDevice()
+        this.appState.value.createRentComponent = this
     }
 
     render() {
@@ -108,6 +109,7 @@ export class CreateRentComponent extends LitElement {
     //TODO add shortcut for this
     //we might want to pass the currently selected global date to the new device
     addDevice(type: RentDeviceEntryComponentType = "default") {
+        console.log("adding")
         let newDevice = new CreateRentDeviceEntryComponent(this, type)
         this.devices.add(newDevice)
         this.shadowRoot.querySelector(".deviceList").appendChild(newDevice)
@@ -151,13 +153,29 @@ export class CreateRentComponent extends LitElement {
     }
 
     cancel(){
-        this.appState.value.closeCreateRentModal()
-        this.appState.value.update()
+        console.log(this)
+        this.appState.value.addCurrentActionCancellation(()=>{
+            PopupEngine.closeModal(true, () => {this.appState.value.removeCurrentActionCancellation("popup")})
+        }, "popup")
+
+        PopupEngine.createModal({
+            heading: "Verleih erstellen abbrechen",
+            text: "Möchtest du den Vorgang wirklich abbrechen? Alle eingegebenen Daten gehen verloren.",
+            buttons: [
+                {text: "Ja", action: () => {
+                        this.close()
+                        this.appState.value.removeCurrentActionCancellation("createRentModal")
+                    }
+                },
+                {text: "Nein", action: () => {
+                        this.appState.value.removeCurrentActionCancellation("popup")
+                    }}
+            ]
+        })
     }
 
     close(){
-        this.appState.value.closeCreateRentModal(true)
-        this.appState.value.update()
+        this.appState.value.closeCreateRentModal()
         this.devices.forEach(device => device.remove())
         this.devices.clear()
         this.addDevice()

@@ -26,7 +26,6 @@ function requestAllStudents() {
             allStudents = data
             console.log(data)
 
-            //TODO do this with promises
             requestAllTeachers()
         })
         .catch(error => console.error(error))

@@ -13,7 +13,7 @@ import AirDatepicker from 'air-datepicker';
 import localeEn from 'air-datepicker/locale/en';
 import {CreateRentComponent} from "./createRent.component"
 import {CreateRentDTO, RentTypeEnum} from "../../service/rent.service"
-import {Api, ccResponse, config} from "../../base"
+import {Api, ccResponse, config, Regex} from "../../base"
 import {AppState} from "../../service/AppState"
 
 export interface CreateRentDeviceEntryData {
@@ -44,7 +44,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
         super()
         this.type = type
         this.parent = parent
-        this.data = { //TODO yeah we have a general issue with the data structure here.. we have no clue about device_id in the frontend, the create dto needs devicetype and number
+        this.data = {
             device_number: "",
             device_type_id: -1,
             device_string: "",
@@ -104,31 +104,60 @@ export class CreateRentDeviceEntryComponent extends LitElement {
     }
 
     async validate():Promise<boolean> {
-        //TODO add error highlighting
-
+        console.log("validating")
         if(this.type == "string"){
-            if(this.data.device_string == ""){
+            if(Regex.onlySpecialChars.test(this.data.device_string)){
+                this.highlightInputError(this.shadowRoot.querySelector(".name"))
                 return false
             }
         }
         else if(this.type == "default"){
-            if(this.data.device_number == "" || this.data.device_type_id == -1){
+            if(
+                Regex.empty.test(String(this.data.device_type_id)) ||
+                Regex.anyThingButNumbers.test(String(this.data.device_type_id)) ||
+                this.data.device_type_id < 0
+            ) {
+                this.highlightInputError(this.shadowRoot.querySelector(".name"))
                 return false
             }
-            const anyThingButNumbers = /\D/
-            if(anyThingButNumbers.test(String(this.data.device_type_id))) return false
+
+            if(Regex.onlySpecialChars.test(this.data.device_number)){
+                this.highlightInputError(this.shadowRoot.querySelector(".number"))
+                return false
+            }
+
             let response = await fetch(`${config.api_url}/device/validatenumberandtype/${this.data.device_number}/${this.data.device_type_id}`)
             Api.handleHttpError(response.status, response.url)
             let result = await response.json() as ccResponse<boolean>
             if(result.ccStatus) Api.handleCCError(result.ccStatus.statusCode, result.ccStatus.details, "/device/validatenumberandtype")
 
             if(result.data == false) {
+                this.highlightInputError(this.shadowRoot.querySelector(".number"))
+                this.highlightInputError(this.shadowRoot.querySelector(".name"))
                 return false
             }
         }
 
         return true
     }
+
+    highlightInputError(input: Element){}
+
+    /*highlightInputError(input: Element){
+        input.classList.add("error")
+        input.addEventListener("keydown", () => {this.removeInputError(input)})
+        input.addEventListener("blur", this.validateInput)
+    }
+
+    removeInputError(input: Element){
+        input.classList.remove("error")
+        input.removeEventListener("keydown", () => {this.removeInputError(input)})
+    }
+
+    validateInput(e: Event){
+        this.validate()
+        e.target.removeEventListener("blur", this.validateInput)
+    }*/
 
     toRentObject(): CreateRentDTO {
         //TODO add support for notes
