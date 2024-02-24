@@ -15,6 +15,7 @@ import {CreateRentComponent} from "./createRent.component"
 import {CreateRentDTO, RentTypeEnum} from "../../service/rent.service"
 import {Api, ccResponse, config, Regex} from "../../base"
 import {AppState} from "../../service/AppState"
+import localeDe from "air-datepicker/locale/de"
 
 export interface CreateRentDeviceEntryData {
     device_type_id: number
@@ -38,7 +39,13 @@ export class CreateRentDeviceEntryComponent extends LitElement {
     @property({reflect: true})
     type: RentDeviceEntryComponentType = "default"
 
+    @property()
+    appState: ObservedProperty<AppState>
+
     datePicker: AirDatepicker
+
+    boundValidateInput: (e: Event) => void
+    boundRemoveErrorHIghlighting: (e: Event) => void
 
     constructor(parent: CreateRentComponent, type: RentDeviceEntryComponentType = "default"){
         super()
@@ -51,6 +58,9 @@ export class CreateRentDeviceEntryComponent extends LitElement {
             rent_start: new Date(),
             rent_end_planned: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
         }
+        this.appState = new ObservedProperty<AppState>(this, model.appState)
+        this.boundValidateInput = this.validateInput.bind(this);
+        this.boundRemoveErrorHIghlighting = this.removeErrorHighlighting.bind(this);
     }
 
     protected firstUpdated(_changedProperties: PropertyValues) {
@@ -62,13 +72,31 @@ export class CreateRentDeviceEntryComponent extends LitElement {
         //it probably makes most sense to only allow ones in the future
         //airdatepicker does allow a min value
         this.datePicker = new AirDatepicker(input, {
-            locale: localeEn,
+            locale: localeDe,
             range: true,
             dateFormat: "dd.MM",
             multipleDatesSeparator: ' - ',
-            selectedDates: [this.data.rent_start, this.data.rent_end_planned],
+            selectedDates: [new Date(), new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)],
             autoClose: true,
-            onSelect: (date) => {this.data.rent_start = date[0]; this.data.rent_end_planned = date[1]}
+            moveToOtherMonthsOnSelect: false,
+            toggleSelected: false,
+            /*visible: true,*/
+            onShow: (finished) => {
+                if(finished) return //onShow gets called twice, once on animation start and a second time on animation end
+                //the datepicker handles its own close by esc, to prevent another close action from getting called this dummy is added
+                this.appState.value.addCurrentActionCancellation(()=>{}, "datepicker")
+                //TODO there is a known issue here with the esc action when directly switching from one datepicker to another
+            },
+            onHide: () => {
+                //needs to be in a timeout to make sure that the cancelCurrentAction shortcut was called before showing
+                setTimeout(() => {
+                    console.log("hiding")
+                    this.appState.value.removeCurrentActionCancellation("datepicker")
+                    if(this.datePicker.selectedDates.length <= 1){//forces user to select an actual range of dates
+                        this.datePicker.show()
+                    }
+                },100)
+            }
         })
     }
 
@@ -105,6 +133,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
 
     async validate():Promise<boolean> {
         console.log("validating")
+
         if(this.type == "string"){
             if(Regex.onlySpecialChars.test(this.data.device_string)){
                 this.highlightInputError(this.shadowRoot.querySelector(".name"))
@@ -141,23 +170,27 @@ export class CreateRentDeviceEntryComponent extends LitElement {
         return true
     }
 
-    highlightInputError(input: Element){}
-
-    /*highlightInputError(input: Element){
-        input.classList.add("error")
-        input.addEventListener("keydown", () => {this.removeInputError(input)})
-        input.addEventListener("blur", this.validateInput)
+    highlightInputError(input: Element){
+        input.classList.add("error");
+        input.addEventListener("keydown", this.boundRemoveErrorHIghlighting);
+        input.addEventListener("blur", this.boundValidateInput);
     }
 
-    removeInputError(input: Element){
-        input.classList.remove("error")
-        input.removeEventListener("keydown", () => {this.removeInputError(input)})
+    /**
+     * Remove the error highlighting from the input as soon as the input is edited
+     * Also removes the event listener for itself.
+     * @param e
+     */
+    removeErrorHighlighting(e: Event){
+        let input = e.target as Element;
+        input.classList.remove("error");
+        input.removeEventListener("keydown", this.boundRemoveErrorHIghlighting);
     }
 
     validateInput(e: Event){
-        this.validate()
-        e.target.removeEventListener("blur", this.validateInput)
-    }*/
+        e.target.removeEventListener("blur", this.boundValidateInput);
+        this.validate();
+    }
 
     toRentObject(): CreateRentDTO {
         //TODO add support for notes

@@ -9,7 +9,7 @@ import {model} from "../../index"
 
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { icon } from '@fortawesome/fontawesome-svg-core'
-import { faXmark, faCircleArrowDown } from "@fortawesome/free-solid-svg-icons"
+import {faXmark, faCircleArrowDown} from "@fortawesome/free-solid-svg-icons"
 
 import AirDatepicker from 'air-datepicker';
 import localeDe from 'air-datepicker/locale/de';
@@ -43,13 +43,24 @@ export class CreateRentComponent extends LitElement {
             range: true,
             dateFormat: "dd.MM",
             multipleDatesSeparator: ' - ',
-            selectedDates: [new Date('January 29, 2024'), new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)],
+            selectedDates: [new Date(), new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)],
             autoClose: true,
             moveToOtherMonthsOnSelect: false,
             toggleSelected: false,
             /*visible: true,*/
+            onShow: (finished) => {
+                if(finished) return //onShow gets called twice, once on animation start and a second time on animation end
+                //the datepicker handles its own close by esc, to prevent another close action from getting called this dummy is added
+                this.appState.value.addCurrentActionCancellation(()=>{}, "datepicker")
+            },
             onHide: () => {
-                if(this.globalDatePicker.selectedDates.length <= 1) this.globalDatePicker.show()
+                //needs to be in a timeout to make sure that the cancelCurrentAction shortcut was called before showing
+                setTimeout(() => {
+                    this.appState.value.removeCurrentActionCancellation("datepicker")
+                    if(this.globalDatePicker.selectedDates.length <= 1){//forces user to select an actual range of dates
+                        this.globalDatePicker.show()
+                    }
+                },100)
             }
         })
         this.addDevice()
@@ -97,7 +108,7 @@ export class CreateRentComponent extends LitElement {
             
             <div class="bottom">
                 <cc-button size="${SizeEnum.BIG}" color="${ColorEnum.ACCENT}" type="${ButtonType.FILLED}" 
-                           @click="${this.createRent}"
+                           @click="${this.create}"
                 >Verleih Erstellen</cc-button>
                 <cc-button size="${SizeEnum.BIG}" color="${ColorEnum.ACCENT}" type="${ButtonType.OUTLINED}" 
                            @click="${this.cancel}"
@@ -130,16 +141,13 @@ export class CreateRentComponent extends LitElement {
         })
     }
 
-    async createRent() {
+    async create() {
         let data: CreateRentDTO[] = []
 
         for (let i = 0; i < this.devices.size; i++) {
             let device = Array.from(this.devices)[i]
 
-            let isValid = await device.validate()
-            if(!isValid) return
-            data.push(device.toRentObject())
-            console.log("adding")
+            if(await device.validate()) data.push(device.toRentObject())
         }
 
         if(data.length == 0) return

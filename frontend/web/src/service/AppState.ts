@@ -81,7 +81,7 @@ export class AppState{
     }
 
     get cancelCurrentAction(): () => void {
-        if(this._cancelCurrentAction.length < 1) return () => {}
+        if(this._cancelCurrentAction.length <= 0) return () => {}
         return this._cancelCurrentAction.at(-1).action
     }
 
