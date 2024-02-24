@@ -22,8 +22,8 @@ export class AppState{
     private _createRentComponent: CreateRentComponent
 
     /**
-     * there is a really small chance here that this falls victim to a race condition
-     * bascially it could happen that the component about to call update()
+     * there is a really small chance here that this possibly falls victim to a race condition
+     * but i think we can ignore that for now
      */
     private update(){
         model.updateAppState(this)
@@ -45,10 +45,10 @@ export class AppState{
     }
 
     openCreateRentModal(){
-        //super weird behavior here: when passing only the function referemce instead of an anonymous function
+        //super weird js behavior here: when passing only the function reference instead of an anonymous function
         //the "this" reference in the CreateRent class will be the AppState, try adding a log of "this" in the cancel method
         this.addCurrentActionCancellation(() => { this.createRentComponent.cancel() }, "createRentModal")
-        KeyBoardShortCut.register(["shift", "g"], () => {this.createRentComponent.addDevice()}, "addDevice")
+        KeyBoardShortCut.register(["shift", "g"], () => {this._createRentComponent.addDevice()}, "addDevice")
         this._createRentModalOpen = true
         this.update()
     }
@@ -111,10 +111,6 @@ export class AppState{
             }
         })
         this.update()
-    }
-
-    get createRentComponent(): CreateRentComponent {
-        return this._createRentComponent
     }
 
     set createRentComponent(value: CreateRentComponent) {

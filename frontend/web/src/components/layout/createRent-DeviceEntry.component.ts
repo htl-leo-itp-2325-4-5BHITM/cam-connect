@@ -44,11 +44,19 @@ export class CreateRentDeviceEntryComponent extends LitElement {
 
     datePicker: AirDatepicker
 
+    /**
+     * These functions have a fixed reference to "this" set to the instance of this class
+     * when using these in eventlisteners, even though js would normally change "this" to the
+     * Element that the event is bound to, these have a fixed reference to the instance of this class
+     * See instantiation in the constructor.
+     * https://javascript.info/bind
+     */
     boundValidateInput: (e: Event) => void
-    boundRemoveErrorHIghlighting: (e: Event) => void
+    boundRemoveErrorHighlighting: (e: Event) => void
 
     constructor(parent: CreateRentComponent, type: RentDeviceEntryComponentType = "default"){
         super()
+        this.appState = new ObservedProperty<AppState>(this, model.appState)
         this.type = type
         this.parent = parent
         this.data = {
@@ -58,9 +66,9 @@ export class CreateRentDeviceEntryComponent extends LitElement {
             rent_start: new Date(),
             rent_end_planned: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
         }
-        this.appState = new ObservedProperty<AppState>(this, model.appState)
+
         this.boundValidateInput = this.validateInput.bind(this);
-        this.boundRemoveErrorHIghlighting = this.removeErrorHighlighting.bind(this);
+        this.boundRemoveErrorHighlighting = this.removeErrorHighlighting.bind(this);
     }
 
     protected firstUpdated(_changedProperties: PropertyValues) {
@@ -172,7 +180,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
 
     highlightInputError(input: Element){
         input.classList.add("error");
-        input.addEventListener("keydown", this.boundRemoveErrorHIghlighting);
+        input.addEventListener("keydown", this.boundRemoveErrorHighlighting);
         input.addEventListener("blur", this.boundValidateInput);
     }
 
@@ -184,7 +192,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
     removeErrorHighlighting(e: Event){
         let input = e.target as Element;
         input.classList.remove("error");
-        input.removeEventListener("keydown", this.boundRemoveErrorHIghlighting);
+        input.removeEventListener("keydown", this.boundRemoveErrorHighlighting);
     }
 
     validateInput(e: Event){
