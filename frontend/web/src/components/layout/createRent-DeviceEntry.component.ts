@@ -126,6 +126,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
             return html`
                 <style>${styles}</style>
                 <div class="left">
+                    <cc-autocomplete placeholder="Name"></cc-autocomplete>
                     <input type="text" value="" class="name" placeholder="Name" 
                            @blur="${(e) => {this.data.device_type_id = e.target.value}}">
                     <input type="text" value="" class="number" placeholder="Nr." 

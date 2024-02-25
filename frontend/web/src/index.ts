@@ -22,6 +22,7 @@ import "./components/layout/rentListStudent.component"
 import "./components/layout/rentListEntry.component"
 import "./components/layout/deviceList.component"
 import "./components/layout/deviceListEntry.component"
+import "./components/basic/autocomplete.component"
 
 import "./components/app.component"
 

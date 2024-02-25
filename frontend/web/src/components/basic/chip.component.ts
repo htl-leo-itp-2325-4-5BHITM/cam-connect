@@ -5,7 +5,6 @@ import { icon } from '@fortawesome/fontawesome-svg-core'
 import { faXmark } from "@fortawesome/free-solid-svg-icons"
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import {ColorEnum, SizeEnum} from "../../base"
-import {ButtonComponent} from "./button.component";
 
 export enum ChipType { EXPANDABLE="expandable", REMOVABLE="removable", CLICKABLE="clickable", DEFAULT="default" }
 
