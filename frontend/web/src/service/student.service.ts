@@ -12,7 +12,7 @@ export interface Student{
     school_class: string
 }
 
-export default class RentService{
+export default class StudentService {
     static fetchAll(){
         Api.fetchData<Student[]>("/student/getall")
             .then(data => {

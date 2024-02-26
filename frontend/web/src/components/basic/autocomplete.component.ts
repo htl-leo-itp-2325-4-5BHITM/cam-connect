@@ -4,10 +4,17 @@ import styles from '../../../styles/components/basic/autocomplete.styles.scss'
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { faCamera } from "@fortawesome/free-solid-svg-icons"
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
+
+export interface AutocompleteOption {
+    id: number
+    name: string
+    type?: string
+}
+
 @customElement('cc-autocomplete')
 export class AutocompleteComponent extends LitElement {
     @property({type: String})
-    placeholder?: String = this.innerText || ""
+    placeholder?: String = ""
 
     @property({type: Boolean})
     disabled?: boolean = false
@@ -15,27 +22,39 @@ export class AutocompleteComponent extends LitElement {
     @property()
     selected: string = ""
 
+    @property()
+    options: AutocompleteOption[] = []
+
+    @property()
+    onSelect = (id: number) => {}
+
+    @property()
+    querySuggestions: (searchTerm: string) => Promise<AutocompleteOption[]>
+
     render() {
         return html`
             <style>${styles}</style>
             <input type="text" placeholder="${this.placeholder}" .disabled="${this.disabled}" 
                    @focus="${this.showSuggestions}"
-                   @blur="${this.hideSuggestions}"
+                   @keyup="${this.getSuggestions}"
             >
             <div class="suggestions">
-                <div class="entry" @click="">
-                    ${unsafeSVG(icon(faCamera).html[0])}
-                    <label>Lumix S5ii</label>
-                </div>
-                <div class="entry">
-                    ${unsafeSVG(icon(faCamera).html[0])}
-                    <label>Lumix S5ii</label>
-                </div>
+                ${this.options.map(option => {
+                    return html`
+                        <div class="entry" @click="${()=>this.selectSuggestion(option.id)}">
+                            ${unsafeSVG(icon(faCamera).html[0])}
+                            <label>${option.name}</label>
+                        </div>
+                    `
+                })}
             </div>
         `
     }
 
     showSuggestions(){
+        let input = this.shadowRoot.querySelector('input') as HTMLInputElement
+        input.select()
+
         let suggestionElem = this.shadowRoot.querySelector(".suggestions") as HTMLElement
         suggestionElem.style.display = "flex"
         setTimeout(() => {
@@ -51,9 +70,20 @@ export class AutocompleteComponent extends LitElement {
         },200)
     }
 
-    selectSuggestion(){
+    selectSuggestion(id:number){
+        console.log("selected", id)
+        this.shadowRoot.querySelector("input").value = this.options.find(option => option.id == id).name
         this.hideSuggestions()
-        console.log("selecting suggestion")
+    }
+
+    getSuggestions(){
+        console.log("getting suggestions")
+        let input = this.shadowRoot.querySelector("input") as HTMLInputElement
+        let searchTerm = input.value
+        this.querySuggestions(searchTerm)
+            .then(options => {
+                this.options = options
+            })
     }
 }
 

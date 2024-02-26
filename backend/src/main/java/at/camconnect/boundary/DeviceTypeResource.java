@@ -1,18 +1,23 @@
 package at.camconnect.boundary;
 
+import at.camconnect.dtos.AutocompleteOptionDTO;
 import at.camconnect.dtos.DeviceTypeCollection;
 import at.camconnect.dtos.DeviceTypeDTO;
+import at.camconnect.dtos.StudentDTO;
+import at.camconnect.model.Student;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
-import at.camconnect.enums.DeviceTypeEnum;
+import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.repository.DeviceTypeRepository;
 import jakarta.inject.Inject;
+import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
 import java.util.List;
 
 @Path("/devicetype")
@@ -25,7 +30,7 @@ public class DeviceTypeResource {
     @Path("/create/{type: [A-z]+}")
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response create(@PathParam("type") DeviceTypeEnum type, JsonObject data){//leave as JsonObject NOT DTO
+    public Response create(@PathParam("type") DeviceTypeVariantEnum type, JsonObject data){//leave as JsonObject NOT DTO
         DeviceType result;
         try{
             result = deviceTypeRepository.create(type, data);
@@ -90,5 +95,20 @@ public class DeviceTypeResource {
         }
 
         return CCResponse.ok();
+    }
+
+    @POST
+    @Path("/search")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response search(JsonObject data){
+        List<AutocompleteOptionDTO> result;
+        try{
+            result = deviceTypeRepository.search(data.getString("searchTerm"));;
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok(result);
     }
 }

@@ -46,8 +46,8 @@ export class Api {
             })
     }
 
-    static createItem<T>(path: string, data: T): Promise<any> {
-        return fetch(`${config.api_url}${path}/create`, {
+    static postData<T>(path: string, data: T): Promise<any> {
+        return fetch(`${config.api_url}${path}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

@@ -2,6 +2,7 @@ import {DeviceType} from "./service/deviceType.service"
 import {FilterOption} from "./components/basic/filterContainer.component"
 import {DeviceTypeAttribute} from "./service/deviceTypeAttribute.service"
 import * as repl from "repl"
+import {AutocompleteOption} from "./components/basic/autocomplete.component"
 export default class Util{
     static deviceTypeToFilterOption(deviceTypes: DeviceType): FilterOption{
         return {
@@ -26,6 +27,15 @@ export default class Util{
         }
     }
 
+    static deviceTypeVariantToAutocompleteOption(deviceTypeVariant: DeviceType): AutocompleteOption{
+        return {
+            name: deviceTypeVariant.name,
+            id: deviceTypeVariant.type_id,
+            type: "TODO"
+        }
+    }
+
+    //Yeah uhh this is deprecated and not needed, dont use this
     /**
      * Loops over a provided array of JSON objects and checks if the id key matches with the provided one.
      * If a match is found, it is returned; if no match is found, null is returned.
@@ -42,7 +52,6 @@ export default class Util{
           id property.
         - the id can be either a number or a string its type is a union type of string and number
      */
-
     //TODO constrain the generic so that it has to have a properly named id column, something like: extends {[keyName]:(number | string)}
     static getItemByKeynameFromJsonArray<T>(data: T[], id: (number | string), keyName: string = "id"):T {
         for (let i = 0; i < data.length; i++) {

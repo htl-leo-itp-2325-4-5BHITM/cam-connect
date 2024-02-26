@@ -117,4 +117,8 @@ export class AppState{
         this._createRentComponent = value
         this.update()
     }
+
+    get createRentComponent(): CreateRentComponent {
+        return this._createRentComponent
+    }
 }

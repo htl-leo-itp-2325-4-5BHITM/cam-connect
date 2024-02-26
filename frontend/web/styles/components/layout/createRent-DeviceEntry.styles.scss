@@ -17,9 +17,9 @@
         align-items: center;
     }
 
-    input{
+    input, cc-autocomplete{
         &.name{
-            width: 10ch;
+            width: 15ch;
         }
 
         &.date{

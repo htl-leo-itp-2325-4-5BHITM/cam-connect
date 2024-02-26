@@ -15,7 +15,7 @@ import AirDatepicker from 'air-datepicker';
 import localeDe from 'air-datepicker/locale/de';
 import {CreateRentDeviceEntryComponent, RentDeviceEntryComponentType} from "./createRent-DeviceEntry.component"
 import PopupEngine from "../../popupEngine"
-import {CreateRentDTO} from "../../service/rent.service"
+import RentService, {CreateRentDTO} from "../../service/rent.service"
 import {AppState} from "../../service/AppState"
 
 @customElement('cc-create-rent')
@@ -153,12 +153,7 @@ export class CreateRentComponent extends LitElement {
 
         if(data.length == 0) return
 
-        console.log(data)
-        Api.createItem<CreateRentDTO[]>("/rent", data).then(result => {
-            console.log(result)
-            this.close()
-        })
-
+        RentService.create(data)
     }
 
     cancel(){

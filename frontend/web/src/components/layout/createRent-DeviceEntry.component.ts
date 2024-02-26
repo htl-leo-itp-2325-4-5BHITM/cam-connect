@@ -16,6 +16,8 @@ import {CreateRentDTO, RentTypeEnum} from "../../service/rent.service"
 import {Api, ccResponse, config, Regex} from "../../base"
 import {AppState} from "../../service/AppState"
 import localeDe from "air-datepicker/locale/de"
+import Util from "../../util"
+import {AutocompleteOption} from "../basic/autocomplete.component"
 
 export interface CreateRentDeviceEntryData {
     device_type_id: number
@@ -126,9 +128,10 @@ export class CreateRentDeviceEntryComponent extends LitElement {
             return html`
                 <style>${styles}</style>
                 <div class="left">
-                    <cc-autocomplete placeholder="Name"></cc-autocomplete>
-                    <input type="text" value="" class="name" placeholder="Name" 
-                           @blur="${(e) => {this.data.device_type_id = e.target.value}}">
+                    <cc-autocomplete placeholder="Name" class="name" 
+                                     onSelect="${(id:number) => {this.data.device_type_id = id}}"
+                                     .querySuggestions="${this.searchForDeviceType}"
+                    ></cc-autocomplete>
                     <input type="text" value="" class="number" placeholder="Nr." 
                            @blur="${(e) => {this.data.device_number = e.target.value}}">
                 </div>
@@ -177,6 +180,16 @@ export class CreateRentDeviceEntryComponent extends LitElement {
         }
 
         return true
+    }
+
+    async searchForDeviceType(searchTerm: string): Promise<AutocompleteOption[]> {
+        try {
+            const result: ccResponse<AutocompleteOption[]> = await Api.postData("/devicetype/search", {searchTerm: searchTerm})
+            return result.data
+        } catch (e) {
+            console.error(e)
+            return []
+        }
     }
 
     highlightInputError(input: Element){
