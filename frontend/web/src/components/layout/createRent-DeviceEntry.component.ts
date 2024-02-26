@@ -46,16 +46,6 @@ export class CreateRentDeviceEntryComponent extends LitElement {
 
     datePicker: AirDatepicker
 
-    /**
-     * These functions have a fixed reference to "this" set to the instance of this class
-     * when using these in eventlisteners, even though js would normally change "this" to the
-     * Element that the event is bound to, these have a fixed reference to the instance of this class
-     * See instantiation in the constructor.
-     * https://javascript.info/bind
-     */
-    boundValidateInput: (e: Event) => void
-    boundRemoveErrorHighlighting: (e: Event) => void
-
     constructor(parent: CreateRentComponent, type: RentDeviceEntryComponentType = "default"){
         super()
         this.appState = new ObservedProperty<AppState>(this, model.appState)
@@ -68,9 +58,6 @@ export class CreateRentDeviceEntryComponent extends LitElement {
             rent_start: new Date(),
             rent_end_planned: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
         }
-
-        this.boundValidateInput = this.validateInput.bind(this);
-        this.boundRemoveErrorHighlighting = this.removeErrorHighlighting.bind(this);
     }
 
     protected firstUpdated(_changedProperties: PropertyValues) {
@@ -192,6 +179,15 @@ export class CreateRentDeviceEntryComponent extends LitElement {
         }
     }
 
+    /**
+     * These functions have a fixed reference to "this" set to the instance of this class
+     * when using these in eventlisteners, even though js would normally change "this" to the
+     * Element that the event is bound to, these have a fixed reference to the instance of this class
+     * See instantiation in the constructor.
+     * https://javascript.info/bind
+     */
+    boundValidateInput = this.validateInput.bind(this);
+    boundRemoveErrorHighlighting = this.removeErrorHighlighting.bind(this);
     highlightInputError(input: Element){
         input.classList.add("error");
         input.addEventListener("keydown", this.boundRemoveErrorHighlighting);

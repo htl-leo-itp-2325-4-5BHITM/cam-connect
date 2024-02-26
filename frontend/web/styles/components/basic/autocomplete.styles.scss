@@ -36,41 +36,41 @@ input{
     opacity: 1;
     transform: translateY(0rem);
   }
+}
 
-  .entry{
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    transition: background-color $transitionTimeShort;
-    border-radius: .3rem;
-    padding: .1rem .5rem;
-    cursor: pointer;
+.entry{
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  transition: background-color $transitionTimeShort;
+  border-radius: .3rem;
+  padding: .1rem .5rem;
+  cursor: pointer;
 
-    &:hover, .selected{
-      background-color: $gray400;
+  &.focused{
+    background-color: $gray400;
 
-      label{
-        color: $gray1000;
-      }
-
-      svg path{
-        color: $gray1000;
-      }
-    }
-
-    svg{
-      height: 1.1rem;
-
-      path{
-        color: $gray800;
-        transition: color $transitionTimeShort;
-      }
-    }
-    
     label{
-      cursor: pointer;
+      color: $gray1000;
+    }
+
+    svg path{
+      color: $gray1000;
+    }
+  }
+
+  svg{
+    height: 1.1rem;
+
+    path{
       color: $gray800;
       transition: color $transitionTimeShort;
     }
+  }
+
+  label{
+    cursor: pointer;
+    color: $gray800;
+    transition: color $transitionTimeShort;
   }
 }
