@@ -84,7 +84,7 @@ export default class RentService {
     }
 
     static return(rent: Rent) {
-        Api.getById("/return", rent.rent_id, "/return", rent)
+        Api.getById("/rent", rent.rent_id, "/return", rent)
             .then(() => {
                 RentService.fetchAll()
             })

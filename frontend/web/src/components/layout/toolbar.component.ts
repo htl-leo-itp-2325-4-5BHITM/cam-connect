@@ -103,6 +103,7 @@ export class ToolbarComponent extends LitElement {
                         this.appState.value.selectedRentEntries.forEach((entry) => {
                             RentService.remove(entry.rent)
                         })
+                        this.uncheckAll()
                     },
                     closePopup: true
                 },
@@ -123,6 +124,7 @@ export class ToolbarComponent extends LitElement {
                         this.appState.value.selectedRentEntries.forEach((entry) => {
                             RentService.return(entry.rent)
                         })
+                        this.uncheckAll()
                     },
                     closePopup: true
                 },
