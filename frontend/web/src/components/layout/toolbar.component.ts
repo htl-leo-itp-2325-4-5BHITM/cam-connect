@@ -10,7 +10,7 @@ import {SimpleColorEnum, SizeEnum} from "../../base"
 import {model} from "../../index"
 import RentService, {RentStatus} from "../../service/rent.service";
 import PopupEngine from "../../popupEngine";
-import {AppState} from "../../service/AppState"
+import {AppState} from "../../AppState"
 
 @customElement('cc-toolbar')
 export class ToolbarComponent extends LitElement {

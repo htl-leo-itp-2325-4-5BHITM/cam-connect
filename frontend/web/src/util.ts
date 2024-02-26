@@ -35,7 +35,17 @@ export default class Util{
         }
     }
 
+    static deepEventTarget(startpoint: Element){
+        let focusedElem = startpoint
+        while (focusedElem != undefined) {
+            let newFocusedElem = focusedElem?.shadowRoot?.activeElement
+            if(newFocusedElem == undefined) return focusedElem
+            focusedElem = newFocusedElem
+        }
+    }
+
     //Yeah uhh this is deprecated and not needed, dont use this
+    //arr.find(item => item.id == id)
     /**
      * Loops over a provided array of JSON objects and checks if the id key matches with the provided one.
      * If a match is found, it is returned; if no match is found, null is returned.
@@ -46,7 +56,7 @@ export default class Util{
      * @return {T | null}
      */
     /*What does this code mean:
-        - T is a type that is passed to the function when called, this makes sure that the type stays consistent with
+        - T is a generic/type that is passed to the function when called, this makes sure that the type stays consistent with
           input and return and that typescript knows what the return value is and doesn't complain.
         - The type T is anything that the caller inputs but it *has* to extend this simple object. AKA it has to have an
           id property.
@@ -73,4 +83,3 @@ export default class Util{
         return data
     }
 }
-

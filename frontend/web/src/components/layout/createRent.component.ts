@@ -16,7 +16,7 @@ import localeDe from 'air-datepicker/locale/de';
 import {CreateRentDeviceEntryComponent, RentDeviceEntryComponentType} from "./createRent-DeviceEntry.component"
 import PopupEngine from "../../popupEngine"
 import RentService, {CreateRentDTO} from "../../service/rent.service"
-import {AppState} from "../../service/AppState"
+import {AppState} from "../../AppState"
 
 @customElement('cc-create-rent')
 export class CreateRentComponent extends LitElement {

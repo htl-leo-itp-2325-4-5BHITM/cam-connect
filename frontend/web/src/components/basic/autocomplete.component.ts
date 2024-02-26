@@ -34,9 +34,9 @@ export class AutocompleteComponent extends LitElement {
     render() {
         return html`
             <style>${styles}</style>
-            <input type="text" placeholder="${this.placeholder}" .disabled="${this.disabled}" 
+            <input type="text" placeholder="${this.placeholder}" .disabled="${this.disabled}" value=""
                    @focus="${this.showSuggestions}"
-                   @keyup="${this.getSuggestions}"
+                   @keyup="${this.generateSuggestions}"
             >
             <div class="suggestions">
                 ${this.options.map(option => {
@@ -52,22 +52,31 @@ export class AutocompleteComponent extends LitElement {
     }
 
     showSuggestions(){
+        console.log("showing suggestions")
+
         let input = this.shadowRoot.querySelector('input') as HTMLInputElement
         input.select()
+        this.generateSuggestions()
 
         let suggestionElem = this.shadowRoot.querySelector(".suggestions") as HTMLElement
         suggestionElem.style.display = "flex"
         setTimeout(() => {
             suggestionElem.classList.add("visible")
         },)
+
+        document.addEventListener("click", (e: Event) => this.handleAutoClose(e))
     }
 
     hideSuggestions(){
+        console.log("hiding suggestions")
+
         let suggestionElem = this.shadowRoot.querySelector(".suggestions") as HTMLElement
         suggestionElem.classList.remove("visible")
         setTimeout(() => {
             suggestionElem.style.display = "none"
         },200)
+
+        document.removeEventListener("click", (e: Event) => this.handleAutoClose(e))
     }
 
     selectSuggestion(id:number){
@@ -76,14 +85,22 @@ export class AutocompleteComponent extends LitElement {
         this.hideSuggestions()
     }
 
-    getSuggestions(){
-        console.log("getting suggestions")
+    generateSuggestions(){
         let input = this.shadowRoot.querySelector("input") as HTMLInputElement
         let searchTerm = input.value
         this.querySuggestions(searchTerm)
             .then(options => {
                 this.options = options
             })
+    }
+
+    handleAutoClose(e: Event){
+        console.log(e.target)
+        if (e.target == this.shadowRoot.querySelector("input") ||
+            e.target == this.shadowRoot.querySelector(".suggestions")) {
+            return
+        }
+        this.hideSuggestions()
     }
 }
 

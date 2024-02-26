@@ -7,7 +7,7 @@ import {filter} from "rxjs"
 import {SimpleColorEnum, SizeEnum, Tooltip} from "../../base"
 import {model} from "../../index"
 import {ObservedProperty} from "../../model"
-import {AppState} from "../../service/AppState"
+import {AppState} from "../../AppState"
 
 @customElement('cc-sidebar')
 export class SidebarComponent extends LitElement {

@@ -14,7 +14,7 @@ import localeEn from 'air-datepicker/locale/en';
 import {CreateRentComponent} from "./createRent.component"
 import {CreateRentDTO, RentTypeEnum} from "../../service/rent.service"
 import {Api, ccResponse, config, Regex} from "../../base"
-import {AppState} from "../../service/AppState"
+import {AppState} from "../../AppState"
 import localeDe from "air-datepicker/locale/de"
 import Util from "../../util"
 import {AutocompleteOption} from "../basic/autocomplete.component"

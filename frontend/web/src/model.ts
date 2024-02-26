@@ -9,7 +9,7 @@ import {FilterOption} from "./components/basic/filterContainer.component"
 import {Teacher} from "./service/teacher.service";
 import {Student} from "./service/student.service";
 import {RentListEntryComponent} from "./components/layout/rentListEntry.component"
-import {AppState} from "./service/AppState"
+import {AppState} from "./AppState"
 
 export enum PageEnum { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar" }
 

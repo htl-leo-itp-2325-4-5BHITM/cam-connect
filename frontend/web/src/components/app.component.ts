@@ -4,7 +4,7 @@ import styles from '../../styles/components/app.styles.scss'
 import {model} from "../index"
 import {ObservedProperty, PageEnum} from "../model"
 import {KeyBoardShortCut} from "../base"
-import {AppState} from "../service/AppState"
+import {AppState} from "../AppState"
 
 @customElement('cc-app')
 export class AppComponent extends LitElement {

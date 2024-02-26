@@ -1,4 +1,5 @@
 import * as trace_events from "trace_events"
+import Util from "./util"
 
 export const config = {
     api_url: "http://localhost:8080/api",
@@ -213,16 +214,9 @@ export class KeyBoardShortCut {
 
     static {
         window.addEventListener("keydown", (event: KeyboardEvent) => {
+            let focusedElem = Util.deepEventTarget(event.target as Element)
 
-            let focusedElem = event.target as Element
-            while (focusedElem != undefined) {
-                let newFocusedElem = focusedElem?.shadowRoot?.activeElement
-                if(newFocusedElem instanceof HTMLInputElement) return
-                if(newFocusedElem == undefined) break
-                focusedElem = newFocusedElem
-            }
-
-            if(event.target instanceof HTMLInputElement) return
+            if(focusedElem instanceof HTMLInputElement) return
             this.pressedKeys.add(event.key.toLowerCase()) //add the pressed key to set
             this.shortCuts.forEach(shortCut => { //check for every shortcut if all keys are currently pressed
                 //if more option keys are pressed then required dont execute the action
