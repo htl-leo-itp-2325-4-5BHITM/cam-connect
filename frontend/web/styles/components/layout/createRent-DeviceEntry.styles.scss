@@ -47,7 +47,8 @@
         flex: 1;
         input{
             /* width of the dropdown + number + gap + border in the middle */
-            width: calc(13ch + .5rem + .6rem + 2px)
+            //TODO adjust this :c
+            width: calc(18ch + .5rem + .6rem + 2px)
         }
     }
 }

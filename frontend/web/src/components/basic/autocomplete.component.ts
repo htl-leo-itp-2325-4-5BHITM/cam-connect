@@ -6,6 +6,7 @@ import { faCamera } from "@fortawesome/free-solid-svg-icons"
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import Util from "../../util"
 import {KeyBoardShortCut, Regex} from "../../base"
+import {model} from "../../index"
 
 export interface AutocompleteOption {
     id: number
@@ -22,7 +23,7 @@ export class AutocompleteComponent extends LitElement {
     disabled?: boolean = false
 
     @property()
-    selected: string = ""
+    selected: number = -1
 
     @property()
     options: AutocompleteOption[] = []
@@ -39,8 +40,9 @@ export class AutocompleteComponent extends LitElement {
         return html`
             <style>${styles}</style>
             <input type="text" placeholder="${this.placeholder}" .disabled="${this.disabled}" value=""
-                   @focus="${this.showSuggestions}"
+                   @click="${this.showSuggestions}"
                    @keyup="${this.generateSuggestions}"
+                   @blur="${this.handleAutoClose}"
             >
             <div class="suggestions">
                 ${this.options.map(option => {
@@ -74,6 +76,7 @@ export class AutocompleteComponent extends LitElement {
         KeyBoardShortCut.register(["ArrowUp"], () => this.moveFocus("up"), "autocomplete", true)
         KeyBoardShortCut.register(["ArrowDown"], () => this.moveFocus("down"), "autocomplete", true)
         KeyBoardShortCut.register(["Enter"], () => {this.selectSuggestion(this.focusedId)}, "autocomplete", true)
+        KeyBoardShortCut.register(["Escape"], () => {this.hideSuggestions()}, "autocomplete", true)
     }
 
     hideSuggestions(){
@@ -83,15 +86,27 @@ export class AutocompleteComponent extends LitElement {
             suggestionElem.style.display = "none"
         },200)
 
+        let input = this.shadowRoot.querySelector("input")
+        console.log(this.selected)
+        if(this.selected > -1) {
+            console.log(Object.values(model.deviceTypes.value).flat())
+            input.value = Object.values(model.deviceTypes.value).flat().find(deviceType => deviceType.type_id == this.selected).name
+        }
+        else
+            input.value = ""
+
+        //input.blur()
+
         document.removeEventListener("click", this.boundHandelAutoClose)
 
         KeyBoardShortCut.remove("autocomplete")
     }
 
     selectSuggestion(id:number){
-        let input = this.shadowRoot.querySelector("input")
-        input.value = this.options.find(option => option.id == id).name
-        input.blur()
+        console.log("selecting", id)
+        if(!id || id < 0) return
+        this.selected = id
+        this.shadowRoot.querySelector("input").focus()
         this.hideSuggestions()
     }
 
@@ -112,7 +127,7 @@ export class AutocompleteComponent extends LitElement {
 
     boundHandelAutoClose = this.handleAutoClose.bind(this)
     handleAutoClose(e: Event){
-        let target = Util.deepEventTarget(e.target as Element)
+        let target = Util.deepEventTarget()
         if (target == this.shadowRoot.querySelector("input") ||
             target == this.shadowRoot.querySelector(".suggestions")) {
             return
@@ -121,7 +136,10 @@ export class AutocompleteComponent extends LitElement {
     }
 
     focusEntry(entry: HTMLElement){
-        if(!entry) return
+        if(!entry) {
+            this.focusedId = -1
+            return
+        }
         this.shadowRoot.querySelectorAll(".entry.focused")
             .forEach(entry => entry.classList.remove("focused"))
         entry?.classList.add("focused")

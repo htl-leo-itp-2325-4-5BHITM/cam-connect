@@ -35,7 +35,7 @@ export default class Util{
         }
     }
 
-    static deepEventTarget(startpoint: Element){
+    static deepEventTarget(startpoint: Element = document.activeElement){
         let focusedElem = startpoint
         while (focusedElem != undefined) {
             let newFocusedElem = focusedElem?.shadowRoot?.activeElement
