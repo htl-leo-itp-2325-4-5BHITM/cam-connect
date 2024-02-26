@@ -46,9 +46,8 @@
     .left{
         flex: 1;
         input{
-            /* width of the dropdown + number + gap + border in the middle */
-            //TODO adjust this :c
-            width: calc(18ch + .5rem + .6rem + 2px)
+            /* width of the (dropdown + number) + gap .. paddings cancel out between equip input and number input */
+            width: calc(18ch + .5rem)
         }
     }
 }

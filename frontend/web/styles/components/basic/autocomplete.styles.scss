@@ -4,6 +4,16 @@
   position: relative;
 }
 
+:host(.error) input{
+  outline: 1px solid $badDark;
+  border-color: $badDark;
+
+  &:focus-visible{
+    border-color: $bad;
+    outline-color: $bad;
+  }
+}
+
 input{
   width: 100%;
   box-sizing: border-box;

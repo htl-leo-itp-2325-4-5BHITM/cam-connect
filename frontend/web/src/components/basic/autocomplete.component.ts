@@ -1,8 +1,7 @@
-import {LitElement, html, PropertyValues} from 'lit'
+import {LitElement, html, PropertyValues, TemplateResult} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/autocomplete.styles.scss'
-import { icon } from '@fortawesome/fontawesome-svg-core'
-import { faCamera } from "@fortawesome/free-solid-svg-icons"
+import {icon, IconDefinition} from '@fortawesome/fontawesome-svg-core'
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import Util from "../../util"
 import {KeyBoardShortCut, Regex} from "../../base"
@@ -23,7 +22,7 @@ export class AutocompleteComponent extends LitElement {
     disabled?: boolean = false
 
     @property()
-    selected: number = -1
+    selectedId: number = -1
 
     @property()
     options: AutocompleteOption[] = []
@@ -32,38 +31,45 @@ export class AutocompleteComponent extends LitElement {
     onSelect = (id: number) => {}
 
     @property()
-    querySuggestions: (searchTerm: string) => Promise<AutocompleteOption[]>
+    querySuggestions: (searchTerm: string) => Promise<AutocompleteOption[]> = async function(searchTerm){return [{name: "no query function", id: -1}]}
 
-    focusedId: number = -1
+    @property()
+    iconProvider: (type: string) => TemplateResult = (type) => {return html`O`}
+
+    private focusedId: number = -1
+
+    private suggestionsVisible: boolean = false
 
     render() {
         return html`
             <style>${styles}</style>
             <input type="text" placeholder="${this.placeholder}" .disabled="${this.disabled}" value=""
-                   @click="${this.showSuggestions}"
+                   @focus="${(e)=>{e.target.select()}}"
+                   @click="${()=>{this.showSuggestions(); this.generateSuggestions()}}"
                    @keyup="${this.generateSuggestions}"
                    @blur="${this.handleAutoClose}"
             >
             <div class="suggestions">
-                ${this.options.map(option => {
-                    return html`
-                        <div class="entry" @click="${()=>this.selectSuggestion(option.id)}" 
-                             @mouseenter="${(e: Event) => {this.focusEntry(e.target as HTMLElement)}}"
-                             data-id="${option.id}"
-                        >
-                            ${unsafeSVG(icon(faCamera).html[0])}
-                            <label>${option.name}</label>
-                        </div>
-                    `
-                })}
+                ${
+                    this.options.length == 0 ? html`<div class="empty">Keine Ergebnisse</div>` :
+                    this.options.map(option => {
+                        return html`
+                            <div class="entry" @click="${()=>this.selectSuggestion(option.id)}" 
+                                 @mouseenter="${(e: Event) => {this.focusEntry(e.target as HTMLElement)}}"
+                                 data-id="${option.id}"
+                            >
+                                ${this.iconProvider(option.type)}
+                                <label>${option.name}</label>
+                            </div>
+                        `
+                    })
+                }
             </div>
         `
     }
 
     showSuggestions(){
-        let input = this.shadowRoot.querySelector('input') as HTMLInputElement
-        input.select()
-        this.generateSuggestions()
+        this.suggestionsVisible = true
 
         let suggestionElem = this.shadowRoot.querySelector(".suggestions") as HTMLElement
         suggestionElem.style.display = "flex"
@@ -80,6 +86,8 @@ export class AutocompleteComponent extends LitElement {
     }
 
     hideSuggestions(){
+        this.suggestionsVisible = false
+
         let suggestionElem = this.shadowRoot.querySelector(".suggestions") as HTMLElement
         suggestionElem.classList.remove("visible")
         setTimeout(() => {
@@ -87,10 +95,8 @@ export class AutocompleteComponent extends LitElement {
         },200)
 
         let input = this.shadowRoot.querySelector("input")
-        console.log(this.selected)
-        if(this.selected > -1) {
-            console.log(Object.values(model.deviceTypes.value).flat())
-            input.value = Object.values(model.deviceTypes.value).flat().find(deviceType => deviceType.type_id == this.selected).name
+        if(this.selectedId > -1) {
+            input.value = Object.values(model.deviceTypes.value).flat().find(deviceType => deviceType.type_id == this.selectedId).name
         }
         else
             input.value = ""
@@ -103,18 +109,22 @@ export class AutocompleteComponent extends LitElement {
     }
 
     selectSuggestion(id:number){
-        console.log("selecting", id)
         if(!id || id < 0) return
-        this.selected = id
+        this.selectedId = id
         this.shadowRoot.querySelector("input").focus()
         this.hideSuggestions()
+        this.onSelect(this.selectedId)
     }
 
     generateSuggestions(e?: KeyboardEvent){
         let input = this.shadowRoot.querySelector("input") as HTMLInputElement
         if(e) {
-            if (e.key == "ArrowUp" || e.key == "ArrowDown" || e.key == "Enter") return
+            console.log(e.key)
+            if (["ArrowUp", "ArrowDown", "Enter", "Alt", "Control"].includes(e.key)) return
         }
+
+        if(!this.suggestionsVisible) this.showSuggestions()
+
         let searchTerm = input.value
         this.querySuggestions(searchTerm)
             .then(options => {
@@ -127,9 +137,12 @@ export class AutocompleteComponent extends LitElement {
 
     boundHandelAutoClose = this.handleAutoClose.bind(this)
     handleAutoClose(e: Event){
+        //TODO target is the body for some reason so clicking the padding of the suggestion box closes it
         let target = Util.deepEventTarget()
         if (target == this.shadowRoot.querySelector("input") ||
-            target == this.shadowRoot.querySelector(".suggestions")) {
+            target == this.shadowRoot.querySelector(".suggestions") ||
+            target.classList.contains("entry"))
+        {
             return
         }
         this.hideSuggestions()

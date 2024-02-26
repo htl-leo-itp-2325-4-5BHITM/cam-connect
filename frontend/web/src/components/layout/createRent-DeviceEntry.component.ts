@@ -7,7 +7,7 @@ import {model} from "../../index"
 
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { icon } from '@fortawesome/fontawesome-svg-core'
-import { faXmark } from "@fortawesome/free-solid-svg-icons"
+import { faXmark, faCamera, faMicrophone, faLightbulb, faHelicopter } from "@fortawesome/free-solid-svg-icons"
 
 import AirDatepicker from 'air-datepicker';
 import localeEn from 'air-datepicker/locale/en';
@@ -18,6 +18,7 @@ import {AppState} from "../../AppState"
 import localeDe from "air-datepicker/locale/de"
 import Util from "../../util"
 import {AutocompleteOption} from "../basic/autocomplete.component"
+import de from "air-datepicker/locale/de"
 
 export interface CreateRentDeviceEntryData {
     device_type_id: number
@@ -102,7 +103,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
             return html`
                 <style>${styles}</style>
                 <div class="left">
-                    <input type="text" value="${this.data.device_string}" class="name" placeholder="Equipment" 
+                    <input type="text" value="${this.data.device_string}" class="name" placeholder="Gerätename" 
                            @blur="${(e) => {this.data.device_string = e.target.value}}">
                 </div>
     
@@ -116,8 +117,9 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                 <style>${styles}</style>
                 <div class="left">
                     <cc-autocomplete placeholder="Name" class="name" 
-                                     onSelect="${(id:number) => {this.data.device_type_id = id}}"
+                                     .onSelect="${(id:number) => {this.data.device_type_id = id}}"
                                      .querySuggestions="${this.searchForDeviceType}"
+                                     .iconProvider="${this.provideDeviceTypeIcon}"
                     ></cc-autocomplete>
                     <input type="text" value="" class="number" placeholder="Nr." 
                            @blur="${(e) => {this.data.device_number = e.target.value}}">
@@ -130,7 +132,13 @@ export class CreateRentDeviceEntryComponent extends LitElement {
             `
     }
 
+    //TODO re write the validation system to be less chaotic and work cleaner
+    //should also imediatly be validated when both are entered
     async validate():Promise<boolean> {
+        this.shadowRoot.querySelectorAll("input").forEach((input)=>{
+            input.classList.remove("error")
+            input.removeEventListener("blur", this.boundValidateInput)
+        })
         console.log("validating")
 
         if(this.type == "string"){
@@ -145,6 +153,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                 Regex.anyThingButNumbers.test(String(this.data.device_type_id)) ||
                 this.data.device_type_id < 0
             ) {
+                console.log(this.data.device_type_id)
                 this.highlightInputError(this.shadowRoot.querySelector(".name"))
                 return false
             }
@@ -167,16 +176,6 @@ export class CreateRentDeviceEntryComponent extends LitElement {
         }
 
         return true
-    }
-
-    async searchForDeviceType(searchTerm: string): Promise<AutocompleteOption[]> {
-        try {
-            const result: ccResponse<AutocompleteOption[]> = await Api.postData("/devicetype/search", {searchTerm: searchTerm})
-            return result.data
-        } catch (e) {
-            console.error(e)
-            return []
-        }
     }
 
     /**
@@ -206,8 +205,30 @@ export class CreateRentDeviceEntryComponent extends LitElement {
     }
 
     validateInput(e: Event){
-        e.target.removeEventListener("blur", this.boundValidateInput);
         this.validate();
+    }
+
+    async searchForDeviceType(searchTerm: string): Promise<AutocompleteOption[]> {
+        try {
+            const result: ccResponse<AutocompleteOption[]> = await Api.postData("/devicetype/search", {searchTerm: searchTerm})
+            return result.data
+        } catch (e) {
+            console.error(e)
+            return []
+        }
+    }
+
+    provideDeviceTypeIcon(type: string){
+        switch (type){
+            case "camera": return unsafeSVG(icon(faCamera).html[0])
+            case "microphone": return unsafeSVG(icon(faMicrophone).html[0])
+            case "drone": return unsafeSVG(icon(faHelicopter).html[0])
+            case "lens":
+            case "light": return unsafeSVG(icon(faLightbulb).html[0])
+            case "stabilizer":
+            case "tripod": return html`T`
+            default: return html`Icon`
+        }
     }
 
     toRentObject(): CreateRentDTO {
