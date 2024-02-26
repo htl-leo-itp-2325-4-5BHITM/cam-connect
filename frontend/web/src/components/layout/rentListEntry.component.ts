@@ -77,7 +77,10 @@ export class RentListEntryComponent extends LitElement {
                     </div>
                 </cc-chip>
                 
-                <cc-circle-select @click="${() => {this.toggleRentCheck()}}" .checked="${this.checked}" size="${SizeEnum.SMALL}"></cc-circle-select>
+                <cc-circle-select @click="${() => {this.toggleRentCheck()}}" 
+                                  .checked="${this.appState.value.selectedRentEntries.has(this)}" 
+                                  size="${SizeEnum.SMALL}">
+                </cc-circle-select>
             </div>
         `
     }

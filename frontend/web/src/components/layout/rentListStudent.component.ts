@@ -20,7 +20,6 @@ export class RentListStudentComponent extends LitElement {
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
 
-
         model.appState.subscribe(data => {
             this.autoCheckSelectAll()
         })
