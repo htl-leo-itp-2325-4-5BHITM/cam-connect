@@ -65,6 +65,7 @@ export class CreateRentComponent extends LitElement {
         })
         this.addDevice()
         this.appState.value.createRentComponent = this
+        console.log(this.appState.value.createRentComponent)
     }
 
     render() {

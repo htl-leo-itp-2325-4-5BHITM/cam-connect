@@ -47,8 +47,8 @@ export class AppState{
     openCreateRentModal(){
         //super weird js behavior here: when passing only the function reference instead of an anonymous function
         //the "this" reference in the CreateRent class will be the AppState, try adding a log of "this" in the cancel method
-        this.addCurrentActionCancellation(() => { this.createRentComponent.cancel() }, "createRentModal")
-        KeyBoardShortCut.register(["shift", "g"], () => {this._createRentComponent.addDevice()}, "addDevice")
+        this.addCurrentActionCancellation(() => { this._createRentComponent?.cancel() }, "createRentModal")
+        KeyBoardShortCut.register(["shift", "g"], () => { this._createRentComponent?.addDevice() }, "addDevice")
         this._createRentModalOpen = true
         this.update()
     }
