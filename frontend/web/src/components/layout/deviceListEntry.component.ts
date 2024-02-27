@@ -5,7 +5,7 @@ import {ButtonType} from "../basic/button.component"
 import {ColorEnum} from "../../base"
 import {DeviceListComponent} from "./deviceList.component";
 import {Device} from "../../service/device.service"
-import {DeviceType, DeviceTypeVariantEnum} from "../../service/deviceType.service"
+import {CameraType, DeviceType, DeviceTypeVariantEnum} from "../../service/deviceType.service"
 
 @customElement('cc-device-list-entry')
 export class RentListEntryComponent extends LitElement {
@@ -13,16 +13,16 @@ export class RentListEntryComponent extends LitElement {
     deviceType?: DeviceType
 
     render() {
-        console.log(this.deviceType)
         switch(this.deviceType.variant){
             case DeviceTypeVariantEnum.camera: return this.renderCamera()
         }
     }
 
     renderCamera() {
+        let camera = this.deviceType as CameraType
         return html`
             <style>${styles}</style>
-            <h3>${this.deviceType.name}</h3>
+            <h3>${camera.name}</h3>
             <div class="tags">
                 <cc-chip color="${ColorEnum.GRAY}">Kamera</cc-chip>
                 <cc-chip color="${ColorEnum.GRAY}">Foto</cc-chip>
@@ -34,11 +34,12 @@ export class RentListEntryComponent extends LitElement {
             
             <section>
                 <div class="details">
-                    <cc-property-value size="small" property="Sensor" value="Full-Frame" isLink></cc-property-value>
-                    <cc-property-value size="small" property="Auflösung" value="4k Video, 5k Foto"></cc-property-value>
-                    <cc-property-value size="small" property="Maximale-Framerate" value="185fps"></cc-property-value>
-                    <cc-property-value size="small" property="Mount" value="L-Mount" isLink></cc-property-value>
-                    <cc-property-value size="small" property="Autofokus" value="${this.deviceType}"></cc-property-value>
+                    <cc-property-value size="small" property="System" value="${camera.system.name}"></cc-property-value>
+                    <cc-property-value size="small" property="Sensor" value="${camera.sensor}" isLink></cc-property-value>
+                    <cc-property-value size="small" property="Auflösung" value="${camera.resolution.name}"></cc-property-value>
+                    <cc-property-value size="small" property="Maximale-Framerate" value="${camera.framerate}fps"></cc-property-value>
+                    <cc-property-value size="small" property="Mount" value="${camera.mount}" isLink></cc-property-value>
+                    <cc-property-value size="small" property="Autofokus" value="${camera.autofocus ? 'Ja' : 'Nein'}"></cc-property-value>
                 </div>
                 <div class="image">
                     <img src="../../../assets/tempCamera.png" alt="">

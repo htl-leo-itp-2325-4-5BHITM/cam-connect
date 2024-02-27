@@ -85,8 +85,8 @@ export interface TripodTypeDTO extends DeviceTypeSource{
     head_id: number
 }
 
-export type DeviceType = (CameraType | AudioType | DroneType | LensType | StabilizerType | TripodType)
 
+export type DeviceType = (CameraType | AudioType | DroneType | LensType | StabilizerType | TripodType)
 //endregion interfaces
 
 export interface DeviceTypeVariantCollection {
