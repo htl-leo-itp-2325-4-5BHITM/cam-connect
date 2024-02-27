@@ -14,6 +14,7 @@ export class RentListEntryComponent extends LitElement {
 
     render() {
         let device = model.devices.value[this.deviceNumber]
+        console.log(device)
 
         return html`
             <style>${styles}</style>

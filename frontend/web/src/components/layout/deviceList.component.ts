@@ -23,7 +23,7 @@ export class DeviceListComponent extends LitElement {
             <style>${styles}</style>
             
             ${this.devices.value.map(device => {
-                return this.generateStudent(count++)
+                return this.generateDevice(count++)
             })}
         `
     }
@@ -33,7 +33,7 @@ export class DeviceListComponent extends LitElement {
         new WidthResizeObserver(this, [{size: 0, key: "small"}, {size: 600, key: "medium"}, {size: 1000, key: "large"}, {size: 1200, key: "xLarge"}])
     }
 
-    generateStudent(count: number){
+    generateDevice(count: number){
         return html`
             <cc-device-list-entry deviceNumber="${count}"></cc-device-list-entry>
         `

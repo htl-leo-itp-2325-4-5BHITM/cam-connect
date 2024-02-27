@@ -1,6 +1,7 @@
 package at.camconnect.model.DeviceTypeVariants;
 
 import at.camconnect.dtos.DeviceTypeGlobal;
+import at.camconnect.enums.DeviceTypeEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.responseSystem.CCException;
 import jakarta.persistence.Entity;
@@ -9,6 +10,10 @@ import jakarta.persistence.Entity;
 public class StabilizerType extends DeviceType {
     private int max_weight;
     private int number_of_axis;
+
+    public StabilizerType() {
+        setVariant(DeviceTypeEnum.stabilizer);
+    }
 
     public StabilizerType(String typeName, int max_weight, int number_of_axis) {
         super(typeName);
@@ -26,8 +31,6 @@ public class StabilizerType extends DeviceType {
         }
     }
 
-    public StabilizerType() {
-    }
     public int getMax_weight() {
         return max_weight;
     }

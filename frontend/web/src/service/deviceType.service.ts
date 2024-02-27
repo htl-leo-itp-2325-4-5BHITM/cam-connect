@@ -5,8 +5,13 @@ import {CameraResolution, CameraSensor, CameraSystem, LensMount, TripodHead} fro
 //region devicetype interfaces
 export interface DeviceType{
     type_id: number
+    variant: DeviceTypeVariantEnum
     name: string
     image: string
+}
+
+export enum DeviceTypeVariantEnum {
+    microphone, camera, drone, lens, light, stabilizer, tripod
 }
 
 export interface AudioType extends DeviceType{
