@@ -98,11 +98,33 @@ export interface DeviceTypeVariantCollection {
     stabilizerTypes: StabilizerType[]
     tripodHeads: TripodType[]
 }
+
+export interface DeviceTypeFullDTO {
+    deviceType: DeviceType
+    available: number
+    deviceTags: Tag[]
+}
+
+export interface Tag {
+    tag_id: number
+    description: string
+}
+
 export default class DeviceTypeService {
     static fetchAll(){
         Api.fetchData<DeviceTypeVariantCollection>("/devicetype/getall")
             .then(data => {
                 model.loadDeviceTypes(data)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
+
+    static fetchAllFull(){
+        Api.fetchData<DeviceTypeFullDTO>("/devicetype/getallfull")
+            .then(data => {
+                model.loadDeviceTypesFull(data)
             })
             .catch(error => {
                 console.error(error)

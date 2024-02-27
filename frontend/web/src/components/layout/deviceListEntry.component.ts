@@ -5,31 +5,32 @@ import {ButtonType} from "../basic/button.component"
 import {ColorEnum} from "../../base"
 import {DeviceListComponent} from "./deviceList.component";
 import {Device} from "../../service/device.service"
-import {CameraType, DeviceType, DeviceTypeVariantEnum} from "../../service/deviceType.service"
+import {CameraType, DeviceType, DeviceTypeFullDTO, DeviceTypeVariantEnum} from "../../service/deviceType.service"
 
 @customElement('cc-device-list-entry')
 export class RentListEntryComponent extends LitElement {
     @property()
-    deviceType?: DeviceType
+    deviceTypeFull?: DeviceTypeFullDTO
 
     render() {
-        switch(this.deviceType.variant){
+        console.log(this.deviceTypeFull)
+        switch(this.deviceTypeFull.deviceType.variant){
             case DeviceTypeVariantEnum.camera: return this.renderCamera()
         }
     }
 
     renderCamera() {
-        let camera = this.deviceType as CameraType
+        console.log(this.deviceTypeFull.available)
+        let camera = this.deviceTypeFull.deviceType as CameraType
         return html`
             <style>${styles}</style>
             <h3>${camera.name}</h3>
             <div class="tags">
-                <cc-chip color="${ColorEnum.GRAY}">Kamera</cc-chip>
-                <cc-chip color="${ColorEnum.GRAY}">Foto</cc-chip>
-                <cc-chip color="${ColorEnum.GRAY}">Video</cc-chip>
-                <cc-chip color="${ColorEnum.GRAY}">Slow-Mo</cc-chip>
-                <cc-chip color="${ColorEnum.GRAY}">4te Klasse</cc-chip>
-                <cc-chip color="${ColorEnum.GRAY}">5te Klasse</cc-chip>
+                ${
+                    this.deviceTypeFull.deviceTags.map(tag => {
+                        return html`<cc-chip color="${ColorEnum.GRAY}" text="${tag.description}"></cc-chip>`
+                    })
+                }
             </div>
             
             <section>
@@ -47,7 +48,7 @@ export class RentListEntryComponent extends LitElement {
             </section>
             
             <div class="bottom">
-                <cc-chip color="${ColorEnum.GOOD}">7 Verfügbar</cc-chip>
+                <cc-chip color="${ColorEnum.GOOD}" text="${this.deviceTypeFull.available} Verfügbar"></cc-chip>
                 <cc-button type="${ButtonType.OUTLINED}">Verleihen</cc-button>
             </div>
             

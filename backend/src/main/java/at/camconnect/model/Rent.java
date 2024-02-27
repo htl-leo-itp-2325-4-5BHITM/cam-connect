@@ -35,6 +35,7 @@ public class Rent {
     private final LocalDateTime creation_date;
     private String verification_code;
     private String verification_message;
+
     private RentStatusEnum status;
     private String note;
     private String device_string;
