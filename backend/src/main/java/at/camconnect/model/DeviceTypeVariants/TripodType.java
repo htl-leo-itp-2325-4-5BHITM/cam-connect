@@ -1,6 +1,7 @@
 package at.camconnect.model.DeviceTypeVariants;
 
 import at.camconnect.dtos.DeviceTypeGlobalObjectsDTO;
+import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypeAttributes.TripodHead;
 import at.camconnect.responseSystem.CCException;
@@ -26,6 +27,7 @@ public class TripodType extends DeviceType {
     }
 
     public TripodType() {
+        setVariant(DeviceTypeVariantEnum.tripod);
     }
 
     public TripodType(String typeName, double height, TripodHead head) {

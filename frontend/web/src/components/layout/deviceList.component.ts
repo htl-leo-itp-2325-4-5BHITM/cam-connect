@@ -6,24 +6,25 @@ import {WidthResizeObserver} from "../../base"
 import {ObservedProperty} from "../../model"
 import {Device} from "../../service/device.service"
 import {RentByStudentDTO} from "../../service/rent.service"
+import {DeviceType, DeviceTypeVariantCollection} from "../../service/deviceType.service"
 
 @customElement('cc-device-list')
 export class DeviceListComponent extends LitElement {
     @property()
-    private devices: ObservedProperty<Device[]>
+    private deviceTypes: ObservedProperty<DeviceTypeVariantCollection>
 
     constructor() {
         super()
-        this.devices = new ObservedProperty<Device[]>(this, model.devices)
+        this.deviceTypes = new ObservedProperty<DeviceTypeVariantCollection>(this, model.deviceTypes)
     }
     render() {
-        let count = 0;
+        let deviceTypes = Object.values(this.deviceTypes.value).flat()
 
         return html`
             <style>${styles}</style>
-            
-            ${this.devices.value.map(device => {
-                return this.generateStudent(count++)
+
+            ${deviceTypes.map(deviceType => {
+                return html`<cc-device-list-entry .deviceType="${deviceType}"></cc-device-list-entry>`
             })}
         `
     }
@@ -31,12 +32,6 @@ export class DeviceListComponent extends LitElement {
     connectedCallback() {
         super.connectedCallback();
         new WidthResizeObserver(this, [{size: 0, key: "small"}, {size: 600, key: "medium"}, {size: 1200, key: "large"}, {size: 1400, key: "xLarge"}])
-    }
-
-    generateStudent(count: number){
-        return html`
-            <cc-device-list-entry deviceNumber="${count}"></cc-device-list-entry>
-        `
     }
 }
 

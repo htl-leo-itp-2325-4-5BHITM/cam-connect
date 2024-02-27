@@ -2,6 +2,8 @@ package at.camconnect.repository;
 
 import at.camconnect.dtos.*;
 import at.camconnect.model.DeviceTypeAttributes.*;
+import at.camconnect.model.Student;
+import at.camconnect.model.Tag;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
@@ -12,6 +14,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Table;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -81,6 +84,21 @@ public class DeviceTypeRepository {
         }
 
         return result;
+    }
+
+    public List<DeviceTypeFullDTO> getAllFull() {
+        List<DeviceType> deviceTypeList = em.createQuery("select dt from DeviceType dt", DeviceType.class).getResultList();
+
+        List<DeviceTypeFullDTO> list = new LinkedList<>();
+        for(DeviceType deviceType : deviceTypeList){
+            int availableDevices = em.createQuery("select count(d) from Device d " +
+                    "where d.device_id not in (select r.device.device_id from Rent r) " +
+                    "group by d.type.type_id", Integer.class).getSingleResult();
+            /**List<Tag> tagList = em.createQuery("select t from Tag t " +
+             "join DeviceType dt on dt = t.type" +
+             "where type_type_id = 1;", Tag.class).getResultList();**/
+        }
+        return list;
     }
 
     public void remove(Long id){

@@ -1,6 +1,9 @@
 package at.camconnect.model;
 
 import at.camconnect.dtos.DeviceTypeGlobalObjectsDTO;
+import at.camconnect.dtos.DeviceTypeDTO;
+import at.camconnect.enums.DeviceTypeVariantEnum;
+import jakarta.json.JsonObject;
 import jakarta.persistence.*;
 
 @Entity
@@ -9,10 +12,25 @@ public abstract class DeviceType{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long type_id;
+
+    @Enumerated(EnumType.STRING)
+    private DeviceTypeVariantEnum variant;
     private String name;
     private String image;
 
     abstract public void update(DeviceTypeGlobalObjectsDTO data);
+
+    public void setType_id(Long type_id) {
+        this.type_id = type_id;
+    }
+
+    public DeviceTypeVariantEnum getVariant() {
+        return variant;
+    }
+
+    public void setVariant(DeviceTypeVariantEnum variant) {
+        this.variant = variant;
+    }
 
     public String getImage() {
         return image;

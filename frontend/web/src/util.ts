@@ -1,10 +1,11 @@
-import {DeviceType} from "./service/deviceType.service"
+import {DeviceTypeSource} from "./service/deviceType.service"
 import {FilterOption} from "./components/basic/filterContainer.component"
 import {DeviceTypeAttribute} from "./service/deviceTypeAttribute.service"
 import * as repl from "repl"
 import {AutocompleteOption} from "./components/basic/autocomplete.component"
 export default class Util{
-    static deviceTypeToFilterOption(deviceTypes: DeviceType): FilterOption{
+    //TODO this typing does not seem right
+    static deviceTypeToFilterOption(deviceTypes: DeviceTypeSource): FilterOption{
         return {
             name: deviceTypes.name,
             id: deviceTypes.type_id,
@@ -27,7 +28,7 @@ export default class Util{
         }
     }
 
-    static deviceTypeVariantToAutocompleteOption(deviceTypeVariant: DeviceType): AutocompleteOption<DeviceType>{
+    static deviceTypeVariantToAutocompleteOption(deviceTypeVariant: DeviceTypeSource): AutocompleteOption{
         return {
             data: deviceTypeVariant,
             id: deviceTypeVariant.type_id,

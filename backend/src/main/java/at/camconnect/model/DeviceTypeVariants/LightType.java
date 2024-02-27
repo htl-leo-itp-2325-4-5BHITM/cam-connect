@@ -1,6 +1,7 @@
 package at.camconnect.model.DeviceTypeVariants;
 
 import at.camconnect.dtos.DeviceTypeGlobalObjectsDTO;
+import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.responseSystem.CCException;
 import jakarta.persistence.Entity;
@@ -10,6 +11,10 @@ public class LightType extends DeviceType {
     private int watts;
     private boolean rgb;
     private boolean variable_temperature;
+
+    public LightType() {
+        setVariant(DeviceTypeVariantEnum.light);
+    }
 
     public LightType(String typeName, int watts, boolean rgb, boolean variable_temperature) {
         super(typeName);
@@ -29,8 +34,6 @@ public class LightType extends DeviceType {
         }
     }
 
-    public LightType() {
-    }
     public int getWatts() {
         return watts;
     }
