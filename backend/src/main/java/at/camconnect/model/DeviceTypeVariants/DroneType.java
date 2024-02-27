@@ -1,7 +1,7 @@
 package at.camconnect.model.DeviceTypeVariants;
 
 import at.camconnect.dtos.DeviceTypeGlobal;
-import at.camconnect.enums.DeviceTypeEnum;
+import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypeAttributes.CameraResolution;
 import at.camconnect.model.DeviceTypeAttributes.CameraSensor;
@@ -21,7 +21,7 @@ public class DroneType extends DeviceType {
     private int max_range;
 
     public DroneType() {
-        setVariant(DeviceTypeEnum.drone);
+        setVariant(DeviceTypeVariantEnum.drone);
     }
 
     public DroneType(String typeName, CameraSensor sensor, CameraResolution resolution, int max_range) {

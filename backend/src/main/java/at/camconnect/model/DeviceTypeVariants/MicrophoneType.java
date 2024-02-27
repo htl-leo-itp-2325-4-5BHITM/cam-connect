@@ -1,7 +1,7 @@
 package at.camconnect.model.DeviceTypeVariants;
 
 import at.camconnect.dtos.DeviceTypeGlobal;
-import at.camconnect.enums.DeviceTypeEnum;
+import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.Device;
 import at.camconnect.model.DeviceType;
 import at.camconnect.responseSystem.CCException;
@@ -14,7 +14,7 @@ public class MicrophoneType extends DeviceType {
     private boolean needs_recorder;
 
     public MicrophoneType() {
-        setVariant(DeviceTypeEnum.microphone);
+        setVariant(DeviceTypeVariantEnum.microphone);
     }
 
     public MicrophoneType(String typeName, boolean windblocker, boolean wireless, boolean needs_recorder) {

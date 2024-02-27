@@ -1,6 +1,6 @@
 import {model} from "../index"
 import {config, Api, ccResponse} from "../base"
-import {DeviceType, DeviceTypeVariantCollection, DeviceTypeVariantEnum} from "./deviceType.service"
+import {DeviceTypeSource, DeviceTypeVariantCollection, DeviceTypeVariantEnum} from "./deviceType.service"
 import {RentByStudentDTO} from "./rent.service"
 
 export interface Device{
@@ -8,7 +8,7 @@ export interface Device{
     serial: string
     number: string
     note: string
-    type: DeviceType
+    type: DeviceTypeSource
 }
 
 export interface DeviceDTO{

@@ -1,7 +1,7 @@
 package at.camconnect.model.DeviceTypeVariants;
 
 import at.camconnect.dtos.DeviceTypeGlobal;
-import at.camconnect.enums.DeviceTypeEnum;
+import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypeAttributes.CameraResolution;
 import at.camconnect.model.DeviceTypeAttributes.CameraSensor;
@@ -44,7 +44,7 @@ public class CameraType extends DeviceType {
     }
 
     public CameraType() {
-        setVariant(DeviceTypeEnum.camera);
+        setVariant(DeviceTypeVariantEnum.camera);
     }
     public CameraType(String typeName, CameraSensor sensor, CameraResolution resolution, LensMount mount, CameraSystem system, int framerate, boolean autofocus) {
         super(typeName);

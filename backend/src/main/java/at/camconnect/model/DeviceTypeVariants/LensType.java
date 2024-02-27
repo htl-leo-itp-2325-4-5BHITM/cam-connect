@@ -1,7 +1,7 @@
 package at.camconnect.model.DeviceTypeVariants;
 
 import at.camconnect.dtos.DeviceTypeGlobal;
-import at.camconnect.enums.DeviceTypeEnum;
+import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypeAttributes.LensMount;
 import at.camconnect.responseSystem.CCException;
@@ -18,7 +18,7 @@ public class LensType extends DeviceType {
     private int focal_length;
 
     public LensType() {
-        setVariant(DeviceTypeEnum.lens);
+        setVariant(DeviceTypeVariantEnum.lens);
     }
 
     public LensType(String typeName, double f_stop, LensMount lens_mount, int focal_length) {

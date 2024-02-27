@@ -1,24 +1,28 @@
 import {html, LitElement} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/deviceListEntry.styles.scss'
-import { ButtonType} from "../basic/button.component"
-import {CircleSelectType} from "../basic/circleSelect.component"
+import {ButtonType} from "../basic/button.component"
 import {ColorEnum} from "../../base"
-import {model} from "../../index";
 import {DeviceListComponent} from "./deviceList.component";
+import {Device} from "../../service/device.service"
+import {DeviceType, DeviceTypeVariantEnum} from "../../service/deviceType.service"
 
 @customElement('cc-device-list-entry')
 export class RentListEntryComponent extends LitElement {
     @property()
-    deviceNumber?: number
+    deviceType?: DeviceType
 
     render() {
-        let device = model.devices.value[this.deviceNumber]
-        console.log(device)
+        console.log(this.deviceType)
+        switch(this.deviceType.variant){
+            case DeviceTypeVariantEnum.camera: return this.renderCamera()
+        }
+    }
 
+    renderCamera() {
         return html`
             <style>${styles}</style>
-            <h3>${device.type.name}</h3>
+            <h3>${this.deviceType.name}</h3>
             <div class="tags">
                 <cc-chip color="${ColorEnum.GRAY}">Kamera</cc-chip>
                 <cc-chip color="${ColorEnum.GRAY}">Foto</cc-chip>
@@ -34,7 +38,7 @@ export class RentListEntryComponent extends LitElement {
                     <cc-property-value size="small" property="Auflösung" value="4k Video, 5k Foto"></cc-property-value>
                     <cc-property-value size="small" property="Maximale-Framerate" value="185fps"></cc-property-value>
                     <cc-property-value size="small" property="Mount" value="L-Mount" isLink></cc-property-value>
-                    <cc-property-value size="small" property="Autofokus" value="Ja"></cc-property-value>
+                    <cc-property-value size="small" property="Autofokus" value="${this.deviceType}"></cc-property-value>
                 </div>
                 <div class="image">
                     <img src="../../../assets/tempCamera.png" alt="">

@@ -3,7 +3,7 @@ import {model} from "../index"
 import {CameraResolution, CameraSensor, CameraSystem, LensMount, TripodHead} from "./deviceTypeAttribute.service"
 
 //region devicetype interfaces
-export interface DeviceType{
+export interface DeviceTypeSource {
     type_id: number
     variant: DeviceTypeVariantEnum
     name: string
@@ -11,10 +11,10 @@ export interface DeviceType{
 }
 
 export enum DeviceTypeVariantEnum {
-    microphone, camera, drone, lens, light, stabilizer, tripod
+    microphone="microphone", camera="camera", drone="drone", lens="lens", light="light", stabilizer="stabilizer", tripod="tripod"
 }
 
-export interface AudioType extends DeviceType{
+export interface AudioType extends DeviceTypeSource{
     windblocker: boolean
     wireless: boolean
     needsRecorder: boolean
@@ -22,7 +22,7 @@ export interface AudioType extends DeviceType{
 
 export interface AudioTypeDTO extends AudioType{}
 
-export interface CameraType extends DeviceType{
+export interface CameraType extends DeviceTypeSource{
     sensor: CameraSensor
     resolution: CameraResolution
     mount: LensMount
@@ -30,37 +30,37 @@ export interface CameraType extends DeviceType{
     autofocus: boolean
     framerate: number
 }
-export interface CameraTypeDTO extends DeviceType{
+export interface CameraTypeDTO extends DeviceTypeSource{
     sensor_id: number
     resolution_id: number
     mount_id: number
 }
 
-export interface DroneType extends DeviceType{
+export interface DroneType extends DeviceTypeSource{
     sensor: CameraSensor
     resolution: CameraResolution
     max_range: number
 }
 
-export interface DroneTypeDTO extends DeviceType{
+export interface DroneTypeDTO extends DeviceTypeSource{
     sensor_id: number
     resolution_id: number
     max_range: number
 }
 
-export interface LensType extends DeviceType{
+export interface LensType extends DeviceTypeSource{
     f_stop: number
     focal_length: number
     lens_mount: LensMount
 }
 
-export interface LensTypeDTO extends DeviceType{
+export interface LensTypeDTO extends DeviceTypeSource{
     f_stop: number
     focal_length: number
     mount_id: number
 }
 
-export interface LightType extends DeviceType{
+export interface LightType extends DeviceTypeSource{
     watts: number
     rgb: boolean
     variable_temperature: boolean
@@ -68,22 +68,24 @@ export interface LightType extends DeviceType{
 
 export interface LightTypeDTO extends LightType{}
 
-export interface StabilizerType extends DeviceType{
+export interface StabilizerType extends DeviceTypeSource{
     max_weight: number
     number_of_axis: number
 }
 
 export interface StabilizerTypeDTO extends StabilizerType{}
 
-export interface TripodType extends DeviceType{
+export interface TripodType extends DeviceTypeSource{
     height: number
     head: TripodHead
 }
 
-export interface TripodTypeDTO extends DeviceType{
+export interface TripodTypeDTO extends DeviceTypeSource{
     height: number
     head_id: number
 }
+
+export type DeviceType = (CameraType | AudioType | DroneType | LensType | StabilizerType | TripodType)
 
 //endregion interfaces
 
