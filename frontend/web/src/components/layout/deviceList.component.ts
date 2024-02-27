@@ -30,7 +30,7 @@ export class DeviceListComponent extends LitElement {
 
     connectedCallback() {
         super.connectedCallback();
-        new WidthResizeObserver(this, [{size: 0, key: "small"}, {size: 600, key: "medium"}, {size: 1000, key: "large"}, {size: 1200, key: "xLarge"}])
+        new WidthResizeObserver(this, [{size: 0, key: "small"}, {size: 600, key: "medium"}, {size: 1200, key: "large"}, {size: 1400, key: "xLarge"}])
     }
 
     generateStudent(count: number){

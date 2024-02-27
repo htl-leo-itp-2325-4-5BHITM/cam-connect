@@ -2,14 +2,14 @@ import {LitElement, css, html, PropertyValues} from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/createRent.styles.scss'
 
-import {Api, ColorEnum, SizeEnum} from "../../base"
+import {Api, ccResponse, ColorEnum, SimpleColorEnum, SizeEnum} from "../../base"
 import {ButtonType} from "../basic/button.component"
 import {ObservedProperty} from "../../model"
 import {model} from "../../index"
 
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { icon } from '@fortawesome/fontawesome-svg-core'
-import {faXmark, faCircleArrowDown} from "@fortawesome/free-solid-svg-icons"
+import {faXmark, faCircleArrowDown, faUser} from "@fortawesome/free-solid-svg-icons"
 
 import AirDatepicker from 'air-datepicker';
 import localeDe from 'air-datepicker/locale/de';
@@ -17,6 +17,8 @@ import {CreateRentDeviceEntryComponent, RentDeviceEntryComponentType} from "./cr
 import PopupEngine from "../../popupEngine"
 import RentService, {CreateRentDTO} from "../../service/rent.service"
 import {AppState} from "../../AppState"
+import {AutocompleteOption} from "../basic/autocomplete.component"
+import {Student} from "../../service/student.service"
 
 @customElement('cc-create-rent')
 export class CreateRentComponent extends LitElement {
@@ -81,8 +83,13 @@ export class CreateRentComponent extends LitElement {
             <div class="top">
                 <h2>Verleih erstellen</h2>
             </div>
-            
-            <cc-chip>Schüler auswählen • Klasse</cc-chip>
+
+            <cc-autocomplete placeholder="Schüler" class="studentSelector" color="${SimpleColorEnum.ACCENT}" size="${SizeEnum.MEDIUM}"
+                             .onSelect="${(id:number) => {this.student_id = id}}"
+                             .querySuggestions="${this.searchForStudent}"
+                             .iconProvider="${()=>{return html`${unsafeSVG(icon(faUser).html[0])}`}}" 
+                             .contentProvider="${(data: Student) => {return `${data.firstname} ${data.lastname} • ${data.school_class}`}}"
+            ></cc-autocomplete>
             
             <cc-line></cc-line>
             
@@ -183,6 +190,16 @@ export class CreateRentComponent extends LitElement {
         this.devices.forEach(device => device.remove())
         this.devices.clear()
         this.addDevice()
+    }
+
+    async searchForStudent(searchTerm: string): Promise<AutocompleteOption<Student>[]> {
+        try {
+            const result: ccResponse<AutocompleteOption<Student>[]> = await Api.postData("/student/search", {searchTerm: searchTerm})
+            return result.data
+        } catch (e) {
+            console.error(e)
+            return []
+        }
     }
 }
 

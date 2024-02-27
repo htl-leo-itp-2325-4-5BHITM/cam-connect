@@ -1,11 +1,13 @@
 package at.camconnect.boundary;
 
+import at.camconnect.dtos.AutocompleteOptionDTO;
 import at.camconnect.dtos.StudentDTO;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.model.Student;
 import at.camconnect.repository.StudentRepository;
 import jakarta.inject.Inject;
+import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -50,7 +52,6 @@ public class StudentResource {
 
     @GET
     @Path("/getbyid/{id: [0-9]+}")
-
     public Student getById(@PathParam("id")Long id) {
         return studentRepository.getById(id);
     }
@@ -59,8 +60,15 @@ public class StudentResource {
     @Path("/search")
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public List<Student> search(StudentDTO studentDTO){
-        return studentRepository.search(studentDTO);
+    public Response search(JsonObject data){
+        List<AutocompleteOptionDTO> result;
+        try{
+            result = studentRepository.search(data.getString("searchTerm"));;
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok(result);
     }
 
     @GET

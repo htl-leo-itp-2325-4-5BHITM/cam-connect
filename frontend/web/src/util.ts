@@ -27,11 +27,10 @@ export default class Util{
         }
     }
 
-    static deviceTypeVariantToAutocompleteOption(deviceTypeVariant: DeviceType): AutocompleteOption{
+    static deviceTypeVariantToAutocompleteOption(deviceTypeVariant: DeviceType): AutocompleteOption<DeviceType>{
         return {
-            name: deviceTypeVariant.name,
+            data: deviceTypeVariant,
             id: deviceTypeVariant.type_id,
-            type: "TODO"
         }
     }
 
@@ -62,7 +61,6 @@ export default class Util{
           id property.
         - the id can be either a number or a string its type is a union type of string and number
      */
-    //TODO constrain the generic so that it has to have a properly named id column, something like: extends {[keyName]:(number | string)}
     static getItemByKeynameFromJsonArray<T>(data: T[], id: (number | string), keyName: string = "id"):T {
         for (let i = 0; i < data.length; i++) {
             if(data[i][keyName] === id){
@@ -81,5 +79,15 @@ export default class Util{
             }
         }
         return data
+    }
+
+    static selectText(element: HTMLElement) {
+        const range = document.createRange();
+        range.selectNodeContents(element);
+        const selection = window.getSelection();
+        if (selection) {
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
     }
 }

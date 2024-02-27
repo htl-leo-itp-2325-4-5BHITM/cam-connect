@@ -42,7 +42,7 @@ button{
     padding-inline: .3rem;
 }
 
-input{
+input, p[contenteditable]{
     border-radius: 0.25rem;
     border: 1px solid $gray500;
     padding-inline: .3rem;

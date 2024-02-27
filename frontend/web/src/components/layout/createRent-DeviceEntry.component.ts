@@ -19,6 +19,7 @@ import localeDe from "air-datepicker/locale/de"
 import Util from "../../util"
 import {AutocompleteOption} from "../basic/autocomplete.component"
 import de from "air-datepicker/locale/de"
+import {DeviceType} from "../../service/deviceType.service"
 
 export interface CreateRentDeviceEntryData {
     device_type_id: number
@@ -117,9 +118,10 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                 <style>${styles}</style>
                 <div class="left">
                     <cc-autocomplete placeholder="Name" class="name" 
-                                     .onSelect="${(id:number) => {this.data.device_type_id = id}}"
+                                     .onSelect="${(option: AutocompleteOption<DeviceType>) => {this.data.device_type_id = option.id}}"
                                      .querySuggestions="${this.searchForDeviceType}"
                                      .iconProvider="${this.provideDeviceTypeIcon}"
+                                     .contentProvider="${(data: DeviceType) => {return data.name}}"
                     ></cc-autocomplete>
                     <input type="text" value="" class="number" placeholder="Nr." 
                            @blur="${(e) => {this.data.device_number = e.target.value}}">
@@ -208,9 +210,9 @@ export class CreateRentDeviceEntryComponent extends LitElement {
         this.validate();
     }
 
-    async searchForDeviceType(searchTerm: string): Promise<AutocompleteOption[]> {
+    async searchForDeviceType(searchTerm: string): Promise<AutocompleteOption<DeviceType>[]> {
         try {
-            const result: ccResponse<AutocompleteOption[]> = await Api.postData("/devicetype/search", {searchTerm: searchTerm})
+            const result: ccResponse<AutocompleteOption<DeviceType>[]> = await Api.postData("/devicetype/search", {searchTerm: searchTerm})
             return result.data
         } catch (e) {
             console.error(e)

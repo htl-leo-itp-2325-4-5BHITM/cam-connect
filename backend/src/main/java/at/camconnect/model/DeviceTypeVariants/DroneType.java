@@ -1,6 +1,6 @@
 package at.camconnect.model.DeviceTypeVariants;
 
-import at.camconnect.dtos.DeviceTypeGlobal;
+import at.camconnect.dtos.DeviceTypeGlobalObjectsDTO;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypeAttributes.CameraResolution;
 import at.camconnect.model.DeviceTypeAttributes.CameraSensor;
@@ -27,7 +27,7 @@ public class DroneType extends DeviceType {
     }
 
     @Override
-    public void update(DeviceTypeGlobal data) {
+    public void update(DeviceTypeGlobalObjectsDTO data) {
         try{
             setMax_range(data.max_range());
             setSensor(data.sensor());

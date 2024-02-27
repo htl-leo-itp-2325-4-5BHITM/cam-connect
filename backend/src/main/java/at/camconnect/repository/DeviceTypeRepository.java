@@ -2,7 +2,6 @@ package at.camconnect.repository;
 
 import at.camconnect.dtos.*;
 import at.camconnect.model.DeviceTypeAttributes.*;
-import at.camconnect.model.Student;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
@@ -14,6 +13,7 @@ import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
 import jakarta.persistence.EntityManager;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @ApplicationScoped
@@ -66,27 +66,35 @@ public class DeviceTypeRepository {
         return new DeviceTypeCollection(cameraTypes, droneTypes, lensTypes, lightTypes, microphoneTypes, stabilizerTypes, tripodTypes);
     }
 
-    public List<AutocompleteOptionDTO> search(String searchTerm){
-        return em.createQuery(
-                        "SELECT new at.camconnect.dtos.AutocompleteOptionDTO(d.name, d.id, 'TODO') FROM DeviceType d " +
+    public List<AutocompleteOptionDTO<DeviceTypeMinimalDTO>> search(String searchTerm){
+        List<DeviceTypeMinimalDTO> deviceTypes = em.createQuery(
+                        "SELECT new at.camconnect.dtos.DeviceTypeMinimalDTO(d.id, d.name, 'a', d.image) FROM DeviceType d " +
                                 "WHERE UPPER(d.name) LIKE :searchTerm ",
-                        AutocompleteOptionDTO.class)
+                        DeviceTypeMinimalDTO.class)
                 .setParameter("searchTerm", searchTerm.toUpperCase() + "%")
                 .getResultList();
+
+        List<AutocompleteOptionDTO<DeviceTypeMinimalDTO>> result = new LinkedList<>();
+
+        for (DeviceTypeMinimalDTO deviceType : deviceTypes) {
+            result.add(new AutocompleteOptionDTO<>(deviceType, deviceType.type_id()));
+        }
+
+        return result;
     }
 
     public void remove(Long id){
         em.remove(getById(id));
     }
 
-    public DeviceType update(Long id, DeviceTypeDTO data){
+    public DeviceType update(Long id, DeviceTypeGlobalIdDTO data){
         DeviceType deviceType = getById(id); //should result in a child of DeviceType like CameraType
 
         deviceType.setName(data.name());
         deviceType.setImage(data.image());
 
         //The DeviceTypeDTO is converted into a DeviceType global which contains objects instead of ids
-        DeviceTypeGlobal dataWithObjects = new DeviceTypeGlobal(
+        DeviceTypeGlobalObjectsDTO dataWithObjects = new DeviceTypeGlobalObjectsDTO(
                 data.autofocus(), data.f_stop(), data.focal_length(), data.framerate(), data.height(), data.max_range(), data.max_weight(), data.needsrecorder(), data.number_of_axis(), data.autofocus(), data.variable_temperature(), data.watts(), data.windblocker(), data.wireless(),
                 getAttribute(TripodHead.class, data.head_id()), getAttribute(LensMount.class, data.mount_id()), getAttribute(CameraResolution.class, data.resolution_id()), getAttribute(CameraSensor.class, data.sensor_id()), getAttribute(CameraSystem.class, data.system_id()),
                 data.type_id(), data.dtype(), data.image(), data.name());

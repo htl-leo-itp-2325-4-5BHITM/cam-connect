@@ -1,6 +1,6 @@
 package at.camconnect.model.DeviceTypeVariants;
 
-import at.camconnect.dtos.DeviceTypeGlobal;
+import at.camconnect.dtos.DeviceTypeGlobalObjectsDTO;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypeAttributes.LensMount;
 import at.camconnect.responseSystem.CCException;
@@ -24,7 +24,7 @@ public class LensType extends DeviceType {
     }
 
     @Override
-    public void update(DeviceTypeGlobal data) {
+    public void update(DeviceTypeGlobalObjectsDTO data) {
         try{
             setF_stop(data.f_stop());
             setFocal_length(data.focal_length());

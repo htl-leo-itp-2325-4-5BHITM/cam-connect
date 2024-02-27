@@ -2,16 +2,14 @@ package at.camconnect.boundary;
 
 import at.camconnect.dtos.AutocompleteOptionDTO;
 import at.camconnect.dtos.DeviceTypeCollection;
-import at.camconnect.dtos.DeviceTypeDTO;
-import at.camconnect.dtos.StudentDTO;
-import at.camconnect.model.Student;
+import at.camconnect.dtos.DeviceTypeGlobalIdDTO;
+import at.camconnect.dtos.DeviceTypeMinimalDTO;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.repository.DeviceTypeRepository;
 import jakarta.inject.Inject;
-import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
@@ -73,7 +71,7 @@ public class DeviceTypeResource {
     @Path("/getbyid/{id: [0-9]+}/update")
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("id") Long id, DeviceTypeDTO data){
+    public Response update(@PathParam("id") Long id, DeviceTypeGlobalIdDTO data){
         DeviceType result;
         try{
             result = deviceTypeRepository.update(id, data);
@@ -102,7 +100,7 @@ public class DeviceTypeResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response search(JsonObject data){
-        List<AutocompleteOptionDTO> result;
+        List<AutocompleteOptionDTO<DeviceTypeMinimalDTO>> result;
         try{
             result = deviceTypeRepository.search(data.getString("searchTerm"));;
         }catch (CCException ex){

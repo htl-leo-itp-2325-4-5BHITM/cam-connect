@@ -1,4 +1,4 @@
 package at.camconnect.dtos;
 
-public record AutocompleteOptionDTO(String name, Long id, String type) {
+public record AutocompleteOptionDTO<T>(T data, Long id) {
 }

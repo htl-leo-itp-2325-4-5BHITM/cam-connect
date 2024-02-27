@@ -1,6 +1,6 @@
 package at.camconnect.model.DeviceTypeVariants;
 
-import at.camconnect.dtos.DeviceTypeGlobal;
+import at.camconnect.dtos.DeviceTypeGlobalObjectsDTO;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypeAttributes.CameraResolution;
 import at.camconnect.model.DeviceTypeAttributes.CameraSensor;
@@ -29,7 +29,7 @@ public class CameraType extends DeviceType {
     private boolean autofocus;
 
     @Override
-    public void update(DeviceTypeGlobal data) {
+    public void update(DeviceTypeGlobalObjectsDTO data) {
         try {
             setAutofocus(data.autofocus());
             setFramerate(data.framerate());

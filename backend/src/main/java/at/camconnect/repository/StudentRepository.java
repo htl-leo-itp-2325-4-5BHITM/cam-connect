@@ -1,5 +1,6 @@
 package at.camconnect.repository;
 
+import at.camconnect.dtos.AutocompleteOptionDTO;
 import at.camconnect.dtos.StudentDTO;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.model.Student;
@@ -45,16 +46,15 @@ public class StudentRepository{
         return students;
     }
 
-    public List<Student> search(StudentDTO studentDTO){
+    public List<AutocompleteOptionDTO> search(String searchTerm){
         return em.createQuery(
-                        "SELECT s FROM Student s " +
-                                "WHERE UPPER(s.firstname) LIKE :searchTerm OR UPPER(s.lastname) LIKE :searchTerm " +
+                        "SELECT new at.camconnect.dtos.AutocompleteOptionDTO(s, s.id) FROM Student s " +
+                                "WHERE UPPER(s.firstname) LIKE :searchTerm " +
+                                "OR UPPER(s.lastname) LIKE :searchTerm " +
                                 "OR UPPER(CONCAT(s.firstname, ' ', s.lastname)) LIKE :searchTerm",
-                        Student.class)
-                .setParameter("searchTerm", studentDTO.firstname().toUpperCase() + "%")
-                .setMaxResults(10)
+                        AutocompleteOptionDTO.class)
+                .setParameter("searchTerm", searchTerm.toUpperCase() + "%")
                 .getResultList();
-
     }
 
     public void importStudents(File file) {

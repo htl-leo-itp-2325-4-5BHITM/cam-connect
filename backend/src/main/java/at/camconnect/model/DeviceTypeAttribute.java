@@ -1,7 +1,6 @@
 package at.camconnect.model;
 
 import at.camconnect.dtos.DeviceTypeAttributeDTO;
-import at.camconnect.dtos.DeviceTypeGlobal;
 import jakarta.persistence.*;
 
 @Entity

@@ -1,40 +1,46 @@
 import {LitElement, html, PropertyValues, TemplateResult} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/autocomplete.styles.scss'
-import {icon, IconDefinition} from '@fortawesome/fontawesome-svg-core'
-import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import Util from "../../util"
-import {KeyBoardShortCut, Regex} from "../../base"
+import {KeyBoardShortCut, Regex, SimpleColorEnum, SizeEnum} from "../../base"
 import {model} from "../../index"
 
-export interface AutocompleteOption {
+export interface AutocompleteOption<T> {
     id: number
-    name: string
-    type?: string
+    data: T
 }
 
 @customElement('cc-autocomplete')
-export class AutocompleteComponent extends LitElement {
+export class AutocompleteComponent<T> extends LitElement {
     @property({type: String})
     placeholder?: String = ""
 
     @property({type: Boolean})
     disabled?: boolean = false
 
-    @property()
-    selectedId: number = -1
+    @property({reflect: true})
+    color: SimpleColorEnum = SimpleColorEnum.GRAY
 
     @property()
-    options: AutocompleteOption[] = []
+    size: SizeEnum = SizeEnum.SMALL
 
     @property()
-    onSelect = (id: number) => {}
+    selected: AutocompleteOption<T> = {id: -1, data: null}
 
     @property()
-    querySuggestions: (searchTerm: string) => Promise<AutocompleteOption[]> = async function(searchTerm){return [{name: "no query function", id: -1}]}
+    options: AutocompleteOption<T>[] = []
 
     @property()
-    iconProvider: (type: string) => TemplateResult = (type) => {return html`O`}
+    onSelect = (option: AutocompleteOption<T>) => {}
+
+    @property()
+    querySuggestions: (searchTerm: string) => Promise<AutocompleteOption<T>[]> = (searchTerm) => {return Promise.resolve([])}
+
+    @property()
+    iconProvider: (data: T) => TemplateResult = (type) => {return html`no icon provider`}
+
+    @property()
+    contentProvider: (data: T) => string = () => {return "no content provider"}
 
     private focusedId: number = -1
 
@@ -43,7 +49,7 @@ export class AutocompleteComponent extends LitElement {
     render() {
         return html`
             <style>${styles}</style>
-            <input type="text" placeholder="${this.placeholder}" .disabled="${this.disabled}" value=""
+            <input contenteditable="true" type="text" placeholder="${this.placeholder}" .disabled="${this.disabled}" value=""
                    @focus="${(e)=>{e.target.select()}}"
                    @click="${()=>{this.showSuggestions(); this.generateSuggestions()}}"
                    @keyup="${this.generateSuggestions}"
@@ -54,12 +60,12 @@ export class AutocompleteComponent extends LitElement {
                     this.options.length == 0 ? html`<div class="empty">Keine Ergebnisse</div>` :
                     this.options.map(option => {
                         return html`
-                            <div class="entry" @click="${()=>this.selectSuggestion(option.id)}" 
+                            <div class="entry" @click="${()=>this.selectSuggestion(option)}" 
                                  @mouseenter="${(e: Event) => {this.focusEntry(e.target as HTMLElement)}}"
                                  data-id="${option.id}"
                             >
-                                ${this.iconProvider(option.type)}
-                                <label>${option.name}</label>
+                                ${this.iconProvider(option.data)}
+                                <label>${this.contentProvider(option.data)}</label>
                             </div>
                         `
                     })
@@ -81,7 +87,7 @@ export class AutocompleteComponent extends LitElement {
 
         KeyBoardShortCut.register(["ArrowUp"], () => this.moveFocus("up"), "autocomplete", true)
         KeyBoardShortCut.register(["ArrowDown"], () => this.moveFocus("down"), "autocomplete", true)
-        KeyBoardShortCut.register(["Enter"], () => {this.selectSuggestion(this.focusedId)}, "autocomplete", true)
+        KeyBoardShortCut.register(["Enter"], () => {this.selectSuggestion(this.options.find(option => option.id = this.focusedId))}, "autocomplete", true)
         KeyBoardShortCut.register(["Escape"], () => {this.hideSuggestions()}, "autocomplete", true)
     }
 
@@ -95,8 +101,8 @@ export class AutocompleteComponent extends LitElement {
         },200)
 
         let input = this.shadowRoot.querySelector("input")
-        if(this.selectedId > -1) {
-            input.value = Object.values(model.deviceTypes.value).flat().find(deviceType => deviceType.type_id == this.selectedId).name
+        if(this.selected.id > -1) {
+            input.value = this.contentProvider(this.selected.data)
         }
         else
             input.value = ""
@@ -108,14 +114,15 @@ export class AutocompleteComponent extends LitElement {
         KeyBoardShortCut.remove("autocomplete")
     }
 
-    selectSuggestion(id:number){
-        if(!id || id < 0) return
-        this.selectedId = id
+    selectSuggestion(option: AutocompleteOption<T>){
+        if(!option || option.id < 0) return
+        this.selected = option
         this.shadowRoot.querySelector("input").focus()
         this.hideSuggestions()
-        this.onSelect(this.selectedId)
+        this.onSelect(this.selected)
     }
 
+    //TODO we might want to limit rates here so that we dont send all too many requests
     generateSuggestions(e?: KeyboardEvent){
         let input = this.shadowRoot.querySelector("input") as HTMLInputElement
         if(e) {
@@ -179,6 +186,6 @@ export class AutocompleteComponent extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "cc-autocomplete": AutocompleteComponent;
+        "cc-autocomplete": AutocompleteComponent<any>;
     }
 }

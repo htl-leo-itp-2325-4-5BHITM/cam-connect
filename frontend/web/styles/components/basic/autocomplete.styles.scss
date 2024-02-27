@@ -4,6 +4,22 @@
   position: relative;
 }
 
+:host([color="accent"]) input{
+  outline: 1px solid $accentDarkmode;
+  border-color: $accentDarkmode;
+  color: $accentDarkmodeLight;
+
+  &:focus-visible{
+    border-color: $accentDarkmodeLight;
+    outline-color: $accentDarkmodeLight;
+  }
+}
+
+:host([size="medium"]) input{
+  padding-inline: .5rem;
+  padding-block: .2rem;
+}
+
 :host(.error) input{
   outline: 1px solid $badDark;
   border-color: $badDark;
@@ -17,6 +33,14 @@
 input{
   width: 100%;
   box-sizing: border-box;
+
+  &:after{
+    content: "";
+    background-color: $gray600;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    height: 1rem;
+    width: 1rem;
+  }
 }
 
 .suggestions{
@@ -83,4 +107,8 @@ input{
     color: $gray800;
     transition: color $transitionTimeShort;
   }
+}
+
+.empty{
+  color: $gray600;
 }
