@@ -38,10 +38,10 @@ VALUES
 */
 
 -- Camera Types
-insert into DEVICETYPE (dtype, name, system_id, resolution_id, sensor_id, mount_id, autofocus, framerate) values ('CameraType', 'Sony A7 III', 1, 3, 4, 8, true, 120);
-insert into DEVICETYPE (dtype, name, system_id, resolution_id, sensor_id, mount_id, autofocus, framerate) values ('CameraType', 'Canon EOS R5', 1, 4, 5, 9, true, 120);
-insert into DEVICETYPE (dtype, name, system_id, resolution_id, sensor_id, mount_id, autofocus, framerate) values ('CameraType', 'Lumix S5 ii', 2, 3, 4, 6, true, 100);
-insert into DEVICETYPE (dtype, name, system_id, resolution_id, sensor_id, mount_id, autofocus, framerate) values ('CameraType', 'Lumix GH6', 2, 3, 5, 7, true, 100);
+insert into DEVICETYPE (variant, dtype, name, system_id, resolution_id, sensor_id, mount_id, autofocus, framerate) values ('camera', 'CameraType', 'Sony A7 III', 1, 3, 4, 8, true, 120);
+insert into DEVICETYPE (variant, dtype, name, system_id, resolution_id, sensor_id, mount_id, autofocus, framerate) values ('camera', 'CameraType', 'Canon EOS R5', 1, 4, 5, 9, true, 120);
+insert into DEVICETYPE (variant, dtype, name, system_id, resolution_id, sensor_id, mount_id, autofocus, framerate) values ('camera', 'CameraType', 'Lumix S5 ii', 2, 3, 4, 6, true, 100);
+insert into DEVICETYPE (variant, dtype, name, system_id, resolution_id, sensor_id, mount_id, autofocus, framerate) values ('camera', 'CameraType', 'Lumix GH6', 2, 3, 5, 7, true, 100);
 
 -- assigning tags to devicetypes
 INSERT INTO tag_devicetype (tag_tag_id, type_type_id)

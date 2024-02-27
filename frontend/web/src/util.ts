@@ -28,12 +28,12 @@ export default class Util{
         }
     }
 
-    static deviceTypeVariantToAutocompleteOption(deviceTypeVariant: DeviceTypeSource): AutocompleteOption{
+    /*static deviceTypeVariantToAutocompleteOption(deviceTypeVariant: DeviceTypeSource): AutocompleteOption{
         return {
             data: deviceTypeVariant,
             id: deviceTypeVariant.type_id,
         }
-    }
+    }*/
 
     static deepEventTarget(startpoint: Element = document.activeElement){
         let focusedElem = startpoint

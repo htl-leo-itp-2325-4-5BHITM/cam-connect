@@ -3,6 +3,8 @@ import {PageEnum} from "./model"
 import {model} from "./index"
 import {CreateRentComponent} from "./components/layout/createRent.component"
 import {KeyBoardShortCut} from "./base"
+import {AutocompleteComponent} from "./components/basic/autocomplete.component"
+import {Student} from "./service/student.service"
 
 interface actionCancellation {
     identifier: string,
@@ -46,6 +48,12 @@ export class AppState{
         this.addCurrentActionCancellation(() => { this._createRentComponent?.cancel() }, "createRentModal")
         KeyBoardShortCut.register(["shift", "g"], () => { this._createRentComponent?.addDevice() }, "addDevice")
         this._createRentModalOpen = true
+
+        let studentSelector = this._createRentComponent.shadowRoot.querySelector(".studentSelector") as AutocompleteComponent<Student>
+        setTimeout(() => {
+            studentSelector.setFocus()
+        },300)
+
         this.update()
     }
 

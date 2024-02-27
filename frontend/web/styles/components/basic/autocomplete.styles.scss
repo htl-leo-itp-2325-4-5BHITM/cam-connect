@@ -7,7 +7,8 @@
 :host([color="accent"]) input{
   outline: 1px solid $accentDarkmode;
   border-color: $accentDarkmode;
-  color: $accentDarkmodeLight;
+  color: adjust-color($accentDarkmodeLight, $lightness: 25%);
+  background-color: adjust-color($accentDarkmodeLight, $alpha: -0.9);
 
   &:focus-visible{
     border-color: $accentDarkmodeLight;
@@ -34,6 +35,7 @@ input{
   width: 100%;
   box-sizing: border-box;
 
+  /*TODO dropdown icon*/
   &:after{
     content: "";
     background-color: $gray600;
