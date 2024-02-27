@@ -6,25 +6,26 @@ import {WidthResizeObserver} from "../../base"
 import {ObservedProperty} from "../../model"
 import {Device} from "../../service/device.service"
 import {RentByStudentDTO} from "../../service/rent.service"
-import {DeviceType, DeviceTypeVariantCollection} from "../../service/deviceType.service"
+import {DeviceType, DeviceTypeFullDTO, DeviceTypeVariantCollection} from "../../service/deviceType.service"
 
 @customElement('cc-device-list')
 export class DeviceListComponent extends LitElement {
     @property()
-    private deviceTypes: ObservedProperty<DeviceTypeVariantCollection>
+    private deviceTypesFull: ObservedProperty<DeviceTypeFullDTO>
 
     constructor() {
         super()
-        this.deviceTypes = new ObservedProperty<DeviceTypeVariantCollection>(this, model.deviceTypes)
+        this.deviceTypesFull = new ObservedProperty<DeviceTypeFullDTO>(this, model.deviceTypesFull)
     }
     render() {
-        let deviceTypes = Object.values(this.deviceTypes.value).flat()
+        //let deviceTypes = Object.values(this.deviceTypes.value).flat()
+        console.log(this.deviceTypesFull.value)
 
         return html`
             <style>${styles}</style>
 
-            ${deviceTypes.map(deviceType => {
-                return html`<cc-device-list-entry .deviceType="${deviceType}"></cc-device-list-entry>`
+            ${Object.values(this.deviceTypesFull.value).flat().map(deviceType => {
+                return html`<cc-device-list-entry .deviceTypeFull="${deviceType}"></cc-device-list-entry>`
             })}
         `
     }

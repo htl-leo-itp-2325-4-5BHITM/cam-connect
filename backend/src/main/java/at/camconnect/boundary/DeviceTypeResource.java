@@ -1,9 +1,6 @@
 package at.camconnect.boundary;
 
-import at.camconnect.dtos.AutocompleteOptionDTO;
-import at.camconnect.dtos.DeviceTypeCollection;
-import at.camconnect.dtos.DeviceTypeDTO;
-import at.camconnect.dtos.StudentDTO;
+import at.camconnect.dtos.*;
 import at.camconnect.model.Student;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
@@ -48,6 +45,20 @@ public class DeviceTypeResource {
         DeviceTypeCollection result;
         try{
             result = deviceTypeRepository.getAll();
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok(result);
+    }
+
+    @GET
+    @Path("/getallfull")
+    @Transactional
+    public Response getAllFull(){
+        List<DeviceTypeFullDTO> result;
+        try{
+            result = deviceTypeRepository.getAllFull();
         }catch (CCException ex){
             return CCResponse.error(ex);
         }

@@ -1,4 +1,8 @@
-import DeviceTypeService, {DeviceTypeVariantCollection} from "./service/deviceType.service"
+import DeviceTypeService, {
+    DeviceType,
+    DeviceTypeFullDTO,
+    DeviceTypeVariantCollection
+} from "./service/deviceType.service"
 import { ReactiveController, ReactiveControllerHost } from 'lit';
 import {BehaviorSubject, lastValueFrom, map, Observable, Subject, Subscription} from 'rxjs';
 import DeviceTypeAttributeService, { DeviceTypeAttributeCollection } from "./service/deviceTypeAttribute.service"
@@ -33,6 +37,8 @@ export default class Model{
 
     readonly devices = new BehaviorSubject<Device[]>([])
     readonly deviceTypes = new BehaviorSubject<DeviceTypeVariantCollection>({audioTypes: [], cameraTypes: [], droneTypes: [], lensTypes: [], lightTypes: [], stabilizerTypes: [], tripodHeads: []})
+    readonly deviceTypesFull = new BehaviorSubject<DeviceTypeFullDTO>({deviceType: null, available: 0, deviceTags: []})
+
     readonly deviceTypeAttributes = new BehaviorSubject<DeviceTypeAttributeCollection>({cameraResolutions: [], cameraSensors: [], cameraSystems: [], lensMounts: [], tripodHeads: []})
     /**
      * This is a representation of all the deviceTypeAttributes split up and transformed into FilterOptions that can be
@@ -86,6 +92,7 @@ export default class Model{
         RentService.fetchAll()
         DeviceService.fetchAll()
         DeviceTypeService.fetchAll()
+        DeviceTypeService.fetchAllFull()
         DeviceTypeAttributeService.fetchAll()
     }
 
@@ -107,6 +114,9 @@ export default class Model{
     }
     loadDeviceTypes(deviceTypes: DeviceTypeVariantCollection){
         this.deviceTypes.next(deviceTypes)
+    }
+    loadDeviceTypesFull(deviceTypesFull: DeviceTypeFullDTO){
+        this.deviceTypesFull.next(deviceTypesFull)
     }
 
     loadDeviceTypeAttributes(deviceTypeAttributes: DeviceTypeAttributeCollection){

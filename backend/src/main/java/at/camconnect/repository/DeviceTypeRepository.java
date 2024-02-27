@@ -74,12 +74,18 @@ public class DeviceTypeRepository {
 
         List<DeviceTypeFullDTO> list = new LinkedList<>();
         for(DeviceType deviceType : deviceTypeList){
-            int availableDevices = em.createQuery("select count(d) from Device d " +
-                    "where d.device_id not in (select r.device.device_id from Rent r) " +
-                    "group by d.type.type_id", Integer.class).getSingleResult();
-            /**List<Tag> tagList = em.createQuery("select t from Tag t " +
-                    "join DeviceType dt on dt = t.type" +
-                    "where type_type_id = 1;", Tag.class).getResultList();**/
+            Long availableDevices = em.createQuery("select count(d) from Device d " +
+                    "where d.device_id not in (select r.device.device_id from Rent r where r.status != 3 and r.status != 4)" +
+                    "group by d.type.type_id " +
+                    "having d.type.type_id = :type_id", Long.class).setParameter("type_id", deviceType.getType_id()).getSingleResult();
+
+            List<Tag> tagList = em.createQuery("SELECT t FROM Tag t " +
+                            "JOIN FETCH t.type dt " +
+                            "WHERE dt = :deviceType", Tag.class)
+                    .setParameter("deviceType", deviceType)
+                    .getResultList();
+
+            list.add(new DeviceTypeFullDTO(deviceType, availableDevices.intValue(), tagList));
         }
         return list;
     }
