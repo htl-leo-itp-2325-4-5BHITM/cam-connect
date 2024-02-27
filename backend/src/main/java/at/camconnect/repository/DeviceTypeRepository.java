@@ -1,11 +1,10 @@
 package at.camconnect.repository;
 
-import at.camconnect.dtos.DeviceTypeCollection;
-import at.camconnect.dtos.DeviceTypeDTO;
-import at.camconnect.dtos.DeviceTypeGlobal;
+import at.camconnect.dtos.*;
 import at.camconnect.model.DeviceTypeAttributes.*;
+import at.camconnect.model.Student;
 import at.camconnect.responseSystem.CCException;
-import at.camconnect.enums.DeviceTypeEnum;
+import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypeVariants.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -26,7 +25,7 @@ public class DeviceTypeRepository {
     DeviceTypeAttributeRepository deviceTypeAttributeRepository;
 
 
-    public DeviceType create(DeviceTypeEnum typeEnum, JsonObject data){
+    public DeviceType create(DeviceTypeVariantEnum typeEnum, JsonObject data){
         /* Why JsonData and not DTO
          * We use a single create endpoint to create lots of different types: this makes the process when calling
          * the api very easy. If we were to use a DTO here we would either have to hardcode all the different routes, or
@@ -67,6 +66,15 @@ public class DeviceTypeRepository {
         return new DeviceTypeCollection(cameraTypes, droneTypes, lensTypes, lightTypes, microphoneTypes, stabilizerTypes, tripodTypes);
     }
 
+    public List<AutocompleteOptionDTO> search(String searchTerm){
+        return em.createQuery(
+                        "SELECT new at.camconnect.dtos.AutocompleteOptionDTO(d.name, d.id, 'TODO') FROM DeviceType d " +
+                                "WHERE UPPER(d.name) LIKE :searchTerm ",
+                        AutocompleteOptionDTO.class)
+                .setParameter("searchTerm", searchTerm.toUpperCase() + "%")
+                .getResultList();
+    }
+
     public void remove(Long id){
         em.remove(getById(id));
     }
@@ -89,7 +97,7 @@ public class DeviceTypeRepository {
     }
 
     //region utility functions
-    private Class<? extends DeviceType> enumToClass(DeviceTypeEnum typeEnum) {
+    private Class<? extends DeviceType> enumToClass(DeviceTypeVariantEnum typeEnum) {
         //yes there are breaks missing, but they are unnecessary because of the returns
         switch (typeEnum) {
             case microphone:

@@ -9,7 +9,7 @@ import {model} from "../../index"
 import {KeyBoardShortCut, SimpleColorEnum, SizeEnum, Tooltip} from "../../base"
 import { ObservedProperty, PageEnum} from "../../model"
 import { SelectComponent } from "../basic/select.component"
-import {AppState} from "../../service/AppState"
+import {AppState} from "../../AppState"
 
 @customElement('cc-navbar')
 export class NavbarComponent extends LitElement {

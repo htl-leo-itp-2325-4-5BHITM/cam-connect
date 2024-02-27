@@ -17,9 +17,9 @@
         align-items: center;
     }
 
-    input{
+    input, cc-autocomplete{
         &.name{
-            width: 10ch;
+            width: 15ch;
         }
 
         &.date{
@@ -46,8 +46,8 @@
     .left{
         flex: 1;
         input{
-            /* width of the dropdown + number + gap + border in the middle */
-            width: calc(13ch + .5rem + .6rem + 2px)
+            /* width of the (dropdown + number) + gap .. paddings cancel out between equip input and number input */
+            width: calc(18ch + .5rem)
         }
     }
 }

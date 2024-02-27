@@ -1,4 +1,5 @@
 import * as trace_events from "trace_events"
+import Util from "./util"
 
 export const config = {
     api_url: "http://localhost:8080/api",
@@ -9,6 +10,7 @@ export const Regex = {
     anyThingButNumbers: /\D/,
     empty: /^\s*$/,
     onlySpecialChars: /^[^a-zA-Z0-9]*$/,
+    onlyNumbersOrLetters: /^[a-zA-Z0-9]*$/,
 }
 
 export interface ccResponse<T>{
@@ -46,8 +48,8 @@ export class Api {
             })
     }
 
-    static createItem<T>(path: string, data: T): Promise<any> {
-        return fetch(`${config.api_url}${path}/create`, {
+    static postData<T>(path: string, data: T): Promise<any> {
+        return fetch(`${config.api_url}${path}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -187,19 +189,20 @@ export class Tooltip {
 }
 
 export interface KeyBoardShortCut {
-    keys: string[],
-    action: ()=> void,
+    keys: string[]
+    action: ()=> void
     identifier?: string
+    worksInInput?: boolean
 }
 
 export class KeyBoardShortCut {
     private static shortCuts: KeyBoardShortCut[] = []
     private static pressedKeys:Set<string> = new Set() //all currently pressed keys
 
-    static register(keys: (string[] | string[][]), action: () => void, identifier?: string){
+    static register(keys: (string[] | string[][]), action: () => void, identifier?: string, worksInInput: boolean = false){
         if(!Array.isArray(keys[0])) keys = [keys] as string[][]
         keys.forEach(combi => {
-            this.shortCuts.push({keys: combi, action: action, identifier: identifier})
+            this.shortCuts.push({keys: combi, action: action, identifier: identifier, worksInInput: worksInInput})
         })
     }
 
@@ -213,28 +216,20 @@ export class KeyBoardShortCut {
 
     static {
         window.addEventListener("keydown", (event: KeyboardEvent) => {
+            let focusOnInput = false
+            let focusedElem = Util.deepEventTarget(event.target as Element)
+            if(focusedElem instanceof HTMLInputElement) focusOnInput = true
 
-            let focusedElem = event.target as Element
-            while (focusedElem != undefined) {
-                let newFocusedElem = focusedElem?.shadowRoot?.activeElement
-                if(newFocusedElem instanceof HTMLInputElement) return
-                if(newFocusedElem == undefined) break
-                focusedElem = newFocusedElem
-            }
-
-            if(event.target instanceof HTMLInputElement) return
             this.pressedKeys.add(event.key.toLowerCase()) //add the pressed key to set
             this.shortCuts.forEach(shortCut => { //check for every shortcut if all keys are currently pressed
-                //if more option keys are pressed then required dont execute the action
-                //console.log(shortCut.keys.length, this.pressedKeys.size)
+                if(focusOnInput && shortCut.worksInInput == false) return
+                //if more or less option keys are pressed then required dont execute the action
                 if(shortCut.keys.length != this.pressedKeys.size) return
                 if(shortCut.keys.every(key => this.pressedKeys.has(key.toLowerCase()))){
                     event.preventDefault()
                     shortCut.action()
                 }
             })
-
-            //console.log(this.pressedKeys)
         })
 
         window.addEventListener("keyup", (event: KeyboardEvent) => {

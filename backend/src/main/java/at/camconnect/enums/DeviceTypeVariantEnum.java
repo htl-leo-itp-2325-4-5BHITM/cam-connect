@@ -1,5 +1,5 @@
 package at.camconnect.enums;
 
-public enum DeviceTypeEnum {
+public enum DeviceTypeVariantEnum {
     microphone, camera, drone, lens, light, stabilizer, tripod;
 }

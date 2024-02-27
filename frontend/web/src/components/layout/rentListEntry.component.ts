@@ -11,7 +11,7 @@ import localeEn from "air-datepicker/locale/en";
 import {LineColor, LineType} from "../basic/line.component"
 import PopupEngine from "../../popupEngine"
 import {ObservedProperty} from "../../model"
-import {AppState} from "../../service/AppState"
+import {AppState} from "../../AppState"
 
 @customElement('cc-rent-list-entry')
 export class RentListEntryComponent extends LitElement {

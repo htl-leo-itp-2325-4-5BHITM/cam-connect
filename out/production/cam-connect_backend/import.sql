@@ -92,4 +92,5 @@ VALUES
     ('DEFAULT', '2024-03-01', '2024-03-15', '2024-02-15', 3, CURRENT_TIMESTAMP, 2, 2, 2, 1, 'Lens', 'Lens rental for project', 'Project Photography', 'lasdnhfgköj'),
     ('DEFAULT', '2024-04-01', '2024-04-15', '2024-03-15', 1, CURRENT_TIMESTAMP, 3, 2, 1, 2, 'Battery Pack', 'Additional power for shoot', 'Outdoor Photography', 'lasdnhfgköj'),
     ('DEFAULT', '2024-05-01', '2024-05-15', '2024-04-15', 4, CURRENT_TIMESTAMP, 1, 1, 2, 1, 'Microphone', 'Audio enhancement for video', 'Video Production', 'lasdnhfgköj'),
+    ('DEFAULT', '2024-05-01', '2024-05-15', '2024-04-15', 4, CURRENT_TIMESTAMP, 1, 1, 2, 1, 'Microphone', 'Audio enhancement for video', 'Video Production', 'lasdnhfgköj'),
     ('DEFAULT', '2024-06-01', '2024-06-15', '2024-05-15', 2, CURRENT_TIMESTAMP, 2, 2, 1, 2, 'Tripod', 'Stable support for shooting', 'Documentary Film', 'lasdnhfgköj');

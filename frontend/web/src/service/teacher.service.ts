@@ -9,7 +9,7 @@ export interface Teacher{
     username: string
 }
 
-export default class RentService{
+export default class TeacherService {
     static fetchAll(){
         Api.fetchData<Teacher[]>("/teacher/getall")
             .then(data => {

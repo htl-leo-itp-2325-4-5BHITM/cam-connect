@@ -63,10 +63,10 @@ export default class RentService {
         }
     }
 
-    static create(rent: Rent) {
-        Api.createItem("/rent", rent)
+    static create(rent: CreateRentDTO[]) {
+        Api.postData("/rent/create", rent)
             .then(() => {
-                RentService.fetchAll()
+                model.appState.value.createRentComponent.close()
             })
             .catch(error => {
                 console.error(error)

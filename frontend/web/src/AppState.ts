@@ -1,12 +1,8 @@
-import {RentListEntryComponent} from "../components/layout/rentListEntry.component"
-import {PageEnum} from "../model"
-import PopupEngine from "../popupEngine"
-import {BehaviorSubject, Subject} from "rxjs"
-import {Teacher} from "./teacher.service"
-import {model} from "../index"
-import {forEachResolvedProjectReference} from "ts-loader/dist/instances"
-import {CreateRentComponent} from "../components/layout/createRent.component"
-import {KeyBoardShortCut} from "../base"
+import {RentListEntryComponent} from "./components/layout/rentListEntry.component"
+import {PageEnum} from "./model"
+import {model} from "./index"
+import {CreateRentComponent} from "./components/layout/createRent.component"
+import {KeyBoardShortCut} from "./base"
 
 interface actionCancellation {
     identifier: string,
@@ -116,5 +112,9 @@ export class AppState{
     set createRentComponent(value: CreateRentComponent) {
         this._createRentComponent = value
         this.update()
+    }
+
+    get createRentComponent(): CreateRentComponent {
+        return this._createRentComponent
     }
 }

@@ -16,6 +16,7 @@ import java.io.File;
 import java.util.List;
 
 @Path("/student")
+@Produces(MediaType.APPLICATION_JSON)
 public class StudentResource {
     @Inject
     StudentRepository studentRepository;
@@ -23,7 +24,6 @@ public class StudentResource {
     @POST
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response createStudent(Student s){
         studentRepository.create(s);
@@ -33,7 +33,6 @@ public class StudentResource {
     @POST
     @Path("/remove")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response removeStudent(Student s){
         studentRepository.remove(s);
@@ -43,7 +42,6 @@ public class StudentResource {
     @POST
     @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response updateStudent(Student s){
         studentRepository.update(s);
@@ -60,7 +58,6 @@ public class StudentResource {
     @POST
     @Path("/search")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public List<Student> search(StudentDTO studentDTO){
         return studentRepository.search(studentDTO);
@@ -68,7 +65,6 @@ public class StudentResource {
 
     @GET
     @Path("/getall")
-    @Produces(MediaType.APPLICATION_JSON)
     public List<Student> getAll() {
         return studentRepository.getAll();
     }
@@ -76,7 +72,6 @@ public class StudentResource {
     @POST
     @Path("/import")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response uploadCsvFile(@RestForm File file) {
         try{
             studentRepository.importStudents(file);
