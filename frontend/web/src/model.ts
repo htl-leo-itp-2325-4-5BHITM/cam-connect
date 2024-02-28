@@ -97,29 +97,29 @@ export default class Model{
     }
 
     //region load functions: used by the service classes to set the data in the model to whatever the api returned
-    loadRents(rent: RentByStudentDTO[]){
+    loadRents(rent: RentByStudentDTO[] = []){
         this.rents.next(rent)
     }
 
-    loadTeachers(teacher: Teacher[]){
+    loadTeachers(teacher: Teacher[] = []){
         this.teachers.next(teacher)
     }
 
-    loadStudents(student: Student[]){
+    loadStudents(student: Student[] = []){
         this.students.next(student)
     }
 
-    loadDevices(devices: Device[]){
+    loadDevices(devices: Device[] = []){
         this.devices.next(devices)
     }
-    loadDeviceTypes(deviceTypes: DeviceTypeVariantCollection){
+    loadDeviceTypes(deviceTypes: DeviceTypeVariantCollection = {audioTypes: [], cameraTypes: [], droneTypes: [], lensTypes: [], lightTypes: [], stabilizerTypes: [], tripodHeads: []}){
         this.deviceTypes.next(deviceTypes)
     }
     loadDeviceTypesFull(deviceTypesFull: DeviceTypeFullDTO){
         this.deviceTypesFull.next(deviceTypesFull)
     }
 
-    loadDeviceTypeAttributes(deviceTypeAttributes: DeviceTypeAttributeCollection){
+    loadDeviceTypeAttributes(deviceTypeAttributes: DeviceTypeAttributeCollection = {cameraResolutions: [], cameraSensors: [], cameraSystems: [], lensMounts: [], tripodHeads: []}){
         this.deviceTypeAttributes.next(deviceTypeAttributes)
     }
 

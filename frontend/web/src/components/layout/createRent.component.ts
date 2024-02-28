@@ -40,6 +40,7 @@ export class CreateRentComponent extends LitElement {
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
         let globalInput = this.renderRoot.querySelector('.globaltime input') as HTMLInputElement
+        let lastSelection = [new Date(), new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)]
         this.globalDatePicker = new AirDatepicker(globalInput, {
             locale: localeDe,
             range: true,
@@ -57,12 +58,14 @@ export class CreateRentComponent extends LitElement {
             },
             onHide: () => {
                 //needs to be in a timeout to make sure that the cancelCurrentAction shortcut was called before showing
-                setTimeout(() => {
+                if(this.globalDatePicker.selectedDates.length <= 1){//forces user to select an actual range of dates
+                    console.log("using old date", lastSelection )
+                    //TODO
+                }
+                else{
                     this.appState.value.removeCurrentActionCancellation("datepicker")
-                    if(this.globalDatePicker.selectedDates.length <= 1){//forces user to select an actual range of dates
-                        this.globalDatePicker.show()
-                    }
-                },100)
+                    lastSelection = this.globalDatePicker.selectedDates
+                }
             }
         })
         this.addDevice()

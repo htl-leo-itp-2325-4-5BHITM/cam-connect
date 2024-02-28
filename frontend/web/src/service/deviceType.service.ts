@@ -11,16 +11,16 @@ export interface DeviceTypeSource {
 }
 
 export enum DeviceTypeVariantEnum {
-    audio="audio", camera="camera", drone="drone", lens="lens", light="light", stabilizer="stabilizer", tripod="tripod"
+    microphone="microphone", camera="camera", drone="drone", lens="lens", light="light", stabilizer="stabilizer", tripod="tripod"
 }
 
-export interface AudioType extends DeviceTypeSource{
+export interface MicrophoneType extends DeviceTypeSource{
     windblocker: boolean
     wireless: boolean
     needsRecorder: boolean
 }
 
-export interface AudioTypeDTO extends AudioType{}
+export interface MicrophoneTypeDTO extends MicrophoneType{}
 
 export interface CameraType extends DeviceTypeSource{
     sensor: CameraSensor
@@ -86,11 +86,11 @@ export interface TripodTypeDTO extends DeviceTypeSource{
 }
 
 
-export type DeviceType = (CameraType | AudioType | DroneType | LensType | LightType | StabilizerType | TripodType)
+export type DeviceType = (CameraType | MicrophoneType | DroneType | LensType | LightType | StabilizerType | TripodType)
 //endregion interfaces
 
 export interface DeviceTypeVariantCollection {
-    audioTypes: AudioType[]
+    audioTypes: MicrophoneType[]
     cameraTypes: CameraType[]
     droneTypes: DroneType[]
     lensTypes: LensType[]

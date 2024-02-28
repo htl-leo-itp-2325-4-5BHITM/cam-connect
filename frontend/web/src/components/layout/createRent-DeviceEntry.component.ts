@@ -1,25 +1,22 @@
-import {LitElement, css, html, PropertyValues} from 'lit'
-import { customElement, property } from 'lit/decorators.js'
+import {html, LitElement, PropertyValues, TemplateResult} from 'lit'
+import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/createRent-DeviceEntry.styles.scss'
 
 import {ObservedProperty} from "../../model"
 import {model} from "../../index"
 
-import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
-import { icon } from '@fortawesome/fontawesome-svg-core'
-import { faXmark, faCamera, faMicrophone, faLightbulb, faHelicopter } from "@fortawesome/free-solid-svg-icons"
+import {unsafeSVG} from 'lit/directives/unsafe-svg.js';
+import {icon} from '@fortawesome/fontawesome-svg-core'
+import {faCamera, faHelicopter, faLightbulb, faMicrophone, faXmark} from "@fortawesome/free-solid-svg-icons"
 
 import AirDatepicker from 'air-datepicker';
-import localeEn from 'air-datepicker/locale/en';
 import {CreateRentComponent} from "./createRent.component"
 import {CreateRentDTO, RentTypeEnum} from "../../service/rent.service"
 import {Api, ccResponse, config, Regex} from "../../base"
 import {AppState} from "../../AppState"
 import localeDe from "air-datepicker/locale/de"
-import Util from "../../util"
 import {AutocompleteOption} from "../basic/autocomplete.component"
-import de from "air-datepicker/locale/de"
-import {DeviceType} from "../../service/deviceType.service"
+import {DeviceType, DeviceTypeVariantEnum} from "../../service/deviceType.service"
 
 export interface CreateRentDeviceEntryData {
     device_type_id: number
@@ -220,15 +217,16 @@ export class CreateRentDeviceEntryComponent extends LitElement {
         }
     }
 
-    provideDeviceTypeIcon(type: string){
-        switch (type){
-            case "camera": return unsafeSVG(icon(faCamera).html[0])
-            case "microphone": return unsafeSVG(icon(faMicrophone).html[0])
-            case "drone": return unsafeSVG(icon(faHelicopter).html[0])
-            case "lens":
-            case "light": return unsafeSVG(icon(faLightbulb).html[0])
-            case "stabilizer":
-            case "tripod": return html`T`
+    provideDeviceTypeIcon(data: DeviceType): TemplateResult {
+        console.log(data)
+        switch (data.variant){
+            case DeviceTypeVariantEnum.camera: return html`${unsafeSVG(icon(faCamera).html[0])}`
+            case DeviceTypeVariantEnum.microphone: return html`${unsafeSVG(icon(faMicrophone).html[0])}`
+            case DeviceTypeVariantEnum.drone: return html`${unsafeSVG(icon(faHelicopter).html[0])}`
+            case DeviceTypeVariantEnum.lens:
+            case DeviceTypeVariantEnum.light: return html`${unsafeSVG(icon(faLightbulb).html[0])}`
+            case DeviceTypeVariantEnum.stabilizer:
+            case DeviceTypeVariantEnum.tripod: return html`T`
             default: return html`Icon`
         }
     }

@@ -71,7 +71,7 @@ public class DeviceTypeRepository {
 
     public List<AutocompleteOptionDTO<DeviceTypeMinimalDTO>> search(String searchTerm){
         List<DeviceTypeMinimalDTO> deviceTypes = em.createQuery(
-                        "SELECT new at.camconnect.dtos.DeviceTypeMinimalDTO(d.id, d.name, 'a', d.image) FROM DeviceType d " +
+                        "SELECT new at.camconnect.dtos.DeviceTypeMinimalDTO(d.id, d.name, d.variant, d.image) FROM DeviceType d " +
                                 "WHERE UPPER(d.name) LIKE :searchTerm ",
                         DeviceTypeMinimalDTO.class)
                 .setParameter("searchTerm", searchTerm.toUpperCase() + "%")

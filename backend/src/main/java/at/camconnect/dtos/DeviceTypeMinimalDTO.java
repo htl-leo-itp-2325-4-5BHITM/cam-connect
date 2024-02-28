@@ -1,4 +1,6 @@
 package at.camconnect.dtos;
 
-public record DeviceTypeMinimalDTO(Long type_id, String name, String variant, String image) {
+import at.camconnect.enums.DeviceTypeVariantEnum;
+
+public record DeviceTypeMinimalDTO(Long type_id, String name, DeviceTypeVariantEnum variant, String image) {
 }

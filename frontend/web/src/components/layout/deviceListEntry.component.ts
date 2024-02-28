@@ -5,7 +5,7 @@ import {ButtonType} from "../basic/button.component"
 import {ColorEnum} from "../../base"
 import {DeviceListComponent} from "./deviceList.component";
 import {
-    AudioType,
+    MicrophoneType,
     CameraType,
     DeviceTypeFullDTO,
     DeviceTypeVariantEnum,
@@ -21,7 +21,7 @@ export class DeviceListEntryComponent extends LitElement {
         let details;
         switch(this.deviceTypeFull.deviceType.variant){
             case DeviceTypeVariantEnum.camera: details = this.renderCamera(); break;
-            case DeviceTypeVariantEnum.audio: details = this.renderAudio(); break;
+            case DeviceTypeVariantEnum.microphone: details = this.renderAudio(); break;
             case DeviceTypeVariantEnum.drone: details = this.renderDrone(); break;
             case DeviceTypeVariantEnum.lens: details = this.renderLens(); break;
             case DeviceTypeVariantEnum.light: details = this.renderLight(); break;
@@ -68,7 +68,7 @@ export class DeviceListEntryComponent extends LitElement {
     }
 
     renderAudio() {
-        let audio = this.deviceTypeFull.deviceType as AudioType
+        let audio = this.deviceTypeFull.deviceType as MicrophoneType
         return html`
             <section>
                 <div class="details">

@@ -5,8 +5,8 @@
 }
 
 :host([color="accent"]) input{
-  outline: 1px solid $accentDarkmode;
-  border-color: $accentDarkmode;
+  outline: 1px solid $accentDarkmodeDark;
+  border-color: $accentDarkmodeDark;
   color: adjust-color($accentDarkmodeLight, $lightness: 25%);
   background-color: adjust-color($accentDarkmodeLight, $alpha: -0.9);
 
