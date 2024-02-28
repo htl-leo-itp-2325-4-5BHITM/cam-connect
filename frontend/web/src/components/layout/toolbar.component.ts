@@ -89,7 +89,7 @@ export class ToolbarComponent extends LitElement {
 
     uncheckAll() {
         this.appState.value.selectedRentEntries.forEach((entry) => {
-            entry.toggleRentCheck()
+            entry.toggleRentCheck(false)
         })
     }
 

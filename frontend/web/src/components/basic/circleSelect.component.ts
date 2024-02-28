@@ -17,17 +17,26 @@ export class CircleSelectComponent extends LitElement {
     @property({ type: Boolean, reflect: true })
     checked?: boolean = false;
 
-    toggleSelect() {
-        this.checked = !this.checked;
+    @property()
+    onToggle: (checked: boolean) => void = (checked) => {}
+
+    connectedCallback() {
+        super.connectedCallback();
     }
 
     //TODO steal click effect logic from iconCTA (and possibly move that to a custom class in base) to steal the subtle upscale effect
     render() {
         return html`
             <style>${styles}</style>
-            <div @click="${this.toggleSelect}" class="${this.type == CircleSelectType.MULTIPLE ? 'multiple' : ''} ${this.color}">
-                <img src="../../assets/${this.checked ? "checked" : "unchecked"}_${this.type}.svg" alt="">\
-            </div>`
+            <icon-cta .clickAction="${()=>{this.toggleSelect(); this.onToggle(this.checked)}}">
+                <div class="${this.type == CircleSelectType.MULTIPLE ? 'multiple' : ''} ${this.color}">
+                    <img src="../../assets/${this.checked ? "checked" : "unchecked"}_${this.type}.svg" alt="">\
+                </div>
+            </icon-cta>`
+    }
+
+    toggleSelect() {
+        this.checked = !this.checked;
     }
 }
 

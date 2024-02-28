@@ -18,9 +18,6 @@ export class RentListEntryComponent extends LitElement {
     @property()
     rent: Rent
 
-    @property({ type: Boolean, reflect: true })
-    checked: boolean = false
-
     @property()
     private appState: ObservedProperty<AppState>
 
@@ -77,10 +74,10 @@ export class RentListEntryComponent extends LitElement {
                     </div>
                 </cc-chip>
                 
-                <cc-circle-select @click="${() => {this.toggleRentCheck()}}" 
+                <cc-circle-select .onToggle="${() => this.toggleRentCheck()}" 
                                   .checked="${this.appState.value.selectedRentEntries.has(this)}" 
-                                  size="${SizeEnum.SMALL}">
-                </cc-circle-select>
+                                  size="${SizeEnum.SMALL}"
+                ></cc-circle-select>
             </div>
         `
     }
@@ -116,9 +113,6 @@ export class RentListEntryComponent extends LitElement {
                                    value="${this.rent.teacher_start.firstname.charAt(0)}. ${this.rent.teacher_start.lastname}">
                 </cc-property-value>`
         } else { //static rent
-/*
-            console.log(this.rent.rent_start.toLocaleDateString("de-DE", {day: '2-digit', month: '2-digit'}))
-*/
             return html`
                 ${this.rent.type == RentTypeEnum.DEFAULT ?
                         html`
@@ -152,14 +146,18 @@ export class RentListEntryComponent extends LitElement {
         }
     }
 
-    toggleRentCheck(){
-        this.checked = !this.checked
+    toggleRentCheck(checked?: boolean){
+        if(!checked) checked = !this.isChecked()
 
-        if(this.checked){
+        if(checked){
             this.appState.value.addSelectedRentEntry(this)
         } else{
             this.appState.value.removeSelectedRentEntry(this)
         }
+    }
+
+    isChecked(){
+        return this.appState.value.selectedRentEntries.has(this)
     }
 
     removeRent() {

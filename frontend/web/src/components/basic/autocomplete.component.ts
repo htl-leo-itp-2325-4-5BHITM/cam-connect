@@ -37,7 +37,7 @@ export class AutocompleteComponent<T> extends LitElement {
     querySuggestions: (searchTerm: string) => Promise<AutocompleteOption<T>[]> = (searchTerm) => {return Promise.resolve([])}
 
     @property()
-    iconProvider: (data: T) => TemplateResult = (type) => {return html`no icon provider`}
+    iconProvider: (data: T) => TemplateResult = (data) => {return html`no icon provider`}
 
     @property()
     contentProvider: (data: T) => string = () => {return "no content provider"}
@@ -146,7 +146,7 @@ export class AutocompleteComponent<T> extends LitElement {
     boundHandelAutoClose = this.handleAutoClose.bind(this)
     handleAutoClose(e: Event){
         //TODO target is the body for some reason so clicking the padding of the suggestion box closes it
-        let target = Util.deepEventTarget(e.target as Element)
+        let target = Util.deepEventTarget(this)
         console.log(target)
         if (target == this.shadowRoot.querySelector("input") ||
             target == this.shadowRoot.querySelector(".suggestions") ||

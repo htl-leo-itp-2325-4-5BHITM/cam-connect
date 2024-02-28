@@ -7,6 +7,9 @@ export class iconCTAComponent extends LitElement {
     @queryAssignedElements()
     slottedChildren!: Array<HTMLElement>;
 
+    @property()
+    clickAction: () => void = () => {}
+
     render() {
         return html`
             <style>${styles}</style>
@@ -16,7 +19,19 @@ export class iconCTAComponent extends LitElement {
 
     connectedCallback() {
         super.connectedCallback();
-        this.addEventListener("click", this.playClickAnimation)
+        this.addEventListener("click", () => {this.playClickAnimation(); this.clickAction()})
+        this.addEventListener("keydown", (event: KeyboardEvent) => {
+            if(event.key == " " || event.key == "Enter") {
+                console.log("action")
+                this.playClickAnimation()
+                this.clickAction()
+            }
+        })
+    }
+
+    protected firstUpdated(_changedProperties: PropertyValues) {
+        super.firstUpdated(_changedProperties);
+        this.setAttribute("tabindex", "0")
     }
 
     handleSlotchange() {

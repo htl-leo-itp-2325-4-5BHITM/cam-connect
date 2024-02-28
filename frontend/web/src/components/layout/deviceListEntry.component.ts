@@ -8,7 +8,7 @@ import {Device} from "../../service/device.service"
 import {CameraType, DeviceType, DeviceTypeFullDTO, DeviceTypeVariantEnum} from "../../service/deviceType.service"
 
 @customElement('cc-device-list-entry')
-export class RentListEntryComponent extends LitElement {
+export class DeviceListEntryComponent extends LitElement {
     @property()
     deviceTypeFull?: DeviceTypeFullDTO
 

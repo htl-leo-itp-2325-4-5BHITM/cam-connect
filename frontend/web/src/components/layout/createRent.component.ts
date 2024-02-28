@@ -98,7 +98,7 @@ export class CreateRentComponent extends LitElement {
                     Globale Zeit setzen:
                     <div class="dateInputArea">
                         <input type="text" class="date">
-                        <icon-cta @click="${this.setGlobaldate}">${unsafeSVG(icon(faCircleArrowDown).html[0])}</icon-cta>
+                        <icon-cta .clickAction="${() => this.setGlobaldate()}">${unsafeSVG(icon(faCircleArrowDown).html[0])}</icon-cta>
                     </div>
                 </div>
                 

@@ -6,16 +6,16 @@ div{
   cursor: pointer;
   user-select: none;
 
-  margin: -.4rem;
-  padding: .4rem;
+/*  margin: -.4rem;
+  padding: .4rem;*/
 
   border-radius: 50%;
 
-  transition: background-color $hoverBackgroundTransitionTime;
+  /*transition: background-color $hoverBackgroundTransitionTime;
 
   &:hover{
     background-color: $hoverBackground;
-  }
+  }*/
 
   img{
     width: 1.2rem;

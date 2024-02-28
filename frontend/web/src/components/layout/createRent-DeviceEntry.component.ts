@@ -110,7 +110,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
     
                 <div class="right">
                     <input class="date">
-                    <icon-cta @click="${() => {this.parent.removeDevice(this)}}">${unsafeSVG(icon(faXmark).html[0])}</icon-cta>
+                    <icon-cta .clickAction="${() => {this.parent.removeDevice(this)}}">${unsafeSVG(icon(faXmark).html[0])}</icon-cta>
                 </div>
             `
         else if(this.type == "default")
@@ -129,7 +129,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
     
                 <div class="right">
                     <input class="date">
-                    <icon-cta @click="${() => {this.parent.removeDevice(this)}}">${unsafeSVG(icon(faXmark).html[0])}</icon-cta>
+                    <icon-cta .clickAction="${() => {this.parent.removeDevice(this)}}">${unsafeSVG(icon(faXmark).html[0])}</icon-cta>
                 </div>
             `
     }

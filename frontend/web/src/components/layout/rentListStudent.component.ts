@@ -6,12 +6,12 @@ import {SimpleColorEnum, SizeEnum} from "../../base"
 import {RentByStudentDTO, RentStatus} from "../../service/rent.service";
 import {model} from "../../index"
 import { ObservedProperty} from "../../model"
+import {RentListEntryComponent} from "./rentListEntry.component"
 
 @customElement('cc-rent-list-student')
 export class RentListStudentComponent extends LitElement {
     @property()
     rentByStudent?: RentByStudentDTO
-
 
     constructor() {
         super()
@@ -53,18 +53,21 @@ export class RentListStudentComponent extends LitElement {
                 <div class="right">
                     <cc-button size="${SizeEnum.SMALL}">Verleih erstellen</cc-button>
                     <cc-button color="${SimpleColorEnum.GRAY}" size="${SizeEnum.SMALL}">Details anzeigen</cc-button>
-                    <cc-circle-select type="${CircleSelectType.MULTIPLE}" size="${SizeEnum.SMALL}" @click="${this.selectAll}"></cc-circle-select>
+                    <cc-circle-select type="${CircleSelectType.MULTIPLE}" size="${SizeEnum.SMALL}" 
+                                      .onToggle="${() => this.selectAll()}"
+                    ></cc-circle-select>
                 </div>
             </div>
         `
     }
 
-    selectAll(elem) {
-        let targetCheck = elem.target.checked
+    selectAll() {
+        let isChecked = this.shadowRoot.querySelector("cc-circle-select").checked
         this.shadowRoot.querySelectorAll("cc-rent-list-entry").forEach(rentListEntry => {
-            if(rentListEntry.checked != targetCheck){
-                rentListEntry.toggleRentCheck()
-            }
+            if(isChecked)
+                rentListEntry.toggleRentCheck(true)
+            else
+                rentListEntry.toggleRentCheck(false)
         })
     }
 
@@ -78,8 +81,8 @@ export class RentListStudentComponent extends LitElement {
         let multiple = this.shadowRoot.querySelector(`cc-circle-select`)
         multiple.checked = true
 
-        this.shadowRoot.querySelectorAll("cc-rent-list-entry").forEach(select => {
-            if(select.checked != true){
+        this.shadowRoot.querySelectorAll("cc-rent-list-entry").forEach((entry: RentListEntryComponent) => {
+            if(entry.isChecked() != true){
                 multiple.checked = false
             }
         })
