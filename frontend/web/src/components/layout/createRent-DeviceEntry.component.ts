@@ -17,6 +17,7 @@ import {AppState} from "../../AppState"
 import localeDe from "air-datepicker/locale/de"
 import {AutocompleteOption} from "../basic/autocomplete.component"
 import {DeviceType, DeviceTypeVariantEnum} from "../../service/deviceType.service"
+import Util, {DatePickerWrapper} from "../../util"
 
 export interface CreateRentDeviceEntryData {
     device_type_id: number
@@ -43,7 +44,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
     @property()
     appState: ObservedProperty<AppState>
 
-    datePicker: AirDatepicker
+    datePicker: DatePickerWrapper
 
     constructor(parent: CreateRentComponent, type: RentDeviceEntryComponentType = "default"){
         super()
@@ -62,38 +63,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
         let input = this.renderRoot.querySelector('.date') as HTMLInputElement
-
-        //TODO ask huemer if we want to allow dates in the past
-        //there might be a case where someone wants to log a rent that they conducted in the past
-        //it probably makes most sense to only allow ones in the future
-        //airdatepicker does allow a min value
-        this.datePicker = new AirDatepicker(input, {
-            locale: localeDe,
-            range: true,
-            dateFormat: "dd.MM",
-            multipleDatesSeparator: ' - ',
-            selectedDates: [new Date(), new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)],
-            autoClose: true,
-            moveToOtherMonthsOnSelect: false,
-            toggleSelected: false,
-            /*visible: true,*/
-            onShow: (finished) => {
-                if(finished) return //onShow gets called twice, once on animation start and a second time on animation end
-                //the datepicker handles its own close by esc, to prevent another close action from getting called this dummy is added
-                this.appState.value.addCurrentActionCancellation(()=>{}, "datepicker")
-                //TODO there is a known issue here with the esc action when directly switching from one datepicker to another
-            },
-            onHide: () => {
-                //needs to be in a timeout to make sure that the cancelCurrentAction shortcut was called before showing
-                setTimeout(() => {
-                    console.log("hiding")
-                    this.appState.value.removeCurrentActionCancellation("datepicker")
-                    if(this.datePicker.selectedDates.length <= 1){//forces user to select an actual range of dates
-                        this.datePicker.show()
-                    }
-                },100)
-            }
-        })
+        this.datePicker = new DatePickerWrapper(input)
     }
 
     render() {
@@ -115,7 +85,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                 <style>${styles}</style>
                 <div class="left">
                     <cc-autocomplete placeholder="Name" class="name" 
-                                     .onSelect="${(option: AutocompleteOption<DeviceType>) => {this.data.device_type_id = option.id}}"
+                                     .onSelect="${(option: DeviceType) => {this.data.device_type_id = option.type_id}}"
                                      .querySuggestions="${this.searchForDeviceType}"
                                      .iconProvider="${this.provideDeviceTypeIcon}"
                                      .contentProvider="${(data: DeviceType) => {return data.name}}"
@@ -215,7 +185,6 @@ export class CreateRentDeviceEntryComponent extends LitElement {
     }
 
     provideDeviceTypeIcon(data: DeviceType): TemplateResult {
-        console.log(data)
         switch (data.variant){
             case DeviceTypeVariantEnum.camera: return html`${unsafeSVG(icon(faCamera).html[0])}`
             case DeviceTypeVariantEnum.microphone: return html`${unsafeSVG(icon(faMicrophone).html[0])}`
@@ -228,30 +197,31 @@ export class CreateRentDeviceEntryComponent extends LitElement {
         }
     }
 
-    toRentObject(): CreateRentDTO {
+    toRentObject(studentId: number): CreateRentDTO {
         //TODO add support for notes
+        //TODO get teacher id from user system
 
         if(this.type == "default"){
             return {
                 type: RentTypeEnum.DEFAULT,
-                student_id: 1,
+                student_id: studentId,
                 teacher_start_id: 1,
                 device_type_id: this.data.device_type_id,
                 device_number: this.data.device_number,
                 note: "",
-                rent_start: this.data.rent_start.toISOString(),
-                rent_end_planned: this.data.rent_end_planned.toISOString()
+                rent_start: Util.formatDateForDb(this.datePicker.instance.selectedDates[0]),
+                rent_end_planned: Util.formatDateForDb(this.datePicker.instance.selectedDates[1])
             }
         }
         else if(this.type == "string"){
             return {
                 type: RentTypeEnum.STRING,
-                student_id: 1,
+                student_id: studentId,
                 teacher_start_id: 1,
                 device_string: this.data.device_string,
                 note: "",
-                rent_start: this.data.rent_start.toISOString(),
-                rent_end_planned: this.data.rent_end_planned.toISOString()
+                rent_start: Util.formatDateForDb(this.datePicker.instance.selectedDates[0]),
+                rent_end_planned: Util.formatDateForDb(this.datePicker.instance.selectedDates[1])
             }
         }
     }
