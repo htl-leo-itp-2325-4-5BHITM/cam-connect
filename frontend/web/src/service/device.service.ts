@@ -40,7 +40,7 @@ export default class DeviceService{
     }
 
     static update(device: Device){
-        Api.getById<Device>("/device", device.device_id, "/update", device)
+        Api.postData(`/device/getById/${device.device_id}/update`, device)
             .then(data => {
                 console.log("updated", data)
             })

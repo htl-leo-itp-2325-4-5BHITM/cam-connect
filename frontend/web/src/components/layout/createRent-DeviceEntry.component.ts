@@ -162,12 +162,9 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                 return false
             }
 
-            let response = await fetch(`${config.api_url}/device/validatenumberandtype/${this.data.device_number}/${this.data.device_type_id}`)
-            Api.handleHttpError(response.status, response.url)
-            let result = await response.json() as ccResponse<boolean>
-            if(result.ccStatus) Api.handleCCError(result.ccStatus.statusCode, result.ccStatus.details, "/device/validatenumberandtype")
+            let isValid = await Api.fetchData<boolean>(`/device/validatenumberandtype/${this.data.device_number}/${this.data.device_type_id}`)
 
-            if(result.data == false) {
+            if(isValid == false) {
                 this.highlightInputError(this.shadowRoot.querySelector(".number"))
                 this.highlightInputError(this.shadowRoot.querySelector(".name"))
                 return false
