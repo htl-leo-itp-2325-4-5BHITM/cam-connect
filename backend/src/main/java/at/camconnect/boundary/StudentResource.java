@@ -28,8 +28,12 @@ public class StudentResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response createStudent(Student s){
-        studentRepository.create(s);
-        return Response.ok().build();
+        try{
+            studentRepository.create(s);
+        } catch(CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
 
     @POST
@@ -37,8 +41,12 @@ public class StudentResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response removeStudent(Student s){
-        studentRepository.remove(s);
-        return Response.ok().build();
+        try{
+            studentRepository.remove(s);
+        } catch(CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
 
     @POST
@@ -46,14 +54,24 @@ public class StudentResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response updateStudent(Student s){
-        studentRepository.update(s);
-        return Response.ok().build();
+        try{
+            studentRepository.update(s);
+        } catch(CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
 
     @GET
     @Path("/getbyid/{id: [0-9]+}")
-    public Student getById(@PathParam("id")Long id) {
-        return studentRepository.getById(id);
+    public Response getById(@PathParam("id")Long id) {
+        Student student;
+        try{
+            student = studentRepository.getById(id);
+        } catch(CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok(student);
     }
 
     @POST
@@ -73,8 +91,14 @@ public class StudentResource {
 
     @GET
     @Path("/getall")
-    public List<Student> getAll() {
-        return studentRepository.getAll();
+    public Response getAll() {
+        List<Student> studentList;
+        try{
+            studentList = studentRepository.getAll();
+        } catch(CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok(studentList);
     }
 
     @POST

@@ -24,7 +24,11 @@ public class DeviceResource {
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createDevice(Device d){
-        deviceRepository.create(d);
+        try {
+            deviceRepository.create(d);
+        } catch (CCException ex) {
+            return CCResponse.error(ex);
+        }
         return CCResponse.ok();
     }
 
@@ -70,48 +74,72 @@ public class DeviceResource {
     @Path("/getbyid/{id: [0-9]+}/remove")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response remove(@PathParam("id")long id){
-        deviceRepository.remove(id);
-        return Response.ok().build();
+        try {
+            deviceRepository.remove(id);
+        } catch (CCException ex) {
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
 
     @POST
     @Path("/getbyid/{id: [0-9]+}/update")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id")Long id, DeviceDTO deviceDTO){
-        deviceRepository.update(id, deviceDTO);
-        return Response.ok().build();
+        try {
+            deviceRepository.update(id, deviceDTO);
+        } catch (CCException ex) {
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
 
     @POST
     @Path("/getbyid/{id: [0-9]+}/update/number")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateNumber(@PathParam("id")Long id, DeviceDTO deviceDTO){
-        deviceRepository.setNumber(id, deviceDTO.number());
-        return Response.ok().build();
+        try {
+            deviceRepository.setNumber(id, deviceDTO.number());
+        } catch (CCException ex) {
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
 
     @POST
     @Path("/getbyid/{id: [0-9]+}/update/serial")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateSerial(@PathParam("id")Long id, DeviceDTO deviceDTO){
-        deviceRepository.setSerial(id, deviceDTO.serial());
-        return Response.ok().build();
+        try {
+            deviceRepository.setSerial(id, deviceDTO.serial());
+        } catch (CCException ex) {
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
 
     @POST
     @Path("/getbyid/{id: [0-9]+}/update/note")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateNote(@PathParam("id")Long id, DeviceDTO deviceDTO){
-        deviceRepository.setNote(id, deviceDTO.note());
-        return Response.ok().build();
+        try {
+            deviceRepository.setNote(id, deviceDTO.note());
+        } catch (CCException ex) {
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
 
     @POST
     @Path("/getbyid/{id: [0-9]+}/update/type")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateType(@PathParam("id")Long id, DeviceDTO deviceDTO){
-        deviceRepository.setType(id, deviceDTO.type_id());
-        return Response.ok().build();
+        try {
+            deviceRepository.setType(id, deviceDTO.type_id());
+        } catch (CCException ex) {
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
     @GET
 
