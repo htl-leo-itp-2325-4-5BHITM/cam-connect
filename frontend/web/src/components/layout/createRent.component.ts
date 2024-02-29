@@ -19,6 +19,7 @@ import RentService, {CreateRentDTO} from "../../service/rent.service"
 import {AppState} from "../../AppState"
 import {AutocompleteOption} from "../basic/autocomplete.component"
 import {Student} from "../../service/student.service"
+import {DatePickerWrapper} from "../../util"
 
 @customElement('cc-create-rent')
 export class CreateRentComponent extends LitElement {
@@ -27,7 +28,7 @@ export class CreateRentComponent extends LitElement {
 
     devices: Set<CreateRentDeviceEntryComponent> = new Set()
 
-    globalDatePicker: AirDatepicker
+    globalDatePicker: DatePickerWrapper
 
     @property()
     private appState: ObservedProperty<AppState>
@@ -39,38 +40,12 @@ export class CreateRentComponent extends LitElement {
 
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
+
         let globalInput = this.renderRoot.querySelector('.globaltime input') as HTMLInputElement
-        let lastSelection = [new Date(), new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)]
-        this.globalDatePicker = new AirDatepicker(globalInput, {
-            locale: localeDe,
-            range: true,
-            dateFormat: "dd.MM",
-            multipleDatesSeparator: ' - ',
-            selectedDates: [new Date(), new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)],
-            autoClose: true,
-            moveToOtherMonthsOnSelect: false,
-            toggleSelected: false,
-            /*visible: true,*/
-            onShow: (finished) => {
-                if(finished) return //onShow gets called twice, once on animation start and a second time on animation end
-                //the datepicker handles its own close by esc, to prevent another close action from getting called this dummy is added
-                this.appState.value.addCurrentActionCancellation(()=>{}, "datepicker")
-            },
-            onHide: () => {
-                //needs to be in a timeout to make sure that the cancelCurrentAction shortcut was called before showing
-                if(this.globalDatePicker.selectedDates.length <= 1){//forces user to select an actual range of dates
-                    console.log("using old date", lastSelection )
-                    //TODO
-                }
-                else{
-                    this.appState.value.removeCurrentActionCancellation("datepicker")
-                    lastSelection = this.globalDatePicker.selectedDates
-                }
-            }
-        })
+        this.globalDatePicker = new DatePickerWrapper(globalInput)
+
         this.addDevice()
         this.appState.value.createRentComponent = this
-        console.log(this.appState.value.createRentComponent)
     }
 
     render() {
@@ -88,7 +63,7 @@ export class CreateRentComponent extends LitElement {
             </div>
 
             <cc-autocomplete placeholder="Schüler" class="studentSelector" color="${SimpleColorEnum.ACCENT}" size="${SizeEnum.MEDIUM}"
-                             .onSelect="${(id:number) => {this.student_id = id}}"
+                             .onSelect="${(student: Student) => {this.student_id = student.student_id}}"
                              .querySuggestions="${this.searchForStudent}"
                              .iconProvider="${()=>{return html`${unsafeSVG(icon(faUser).html[0])}`}}" 
                              .contentProvider="${(data: Student) => {return `${data.firstname} ${data.lastname} • ${data.school_class}`}}"
@@ -148,7 +123,7 @@ export class CreateRentComponent extends LitElement {
 
     setGlobaldate() {
         this.devices.forEach(device => {
-            device.datePicker.selectDate([this.globalDatePicker.selectedDates[0], this.globalDatePicker.selectedDates[1]])
+            device.datePicker.instance.selectDate([this.globalDatePicker.instance.selectedDates[0], this.globalDatePicker.instance.selectedDates[1]])
         })
     }
 
@@ -158,7 +133,7 @@ export class CreateRentComponent extends LitElement {
         for (let i = 0; i < this.devices.size; i++) {
             let device = Array.from(this.devices)[i]
 
-            if(await device.validate()) data.push(device.toRentObject())
+            if(await device.validate()) data.push(device.toRentObject(this.student_id))
         }
 
         if(data.length == 0) return
@@ -192,6 +167,7 @@ export class CreateRentComponent extends LitElement {
         this.appState.value.closeCreateRentModal()
         this.devices.forEach(device => device.remove())
         this.devices.clear()
+        this.shadowRoot.querySelector("cc-autocomplete").clear()
         this.addDevice()
     }
 

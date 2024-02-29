@@ -12,6 +12,7 @@ import {LineColor, LineType} from "../basic/line.component"
 import PopupEngine from "../../popupEngine"
 import {ObservedProperty} from "../../model"
 import {AppState} from "../../AppState"
+import Util from "../../util"
 
 @customElement('cc-rent-list-entry')
 export class RentListEntryComponent extends LitElement {
@@ -132,10 +133,10 @@ export class RentListEntryComponent extends LitElement {
                 
                 <div class="time">
                     <span>
-                        ${this.rent.rent_start}
+                        ${Util.formatDateForHuman(this.rent.rent_start)}
                     </span>
                     <span>-</span>
-                    <span>${this.rent.rent_end_planned}</span>
+                    <span>${Util.formatDateForHuman(this.rent.rent_end_planned)}</span>
                 </div>
                 
                 <cc-line color=${LineColor.LIGHTER} type="${LineType.VERTICAL}"></cc-line>

@@ -48,7 +48,7 @@ export class Api {
             })
     }
 
-    static postData<T>(path: string, data: T): Promise<any> {
+    static postData<In, Out>(path: string, data: In): Promise<any> {
         return fetch(`${config.api_url}${path}`, {
             method: "POST",
             headers: {
@@ -58,38 +58,13 @@ export class Api {
         })
         .then(response => {
             this.handleHttpError(response.status, response.url)
-            return response.json()
+            return response.json() as Promise<ccResponse<Out>>
         })
-        .then((result: ccResponse<any>) => {
-            this.handleCCError(result.ccStatus.statusCode, result.ccStatus.details, path)
+        .then((result: ccResponse<Out>) => {
+            if(result.ccStatus) this.handleCCError(result.ccStatus.statusCode, result.ccStatus.details, path)
+            else console.error("no ccResponse object received from", path, "only got:", result)
             return result
         })
-    }
-
-    /**
-     * updates the data at the specified path with the given id.
-     * @param path should start with a / will automatically be surrounded by the api url, the getbyid and optionally the operation
-     * @param operation
-     * @param id
-     * @param data
-     */
-    static async getById<T>(path: string, id: number, operation: string = "", data?: T): Promise<T> {
-        let response: Response
-        if(data)
-            response = await fetch(`${config.api_url}${path}/getbyid/${id}${operation}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        })
-        else
-            response = await fetch(`${config.api_url}${path}/getbyid/${id}${operation}`)
-
-        this.handleHttpError(response.status, response.url)
-        let result = await response.json() as ccResponse<T>
-        if(result.ccStatus) this.handleCCError(result.ccStatus.statusCode, result.ccStatus.details, path + operation)
-        return result.data
     }
 
     static handleCCError(statusCode: number, details: string, url:string): boolean {

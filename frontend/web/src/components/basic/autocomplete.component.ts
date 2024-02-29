@@ -31,7 +31,7 @@ export class AutocompleteComponent<T> extends LitElement {
     options: AutocompleteOption<T>[] = []
 
     @property()
-    onSelect = (option: AutocompleteOption<T>) => {}
+    onSelect = (option: T) => {}
 
     @property()
     querySuggestions: (searchTerm: string) => Promise<AutocompleteOption<T>[]> = (searchTerm) => {return Promise.resolve([])}
@@ -121,7 +121,7 @@ export class AutocompleteComponent<T> extends LitElement {
         this.selected = option
         this.shadowRoot.querySelector("input").focus()
         this.hideSuggestions()
-        this.onSelect(this.selected)
+        this.onSelect(this.selected.data)
     }
 
     //TODO we might want to limit rates here so that we dont send all too many requests
@@ -147,7 +147,6 @@ export class AutocompleteComponent<T> extends LitElement {
     handleAutoClose(e: Event){
         //TODO target is the body for some reason so clicking the padding of the suggestion box closes it
         let target = Util.deepEventTarget(this)
-        console.log(target)
         if (target == this.shadowRoot.querySelector("input") ||
             target == this.shadowRoot.querySelector(".suggestions") ||
             target.classList.contains("entry"))
@@ -185,10 +184,17 @@ export class AutocompleteComponent<T> extends LitElement {
         this.focusedId = Number(next.dataset.id)
     }
 
+    //region outside interaction
     setFocus(){
         this.shadowRoot.querySelector("input").focus()
         this.generateSuggestions()
     }
+
+    clear(){
+        this.selected = {id: -1, data: null}
+        this.shadowRoot.querySelector("input").value = ""
+    }
+    //endregion
 }
 
 declare global {

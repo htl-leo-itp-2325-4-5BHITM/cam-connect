@@ -3,6 +3,9 @@ import {FilterOption} from "./components/basic/filterContainer.component"
 import {DeviceTypeAttribute} from "./service/deviceTypeAttribute.service"
 import * as repl from "repl"
 import {AutocompleteOption} from "./components/basic/autocomplete.component"
+import AirDatepicker from "air-datepicker"
+import localeDe from "air-datepicker/locale/de"
+import {model} from "./index"
 export default class Util{
     //TODO this typing does not seem right
     static deviceTypeToFilterOption(deviceTypes: DeviceTypeSource): FilterOption{
@@ -44,33 +47,6 @@ export default class Util{
         }
     }
 
-    //Yeah uhh this is deprecated and not needed, dont use this
-    //arr.find(item => item.id == id)
-    /**
-     * Loops over a provided array of JSON objects and checks if the id key matches with the provided one.
-     * If a match is found, it is returned; if no match is found, null is returned.
-     *
-     * @template T The type of the elements in the array, must have an 'id' property of type number or string.
-     * @param data
-     * @param id
-     * @return {T | null}
-     */
-    /*What does this code mean:
-        - T is a generic/type that is passed to the function when called, this makes sure that the type stays consistent with
-          input and return and that typescript knows what the return value is and doesn't complain.
-        - The type T is anything that the caller inputs but it *has* to extend this simple object. AKA it has to have an
-          id property.
-        - the id can be either a number or a string its type is a union type of string and number
-     */
-    static getItemByKeynameFromJsonArray<T>(data: T[], id: (number | string), keyName: string = "id"):T {
-        for (let i = 0; i < data.length; i++) {
-            if(data[i][keyName] === id){
-                return data[i]
-            }
-        }
-        return null
-    }
-
     //TODO constrain the generic so that it has to have a properly named id column, something like: extends {[keyName]:(number | string)}
     static replaceItemByIdInJsonArray<T>(data: T[], replacement: T, id: (number | string), keyName: keyof T):T[] {
         for (let i = 0; i < data.length; i++) {
@@ -90,5 +66,80 @@ export default class Util{
             selection.removeAllRanges();
             selection.addRange(range);
         }
+    }
+
+    static formatDateForDb(input: Date | string){
+        let date: Date
+        if(typeof input == "string"){
+            date = new Date(input)
+        }
+        else{
+            date = input
+        }
+
+        return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`
+    }
+
+    static formatDateForHuman(input: Date | string){
+        let date: Date
+        if(typeof input == "string"){
+            date = new Date(input)
+        }
+        else{
+            date = input
+        }
+
+        return date.toLocaleDateString("at-DE", {day: "2-digit", month: "2-digit", year: "2-digit"})
+    }
+}
+
+//TODO ask huemer if we want to allow dates in the past
+//there might be a case where someone wants to log a rent that they conducted in the past
+//it probably makes most sense to only allow ones in the future
+//airpicker does allow to set a min date
+//TODO the color of the keyboard nav effect is always the same and not visible inside a date range
+//this is not a problem with out implementation but with the library, its the same in the examples
+export class DatePickerWrapper{
+    instance: AirDatepicker
+    lastSelection = [new Date(), new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)]
+    static pickerIsOpen = false
+
+    constructor(input: HTMLInputElement, onSelect?: ({date, formattedDate, datepicker}) => void) {
+        this.instance = new AirDatepicker(input, {
+            locale: localeDe,
+            range: true,
+            dateFormat: "dd.MM",
+            multipleDatesSeparator: ' - ',
+            selectedDates: [new Date(), new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)],
+            autoClose: true,
+            moveToOtherMonthsOnSelect: false,
+            toggleSelected: false,
+            onShow: (finished) => {
+                if(finished) return //onShow gets called twice, once on animation start and a second time on animation end
+                DatePickerWrapper.pickerIsOpen = true
+                //the datepicker handles its own close by esc, to prevent another close action from getting called this
+                // dummy is added
+                model.appState.value.addCurrentActionCancellation(()=>{}, "datepicker")
+                //TODO there is a known issue here with the esc action when directly switching from one datepicker to another
+            },
+            onHide: (finished) => {
+                if(finished) return //onHide gets called twice, once on animation start and a second time on animation end
+                DatePickerWrapper.pickerIsOpen = false
+                if(this.instance.selectedDates.length == 1){//prevents only one date from being selected
+                    this.instance.clear()
+                    this.instance.selectDate([this.lastSelection[0], this.lastSelection[1]])
+                }
+                else{
+                    this.lastSelection = this.instance.selectedDates
+                }
+                setTimeout(() => {
+                    if(!DatePickerWrapper.pickerIsOpen)
+                        model.appState.value.removeCurrentActionCancellation("datepicker")
+                },100)
+            },
+            onSelect:() => {
+                //console.log(this.instance.selectedDates)
+            }
+        })
     }
 }
