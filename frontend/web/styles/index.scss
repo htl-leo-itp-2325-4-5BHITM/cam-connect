@@ -1,5 +1,11 @@
 @import "base";
 
+@media print{
+  @page {
+    size: landscape letter;
+  }
+}
+
 :global{
   body{
     height: 100svh;
