@@ -31,18 +31,23 @@
   }
 }
 
+/*TODO*/
+:host > svg{
+  display: block;
+  height: .9rem;
+  position: absolute;
+  top: 45%;
+  translate: 0 -50%;
+  right: .5rem;
+
+  path{
+    color: $gray600;
+  }
+}
+
 input{
   width: 100%;
   box-sizing: border-box;
-
-  /*TODO dropdown icon*/
-  &:after{
-    content: "";
-    background-color: $gray600;
-    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-    height: 1rem;
-    width: 1rem;
-  }
 }
 
 .suggestions{

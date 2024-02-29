@@ -122,8 +122,9 @@ export default class DeviceTypeService {
     }
 
     static fetchAllFull(){
-        Api.fetchData<DeviceTypeFullDTO>("/devicetype/getallfull")
+        Api.fetchData<DeviceTypeFullDTO[]>("/devicetype/getallfull")
             .then(data => {
+                console.log(data)
                 model.loadDeviceTypesFull(data)
             })
             .catch(error => {

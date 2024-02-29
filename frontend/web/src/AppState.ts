@@ -39,6 +39,7 @@ export class AppState{
     closeCreateRentModal(){
         this._createRentModalOpen = false
         KeyBoardShortCut.remove("addDevice")
+        KeyBoardShortCut.remove("createRent")
         this.update()
     }
 
@@ -47,6 +48,7 @@ export class AppState{
         //the "this" reference in the CreateRent class will be the AppState, try adding a log of "this" in the cancel method
         this.addCurrentActionCancellation(() => { this._createRentComponent?.cancel() }, "createRentModal")
         KeyBoardShortCut.register(["shift", "g"], () => { this._createRentComponent?.addDevice() }, "addDevice")
+        KeyBoardShortCut.register(["control", "enter"], () => { this._createRentComponent?.create() }, "createRent")
         this._createRentModalOpen = true
 
         let studentSelector = this._createRentComponent.shadowRoot.querySelector(".studentSelector") as AutocompleteComponent<Student>

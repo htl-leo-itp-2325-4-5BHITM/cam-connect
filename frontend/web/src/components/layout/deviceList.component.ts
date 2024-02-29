@@ -11,11 +11,11 @@ import {DeviceType, DeviceTypeFullDTO, DeviceTypeVariantCollection} from "../../
 @customElement('cc-device-list')
 export class DeviceListComponent extends LitElement {
     @property()
-    private deviceTypesFull: ObservedProperty<DeviceTypeFullDTO>
+    private deviceTypesFull: ObservedProperty<DeviceTypeFullDTO[]>
 
     constructor() {
         super()
-        this.deviceTypesFull = new ObservedProperty<DeviceTypeFullDTO>(this, model.deviceTypesFull)
+        this.deviceTypesFull = new ObservedProperty<DeviceTypeFullDTO[]>(this, model.deviceTypesFull)
     }
     render() {
         //let deviceTypes = Object.values(this.deviceTypes.value).flat()

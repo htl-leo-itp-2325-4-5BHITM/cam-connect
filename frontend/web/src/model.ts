@@ -37,7 +37,7 @@ export default class Model{
 
     readonly devices = new BehaviorSubject<Device[]>([])
     readonly deviceTypes = new BehaviorSubject<DeviceTypeVariantCollection>({audioTypes: [], cameraTypes: [], droneTypes: [], lensTypes: [], lightTypes: [], stabilizerTypes: [], tripodHeads: []})
-    readonly deviceTypesFull = new BehaviorSubject<DeviceTypeFullDTO>({deviceType: null, available: 0, deviceTags: []})
+    readonly deviceTypesFull = new BehaviorSubject<DeviceTypeFullDTO[]>([])
 
     readonly deviceTypeAttributes = new BehaviorSubject<DeviceTypeAttributeCollection>({cameraResolutions: [], cameraSensors: [], cameraSystems: [], lensMounts: [], tripodHeads: []})
     /**
@@ -115,7 +115,7 @@ export default class Model{
     loadDeviceTypes(deviceTypes: DeviceTypeVariantCollection = {audioTypes: [], cameraTypes: [], droneTypes: [], lensTypes: [], lightTypes: [], stabilizerTypes: [], tripodHeads: []}){
         this.deviceTypes.next(deviceTypes)
     }
-    loadDeviceTypesFull(deviceTypesFull: DeviceTypeFullDTO){
+    loadDeviceTypesFull(deviceTypesFull: DeviceTypeFullDTO[]){
         this.deviceTypesFull.next(deviceTypesFull)
     }
 

@@ -4,6 +4,9 @@ import styles from '../../../styles/components/basic/autocomplete.styles.scss'
 import Util from "../../util"
 import {KeyBoardShortCut, Regex, SimpleColorEnum, SizeEnum} from "../../base"
 import {model} from "../../index"
+import {unsafeSVG} from 'lit/directives/unsafe-svg.js';
+import {icon} from '@fortawesome/fontawesome-svg-core'
+import {faCaretDown} from "@fortawesome/free-solid-svg-icons"
 
 export interface AutocompleteOption<T> {
     id: number
@@ -55,6 +58,7 @@ export class AutocompleteComponent<T> extends LitElement {
                    @keyup="${this.generateSuggestions}"
                    @blur="${this.handleAutoClose}"
             >
+            ${unsafeSVG(icon(faCaretDown).html[0])}
             <div class="suggestions">
                 ${
                     this.options.length == 0 ? html`<div class="empty">Keine Ergebnisse</div>` :
@@ -126,6 +130,8 @@ export class AutocompleteComponent<T> extends LitElement {
 
     //TODO we might want to limit rates here so that we dont send all too many requests
     generateSuggestions(e?: KeyboardEvent){
+        //TODO display selected suggestion on first focus
+
         let input = this.shadowRoot.querySelector("input") as HTMLInputElement
         if(e) {
             if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Enter", "Alt", "Control"].includes(e.key)) return

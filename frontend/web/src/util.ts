@@ -120,7 +120,6 @@ export class DatePickerWrapper{
                 //the datepicker handles its own close by esc, to prevent another close action from getting called this
                 // dummy is added
                 model.appState.value.addCurrentActionCancellation(()=>{}, "datepicker")
-                //TODO there is a known issue here with the esc action when directly switching from one datepicker to another
             },
             onHide: (finished) => {
                 if(finished) return //onHide gets called twice, once on animation start and a second time on animation end
