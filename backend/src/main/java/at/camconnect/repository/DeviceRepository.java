@@ -40,7 +40,7 @@ public class DeviceRepository {
     public void update(Long id, DeviceDTO data) {
         try{
             setNumber(id, data.number());
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+        } catch(NumberFormatException ex){ System.out.println(ex.getMessage()); throw new CCException(1106); };
 
         try{
             setNote(id, data.note());

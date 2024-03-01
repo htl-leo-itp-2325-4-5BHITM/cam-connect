@@ -58,8 +58,7 @@ export default class RentService {
         let socket = new WebSocket(config.socket_url + "/socket/rents");
 
         socket.onmessage = (m) => {
-            let result = JSON.parse(m.data) as ccResponse<RentByStudentDTO[]>
-            model.loadRents(result.data)
+            RentService.fetchAll()
         }
     }
 

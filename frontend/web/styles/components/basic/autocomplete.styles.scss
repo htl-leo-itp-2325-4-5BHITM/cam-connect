@@ -52,6 +52,7 @@ input{
 
 .suggestions{
   position: absolute;
+  z-index: 10;
   left: 0;
   top: calc(100% + .3rem);
 
@@ -65,7 +66,6 @@ input{
 
   display: flex;
   flex-direction: column;
-  gap: .1rem;
 
   transition: opacity $transitionTimeMedium, transform $transitionTimeMedium;
 
@@ -85,7 +85,7 @@ input{
   gap: .5rem;
   transition: background-color $transitionTimeShort;
   border-radius: .3rem;
-  padding: .1rem .5rem;
+  padding: .2rem .5rem;
   cursor: pointer;
 
   &.focused{

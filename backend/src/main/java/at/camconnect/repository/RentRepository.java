@@ -70,19 +70,19 @@ public class RentRepository {
 
             em.persist(rent);
         }
-        rentSocket.broadcast(getAll());
+        rentSocket.broadcast();
     }
 
     @Transactional
     public void createEmpty(){
         em.persist(new Rent());
-        rentSocket.broadcast(getAll());
+        rentSocket.broadcast();
     }
 
     @Transactional
     public Response remove(Long id){
         em.remove(getById(id));
-        rentSocket.broadcast(getAll());
+        rentSocket.broadcast();
         return CCResponse.ok();
     }
 
@@ -242,7 +242,7 @@ public class RentRepository {
             }
         });
 
-        rentSocket.broadcast(getAll());
+        rentSocket.broadcast();
     }
 
     @Transactional
@@ -305,7 +305,7 @@ public class RentRepository {
             catch (CCException ccex){ throw ccex; }
             catch(Exception ex){ throw new CCException(1105, "cannot update device_string " + ex.getMessage()); }
 
-        rentSocket.broadcast(getAll());
+        rentSocket.broadcast();
     }
 
     @Transactional
@@ -350,7 +350,7 @@ public class RentRepository {
                 break;
         }
 
-        rentSocket.broadcast(getAll());
+        rentSocket.broadcast();
     }
 
     //region setter

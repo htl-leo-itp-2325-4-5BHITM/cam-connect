@@ -36,20 +36,11 @@ public class RentSocket {
         sessions.remove(session);
     }
 
-    public void broadcast(List<RentByStudentDTO> data) {
-        CCDataResponseDTO response = new CCDataResponseDTO(new CCStatus(1000), new CCResponseDetailDTO(data), data);
+    public void broadcast() {
+        CCResponseDTO response = new CCResponseDTO(new CCStatus(1000), new CCResponseDetailDTO());
 
-        //convert to a string (json-string)
-        String responseString = "";
-        try{
-            responseString = objectMapper.writeValueAsString(response);
-        }catch (JsonProcessingException ex){
-            responseString = "ewow";
-        }
-
-        String finalResponseString = responseString;
         sessions.forEach(s -> {
-            s.getAsyncRemote().sendObject(finalResponseString, result -> {
+            s.getAsyncRemote().sendObject("update", result -> {
                 if (result.getException() != null){
                     System.out.println("Unable to send message: " + result.getException());
                 }

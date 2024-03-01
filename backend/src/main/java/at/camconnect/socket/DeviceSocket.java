@@ -20,7 +20,7 @@ import java.util.List;
 
 @ServerEndpoint("/socket/devices")
 @ApplicationScoped
-public class DeviceSocket {
+public class DeviceSocket { //TODO this should be for deviceTypeFull
     List<Session> sessions = new ArrayList<>();
 
     @Inject
@@ -38,6 +38,7 @@ public class DeviceSocket {
         sessions.remove(session);
     }
 
+    //TODO reformat like the RentSocket
     public void broadcast(List<Device> data) {
         CCDataResponseDTO response = new CCDataResponseDTO(new CCStatus(1000), new CCResponseDetailDTO(data), data);
 
