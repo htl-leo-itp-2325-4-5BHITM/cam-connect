@@ -38,10 +38,42 @@ VALUES
 */
 
 -- Camera Types
-insert into DEVICETYPE (variant, dtype, name, system_id, resolution_id, sensor_id, mount_id, autofocus, framerate) values ('camera', 'CameraType', 'Sony A7 III', 1, 3, 4, 8, true, 120);
-insert into DEVICETYPE (variant, dtype, name, system_id, resolution_id, sensor_id, mount_id, autofocus, framerate) values ('camera', 'CameraType', 'Canon EOS R5', 1, 4, 5, 9, true, 120);
-insert into DEVICETYPE (variant, dtype, name, system_id, resolution_id, sensor_id, mount_id, autofocus, framerate) values ('camera', 'CameraType', 'Lumix S5 ii', 2, 3, 4, 6, true, 100);
-insert into DEVICETYPE (variant, dtype, name, system_id, resolution_id, sensor_id, mount_id, autofocus, framerate) values ('camera', 'CameraType', 'Lumix GH6', 2, 3, 5, 7, true, 100);
+insert into DEVICETYPE (variant, dtype, name, system_id, resolution_id, sensor_id, mount_id, autofocus, framerate)
+values
+    ('camera', 'CameraType', 'Sony A7 III', 1, 3, 4, 8, true, 120),
+    ('camera', 'CameraType', 'Canon EOS R5', 1, 4, 5, 9, true, 120),
+    ('camera', 'CameraType', 'Lumix S5 ii', 2, 3, 4, 6, true, 100),
+    ('camera', 'CameraType', 'Lumix GH6', 2, 3, 5, 7, true, 100);
+
+/** they don't work :c
+-- Drone Types
+insert into DEVICETYPE (variant, dtype, name, sensor_id, resolution_id, max_range)
+values
+    ('drone', 'DroneType', 'Mavic Mini', 3, 1, 100),
+    ('drone', 'DroneType', 'Mavic Pro', 4, 2, 100);
+
+-- Lens Types
+insert into DEVICETYPE (variant, dtype, name, mount_id, f_stop, focal_length) values ('lens', 'LensType', 'Lens 1', 2, 2.8, 35);
+insert into DEVICETYPE (variant, dtype, name, mount_id, f_stop, focal_length) values ('lens', 'LensType', 'Lens 2', 2, 3.8, 25);
+insert into DEVICETYPE (variant, dtype, name, mount_id, f_stop, focal_length) values ('lens', 'LensType', 'Lens 3', 2, 4.0, 45);
+
+-- Light Types
+insert into DEVICETYPE (variant, dtype, name, watts, rgb, variable_temperature) values ('light', 'LightType', 'LED', 600, true, true);
+insert into DEVICETYPE (variant, dtype, name, watts, rgb, variable_temperature) values ('light', 'LightType', 'Lampenstativ', 525, false, true);
+
+-- Microphone Types
+insert into DEVICETYPE (variant, dtype, name, windblocker, wireless, needs_recorder) values ('microphone', 'MicrophoneType', 'Zoom H2', false, true, false);
+insert into DEVICETYPE (variant, dtype, name, windblocker, wireless, needs_recorder) values ('microphone', 'MicrophoneType', 'RodeFunkset', true, true, true);
+insert into DEVICETYPE (variant, dtype, name, windblocker, wireless, needs_recorder) values ('microphone', 'MicrophoneType', 'X-Vive Funks.', true, true, false);
+
+-- Stabilizer Types
+insert into DEVICETYPE (variant, dtype, name, max_weight, number_of_axis) values ('stabilizer', 'StabilizerType', 'Schulterrig', 200, 2);
+insert into DEVICETYPE (variant, dtype, name, max_weight, number_of_axis) values ('stabilizer', 'StabilizerType', 'Gopro Gimbal', 150, 3);
+
+-- Tripod Types
+insert into DEVICETYPE (variant, dtype, name, head_id, height) values ('tripod', 'TripodType', 'Manfrotto 756B', 1, 150);
+insert into DEVICETYPE (variant, dtype, name, head_id, height) values ('tripod', 'TripodType', 'Hama Profil 76', 1, 150);
+**/
 
 -- assigning tags to devicetypes
 INSERT INTO tag_devicetype (tag_tag_id, type_type_id)
