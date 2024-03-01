@@ -39,8 +39,12 @@ public class RentResource {
     @Path("/createempty")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createRentEmpty() {
-        rentRepository.createEmpty();
-        return Response.ok().build();
+        try{
+            rentRepository.createEmpty();
+        } catch(CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
 
     @GET
@@ -124,7 +128,6 @@ public class RentResource {
         }catch (CCException ex){
             return CCResponse.error(ex);
         }
-
         return CCResponse.ok();
     }
 

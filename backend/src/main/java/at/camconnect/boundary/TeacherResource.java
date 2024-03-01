@@ -26,8 +26,12 @@ public class TeacherResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response createTeacher(Teacher t){
-        teacherRepository.create(t);
-        return Response.ok().build();
+        try{
+            teacherRepository.create(t);
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
     
     @POST   
@@ -35,8 +39,12 @@ public class TeacherResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response removeTeacher(Teacher t){
-        teacherRepository.remove(t);
-        return Response.ok().build();
+        try{
+            teacherRepository.remove(t);
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
 
     @POST
@@ -44,8 +52,12 @@ public class TeacherResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response updateTeacher(Teacher t){
-        teacherRepository.update(t);
-        return Response.ok().build();
+        try{
+            teacherRepository.update(t);
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
 
     @POST
@@ -53,21 +65,39 @@ public class TeacherResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Teacher> search(TeacherDTO teacherDTO){
-        return teacherRepository.search(teacherDTO);
+    public Response search(TeacherDTO teacherDTO){
+        List<Teacher> teacherList;
+        try{
+            teacherList = teacherRepository.search(teacherDTO);
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok(teacherList);
     }
 
     @GET
     @Path("/getbyid/{id: [0-9]+}")
-    public Teacher getById(@PathParam("id")long id) {
-        return teacherRepository.getById(id);
+    public Response getById(@PathParam("id")long id) {
+        Teacher teacher;
+        try{
+            teacher = teacherRepository.getById(id);
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok(teacher);
     }
 
     @GET
     @Path("/getall")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Teacher> getAll() {
-        return teacherRepository.getAll();
+    public Response getAll() {
+        List<Teacher> teacherList;
+        try{
+            teacherList = teacherRepository.getAll();
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok(teacherList);
     }
 
     @POST
