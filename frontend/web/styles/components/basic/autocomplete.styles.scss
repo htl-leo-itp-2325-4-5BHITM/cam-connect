@@ -31,7 +31,7 @@
   }
 }
 
-/*TODO*/
+//dropdown icon
 :host > svg{
   display: block;
   height: .9rem;
@@ -39,6 +39,7 @@
   top: 45%;
   translate: 0 -50%;
   right: .5rem;
+  pointer-events: none;
 
   path{
     color: $gray600;

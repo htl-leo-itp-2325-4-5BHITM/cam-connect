@@ -105,6 +105,13 @@ export interface DeviceTypeFullDTO {
     deviceTags: Tag[]
 }
 
+export interface DeviceTypeMinimalDTO {
+    type_id: number
+    name: string
+    variant: DeviceTypeVariantEnum
+    image: string
+}
+
 export interface Tag {
     tag_id: number
     description: string

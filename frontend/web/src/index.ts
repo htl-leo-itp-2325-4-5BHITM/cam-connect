@@ -42,8 +42,21 @@ export let model = new Model()
     console.log(data)
 })*/
 
-PopupEngine.init()
-
+PopupEngine.init({
+    onModalOpen: () => {
+        console.log("modal open")
+        model.appState.value.addCurrentActionCancellation(() => {
+            PopupEngine.cancelModal()
+        }, "modalClose")
+        KeyBoardShortCut.register(["Enter"], () => {
+            PopupEngine.confirmModal()
+        }, "confirmModal", true)
+    },
+    onModalClose: () => {
+        model.appState.value.removeCurrentActionCancellation("modalClose")
+        KeyBoardShortCut.remove("confirmModal")
+    }
+})
 setTimeout(() => {
     const app = document.createElement("cc-app")
     document.body.appendChild(app)

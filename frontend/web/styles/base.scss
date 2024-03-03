@@ -49,6 +49,7 @@ input, p[contenteditable]{
     padding-inline: .3rem;
     background-color: transparent;
     outline-color: transparent;
+    -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;
 
     transition: outline-color $transitionTimeShort, border-color $transitionTimeShort;
 
@@ -83,6 +84,7 @@ input, p[contenteditable]{
         left: 0;
         z-index: 100;
         font-size: $fSizeDesktopSmall;
+        transform: translateX(-50%);
     }
 }
 

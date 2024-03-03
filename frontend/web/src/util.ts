@@ -38,10 +38,10 @@ export default class Util{
         }
     }*/
 
-    static deepEventTarget(startpoint: Element = document.activeElement){
-        let focusedElem = startpoint
+    static deepEventFocusedElement(startpoint: HTMLElement = document.activeElement as HTMLElement){
+        let focusedElem:HTMLElement = startpoint
         while (focusedElem != undefined) {
-            let newFocusedElem = focusedElem?.shadowRoot?.activeElement
+            let newFocusedElem = focusedElem?.shadowRoot?.activeElement as HTMLElement
             if(newFocusedElem == undefined) return focusedElem
             focusedElem = newFocusedElem
         }
@@ -93,10 +93,6 @@ export default class Util{
     }
 }
 
-//TODO ask huemer if we want to allow dates in the past
-//there might be a case where someone wants to log a rent that they conducted in the past
-//it probably makes most sense to only allow ones in the future
-//airpicker does allow to set a min date
 //TODO the color of the keyboard nav effect is always the same and not visible inside a date range
 //this is not a problem with out implementation but with the library, its the same in the examples
 export class DatePickerWrapper{

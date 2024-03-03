@@ -2,7 +2,7 @@ import {LitElement, css, html, PropertyValues} from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/createRent.styles.scss'
 
-import {Api, ccResponse, ColorEnum, SimpleColorEnum, SizeEnum} from "../../base"
+import {Api, ccResponse, ColorEnum, SimpleColorEnum, SizeEnum, Tooltip} from "../../base"
 import {ButtonType} from "../basic/button.component"
 import {ObservedProperty} from "../../model"
 import {model} from "../../index"
@@ -19,7 +19,7 @@ import RentService, {CreateRentDTO} from "../../service/rent.service"
 import {AppState} from "../../AppState"
 import {AutocompleteOption} from "../basic/autocomplete.component"
 import {Student} from "../../service/student.service"
-import {DatePickerWrapper} from "../../util"
+import Util, {DatePickerWrapper} from "../../util"
 
 @customElement('cc-create-rent')
 export class CreateRentComponent extends LitElement {
@@ -84,7 +84,11 @@ export class CreateRentComponent extends LitElement {
             </div>
 
             <div class="buttons">
-                <cc-button class="primary" color="${ColorEnum.ACCENT}" type="${ButtonType.OUTLINED}" @click="${() => {this.addDevice('default')}}">
+                <cc-button class="primary" color="${ColorEnum.ACCENT}" type="${ButtonType.OUTLINED}" 
+                           @click="${() => {this.addDevice('default')}}"
+                           @mouseenter="${(e) => {Tooltip.show(e.target, 'shift+g', 1000)}}"
+                           @mouseleave="${()=>{Tooltip.hide(0)}}"
+                >
                     Gerät Hinzufügen
                 </cc-button>
                 <cc-button color="${ColorEnum.GRAY}" type="${ButtonType.OUTLINED}" @click="${() => {this.addDevice('string')}}">
@@ -106,10 +110,12 @@ export class CreateRentComponent extends LitElement {
     //TODO add shortcut for this
     //we might want to pass the currently selected global date to the new device
     addDevice(type: RentDeviceEntryComponentType = "default") {
-        console.log("adding")
         let newDevice = new CreateRentDeviceEntryComponent(this, type)
         this.devices.add(newDevice)
         this.shadowRoot.querySelector(".deviceList").appendChild(newDevice)
+        window.requestAnimationFrame(()=>{
+            newDevice.shadowRoot.querySelector("cc-autocomplete").setFocus()
+        })
     }
 
     removeDevice(device: CreateRentDeviceEntryComponent) {
@@ -143,22 +149,26 @@ export class CreateRentComponent extends LitElement {
 
     cancel(){
         console.log(this)
-        this.appState.value.addCurrentActionCancellation(()=>{
-            PopupEngine.closeModal(true, () => {this.appState.value.removeCurrentActionCancellation("popup")})
-        }, "popup")
 
         PopupEngine.createModal({
             heading: "Verleih erstellen abbrechen",
             text: "Möchtest du den Vorgang wirklich abbrechen? Alle eingegebenen Daten gehen verloren.",
             buttons: [
-                {text: "Ja", action: () => {
+                {
+                    text: "Ja",
+                    action: () => {
                         this.close()
                         this.appState.value.removeCurrentActionCancellation("createRentModal")
-                    }
+                    },
+                    role: "confirm"
                 },
-                {text: "Nein", action: () => {
+                {
+                    text: "Nein",
+                    action: () => {
                         this.appState.value.removeCurrentActionCancellation("popup")
-                    }}
+                    },
+                    role: "cancel"
+                },
             ]
         })
     }
@@ -169,6 +179,7 @@ export class CreateRentComponent extends LitElement {
         this.devices.clear()
         this.shadowRoot.querySelector("cc-autocomplete").clear()
         this.addDevice()
+        Util.deepEventFocusedElement()?.blur() //removes focus on possible input thats still targeted and preventing the user from using keyboard shortcuts
     }
 
     async searchForStudent(searchTerm: string): Promise<AutocompleteOption<Student>[]> {

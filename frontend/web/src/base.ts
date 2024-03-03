@@ -118,14 +118,16 @@ export class Tooltip {
     static timeoutFallback
 
     static show(elem: HTMLElement, text: string, delay: number) {
+        clearTimeout(this.timeoutFallback)
+
         this.lastTimeShown = Date.now()
         this.tooltip.innerText = text
 
         const bounds = elem.getBoundingClientRect()
-        let topOffset = bounds.top - this.tooltip.clientHeight
+        let topOffset = bounds.top - this.tooltip.clientHeight - 10
         if(topOffset < 0) topOffset = bounds.bottom + 5
         this.tooltip.style.top = topOffset + "px" //align the bottom of the toolip with the top of the hovered elem
-        this.tooltip.style.left = bounds.left + "px"
+        this.tooltip.style.left = bounds.left + bounds.width/2 + "px"
 
         if (Date.now() - this.lastTimeHidden < 100) { //if the last tooltip was closed less the 100ms ago
             /*this.lastTimeHidden = Date.now()*/
@@ -192,7 +194,7 @@ export class KeyBoardShortCut {
     static {
         window.addEventListener("keydown", (event: KeyboardEvent) => {
             let focusOnInput = false
-            let focusedElem = Util.deepEventTarget(event.target as Element)
+            let focusedElem = Util.deepEventFocusedElement(event.target as HTMLElement)
             if(focusedElem instanceof HTMLInputElement) focusOnInput = true
 
             this.pressedKeys.add(event.key.toLowerCase()) //add the pressed key to set

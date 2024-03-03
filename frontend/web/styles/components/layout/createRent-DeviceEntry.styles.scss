@@ -23,13 +23,13 @@
         }
 
         &.date{
-            width: 10ch;
+            width: 11ch;
             text-align: center;
             padding-inline: .2rem;
         }
 
         &.number{
-            width: 3ch;
+            width: 5ch;
         }
     }
 
@@ -47,7 +47,7 @@
         flex: 1;
         input{
             /* width of the (dropdown + number) + gap .. paddings cancel out between equip input and number input */
-            width: calc(18ch + .5rem)
+            width: calc(20ch + .5rem)
         }
     }
 }

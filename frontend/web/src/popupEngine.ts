@@ -9,6 +9,7 @@ interface ModalButton {
 	text?: string,
 	action?: (data?: ModalCallbackData) => void
 	closePopup?: boolean
+	role?: "confirm" | "cancel"
 }
 
 interface ModalInput {
@@ -28,6 +29,8 @@ interface Config{
 	notificationOffsetPhone?: {top: string, bottom: string}
 	defaultNotificationLifetime?: number
 	phoneBreakpoint?: number
+	onModalOpen?: () => void
+	onModalClose?: (data: ModalCallbackData) => void
 }
 
 interface ModalCallbackData{
@@ -60,7 +63,10 @@ export default class PopupEngine{
 		notificationOffsetPhone: {top: "1vh", bottom: "1vh"},
 		defaultNotificationLifetime: 5000,
 
-		phoneBreakpoint: 600
+		phoneBreakpoint: 600,
+
+		onModalOpen: () => {},
+		onModalClose: (data: ModalCallbackData) => {}
 	}
 
 	static endModal
@@ -128,6 +134,14 @@ export default class PopupEngine{
 					this.config.phoneBreakpoint = config.phoneBreakpoint
 				else
 					console.error('invalid phone breakpoint value: "' + config.phoneBreakpoint + '" must be a number, will default to "600".');
+			}
+
+			if(config.onModalOpen){
+				this.config.onModalOpen = config.onModalOpen
+			}
+
+			if(config.onModalClose){
+				this.config.onModalClose = config.onModalClose
 			}
 		}
 
@@ -747,6 +761,9 @@ export default class PopupEngine{
 			this.modalContent.appendChild(popupInputs)
 			
 			//create buttons
+			this.confirmModal = () => {}
+			this.cancelModal = () => {}
+
 			if(!settings.buttons || settings.buttons.length == 0){
 				settings.buttons = [{text: "okay"}]
 			}
@@ -770,6 +787,37 @@ export default class PopupEngine{
 							buttonIndex: i,
 						}
 				)}
+
+				switch (settings.buttons[i]?.role) {
+					case "confirm":
+						this.confirmModal = () => {
+							PopupEngine.closeModal(
+								settings.buttons[i].closePopup,
+								settings.buttons[i].action,
+								{
+									text: settings.text,
+									heading: settings.heading,
+									buttons: settings.buttons,
+									inputs: settings.inputs,
+									buttonIndex: i,
+								})
+						}
+						break;
+					case "cancel":
+						this.cancelModal = () => {
+							PopupEngine.closeModal(
+								settings.buttons[i].closePopup,
+								settings.buttons[i].action,
+								{
+									text: settings.text,
+									heading: settings.heading,
+									buttons: settings.buttons,
+									inputs: settings.inputs,
+									buttonIndex: i,
+								})
+						}
+						break;
+				}
 	
 				popupButtons.appendChild(button)
 			}
@@ -777,6 +825,8 @@ export default class PopupEngine{
 			this.modalContent.appendChild(popupButtons)
 	
 			//#endregion
+
+			this.config.onModalOpen()
 	
 			//show popup
 			this.modal.style.display = "grid"
@@ -812,7 +862,22 @@ export default class PopupEngine{
 			this.modal.style.opacity = "0"
 			this.modalContent.style.scale = "0"
 
+			this.config.onModalClose(data)
+
 			this.endModal(data)
+		}
+	}
+
+	static confirmModal = () => {}
+	static cancelModal = () => {}
+	static pressModalButton(role: "confirm" | "cancel"){
+		switch (role) {
+			case "cancel":
+				this.cancelModal()
+				break;
+			case "confirm":
+				this.confirmModal()
+				break;
 		}
 	}
 

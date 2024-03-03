@@ -7,6 +7,8 @@ import {model} from "../../index"
 import {unsafeSVG} from 'lit/directives/unsafe-svg.js';
 import {icon} from '@fortawesome/fontawesome-svg-core'
 import {faCaretDown} from "@fortawesome/free-solid-svg-icons"
+import {ObservedProperty} from "../../model"
+import {AppState} from "../../AppState"
 
 export interface AutocompleteOption<T> {
     id: number
@@ -49,6 +51,14 @@ export class AutocompleteComponent<T> extends LitElement {
 
     private suggestionsVisible: boolean = false
 
+    @property()
+    appState: ObservedProperty<AppState>
+
+    constructor() {
+        super()
+        this.appState = new ObservedProperty<AppState>(this, model.appState)
+    }
+
     render() {
         return html`
             <style>${styles}</style>
@@ -58,7 +68,7 @@ export class AutocompleteComponent<T> extends LitElement {
                    @keyup="${this.generateSuggestions}"
                    @blur="${this.handleAutoClose}"
             >
-            ${unsafeSVG(icon(faCaretDown).html[0])}
+            ${this.clientWidth > 50 ? unsafeSVG(icon(faCaretDown).html[0]) : html``}
             <div class="suggestions">
                 ${
                     this.options.length == 0 ? html`<div class="empty">Keine Ergebnisse</div>` :
@@ -93,7 +103,7 @@ export class AutocompleteComponent<T> extends LitElement {
         KeyBoardShortCut.register(["ArrowUp"], () => this.moveFocus("up"), "autocomplete", true)
         KeyBoardShortCut.register(["ArrowDown"], () => this.moveFocus("down"), "autocomplete", true)
         KeyBoardShortCut.register(["Enter"], () => {this.selectSuggestion(this.options.find(option => option.id = this.focusedId))}, "autocomplete", true)
-        KeyBoardShortCut.register(["Escape"], () => {this.hideSuggestions()}, "autocomplete", true)
+        this.appState.value.addCurrentActionCancellation(() => {this.hideSuggestions()}, "autocomplete")
     }
 
     hideSuggestions(){
@@ -117,6 +127,7 @@ export class AutocompleteComponent<T> extends LitElement {
         document.removeEventListener("click", this.boundHandelAutoClose)
 
         KeyBoardShortCut.remove("autocomplete")
+        this.appState.value.removeCurrentActionCancellation("autocomplete")
     }
 
     selectSuggestion(option: AutocompleteOption<T>){
@@ -134,7 +145,7 @@ export class AutocompleteComponent<T> extends LitElement {
 
         let input = this.shadowRoot.querySelector("input") as HTMLInputElement
         if(e) {
-            if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Enter", "Alt", "Control"].includes(e.key)) return
+            if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Enter", "Alt", "Control", "Escape"].includes(e.key)) return
         }
 
         if(!this.suggestionsVisible) this.showSuggestions()
@@ -152,7 +163,7 @@ export class AutocompleteComponent<T> extends LitElement {
     boundHandelAutoClose = this.handleAutoClose.bind(this)
     handleAutoClose(e: Event){
         //TODO target is the body for some reason so clicking the padding of the suggestion box closes it
-        let target = Util.deepEventTarget(this)
+        let target = Util.deepEventFocusedElement(this)
         if (target == this.shadowRoot.querySelector("input") ||
             target == this.shadowRoot.querySelector(".suggestions") ||
             target.classList.contains("entry"))

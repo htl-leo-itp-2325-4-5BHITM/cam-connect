@@ -7,7 +7,7 @@ import {model} from "../../index"
 
 import {unsafeSVG} from 'lit/directives/unsafe-svg.js';
 import {icon} from '@fortawesome/fontawesome-svg-core'
-import {faCamera, faHelicopter, faLightbulb, faMicrophone, faXmark} from "@fortawesome/free-solid-svg-icons"
+import {faCamera, faHelicopter, faLightbulb, faMicrophone, faXmark, faIdBadge} from "@fortawesome/free-solid-svg-icons"
 
 import AirDatepicker from 'air-datepicker';
 import {CreateRentComponent} from "./createRent.component"
@@ -15,9 +15,10 @@ import {CreateRentDTO, RentTypeEnum} from "../../service/rent.service"
 import {Api, ccResponse, config, Regex} from "../../base"
 import {AppState} from "../../AppState"
 import localeDe from "air-datepicker/locale/de"
-import {AutocompleteOption} from "../basic/autocomplete.component"
-import {DeviceType, DeviceTypeVariantEnum} from "../../service/deviceType.service"
+import {AutocompleteComponent, AutocompleteOption} from "../basic/autocomplete.component"
+import {DeviceType, DeviceTypeMinimalDTO, DeviceTypeVariantEnum} from "../../service/deviceType.service"
 import Util, {DatePickerWrapper} from "../../util"
+import {Device, DeviceDTO} from "../../service/device.service"
 
 export interface CreateRentDeviceEntryData {
     device_type_id: number
@@ -85,13 +86,21 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                 <style>${styles}</style>
                 <div class="left">
                     <cc-autocomplete placeholder="Name" class="name" 
-                                     .onSelect="${(option: DeviceType) => {this.data.device_type_id = option.type_id}}"
+                                     .onSelect="${(option: DeviceTypeMinimalDTO) => {
+                                         this.data.device_type_id = option.type_id; this.data.device_number = ""
+                                         let numberInput = this.shadowRoot.querySelector('cc-autocomplete.number') as AutocompleteComponent<DeviceDTO>
+                                         numberInput.clear()
+                                     }}"
                                      .querySuggestions="${this.searchForDeviceType}"
                                      .iconProvider="${this.provideDeviceTypeIcon}"
-                                     .contentProvider="${(data: DeviceType) => {return data.name}}"
+                                     .contentProvider="${(data: DeviceTypeMinimalDTO) => {return data.name}}"
                     ></cc-autocomplete>
-                    <input type="text" value="" class="number" placeholder="Nr." 
-                           @blur="${(e) => {this.data.device_number = e.target.value}}">
+                    <cc-autocomplete placeholder="Nr." class="number" 
+                                     .onSelect="${(option: DeviceDTO) => {this.data.device_number = String(option.type_id)}}"
+                                     .querySuggestions="${(searchTerm) => this.searchForDevice(searchTerm)}"
+                                     .iconProvider="${this.provideDeviceIcon}"
+                                     .contentProvider="${(data: DeviceDTO) => {return data.number}}"
+                    ></cc-autocomplete>
                 </div>
     
                 <div class="right">
@@ -174,9 +183,12 @@ export class CreateRentDeviceEntryComponent extends LitElement {
         this.validate();
     }
 
-    async searchForDeviceType(searchTerm: string): Promise<AutocompleteOption<DeviceType>[]> {
+    async searchForDeviceType(searchTerm: string): Promise<AutocompleteOption<DeviceTypeMinimalDTO>[]> {
         try {
-            const result: ccResponse<AutocompleteOption<DeviceType>[]> = await Api.postData("/devicetype/search", {searchTerm: searchTerm})
+            const result: ccResponse<AutocompleteOption<DeviceTypeMinimalDTO>[]> = await Api.postData(
+                "/devicetype/search",
+                {searchTerm: searchTerm}
+            )
             return result.data
         } catch (e) {
             console.error(e)
@@ -184,7 +196,22 @@ export class CreateRentDeviceEntryComponent extends LitElement {
         }
     }
 
-    provideDeviceTypeIcon(data: DeviceType): TemplateResult {
+    async searchForDevice(searchTerm: string): Promise<AutocompleteOption<DeviceDTO>[]> {
+        if(this.data.device_type_id < 0) return []
+        try {
+            const result: ccResponse<AutocompleteOption<DeviceDTO>[]> = await Api.postData(
+                `/device/searchwithtype/${this.data.device_type_id}`,
+                {searchTerm: searchTerm}
+            )
+            //can be undefined if type id is -1
+            return result.data || []
+        } catch (e) {
+            console.error(e)
+            return []
+        }
+    }
+
+    provideDeviceTypeIcon(data: DeviceTypeMinimalDTO): TemplateResult {
         switch (data.variant){
             case DeviceTypeVariantEnum.camera: return html`${unsafeSVG(icon(faCamera).html[0])}`
             case DeviceTypeVariantEnum.microphone: return html`${unsafeSVG(icon(faMicrophone).html[0])}`
@@ -195,6 +222,11 @@ export class CreateRentDeviceEntryComponent extends LitElement {
             case DeviceTypeVariantEnum.tripod: return html`T`
             default: return html`Icon`
         }
+    }
+
+    //TODO find better icon here
+    provideDeviceIcon(data: DeviceDTO){
+        return html`${unsafeSVG(icon(faIdBadge).html[0])}`
     }
 
     toRentObject(studentId: number): CreateRentDTO {

@@ -1,6 +1,8 @@
 package at.camconnect.boundary;
 
+import at.camconnect.dtos.AutocompleteOptionDTO;
 import at.camconnect.dtos.DeviceDTO;
+import at.camconnect.dtos.DeviceTypeMinimalDTO;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.model.Device;
@@ -68,6 +70,38 @@ public class DeviceResource {
         }
 
         return CCResponse.ok(result);
+    }
+
+    @POST
+    @Path("/search")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response search(JsonObject data){
+        List<AutocompleteOptionDTO<DeviceDTO>> result;
+        try{
+            result = deviceRepository.search(data.getString("searchTerm"));;
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok(result);
+    }
+
+    //TODO when beeing called this throws a really cryptic error because Long cant be negative
+    //then when changing the param to int and casting to long it throws a not found.. probably cause of the regex
+    @POST
+    @Path("/searchwithtype/{type_id: [0-9]+}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response searchWithType(@PathParam("type_id") Long type_id, JsonObject data){
+        List<AutocompleteOptionDTO<DeviceDTO>> result;
+        try{
+            result = deviceRepository.searchWithType(data.getString("searchTerm"), type_id);;
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok(result); //TODO probably a generall response system problem: if result is null - the dto is like there was not data in the first place
     }
 
     @POST
