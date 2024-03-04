@@ -7,7 +7,7 @@ import {model} from "../../index"
 
 import {unsafeSVG} from 'lit/directives/unsafe-svg.js';
 import {icon} from '@fortawesome/fontawesome-svg-core'
-import {faCamera, faHelicopter, faLightbulb, faMicrophone, faXmark, faIdBadge} from "@fortawesome/free-solid-svg-icons"
+import {faCamera, faHelicopter, faLightbulb, faMicrophone, faXmark, faHashtag} from "@fortawesome/free-solid-svg-icons"
 
 import AirDatepicker from 'air-datepicker';
 import {CreateRentComponent} from "./createRent.component"
@@ -226,7 +226,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
 
     //TODO find better icon here
     provideDeviceIcon(data: DeviceDTO){
-        return html`${unsafeSVG(icon(faIdBadge).html[0])}`
+        return html`${unsafeSVG(icon(faHashtag).html[0])}`
     }
 
     toRentObject(studentId: number): CreateRentDTO {

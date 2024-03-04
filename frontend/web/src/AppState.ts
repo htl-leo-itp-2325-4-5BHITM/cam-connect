@@ -44,6 +44,8 @@ export class AppState{
     }
 
     openCreateRentModal(){
+        if(this._createRentModalOpen) return
+
         //super weird js behavior here: when passing only the function reference instead of an anonymous function
         //the "this" reference in the CreateRent class will be the AppState, try adding a log of "this" in the cancel method
         this.addCurrentActionCancellation(() => { this._createRentComponent?.cancel() }, "createRentModal")
@@ -55,6 +57,8 @@ export class AppState{
         setTimeout(() => {
             studentSelector.setFocus()
         },300)
+
+        this._createRentComponent.addDevice()
 
         this.update()
     }

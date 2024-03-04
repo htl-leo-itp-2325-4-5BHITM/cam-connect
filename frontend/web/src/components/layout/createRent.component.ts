@@ -17,7 +17,7 @@ import {CreateRentDeviceEntryComponent, RentDeviceEntryComponentType} from "./cr
 import PopupEngine from "../../popupEngine"
 import RentService, {CreateRentDTO} from "../../service/rent.service"
 import {AppState} from "../../AppState"
-import {AutocompleteOption} from "../basic/autocomplete.component"
+import {AutocompleteComponent, AutocompleteOption} from "../basic/autocomplete.component"
 import {Student} from "../../service/student.service"
 import Util, {DatePickerWrapper} from "../../util"
 
@@ -44,7 +44,6 @@ export class CreateRentComponent extends LitElement {
         let globalInput = this.renderRoot.querySelector('.globaltime input') as HTMLInputElement
         this.globalDatePicker = new DatePickerWrapper(globalInput)
 
-        this.addDevice()
         this.appState.value.createRentComponent = this
     }
 
@@ -114,7 +113,8 @@ export class CreateRentComponent extends LitElement {
         this.devices.add(newDevice)
         this.shadowRoot.querySelector(".deviceList").appendChild(newDevice)
         window.requestAnimationFrame(()=>{
-            newDevice.shadowRoot.querySelector("cc-autocomplete").setFocus()
+            let autocmomp = newDevice.shadowRoot.querySelector("cc-autocomplete") as AutocompleteComponent<any>
+            autocmomp.setFocus()
         })
     }
 
@@ -178,7 +178,7 @@ export class CreateRentComponent extends LitElement {
         this.devices.forEach(device => device.remove())
         this.devices.clear()
         this.shadowRoot.querySelector("cc-autocomplete").clear()
-        this.addDevice()
+
         Util.deepEventFocusedElement()?.blur() //removes focus on possible input thats still targeted and preventing the user from using keyboard shortcuts
     }
 

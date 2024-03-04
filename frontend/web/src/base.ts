@@ -193,8 +193,9 @@ export class KeyBoardShortCut {
 
     static {
         window.addEventListener("keydown", (event: KeyboardEvent) => {
+            //check if an input is currently in focus
             let focusOnInput = false
-            let focusedElem = Util.deepEventFocusedElement(event.target as HTMLElement)
+            let focusedElem = Util.deepEventFocusedElement()
             if(focusedElem instanceof HTMLInputElement) focusOnInput = true
 
             this.pressedKeys.add(event.key.toLowerCase()) //add the pressed key to set

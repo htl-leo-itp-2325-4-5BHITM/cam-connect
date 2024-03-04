@@ -38,13 +38,14 @@ export default class Util{
         }
     }*/
 
-    static deepEventFocusedElement(startpoint: HTMLElement = document.activeElement as HTMLElement){
+    static deepEventFocusedElement(startpoint: HTMLElement = document.activeElement as HTMLElement): HTMLElement{
         let focusedElem:HTMLElement = startpoint
         while (focusedElem != undefined) {
             let newFocusedElem = focusedElem?.shadowRoot?.activeElement as HTMLElement
             if(newFocusedElem == undefined) return focusedElem
             focusedElem = newFocusedElem
         }
+        return focusedElem
     }
 
     //TODO constrain the generic so that it has to have a properly named id column, something like: extends {[keyName]:(number | string)}

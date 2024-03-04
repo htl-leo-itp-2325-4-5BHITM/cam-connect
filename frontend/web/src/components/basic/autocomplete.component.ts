@@ -75,7 +75,7 @@ export class AutocompleteComponent<T> extends LitElement {
                     this.options.map(option => {
                         return html`
                             <div class="entry" 
-                                 @click="${()=> { this.selectSuggestion(option) }}" 
+                                 @click="${()=> {this.selectSuggestion(option)}}" 
                                  @mouseenter="${(e: Event) => {this.focusEntry(e.target as HTMLElement)}}"
                                  data-id="${option.id}"
                             >
@@ -131,7 +131,7 @@ export class AutocompleteComponent<T> extends LitElement {
     }
 
     selectSuggestion(option: AutocompleteOption<T>){
-        console.log("selcting")
+        console.log("selcting", option)
         if(!option || option.id < 0) return
         this.selected = option
         this.shadowRoot.querySelector("input").focus()
@@ -199,6 +199,8 @@ export class AutocompleteComponent<T> extends LitElement {
         }
         next.classList.add("focused")
         this.focusedId = Number(next.dataset.id)
+
+        console.log(next, this.focusedId)
     }
 
     //region outside interaction
