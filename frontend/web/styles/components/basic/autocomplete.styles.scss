@@ -16,6 +16,10 @@
   }
 }
 
+:host(.error[color="accent"]) input{
+  background-color: adjust-color($badBright, $alpha: -0.9);
+}
+
 :host([size="medium"]) input{
   padding-inline: .5rem;
   padding-block: .2rem;

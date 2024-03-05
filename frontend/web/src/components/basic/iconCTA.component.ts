@@ -22,7 +22,6 @@ export class iconCTAComponent extends LitElement {
         this.addEventListener("click", () => {this.playClickAnimation(); this.clickAction()})
         this.addEventListener("keydown", (event: KeyboardEvent) => {
             if(event.key == " " || event.key == "Enter") {
-                console.log("action")
                 this.playClickAnimation()
                 this.clickAction()
             }

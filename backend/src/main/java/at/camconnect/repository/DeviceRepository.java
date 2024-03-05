@@ -100,7 +100,7 @@ public class DeviceRepository {
 
     public List<AutocompleteOptionDTO<DeviceDTO>> search(String searchTerm){
         List<DeviceDTO> devices = em.createQuery(
-                        "SELECT new at.camconnect.dtos.DeviceDTO(d.serial, d.number, d.note, d.type.id) FROM Device d " +
+                        "SELECT new at.camconnect.dtos.DeviceDTO(d.id, d.serial, d.number, d.note, d.type.id) FROM Device d " +
                                 "WHERE UPPER(d.number) LIKE :searchTerm ",
                         DeviceDTO.class)
                 .setParameter("searchTerm", searchTerm.toUpperCase() + "%")
@@ -109,7 +109,7 @@ public class DeviceRepository {
         List<AutocompleteOptionDTO<DeviceDTO>> result = new LinkedList<>();
 
         for (DeviceDTO device : devices) {
-            result.add(new AutocompleteOptionDTO<>(device, device.type_id()));
+            result.add(new AutocompleteOptionDTO<>(device, device.device_id()));
         }
 
         return result;
@@ -117,7 +117,7 @@ public class DeviceRepository {
 
     public List<AutocompleteOptionDTO<DeviceDTO>> searchWithType(String searchTerm, Long type_id){
         List<DeviceDTO> devices = em.createQuery(
-                        "SELECT new at.camconnect.dtos.DeviceDTO(d.serial, d.number, d.note, d.type.id) FROM Device d " +
+                        "SELECT new at.camconnect.dtos.DeviceDTO(d.id, d.serial, d.number, d.note, d.type.id) FROM Device d " +
                                 "WHERE UPPER(d.number) LIKE :searchTerm and " +
                                 "d.type.id = :typeId",
                         DeviceDTO.class)
@@ -128,7 +128,7 @@ public class DeviceRepository {
         List<AutocompleteOptionDTO<DeviceDTO>> result = new LinkedList<>();
 
         for (DeviceDTO device : devices) {
-            result.add(new AutocompleteOptionDTO<>(device, device.type_id()));
+            result.add(new AutocompleteOptionDTO<>(device, device.device_id()));
         }
 
         return result;

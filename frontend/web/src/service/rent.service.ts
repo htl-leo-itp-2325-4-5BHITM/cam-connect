@@ -33,8 +33,7 @@ export enum RentTypeEnum { DEFAULT="DEFAULT", STRING="STRING" }
 export interface CreateRentDTO {
     type: RentTypeEnum,
     student_id: number
-    device_type_id?: number
-    device_number?: string
+    device_id?: number
     device_string?: string
     teacher_start_id: number
     rent_start: string //should be date but couldnt get that to work
@@ -73,7 +72,7 @@ export default class RentService {
     }
 
     static remove(rent: Rent) {
-        Api.fetchData(`/rent/getById/${rent.rent_id}/remove`)
+        Api.fetchData(`/rent/getbyid/${rent.rent_id}/remove`)
             .then(() => {
                 RentService.fetchAll()
             })
@@ -83,7 +82,7 @@ export default class RentService {
     }
 
     static return(rent: Rent) {
-        Api.postData(`/rent/getById/${rent.rent_id}/return`, rent)
+        Api.postData(`/rent/getbyid/${rent.rent_id}/return`, rent)
             .then(() => {
                 RentService.fetchAll()
             })
