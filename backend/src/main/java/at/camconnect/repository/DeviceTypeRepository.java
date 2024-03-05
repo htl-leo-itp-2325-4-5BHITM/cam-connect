@@ -125,7 +125,7 @@ public class DeviceTypeRepository {
         DeviceTypeGlobalObjectsDTO dataWithObjects = new DeviceTypeGlobalObjectsDTO(
                 data.autofocus(), data.f_stop(), data.focal_length(), data.framerate(), data.height(), data.max_range(), data.max_weight(), data.needsrecorder(), data.number_of_axis(), data.autofocus(), data.variable_temperature(), data.watts(), data.windblocker(), data.wireless(),
                 getAttribute(TripodHead.class, data.head_id()), getAttribute(LensMount.class, data.mount_id()), getAttribute(CameraResolution.class, data.resolution_id()), getAttribute(CameraSensor.class, data.sensor_id()), getAttribute(CameraSystem.class, data.system_id()),
-                data.type_id(), data.dtype(), data.image(), data.name());
+                data.type_id(), data.dtype(), data.image(), data.name(), data.description());
 
         //just call the update method on whichever child class it is
         deviceType.update(dataWithObjects);

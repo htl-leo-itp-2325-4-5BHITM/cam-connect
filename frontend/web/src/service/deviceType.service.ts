@@ -11,7 +11,7 @@ export interface DeviceTypeSource {
 }
 
 export enum DeviceTypeVariantEnum {
-    microphone="microphone", camera="camera", drone="drone", lens="lens", light="light", stabilizer="stabilizer", tripod="tripod"
+    microphone="microphone", camera="camera", drone="drone", lens="lens", light="light", stabilizer="stabilizer", tripod="tripod", simple="simple"
 }
 
 export interface MicrophoneType extends DeviceTypeSource{
@@ -85,8 +85,16 @@ export interface TripodTypeDTO extends DeviceTypeSource{
     head_id: number
 }
 
+export interface SimpleType extends DeviceTypeSource{
+    description: string
+}
 
-export type DeviceType = (CameraType | MicrophoneType | DroneType | LensType | LightType | StabilizerType | TripodType)
+export interface SimpleTypeDTO extends DeviceTypeSource{
+    description: string
+}
+
+
+export type DeviceType = (CameraType | MicrophoneType | DroneType | LensType | LightType | StabilizerType | TripodType | SimpleType)
 //endregion interfaces
 
 export interface DeviceTypeVariantCollection {

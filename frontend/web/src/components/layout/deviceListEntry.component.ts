@@ -9,7 +9,7 @@ import {
     CameraType,
     DeviceTypeFullDTO,
     DeviceTypeVariantEnum,
-    DroneType, LensType, LightType, StabilizerType, TripodType
+    DroneType, LensType, LightType, StabilizerType, TripodType, SimpleType
 } from "../../service/deviceType.service"
 
 @customElement('cc-device-list-entry')
@@ -27,6 +27,7 @@ export class DeviceListEntryComponent extends LitElement {
             case DeviceTypeVariantEnum.light: details = this.renderLight(); break;
             case DeviceTypeVariantEnum.stabilizer: details = this.renderStabilizer(); break;
             case DeviceTypeVariantEnum.tripod: details = this.renderTripod(); break;
+            case DeviceTypeVariantEnum.simple: details = this.renderSimple(); break;
         }
 
         return html`
@@ -153,6 +154,20 @@ export class DeviceListEntryComponent extends LitElement {
                 <div class="details">
                     <cc-property-value size="small" property="Head" value="${tripod.head}"></cc-property-value>
                     <cc-property-value size="small" property="Höhe" value="${tripod.height}"></cc-property-value>
+                </div>
+                <div class="image">
+                    <img src="../../../assets/tempCamera.png" alt="">
+                </div>
+            </section>
+        `
+    }
+
+    renderSimple() {
+        let simple = this.deviceTypeFull.deviceType as SimpleType
+        return html`
+            <section>
+                <div class="details">
+                    <cc-property-value size="small" property="Beschreibung" value="${simple.description}"></cc-property-value>
                 </div>
                 <div class="image">
                     <img src="../../../assets/tempCamera.png" alt="">
