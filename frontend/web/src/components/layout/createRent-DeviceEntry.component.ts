@@ -21,8 +21,8 @@ import Util, {DatePickerWrapper} from "../../util"
 import {Device, DeviceDTO} from "../../service/device.service"
 
 export interface CreateRentDeviceEntryData {
+    device_id: number
     device_type_id: number
-    device_number: string
     device_string: string
     rent_start: Date
     rent_end_planned: Date
@@ -53,7 +53,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
         this.type = type
         this.parent = parent
         this.data = {
-            device_number: "",
+            device_id: -1,
             device_type_id: -1,
             device_string: "",
             rent_start: new Date(),
@@ -87,7 +87,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                 <div class="left">
                     <cc-autocomplete placeholder="Name" class="name" 
                                      .onSelect="${(option: DeviceTypeMinimalDTO) => {
-                                         this.data.device_type_id = option.type_id; this.data.device_number = ""
+                                         this.data.device_type_id = option.type_id; this.data.device_id = -1
                                          let numberInput = this.shadowRoot.querySelector('cc-autocomplete.number') as AutocompleteComponent<DeviceDTO>
                                          numberInput.clear()
                                      }}"
@@ -96,7 +96,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                                      .contentProvider="${(data: DeviceTypeMinimalDTO) => {return data.name}}"
                     ></cc-autocomplete>
                     <cc-autocomplete placeholder="Nr." class="number" 
-                                     .onSelect="${(option: DeviceDTO) => {this.data.device_number = String(option.type_id)}}"
+                                     .onSelect="${(option: DeviceDTO) => {this.data.device_id = option.device_id}}"
                                      .querySuggestions="${(searchTerm) => this.searchForDevice(searchTerm)}"
                                      .iconProvider="${this.provideDeviceIcon}"
                                      .contentProvider="${(data: DeviceDTO) => {return data.number}}"
@@ -113,11 +113,12 @@ export class CreateRentDeviceEntryComponent extends LitElement {
     //TODO re write the validation system to be less chaotic and work cleaner
     //should also imediatly be validated when both are entered
     async validate():Promise<boolean> {
+        console.log("validating")
+
         this.shadowRoot.querySelectorAll("input").forEach((input)=>{
             input.classList.remove("error")
             input.removeEventListener("blur", this.boundValidateInput)
         })
-        console.log("validating")
 
         if(this.type == "string"){
             if(Regex.onlySpecialChars.test(this.data.device_string)){
@@ -126,26 +127,13 @@ export class CreateRentDeviceEntryComponent extends LitElement {
             }
         }
         else if(this.type == "default"){
-            if(
-                Regex.empty.test(String(this.data.device_type_id)) ||
-                Regex.anyThingButNumbers.test(String(this.data.device_type_id)) ||
-                this.data.device_type_id < 0
-            ) {
-                console.log(this.data.device_type_id)
-                this.highlightInputError(this.shadowRoot.querySelector(".name"))
+            if(this.data.device_type_id < 0) {
+                this.highlightInputError(this.shadowRoot.querySelector("cc-autocomplete.name"))
                 return false
             }
 
-            if(Regex.onlySpecialChars.test(this.data.device_number)){
-                this.highlightInputError(this.shadowRoot.querySelector(".number"))
-                return false
-            }
-
-            let isValid = await Api.fetchData<boolean>(`/device/validatenumberandtype/${this.data.device_number}/${this.data.device_type_id}`)
-
-            if(isValid == false) {
-                this.highlightInputError(this.shadowRoot.querySelector(".number"))
-                this.highlightInputError(this.shadowRoot.querySelector(".name"))
+            if(this.data.device_id < 0) {
+                this.highlightInputError(this.shadowRoot.querySelector("cc-autocomplete.number"))
                 return false
             }
         }
@@ -164,7 +152,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
     boundRemoveErrorHighlighting = this.removeErrorHighlighting.bind(this);
     highlightInputError(input: Element){
         input.classList.add("error");
-        input.addEventListener("keydown", this.boundRemoveErrorHighlighting);
+        input.addEventListener("focus", this.boundRemoveErrorHighlighting);
         input.addEventListener("blur", this.boundValidateInput);
     }
 
@@ -176,7 +164,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
     removeErrorHighlighting(e: Event){
         let input = e.target as Element;
         input.classList.remove("error");
-        input.removeEventListener("keydown", this.boundRemoveErrorHighlighting);
+        input.removeEventListener("focus", this.boundRemoveErrorHighlighting);
     }
 
     validateInput(e: Event){
@@ -238,8 +226,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                 type: RentTypeEnum.DEFAULT,
                 student_id: studentId,
                 teacher_start_id: 1,
-                device_type_id: this.data.device_type_id,
-                device_number: this.data.device_number,
+                device_id: this.data.device_id,
                 note: "",
                 rent_start: Util.formatDateForDb(this.datePicker.instance.selectedDates[0]),
                 rent_end_planned: Util.formatDateForDb(this.datePicker.instance.selectedDates[1])

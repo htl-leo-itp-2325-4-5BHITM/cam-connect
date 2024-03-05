@@ -33,8 +33,7 @@ export enum RentTypeEnum { DEFAULT="DEFAULT", STRING="STRING" }
 export interface CreateRentDTO {
     type: RentTypeEnum,
     student_id: number
-    device_type_id?: number
-    device_number?: string
+    device_id?: number
     device_string?: string
     teacher_start_id: number
     rent_start: string //should be date but couldnt get that to work

@@ -24,7 +24,7 @@ import Util, {DatePickerWrapper} from "../../util"
 @customElement('cc-create-rent')
 export class CreateRentComponent extends LitElement {
     @property()
-    student_id: number
+    student_id: number = -1
 
     devices: Set<CreateRentDeviceEntryComponent> = new Set()
 
@@ -113,8 +113,8 @@ export class CreateRentComponent extends LitElement {
         this.devices.add(newDevice)
         this.shadowRoot.querySelector(".deviceList").appendChild(newDevice)
         window.requestAnimationFrame(()=>{
-            let autocmomp = newDevice.shadowRoot.querySelector("cc-autocomplete") as AutocompleteComponent<any>
-            autocmomp.setFocus()
+            let autocomomp = newDevice.shadowRoot.querySelector("cc-autocomplete") as AutocompleteComponent<any>
+            autocomomp?.setFocus()
         })
     }
 
@@ -136,6 +136,9 @@ export class CreateRentComponent extends LitElement {
     async create() {
         let data: CreateRentDTO[] = []
 
+        if(this.student_id < 0)
+            this.highlightInputError(this.shadowRoot.querySelector(".studentSelector"))
+
         for (let i = 0; i < this.devices.size; i++) {
             let device = Array.from(this.devices)[i]
 
@@ -145,6 +148,30 @@ export class CreateRentComponent extends LitElement {
         if(data.length == 0) return
 
         RentService.create(data)
+    }
+
+    boundValidateInput = this.validateInput.bind(this);
+    boundRemoveErrorHighlighting = this.removeErrorHighlighting.bind(this);
+    highlightInputError(input: Element){
+        input.classList.add("error");
+        input.addEventListener("focus", this.boundRemoveErrorHighlighting);
+        input.addEventListener("blur", this.boundValidateInput);
+    }
+
+    /**
+     * Remove the error highlighting from the input as soon as the input is edited
+     * Also removes the event listener for itself.
+     * @param e
+     */
+    removeErrorHighlighting(e: Event){
+        let input = e.target as Element;
+        input.classList.remove("error");
+        input.removeEventListener("focus", this.boundRemoveErrorHighlighting);
+    }
+
+    validateInput(e: Event){
+        if(this.student_id < 0)
+            this.highlightInputError(this.shadowRoot.querySelector(".studentSelector"))
     }
 
     cancel(){
@@ -178,6 +205,9 @@ export class CreateRentComponent extends LitElement {
         this.devices.forEach(device => device.remove())
         this.devices.clear()
         this.shadowRoot.querySelector("cc-autocomplete").clear()
+        this.student_id = -1
+        this.shadowRoot.querySelector(".studentSelector")?.classList.remove("error")
+        this.shadowRoot.querySelector(".studentSelector")?.removeEventListener("blur", this.boundValidateInput)
 
         Util.deepEventFocusedElement()?.blur() //removes focus on possible input thats still targeted and preventing the user from using keyboard shortcuts
     }

@@ -48,7 +48,7 @@ public class RentRepository {
             if(rentDTO.type() == RentTypeEnum.DEFAULT){
                 rent = new Rent(
                         em.find(Student.class, rentDTO.student_id()),
-                        deviceRepository.getByNumberAndType(rentDTO.device_number(), rentDTO.device_type_id()),
+                        deviceRepository.getById(rentDTO.device_id()),
                         em.find(Teacher.class, rentDTO.teacher_start_id()),
                         rentDTO.rent_start(),
                         rentDTO.rent_end_planned(),

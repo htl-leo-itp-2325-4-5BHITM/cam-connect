@@ -63,12 +63,12 @@ export class AutocompleteComponent<T> extends LitElement {
         return html`
             <style>${styles}</style>
             <input type="text" placeholder="${this.placeholder}" .disabled="${this.disabled}" value=""
-                   @focus="${(e)=>{e.target.select()}}"
-                   @click="${()=>{this.showSuggestions(); this.generateSuggestions()}}"
+                   @focus="${(e)=>{}}"
+                   @click="${(e)=>{e.target.select(); this.showSuggestions(); this.generateSuggestions()}}"
                    @keyup="${this.generateSuggestions}"
                    @blur="${this.handleAutoClose}"
             >
-            ${this.clientWidth > 50 ? unsafeSVG(icon(faCaretDown).html[0]) : html``}
+            ${this.clientWidth > 50 || this.selected.id < 0 ? unsafeSVG(icon(faCaretDown).html[0]) : html``}
             <div class="suggestions">
                 ${
                     this.options.length == 0 ? html`<div class="empty">Keine Ergebnisse</div>` :
@@ -102,7 +102,7 @@ export class AutocompleteComponent<T> extends LitElement {
 
         KeyBoardShortCut.register(["ArrowUp"], () => this.moveFocus("up"), "autocomplete", true)
         KeyBoardShortCut.register(["ArrowDown"], () => this.moveFocus("down"), "autocomplete", true)
-        KeyBoardShortCut.register(["Enter"], () => {this.selectSuggestion(this.options.find(option => option.id = this.focusedId))}, "autocomplete", true)
+        KeyBoardShortCut.register(["Enter"], () => {this.selectSuggestion(this.focusedId)}, "autocomplete", true)
         this.appState.value.addCurrentActionCancellation(() => {this.hideSuggestions()}, "autocomplete")
     }
 
@@ -130,8 +130,8 @@ export class AutocompleteComponent<T> extends LitElement {
         this.appState.value.removeCurrentActionCancellation("autocomplete")
     }
 
-    selectSuggestion(option: AutocompleteOption<T>){
-        console.log("selcting", option)
+    selectSuggestion(option: AutocompleteOption<T> | number){
+        if(typeof option == "number") option = this.options.find(option => option.id == this.focusedId)
         if(!option || option.id < 0) return
         this.selected = option
         this.shadowRoot.querySelector("input").focus()
@@ -199,8 +199,6 @@ export class AutocompleteComponent<T> extends LitElement {
         }
         next.classList.add("focused")
         this.focusedId = Number(next.dataset.id)
-
-        console.log(next, this.focusedId)
     }
 
     //region outside interaction

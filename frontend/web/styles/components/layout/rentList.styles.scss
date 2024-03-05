@@ -6,6 +6,7 @@
   all: initial;
   flex-grow: 1;
   padding-inline: 1rem !important;
+  overflow-y: auto;
 
   cc-rent-list-entry {
     margin: 1rem !important;
