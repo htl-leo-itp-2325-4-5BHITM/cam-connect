@@ -54,15 +54,15 @@ values
 -- Drone Types
 insert into DEVICETYPE (variant, dtype, name, sensor_id, resolution_id, max_range)
 values
-    ('drone', 'DroneType', 'Mavic Mini', 3, 1, 100),
-    ('drone', 'DroneType', 'Mavic Pro', 4, 2, 100);
+    ('drone', 'DroneType', 'Mavic Mini', 5, 4, 100),
+    ('drone', 'DroneType', 'Mavic Pro', 6, 3, 100);
 
 -- Lens Types
 insert into DEVICETYPE (variant, dtype, name, mount_id, f_stop, focal_length)
 values
-    ('lens', 'LensType', 'Lens 1', 2, 2.8, 35),
-    ('lens', 'LensType', 'Lens 2', 2, 3.8, 25),
-    ('lens', 'LensType', 'Lens 3', 2, 4.0, 45);
+    ('lens', 'LensType', 'Lens 1', 10, 2.8, 35),
+    ('lens', 'LensType', 'Lens 2', 11, 3.8, 25),
+    ('lens', 'LensType', 'Lens 3', 12, 4.0, 45);
 
 -- Light Types
 insert into DEVICETYPE (variant, dtype, name, watts, rgb, variable_temperature)
@@ -79,13 +79,8 @@ values
 
 -- Stabilizer Types
 insert into DEVICETYPE (variant, dtype, name, max_weight, number_of_axis)
-values ('stabilizer', 'StabilizerType', 'Schulterrig', 200, 2);
-insert into DEVICETYPE (variant, dtype, name, max_weight, number_of_axis) values ('stabilizer', 'StabilizerType', 'Gopro Gimbal', 150, 3);
-
--- Tripod Types
-insert into DEVICETYPE (variant, dtype, name, head_id, height) values ('tripod', 'TripodType', 'Manfrotto 756B', 1, 150);
-insert into DEVICETYPE (variant, dtype, name, head_id, height) values ('tripod', 'TripodType', 'Hama Profil 76', 1, 150);
-
+values ('stabilizer', 'StabilizerType', 'Schulterrig', 200, 2),
+       ('stabilizer', 'StabilizerType', 'Gopro Gimbal', 150, 3);
 
 -- assigning tags to devicetypes
 INSERT INTO tag_devicetype (tag_tag_id, type_type_id)
