@@ -59,10 +59,15 @@ export class AutocompleteComponent<T> extends LitElement {
         this.appState = new ObservedProperty<AppState>(this, model.appState)
     }
 
+    protected firstUpdated(_changedProperties: PropertyValues) {
+        super.firstUpdated(_changedProperties);
+        this.selectSuggestion(this.selected)
+    }
+
     render() {
         return html`
             <style>${styles}</style>
-            <input type="text" placeholder="${this.placeholder}" .disabled="${this.disabled}" value=""
+            <input type="text" placeholder="${this.placeholder}" .disabled="${this.disabled}"
                    @focus="${(e)=>{}}"
                    @click="${(e)=>{e.target.select(); this.showSuggestions(); this.generateSuggestions()}}"
                    @keyup="${this.generateSuggestions}"
