@@ -70,7 +70,6 @@ export class CreateRentComponent extends LitElement {
             
             <cc-line></cc-line>
             
-            <div class="list">
                 <div class="globaltime">
                     Globale Zeit setzen:
                     <div class="dateInputArea">
@@ -80,6 +79,7 @@ export class CreateRentComponent extends LitElement {
                 </div>
                 
                 <div class="deviceList"></div>
+            <div class="list">
             </div>
 
             <div class="buttons">

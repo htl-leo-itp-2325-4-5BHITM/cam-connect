@@ -31,19 +31,13 @@
   width: 20ch;
 }
 
-.list{
+.deviceList{
   display: flex;
   flex-direction: column;
   gap: .5rem;
   margin-inline: .5rem;
-
-  .deviceList{
-    display: flex;
-    flex-direction: column;
-    gap: .5rem;
-    overflow-y: auto;
-    @include noScrollbar;
-  }
+  overflow-y: auto;
+  @include noScrollbar;
 }
 
 .globaltime{
@@ -51,6 +45,7 @@
   flex-wrap: nowrap;
   align-items: center;
   gap: .5rem;
+  margin-inline: .5rem;
   justify-content: right;
 }
 
@@ -88,7 +83,7 @@
 .buttons{
   display: flex;
   margin-inline: .5rem;
-  margin-top: 1rem;
+  margin-block: 1rem;
   gap: .5rem;
 
   cc-button:first-of-type {
