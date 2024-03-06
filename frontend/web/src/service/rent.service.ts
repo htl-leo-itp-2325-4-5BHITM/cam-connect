@@ -90,4 +90,14 @@ export default class RentService {
                 console.error(error)
             })
     }
+
+    static requestConfirmation(rent: Rent) {
+        Api.fetchData(`/rent/getbyid/${rent.rent_id}/sendconfirmation`)
+            .then(() => {
+                RentService.fetchAll()
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
 }

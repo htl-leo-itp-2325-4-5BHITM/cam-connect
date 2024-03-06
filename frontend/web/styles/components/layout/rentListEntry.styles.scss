@@ -28,6 +28,22 @@
   }
 }
 
+input, cc-autocomplete{
+  &.name{
+    width: 15ch;
+  }
+
+  &.date{
+    width: 11ch;
+    text-align: center;
+    padding-inline: .2rem;
+  }
+
+  &.number{
+    width: 5ch;
+  }
+}
+
 //TODO format all dates with more letter spacing as they are in figma
 
 //TODO cleanup this selector
@@ -73,11 +89,6 @@ input{
 
   &.number{
     width: 4ch;
-  }
-
-  &.date{
-    width: 10ch;
-    text-align: center;
   }
 
   &[disabled]{

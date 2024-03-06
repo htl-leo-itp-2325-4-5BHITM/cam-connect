@@ -1,8 +1,8 @@
-import {html, LitElement, PropertyValues} from 'lit'
+import {html, LitElement, PropertyValues, TemplateResult} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/rentListEntry.styles.scss'
 import {ButtonType} from "../basic/button.component"
-import {ColorEnum, SizeEnum} from "../../base"
+import {Api, ccResponse, ColorEnum, SizeEnum} from "../../base"
 import RentService, {Rent, RentStatus, RentTypeEnum} from "../../service/rent.service";
 import {ChipType} from "../basic/chip.component"
 import {model} from "../../index"
@@ -13,6 +13,12 @@ import PopupEngine from "../../popupEngine"
 import {ObservedProperty} from "../../model"
 import {AppState} from "../../AppState"
 import Util from "../../util"
+import {unsafeSVG} from "lit/directives/unsafe-svg.js"
+import {icon} from "@fortawesome/fontawesome-svg-core"
+import {faCamera, faHashtag, faHelicopter, faLightbulb, faMicrophone} from "@fortawesome/free-solid-svg-icons"
+import {Device, DeviceDTO} from "../../service/device.service"
+import {AutocompleteComponent, AutocompleteOption} from "../basic/autocomplete.component"
+import {DeviceType, DeviceTypeMinimalDTO, DeviceTypeVariantEnum} from "../../service/deviceType.service"
 
 @customElement('cc-rent-list-entry')
 export class RentListEntryComponent extends LitElement {
@@ -71,7 +77,7 @@ export class RentListEntryComponent extends LitElement {
                     <div class="detail">
                         <h2>angegebener Ablehngrund</h2>
                         <p>${this.rent.verification_message}</p>
-                        <cc-button type="${ButtonType.OUTLINED}" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}">Bestätigung erneut Anfragen</cc-button>
+                        <cc-button @click="${this.requestRent}" type="${ButtonType.OUTLINED}" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}">Bestätigung erneut Anfragen</cc-button>
                     </div>
                 </cc-chip>
                 
@@ -96,8 +102,24 @@ export class RentListEntryComponent extends LitElement {
             return html`
                 ${this.rent.type == RentTypeEnum.DEFAULT ?
                         html`
-                            <input type="text" value="${this.rent.device.type.name}">
-                            <input type="text" class="number" value="${this.rent.device.number}">
+                    <cc-autocomplete placeholder="Name" class="name"
+                                     .selected="${{id: this.rent.device.type.type_id, data: this.rent.device.type}}"
+                                     .onSelect="${(option: DeviceType) => {
+                                        this.rent.device.type = option;
+                                        let numberInput = this.shadowRoot.querySelector('cc-autocomplete.number') as AutocompleteComponent<DeviceDTO>
+                                        numberInput.clear()
+                                     }}"
+                                     .querySuggestions="${this.searchForDeviceType}"
+                                     .iconProvider="${this.provideDeviceTypeIcon}"
+                                     .contentProvider="${(data: DeviceTypeMinimalDTO) => {return data.name}}">
+                    </cc-autocomplete>
+                    <cc-autocomplete placeholder="Nr." class="number"
+                                     .selected="${{id: this.rent.device.device_id, data: this.rent.device}}"
+                                     .onSelect="${(option: Device) => {this.rent.device = option}}"
+                                     .querySuggestions="${(searchTerm) => this.searchForDevice(searchTerm)}"
+                                     .iconProvider="${this.provideDeviceIcon}"
+                                     .contentProvider="${(data: DeviceDTO) => {return data.number}}">
+                    </cc-autocomplete>
                         ` :
                         html`
                             <input type="text" value="${this.rent.device_string}" placeholder="Name">
@@ -147,6 +169,51 @@ export class RentListEntryComponent extends LitElement {
         }
     }
 
+    async searchForDeviceType(searchTerm: string): Promise<AutocompleteOption<DeviceType>[]> {
+        try {
+            const result: ccResponse<AutocompleteOption<DeviceType>[]> = await Api.postData(
+                "/devicetype/search",
+                {searchTerm: searchTerm}
+            )
+            return result.data
+        } catch (e) {
+            console.error(e)
+            return []
+        }
+    }
+
+    async searchForDevice(searchTerm: string): Promise<AutocompleteOption<Device>[]> {
+        if(this.rent.device.type.type_id < 0) return []
+        try {
+            const result: ccResponse<AutocompleteOption<Device>[]> = await Api.postData(
+                `/device/searchwithtype/${this.rent.device.type.type_id}`,
+                {searchTerm: searchTerm}
+            )
+            //can be undefined if type id is -1
+            return result.data || []
+        } catch (e) {
+            console.error(e)
+            return []
+        }
+    }
+
+    provideDeviceTypeIcon(data: DeviceTypeMinimalDTO): TemplateResult {
+        switch (data.variant){
+            case DeviceTypeVariantEnum.camera: return html`${unsafeSVG(icon(faCamera).html[0])}`
+            case DeviceTypeVariantEnum.microphone: return html`${unsafeSVG(icon(faMicrophone).html[0])}`
+            case DeviceTypeVariantEnum.drone: return html`${unsafeSVG(icon(faHelicopter).html[0])}`
+            case DeviceTypeVariantEnum.lens:
+            case DeviceTypeVariantEnum.light: return html`${unsafeSVG(icon(faLightbulb).html[0])}`
+            case DeviceTypeVariantEnum.stabilizer:
+            case DeviceTypeVariantEnum.tripod: return html`T`
+            default: return html`Icon`
+        }
+    }
+
+    provideDeviceIcon(data: DeviceDTO){
+        return html`${unsafeSVG(icon(faHashtag).html[0])}`
+    }
+
     toggleRentCheck(checked?: boolean){
         if(!checked) checked = !this.isChecked()
 
@@ -159,6 +226,25 @@ export class RentListEntryComponent extends LitElement {
 
     isChecked(){
         return this.appState.value.selectedRentEntries.has(this)
+    }
+
+    requestRent() {
+        PopupEngine.createModal({
+            text: "Willst du wirklich diesen Verleih neu Anfragen?",
+            buttons: [
+                {
+                    text: "Ja",
+                    action: (data) => {
+                        this.rent.status = RentStatus.WAITING
+                        RentService.requestConfirmation(this.rent)
+                    },
+                    closePopup: true
+                },
+                {
+                    text: "Nein",
+                },
+            ]
+        })
     }
 
     removeRent() {
@@ -176,7 +262,8 @@ export class RentListEntryComponent extends LitElement {
                     text: "Nein",
                 },
             ]
-        })    }
+        })
+    }
 
     returnRent() {
         PopupEngine.createModal({

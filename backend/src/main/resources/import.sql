@@ -79,12 +79,15 @@ values
 
 -- Stabilizer Types
 insert into DEVICETYPE (variant, dtype, name, max_weight, number_of_axis)
-values ('stabilizer', 'StabilizerType', 'Schulterrig', 200, 2);
-insert into DEVICETYPE (variant, dtype, name, max_weight, number_of_axis) values ('stabilizer', 'StabilizerType', 'Gopro Gimbal', 150, 3);
+values
+    ('stabilizer', 'StabilizerType', 'Schulterrig', 200, 2),
+    ('stabilizer', 'StabilizerType', 'Gopro Gimbal', 150, 3);
 
 -- Tripod Types
-insert into DEVICETYPE (variant, dtype, name, head_id, height) values ('tripod', 'TripodType', 'Manfrotto 756B', 1, 150);
-insert into DEVICETYPE (variant, dtype, name, head_id, height) values ('tripod', 'TripodType', 'Hama Profil 76', 1, 150);
+insert into DEVICETYPE (variant, dtype, name, head_id, height)
+values
+    ('tripod', 'TripodType', 'Manfrotto 756B', 1, 150,
+    ('tripod', 'TripodType', 'Hama Profil 76', 1, 150);
 
 
 -- assigning tags to devicetypes
