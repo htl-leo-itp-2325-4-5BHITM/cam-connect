@@ -3,18 +3,19 @@
 :host {
   all: initial;
   flex-grow: 1;
-
   display: flex;
   background-color: $gray200;
-  border-top: 1px solid $gray400;
   padding: 0.5rem !important;
   gap: 0.75rem;
   align-items: center;
   justify-content: space-between;
 }
 
+:host(:not(:first-of-type)){
+  border-top: 1px solid $gray350;
+}
+
 :host([status="DECLINED"]){
-  border-top: 1px solid $gray400;
   background: linear-gradient(90deg, #423333 22.57%, #663D3D 99.01%);
 
   input{
@@ -83,17 +84,5 @@ input{
   &[disabled]{
     background: transparent;
     border: none;
-  }
-}
-
-.globaltime{
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  gap: .5rem;
-  justify-content: right;
-
-  svg path{
-    color: $accentDarkmodeLight !important;
   }
 }

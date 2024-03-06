@@ -56,9 +56,9 @@ export class AppState{
         let studentSelector = this._createRentComponent.shadowRoot.querySelector(".studentSelector") as AutocompleteComponent<Student>
         setTimeout(() => {
             studentSelector.setFocus()
-        },300)
+        },200)
 
-        this._createRentComponent.addDevice()
+        this._createRentComponent.addDevice("default", false)
 
         this.update()
     }

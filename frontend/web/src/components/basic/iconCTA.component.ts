@@ -1,6 +1,7 @@
 import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, property, queryAssignedElements} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/iconCTA.styles.scss'
+import {AnimationHelper} from "../../util"
 
 @customElement('icon-cta')
 export class iconCTAComponent extends LitElement {
@@ -42,16 +43,8 @@ export class iconCTAComponent extends LitElement {
         this.style.width = childHeight + "px"
     }
 
-    playClickAnimation(){
-        this.slottedChildren[0].animate([
-            {scale: 1},
-            {scale: 1.1},
-            {scale: 1},
-        ],
-            {
-                iterations: 1,
-                duration: 200
-            })
+    playClickAnimation() {
+        AnimationHelper.pop(this.slottedChildren[0], 200, 1.1)
     }
 }
 

@@ -92,6 +92,16 @@ export default class Util{
 
         return date.toLocaleDateString("at-DE", {day: "2-digit", month: "2-digit", year: "2-digit"})
     }
+
+    static smartHeight(elem: HTMLElement){
+        let styles = getComputedStyle(elem)
+        if(styles.boxSizing == "border-box"){
+            return elem.clientHeight
+        }
+        else{
+            return elem.clientHeight - parseFloat(styles.paddingTop) - parseFloat(styles.paddingBottom)
+        }
+    }
 }
 
 //TODO the color of the keyboard nav effect is always the same and not visible inside a date range
@@ -137,5 +147,59 @@ export class DatePickerWrapper{
                 //console.log(this.instance.selectedDates)
             }
         })
+    }
+}
+
+export class AnimationHelper{
+    static shake(elem: Element, duration: number = 200){
+        elem.animate([
+            {transform: 'translateX(0)', rotate: '0deg'},
+            {transform: 'translateX(-5px)', rotate: '-5deg'},
+            {transform: 'translateX(5px)'},
+            {transform: 'translateX(-5px)'},
+            {transform: 'translateX(5px)'},
+            {transform: 'translateX(-5px)'},
+            {transform: 'translateX(0)'},
+        ], {
+            duration: duration,
+            easing: 'ease-in-out',
+        })
+    }
+
+    static pop(elem: Element, duration: number = 200, scale: number = 1.05){
+        elem.animate([
+            {transform: 'scale(1)'},
+            {transform: `scale(${scale})`},
+            {transform: 'scale(1)'},
+        ], {
+            duration: duration,
+            easing: 'ease-in-out',
+        })
+    }
+
+    static bounce(elem: Element, duration: number = 200){
+        elem.animate([
+
+        ], {
+            duration: duration,
+            easing: 'ease-in-out',
+        })
+    }
+
+    static remove(elem: Element, duration: number = 200){
+        let elemAsHTMLElement = elem as HTMLElement
+        elemAsHTMLElement.style.overflow = "hidden"
+
+        elem.animate([
+            {opacity: 1, height: Util.smartHeight(elemAsHTMLElement) + "px"},
+            {opacity: 0, height: "0px"},
+        ], {
+            duration: duration,
+            easing: 'ease-in-out',
+        })
+
+        setTimeout(() => {
+            elem.remove()
+        },duration)
     }
 }

@@ -24,7 +24,7 @@
     --spacerColor: #{$gray800};
   }
   &[spacerColor="accent"]{
-    --spacerColor: #{$accentDarkmode};
+    --spacerColor: #{$accent};
   }
 
   ::slotted(*){

@@ -41,6 +41,8 @@
     display: flex;
     flex-direction: column;
     gap: .5rem;
+    overflow-y: auto;
+    @include noScrollbar;
   }
 }
 
@@ -78,7 +80,7 @@
     height: 1.2rem;
 
     path{
-      color: $accentDarkmodeLight;
+      color: $accentLight;
     }
   }
 }

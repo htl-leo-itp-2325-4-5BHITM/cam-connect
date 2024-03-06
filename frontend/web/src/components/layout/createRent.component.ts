@@ -19,7 +19,7 @@ import RentService, {CreateRentDTO} from "../../service/rent.service"
 import {AppState} from "../../AppState"
 import {AutocompleteComponent, AutocompleteOption} from "../basic/autocomplete.component"
 import {Student} from "../../service/student.service"
-import Util, {DatePickerWrapper} from "../../util"
+import Util, {AnimationHelper, DatePickerWrapper} from "../../util"
 
 @customElement('cc-create-rent')
 export class CreateRentComponent extends LitElement {
@@ -108,10 +108,12 @@ export class CreateRentComponent extends LitElement {
 
     //TODO add shortcut for this
     //we might want to pass the currently selected global date to the new device
-    addDevice(type: RentDeviceEntryComponentType = "default") {
+    addDevice(type: RentDeviceEntryComponentType = "default", setFocus = true) {
         let newDevice = new CreateRentDeviceEntryComponent(this, type)
         this.devices.add(newDevice)
         this.shadowRoot.querySelector(".deviceList").appendChild(newDevice)
+
+        if(setFocus)
         window.requestAnimationFrame(()=>{
             let autocomomp = newDevice.shadowRoot.querySelector("cc-autocomplete") as AutocompleteComponent<any>
             autocomomp?.setFocus()
@@ -120,24 +122,33 @@ export class CreateRentComponent extends LitElement {
 
     removeDevice(device: CreateRentDeviceEntryComponent) {
         this.devices.delete(device)
-        device.remove()
 
-        if(this.devices.size == 0) this.addDevice()
-
+        if(this.devices.size == 0) {
+            device.remove();
+            this.addDevice()
+        }
+        else
+            AnimationHelper.remove(device)
         console.log(this.devices)
     }
 
     setGlobaldate() {
-        this.devices.forEach(device => {
-            device.datePicker.instance.selectDate([this.globalDatePicker.instance.selectedDates[0], this.globalDatePicker.instance.selectedDates[1]])
+        let delay = 0
+        this.devices.forEach((device) => {
+            setTimeout(() => {
+                device.setDate(this.globalDatePicker.instance.selectedDates[0], this.globalDatePicker.instance.selectedDates[1])
+            },delay+=50)
         })
     }
 
     async create() {
         let data: CreateRentDTO[] = []
 
-        if(this.student_id < 0)
-            this.highlightInputError(this.shadowRoot.querySelector(".studentSelector"))
+        if(this.student_id < 0) {
+            let studentSelector = this.shadowRoot.querySelector(".studentSelector") as AutocompleteComponent<Student>
+            this.highlightInputError(studentSelector)
+            AnimationHelper.shake(studentSelector)
+        }
 
         for (let i = 0; i < this.devices.size; i++) {
             let device = Array.from(this.devices)[i]
