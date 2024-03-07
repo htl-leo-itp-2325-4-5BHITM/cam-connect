@@ -5,14 +5,14 @@
 }
 
 :host([color="accent"]) input{
-  outline: 1px solid $accentDarkmodeDark;
-  border-color: $accentDarkmodeDark;
+  outline: 1px solid $accentDark;
+  border-color: $accentDark;
   /*color: adjust-color($accentDarkmodeLight, $lightness: 35%);*/
-  background-color: adjust-color($accentDarkmodeLight, $alpha: -0.9);
+  background-color: adjust-color($accentLight, $alpha: -0.9);
 
   &:focus-visible{
-    border-color: $accentDarkmodeLight;
-    outline-color: $accentDarkmodeLight;
+    border-color: $accentLight;
+    outline-color: $accentLight;
   }
 }
 

@@ -22,8 +22,8 @@
   user-select: none;
 
   &[color = "accent"]{
-    --color-main: #{$accentDarkmodeDark};
-    --color-light: #{$accentDarkmodeLight};
+    --color-main: #{$accentDark};
+    --color-light: #{$accentLight};
     --color-text: #{$gray1000};
   }
   &[color = "gray"] {

@@ -5,7 +5,7 @@
     margin: 0;
     padding: 0;
     font: inherit;
-    accent-color: $accentDarkmode;
+    accent-color: $accent;
     font-family: 'Quicksand', sans-serif;
     font-weight: 500;
     color: $gray1000;
@@ -27,7 +27,7 @@ html{
 }
 
 ::selection{
-    background-color: $accentDarkmodeLight;
+    background-color: $accentLight;
     color: hsl(0, 0%, 0%);
 }
 
@@ -54,8 +54,8 @@ input, p[contenteditable]{
     transition: outline-color $transitionTimeShort, border-color $transitionTimeShort;
 
     &:focus-visible{
-        border-color: $accentDarkmode;
-        outline: 1px solid $accentDarkmode;
+        border-color: $accent;
+        outline: 1px solid $accent;
     }
 
     &.error{

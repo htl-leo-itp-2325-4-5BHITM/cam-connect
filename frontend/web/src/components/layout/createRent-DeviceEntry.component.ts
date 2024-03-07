@@ -17,7 +17,7 @@ import {AppState} from "../../AppState"
 import localeDe from "air-datepicker/locale/de"
 import {AutocompleteComponent, AutocompleteOption} from "../basic/autocomplete.component"
 import {DeviceType, DeviceTypeMinimalDTO, DeviceTypeVariantEnum} from "../../service/deviceType.service"
-import Util, {DatePickerWrapper} from "../../util"
+import Util, {AnimationHelper, DatePickerWrapper} from "../../util"
 import {Device, DeviceDTO} from "../../service/device.service"
 
 export interface CreateRentDeviceEntryData {
@@ -151,6 +151,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
     boundValidateInput = this.validateInput.bind(this);
     boundRemoveErrorHighlighting = this.removeErrorHighlighting.bind(this);
     highlightInputError(input: Element){
+        AnimationHelper.shake(input)
         input.classList.add("error");
         input.addEventListener("focus", this.boundRemoveErrorHighlighting);
         input.addEventListener("blur", this.boundValidateInput);
@@ -243,6 +244,13 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                 rent_end_planned: Util.formatDateForDb(this.datePicker.instance.selectedDates[1])
             }
         }
+    }
+
+    setDate(from: Date, to: Date){
+        AnimationHelper.pop(this.shadowRoot.querySelector(".date"))
+        this.datePicker.instance.selectDate(
+            [from, to]
+        )
     }
 }
 

@@ -19,8 +19,8 @@
   white-space: nowrap;
 
   &[color="ACCENT"]{
-    background-color: $accentDarkmode;
-    --hover-background: #{$accentDarkmodeDark};
+    background-color: $accent;
+    --hover-background: #{$accentDark};
   }
   &[color="GOOD"]{
     background-color: $good;

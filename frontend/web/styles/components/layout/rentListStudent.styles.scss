@@ -13,11 +13,12 @@
 .heading{
   display: flex;
   justify-content: space-between;
-  border: 1px solid $gray500;
+  /*border: 1px solid $gray500;*/
   border-radius: 0.75rem 0.75rem 0rem 0.75rem;
   background-color: $gray300;
-  padding: .25rem;
+  padding: .3rem;
   font-size: $fSizeDesktopSmall;
+  -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;
 
   img{
     height: 1.5rem;
