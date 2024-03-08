@@ -91,7 +91,18 @@ export default class RentService {
             })
     }
 
+    static updateAttribute(id, attribute, data) {
++        Api.postData(`/rent/getbyid/${id}/update/${attribute}`, data)
+            .then((data) => {
+                RentService.fetchAll()
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
+
     static requestConfirmation(rent: Rent) {
+        console.log(rent)
         Api.fetchData(`/rent/getbyid/${rent.rent_id}/sendconfirmation`)
             .then(() => {
                 RentService.fetchAll()

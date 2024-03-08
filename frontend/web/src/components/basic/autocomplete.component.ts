@@ -214,7 +214,8 @@ export class AutocompleteComponent<T> extends LitElement {
 
     clear(){
         this.selected = {id: -1, data: null}
-        this.shadowRoot.querySelector("input").value = ""
+        if(this.shadowRoot.querySelector("input"))
+            this.shadowRoot.querySelector("input").value = ""
     }
     //endregion
 }

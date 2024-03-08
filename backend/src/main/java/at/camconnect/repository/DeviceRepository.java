@@ -115,7 +115,7 @@ public class DeviceRepository {
         return result;
     }
 
-    public List<AutocompleteOptionDTO<DeviceDTO>> searchWithType(String searchTerm, Long type_id){
+    public List<AutocompleteOptionDTO<DeviceDTO>>searchWithType(String searchTerm, Long type_id){
         List<DeviceDTO> devices = em.createQuery(
                         "SELECT new at.camconnect.dtos.DeviceDTO(d.id, d.serial, d.number, d.note, d.type.id) FROM Device d " +
                                 "WHERE UPPER(d.number) LIKE :searchTerm and " +
