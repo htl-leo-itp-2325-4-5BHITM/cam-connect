@@ -106,8 +106,8 @@ export class RentListEntryComponent extends LitElement {
                                              .selected="${{id: this.rent.device.type.type_id, data: this.rent.device.type}}"
                                              .onSelect="${(option: DeviceType) => {
                                                  this.rent.device.type = option
-                                                 RentService.updateAttribute(this.rent.rent_id, 'device', this.rent.device)
                                                  let numberInput = this.shadowRoot.querySelector('cc-autocomplete.number') as AutocompleteComponent<DeviceDTO>
+                                                 numberInput.clear()
                                              }}"
                                              .querySuggestions="${this.searchForDeviceType}"
                                              .iconProvider="${this.provideDeviceTypeIcon}"
@@ -159,11 +159,11 @@ export class RentListEntryComponent extends LitElement {
                 <cc-line color=${LineColor.LIGHTER} type="${LineType.VERTICAL}"></cc-line>
                 
                 <div class="time">
-                    <span .onblur="${() => {RentService.updateAttribute(this.rent.rent_id, 'rentstart', this.rent.rent_start)}}">
+                    <span>
                         ${Util.formatDateForHuman(this.rent.rent_start)}
                     </span>
                     <span>-</span>
-                    <span .onblur="${() => {RentService.updateAttribute(this.rent.rent_id, 'rentendplanned', this.rent.rent_end_planned)}}">
+                    <span>
                         ${Util.formatDateForHuman(this.rent.rent_end_planned)}
                     </span>
                 </div>
@@ -236,6 +236,9 @@ export class RentListEntryComponent extends LitElement {
     }
 
     requestRent() {
+        RentService.updateAttribute(this.rent.rent_id, 'rentstart', this.rent.rent_start)
+        RentService.updateAttribute(this.rent.rent_id, 'rentendplanned', this.rent.rent_end_planned)
+
         PopupEngine.createModal({
             text: "Willst du wirklich diesen Verleih neu Anfragen?",
             buttons: [

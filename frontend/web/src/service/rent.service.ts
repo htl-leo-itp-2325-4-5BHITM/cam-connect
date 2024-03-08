@@ -92,7 +92,7 @@ export default class RentService {
     }
 
     static updateAttribute(id, attribute, data) {
-        console.log("updated: ", data)
+        console.log("updated: ")
         Api.postData(`/rent/getbyid/${id}/update/${attribute}`, data)
             .then((data) => {
                 console.log(data)
