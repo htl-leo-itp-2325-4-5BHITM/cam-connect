@@ -92,8 +92,10 @@ export default class RentService {
     }
 
     static updateAttribute(id, attribute, data) {
-+        Api.postData(`/rent/getbyid/${id}/update/${attribute}`, data)
+        console.log("updated: ", data)
+        Api.postData(`/rent/getbyid/${id}/update/${attribute}`, data)
             .then((data) => {
+                console.log(data)
                 RentService.fetchAll()
             })
             .catch(error => {
