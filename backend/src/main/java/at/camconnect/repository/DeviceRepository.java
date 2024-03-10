@@ -30,13 +30,13 @@ public class DeviceRepository {
     @Transactional
     public void create(Device device){
         em.persist(device);
-        deviceSocket.broadcast(getAll());
+        deviceSocket.broadcast();
     }
 
     @Transactional
     public void remove(Long id){
         em.remove(getById(id));
-        deviceSocket.broadcast(getAll());
+        deviceSocket.broadcast();
     }
 
     @Transactional
@@ -57,7 +57,7 @@ public class DeviceRepository {
             setType(id, data.type_id());
         } catch(Exception ex){ System.out.println(ex.getMessage()); throw new CCException(1106); }
 
-        deviceSocket.broadcast(getAll());
+        deviceSocket.broadcast();
     }
 
     public Device getById(Long id){
@@ -142,26 +142,26 @@ public class DeviceRepository {
     public void setNumber(Long rentId, String number) {
         Device device = getById(rentId);
         device.setNumber(number);
-        deviceSocket.broadcast(getAll());
+        deviceSocket.broadcast();
     }
 
     public void setSerial(Long rentId, String serial) {
         Device device = getById(rentId);
         device.setSerial(serial);
-        deviceSocket.broadcast(getAll());
+        deviceSocket.broadcast();
     }
 
     public void setNote(Long rentId, String serial) {
         Device device = getById(rentId);
         device.setNote(serial);
-        deviceSocket.broadcast(getAll());
+        deviceSocket.broadcast();
     }
 
     public void setType(Long rentId, Long type) {
         Device device = getById(rentId);
         DeviceType deviceType = em.find(DeviceType.class, type);
         device.setType(deviceType);
-        deviceSocket.broadcast(getAll());
+        deviceSocket.broadcast();
     }
 
     public boolean importDevices(InputStream fileInputStream) {

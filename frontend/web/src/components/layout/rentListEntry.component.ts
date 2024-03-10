@@ -64,7 +64,8 @@ export class RentListEntryComponent extends LitElement {
             </div>
 
             <div>
-                <!--TODO move this code into a more readable generator functioin-->
+                <!--TODO move this code into a more readable generator function-->
+                <!--please no nested ternary operators 🤮 -->
                 <cc-button color="${this.rent.status == RentStatus.DECLINED ? ColorEnum.GRAY : ColorEnum.ACCENT}" 
                            type="${ButtonType.TEXT}" size="${SizeEnum.SMALL}"
                            @click="${this.rent.status == RentStatus.DECLINED ? this.removeRent : this.rent.status == RentStatus.CONFIRMED ? this.returnRent : ''}"

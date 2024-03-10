@@ -39,20 +39,9 @@ public class DeviceSocket { //TODO this should be for deviceTypeFull
     }
 
     //TODO reformat like the RentSocket
-    public void broadcast(List<Device> data) {
-        CCDataResponseDTO response = new CCDataResponseDTO(new CCStatus(1000), new CCResponseDetailDTO(data), data);
-
-        //convert to a string (json-string)
-        String responseString = "";
-        try{
-            responseString = objectMapper.writeValueAsString(response);
-        }catch (JsonProcessingException ex){
-            responseString = "ewow";
-        }
-
-        String finalResponseString = responseString;
+    public void broadcast() {
         sessions.forEach(s -> {
-            s.getAsyncRemote().sendObject(finalResponseString, result -> {
+            s.getAsyncRemote().sendObject("update", result -> {
                if (result.getException() != null){
                    System.out.println("Unable to send message: " + result.getException());
                }

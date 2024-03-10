@@ -37,8 +37,6 @@ public class RentSocket {
     }
 
     public void broadcast() {
-        CCResponseDTO response = new CCResponseDTO(new CCStatus(1000), new CCResponseDetailDTO());
-
         sessions.forEach(s -> {
             s.getAsyncRemote().sendObject("update", result -> {
                 if (result.getException() != null){
