@@ -9,6 +9,8 @@
   height: 100vh;
   max-height: 100vh;
   background-color: $gray100;
+  position: relative;
+  overflow: hidden;
 }
 
 cc-navbar{
@@ -49,6 +51,98 @@ cc-sidebar{
 .create-container{
   display: flex;
   width: 100%;
+}
+
+#tooltip{
+  position: absolute;
+  padding: .4rem;
+  background-color: $gray500;
+  box-sizing: border-box;
+  pointer-events: none;
+  cursor: default;
+  border-radius: .2rem;
+  opacity: 0;
+  max-width: 30ch;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  font-size: $fSizeDesktopSmall;
+  transform: translateX(-50%);
+}
+
+#autocompleteSuggestions{
+  position: absolute;
+  z-index: 10;
+  left: 0;
+
+  padding: .3rem .2rem;
+  min-width: 20ch;
+
+  border-radius: .3rem;
+  border: 1px solid $gray600;
+  background-color: $gray300;
+  box-shadow: .3rem .3rem .3rem hsl(0, 0%, 0%, 20%);
+
+  display: flex;
+  flex-direction: column;
+
+  transition: opacity $transitionTimeMedium, transform $transitionTimeMedium;
+
+  opacity: 0;
+  transform: translateY(.5rem);
+
+  pointer-events: none;
+
+  -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;
+  overflow-y: auto;
+
+  &.visible{
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0rem);
+    pointer-events: initial;
+  }
+}
+
+.entry{
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  transition: background-color $transitionTimeShort;
+  border-radius: .3rem;
+  padding: .2rem .5rem;
+  cursor: pointer;
+
+  &.focused{
+    background-color: $gray400;
+
+    label{
+      color: $gray1000;
+    }
+
+    svg path{
+      color: $gray1000;
+    }
+  }
+
+  svg{
+    height: 1.1rem;
+
+    path{
+      color: $gray800;
+      transition: color $transitionTimeShort;
+    }
+  }
+
+  label{
+    cursor: pointer;
+    color: $gray800;
+    transition: color $transitionTimeShort;
+  }
+}
+
+.empty{
+  color: $gray600;
 }
 
 :global{

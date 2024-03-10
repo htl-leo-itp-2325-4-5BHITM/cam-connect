@@ -2,6 +2,7 @@ import {model} from "../index"
 import {config, Api, ccResponse} from "../base"
 import {DeviceType, DeviceTypeSource, DeviceTypeVariantCollection, DeviceTypeVariantEnum} from "./deviceType.service"
 import {RentByStudentDTO} from "./rent.service"
+import {AutocompleteOption} from "../components/basic/autocomplete.component"
 
 export interface Device{
     device_id: number
@@ -47,5 +48,32 @@ export default class DeviceService{
             .catch(error => {
                 console.error(error)
             })
+    }
+
+    static async search(searchTerm: string): Promise<AutocompleteOption<DeviceDTO>[]> {
+        try {
+            const result: ccResponse<AutocompleteOption<DeviceDTO>[]> = await Api.postData(
+                `/device/search`,
+                {searchTerm: searchTerm}
+            )
+            return result.data || []
+        } catch (e) {
+            console.error(e)
+            return []
+        }
+    }
+
+    static async searchWithType(searchTerm: string, type_id: number): Promise<AutocompleteOption<DeviceDTO>[]> {
+        try {
+            const result: ccResponse<AutocompleteOption<DeviceDTO>[]> = await Api.postData(
+                `/device/searchwithtype/${type_id}`,
+                {searchTerm: searchTerm}
+            )
+            //can be undefined if type id is -1
+            return result.data || []
+        } catch (e) {
+            console.error(e)
+            return []
+        }
     }
 }

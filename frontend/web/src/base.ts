@@ -1,5 +1,6 @@
 import * as trace_events from "trace_events"
 import Util from "./util"
+import {model} from "./index"
 
 export const config = {
     api_url: "http://localhost:8080/api",
@@ -87,12 +88,16 @@ interface ResizeBreakpoint {
 export class WidthResizeObserver {
     source: HTMLElement
     breakpoints: ResizeBreakpoint[]
+    lastWidth: number
     constructor(source: HTMLElement, breakpoints: ResizeBreakpoint[]) {
         this.source = source
         this.breakpoints = breakpoints.sort((a, b) => a.size - b.size)
 
         new ResizeObserver(() => {
             window.requestAnimationFrame(() => {
+                if(Math.abs(this.lastWidth - this.source.clientWidth) < 10) return
+                this.lastWidth = this.source.clientWidth
+
                 let newSize = this.breakpoints.at(-1).key;
 
                 for (let i = 0; i < this.breakpoints.length; i++) {
@@ -112,12 +117,14 @@ export class WidthResizeObserver {
 }
 
 export class Tooltip {
-    static tooltip:HTMLElement = document.querySelector("#tooltip")
+    static tooltip:HTMLElement
     static lastTimeHidden = 0
     static lastTimeShown = 0
     static timeoutFallback
 
     static show(elem: HTMLElement, text: string, delay: number) {
+        if(!this.tooltip) this.tooltip = model.appState.value.appElement.shadowRoot.querySelector("#tooltip")
+
         clearTimeout(this.timeoutFallback)
 
         this.lastTimeShown = Date.now()

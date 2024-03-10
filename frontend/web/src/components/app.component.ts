@@ -18,10 +18,8 @@ export class AppComponent extends LitElement {
 
         KeyBoardShortCut.register([["shift", "n"], ["<"]], () => {this.appState.value.openCreateRentModal()})
         KeyBoardShortCut.register(["escape"], () => {this.appState.value.cancelCurrentAction()}, "cancelCurrentAction", true)
-    }
 
-    connectedCallback() {
-        super.connectedCallback();
+        model.appState.value.appElement = this
     }
 
     render() {
@@ -61,6 +59,9 @@ export class AppComponent extends LitElement {
                 <cc-create-rent></cc-create-rent>
                 ${page}
             </div>
+            
+            <div id="tooltip"></div>
+            <div id="autocompleteSuggestions"></div>
         `
     }
 }

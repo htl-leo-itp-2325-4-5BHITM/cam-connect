@@ -17,7 +17,8 @@ export class AppState{
     private _createMultiRentModalOpen: boolean = false
     private _selectedRentEntries: Set<RentListEntryComponent> = new Set<RentListEntryComponent>()
     private _cancelCurrentAction: actionCancellation[] = []
-    private _createRentComponent: CreateRentComponent
+    private _createRentElement: CreateRentComponent
+    private _appElement: HTMLElement
 
     /**
      * there is a really small chance here that this possibly falls victim to a race condition
@@ -48,17 +49,17 @@ export class AppState{
 
         //super weird js behavior here: when passing only the function reference instead of an anonymous function
         //the "this" reference in the CreateRent class will be the AppState, try adding a log of "this" in the cancel method
-        this.addCurrentActionCancellation(() => { this._createRentComponent?.cancel() }, "createRentModal")
-        KeyBoardShortCut.register(["shift", "g"], () => { this._createRentComponent?.addDevice() }, "addDevice", true)
-        KeyBoardShortCut.register(["control", "enter"], () => { this._createRentComponent?.create() }, "createRent", true)
+        this.addCurrentActionCancellation(() => { this._createRentElement?.cancel() }, "createRentModal")
+        KeyBoardShortCut.register(["shift", "g"], () => { this._createRentElement?.addDevice() }, "addDevice", true)
+        KeyBoardShortCut.register(["control", "enter"], () => { this._createRentElement?.create() }, "createRent", true)
         this._createRentModalOpen = true
 
-        let studentSelector = this._createRentComponent.shadowRoot.querySelector(".studentSelector") as AutocompleteComponent<Student>
+        let studentSelector = this._createRentElement.shadowRoot.querySelector(".studentSelector") as AutocompleteComponent<Student>
         setTimeout(() => {
             studentSelector.setFocus()
         },200)
 
-        this._createRentComponent.addDevice("default", false)
+        this._createRentElement.addDevice("default", false)
 
         this.update()
     }
@@ -123,12 +124,21 @@ export class AppState{
         this.update()
     }
 
-    set createRentComponent(value: CreateRentComponent) {
-        this._createRentComponent = value
+    set createRentElement(value: CreateRentComponent) {
+        this._createRentElement = value
         this.update()
     }
 
-    get createRentComponent(): CreateRentComponent {
-        return this._createRentComponent
+    get createRentElement(): CreateRentComponent {
+        return this._createRentElement
+    }
+
+    get appElement(): HTMLElement {
+        return this._appElement
+    }
+
+    set appElement(value: HTMLElement) {
+        this._appElement = value
+        this.update()
     }
 }

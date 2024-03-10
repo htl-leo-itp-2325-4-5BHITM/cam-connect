@@ -44,7 +44,7 @@ export class CreateRentComponent extends LitElement {
         let globalInput = this.renderRoot.querySelector('.globaltime input') as HTMLInputElement
         this.globalDatePicker = new DatePickerWrapper(globalInput)
 
-        this.appState.value.createRentComponent = this
+        this.appState.value.createRentElement = this
     }
 
     render() {
@@ -128,8 +128,8 @@ export class CreateRentComponent extends LitElement {
             this.addDevice()
         }
         else
-            AnimationHelper.remove(device)
-        console.log(this.devices)
+            device.remove()
+            //AnimationHelper.remove(device)
     }
 
     setGlobaldate() {
@@ -143,6 +143,7 @@ export class CreateRentComponent extends LitElement {
 
     async create() {
         let data: CreateRentDTO[] = []
+        let valid = true
 
         if(this.student_id < 0) {
             let studentSelector = this.shadowRoot.querySelector(".studentSelector") as AutocompleteComponent<Student>
@@ -154,9 +155,10 @@ export class CreateRentComponent extends LitElement {
             let device = Array.from(this.devices)[i]
 
             if(await device.validate()) data.push(device.toRentObject(this.student_id))
+            else valid = false
         }
 
-        if(data.length == 0) return
+        if(!valid) return
 
         RentService.create(data)
     }

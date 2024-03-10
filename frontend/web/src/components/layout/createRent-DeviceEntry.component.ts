@@ -18,7 +18,7 @@ import localeDe from "air-datepicker/locale/de"
 import {AutocompleteComponent, AutocompleteOption} from "../basic/autocomplete.component"
 import {DeviceType, DeviceTypeMinimalDTO, DeviceTypeVariantEnum} from "../../service/deviceType.service"
 import Util, {AnimationHelper, DatePickerWrapper} from "../../util"
-import {Device, DeviceDTO} from "../../service/device.service"
+import DeviceService, {Device, DeviceDTO} from "../../service/device.service"
 
 export interface CreateRentDeviceEntryData {
     device_id: number
@@ -148,7 +148,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
      * See instantiation in the constructor.
      * https://javascript.info/bind
      */
-    boundValidateInput = this.validateInput.bind(this);
+    boundValidateInput = this.validate.bind(this);
     boundRemoveErrorHighlighting = this.removeErrorHighlighting.bind(this);
     highlightInputError(input: Element){
         AnimationHelper.shake(input)
@@ -168,10 +168,6 @@ export class CreateRentDeviceEntryComponent extends LitElement {
         input.removeEventListener("focus", this.boundRemoveErrorHighlighting);
     }
 
-    validateInput(e: Event){
-        this.validate();
-    }
-
     async searchForDeviceType(searchTerm: string): Promise<AutocompleteOption<DeviceTypeMinimalDTO>[]> {
         try {
             const result: ccResponse<AutocompleteOption<DeviceTypeMinimalDTO>[]> = await Api.postData(
@@ -186,18 +182,9 @@ export class CreateRentDeviceEntryComponent extends LitElement {
     }
 
     async searchForDevice(searchTerm: string): Promise<AutocompleteOption<DeviceDTO>[]> {
-        if(this.data.device_type_id < 0) return []
-        try {
-            const result: ccResponse<AutocompleteOption<DeviceDTO>[]> = await Api.postData(
-                `/device/searchwithtype/${this.data.device_type_id}`,
-                {searchTerm: searchTerm}
-            )
-            //can be undefined if type id is -1
-            return result.data || []
-        } catch (e) {
-            console.error(e)
-            return []
-        }
+        if(this.data.device_type_id < 0) return DeviceService.search(searchTerm)
+
+        return DeviceService.searchWithType(searchTerm, this.data.device_type_id)
     }
 
     provideDeviceTypeIcon(data: DeviceTypeMinimalDTO): TemplateResult {

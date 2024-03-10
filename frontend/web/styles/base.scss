@@ -69,25 +69,6 @@ input, p[contenteditable]{
     }
 }
 
-:global {
-    #tooltip{
-        position: absolute;
-        padding: .4rem;
-        background-color: $gray500;
-        box-sizing: border-box;
-        pointer-events: none;
-        cursor: default;
-        border-radius: .2rem;
-        opacity: 0;
-        max-width: 30ch;
-        top: 0;
-        left: 0;
-        z-index: 100;
-        font-size: $fSizeDesktopSmall;
-        transform: translateX(-50%);
-    }
-}
-
 /*animation geht mit svg grad aus irgendeimnem grund ned*/
 @keyframes svg-cta-click {
     1% {

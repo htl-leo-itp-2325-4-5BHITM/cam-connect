@@ -95,16 +95,18 @@ public class RentRepository {
         //this is currently just joining to half the db and not using a propper DTO,
         // this might cause performance problems in the future but is fine for now
         List<Student> students = em.createQuery(
-                "SELECT s FROM Rent r" +
-                    " join Student s on r.student.student_id = s.student_id" +
-                        " group by s.student_id", Student.class).getResultList();
+                "SELECT s FROM Rent r " +
+                        "join Student s on r.student.student_id = s.student_id " +
+                        "group by s.student_id " +
+                        "order by s.student_id", Student.class).getResultList();
 
         List<RentByStudentDTO> result = new LinkedList<>();
 
         for (Student student : students) {
             List<Rent> rents = em.createQuery(
-                    "SELECT r FROM Rent r" +
-                            " where r.student.student_id = :studentId", Rent.class)
+                    "SELECT r FROM Rent r " +
+                            "where r.student.student_id = :studentId " +
+                            "order by r.id", Rent.class)
                     .setParameter("studentId", student.getStudent_id())
                     .getResultList();
 

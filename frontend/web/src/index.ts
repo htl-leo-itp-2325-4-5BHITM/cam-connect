@@ -38,6 +38,7 @@ import PopupEngine from "./popupEngine";
 
 //OMG its our single swouce of THWQUUUCE
 export let model = new Model()
+
 /*model.appState.subscribe(data => {
     console.log(data)
 })*/
@@ -57,10 +58,9 @@ PopupEngine.init({
         KeyBoardShortCut.remove("confirmModal")
     }
 })
-setTimeout(() => {
-    const app = document.createElement("cc-app")
-    document.body.appendChild(app)
-},100)
+
+const app = document.createElement("cc-app")
+document.body.appendChild(app)
 
 //Api.getbyid("/rent",  1, "/remove").then(data => console.log(data))
 
