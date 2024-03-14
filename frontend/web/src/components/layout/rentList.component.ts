@@ -1,8 +1,8 @@
-import {LitElement, css, html} from 'lit'
+import {html, LitElement} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/rentList.styles.scss'
 import {model} from "../../index";
-import {Rent, RentByStudentDTO} from "../../service/rent.service"
+import {RentByStudentDTO, RentStatus} from "../../service/rent.service"
 import {ObservedProperty} from "../../model"
 
 @customElement('cc-rent-list')
@@ -18,8 +18,9 @@ export class RentListComponent extends LitElement {
             <style>${styles}</style>
             
             ${this.rents.value.map(rentByStudent => {
-                return html`<cc-rent-list-student .rentByStudent="${rentByStudent}"></cc-rent-list-student>`
-            })}
+            if(rentByStudent.rentList.every(rent => rent.status == RentStatus.RETURNED)) return
+            else return html`<cc-rent-list-student .rentByStudent="${rentByStudent}"></cc-rent-list-student>`
+        })}
         `
     }
 }
