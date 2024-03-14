@@ -17,6 +17,7 @@ import java.io.File;
 import java.util.List;
 
 @Path("/teacher")
+@Produces(MediaType.APPLICATION_JSON)
 public class TeacherResource {
     @Inject
     TeacherRepository teacherRepository;
