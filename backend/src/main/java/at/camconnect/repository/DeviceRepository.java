@@ -2,14 +2,12 @@ package at.camconnect.repository;
 
 import at.camconnect.dtos.AutocompleteOptionDTO;
 import at.camconnect.dtos.DeviceDTO;
-import at.camconnect.dtos.DeviceTypeMinimalDTO;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.model.Device;
 import at.camconnect.model.DeviceType;
 import at.camconnect.socket.DeviceSocket;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.json.JsonObject;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 

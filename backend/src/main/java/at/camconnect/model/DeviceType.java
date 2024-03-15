@@ -63,5 +63,13 @@ public abstract class DeviceType{
     public void setType_id(long typeId) {
         this.type_id = typeId;
     }
+
+    public DeviceType(Long type_id, DeviceTypeVariantEnum variant, String name, String image) {
+        this.type_id = type_id;
+        this.variant = variant;
+        this.name = name;
+        this.image = image;
+    }
+
     //endregion
 }

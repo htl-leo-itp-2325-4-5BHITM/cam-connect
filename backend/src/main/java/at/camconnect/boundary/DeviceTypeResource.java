@@ -112,7 +112,7 @@ public class DeviceTypeResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response search(JsonObject data){
-        List<AutocompleteOptionDTO<DeviceTypeMinimalDTO>> result;
+        List<AutocompleteOptionDTO<DeviceType>> result;
         try{
             result = deviceTypeRepository.search(data.getString("searchTerm"));;
         }catch (CCException ex){

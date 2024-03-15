@@ -137,7 +137,7 @@ export class DeviceListEntryComponent extends LitElement {
         return html`
             <section>
                 <div class="details">
-                    <cc-property-value size="small" property="Maximales Gewicht" value="${stabilizer.max_weight}"></cc-property-value>
+                    <cc-property-value size="small" property="Maximales Gewicht" value="${stabilizer.max_weight_kilograms}"></cc-property-value>
                     <cc-property-value size="small" property="Achsen Anzahl" value="${stabilizer.number_of_axis}"></cc-property-value>
                 </div>
                 <div class="image">
@@ -153,7 +153,7 @@ export class DeviceListEntryComponent extends LitElement {
             <section>
                 <div class="details">
                     <cc-property-value size="small" property="Head" value="${tripod.head}"></cc-property-value>
-                    <cc-property-value size="small" property="Höhe" value="${tripod.height}"></cc-property-value>
+                    <cc-property-value size="small" property="Höhe" value="${tripod.height_centimeters}"></cc-property-value>
                 </div>
                 <div class="image">
                     <img src="../../../assets/tempCamera.png" alt="">

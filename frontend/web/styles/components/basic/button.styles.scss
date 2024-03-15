@@ -137,6 +137,11 @@
     cursor: default;
   }
 
+  &[noPadding="true"]{
+    padding-inline: .2rem !important;
+    min-width: 0;
+  }
+
   ::slotted(*:not(.icon, svg, img)){
     opacity: 80%;
     font-weight: 400 !important;

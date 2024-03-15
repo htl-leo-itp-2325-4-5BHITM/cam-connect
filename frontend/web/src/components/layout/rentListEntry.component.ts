@@ -16,9 +16,9 @@ import Util from "../../util"
 import {unsafeSVG} from "lit/directives/unsafe-svg.js"
 import {icon} from "@fortawesome/fontawesome-svg-core"
 import {faCamera, faHashtag, faHelicopter, faLightbulb, faMicrophone} from "@fortawesome/free-solid-svg-icons"
-import {Device, DeviceDTO} from "../../service/device.service"
+import DeviceService, {Device, DeviceDTO} from "../../service/device.service"
 import {AutocompleteComponent, AutocompleteOption} from "../basic/autocomplete.component"
-import {DeviceType, DeviceTypeMinimalDTO, DeviceTypeVariantEnum} from "../../service/deviceType.service"
+import DeviceTypeService, {DeviceType, DeviceTypeSource, DeviceTypeVariantEnum} from "../../service/deviceType.service"
 
 @customElement('cc-rent-list-entry')
 export class RentListEntryComponent extends LitElement {
@@ -110,9 +110,9 @@ export class RentListEntryComponent extends LitElement {
                                                  let numberInput = this.shadowRoot.querySelector('cc-autocomplete.number') as AutocompleteComponent<DeviceDTO>
                                                  numberInput.clear()
                                              }}"
-                                             .querySuggestions="${this.searchForDeviceType}"
-                                             .iconProvider="${this.provideDeviceTypeIcon}"
-                                             .contentProvider="${(data: DeviceTypeMinimalDTO) => {return data.name}}">
+                                             .querySuggestions="${DeviceTypeService.search}"
+                                             .iconProvider="${DeviceTypeService.deviceTypeToIcon}"
+                                             .contentProvider="${(data: DeviceTypeSource) => {return data.name}}">
                             </cc-autocomplete>
                             <cc-autocomplete placeholder="Nr." class="number"
                                              .selected="${{id: this.rent.device.device_id, data: this.rent.device}}"
@@ -176,46 +176,10 @@ export class RentListEntryComponent extends LitElement {
                 </cc-property-value>`
         }
     }
-
-    async searchForDeviceType(searchTerm: string): Promise<AutocompleteOption<DeviceType>[]> {
-        try {
-            const result: ccResponse<AutocompleteOption<DeviceType>[]> = await Api.postData(
-                "/devicetype/search",
-                {searchTerm: searchTerm}
-            )
-            return result.data
-        } catch (e) {
-            console.error(e)
-            return []
-        }
-    }
-
     async searchForDevice(searchTerm: string): Promise<AutocompleteOption<DeviceDTO>[]> {
-        if(this.rent.device.type.type_id < 0) return []
-        try {
-            const result: ccResponse<AutocompleteOption<DeviceDTO>[]> = await Api.postData(
-                `/device/searchwithtype/${this.rent.device.type.type_id}`,
-                {searchTerm: searchTerm}
-            )
-            //can be undefined if type id is -1
-            return result.data || []
-        } catch (e) {
-            console.error(e)
-            return []
-        }
-    }
+        if(this.rent.device.type.type_id < 0) return DeviceService.search(searchTerm)
 
-    provideDeviceTypeIcon(data: DeviceTypeMinimalDTO): TemplateResult {
-        switch (data.variant){
-            case DeviceTypeVariantEnum.camera: return html`${unsafeSVG(icon(faCamera).html[0])}`
-            case DeviceTypeVariantEnum.microphone: return html`${unsafeSVG(icon(faMicrophone).html[0])}`
-            case DeviceTypeVariantEnum.drone: return html`${unsafeSVG(icon(faHelicopter).html[0])}`
-            case DeviceTypeVariantEnum.lens:
-            case DeviceTypeVariantEnum.light: return html`${unsafeSVG(icon(faLightbulb).html[0])}`
-            case DeviceTypeVariantEnum.stabilizer:
-            case DeviceTypeVariantEnum.tripod: return html`T`
-            default: return html`Icon`
-        }
+        return DeviceService.searchWithType(searchTerm, this.rent.device.type.type_id)
     }
 
     provideDeviceIcon(data: DeviceDTO){

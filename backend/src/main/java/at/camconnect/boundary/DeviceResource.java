@@ -2,7 +2,6 @@ package at.camconnect.boundary;
 
 import at.camconnect.dtos.AutocompleteOptionDTO;
 import at.camconnect.dtos.DeviceDTO;
-import at.camconnect.dtos.DeviceTypeMinimalDTO;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.model.Device;
