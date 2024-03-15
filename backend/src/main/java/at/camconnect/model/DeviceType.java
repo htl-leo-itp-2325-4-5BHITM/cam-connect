@@ -11,10 +11,12 @@ import jakarta.persistence.*;
 public abstract class DeviceType{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(length = 4)
     private Long type_id;
 
     @Enumerated(EnumType.STRING)
     private DeviceTypeVariantEnum variant;
+    @Column(length = 20)
     private String name;
     private String image;
 

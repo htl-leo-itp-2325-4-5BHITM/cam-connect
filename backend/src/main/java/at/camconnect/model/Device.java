@@ -6,9 +6,13 @@ import jakarta.persistence.*;
 public class Device {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(length = 4)
     private Long device_id;
+    @Column(length = 5)
     private String serial;
+    @Column(length = 15)
     private String number;
+    @Column(length = 150)
     private String note;
     @ManyToOne
     @JoinColumn(name = "type_id")

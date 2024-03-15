@@ -6,6 +6,7 @@ import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypeAttributes.CameraResolution;
 import at.camconnect.model.DeviceTypeAttributes.CameraSensor;
 import at.camconnect.responseSystem.CCException;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -18,6 +19,7 @@ public class DroneType extends DeviceType {
     @ManyToOne
     @JoinColumn(name = "resolution_id")
     private CameraResolution resolution;
+    @Column(length = 5)
     private int max_range;
 
     public DroneType() {

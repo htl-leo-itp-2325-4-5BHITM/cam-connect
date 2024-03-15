@@ -8,8 +8,11 @@ import jakarta.persistence.*;
 public abstract class DeviceTypeAttribute {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "attribute_name")
+    @Column(length = 5)
     private long attribute_id;
+    @Column(length = 20)
     private String name;
+    @Column(length = 150)
     private String details;
 
     public DeviceTypeAttribute(String name, String details) {

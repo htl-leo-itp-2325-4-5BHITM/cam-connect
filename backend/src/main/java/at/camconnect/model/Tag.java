@@ -8,13 +8,16 @@ import java.util.List;
 public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(length = 4)
     private Long tag_id;
 
     @OneToMany
     private List<DeviceType> type;
 
+    @Column(length = 20)
     private String name;
 
+    @Column(length = 150)
     private String description;
 
     public Tag(String name, String description) {

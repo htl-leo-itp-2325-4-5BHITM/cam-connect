@@ -5,6 +5,7 @@ import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypeAttributes.LensMount;
 import at.camconnect.responseSystem.CCException;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -14,14 +15,16 @@ public class LensType extends DeviceType {
     @ManyToOne
     @JoinColumn(name = "mount_id")
     private LensMount lens_mount;
-    private double f_stop;
-    private int focal_length;
+    @Column(length = 15)
+    private String f_stop;
+    @Column(length = 15)
+    private String focal_length;
 
     public LensType() {
         setVariant(DeviceTypeVariantEnum.lens);
     }
 
-    public LensType(String typeName, double f_stop, LensMount lens_mount, int focal_length) {
+    public LensType(String typeName, String f_stop, LensMount lens_mount, String focal_length) {
         super(typeName);
         this.f_stop = f_stop;
         this.lens_mount = lens_mount;
@@ -40,19 +43,19 @@ public class LensType extends DeviceType {
     }
 
     //region getter setter
-    public double getF_stop() {
+    public String getF_stop() {
         return f_stop;
     }
 
-    public void setF_stop(double f_stop) {
+    public void setF_stop(String f_stop) {
         this.f_stop = f_stop;
     }
 
-    public int getFocal_length() {
+    public String getFocal_length() {
         return focal_length;
     }
 
-    public void setFocal_length(int focal_length) {
+    public void setFocal_length(String focal_length) {
         this.focal_length = focal_length;
     }
 

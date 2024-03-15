@@ -13,6 +13,7 @@ import java.util.Set;
 public class Rent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(length = 4)
     private Long rent_id;
 
     @Enumerated(EnumType.STRING)
@@ -33,11 +34,15 @@ public class Rent {
     private LocalDate rent_end_planned;
     private LocalDate rent_end_actual;
     private final LocalDateTime creation_date;
+    @Column(length = 20)
     private String verification_code;
+    @Column(length = 150)
     private String verification_message;
 
     private RentStatusEnum status;
+    @Column(length = 150)
     private String note;
+    @Column(length = 25)
     private String device_string;
 
     //TODO remove these when moving to new UI permanatly - also remove them in repo resource and update functions
