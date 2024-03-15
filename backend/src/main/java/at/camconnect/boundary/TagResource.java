@@ -14,6 +14,7 @@ import jakarta.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/tag")
+@Produces(MediaType.APPLICATION_JSON)
 public class TagResource {
 
     @Inject
@@ -45,6 +46,7 @@ public class TagResource {
         return CCResponse.ok();
     }
 
+    //TODO this is definitly not correct..
     @POST
     @Path("/update{id: [0-9]+}")
     @Consumes(MediaType.APPLICATION_JSON)
