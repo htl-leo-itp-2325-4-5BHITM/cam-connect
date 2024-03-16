@@ -18,6 +18,7 @@ import jakarta.persistence.Table;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 @ApplicationScoped
 public class DeviceTypeRepository {
@@ -69,23 +70,21 @@ public class DeviceTypeRepository {
         return new DeviceTypeCollection(cameraTypes, droneTypes, lensTypes, lightTypes, microphoneTypes, stabilizerTypes, tripodTypes);
     }
 
-    public List<AutocompleteOptionDTO<DeviceType>> search(String searchTerm){
-        List<DeviceType> deviceTypes = null;
-        try {
-            deviceTypes = em.createQuery(
-                            "SELECT new DeviceType(d.id, d.variant, d.name, d.image) FROM DeviceType d " +
-                                    "WHERE UPPER(d.name) LIKE :searchTerm ",
-                            DeviceType.class)
-                    .setParameter("searchTerm", "%" + searchTerm.toUpperCase() + "%")
-                    .getResultList();
-        } catch (Exception ex) {
-            System.out.println("error: " + ex.getMessage();
-        }
+    public List<AutocompleteOptionDTO<DeviceTypeMinimalDTO>> search(String searchTerm){
+        List<DeviceTypeMinimalDTO> deviceTypes = new LinkedList<DeviceTypeMinimalDTO>();
 
-        List<AutocompleteOptionDTO<DeviceType>> result = new LinkedList<>();
+        deviceTypes = em.createQuery(
+                        "SELECT new at.camconnect.dtos.DeviceTypeMinimalDTO(d.id, d.variant, d.name, d.image) FROM DeviceType d " +
+                                "WHERE UPPER(d.name) LIKE :searchTerm " +
+                                "order by name",
+                        DeviceTypeMinimalDTO.class)
+                .setParameter("searchTerm", "%" + searchTerm.toUpperCase() + "%")
+                .getResultList();
 
-        for (DeviceType deviceType : deviceTypes) {
-            result.add(new AutocompleteOptionDTO<>(deviceType, deviceType.getType_id()));
+        List<AutocompleteOptionDTO<DeviceTypeMinimalDTO>> result = new LinkedList<>();
+
+        for (DeviceTypeMinimalDTO deviceType : deviceTypes) {
+            result.add(new AutocompleteOptionDTO<>(deviceType, deviceType.type_id()));
         }
 
         return result;

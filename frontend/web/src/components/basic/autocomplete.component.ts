@@ -1,7 +1,7 @@
  import {LitElement, html, PropertyValues, TemplateResult, render} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/autocomplete.styles.scss'
-import Util, {AnimationHelper} from "../../util"
+import Util, {AnimationHelper, Logger} from "../../util"
 import {KeyBoardShortCut, Regex, SimpleColorEnum, SizeEnum} from "../../base"
 import {model} from "../../index"
 import {unsafeSVG} from 'lit/directives/unsafe-svg.js';
@@ -56,6 +56,8 @@ export class AutocompleteComponent<T> extends LitElement {
 
     static suggestionElement: HTMLElement
 
+    private logger = new Logger(true)
+
     constructor() {
         super()
         this.appState = new ObservedProperty<AppState>(this, model.appState)
@@ -91,7 +93,7 @@ export class AutocompleteComponent<T> extends LitElement {
             <style>${styles}</style>
             <input type="text" placeholder="${this.placeholder}" .disabled="${this.disabled}" data-role="autocompleteInput" value="${this.selected.id > -1 ? this.contentProvider(this.selected.data) : ""}"
                    @focus="${(e)=>{}}"
-                   @click="${(e)=>{e.target.select(); this.showSuggestions(); this.generateSuggestions()}}"
+                   @mouseup="${(e)=>{ this.generateSuggestions()}}"
                    @keyup="${this.generateSuggestions}"
                    @blur="${this.handleAutoClose}"
             >
@@ -100,6 +102,8 @@ export class AutocompleteComponent<T> extends LitElement {
     }
 
     showSuggestions(){
+        if(!this.suggestionsVisible) this.shadowRoot.querySelector("input").select();
+
         this.suggestionsVisible = true
 
         let input = this.shadowRoot.querySelector("input")
@@ -152,12 +156,13 @@ export class AutocompleteComponent<T> extends LitElement {
     }
 
     hideSuggestions(){
+        this.logger.log("hiding", this.placeholder)
+
         this.suggestionsVisible = false
 
         AutocompleteComponent.suggestionElement.classList.remove("visible")
 
         let input = this.shadowRoot.querySelector("input")
-        console.log("hding", this.selected)
         if(this.selected.id > -1) {
             input.value = this.contentProvider(this.selected.data)
         }
@@ -176,6 +181,8 @@ export class AutocompleteComponent<T> extends LitElement {
     }
 
     selectSuggestion(option: AutocompleteOption<T> | number){
+        this.logger.log("selecting", this.placeholder)
+
         if(typeof option == "number") option = this.options.find(option => option.id == this.focusedId)
 
         if(!option || option.id < 0) return
@@ -184,12 +191,11 @@ export class AutocompleteComponent<T> extends LitElement {
         //this.shadowRoot.querySelector("input").focus()
         this.hideSuggestions()
         this.onSelect(this.selected.data)
-
-        console.log("selecting", this.selected)
     }
 
     //TODO we might want to limit rates here so that we dont send all too many requests
     generateSuggestions(e?: KeyboardEvent){
+        this.logger.log("generating suggestions", this.placeholder)
         //TODO display selected suggestion on first focus
 
         let input = this.shadowRoot.querySelector("input") as HTMLInputElement
@@ -197,9 +203,16 @@ export class AutocompleteComponent<T> extends LitElement {
             if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Enter", "Alt", "Control", "Escape"].includes(e.key)) return
         }
 
+
+        render(html`<div class="loading">Lade...</div>`, AutocompleteComponent.suggestionElement)
+
         if(!this.suggestionsVisible) this.showSuggestions()
 
-        let searchTerm = input.value
+        this.logger.log(window.getSelection().toString())
+
+        //TODO does not quite work as intended
+        let searchTerm = ""
+        if(input.value.includes(window.getSelection().toString())) searchTerm = window.getSelection().toString()
         this.querySuggestions(searchTerm)
             .then(options => {
                 this.options = options
@@ -207,6 +220,7 @@ export class AutocompleteComponent<T> extends LitElement {
             .then(() => {
                 this.focusEntry(this.appState.value.appElement.shadowRoot.querySelector("#autocompleteSuggestions .entry") as HTMLElement)
             })
+
     }
 
     boundHandelAutoClose = this.handleAutoClose.bind(this)
@@ -253,18 +267,18 @@ export class AutocompleteComponent<T> extends LitElement {
 
     //region outside interaction
     setFocus(){
-        console.log("setting focus")
+        this.logger.log("setting focus", this.placeholder)
         this.shadowRoot.querySelector("input").focus()
         this.generateSuggestions()
     }
 
     clear(){
+        this.logger.log("clearing", this.placeholder)
         this.selected = {id: -1, data: null}
         this.focusedId = -1
         if(this.shadowRoot.querySelector("input"))
             this.shadowRoot.querySelector("input").value = ""
         AnimationHelper.shake(this)
-        console.log("cleared", this.selected)
     }
     //endregion
 }

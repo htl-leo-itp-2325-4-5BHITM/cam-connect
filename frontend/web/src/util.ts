@@ -6,6 +6,7 @@ import {AutocompleteOption} from "./components/basic/autocomplete.component"
 import AirDatepicker from "air-datepicker"
 import localeDe from "air-datepicker/locale/de"
 import {model} from "./index"
+import {config} from "./base"
 export default class Util{
     //TODO this typing does not seem right
     static deviceTypeToFilterOption(deviceTypes: DeviceTypeSource): FilterOption{
@@ -201,5 +202,18 @@ export class AnimationHelper{
         setTimeout(() => {
             elem.remove()
         },duration)
+    }
+}
+
+export class Logger{
+    doLogs = true
+    constructor(doLogs: boolean = true) {
+        this.doLogs = doLogs
+    }
+
+    log(...args: any[]){
+        if(this.doLogs && config.do_logs){
+            console.log(...args)
+        }
     }
 }

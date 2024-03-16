@@ -17,7 +17,7 @@ import {AppState} from "../../AppState"
 import localeDe from "air-datepicker/locale/de"
 import {AutocompleteComponent, AutocompleteOption} from "../basic/autocomplete.component"
 import DeviceTypeService, {DeviceType, DeviceTypeSource, DeviceTypeVariantEnum} from "../../service/deviceType.service"
-import Util, {AnimationHelper, DatePickerWrapper} from "../../util"
+import Util, {AnimationHelper, DatePickerWrapper, Logger} from "../../util"
 import DeviceService, {Device, DeviceDTO} from "../../service/device.service"
 
 export interface CreateRentDeviceEntryData {
@@ -47,6 +47,8 @@ export class CreateRentDeviceEntryComponent extends LitElement {
 
     datePicker: DatePickerWrapper
 
+    selectedDevice: DeviceDTO
+
     constructor(parent: CreateRentComponent, type: RentDeviceEntryComponentType = "default"){
         super()
         this.appState = new ObservedProperty<AppState>(this, model.appState)
@@ -58,6 +60,12 @@ export class CreateRentDeviceEntryComponent extends LitElement {
             device_string: "",
             rent_start: new Date(),
             rent_end_planned: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
+        }
+        this.selectedDevice = {
+            device_id: -1,
+            serial: "",
+            number: "",
+            type_id: -1
         }
     }
 
@@ -87,7 +95,10 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                 <div class="left">
                     <cc-autocomplete placeholder="Name" class="name" 
                                      .onSelect="${(option: DeviceTypeSource) => {
-                                         this.data.device_type_id = option.type_id; this.data.device_id = -1
+                                         this.data.device_type_id = option.type_id
+                                         
+                                         if(option.type_id == this.selectedDevice.type_id || this.data.device_id == -1) return
+                                         this.data.device_id = -1
                                          let numberInput = this.shadowRoot.querySelector('cc-autocomplete.number') as AutocompleteComponent<DeviceDTO>
                                          numberInput.clear()
                                      }}"
@@ -98,6 +109,11 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                     <cc-autocomplete placeholder="Nr." class="number" 
                                      .onSelect="${(option: DeviceDTO) => {
                                          this.data.device_id = option.device_id
+                                         this.selectedDevice = option
+                                         
+                                         if(this.data.device_type_id != -1) return
+
+                                         console.log("fetching device type")
                                          Api.fetchData<DeviceTypeSource>(`/devicetype/getbyid/${option.type_id}`)
                                              .then((deviceType: DeviceType) => {
                                                  let typeInput = this.shadowRoot.querySelector('cc-autocomplete.name') as AutocompleteComponent<DeviceTypeSource>
