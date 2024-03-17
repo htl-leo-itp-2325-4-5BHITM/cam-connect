@@ -153,6 +153,8 @@ export class CreateRentDeviceEntryComponent extends LitElement {
         })
 
         if(this.type == "string"){
+            //TODO validation is not correct
+            //create an aditional string entry and try to create the rent with valid text
             if(Regex.onlySpecialChars.test(this.data.device_string)){
                 this.highlightInputError(this.shadowRoot.querySelector(".name"))
                 return false

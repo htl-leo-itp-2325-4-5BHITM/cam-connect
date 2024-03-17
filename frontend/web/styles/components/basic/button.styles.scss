@@ -53,10 +53,10 @@
 
   &[type = "filled"]{
     background-color: var(--color-main);
-    box-shadow: 0 0 0 1px var(--color-light) inset;
     color: var(--color-text);
 
     &:not([disabled]):hover {
+      background-color: var(--color-light);
     }
   }
   &[type = "outlined"]{
