@@ -30,31 +30,50 @@ export class AutocompleteComponent<T> extends LitElement {
     size: SizeEnum = SizeEnum.SMALL
 
     @property()
+    allowNoSelection: boolean = false
+
+    @property()
     selected: AutocompleteOption<T> = {id: -1, data: null}
 
     @property()
     options: AutocompleteOption<T>[] = []
 
+    /**
+     * a custom function that is called whenever the user selects an option
+     * this is typically used to update the state of the parent component
+     * @param option
+     */
     @property()
     onSelect = (option: T) => {}
 
+    /**
+     * should provide the applicable suggestions based on the search term
+     * @param searchTerm string
+     */
     @property()
     querySuggestions: (searchTerm: string) => Promise<AutocompleteOption<T>[]> = (searchTerm) => {return Promise.resolve([])}
 
+    /**
+     * should provide the icon for the suggestion that wille be displayed alongside the content
+     * @param data
+     */
     @property()
     iconProvider: (data: T) => TemplateResult = (data) => {return html`no icon provider`}
 
+    /**
+     * converts a options data into a string that can be displayed to the user
+     */
     @property()
     contentProvider: (data: T) => string = () => {return "no content provider"}
 
-    private focusedId: number = -1
+    private focusedId: number = -1 //the id of the hovered or arrow-key-selected suggestion
 
     private suggestionsVisible: boolean = false
 
     @property()
-    appState: ObservedProperty<AppState>
+    private appState: ObservedProperty<AppState>
 
-    static suggestionElement: HTMLElement
+    static suggestionElement: HTMLElement //the absolute positioned element that contains the suggestions
 
     private logger = new Logger(true)
 
@@ -62,49 +81,64 @@ export class AutocompleteComponent<T> extends LitElement {
         super()
         this.appState = new ObservedProperty<AppState>(this, model.appState)
 
-        if(AutocompleteComponent.suggestionElement) return
-        AutocompleteComponent.suggestionElement = model.appState.value.appElement.shadowRoot.querySelector("#autocompleteSuggestions") as HTMLElement
+        if(!AutocompleteComponent.suggestionElement) AutocompleteComponent.suggestionElement = model.appState.value.appElement.shadowRoot.querySelector("#autocompleteSuggestions") as HTMLElement
     }
 
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
+        //probably for default values
         this.selectSuggestion(this.selected)
     }
 
     render() {
-        render(html`${
+
+        //render the suggestions into the separate suggestion element
+        render(
+            html`${
                 this.options.length == 0 ? html`<div class="empty">Keine Ergebnisse</div>` :
-                    this.options.map(option => {
-                        return html`
-                            <div class="entry" 
-                                 @click="${()=> {this.selectSuggestion(option)}}" 
-                                 @mouseenter="${(e: Event) => {this.focusEntry(e.target as HTMLElement)}}"
-                                 data-id="${option.id}"
-                            >
-                                ${this.iconProvider(option.data)}
-                                <label>${this.contentProvider(option.data)}</label>
-                            </div>
-                        `
-                    })
+                this.options.map(option => {
+                    return html`
+                        <div class="entry" 
+                             @click="${()=> {this.selectSuggestion(option)}}" 
+                             @mouseenter="${(e: Event) => {this.focusEntry(e.target as HTMLElement)}}"
+                             data-id="${option.id}"
+                        >
+                            ${this.iconProvider(option.data)}
+                            <label>${this.contentProvider(option.data)}</label>
+                        </div>
+                    `
+                })
             }`,
-            AutocompleteComponent.suggestionElement)
+            AutocompleteComponent.suggestionElement
+        )
 
         return html`
             <style>${styles}</style>
             <input type="text" placeholder="${this.placeholder}" .disabled="${this.disabled}" data-role="autocompleteInput" value="${this.selected.id > -1 ? this.contentProvider(this.selected.data) : ""}"
-                   @focus="${(e)=>{}}"
-                   @mouseup="${(e)=>{ this.generateSuggestions()}}"
-                   @keyup="${this.generateSuggestions}"
-                   @blur="${this.handleAutoClose}"
+                   @mouseup="${ this.generateSuggestions }"
+                   @keyup="${ (e)=> this.generateSuggestions(e) }"
+                   @blur="${ this.handleAutoClose }"
             >
+            <!-- display the dropdown icon if the width is enough -->
             ${this.clientWidth > 50 || this.selected.id < 0 ? unsafeSVG(icon(faCaretDown).html[0]) : html``}
         `
     }
 
+    /**
+     * displays the suggestion container
+     */
     showSuggestions(){
-        if(!this.suggestionsVisible) this.shadowRoot.querySelector("input").select();
-
         this.suggestionsVisible = true
+
+        //prevents double binds when moving directly from one input to another
+        KeyBoardShortCut.remove("autocomplete")
+        this.appState.value.removeCurrentActionCancellation("autocomplete")
+
+        if( //if the call is not caused by the user selecting text
+            window.getSelection().toString() == ""
+        ) {
+            this.shadowRoot.querySelector("input").select();
+        }
 
         let input = this.shadowRoot.querySelector("input")
         let inputBounds = input.getBoundingClientRect()
@@ -113,14 +147,13 @@ export class AutocompleteComponent<T> extends LitElement {
         this.updateSuggestionPosition()
 
         //TODO these are not working properyl and seem to impact performance significantly
+        //these should update the position of the suggestion box dynamically
         /*document.addEventListener("mousewheel", this.boundUpdateSuggestionPosition);
         document.addEventListener("touchmove", this.boundUpdateSuggestionPosition);*/
 
-        setTimeout(() => {
-            AutocompleteComponent.suggestionElement.classList.add("visible")
-        },)
+        AutocompleteComponent.suggestionElement.classList.add("visible") //show the suggestion box
 
-        document.addEventListener("click", this.boundHandelAutoClose)
+        document.addEventListener("click", this.boundHandelAutoClose) //close when clicking outside the suggestion box
 
         KeyBoardShortCut.register(["ArrowUp"], () => this.moveFocus("up"), "autocomplete", true)
         KeyBoardShortCut.register(["ArrowDown"], () => this.moveFocus("down"), "autocomplete", true)
@@ -130,19 +163,19 @@ export class AutocompleteComponent<T> extends LitElement {
 
     lastPositionUpdate = Date.now()
     boundUpdateSuggestionPosition = this.updateSuggestionPosition.bind(this)
-    scrollEnd
     updateSuggestionPosition(ending = false){
-        if(!ending)
-        this.scrollEnd = setTimeout(()=>{
+        /*if(!ending)
+        setTimeout(()=>{
             if(this.lastPositionUpdate + 20 > Date.now()) return
             this.boundUpdateSuggestionPosition(true)
         }, 20)
 
-        if(Date.now() - this.lastPositionUpdate < 5) return
+        if(Date.now() - this.lastPositionUpdate < 5) return*/
 
         let input = this.shadowRoot.querySelector("input")
         let inputBounds = input.getBoundingClientRect()
 
+        //move the element vertically and adjust the height to fit on screen
         if(inputBounds.top > window.innerHeight/2){//more space above then below
             AutocompleteComponent.suggestionElement.style.top = ""
             AutocompleteComponent.suggestionElement.style.bottom = window.innerHeight - inputBounds.top + "px"
@@ -155,24 +188,39 @@ export class AutocompleteComponent<T> extends LitElement {
         }
     }
 
-    hideSuggestions(){
+    /**
+     * hides the suggestion container and cleans up the event listeners and selections
+     * @param afterSelection
+     */
+    hideSuggestions( afterSelection = false){
         this.logger.log("hiding", this.placeholder)
 
         this.suggestionsVisible = false
-
         AutocompleteComponent.suggestionElement.classList.remove("visible")
 
         let input = this.shadowRoot.querySelector("input")
+
+        //if the component allows no selection
+        //and the hiding did not happen after a selection was made
+        //  (if the user selected an option without typing anything in to the input field the field will be empty
+        //  but youd want something to be selected, if something was selected and then the user clears out the
+        //  input field you want nothing to be selected)
+        //and the input is empty
+        if(this.allowNoSelection && afterSelection == false && Regex.empty.test(input.value)) {
+            this.selected = {id: -1, data: null}
+            this.onSelect(this.selected.data)
+        }
+
+        //if a valid value was selected update the text in the input
         if(this.selected.id > -1) {
             input.value = this.contentProvider(this.selected.data)
         }
         else
             input.value = ""
 
-        //input.blur()
-
         document.removeEventListener("click", this.boundHandelAutoClose)
 
+        //unused, would be for dynamic positioning
         document.removeEventListener("mousewheel", this.boundUpdateSuggestionPosition);
         document.removeEventListener("touchmove", this.boundUpdateSuggestionPosition);
 
@@ -180,53 +228,75 @@ export class AutocompleteComponent<T> extends LitElement {
         this.appState.value.removeCurrentActionCancellation("autocomplete")
     }
 
+    /**
+     * select a specific option (by clicking or using keyboard)
+     * @param option either a AutocompleteOption or the id of the option
+     */
     selectSuggestion(option: AutocompleteOption<T> | number){
         this.logger.log("selecting", this.placeholder)
 
-        if(typeof option == "number") option = this.options.find(option => option.id == this.focusedId)
+        if(typeof option == "number") option = this.options.find(item => item.id == option)
 
         if(!option || option.id < 0) return
 
         this.selected = option
-        //this.shadowRoot.querySelector("input").focus()
-        this.hideSuggestions()
-        this.onSelect(this.selected.data)
+        this.hideSuggestions(true)
+        this.onSelect(this.selected.data) //custom function that's different for each component
     }
 
-    //TODO we might want to limit rates here so that we dont send all too many requests
+    /**
+     * query the suggestions based on the input
+     * @param e
+     */
     generateSuggestions(e?: KeyboardEvent){
-        this.logger.log("generating suggestions", this.placeholder)
+        //TODO we might want to limit rates on this function, if we do that wed have to delay the query by a few ms
+        // and check if a new query showed up when the delay is over we cant just exit out of the function if the last
+        // call was less than XXms ago cause then the search query of the new call would be ignored
+
         //TODO display selected suggestion on first focus
 
+        //ignore keys that serve another purpose
         let input = this.shadowRoot.querySelector("input") as HTMLInputElement
-        if(e) {
+        if(e) { //TODO sub optimal solution it would be better to use a whitelist instead of a blacklist
             if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Enter", "Alt", "Control", "Escape"].includes(e.key)) return
         }
 
+        this.logger.log("generating suggestions", this.placeholder)
 
-        render(html`<div class="loading">Lade...</div>`, AutocompleteComponent.suggestionElement)
+        //results in flashing while waiting for the server to respond
+        /*render(html`<div class="loading">Lade...</div>`, AutocompleteComponent.suggestionElement)*/
 
         if(!this.suggestionsVisible) this.showSuggestions()
 
-        this.logger.log(window.getSelection().toString())
+        //timeout so that the getSelection() is updated (without this the mouseup would be called and the selection
+        // would still be the old one
+        setTimeout(() => {
+            let searchTerm = input.value
+            if( //if the user selects part of the input that should be used as the search term
+                window.getSelection().toString() != "" &&
+                input.value.includes(window.getSelection().toString())
+            ) {
+                searchTerm = window.getSelection().toString()
+            }
 
-        //TODO does not quite work as intended
-        let searchTerm = ""
-        if(input.value.includes(window.getSelection().toString())) searchTerm = window.getSelection().toString()
-        this.querySuggestions(searchTerm)
-            .then(options => {
-                this.options = options
-            })
-            .then(() => {
-                this.focusEntry(this.appState.value.appElement.shadowRoot.querySelector("#autocompleteSuggestions .entry") as HTMLElement)
-            })
-
+            this.querySuggestions(searchTerm)
+                .then(options => {
+                    this.options = options
+                })
+                .then(() => {
+                    //focus the first option
+                    this.focusEntry(this.appState.value.appElement.shadowRoot.querySelector("#autocompleteSuggestions .entry") as HTMLElement)
+                })
+        },)
     }
 
     boundHandelAutoClose = this.handleAutoClose.bind(this)
+
+    /**
+     * closes the suggestion box if focus is lost
+     * @param e
+     */
     handleAutoClose(e: Event){
-        //TODO target is the body for some reason so clicking the padding of the suggestion box closes it
-        //let target = Util.deepEventFocusedElement(this)
         let target = e.composedPath()[0] as HTMLElement
         if (target.dataset.role == "autocompleteInput" ||
             target == AutocompleteComponent.suggestionElement ||
@@ -237,17 +307,25 @@ export class AutocompleteComponent<T> extends LitElement {
         this.hideSuggestions()
     }
 
-    focusEntry(entry: HTMLElement){
+    /**
+     * focuses a specific entry or none
+     * @param entry element or nothing
+     */
+    focusEntry(entry?: HTMLElement){
         if(!entry) {
             this.focusedId = -1
             return
         }
         this.appState.value.appElement.shadowRoot.querySelectorAll("#autocompleteSuggestions .entry.focused")
             .forEach(entry => entry.classList.remove("focused"))
-        entry?.classList.add("focused")
+        entry.classList.add("focused")
         this.focusedId = Number(entry.dataset.id)
     }
 
+    /**
+     * Moves the focused element using the arrow keys
+     * @param direction "up" or "down"
+     */
     moveFocus(direction: "up" | "down"){
         let focused = this.appState.value.appElement.shadowRoot.querySelector("#autocompleteSuggestions .entry.focused") as HTMLElement
         focused.classList.remove("focused")
@@ -255,12 +333,21 @@ export class AutocompleteComponent<T> extends LitElement {
         let next: HTMLElement
         if(direction == "up"){
             next = focused?.previousElementSibling as HTMLElement
-            if(next == null) next = this.appState.value.appElement.shadowRoot.querySelector("#autocompleteSuggestions .entry:last-of-type")
+            if(next == null) {
+                //the first element is currently focused -> jump to the last
+                next = this.appState.value.appElement.shadowRoot.querySelector("#autocompleteSuggestions .entry:last-of-type")
+            }
         }
         else if(direction == "down"){
             next = focused?.nextElementSibling as HTMLElement
-            if(next == null) next = this.appState.value.appElement.shadowRoot.querySelector("#autocompleteSuggestions .entry:first-of-type")
+            if(next == null) {
+                //the last element is currently focused -> jump to the first
+                next = this.appState.value.appElement.shadowRoot.querySelector("#autocompleteSuggestions .entry:first-of-type")
+            }
         }
+
+        this.logger.log("moving focus", this.placeholder, focused, next)
+
         next.classList.add("focused")
         this.focusedId = Number(next.dataset.id)
     }
@@ -278,7 +365,7 @@ export class AutocompleteComponent<T> extends LitElement {
         this.focusedId = -1
         if(this.shadowRoot.querySelector("input"))
             this.shadowRoot.querySelector("input").value = ""
-        AnimationHelper.shake(this)
+         AnimationHelper.shake(this)
     }
     //endregion
 }

@@ -95,9 +95,17 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                 <div class="left">
                     <cc-autocomplete placeholder="Name" class="name" 
                                      .onSelect="${(option: DeviceTypeSource) => {
-                                         this.data.device_type_id = option.type_id
+                                         console.log("on selected:", option)
+                                         if(option == null) {
+                                             this.data.device_type_id = -1
+                                         }
+                                         else {
+                                             this.data.device_type_id = option.type_id
+                                             //if the selected device matches the selected type, do nothing
+                                             if (this.data.device_type_id == this.selectedDevice.type_id || this.data.device_id == -1) return
+                                         }
                                          
-                                         if(option.type_id == this.selectedDevice.type_id || this.data.device_id == -1) return
+                                         //reset the device type
                                          this.data.device_id = -1
                                          let numberInput = this.shadowRoot.querySelector('cc-autocomplete.number') as AutocompleteComponent<DeviceDTO>
                                          numberInput.clear()
@@ -105,6 +113,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                                      .querySuggestions="${DeviceTypeService.search}"
                                      .iconProvider="${DeviceTypeService.deviceTypeToIcon}"
                                      .contentProvider="${(data: DeviceTypeSource) => {return data.name}}"
+                                     allowNoSelection="true"
                     ></cc-autocomplete>
                     <cc-autocomplete placeholder="Nr." class="number" 
                                      .onSelect="${(option: DeviceDTO) => {
