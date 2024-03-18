@@ -24,7 +24,7 @@ insert into devicetypeattribute(dtype, name, details) values ('TripodHead', '2 a
 insert into devicetypeattribute(dtype, name, details) values ('TripodHead', '3 axis', '3 achsen ajustierbar');
 insert into devicetypeattribute(dtype, name, details) values ('TripodHead', 'Ballhead', 'In alle richtungen adjustierbarer Kugelkopf');
 
-INSERT INTO tag (description, name)
+INSERT INTO tag (name, description)
 VALUES
     ('Foto', 'Dieses Gerät ist am besten für Fotografie geeignet'),
     ('Video', 'Dieses Gerät ist am besten fürs filmen von Videos geeignet'),

@@ -42,7 +42,7 @@ public class Rent {
     private RentStatusEnum status;
     @Column(length = 150)
     private String note;
-    @Column(length = 25)
+    @Column(length = 100)
     private String device_string;
 
     //TODO remove these when moving to new UI permanatly - also remove them in repo resource and update functions
