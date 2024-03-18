@@ -18,6 +18,7 @@ import jakarta.persistence.Table;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 @ApplicationScoped
 public class DeviceTypeRepository {
@@ -70,11 +71,14 @@ public class DeviceTypeRepository {
     }
 
     public List<AutocompleteOptionDTO<DeviceTypeMinimalDTO>> search(String searchTerm){
-        List<DeviceTypeMinimalDTO> deviceTypes = em.createQuery(
-                        "SELECT new at.camconnect.dtos.DeviceTypeMinimalDTO(d.id, d.name, d.variant, d.image) FROM DeviceType d " +
-                                "WHERE UPPER(d.name) LIKE :searchTerm ",
+        List<DeviceTypeMinimalDTO> deviceTypes = new LinkedList<DeviceTypeMinimalDTO>();
+
+        deviceTypes = em.createQuery(
+                        "SELECT new at.camconnect.dtos.DeviceTypeMinimalDTO(d.id, d.variant, d.name, d.image) FROM DeviceType d " +
+                                "WHERE UPPER(d.name) LIKE :searchTerm " +
+                                "order by name",
                         DeviceTypeMinimalDTO.class)
-                .setParameter("searchTerm", searchTerm.toUpperCase() + "%")
+                .setParameter("searchTerm", "%" + searchTerm.toUpperCase() + "%")
                 .getResultList();
 
         List<AutocompleteOptionDTO<DeviceTypeMinimalDTO>> result = new LinkedList<>();

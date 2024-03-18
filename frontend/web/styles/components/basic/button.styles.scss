@@ -53,10 +53,10 @@
 
   &[type = "filled"]{
     background-color: var(--color-main);
-    box-shadow: 0 0 0 1px var(--color-light) inset;
     color: var(--color-text);
 
     &:not([disabled]):hover {
+      background-color: var(--color-light);
     }
   }
   &[type = "outlined"]{
@@ -135,6 +135,11 @@
   &[disabled]{
     opacity: 50%;
     cursor: default;
+  }
+
+  &[noPadding="true"]{
+    padding-inline: .2rem !important;
+    min-width: 0;
   }
 
   ::slotted(*:not(.icon, svg, img)){

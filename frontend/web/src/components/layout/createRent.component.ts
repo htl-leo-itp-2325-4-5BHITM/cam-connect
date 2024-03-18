@@ -149,6 +149,7 @@ export class CreateRentComponent extends LitElement {
             let studentSelector = this.shadowRoot.querySelector(".studentSelector") as AutocompleteComponent<Student>
             this.highlightInputError(studentSelector)
             AnimationHelper.shake(studentSelector)
+            valid = false
         }
 
         for (let i = 0; i < this.devices.size; i++) {

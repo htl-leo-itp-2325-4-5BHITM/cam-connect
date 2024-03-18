@@ -28,10 +28,13 @@ export class ButtonComponent extends LitElement {
     @property({type: Boolean})
     disabled?: boolean = false
 
+    @property({type: Boolean})
+    noPadding?: boolean = false
+
     render() {
         return html`
             <style>${styles}</style>
-            <button class="cc-button" part="button" color="${this.color}" type="${this.type}" size="${this.size}" .disabled="${this.disabled}">
+            <button class="cc-button" part="button" color="${this.color}" type="${this.type}" size="${this.size}" .disabled="${this.disabled}" noPadding="${this.noPadding}">
                 <slot name="left"></slot>
                 ${this.text}
                 <slot name="right"></slot>

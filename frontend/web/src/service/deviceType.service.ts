@@ -1,6 +1,11 @@
-import {Api} from '../base'
+import {Api, ccResponse} from '../base'
 import {model} from "../index"
 import {CameraResolution, CameraSensor, CameraSystem, LensMount, TripodHead} from "./deviceTypeAttribute.service"
+import {html, TemplateResult} from "lit"
+import {unsafeSVG} from 'lit/directives/unsafe-svg.js';
+import {icon} from "@fortawesome/fontawesome-svg-core"
+import {faCamera, faHelicopter, faLightbulb, faMicrophone} from "@fortawesome/free-solid-svg-icons"
+import {AutocompleteOption} from "../components/basic/autocomplete.component"
 
 //region devicetype interfaces
 export interface DeviceTypeSource {
@@ -56,7 +61,7 @@ export interface LensType extends DeviceTypeSource{
 
 export interface LensTypeDTO extends DeviceTypeSource{
     f_stop: number
-    focal_length: number
+    focal_length: string
     mount_id: number
 }
 
@@ -69,19 +74,19 @@ export interface LightType extends DeviceTypeSource{
 export interface LightTypeDTO extends LightType{}
 
 export interface StabilizerType extends DeviceTypeSource{
-    max_weight: number
+    max_weight_kilograms: number
     number_of_axis: number
 }
 
 export interface StabilizerTypeDTO extends StabilizerType{}
 
 export interface TripodType extends DeviceTypeSource{
-    height: number
+    height_centimeters: number
     head: TripodHead
 }
 
 export interface TripodTypeDTO extends DeviceTypeSource{
-    height: number
+    height_centimeters: number
     head_id: number
 }
 
@@ -113,13 +118,6 @@ export interface DeviceTypeFullDTO {
     deviceTags: Tag[]
 }
 
-export interface DeviceTypeMinimalDTO {
-    type_id: number
-    name: string
-    variant: DeviceTypeVariantEnum
-    image: string
-}
-
 export interface Tag {
     tag_id: number
     description: string
@@ -145,5 +143,31 @@ export default class DeviceTypeService {
             .catch(error => {
                 console.error(error)
             })
+    }
+
+    static async search(searchTerm: string): Promise<AutocompleteOption<DeviceType>[]> {
+        try {
+            const result: ccResponse<AutocompleteOption<DeviceType>[]> = await Api.postData(
+                "/devicetype/search",
+                {searchTerm: searchTerm}
+            )
+            return result.data
+        } catch (e) {
+            console.error(e)
+            return []
+        }
+    }
+
+    static deviceTypeToIcon(data: DeviceTypeSource): TemplateResult {
+        switch (data.variant){
+            case DeviceTypeVariantEnum.camera: return html`${unsafeSVG(icon(faCamera).html[0])}`
+            case DeviceTypeVariantEnum.microphone: return html`${unsafeSVG(icon(faMicrophone).html[0])}`
+            case DeviceTypeVariantEnum.drone: return html`${unsafeSVG(icon(faHelicopter).html[0])}`
+            case DeviceTypeVariantEnum.lens:
+            case DeviceTypeVariantEnum.light: return html`${unsafeSVG(icon(faLightbulb).html[0])}`
+            case DeviceTypeVariantEnum.stabilizer:
+            case DeviceTypeVariantEnum.tripod: return html`T`
+            default: return html`Icon`
+        }
     }
 }

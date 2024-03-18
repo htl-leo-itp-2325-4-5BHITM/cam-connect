@@ -16,8 +16,8 @@ import {Api, ccResponse, config, Regex} from "../../base"
 import {AppState} from "../../AppState"
 import localeDe from "air-datepicker/locale/de"
 import {AutocompleteComponent, AutocompleteOption} from "../basic/autocomplete.component"
-import {DeviceType, DeviceTypeMinimalDTO, DeviceTypeVariantEnum} from "../../service/deviceType.service"
-import Util, {AnimationHelper, DatePickerWrapper} from "../../util"
+import DeviceTypeService, {DeviceType, DeviceTypeSource, DeviceTypeVariantEnum} from "../../service/deviceType.service"
+import Util, {AnimationHelper, DatePickerWrapper, Logger} from "../../util"
 import DeviceService, {Device, DeviceDTO} from "../../service/device.service"
 
 export interface CreateRentDeviceEntryData {
@@ -47,6 +47,8 @@ export class CreateRentDeviceEntryComponent extends LitElement {
 
     datePicker: DatePickerWrapper
 
+    selectedDevice: DeviceDTO
+
     constructor(parent: CreateRentComponent, type: RentDeviceEntryComponentType = "default"){
         super()
         this.appState = new ObservedProperty<AppState>(this, model.appState)
@@ -58,6 +60,12 @@ export class CreateRentDeviceEntryComponent extends LitElement {
             device_string: "",
             rent_start: new Date(),
             rent_end_planned: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
+        }
+        this.selectedDevice = {
+            device_id: -1,
+            serial: "",
+            number: "",
+            type_id: -1
         }
     }
 
@@ -86,17 +94,41 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                 <style>${styles}</style>
                 <div class="left">
                     <cc-autocomplete placeholder="Name" class="name" 
-                                     .onSelect="${(option: DeviceTypeMinimalDTO) => {
-                                         this.data.device_type_id = option.type_id; this.data.device_id = -1
+                                     .onSelect="${(option: DeviceTypeSource) => {
+                                         console.log("on selected:", option)
+                                         if(option == null) {
+                                             this.data.device_type_id = -1
+                                         }
+                                         else {
+                                             this.data.device_type_id = option.type_id
+                                             //if the selected device matches the selected type, do nothing
+                                             if (this.data.device_type_id == this.selectedDevice.type_id || this.data.device_id == -1) return
+                                         }
+                                         
+                                         //reset the device type
+                                         this.data.device_id = -1
                                          let numberInput = this.shadowRoot.querySelector('cc-autocomplete.number') as AutocompleteComponent<DeviceDTO>
                                          numberInput.clear()
                                      }}"
-                                     .querySuggestions="${this.searchForDeviceType}"
-                                     .iconProvider="${this.provideDeviceTypeIcon}"
-                                     .contentProvider="${(data: DeviceTypeMinimalDTO) => {return data.name}}"
+                                     .querySuggestions="${DeviceTypeService.search}"
+                                     .iconProvider="${DeviceTypeService.deviceTypeToIcon}"
+                                     .contentProvider="${(data: DeviceTypeSource) => {return data.name}}"
+                                     allowNoSelection="true"
                     ></cc-autocomplete>
                     <cc-autocomplete placeholder="Nr." class="number" 
-                                     .onSelect="${(option: DeviceDTO) => {this.data.device_id = option.device_id}}"
+                                     .onSelect="${(option: DeviceDTO) => {
+                                         this.data.device_id = option.device_id
+                                         this.selectedDevice = option
+                                         
+                                         if(this.data.device_type_id != -1) return
+
+                                         console.log("fetching device type")
+                                         Api.fetchData<DeviceTypeSource>(`/devicetype/getbyid/${option.type_id}`)
+                                             .then((deviceType: DeviceType) => {
+                                                 let typeInput = this.shadowRoot.querySelector('cc-autocomplete.name') as AutocompleteComponent<DeviceTypeSource>
+                                                 typeInput.selectSuggestion({id: deviceType.type_id, data: deviceType})
+                                             })
+                                     }}"
                                      .querySuggestions="${(searchTerm) => this.searchForDevice(searchTerm)}"
                                      .iconProvider="${this.provideDeviceIcon}"
                                      .contentProvider="${(data: DeviceDTO) => {return data.number}}"
@@ -121,6 +153,8 @@ export class CreateRentDeviceEntryComponent extends LitElement {
         })
 
         if(this.type == "string"){
+            //TODO validation is not correct
+            //create an aditional string entry and try to create the rent with valid text
             if(Regex.onlySpecialChars.test(this.data.device_string)){
                 this.highlightInputError(this.shadowRoot.querySelector(".name"))
                 return false
@@ -168,36 +202,10 @@ export class CreateRentDeviceEntryComponent extends LitElement {
         input.removeEventListener("focus", this.boundRemoveErrorHighlighting);
     }
 
-    async searchForDeviceType(searchTerm: string): Promise<AutocompleteOption<DeviceTypeMinimalDTO>[]> {
-        try {
-            const result: ccResponse<AutocompleteOption<DeviceTypeMinimalDTO>[]> = await Api.postData(
-                "/devicetype/search",
-                {searchTerm: searchTerm}
-            )
-            return result.data
-        } catch (e) {
-            console.error(e)
-            return []
-        }
-    }
-
     async searchForDevice(searchTerm: string): Promise<AutocompleteOption<DeviceDTO>[]> {
         if(this.data.device_type_id < 0) return DeviceService.search(searchTerm)
 
         return DeviceService.searchWithType(searchTerm, this.data.device_type_id)
-    }
-
-    provideDeviceTypeIcon(data: DeviceTypeMinimalDTO): TemplateResult {
-        switch (data.variant){
-            case DeviceTypeVariantEnum.camera: return html`${unsafeSVG(icon(faCamera).html[0])}`
-            case DeviceTypeVariantEnum.microphone: return html`${unsafeSVG(icon(faMicrophone).html[0])}`
-            case DeviceTypeVariantEnum.drone: return html`${unsafeSVG(icon(faHelicopter).html[0])}`
-            case DeviceTypeVariantEnum.lens:
-            case DeviceTypeVariantEnum.light: return html`${unsafeSVG(icon(faLightbulb).html[0])}`
-            case DeviceTypeVariantEnum.stabilizer:
-            case DeviceTypeVariantEnum.tripod: return html`T`
-            default: return html`Icon`
-        }
     }
 
     //TODO find better icon here

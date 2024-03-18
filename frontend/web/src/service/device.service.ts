@@ -16,7 +16,7 @@ export interface DeviceDTO{
     device_id: number
     serial: string
     number: string
-    note: string
+    note?: string
     type_id: number
 }
 
