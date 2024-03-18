@@ -4,10 +4,13 @@ import at.camconnect.dtos.DeviceTypeGlobalObjectsDTO;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.responseSystem.CCException;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
 @Entity
 public class SimpleType extends DeviceType {
+    @Column(length = 150)
     private String description;
 
     public SimpleType() {

@@ -8,6 +8,7 @@ import at.camconnect.model.DeviceTypeAttributes.CameraSensor;
 import at.camconnect.model.DeviceTypeAttributes.CameraSystem;
 import at.camconnect.model.DeviceTypeAttributes.LensMount;
 import at.camconnect.responseSystem.CCException;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -26,6 +27,7 @@ public class CameraType extends DeviceType {
     @ManyToOne
     @JoinColumn(name = "system_id")
     private CameraSystem system;
+    @Column(length = 15)
     private int framerate;
     private boolean autofocus;
 

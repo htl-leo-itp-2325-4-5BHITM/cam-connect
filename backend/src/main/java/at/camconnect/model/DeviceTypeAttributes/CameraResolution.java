@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 @Entity
 public class CameraResolution extends DeviceTypeAttribute {
+    @Column(length = 15)
     private String resolution;
 
     public CameraResolution(String name, String resolution, String details) {

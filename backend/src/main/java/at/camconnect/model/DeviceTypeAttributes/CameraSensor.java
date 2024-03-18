@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 @Entity
 public class CameraSensor extends DeviceTypeAttribute {
+    @Column(length = 50)
     private String size;
 
     public CameraSensor(String name, String size, String details) {
