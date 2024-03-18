@@ -27,9 +27,8 @@ import "./components/app.component"
 
 import "./printView"
 
-import '../styles/index.scss'
 import 'air-datepicker/air-datepicker.css';
-import styles from '../styles/printView.styles.scss'
+import '../styles/index.scss'
 
 import Model, {ObservedProperty, PageEnum} from "./model"
 import {Api, KeyBoardShortCut} from "./base"

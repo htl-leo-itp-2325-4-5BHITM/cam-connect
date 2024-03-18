@@ -115,8 +115,13 @@ export class CreateRentComponent extends LitElement {
 
         if(setFocus)
         window.requestAnimationFrame(()=>{
-            let autocomomp = newDevice.shadowRoot.querySelector("cc-autocomplete") as AutocompleteComponent<any>
-            autocomomp?.setFocus()
+            if(type == "default") {
+                let autocomp = newDevice.shadowRoot.querySelector("cc-autocomplete") as AutocompleteComponent<any>
+                autocomp?.setFocus()
+            } else {
+                let input = newDevice.shadowRoot.querySelector("input") as HTMLInputElement
+                input.focus()
+            }
         })
     }
 

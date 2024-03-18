@@ -65,6 +65,7 @@ export class RentListEntryComponent extends LitElement {
 
             <div>
                 <!--TODO move this code into a more readable generator function-->
+                <!--TODO this button should not be displayed if the status is waiting-->
                 <!--please no nested ternary operators 🤮 -->
                 <cc-button color="${this.rent.status == RentStatus.DECLINED ? ColorEnum.GRAY : ColorEnum.ACCENT}" 
                            type="${ButtonType.TEXT}" size="${SizeEnum.SMALL}"

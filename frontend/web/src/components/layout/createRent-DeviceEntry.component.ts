@@ -101,9 +101,10 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                                          }
                                          else {
                                              this.data.device_type_id = option.type_id
-                                             //if the selected device matches the selected type, do nothing
-                                             if (this.data.device_type_id == this.selectedDevice.type_id || this.data.device_id == -1) return
                                          }
+                                         
+                                         //if the selected device matches the selected type, do nothing
+                                         if (this.data.device_type_id == this.selectedDevice.type_id || this.data.device_id == -1) return
                                          
                                          //reset the device type
                                          this.data.device_id = -1

@@ -11,7 +11,7 @@
   height: fit-content;
   border-radius: .3rem;
   cursor: pointer;
-  transition: .2s background-color, color, border ease;
+  transition: background-color $transitionTimeShort, color $transitionTimeShort, border ease $transitionTimeShort, box-shadow $transitionTimeShort;
   white-space: nowrap;
 
   display: flex;
@@ -20,6 +20,11 @@
   gap: .5rem;
 
   user-select: none;
+
+  &:focus-visible{
+    outline: 2px solid $accentLight;
+    outline-offset: .2rem;
+  }
 
   &[color = "accent"]{
     --color-main: #{$accentDark};
@@ -55,8 +60,10 @@
     background-color: var(--color-main);
     color: var(--color-text);
 
-    &:not([disabled]):hover {
-      background-color: var(--color-light);
+    &:not([disabled]):hover, &:not([disabled]):focus-visible {
+      &[color = "accent"]{
+        background-color: $accent;
+      }
     }
   }
   &[type = "outlined"]{
@@ -68,8 +75,10 @@
       color: var(--color-light);
     }
 
-    &:not([disabled]):hover{
-      background: $gray100;
+    &:not([disabled]):hover, &:not([disabled]):focus-visible{
+      box-shadow: 0 0 0 2px var(--color-light) inset;
+      background-color: rgba(var(--color-main), 0.5);
+      color: white;
     }
   }
   &[type = "text"]{
@@ -84,7 +93,7 @@
       color: var(--color-light);
     }
 
-    &:not([disabled]):hover {
+    &:not([disabled]):hover, &:not([disabled]):focus-visible {
       background-color: $hoverBackground;
     }
   }
@@ -105,7 +114,7 @@
       color: var(--color-light);
     }
 
-    &:not([disabled]):hover {
+    &:not([disabled]):hover, &:not([disabled]):focus-visible {
       background-color: $hoverBackgroundLight;
     }
   }

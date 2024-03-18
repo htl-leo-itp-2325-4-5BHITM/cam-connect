@@ -151,6 +151,7 @@ export default class DeviceTypeService {
                 "/devicetype/search",
                 {searchTerm: searchTerm}
             )
+            console.log("queryresult", result.data)
             return result.data
         } catch (e) {
             console.error(e)

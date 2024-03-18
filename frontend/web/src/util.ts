@@ -39,7 +39,7 @@ export default class Util{
         }
     }*/
 
-    static deepEventFocusedElement(startpoint: HTMLElement = document.activeElement as HTMLElement): HTMLElement{
+    static deepEventFocusedElement(startpoint: HTMLElement = document.querySelector("cc-app") as HTMLElement): HTMLElement{
         let focusedElem:HTMLElement = startpoint
         while (focusedElem != undefined) {
             let newFocusedElem = focusedElem?.shadowRoot?.activeElement as HTMLElement
