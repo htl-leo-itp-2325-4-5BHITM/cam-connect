@@ -41,6 +41,8 @@ public class RentSocket {
             s.getAsyncRemote().sendObject("update", result -> {
                 if (result.getException() != null){
                     System.out.println("Unable to send message: " + result.getException());
+                } else{
+                    System.out.println("Updated Socket");
                 }
             });
         });

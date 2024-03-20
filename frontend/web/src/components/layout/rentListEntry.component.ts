@@ -12,7 +12,7 @@ import {LineColor, LineType} from "../basic/line.component"
 import PopupEngine from "../../popupEngine"
 import {ObservedProperty} from "../../model"
 import {AppState} from "../../AppState"
-import Util, {Logger} from "../../util"
+import Util, {DatePickerWrapper, Logger} from "../../util"
 import {unsafeSVG} from "lit/directives/unsafe-svg.js"
 import {icon} from "@fortawesome/fontawesome-svg-core"
 import {faCamera, faHashtag, faHelicopter, faLightbulb, faMicrophone} from "@fortawesome/free-solid-svg-icons"
@@ -28,6 +28,8 @@ export class RentListEntryComponent extends LitElement {
     @property()
     private appState: ObservedProperty<AppState>
 
+    private datePicker : DatePickerWrapper
+
     constructor() {
         super()
         this.appState = new ObservedProperty<AppState>(this, model.appState)
@@ -39,20 +41,18 @@ export class RentListEntryComponent extends LitElement {
         let startDate = this.rent.rent_start
         let endDate = this.rent.rent_end_actual || this.rent.rent_end_planned
 
-        //TODO this will probably not work if the rent changes from waiting to declined
-        let globalInput = this.renderRoot.querySelector('.date') as HTMLInputElement
-        new AirDatepicker(globalInput, {
-            locale: localeEn,
-            range: true,
-            dateFormat: "dd.MM",
-            multipleDatesSeparator: ' - ',
-            selectedDates: [startDate, endDate]
-        })
+        let input = this.renderRoot.querySelector('.date') as HTMLInputElement
+        this.datePicker = new DatePickerWrapper(input)
     }
 
     protected performUpdate() {
         super.performUpdate();
         this.setAttribute("status", this.rent.status)
+    }
+
+    protected getUpdateCompleted() {
+        let startDate = this.rent.rent_start
+        let endDate = this.rent.rent_end_actual || this.rent.rent_end_planned
     }
 
     render() {

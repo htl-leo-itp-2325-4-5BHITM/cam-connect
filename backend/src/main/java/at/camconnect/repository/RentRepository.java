@@ -69,6 +69,8 @@ public class RentRepository {
             }
 
             em.persist(rent);
+
+            requestConfirmationMail(rent.getRent_id());
         }
         rentSocket.broadcast();
     }
@@ -129,9 +131,10 @@ public class RentRepository {
     @Transactional
     public MailClient requestConfirmationMail(Long id){
         Rent rent = getById(id);
-        if(rent.getStatus().equals(RentStatusEnum.WAITING)){
+        //does it make sense to check it still, because if it does we have to change something because every rent is waiting by default
+        /**if(rent.getStatus().equals(RentStatusEnum.WAITING)){
             throw new CCException(1205, "Email is already sent or rent is already confirmed");
-        }
+        }**/
 
         MailMessage message = generateConfirmationMailMessage(id);
         System.out.println(message.toJson());
@@ -175,7 +178,7 @@ public class RentRepository {
 
         //plaintext is als backup für den html content, wenn html möglich ist wird nur das angezeigt
         message.setHtml("Bitte bestätige oder lehne deinen Verleih ab:<br>" +
-                "<p>" + rent.getDevice_string() + " mit Zubehör: " + rent.getAccessory() + " von: " + rent.getRent_start() + " bis: " + rent.getRent_end_planned() + "</p>" +
+                "<p>" + rent.getDevice().getType().getName() + " " + rent.getDevice().getNumber() + " mit Zubehör: " + rent.getAccessory() + " von: " + rent.getRent_start() + " bis: " + rent.getRent_end_planned() + "</p>" +
                  "<div><a style='margin: 2rem; padding: .5rem 1rem; color: black;' href='" + urlAccept + "'>Bestätigen</a>" +
                 "<a style='margin: 2rem; padding: .5rem 1rem; color: black;' href='" + urlDecline + "'>Ablehnen</a></div>");
 
@@ -212,6 +215,8 @@ public class RentRepository {
         } else{
             throw new CCException(1205, "Message: " + verificationMessage + ", Status: " + verificationStatus + ", Code: " + verificationCode);
         }
+
+        rentSocket.broadcast();
     }
 
     @Transactional
@@ -232,7 +237,7 @@ public class RentRepository {
         message.setTo(email);
         message.setSubject("Bestätigung der Gerät Rückgabe");
         //plaintext is als backup für den html content, wenn html möglich ist wird nur das angezeigt
-        message.setHtml("Ihr Verleih von " + rent.getDevice_string() + " vom: " + rent.getRent_start() + " bis: " + rent.getRent_end_actual() + ", wurde zurückgegeben.");
+        message.setHtml("Ihr Verleih von " + rent.getDevice().getType().getName() + " " + rent.getDevice().getNumber() + " vom: " + rent.getRent_start() + " bis: " + rent.getRent_end_actual() + ", wurde zurückgegeben.");
 
 
         client.sendMail(message, result -> {

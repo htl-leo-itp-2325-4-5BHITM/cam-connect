@@ -108,8 +108,10 @@ insert into device (type_id, note, number, serial) values
 -- Students
 INSERT INTO student (email, firstname, lastname, password, school_class, username)
 VALUES
-    ('student1@example.com', 'John', 'Doe', 'password123', 'Class A', 'john_doe'),
-    ('student2@example.com', 'Jane', 'Smith', 'securepass', 'Class B', 'jane_smith');
+    ('m.leisch@students.htl-leonding.ac.at', 'Michael', 'Leisch', 'michiiii', '4BHITM', 'michiii'),
+    ('y.kendler@students.htl-leonding.ac.at', 'Yanik', 'Kendler', 'yanuki', '4BHITM', 'yanuki'),
+    ('j.jaklitsch@students.htl-leonding.ac.at', 'Julian', 'Jaklitsch', 'jj', '4BHITM', 'jj'),
+    ('l.steinhuber@students.htl-leonding.ac.at', 'Leon', 'Steinhuber', 'stoni', '4BHITM', 'stoni');
 
 -- Inserting data into teacher table
 INSERT INTO teacher (email, firstname, lastname, password, username)
