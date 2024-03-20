@@ -15,6 +15,8 @@ export interface AutocompleteOption<T> {
     data: T
 }
 
+//TODO check why when clicking away it
+
 @customElement('cc-autocomplete')
 export class AutocompleteComponent<T> extends LitElement {
     @property({type: String})

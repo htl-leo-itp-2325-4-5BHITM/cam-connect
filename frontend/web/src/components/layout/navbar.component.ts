@@ -10,6 +10,8 @@ import {KeyBoardShortCut, SimpleColorEnum, SizeEnum, Tooltip} from "../../base"
 import { ObservedProperty, PageEnum} from "../../model"
 import { SelectComponent } from "../basic/select.component"
 import {AppState} from "../../AppState"
+import DeviceService from "../../service/device.service"
+import RentService from "../../service/rent.service"
 
 @customElement('cc-navbar')
 export class NavbarComponent extends LitElement {
@@ -49,7 +51,7 @@ export class NavbarComponent extends LitElement {
 
             <div class="tools">
                 <icon-cta>${unsafeSVG(icon(faMagnifyingGlass).html[0])}</icon-cta>
-                <!--<icon-cta>${unsafeSVG(icon(faArrowRotateRight).html[0])}</icon-cta>-->
+                <icon-cta @click="${this.reload}">${unsafeSVG(icon(faArrowRotateRight).html[0])}</icon-cta>
                 <icon-cta>${unsafeSVG(icon(faCircleQuestion).html[0])}</icon-cta>
             </div>
         `
@@ -69,6 +71,10 @@ export class NavbarComponent extends LitElement {
     selectNavItem(pageIndex: number) {
         let select: SelectComponent = this.renderRoot.querySelector("cc-select")
         select.selectOptionByIndex(pageIndex)
+    }
+
+    reload() { //TODO limit rates
+        RentService.fetchAll()
     }
 }
 

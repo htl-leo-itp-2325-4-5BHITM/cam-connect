@@ -57,6 +57,7 @@ export class RentListEntryComponent extends LitElement {
         let input = this.renderRoot.querySelector('.date') as HTMLInputElement
         
         //todo this.datePicker?.instance.destroy();
+        //if(!this.datePicker)
         this.datePicker = new DatePickerWrapper(input, [new Date(startDate), new Date(endDate)])
     }
 
@@ -132,6 +133,45 @@ export class RentListEntryComponent extends LitElement {
                                              .iconProvider="${this.provideDeviceIcon}"
                                              .contentProvider="${(data: DeviceDTO) => {return data.number}}">
                             </cc-autocomplete>
+                            <!--<cc-autocomplete placeholder="Name" class="name"
+                                     .selected="${{id: this.rent.device.type.type_id, data: this.rent.device.type}}"
+                                     .onSelect="${(option: DeviceType) => {
+                                            if(option == null) {
+                                                this.rent.device.type = null
+                                            }
+                                            else {
+                                                this.rent.device.type = option
+                                            }
+                
+                                            //if the selected device matches the selected type, do nothing
+                                            if (this.rent.device.type == this.rent.device.type) return
+                
+                                            //reset the device type
+                                            this.rent.device = null
+                                            let numberInput = this.shadowRoot.querySelector('cc-autocomplete.number') as AutocompleteComponent<DeviceDTO>
+                                            numberInput.clear()
+                                        }}"
+                                     .querySuggestions="${DeviceTypeService.search}"
+                                     .iconProvider="${DeviceTypeService.deviceTypeToIcon}"
+                                     .contentProvider="${(data: DeviceType) => {return data.name}}"
+                                     allowNoSelection="true"
+                            ></cc-autocomplete>
+                            <cc-autocomplete placeholder="Nr." class="number" 
+                                             .onSelect="${(option: Device) => {
+                                                    this.rent.device = option
+                        
+                                                    if(this.rent.device.type == null) return
+                        
+                                                    Api.fetchData<DeviceTypeSource>(`/devicetype/getbyid/${option.type.type_id}`)
+                                                            .then((deviceType: DeviceType) => {
+                                                                let typeInput = this.shadowRoot.querySelector('cc-autocomplete.name') as AutocompleteComponent<DeviceType>
+                                                                typeInput.selectSuggestion({id: deviceType.type_id, data: deviceType})
+                                                            })
+                                                }}"
+                                             .querySuggestions="${(searchTerm) => this.searchForDevice(searchTerm)}"
+                                             .iconProvider="${this.provideDeviceIcon}"
+                                             .contentProvider="${(data: DeviceDTO) => {return data.number}}"
+                            ></cc-autocomplete>-->
                         ` :
                         html`
                             <input type="text" value="${this.rent.device_string}" placeholder="Name">
@@ -218,6 +258,7 @@ export class RentListEntryComponent extends LitElement {
                     action: (data) => {
                         this.rent.status = RentStatus.WAITING
                         RentService.requestConfirmation(this.rent)
+                        //this.datePicker = null
                     },
                     closePopup: true
                 },
