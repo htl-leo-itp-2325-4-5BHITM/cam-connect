@@ -42,7 +42,7 @@ export class RentListEntryComponent extends LitElement {
         let endDate = this.rent.rent_end_actual || this.rent.rent_end_planned
 
         let input = this.renderRoot.querySelector('.date') as HTMLInputElement
-        this.datePicker = new DatePickerWrapper(input)
+        this.datePicker = new DatePickerWrapper(input, [new Date(startDate), new Date(endDate)])
     }
 
     protected performUpdate() {
@@ -50,9 +50,14 @@ export class RentListEntryComponent extends LitElement {
         this.setAttribute("status", this.rent.status)
     }
 
-    protected getUpdateCompleted() {
+    protected updated() {
         let startDate = this.rent.rent_start
         let endDate = this.rent.rent_end_actual || this.rent.rent_end_planned
+
+        let input = this.renderRoot.querySelector('.date') as HTMLInputElement
+        
+        //todo this.datePicker?.instance.destroy();
+        this.datePicker = new DatePickerWrapper(input, [new Date(startDate), new Date(endDate)])
     }
 
     render() {
