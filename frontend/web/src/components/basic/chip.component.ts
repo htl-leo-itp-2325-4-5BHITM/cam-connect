@@ -44,7 +44,6 @@ export class ChipComponent extends LitElement {
             return html`
                 <style>${styles}</style>
                  <div class="cc-chip" color="${this.color}" size="${this.size}" type="${this.type}" @click="${this.handleClick}">
-                     expanded
                     <slot></slot>
                 </div>
             `

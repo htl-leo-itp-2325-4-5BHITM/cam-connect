@@ -2,7 +2,7 @@ import {LitElement, css, html, PropertyValues} from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/createRent.styles.scss'
 
-import {Api, ccResponse, ColorEnum, SimpleColorEnum, SizeEnum, Tooltip} from "../../base"
+import {Api, ccResponse, ColorEnum, DatePickerWrapper, SimpleColorEnum, SizeEnum, Tooltip} from "../../base"
 import {ButtonType} from "../basic/button.component"
 import {ObservedProperty} from "../../model"
 import {model} from "../../index"
@@ -19,7 +19,7 @@ import RentService, {CreateRentDTO} from "../../service/rent.service"
 import {AppState} from "../../AppState"
 import {AutocompleteComponent, AutocompleteOption} from "../basic/autocomplete.component"
 import {Student} from "../../service/student.service"
-import Util, {AnimationHelper, DatePickerWrapper} from "../../util"
+import Util, {AnimationHelper} from "../../util"
 
 @customElement('cc-create-rent')
 export class CreateRentComponent extends LitElement {

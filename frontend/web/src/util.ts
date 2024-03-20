@@ -105,52 +105,6 @@ export default class Util{
     }
 }
 
-//TODO the color of the keyboard nav effect is always the same and not visible inside a date range
-//this is not a problem with out implementation but with the library, its the same in the examples
-export class DatePickerWrapper{
-    instance: AirDatepicker
-    lastSelection = [new Date(), new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)]
-    static pickerIsOpen = false
-
-    constructor(input: HTMLInputElement, onSelect?: ({date, formattedDate, datepicker}) => void) {
-        this.instance = new AirDatepicker(input, {
-            locale: localeDe,
-            range: true,
-            dateFormat: "dd.MM",
-            multipleDatesSeparator: ' - ',
-            selectedDates: [new Date(), new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)],
-            autoClose: true,
-            moveToOtherMonthsOnSelect: false,
-            toggleSelected: false,
-            onShow: (finished) => {
-                if(finished) return //onShow gets called twice, once on animation start and a second time on animation end
-                DatePickerWrapper.pickerIsOpen = true
-                //the datepicker handles its own close by esc, to prevent another close action from getting called this
-                // dummy is added
-                model.appState.value.addCurrentActionCancellation(()=>{}, "datepicker")
-            },
-            onHide: (finished) => {
-                if(finished) return //onHide gets called twice, once on animation start and a second time on animation end
-                DatePickerWrapper.pickerIsOpen = false
-                if(this.instance.selectedDates.length == 1){//prevents only one date from being selected
-                    this.instance.clear()
-                    this.instance.selectDate([this.lastSelection[0], this.lastSelection[1]])
-                }
-                else{
-                    this.lastSelection = this.instance.selectedDates
-                }
-                setTimeout(() => {
-                    if(!DatePickerWrapper.pickerIsOpen)
-                        model.appState.value.removeCurrentActionCancellation("datepicker")
-                },100)
-            },
-            onSelect:() => {
-                //console.log(this.instance.selectedDates)
-            }
-        })
-    }
-}
-
 export class AnimationHelper{
     static shake(elem: Element, duration: number = 200){
         elem.animate([

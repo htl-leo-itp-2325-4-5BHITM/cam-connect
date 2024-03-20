@@ -2,7 +2,7 @@ import {html, LitElement, PropertyValues, TemplateResult} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/rentListEntry.styles.scss'
 import {ButtonType} from "../basic/button.component"
-import {Api, ccResponse, ColorEnum, SizeEnum} from "../../base"
+import {Api, ccResponse, ColorEnum, DatePickerWrapper, SizeEnum} from "../../base"
 import RentService, {Rent, RentStatus, RentTypeEnum} from "../../service/rent.service";
 import {ChipType} from "../basic/chip.component"
 import {model} from "../../index"
@@ -12,7 +12,7 @@ import {LineColor, LineType} from "../basic/line.component"
 import PopupEngine from "../../popupEngine"
 import {ObservedProperty} from "../../model"
 import {AppState} from "../../AppState"
-import Util, {DatePickerWrapper, Logger} from "../../util"
+import Util, {Logger} from "../../util"
 import {unsafeSVG} from "lit/directives/unsafe-svg.js"
 import {icon} from "@fortawesome/fontawesome-svg-core"
 import {faCamera, faHashtag, faHelicopter, faLightbulb, faMicrophone} from "@fortawesome/free-solid-svg-icons"
@@ -59,11 +59,11 @@ export class RentListEntryComponent extends LitElement {
         return html`
             <style>${styles}</style>
             
-            <div class="">    
+            <div class="area">
                 ${this.generateRentContent()}
             </div>
 
-            <div>
+            <div class="area">
                 <!--TODO move this code into a more readable generator function-->
                 <!--TODO this button should not be displayed if the status is waiting-->
                 <!--please no nested ternary operators 🤮 -->
