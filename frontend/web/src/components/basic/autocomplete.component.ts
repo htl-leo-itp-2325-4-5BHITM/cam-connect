@@ -75,7 +75,7 @@ export class AutocompleteComponent<T> extends LitElement {
 
     static suggestionElement: HTMLElement //the absolute positioned element that contains the suggestions
 
-    private logger = new Logger(true)
+    private logger = new Logger(false, "autocomplete")
 
     constructor() {
         super()

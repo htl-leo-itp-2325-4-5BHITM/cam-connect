@@ -59,7 +59,7 @@ export class RentListEntryComponent extends LitElement {
         return html`
             <style>${styles}</style>
             
-            <div>    
+            <div class="">    
                 ${this.generateRentContent()}
             </div>
 

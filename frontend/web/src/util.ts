@@ -209,14 +209,19 @@ export class AnimationHelper{
  * Simple wrapper class for console.log with the main improvement being that it can be turned off per instance
  */
 export class Logger{
-    doLogs = true
-    constructor(doLogs: boolean = true) {
+    doLogs: boolean = true
+    name: string = undefined
+    constructor(doLogs: boolean = true, name: string = undefined) {
         this.doLogs = doLogs
+        this.name = name
     }
 
     log(...args: any[]){
         if(this.doLogs && config.do_logs){
-            console.log(...args)
+            if(this.name)
+                console.log(this.name + ":", ...args)
+            else
+                console.log(...args)
         }
     }
 }

@@ -95,7 +95,6 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                 <div class="left">
                     <cc-autocomplete placeholder="Name" class="name" 
                                      .onSelect="${(option: DeviceTypeSource) => {
-                                         console.log("on selected:", option)
                                          if(option == null) {
                                              this.data.device_type_id = -1
                                          }
@@ -123,7 +122,6 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                                          
                                          if(this.data.device_type_id != -1) return
 
-                                         console.log("fetching device type")
                                          Api.fetchData<DeviceTypeSource>(`/devicetype/getbyid/${option.type_id}`)
                                              .then((deviceType: DeviceType) => {
                                                  let typeInput = this.shadowRoot.querySelector('cc-autocomplete.name') as AutocompleteComponent<DeviceTypeSource>
@@ -146,8 +144,6 @@ export class CreateRentDeviceEntryComponent extends LitElement {
     //TODO re write the validation system to be less chaotic and work cleaner
     //should also imediatly be validated when both are entered
     async validate():Promise<boolean> {
-        console.log("validating")
-
         this.shadowRoot.querySelectorAll("input").forEach((input)=>{
             input.classList.remove("error")
             input.removeEventListener("blur", this.boundValidateInput)

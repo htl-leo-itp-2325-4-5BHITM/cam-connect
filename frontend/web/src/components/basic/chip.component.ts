@@ -1,4 +1,4 @@
-import { LitElement, html } from 'lit'
+import {LitElement, html, PropertyValues} from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/chip.styles.scss'
 import { icon } from '@fortawesome/fontawesome-svg-core'
@@ -60,30 +60,38 @@ export class ChipComponent extends LitElement {
     }
 
     handleClick() {
-        if(this.type == ChipType.EXPANDABLE) {
-
-            if(this.isExpanded){
-                this.animate([
-                    {maxHeight: "100px", maxWidth: "100px"},
-                    {maxHeight: this.nonExpandedBounds.height + "px", maxWidth: this.nonExpandedBounds.width + "px"}
-                ], {iterations: 1, duration: 500, fill: "forwards"})
-
-                setTimeout(() => {
-                    this.requestUpdate()
-                },500)
-            }
-            else{
-                this.requestUpdate()
-                this.nonExpandedBounds = this.getBoundingClientRect()
-                this.animate([
-                    {maxHeight: this.nonExpandedBounds.height + "px", maxWidth: this.nonExpandedBounds.width + "px"},
-                    {maxHeight: "1000px", maxWidth: "1000px"}
-                ], {iterations: 1, duration: 5000, fill: "forwards"})
-            }
-
-            this.isExpanded = !this.isExpanded
+        if(this.type == ChipType.REMOVABLE) {
+            this.remove()
+            return
         }
-        else if(this.type == ChipType.REMOVABLE) this.remove()
+
+        if(this.type != ChipType.EXPANDABLE) return
+
+        if(this.isExpanded){
+            this.animate([
+                {maxHeight: "1000px", maxWidth: "1000px"},
+                {maxHeight: this.nonExpandedBounds.height + "px", maxWidth: this.nonExpandedBounds.width + "px"},
+            ], {iterations: 1, duration: 500, fill: "forwards"})
+
+            setTimeout(() => {
+                this.animate([
+                    {maxWidth: "fit-content"}
+                ], {iterations: 1, duration: 0, fill: "forwards"})
+                this.requestUpdate()
+            },500)
+
+            //this might fix the wrong size but idk
+        }
+        else{
+            this.requestUpdate()
+            this.nonExpandedBounds = this.getBoundingClientRect()
+            this.animate([
+                {maxHeight: this.nonExpandedBounds.height + "px", maxWidth: this.nonExpandedBounds.width + "px"},
+                {maxHeight: "1000px", maxWidth: "1000px"}
+            ], {iterations: 1, duration: 500, fill: "forwards", easing: "ease-in"})
+        }
+
+        this.isExpanded = !this.isExpanded
     }
 
     renderRemoveButton(){

@@ -176,11 +176,16 @@ public class RentRepository {
         String urlDecline = FRONTEND_URL + "/confirmVerification.html?vcode=" + verification_code + "&id=" + id;
         String urlAccept = urlDecline + "&isAccepted=true";
 
-        //plaintext is als backup für den html content, wenn html möglich ist wird nur das angezeigt
-        message.setHtml("Bitte bestätige oder lehne deinen Verleih ab:<br>" +
-                "<p>" + rent.getDevice().getType().getName() + " " + rent.getDevice().getNumber() + " mit Zubehör: " + rent.getAccessory() + " von: " + rent.getRent_start() + " bis: " + rent.getRent_end_planned() + "</p>" +
-                 "<div><a style='margin: 2rem; padding: .5rem 1rem; color: black;' href='" + urlAccept + "'>Bestätigen</a>" +
-                "<a style='margin: 2rem; padding: .5rem 1rem; color: black;' href='" + urlDecline + "'>Ablehnen</a></div>");
+        if(rent.getType() == RentTypeEnum.DEFAULT)
+            message.setHtml("Bitte bestätige oder lehne deinen Verleih ab:<br>" +
+                    "<p>" + rent.getDevice().getType().getName() + " " + rent.getDevice().getNumber() + " von: " + rent.getRent_start() + " bis: " + rent.getRent_end_planned() + "</p>" +
+                     "<div><a style='margin: 2rem; padding: .5rem 1rem; color: black;' href='" + urlAccept + "'>Bestätigen</a>" +
+                    "<a style='margin: 2rem; padding: .5rem 1rem; color: black;' href='" + urlDecline + "'>Ablehnen</a></div>");
+        else
+            message.setHtml("Bitte bestätige oder lehne deinen Verleih ab:<br>" +
+                    "<p>" + rent.getDevice_string() + " von: " + rent.getRent_start() + " bis: " + rent.getRent_end_planned() + "</p>" +
+                     "<div><a style='margin: 2rem; padding: .5rem 1rem; color: black;' href='" + urlAccept + "'>Bestätigen</a>" +
+                    "<a style='margin: 2rem; padding: .5rem 1rem; color: black;' href='" + urlDecline + "'>Ablehnen</a></div>");
 
         return message;
     }
@@ -236,9 +241,11 @@ public class RentRepository {
         String email = rent.getStudent().getEmail();
         message.setTo(email);
         message.setSubject("Bestätigung der Gerät Rückgabe");
-        //plaintext is als backup für den html content, wenn html möglich ist wird nur das angezeigt
-        message.setHtml("Ihr Verleih von " + rent.getDevice().getType().getName() + " " + rent.getDevice().getNumber() + " vom: " + rent.getRent_start() + " bis: " + rent.getRent_end_actual() + ", wurde zurückgegeben.");
 
+        if(rent.getType() == RentTypeEnum.DEFAULT)
+            message.setHtml("Ihr Verleih von " + rent.getDevice().getType().getName() + " " + rent.getDevice().getNumber() + " vom: " + rent.getRent_start() + " bis: " + rent.getRent_end_actual() + ", wurde zurückgegeben.");
+        else
+            message.setHtml("Ihr Verleih von " + rent.getDevice_string() + " vom: " + rent.getRent_start() + " bis: " + rent.getRent_end_actual() + ", wurde zurückgegeben.");
 
         client.sendMail(message, result -> {
             if (result.succeeded()) {
