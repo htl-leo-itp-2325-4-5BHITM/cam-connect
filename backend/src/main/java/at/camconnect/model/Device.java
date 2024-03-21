@@ -8,7 +8,7 @@ public class Device {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(length = 4)
     private Long device_id;
-    @Column(length = 15)
+    @Column(length = 15, unique = true)
     private String serial;
     @Column(length = 15)
     private String number;

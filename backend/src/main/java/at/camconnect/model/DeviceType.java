@@ -16,7 +16,7 @@ public abstract class DeviceType{
 
     @Enumerated(EnumType.STRING)
     private DeviceTypeVariantEnum variant;
-    @Column(length = 20)
+    @Column(length = 20, unique = true)
     private String name;
     private String image;
 
