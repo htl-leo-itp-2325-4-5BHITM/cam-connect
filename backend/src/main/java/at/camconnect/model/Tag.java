@@ -14,10 +14,10 @@ public class Tag {
     @OneToMany
     private List<DeviceType> type;
 
-    @Column(length = 20)
+    @Column(length = 20, unique = true)
     private String name;
 
-    @Column(length = 150)
+    @Column(length = 150, unique = true)
     private String description;
 
     public Tag(String name, String description) {

@@ -30,8 +30,11 @@ public class Rent {
     @ManyToOne
     @JoinColumn(name = "teacher_id_end")
     private Teacher teacher_end;
+    @Temporal(TemporalType.DATE)
     private LocalDate rent_start;
+    @Temporal(TemporalType.DATE)
     private LocalDate rent_end_planned;
+    @Temporal(TemporalType.DATE)
     private LocalDate rent_end_actual;
     private final LocalDateTime creation_date;
     @Column(length = 20)
@@ -240,6 +243,5 @@ public class Rent {
     public void setType(RentTypeEnum type) {
         this.type = type;
     }
-
     //endregion
 }
