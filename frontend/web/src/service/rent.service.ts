@@ -91,12 +91,12 @@ export default class RentService {
             })
     }
 
-    static updateProperty(id, property, data) {
+    static updateProperty(id: number, property: string, data: any) {
         console.log("updated: ")
-        Api.postData(`/rent/getbyid/${id}/update/${property}`, data)
+        let theData = {value: data}
+        Api.postData(`/rent/getbyid/${id}/update/${property}`, theData)
             .then((data) => {
                 console.log(data)
-                RentService.fetchAll()
             })
             .catch(error => {
                 console.error(error)

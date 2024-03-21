@@ -30,6 +30,8 @@ export class RentListEntryComponent extends LitElement {
 
     private datePicker : DatePickerWrapper
 
+    private logger = new Logger(true, "rentListEntry")
+
     constructor() {
         super()
         this.appState = new ObservedProperty<AppState>(this, model.appState)
@@ -37,9 +39,6 @@ export class RentListEntryComponent extends LitElement {
 
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
-
-        let startDate = this.rent.rent_start
-        let endDate = this.rent.rent_end_actual || this.rent.rent_end_planned
     }
 
     protected performUpdate() {
@@ -49,7 +48,9 @@ export class RentListEntryComponent extends LitElement {
 
     protected updated() {
         let startDate = this.rent.rent_start
-        let endDate = this.rent.rent_end_actual || this.rent.rent_end_planned
+        let endDate = this.rent.rent_end_planned
+
+        this.logger.log(this.rent.rent_id, startDate, endDate)
 
         let input = this.renderRoot.querySelector('.date') as HTMLInputElement
         
@@ -82,7 +83,7 @@ export class RentListEntryComponent extends LitElement {
                     <div class="detail">
                         <h2>angegebener Ablehngrund</h2>
                         <p>${this.rent.verification_message}</p>
-                        <cc-button @click="${this.requestRent}" type="${ButtonType.OUTLINED}" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}">Bestätigung erneut Anfragen</cc-button>
+                        <cc-button @click="${this.requestConfirmation}" type="${ButtonType.OUTLINED}" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}">Bestätigung erneut Anfragen</cc-button>
                     </div>
                 </cc-chip>
                 
@@ -243,9 +244,7 @@ export class RentListEntryComponent extends LitElement {
         return this.appState.value.selectedRentEntries.has(this)
     }
 
-    requestRent() {
-
-
+    requestConfirmation() {
         PopupEngine.createModal({
             text: "Willst du wirklich diesen Verleih neu Anfragen?",
             buttons: [
@@ -253,10 +252,9 @@ export class RentListEntryComponent extends LitElement {
                     text: "Ja",
                     action: (data) => {
                         this.rent.status = RentStatus.WAITING
-                        RentService.updateProperty(this.rent.rent_id, 'rentstart', this.rent.rent_start)
-                        RentService.updateProperty(this.rent.rent_id, 'rentendplanned', this.rent.rent_end_planned)
-                        RentService.requestConfirmation(this.rent)
-                        //this.datePicker = null
+                        RentService.updateProperty(this.rent.rent_id, 'rentstart', Util.formatDateForDb(this.datePicker.instance.selectedDates[0]))
+                        RentService.updateProperty(this.rent.rent_id, 'rentendplanned', Util.formatDateForDb(this.datePicker.instance.selectedDates[1]))
+                        //RentService.requestConfirmation(this.rent)
                     },
                     closePopup: true
                 },

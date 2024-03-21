@@ -144,8 +144,9 @@ public class RentResource {
     @POST
     @Path("/getbyid/{id: [0-9]+}/update/{property}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("id") Long id, RentDTO rent, @PathParam("property") String property) {
+    public Response update(@PathParam("id") Long id, @PathParam("property") String property, JsonObject rent) {
         try {
+            System.out.println("Updating prop " + property);
             rentRepository.updateProperty(property, id, rent);
         } catch (CCException ex) {
             return CCResponse.error(ex);

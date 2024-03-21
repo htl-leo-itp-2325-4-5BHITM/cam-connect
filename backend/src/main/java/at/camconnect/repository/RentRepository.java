@@ -23,6 +23,8 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -137,7 +139,6 @@ public class RentRepository {
         }**/
 
         MailMessage message = generateConfirmationMailMessage(id);
-        System.out.println(message.toJson());
 
         rent.setStatus(RentStatusEnum.WAITING);
         em.merge(rent);
@@ -176,6 +177,9 @@ public class RentRepository {
         String urlDecline = FRONTEND_URL + "/confirmVerification.html?vcode=" + verification_code + "&id=" + id;
         String urlAccept = urlDecline + "&isAccepted=true";
 
+        System.out.println(urlDecline);
+        System.out.println(urlAccept);
+
         if(rent.getType() == RentTypeEnum.DEFAULT)
             message.setHtml("Bitte bestätige oder lehne deinen Verleih ab:<br>" +
                     "<p>" + rent.getDevice().getType().getName() + " " + rent.getDevice().getNumber() + " von: " + rent.getRent_start() + " bis: " + rent.getRent_end_planned() + "</p>" +
@@ -210,7 +214,6 @@ public class RentRepository {
             throw new CCException(1106);
         }
 
-        System.out.println("Status " + verificationStatus);
         Set<RentStatusEnum> allowedStatus = Set.of(RentStatusEnum.CONFIRMED, RentStatusEnum.DECLINED, RentStatusEnum.RETURNED);
         // set only if the current status is allowed and if the verification_code is the same as provided
         if (allowedStatus.contains(verificationStatus) && rent.getVerification_code().equals(verificationCode)) {
@@ -323,48 +326,54 @@ public class RentRepository {
     }
 
     @Transactional
-    public void updateProperty(String property, Long rentId, RentDTO rentDTO){
-        Rent rent = em.find(Rent.class, rentId);
+    public void updateProperty(String property, Long rentId, JsonObject data){
+        Rent rent = getById(rentId);
+
+        System.out.println(property + " - " + rentId + " - " + data.toString());
 
         switch (property){
             case "student":
-                Student student = em.find(Student.class, rentDTO.student_id());
+                Student student = em.find(Student.class, data.getInt("value"));
                 rent.setStudent(student);
                 break;
             case "device":
-                Device device = em.find(Device.class, rentDTO.device_id());
+                Device device = em.find(Device.class, data.getInt("value"));
                 rent.setDevice(device);
                 break;
             case "teacherstart":
-                Teacher teacherStart = em.find(Teacher.class, rentDTO.teacher_id_start());
+                Teacher teacherStart = em.find(Teacher.class, data.getInt("value"));
                 rent.setTeacher_start(teacherStart);
                 break;
             case "teacherend":
-                Teacher teacherEnd = em.find(Teacher.class, rentDTO.teacher_id_end());
+                Teacher teacherEnd = em.find(Teacher.class, data.getInt("value"));
                 rent.setTeacher_end(teacherEnd);
                 break;
             case "rentstart":
-                LocalDate rentStart = rentDTO.rent_start();
+                System.out.println("updating rentstart " + data.getString("value"));
+                LocalDate rentStart = LocalDate.parse(data.getString("value"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 rent.setRent_start(rentStart);
                 break;
             case "rentendplanned":
-                LocalDate rentEndPlanned = rentDTO.rent_end_planned();
+                System.out.println("updating rentendplanned " + data.getString("value"));
+                LocalDate rentEndPlanned = LocalDate.parse(data.getString("value"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 rent.setRent_end_planned(rentEndPlanned);
                 break;
             case "rentendactual":
-                LocalDate rentEndActual = rentDTO.rent_end_actual();
+                LocalDate rentEndActual = LocalDate.parse(data.getString("value"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 rent.setRent_end_actual(rentEndActual);
                 break;
             case "note":
-                rent.setNote(rentDTO.note());
+                rent.setNote(data.getString("value"));
                 break;
             case "status":
-                RentStatusEnum status = rentDTO.status();
+                RentStatusEnum status = RentStatusEnum.valueOf(data.getString("value"));
                 rent.setStatus(status);
                 break;
         }
 
-        rentSocket.broadcast();
+        em.persist(rent);
+
+        //rentSocket.broadcast();
     }
 
     //region setter

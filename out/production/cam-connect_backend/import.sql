@@ -24,7 +24,7 @@ insert into devicetypeattribute(dtype, name, details) values ('TripodHead', '2 a
 insert into devicetypeattribute(dtype, name, details) values ('TripodHead', '3 axis', '3 achsen ajustierbar');
 insert into devicetypeattribute(dtype, name, details) values ('TripodHead', 'Ballhead', 'In alle richtungen adjustierbarer Kugelkopf');
 
-INSERT INTO tag (description, name)
+INSERT INTO tag (name, description)
 VALUES
     ('Foto', 'Dieses Gerät ist am besten für Fotografie geeignet'),
     ('Video', 'Dieses Gerät ist am besten fürs filmen von Videos geeignet'),
@@ -78,7 +78,7 @@ values
     ('microphone', 'MicrophoneType', 'X-Vive Funks.', true, true, false);
 
 -- Stabilizer Types
-insert into DEVICETYPE (variant, dtype, name, max_weight, number_of_axis)
+insert into DEVICETYPE (variant, dtype, name, max_weight_kilograms, number_of_axis)
 values ('stabilizer', 'StabilizerType', 'Schulterrig', 200, 2),
        ('stabilizer', 'StabilizerType', 'Gopro Gimbal', 150, 3);
 
@@ -108,8 +108,10 @@ insert into device (type_id, note, number, serial) values
 -- Students
 INSERT INTO student (email, firstname, lastname, password, school_class, username)
 VALUES
-    ('student1@example.com', 'John', 'Doe', 'password123', 'Class A', 'john_doe'),
-    ('student2@example.com', 'Jane', 'Smith', 'securepass', 'Class B', 'jane_smith');
+    ('m.leisch@students.htl-leonding.ac.at', 'Michael', 'Leisch', 'michiiii', '4BHITM', 'michiii'),
+    ('y.kendler@students.htl-leonding.ac.at', 'Yanik', 'Kendler', 'yanuki', '4BHITM', 'yanuki'),
+    ('j.jaklitsch@students.htl-leonding.ac.at', 'Julian', 'Jaklitsch', 'jj', '4BHITM', 'jj'),
+    ('l.steinhuber@students.htl-leonding.ac.at', 'Leon', 'Steinhuber', 'stoni', '4BHITM', 'stoni');
 
 -- Inserting data into teacher table
 INSERT INTO teacher (email, firstname, lastname, password, username)
