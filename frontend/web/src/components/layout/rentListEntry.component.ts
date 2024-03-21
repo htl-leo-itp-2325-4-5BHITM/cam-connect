@@ -40,9 +40,6 @@ export class RentListEntryComponent extends LitElement {
 
         let startDate = this.rent.rent_start
         let endDate = this.rent.rent_end_actual || this.rent.rent_end_planned
-
-        let input = this.renderRoot.querySelector('.date') as HTMLInputElement
-        this.datePicker = new DatePickerWrapper(input, [new Date(startDate), new Date(endDate)])
     }
 
     protected performUpdate() {
@@ -57,7 +54,7 @@ export class RentListEntryComponent extends LitElement {
         let input = this.renderRoot.querySelector('.date') as HTMLInputElement
         
         //todo this.datePicker?.instance.destroy();
-        //if(!this.datePicker)
+        if(!this.datePicker)
         this.datePicker = new DatePickerWrapper(input, [new Date(startDate), new Date(endDate)])
     }
 
@@ -127,7 +124,7 @@ export class RentListEntryComponent extends LitElement {
                                                  let type = this.rent.device.type
                                                  this.rent.device = option
                                                  this.rent.device.type = type
-                                                 RentService.updateAttribute(this.rent.rent_id, 'device', this.rent.device)
+                                                 RentService.updateProperty(this.rent.rent_id, 'device', this.rent.device)
                                              }}"
                                              .querySuggestions="${(searchTerm) => this.searchForDevice(searchTerm)}"
                                              .iconProvider="${this.provideDeviceIcon}"
@@ -247,8 +244,7 @@ export class RentListEntryComponent extends LitElement {
     }
 
     requestRent() {
-        RentService.updateAttribute(this.rent.rent_id, 'rentstart', this.rent.rent_start)
-        RentService.updateAttribute(this.rent.rent_id, 'rentendplanned', this.rent.rent_end_planned)
+
 
         PopupEngine.createModal({
             text: "Willst du wirklich diesen Verleih neu Anfragen?",
@@ -257,6 +253,8 @@ export class RentListEntryComponent extends LitElement {
                     text: "Ja",
                     action: (data) => {
                         this.rent.status = RentStatus.WAITING
+                        RentService.updateProperty(this.rent.rent_id, 'rentstart', this.rent.rent_start)
+                        RentService.updateProperty(this.rent.rent_id, 'rentendplanned', this.rent.rent_end_planned)
                         RentService.requestConfirmation(this.rent)
                         //this.datePicker = null
                     },

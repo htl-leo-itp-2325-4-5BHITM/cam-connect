@@ -323,10 +323,10 @@ public class RentRepository {
     }
 
     @Transactional
-    public void updateAttribute(String attribute, Long rentId, RentDTO rentDTO){
+    public void updateProperty(String property, Long rentId, RentDTO rentDTO){
         Rent rent = em.find(Rent.class, rentId);
 
-        switch (attribute){
+        switch (property){
             case "student":
                 Student student = em.find(Student.class, rentDTO.student_id());
                 rent.setStudent(student);

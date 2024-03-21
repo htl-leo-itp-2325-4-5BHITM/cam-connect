@@ -1,7 +1,6 @@
 package at.camconnect.boundary;
 
 import at.camconnect.dtos.CreateRentDTO;
-import at.camconnect.dtos.DeviceTypeCollection;
 import at.camconnect.dtos.RentDTO;
 import at.camconnect.dtos.RentByStudentDTO;
 import at.camconnect.model.Rent;
@@ -10,7 +9,6 @@ import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.repository.RentRepository;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -144,11 +142,11 @@ public class RentResource {
     }
 
     @POST
-    @Path("/getbyid/{id: [0-9]+}/update/{attribute}")
+    @Path("/getbyid/{id: [0-9]+}/update/{property}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("id") Long id, RentDTO rent, @PathParam("attribute") String attribute) {
+    public Response update(@PathParam("id") Long id, RentDTO rent, @PathParam("property") String property) {
         try {
-            rentRepository.updateAttribute(attribute, id, rent);
+            rentRepository.updateProperty(property, id, rent);
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }

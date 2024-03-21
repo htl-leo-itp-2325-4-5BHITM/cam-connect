@@ -91,9 +91,9 @@ export default class RentService {
             })
     }
 
-    static updateAttribute(id, attribute, data) {
+    static updateProperty(id, property, data) {
         console.log("updated: ")
-        Api.postData(`/rent/getbyid/${id}/update/${attribute}`, data)
+        Api.postData(`/rent/getbyid/${id}/update/${property}`, data)
             .then((data) => {
                 console.log(data)
                 RentService.fetchAll()
