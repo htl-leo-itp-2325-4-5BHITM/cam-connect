@@ -3,7 +3,30 @@
 :host {
   all: initial;
   transition: all $transitionTimeLong;
-  overflow: hidden;
+  position: relative;
+}
+
+:host([color="ACCENT"]){
+  --background: #{$accent};
+  --hover-background: #{$accentDark};
+  --expanded-background: #{darken($accent, 80%)};
+}
+:host([color="GOOD"]){
+  --background: #{$good};
+  --hover-background: #{$goodDark};
+}
+:host([color="MID"]){
+  --background: #{$mid};
+  --hover-background: #{$midDark};
+}
+:host([color="BAD"]){
+  --background: #{$bad};
+  --hover-background: #{$badDark};
+  --expanded-background: #{darken($bad, 30%)};
+}
+:host([color="GRAY"]){
+  --background: #{$gray500};
+  --hover-background: #{$gray400};
 }
 
 .cc-chip{
@@ -18,26 +41,7 @@
   transition: background-color $transitionTimeShort;
   white-space: nowrap;
 
-  &[color="ACCENT"]{
-    background-color: $accent;
-    --hover-background: #{$accentDark};
-  }
-  &[color="GOOD"]{
-    background-color: $good;
-    --hover-background: #{$goodDark};
-  }
-  &[color="MID"]{
-    background-color: $mid;
-    --hover-background: #{$midDark};
-  }
-  &[color="BAD"]{
-    background-color: $bad;
-    --hover-background: #{$badDark};
-  }
-  &[color="GRAY"]{
-    background-color: $gray500;
-    --hover-background: #{$gray400};
-  }
+  background-color: var(--background);
 
   &[size="big"]{
     font-size: $fSizeDesktopDefault;
@@ -80,4 +84,15 @@
       color: $gray800;
     }
   }
+}
+
+::slotted(*){
+  position: absolute;
+  background-color: var(--expanded-background);
+  right: 0;
+  top: calc(100% + 3px);
+  z-index: 100;
+  padding: .3rem !important;
+  border: 2px solid $bad;
+  border-radius: .25rem;
 }

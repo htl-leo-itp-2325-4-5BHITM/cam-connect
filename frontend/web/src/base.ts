@@ -127,7 +127,7 @@ export class DatePickerWrapper{
     lastSelection = [new Date(), new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)]
     static pickerIsOpen = false
 
-    constructor(input: HTMLInputElement, selectedDates = [new Date(), new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)], onSelect?: ({date, formattedDate, datepicker}) => void) {
+    constructor(input: HTMLInputElement, selectedDates = [new Date(), new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)], onSelect = (dates: Date[]) => {}){
         this.instance = new AirDatepicker(input, {
             locale: localeDe,
             range: true,
@@ -153,14 +153,12 @@ export class DatePickerWrapper{
                 }
                 else{
                     this.lastSelection = this.instance.selectedDates
+                    onSelect(this.instance.selectedDates)
                 }
                 setTimeout(() => {
                     if(!DatePickerWrapper.pickerIsOpen)
                         model.appState.value.removeCurrentActionCancellation("datepicker")
                 },100)
-            },
-            onSelect:() => {
-                //console.log(this.instance.selectedDates)
             }
         })
     }

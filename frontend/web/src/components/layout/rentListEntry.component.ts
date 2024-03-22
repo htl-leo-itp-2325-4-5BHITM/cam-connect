@@ -25,6 +25,8 @@ export class RentListEntryComponent extends LitElement {
     @property()
     rent: Rent
 
+    private lastStatus = RentStatus.WAITING
+
     @property()
     private appState: ObservedProperty<AppState>
 
@@ -50,13 +52,13 @@ export class RentListEntryComponent extends LitElement {
         let startDate = this.rent.rent_start
         let endDate = this.rent.rent_end_planned
 
-        this.logger.log(this.rent.rent_id, startDate, endDate)
-
         let input = this.renderRoot.querySelector('.date') as HTMLInputElement
         
         //todo this.datePicker?.instance.destroy();
-        if(!this.datePicker)
-        this.datePicker = new DatePickerWrapper(input, [new Date(startDate), new Date(endDate)])
+        if(!this.datePicker || this.lastStatus != this.rent.status) {
+            this.lastStatus = this.rent.status
+            this.datePicker = new DatePickerWrapper(input, [new Date(startDate), new Date(endDate)])
+        }
     }
 
     render() {
@@ -80,10 +82,10 @@ export class RentListEntryComponent extends LitElement {
                 <cc-chip color="${this.rentStatusToColor(this.rent.status)}" size="${SizeEnum.SMALL}"
                          type="${this.rent.status == RentStatus.DECLINED ? ChipType.EXPANDABLE : ''}" 
                          text="${this.rentStatusAsString(this.rent.status)}">
-                    <div class="detail">
-                        <h2>angegebener Ablehngrund</h2>
+                    <div class="details">
+                        <h2>Angegebener Ablehngrund:</h2>
                         <p>${this.rent.verification_message}</p>
-                        <cc-button @click="${this.requestConfirmation}" type="${ButtonType.OUTLINED}" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}">Bestätigung erneut Anfragen</cc-button>
+                        <cc-button closeChip="true" @click="${this.requestConfirmation}" type="${ButtonType.OUTLINED}" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}">Bestätigung erneut Anfragen</cc-button>
                     </div>
                 </cc-chip>
                 
@@ -252,9 +254,7 @@ export class RentListEntryComponent extends LitElement {
                     text: "Ja",
                     action: (data) => {
                         this.rent.status = RentStatus.WAITING
-                        RentService.updateProperty(this.rent.rent_id, 'rentstart', Util.formatDateForDb(this.datePicker.instance.selectedDates[0]))
-                        RentService.updateProperty(this.rent.rent_id, 'rentendplanned', Util.formatDateForDb(this.datePicker.instance.selectedDates[1]))
-                        //RentService.requestConfirmation(this.rent)
+                        RentService.requestConfirmation(this.rent)
                     },
                     closePopup: true
                 },

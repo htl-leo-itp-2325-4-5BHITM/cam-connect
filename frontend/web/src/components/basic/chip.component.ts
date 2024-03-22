@@ -1,5 +1,5 @@
 import {LitElement, html, PropertyValues} from 'lit'
-import { customElement, property } from 'lit/decorators.js'
+import {customElement, property, queryAssignedElements} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/chip.styles.scss'
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { faXmark } from "@fortawesome/free-solid-svg-icons"
@@ -10,7 +10,7 @@ export enum ChipType { EXPANDABLE="expandable", REMOVABLE="removable", CLICKABLE
 
 @customElement('cc-chip')
 export class ChipComponent extends LitElement {
-    @property({type: ColorEnum})
+    @property({type: ColorEnum, reflect: true})
     color?: ColorEnum = ColorEnum.ACCENT
 
     @property({type: SizeEnum})
@@ -22,14 +22,11 @@ export class ChipComponent extends LitElement {
     @property()
     type: ChipType = ChipType.DEFAULT
 
-    @property({type: HTMLElement})
-    base?: HTMLElement
+    @property({reflect: true})
+    private isExpanded: boolean = false
 
-    @property({type: HTMLElement})
-    detail?: HTMLElement
-
-    isExpanded: boolean = false
-    nonExpandedBounds
+    @queryAssignedElements()
+    private closeElements!: Array<HTMLElement>;
 
     constructor() {
         super()
@@ -44,8 +41,9 @@ export class ChipComponent extends LitElement {
             return html`
                 <style>${styles}</style>
                  <div class="cc-chip" color="${this.color}" size="${this.size}" type="${this.type}" @click="${this.handleClick}">
-                    <slot></slot>
+                     ${this.text}
                 </div>
+                <slot></slot>
             `
         } else{
             return html`
@@ -58,47 +56,32 @@ export class ChipComponent extends LitElement {
         }
     }
 
-    handleClick() {
-        if(this.type == ChipType.REMOVABLE) {
-            this.remove()
-            return
-        }
-
-        if(this.type != ChipType.EXPANDABLE) return
-
-        if(this.isExpanded){
-            this.animate([
-                {maxHeight: "1000px", maxWidth: "1000px"},
-                {maxHeight: this.nonExpandedBounds.height + "px", maxWidth: this.nonExpandedBounds.width + "px"},
-            ], {iterations: 1, duration: 500, fill: "forwards"})
-
-            setTimeout(() => {
-                this.animate([
-                    {maxWidth: "fit-content"}
-                ], {iterations: 1, duration: 0, fill: "forwards"})
-                this.requestUpdate()
-            },500)
-
-            //this might fix the wrong size but idk
-        }
-        else{
-            this.requestUpdate()
-            this.nonExpandedBounds = this.getBoundingClientRect()
-            this.animate([
-                {maxHeight: this.nonExpandedBounds.height + "px", maxWidth: this.nonExpandedBounds.width + "px"},
-                {maxHeight: "1000px", maxWidth: "1000px"}
-            ], {iterations: 1, duration: 500, fill: "forwards", easing: "ease-in"})
-        }
-
-        this.isExpanded = !this.isExpanded
+    protected firstUpdated(_changedProperties: PropertyValues) {
+        super.firstUpdated(_changedProperties);
     }
 
-    renderRemoveButton(){
+    private handleClick() {
+        if(this.type == ChipType.REMOVABLE) {
+            this.remove()
+        }
+        else if(this.type == ChipType.EXPANDABLE){
+            this.toggleExpand()
+        }
+    }
+
+    private renderRemoveButton(){
         return html`
             <div class="remove">
                 ${unsafeSVG(icon(faXmark).html[0])}
             </div>
         `
+    }
+
+    toggleExpand(){
+        this.isExpanded = !this.isExpanded
+        setTimeout(() => {
+            console.log(this.closeElements)
+        },)
     }
 }
 
