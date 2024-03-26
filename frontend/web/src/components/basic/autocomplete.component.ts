@@ -151,7 +151,8 @@ export class AutocompleteComponent<T> extends LitElement {
         /*document.addEventListener("mousewheel", this.boundUpdateSuggestionPosition);
         document.addEventListener("touchmove", this.boundUpdateSuggestionPosition);*/
 
-        AutocompleteComponent.suggestionElement.classList.add("visible") //show the suggestion box
+        /*AutocompleteComponent.suggestionElement.classList.add("visible") //show the suggestion box*/
+        AnimationHelper.show(AutocompleteComponent.suggestionElement, "flex")
 
         document.addEventListener("click", this.boundHandelAutoClose) //close when clicking outside the suggestion box
 
@@ -200,7 +201,8 @@ export class AutocompleteComponent<T> extends LitElement {
         let input = this.shadowRoot.querySelector("input")
 
         AutocompleteComponent.suggestionsVisible = null
-        AutocompleteComponent.suggestionElement.classList.remove("visible")
+        /*AutocompleteComponent.suggestionElement.classList.remove("visible")*/
+        AnimationHelper.hide(AutocompleteComponent.suggestionElement)
 
         //if the component allows no selection
         //and the hiding did not happen after a selection was made
@@ -240,8 +242,8 @@ export class AutocompleteComponent<T> extends LitElement {
         if(typeof option == "number") option = this.options.find(item => item.id == option)
 
         if(!option || option.id < 0) {
-            this.logger.log("invalid", option)
-            this.logger.log("options", this.options)
+            this.logger.log("selected option is invalid:", option)
+            this.logger.log("available options", this.options)
             return
         }
         this.selected = option
@@ -256,47 +258,51 @@ export class AutocompleteComponent<T> extends LitElement {
      * @param e
      */
     generateSuggestions(e?: KeyboardEvent){
-        //TODO we might want to limit rates on this function, if we do that wed have to delay the query by a few ms
-        // and check if a new query showed up when the delay is over we cant just exit out of the function if the last
-        // call was less than XXms ago cause then the search query of the new call would be ignored
+        return new Promise((resolve, reject) => {
 
-        //TODO display selected suggestion on first focus
+            //TODO we might want to limit rates on this function, if we do that wed have to delay the query by a few ms
+            // and check if a new query showed up when the delay is over we cant just exit out of the function if the last
+            // call was less than XXms ago cause then the search query of the new call would be ignored
 
-        //ignore keys that serve another purpose
-        let input = this.shadowRoot.querySelector("input") as HTMLInputElement
-        if(e) { //TODO sub optimal solution it would be better to use a whitelist instead of a blacklist
-            if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Enter", "Alt", "Control", "Escape"].includes(e.key)) return
-        }
+            //TODO display selected suggestion on first focus
 
-        this.logger.log("generating suggestions", this.placeholder)
-
-        //results in flashing while waiting for the server to respond
-        /*render(html`<div class="loading">Lade...</div>`, AutocompleteComponent.suggestionElement)*/
-
-        if(AutocompleteComponent.suggestionsVisible != this) this.showSuggestions()
-
-        //timeout so that the getSelection() is updated (without this the mouseup would be called and the selection
-        // would still be the old one
-        setTimeout(() => {
-            let searchTerm = input.value
-            if( //if the user selects part of the input that should be used as the search term
-                window.getSelection().toString() != "" &&
-                input.value.includes(window.getSelection().toString())
-            ) {
-                searchTerm = window.getSelection().toString()
+            //ignore keys that serve another purpose
+            let input = this.shadowRoot.querySelector("input") as HTMLInputElement
+            if (e) { //TODO sub optimal solution it would be better to use a whitelist instead of a blacklist
+                if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Enter", "Alt", "Control", "Escape"].includes(e.key)) return
             }
 
-            this.querySuggestions(searchTerm)
-                .then(options => {
-                    this.options = options
-                })
-                .then(() => {
-                    //focus the first option
-                    this.focusEntry(this.appState.value.appElement.shadowRoot.querySelector("#autocompleteSuggestions .entry") as HTMLElement)
-                })
-        },)
+            this.logger.log("generating suggestions", this.placeholder)
 
-        this.updateSuggestionPosition()
+            //results in flashing while waiting for the server to respond
+            /*render(html`<div class="loading">Lade...</div>`, AutocompleteComponent.suggestionElement)*/
+
+            if (AutocompleteComponent.suggestionsVisible != this) this.showSuggestions()
+
+            //timeout so that the getSelection() is updated (without this the mouseup would be called and the selection
+            // would still be the old one
+            setTimeout(() => {
+                let searchTerm = input.value
+                if ( //if the user selects part of the input that should be used as the search term
+                    window.getSelection().toString() != "" &&
+                    input.value.includes(window.getSelection().toString())
+                ) {
+                    searchTerm = window.getSelection().toString()
+                }
+
+                this.querySuggestions(searchTerm)
+                    .then(options => {
+                        this.options = options
+                        resolve(this.options)
+                    })
+                    .then(() => {
+                        //focus the first option
+                        this.focusEntry(this.appState.value.appElement.shadowRoot.querySelector("#autocompleteSuggestions .entry") as HTMLElement)
+                    })
+            },)
+
+            this.updateSuggestionPosition()
+        })
     }
 
     boundHandelAutoClose = this.handleAutoClose.bind(this)

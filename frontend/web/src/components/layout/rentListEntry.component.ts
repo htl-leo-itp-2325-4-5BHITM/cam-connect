@@ -12,7 +12,7 @@ import {LineColor, LineType} from "../basic/line.component"
 import PopupEngine from "../../popupEngine"
 import {ObservedProperty} from "../../model"
 import {AppState} from "../../AppState"
-import Util, {Logger} from "../../util"
+import Util from "../../util"
 import {unsafeSVG} from "lit/directives/unsafe-svg.js"
 import {icon} from "@fortawesome/fontawesome-svg-core"
 import {faCamera, faHashtag, faHelicopter, faLightbulb, faMicrophone} from "@fortawesome/free-solid-svg-icons"
@@ -31,8 +31,6 @@ export class RentListEntryComponent extends LitElement {
     private appState: ObservedProperty<AppState>
 
     private datePicker : DatePickerWrapper
-
-    private logger = new Logger(true, "rentListEntry")
 
     constructor() {
         super()
@@ -85,7 +83,7 @@ export class RentListEntryComponent extends LitElement {
                     <div class="details">
                         <h2>Angegebener Ablehngrund:</h2>
                         <p>${this.rent.verification_message}</p>
-                        <cc-button closeChip="true" @click="${this.requestConfirmation}" type="${ButtonType.OUTLINED}" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}">Bestätigung erneut Anfragen</cc-button>
+                        <cc-button closeChip @click="${this.requestConfirmation}" type="${ButtonType.OUTLINED}" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}">Bestätigung erneut Anfragen</cc-button>
                     </div>
                 </cc-chip>
                 
@@ -96,15 +94,7 @@ export class RentListEntryComponent extends LitElement {
             </div>
         `
     }
-    /*
-     * @Michi sidenote
-     * I renamed this function from getRentInfoSection since:
-     * it's not a simply getting a result but generating the result
-     * it's not really about the info tbh this is just the content of the entry
-     * saying it's a section is about as descriptive as saying that is html
-     *
-     * my function name is not perfect either, but you get the idea that this function generates the content of the rent
-     */
+
     generateRentContent() {
         if(this.rent.status == RentStatus.DECLINED) { //editable rent
             return html`

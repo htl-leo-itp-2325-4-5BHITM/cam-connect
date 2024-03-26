@@ -5,6 +5,8 @@ import { icon } from '@fortawesome/fontawesome-svg-core'
 import { faXmark } from "@fortawesome/free-solid-svg-icons"
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import {ColorEnum, SizeEnum} from "../../base"
+import {model} from "../../index"
+import {AnimationHelper} from "../../util"
 
 export enum ChipType { EXPANDABLE="expandable", REMOVABLE="removable", CLICKABLE="clickable", DEFAULT="default" }
 
@@ -26,7 +28,7 @@ export class ChipComponent extends LitElement {
     private isExpanded: boolean = false
 
     @queryAssignedElements()
-    private closeElements!: Array<HTMLElement>;
+    private detailElement!: Array<HTMLElement>;
 
     constructor() {
         super()
@@ -37,27 +39,26 @@ export class ChipComponent extends LitElement {
     }
 
     render() {
-        if(this.isExpanded){
-            return html`
-                <style>${styles}</style>
-                 <div class="cc-chip" color="${this.color}" size="${this.size}" type="${this.type}" @click="${this.handleClick}">
-                     ${this.text}
-                </div>
-                <slot></slot>
-            `
-        } else{
-            return html`
-                <style>${styles}</style>
-                 <div class="cc-chip" color="${this.color}" size="${this.size}" type="${this.type}" @click="${this.handleClick}">
-                    ${this.text}
-                    ${this.type == ChipType.REMOVABLE ? this.renderRemoveButton() : ""}
-                </div>
-            `
-        }
+        return html`
+            <style>${styles}</style>
+             <div class="cc-chip" color="${this.color}" size="${this.size}" type="${this.type}" @click="${this.handleClick}">
+                 ${this.text}
+                 ${this.type == ChipType.REMOVABLE && this.isExpanded ? this.renderRemoveButton() : ""}
+            </div>
+            <slot></slot>
+        `
     }
 
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
+
+        setTimeout(() => {
+            this.detailElement[0]?.querySelectorAll('[closeChip]').forEach((element) => {
+                element.addEventListener("click", () => {
+                    this.toggleExpand()
+                })
+            })
+        },)
     }
 
     private handleClick() {
@@ -78,10 +79,26 @@ export class ChipComponent extends LitElement {
     }
 
     toggleExpand(){
-        this.isExpanded = !this.isExpanded
-        setTimeout(() => {
-            console.log(this.closeElements)
-        },)
+
+        if(this.isExpanded){
+            AnimationHelper.hide(this.detailElement[0])
+            this.isExpanded = false
+            window.removeEventListener("click", this.handleAutoClose)
+            model.appState.value.removeCurrentActionCancellation("chip")
+        }
+        else{
+            AnimationHelper.show(this.detailElement[0])
+            this.isExpanded = true
+            window.addEventListener("click", this.handleAutoClose)
+            model.appState.value.addCurrentActionCancellation(this.toggleExpand.bind(this), "chip")
+        }
+    }
+
+    handleAutoClose = (event: MouseEvent) => {
+        if(!this.shadowRoot.contains(event.composedPath()[0] as HTMLElement)){
+            window.removeEventListener("click", this.handleAutoClose)
+            this.toggleExpand()
+        }
     }
 }
 

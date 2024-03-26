@@ -60,6 +60,9 @@ PopupEngine.init({
 const app = document.createElement("cc-app")
 document.body.appendChild(app)
 
+KeyBoardShortCut.register([["shift", "n"], ["<"]], () => {model.appState.value.openCreateRentModal()})
+KeyBoardShortCut.register(["escape"], () => {model.appState.value.cancelCurrentAction()}, "cancelCurrentAction", true)
+
 //Api.getbyid("/rent",  1, "/remove").then(data => console.log(data))
 
 //lol i just wanna keep this code arround cause i like it.. i dug arround trying to find a way to prevent keybinds

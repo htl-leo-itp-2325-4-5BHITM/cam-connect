@@ -86,7 +86,7 @@ public class DeviceResource {
         return CCResponse.ok(result);
     }
 
-    //TODO when beeing called this throws a really cryptic error because Long cant be negative
+    //TODO when beeing called with -1 this throws a really cryptic error because Long cant be negative
     //then when changing the param to int and casting to long it throws a not found.. probably cause of the regex
     @POST
     @Path("/searchwithtype/{type_id: [0-9]+}")

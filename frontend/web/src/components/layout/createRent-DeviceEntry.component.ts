@@ -17,7 +17,7 @@ import {AppState} from "../../AppState"
 import localeDe from "air-datepicker/locale/de"
 import {AutocompleteComponent, AutocompleteOption} from "../basic/autocomplete.component"
 import DeviceTypeService, {DeviceType, DeviceTypeSource, DeviceTypeVariantEnum} from "../../service/deviceType.service"
-import Util, {AnimationHelper, Logger} from "../../util"
+import Util, {AnimationHelper} from "../../util"
 import DeviceService, {Device, DeviceDTO} from "../../service/device.service"
 
 export interface CreateRentDeviceEntryData {
@@ -38,7 +38,6 @@ export class CreateRentDeviceEntryComponent extends LitElement {
     @property()
     parent: CreateRentComponent
 
-    //TODO this will eventually be part of the data object as a type enum
     @property({reflect: true})
     type: RentDeviceEntryComponentType = "default"
 

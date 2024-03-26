@@ -8,20 +8,20 @@
 
 :host([color="ACCENT"]){
   --background: #{$accent};
-  --hover-background: #{$accentDark};
+  --hover-background: #{$accentLight};
   --expanded-background: #{darken($accent, 80%)};
 }
 :host([color="GOOD"]){
   --background: #{$good};
-  --hover-background: #{$goodDark};
+  --hover-background: #{$goodLight};
 }
 :host([color="MID"]){
   --background: #{$mid};
-  --hover-background: #{$midDark};
+  --hover-background: #{$midLight};
 }
 :host([color="BAD"]){
   --background: #{$bad};
-  --hover-background: #{$badDark};
+  --hover-background: #{$badLight};
   --expanded-background: #{darken($bad, 30%)};
 }
 :host([color="GRAY"]){
@@ -38,8 +38,13 @@
   border-radius: .25rem;
   width: fit-content;
   padding: .1rem .3rem;
-  transition: background-color $transitionTimeShort;
+  transition: background-color $transitionTimeShort, box-shadow $transitionTimeShort, outline-color $transitionTimeShort;
   white-space: nowrap;
+  outline: {
+    color: transparent;
+    style: solid;
+    width: 1.5px;
+  };
 
   background-color: var(--background);
 
@@ -58,7 +63,8 @@
     user-select: none;
 
     &:hover{
-      background-color: var(--hover-background);
+      outline-color: var(--hover-background);
+      box-shadow: inset 0 0 2px 2px rgba(0, 0, 0, 0.2);
     }
   }
 
@@ -95,4 +101,7 @@
   padding: .3rem !important;
   border: 2px solid $bad;
   border-radius: .25rem;
+
+  display: none;
 }
+

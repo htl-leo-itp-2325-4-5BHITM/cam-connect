@@ -157,6 +157,41 @@ export class AnimationHelper{
             elem.remove()
         },duration)
     }
+
+    static show(elem: Element, display: string = "block", duration: number = 200){
+        let elemAsHTMLElement = elem as HTMLElement
+        elemAsHTMLElement.style.opacity = "0"
+        elemAsHTMLElement.style.display = display
+
+        setTimeout(() => {
+            elem.animate([
+                {opacity: 0, transform: "translateY(5px)"},
+                {opacity: 1, transform: "translateY(0)"},
+            ], {
+                duration: duration,
+                easing: 'ease-in-out',
+                fill: "forwards",
+            })
+        },)
+    }
+
+    static hide(elem: Element, duration: number = 200){
+        let elemAsHTMLElement = elem as HTMLElement
+
+        elem.animate([
+            {opacity: 1, transform: "translateY(0)"},
+            {opacity: 0, transform: "translateY(5px)"},
+        ], {
+            duration: duration,
+            easing: 'ease-in-out',
+            fill: "forwards",
+        })
+
+
+        setTimeout(() => {
+            elemAsHTMLElement.style.display = "none"
+        },duration)
+    }
 }
 
 /**

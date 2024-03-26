@@ -8,6 +8,7 @@ import {model} from "../../index"
 import { ObservedProperty} from "../../model"
 import {RentListEntryComponent} from "./rentListEntry.component"
 import {ButtonType} from "../basic/button.component"
+import {AppState} from "../../AppState"
 
 @customElement('cc-rent-list-student')
 export class RentListStudentComponent extends LitElement {
@@ -52,8 +53,8 @@ export class RentListStudentComponent extends LitElement {
                     <p>${schoolClass}</p>
                 </div>
                 <div class="right">
-                    <cc-button type="${ButtonType.OUTLINED}" size="${SizeEnum.SMALL}">Verleih erstellen</cc-button>
-                    <cc-button color="${SimpleColorEnum.GRAY}" size="${SizeEnum.SMALL}">Details anzeigen</cc-button>
+                    <cc-button type="${ButtonType.OUTLINED}" size="${SizeEnum.SMALL}" @click="${() => model.appState.value.openCreateRentModal(this.rentByStudent.student.student_id)}">Verleih erstellen</cc-button>
+                    <cc-button type="${ButtonType.TEXT}" color="${SimpleColorEnum.GRAY}" size="${SizeEnum.SMALL}">Details anzeigen</cc-button>
                     <cc-circle-select type="${CircleSelectType.MULTIPLE}" size="${SizeEnum.SMALL}" 
                                       .onToggle="${() => this.selectAll()}"
                     ></cc-circle-select>

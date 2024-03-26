@@ -16,9 +16,6 @@ export class AppComponent extends LitElement {
 
         this.appState = new ObservedProperty<AppState>(this, model.appState)
 
-        KeyBoardShortCut.register([["shift", "n"], ["<"]], () => {this.appState.value.openCreateRentModal()})
-        KeyBoardShortCut.register(["escape"], () => {this.appState.value.cancelCurrentAction()}, "cancelCurrentAction", true)
-
         model.appState.value.appElement = this
     }
 

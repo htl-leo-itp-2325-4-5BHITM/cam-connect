@@ -86,22 +86,8 @@ cc-sidebar{
   display: flex;
   flex-direction: column;
 
-  transition: opacity $transitionTimeMedium, transform $transitionTimeMedium;
-
-  opacity: 0;
-  transform: translateY(.5rem);
-
-  pointer-events: none;
-
   -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;
   overflow-y: auto;
-
-  &.visible{
-    visibility: visible;
-    opacity: 1;
-    transform: translateY(0rem);
-    pointer-events: initial;
-  }
 }
 
 .entry{

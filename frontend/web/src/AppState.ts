@@ -5,6 +5,7 @@ import {CreateRentComponent} from "./components/layout/createRent.component"
 import {KeyBoardShortCut} from "./base"
 import {AutocompleteComponent} from "./components/basic/autocomplete.component"
 import {Student} from "./service/student.service"
+import {DeviceType} from "./service/deviceType.service"
 
 interface actionCancellation {
     identifier: string,
@@ -44,7 +45,7 @@ export class AppState{
         this.update()
     }
 
-    openCreateRentModal(){
+    openCreateRentModal(withStudentId?: number){
         if(this._createRentModalOpen) return
 
         //super weird js behavior here: when passing only the function reference instead of an anonymous function
@@ -54,10 +55,25 @@ export class AppState{
         KeyBoardShortCut.register(["control", "enter"], () => { this._createRentElement?.create() }, "createRent", true)
         this._createRentModalOpen = true
 
-        let studentSelector = this._createRentElement.shadowRoot.querySelector(".studentSelector") as AutocompleteComponent<Student>
-        setTimeout(() => {
-            studentSelector.setFocus()
-        },200)
+        let studentSelector = this._createRentElement.shadowRoot.querySelector("cc-autocomplete.studentSelector") as AutocompleteComponent<Student>
+
+        if(withStudentId){
+            studentSelector.generateSuggestions()
+                .then(()=>{
+                    studentSelector.selectSuggestion(1)
+                })
+
+            setTimeout(() => {
+                let firstDeviceSelector = this._createRentElement.shadowRoot.querySelector("cc-create-rent-device-entry")
+                    .shadowRoot.querySelector("cc-autocomplete") as AutocompleteComponent<DeviceType>
+                firstDeviceSelector?.setFocus()
+            },200)
+        }
+        else{
+            setTimeout(() => {
+                studentSelector.setFocus()
+            },200)
+        }
 
         this._createRentElement.addDevice("default", false)
 
@@ -70,11 +86,6 @@ export class AppState{
 
     get createMultiRentModalOpen(): boolean {
         return this._createMultiRentModalOpen
-    }
-
-    set createMultiRentModalOpen(value: boolean) {
-        this._createMultiRentModalOpen = value
-        this.update()
     }
 
     get selectedRentEntries(): Set<RentListEntryComponent> {
@@ -93,6 +104,7 @@ export class AppState{
 
     get cancelCurrentAction(): () => void {
         if(this._cancelCurrentAction.length <= 0) return () => {}
+        if(typeof this._cancelCurrentAction.at(-1).action != "function") return () => {}
         return this._cancelCurrentAction.at(-1).action
     }
 

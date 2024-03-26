@@ -32,9 +32,9 @@
     --color-text: #{$gray1000};
   }
   &[color = "gray"] {
-    --color-main: #{$gray300};
+    --color-main: #{$gray400};
     --color-light: #{$gray600};
-    --color-text: #{$gray900};
+    --color-text: #{$gray1000};
   }
 
   &[size = "big"]{
