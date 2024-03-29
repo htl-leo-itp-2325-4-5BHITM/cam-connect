@@ -9,6 +9,12 @@
   gap: 0.75rem;
   align-items: center;
   justify-content: space-between;
+  transition: background-color $transitionTimeShort;
+}
+
+:host(:hover){
+  //TODO add this as setting
+  /*background-color: $gray300;*/
 }
 
 :host(:not(:first-of-type)){

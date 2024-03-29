@@ -55,7 +55,11 @@ export class RentListEntryComponent extends LitElement {
         //todo this.datePicker?.instance.destroy();
         if(!this.datePicker || this.lastStatus != this.rent.status) {
             this.lastStatus = this.rent.status
-            this.datePicker = new DatePickerWrapper(input, [new Date(startDate), new Date(endDate)])
+            this.datePicker = new DatePickerWrapper(input, [new Date(startDate), new Date(endDate)], (dates) => {
+                console.log(dates)
+                RentService.updateProperty(this.rent.rent_id, 'rent_start', Util.formatDateForDb(dates[0]))
+                RentService.updateProperty(this.rent.rent_id, 'rent_end_planned', Util.formatDateForDb(dates[1]))
+            })
         }
     }
 

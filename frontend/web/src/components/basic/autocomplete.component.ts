@@ -384,8 +384,8 @@ export class AutocompleteComponent<T> extends LitElement {
         this.generateSuggestions()
     }
 
-    clear(){
-        if(this.selected.id != -1) AnimationHelper.shake(this)
+    clear(animated = true){
+        if(this.selected.id != -1 && animated) AnimationHelper.shake(this)
         this.logger.log("clearing", this.placeholder)
         this.selected = {id: -1, data: null}
         this.focusedId = -1

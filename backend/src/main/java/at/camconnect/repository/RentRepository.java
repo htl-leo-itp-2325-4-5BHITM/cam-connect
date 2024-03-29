@@ -301,7 +301,6 @@ public class RentRepository {
             catch (CCException ccex){ throw ccex; }
             catch(Exception ex){ throw new CCException(1105, "cannot update rent_end_actual " + ex.getMessage()); }
 
-
         if(validateJsonKey(rentJson,"status"))
             try{ confirm(id, rentJson.getString("status")); }
             catch (CCException ccex){ throw ccex; }
@@ -340,25 +339,25 @@ public class RentRepository {
                 Device device = em.find(Device.class, data.getInt("value"));
                 rent.setDevice(device);
                 break;
-            case "teacherstart":
+            case "teacher_start":
                 Teacher teacherStart = em.find(Teacher.class, data.getInt("value"));
                 rent.setTeacher_start(teacherStart);
                 break;
-            case "teacherend":
+            case "teacher_end":
                 Teacher teacherEnd = em.find(Teacher.class, data.getInt("value"));
                 rent.setTeacher_end(teacherEnd);
                 break;
-            case "rentstart":
+            case "rent_start":
                 System.out.println("updating rentstart " + data.getString("value"));
                 LocalDate rentStart = LocalDate.parse(data.getString("value"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 rent.setRent_start(rentStart);
                 break;
-            case "rentendplanned":
+            case "rent_end_planned":
                 System.out.println("updating rentendplanned " + data.getString("value"));
                 LocalDate rentEndPlanned = LocalDate.parse(data.getString("value"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 rent.setRent_end_planned(rentEndPlanned);
                 break;
-            case "rentendactual":
+            case "rent_end_actual":
                 LocalDate rentEndActual = LocalDate.parse(data.getString("value"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 rent.setRent_end_actual(rentEndActual);
                 break;
@@ -369,11 +368,13 @@ public class RentRepository {
                 RentStatusEnum status = RentStatusEnum.valueOf(data.getString("value"));
                 rent.setStatus(status);
                 break;
+            default:
+                throw new CCException(1106, "Property not found: " + property);
         }
 
-        em.persist(rent);
+        /*em.merge(rent);*/
 
-        //rentSocket.broadcast();
+        rentSocket.broadcast();
     }
 
     //region setter

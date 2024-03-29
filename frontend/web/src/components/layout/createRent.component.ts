@@ -224,7 +224,7 @@ export class CreateRentComponent extends LitElement {
         this.devices.forEach(device => device.remove())
         this.devices.clear()
         let studentSelector = this.shadowRoot.querySelector("cc-autocomplete.studentSelector") as AutocompleteComponent<Student>
-        studentSelector.clear()
+        studentSelector.clear(false)
         this.student_id = -1
         this.shadowRoot.querySelector(".studentSelector")?.classList.remove("error")
         this.shadowRoot.querySelector(".studentSelector")?.removeEventListener("blur", this.boundValidateInput)
