@@ -160,6 +160,9 @@ export class AnimationHelper{
 
     static show(elem: Element, display: string = "block", duration: number = 200){
         let elemAsHTMLElement = elem as HTMLElement
+
+        if(elemAsHTMLElement.dataset.visibility == "visible") return
+
         elemAsHTMLElement.style.opacity = "0"
         elemAsHTMLElement.style.display = display
 
@@ -173,10 +176,17 @@ export class AnimationHelper{
                 fill: "forwards",
             })
         },)
+        setTimeout(() => {
+            elemAsHTMLElement.style.opacity = "1"
+            elemAsHTMLElement.style.display = display
+            elemAsHTMLElement.dataset.visibility = "visible"
+        },duration)
     }
 
     static hide(elem: Element, duration: number = 200){
         let elemAsHTMLElement = elem as HTMLElement
+
+        if(elemAsHTMLElement.dataset.visibility == "hidden") return
 
         elem.animate([
             {opacity: 1, transform: "translateY(0)"},
@@ -190,6 +200,7 @@ export class AnimationHelper{
 
         setTimeout(() => {
             elemAsHTMLElement.style.display = "none"
+            elemAsHTMLElement.dataset.visibility = "hidden"
         },duration)
     }
 }

@@ -77,7 +77,7 @@ export class AutocompleteComponent<T> extends LitElement {
 
     static suggestionElement: HTMLElement //the absolute positioned element that contains the suggestions
 
-    private logger = new Logger(false, "autocomplete")
+    private logger = new Logger(true, "autocomplete")
 
     constructor() {
         super()
@@ -380,12 +380,12 @@ export class AutocompleteComponent<T> extends LitElement {
     }
 
     clear(){
+        if(this.selected.id != -1) AnimationHelper.shake(this)
         this.logger.log("clearing", this.placeholder)
         this.selected = {id: -1, data: null}
         this.focusedId = -1
         if(this.shadowRoot.querySelector("input"))
             this.shadowRoot.querySelector("input").value = ""
-         AnimationHelper.shake(this)
     }
     //endregion
 }
