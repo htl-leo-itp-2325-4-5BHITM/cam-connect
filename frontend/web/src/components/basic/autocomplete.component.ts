@@ -225,6 +225,7 @@ export class AutocompleteComponent<T> extends LitElement {
         //if a valid value was selected update the text in the input
         if(this.selected.id > -1) {
             input.value = this.contentProvider(this.selected.data)
+            this.logger.log("setting content", this.selected)
         }
         else
             input.value = ""
@@ -263,8 +264,9 @@ export class AutocompleteComponent<T> extends LitElement {
     /**
      * query the suggestions based on the input
      * @param e
+     * @param searchTermOverride
      */
-    generateSuggestions(e?: KeyboardEvent){
+    generateSuggestions(e?: KeyboardEvent, searchTermOverride?: string){
         return new Promise((resolve, reject) => {
             //TODO we might want to limit rates on this function, if we do that wed have to delay the query by a few ms
             // and check if a new query showed up when the delay is over we cant just exit out of the function if the last
@@ -295,6 +297,8 @@ export class AutocompleteComponent<T> extends LitElement {
                 ) {
                     searchTerm = window.getSelection().toString()
                 }
+
+                if(searchTermOverride != undefined) searchTerm = searchTermOverride
 
                 this.querySuggestions(searchTerm)
                     .then(options => {

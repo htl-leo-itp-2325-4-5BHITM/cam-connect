@@ -46,6 +46,28 @@ export class AppState{
     }
 
     openCreateRentModal(withStudentId?: number){
+        let studentSelector = this._createRentElement.shadowRoot.querySelector("cc-autocomplete.studentSelector") as AutocompleteComponent<Student>
+
+        if(withStudentId){
+            studentSelector.generateSuggestions(undefined,"")
+                .then(()=>{
+                    studentSelector.selectSuggestion(withStudentId)
+                })
+
+            //super ugly i know, got something to do with the previous one closing and overriding this one opening
+            //TODO cleanup
+            setTimeout(() => {
+                let firstDeviceSelector = this._createRentElement.shadowRoot.querySelector("cc-create-rent-device-entry")
+                    .shadowRoot.querySelector("cc-autocomplete") as AutocompleteComponent<DeviceType>
+                firstDeviceSelector?.setFocus()
+            },250)
+        }
+        else{
+            setTimeout(() => {
+                studentSelector.setFocus()
+            },200)
+        }
+
         if(this._createRentModalOpen) return
 
         //super weird js behavior here: when passing only the function reference instead of an anonymous function
@@ -54,26 +76,6 @@ export class AppState{
         KeyBoardShortCut.register(["shift", "g"], () => { this._createRentElement?.addDevice() }, "addDevice", true)
         KeyBoardShortCut.register(["control", "enter"], () => { this._createRentElement?.create() }, "createRent", true)
         this._createRentModalOpen = true
-
-        let studentSelector = this._createRentElement.shadowRoot.querySelector("cc-autocomplete.studentSelector") as AutocompleteComponent<Student>
-
-        if(withStudentId){
-            studentSelector.generateSuggestions()
-                .then(()=>{
-                    studentSelector.selectSuggestion(1)
-                })
-
-            setTimeout(() => {
-                let firstDeviceSelector = this._createRentElement.shadowRoot.querySelector("cc-create-rent-device-entry")
-                    .shadowRoot.querySelector("cc-autocomplete") as AutocompleteComponent<DeviceType>
-                firstDeviceSelector?.setFocus()
-            },200)
-        }
-        else{
-            setTimeout(() => {
-                studentSelector.setFocus()
-            },200)
-        }
 
         this._createRentElement.addDevice("default", false)
 
