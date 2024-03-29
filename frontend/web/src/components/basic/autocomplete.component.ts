@@ -72,6 +72,8 @@ export class AutocompleteComponent<T> extends LitElement {
 
     private static suggestionsVisible: AutocompleteComponent<any> = null
 
+    openedThroughClick = false //allows for selection of text without the whole text automatically being selected
+
     @property()
     private appState: ObservedProperty<AppState>
 
@@ -120,7 +122,10 @@ export class AutocompleteComponent<T> extends LitElement {
                    @mouseup="${ this.generateSuggestions }"
                    @keyup="${ (e)=> this.generateSuggestions(e) }"
                    @keydown="${this.handelTabOut}"
-                   @focus="${this.generateSuggestions}"
+                   @mousedown="${() => this.openedThroughClick = true}"
+                   @focus="${(e) => {
+                        if (!this.openedThroughClick) this.generateSuggestions(e)
+                   }}"
             >
             <!-- display the dropdown icon if the width is enough -->
             ${this.clientWidth > 50 || this.selected.id < 0 ? unsafeSVG(icon(faCaretDown).html[0]) : html``}
@@ -133,6 +138,8 @@ export class AutocompleteComponent<T> extends LitElement {
     showSuggestions(){
         this.logger.log("----SHOWING SUGGESTIONS----", this.placeholder)
         AutocompleteComponent.suggestionsVisible = this
+
+        this.openedThroughClick = false
 
         //prevents double binds when moving directly from one input to another
         KeyBoardShortCut.remove("autocomplete")
@@ -259,7 +266,6 @@ export class AutocompleteComponent<T> extends LitElement {
      */
     generateSuggestions(e?: KeyboardEvent){
         return new Promise((resolve, reject) => {
-
             //TODO we might want to limit rates on this function, if we do that wed have to delay the query by a few ms
             // and check if a new query showed up when the delay is over we cant just exit out of the function if the last
             // call was less than XXms ago cause then the search query of the new call would be ignored
@@ -306,7 +312,6 @@ export class AutocompleteComponent<T> extends LitElement {
     }
 
     boundHandelAutoClose = this.handleAutoClose.bind(this)
-
     /**
      * closes the suggestion box if focus is lost
      * @param e
