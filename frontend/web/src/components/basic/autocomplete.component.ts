@@ -74,6 +74,8 @@ export class AutocompleteComponent<T> extends LitElement {
 
     openedThroughClick = false //allows for selection of text without the whole text automatically being selected
 
+    autoCloseTimeout //automatically closes the suggestion box after one minute in case through some bug it stays open
+
     @property()
     private appState: ObservedProperty<AppState>
 
@@ -140,6 +142,9 @@ export class AutocompleteComponent<T> extends LitElement {
         AutocompleteComponent.suggestionsVisible = this
 
         this.openedThroughClick = false
+
+        clearTimeout(this.autoCloseTimeout)
+        this.autoCloseTimeout = setTimeout(() => this.hideSuggestions(), 60000)
 
         //prevents double binds when moving directly from one input to another
         KeyBoardShortCut.remove("autocomplete")

@@ -109,12 +109,12 @@ export class AnimationHelper{
     static shake(elem: Element, duration: number = 200){
         elem.animate([
             {transform: 'translateX(0)', rotate: '0deg'},
-            {transform: 'translateX(-5px)', rotate: '-5deg'},
-            {transform: 'translateX(5px)'},
-            {transform: 'translateX(-5px)'},
-            {transform: 'translateX(5px)'},
-            {transform: 'translateX(-5px)'},
-            {transform: 'translateX(0)'},
+            {transform: 'translateX(-5px)', rotate: '-2deg'},
+            {transform: 'translateX(5px)', rotate: '0deg'},
+            {transform: 'translateX(-5px)', rotate: '2deg'},
+            {transform: 'translateX(5px)', rotate: '0deg'},
+            {transform: 'translateX(-5px)', rotate: '-2deg'},
+            {transform: 'translateX(0)', rotate: '0deg'},
         ], {
             duration: duration,
             easing: 'ease-in-out',

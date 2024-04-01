@@ -142,60 +142,38 @@ export class CreateRentDeviceEntryComponent extends LitElement {
 
     //TODO re write the validation system to be less chaotic and work cleaner
     //should also imediatly be validated when both are entered
-    async validate():Promise<boolean> {
-        this.shadowRoot.querySelectorAll("input").forEach((input)=>{
-            input.classList.remove("error")
-            input.removeEventListener("blur", this.boundValidateInput)
-        })
-
-        if(this.type == "string"){
-            //TODO validation is not correct
-            //create an aditional string entry and try to create the rent with valid text
-            if(Regex.onlySpecialChars.test(this.data.device_string)){
-                this.highlightInputError(this.shadowRoot.querySelector(".name"))
-                return false
-            }
-        }
-        else if(this.type == "default"){
+    validate() {
+        let result = true
+        if(this.type == "default") {
             if(this.data.device_type_id < 0) {
-                this.highlightInputError(this.shadowRoot.querySelector("cc-autocomplete.name"))
-                return false
+                this.highlightError(this.shadowRoot.querySelector('cc-autocomplete.name'))
+                result = false
             }
-
             if(this.data.device_id < 0) {
-                this.highlightInputError(this.shadowRoot.querySelector("cc-autocomplete.number"))
-                return false
+                this.highlightError(this.shadowRoot.querySelector('cc-autocomplete.number'))
+                result = false
             }
         }
+        else if(this.type == "string" && this.data.device_string == "") {
+            this.highlightError(this.shadowRoot.querySelector('.name'))
+            result = false
+        }
 
-        return true
+        return result
     }
 
-    /**
-     * These functions have a fixed reference to "this" set to the instance of this class
-     * when using these in eventlisteners, even though js would normally change "this" to the
-     * Element that the event is bound to, these have a fixed reference to the instance of this class
-     * See instantiation in the constructor.
-     * https://javascript.info/bind
-     */
-    boundValidateInput = this.validate.bind(this);
-    boundRemoveErrorHighlighting = this.removeErrorHighlighting.bind(this);
-    highlightInputError(input: Element){
+    highlightError(input: Element){
+        input.classList.add("error")
         AnimationHelper.shake(input)
-        input.classList.add("error");
-        input.addEventListener("focus", this.boundRemoveErrorHighlighting);
-        input.addEventListener("blur", this.boundValidateInput);
+        input.addEventListener("focus", () => {input.classList.remove("error")})
+
+        //TODO auto remove when selecting id
     }
 
-    /**
-     * Remove the error highlighting from the input as soon as the input is edited
-     * Also removes the event listener for itself.
-     * @param e
-     */
-    removeErrorHighlighting(e: Event){
-        let input = e.target as Element;
-        input.classList.remove("error");
-        input.removeEventListener("focus", this.boundRemoveErrorHighlighting);
+    removeErrorHighlighting(){
+        this.shadowRoot.querySelectorAll(".error").forEach((elem) => {
+            elem.classList.remove("error")
+        })
     }
 
     async searchForDevice(searchTerm: string): Promise<AutocompleteOption<DeviceDTO>[]> {

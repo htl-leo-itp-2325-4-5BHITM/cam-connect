@@ -151,16 +151,14 @@ export class CreateRentComponent extends LitElement {
         let valid = true
 
         if(this.student_id < 0) {
-            let studentSelector = this.shadowRoot.querySelector(".studentSelector") as AutocompleteComponent<Student>
-            this.highlightInputError(studentSelector)
-            AnimationHelper.shake(studentSelector)
+            this.highlightError(this.shadowRoot.querySelector(".studentSelector"))
             valid = false
         }
 
         for (let i = 0; i < this.devices.size; i++) {
             let device = Array.from(this.devices)[i]
 
-            if(await device.validate()) data.push(device.toRentObject(this.student_id))
+            if(device.validate()) data.push(device.toRentObject(this.student_id))
             else valid = false
         }
 
@@ -169,28 +167,10 @@ export class CreateRentComponent extends LitElement {
         RentService.create(data)
     }
 
-    boundValidateInput = this.validateInput.bind(this);
-    boundRemoveErrorHighlighting = this.removeErrorHighlighting.bind(this);
-    highlightInputError(input: Element){
-        input.classList.add("error");
-        input.addEventListener("focus", this.boundRemoveErrorHighlighting);
-        input.addEventListener("blur", this.boundValidateInput);
-    }
-
-    /**
-     * Remove the error highlighting from the input as soon as the input is edited
-     * Also removes the event listener for itself.
-     * @param e
-     */
-    removeErrorHighlighting(e: Event){
-        let input = e.target as Element;
-        input.classList.remove("error");
-        input.removeEventListener("focus", this.boundRemoveErrorHighlighting);
-    }
-
-    validateInput(e: Event){
-        if(this.student_id < 0)
-            this.highlightInputError(this.shadowRoot.querySelector(".studentSelector"))
+    highlightError(input: Element){
+        input.classList.add("error")
+        AnimationHelper.shake(input)
+        input.addEventListener("focus", () => {input.classList.remove("error")})
     }
 
     cancel(){
@@ -227,7 +207,6 @@ export class CreateRentComponent extends LitElement {
         studentSelector.clear(false)
         this.student_id = -1
         this.shadowRoot.querySelector(".studentSelector")?.classList.remove("error")
-        this.shadowRoot.querySelector(".studentSelector")?.removeEventListener("blur", this.boundValidateInput)
 
         Util.deepEventFocusedElement()?.blur() //removes focus on possible input thats still targeted and preventing the user from using keyboard shortcuts
     }
