@@ -26,6 +26,7 @@ export class DeviceListComponent extends LitElement {
 
             ${Object.values(this.deviceTypesFull.value).flat().map(deviceType => {
                 return html`<cc-device-list-entry .deviceTypeFull="${deviceType}"></cc-device-list-entry>`
+                /*return html`<p>hallo</p>`*/
             })}
         `
     }

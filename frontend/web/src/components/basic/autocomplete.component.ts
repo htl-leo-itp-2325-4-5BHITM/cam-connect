@@ -138,7 +138,7 @@ export class AutocompleteComponent<T> extends LitElement {
      * displays the suggestion container
      */
     showSuggestions(){
-        this.logger.log("----SHOWING SUGGESTIONS----", this.placeholder)
+        this.logger.log("----SHOWING SUGGESTIONS----", this.placeholder, this.selected)
         AutocompleteComponent.suggestionsVisible = this
 
         this.openedThroughClick = false
@@ -209,6 +209,7 @@ export class AutocompleteComponent<T> extends LitElement {
      */
     hideSuggestions( afterSelection = false){
         this.logger.log("hiding", this.placeholder)
+        this.logger.log(this.selected)
 
         let input = this.shadowRoot.querySelector("input")
 
@@ -216,8 +217,8 @@ export class AutocompleteComponent<T> extends LitElement {
         /*AutocompleteComponent.suggestionElement.classList.remove("visible")*/
         AnimationHelper.hide(AutocompleteComponent.suggestionElement)
 
-        //if the component allows no selection
-        //and the hiding did not happen after a selection was made
+        //if the component allows the selection to be empty
+        //and the hiding did not happen after a selection was clicked/entered
         //  (if the user selected an option without typing anything in to the input field the field will be empty
         //  but youd want something to be selected, if something was selected and then the user clears out the
         //  input field you want nothing to be selected)
@@ -263,6 +264,8 @@ export class AutocompleteComponent<T> extends LitElement {
         this.hideSuggestions(true)
         this.onSelect(this.selected.data) //custom function that's different for each component
 
+        this.classList.remove("error")
+
         this.logger.log("selected", this.placeholder, this.selected)
     }
 
@@ -285,7 +288,7 @@ export class AutocompleteComponent<T> extends LitElement {
                 if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Enter", "Alt", "Control", "Escape"].includes(e.key)) return
             }
 
-            this.logger.log("generating suggestions", this.placeholder)
+            this.logger.log("generating suggestions", this.placeholder, this.selected)
 
             //results in flashing while waiting for the server to respond
             /*render(html`<div class="loading">Lade...</div>`, AutocompleteComponent.suggestionElement)*/
@@ -394,7 +397,7 @@ export class AutocompleteComponent<T> extends LitElement {
     }
 
     clear(animated = true){
-        if(this.selected.id != -1 && animated) AnimationHelper.shake(this)
+        if(this.selected.id > -1 && animated) AnimationHelper.shake(this)
         this.logger.log("clearing", this.placeholder)
         this.selected = {id: -1, data: null}
         this.focusedId = -1
