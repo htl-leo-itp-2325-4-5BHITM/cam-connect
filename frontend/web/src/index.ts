@@ -33,9 +33,13 @@ import '../styles/index.scss'
 import Model, {ObservedProperty, PageEnum} from "./model"
 import {Api, KeyBoardShortCut} from "./base"
 import PopupEngine from "./popupEngine";
+import URLHandler from "./service/urlHandler.service"
 
 //OMG its our single swouce of THWQUUUCE
 export let model = new Model()
+
+URLHandler.setUrl("/rents/test")
+URLHandler.parseCurrentURL()
 
 /*model.appState.subscribe(data => {
     console.log(data)
