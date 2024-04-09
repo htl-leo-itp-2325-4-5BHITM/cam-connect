@@ -16,6 +16,9 @@ import RentService from "../../service/rent.service"
 @customElement('cc-navbar')
 export class NavbarComponent extends LitElement {
     @property()
+    type: "default" | "simple" = "default"
+
+    @property()
     private appState: ObservedProperty<AppState>
 
     constructor() {
@@ -24,6 +27,14 @@ export class NavbarComponent extends LitElement {
     }
 
     render() {
+        if(this.type == "simple")
+            return html`
+                <style>${styles}</style>
+                <div class="logo">
+                    <img src="assets/logo/cc-wordmark-white.svg" alt="cam-connect">
+                </div>
+            `
+
         return html`
             <style>${styles}</style>
             <div class="logo">

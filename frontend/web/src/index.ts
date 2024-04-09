@@ -24,6 +24,7 @@ import "./components/layout/deviceListEntry.component"
 import "./components/basic/autocomplete.component"
 
 import "./components/app.component"
+import "./components/externalConfirm.component"
 
 import "./printView"
 
@@ -57,8 +58,9 @@ PopupEngine.init({
     }
 })
 
-const app = document.createElement("cc-app")
-document.body.appendChild(app)
+document.body.appendChild(document.createElement("cc-external-confirm"))
+
+
 
 KeyBoardShortCut.register([["shift", "n"], ["<"]], () => {model.appState.value.openCreateRentModal()})
 KeyBoardShortCut.register(["escape"], () => {model.appState.value.cancelCurrentAction()}, "cancelCurrentAction", true)

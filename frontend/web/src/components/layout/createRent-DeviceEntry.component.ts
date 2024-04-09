@@ -48,7 +48,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
 
     selectedDevice: DeviceDTO
 
-    constructor(parent: CreateRentComponent, type: RentDeviceEntryComponentType = "default"){
+    constructor(parent: CreateRentComponent, type: RentDeviceEntryComponentType = "default", dates?: Date[]){
         super()
         this.appState = new ObservedProperty<AppState>(this, model.appState)
         this.type = type
@@ -57,8 +57,8 @@ export class CreateRentDeviceEntryComponent extends LitElement {
             device_id: -1,
             device_type_id: -1,
             device_string: "",
-            rent_start: new Date(),
-            rent_end_planned: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
+            rent_start: dates[0] || new Date(),
+            rent_end_planned: dates[1] || new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
         }
         this.selectedDevice = {
             device_id: -1,
@@ -71,7 +71,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
         let input = this.renderRoot.querySelector('.date') as HTMLInputElement
-        this.datePicker = new DatePickerWrapper(input)
+        this.datePicker = new DatePickerWrapper(input, [this.data.rent_start, this.data.rent_end_planned])
     }
 
     render() {

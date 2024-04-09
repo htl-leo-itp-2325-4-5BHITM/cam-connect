@@ -19,6 +19,8 @@
   align-items: center;
   gap: .5rem;
 
+  padding-inline: 1rem !important;
+
   user-select: none;
 
   &:focus-visible{
@@ -36,23 +38,30 @@
     --color-light: #{$gray600};
     --color-text: #{$gray1000};
   }
+  &[color = "good"] {
+    --color-main: #{$good};
+    --color-light: #{$goodLight};
+    --color-text: #{$gray1000};
+  }
+  &[color = "bad"] {
+    --color-main: #{$bad};
+    --color-light: #{$badLight};
+    --color-text: #{$gray1000};
+  }
 
   &[size = "big"]{
     font-size: $fSizeDesktopLarge;
     min-width: 8ch;
-    padding-inline: 1rem !important;
     padding-block: .2rem !important;
   }
   &[size = "medium"]{
     font-size: $fSizeDesktopDefault;
     min-width: 8ch;
-    padding-inline: 1rem !important;
     padding-block: .1rem !important;
   }
   &[size = "small"]{
     font-size: $fSizeDesktopSmall;
     min-width: 6ch;
-    padding-inline: 1rem !important;
     padding-block: .1rem !important;
   }
 
@@ -71,7 +80,7 @@
     box-shadow: 0 0 0 1.5px var(--color-light) inset;
     color: var(--color-text);
 
-    &[color = "accent"]{
+    &[color = "accent"], &[color = "good"], &[color = "bad"]{
       color: var(--color-light);
     }
 
@@ -89,7 +98,7 @@
     min-width: 0;
     padding-inline: .3rem !important;
 
-    &[color = "accent"]{
+    &[color = "accent"], &[color = "good"], &[color = "bad"]{
       color: var(--color-light);
     }
 
@@ -102,7 +111,7 @@
     border: none;
     color: var(--color-text);
     text-decoration: underline;
-    font-weight: 400;
+    /*font-weight: 400;*/
     text-underline-offset: .1rem;
 
     min-width: 0;
@@ -110,7 +119,7 @@
     margin-inline: -.2rem;
     margin-block: -.1rem;
 
-    &[color = "accent"]{
+    &[color = "accent"], &[color = "good"], &[color = "bad"]{
       color: var(--color-light);
     }
 
@@ -158,6 +167,7 @@
 
   ::slotted(svg){
     @include imgIconColorGray800;
+    height: 1rem;
   }
   ::slotted(img){
     @include imgIconColorGray800;
@@ -165,9 +175,21 @@
 
   ::slotted(.icon) {
     @include imgIconColorGray800;
+    height: 1rem;
+    aspect-ratio: 1;
+    margin-top: -3px !important;
+    vertical-align: center;
   }
 
   ::slotted(.icon.accent) {
     @include imgIconColorAccent;
+  }
+
+  ::slotted(.icon.good) {
+    @include imgIconColorGood;
+  }
+
+  ::slotted(.icon.bad) {
+    @include imgIconColorBad;
   }
 }

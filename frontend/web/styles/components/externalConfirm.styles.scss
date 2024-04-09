@@ -1,0 +1,41 @@
+@import "../base";
+
+:host{
+  height: 100vh;
+  max-height: 100vh;
+  background-color: $gray100;
+  position: relative;
+  overflow: hidden;
+}
+
+main{
+  width: 60%;
+  margin-inline: auto;
+}
+
+h1{
+  font-size: 1.8rem;
+  font-weight: 300;
+  margin-top: 2rem;
+  margin-bottom: .8rem;
+}
+
+ul{
+
+  li{
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+    padding-block: .5rem;
+    padding-inline: 1rem;
+    border-radius: .3rem;
+    background-color: $gray300;
+    margin-block: .3rem;
+  }
+}
+
+.button-container{
+  display: flex;
+  gap: .5rem;
+  margin-top: 2rem;
+}

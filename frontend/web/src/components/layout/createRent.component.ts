@@ -106,10 +106,9 @@ export class CreateRentComponent extends LitElement {
         `
     }
 
-    //TODO add shortcut for this
-    //we might want to pass the currently selected global date to the new device
     addDevice(type: RentDeviceEntryComponentType = "default", setFocus = true) {
-        let newDevice = new CreateRentDeviceEntryComponent(this, type)
+        //TODO passing the global date is a setting
+        let newDevice = new CreateRentDeviceEntryComponent(this, type, this.globalDatePicker.instance.selectedDates)
         this.devices.add(newDevice)
         this.shadowRoot.querySelector(".deviceList").appendChild(newDevice)
 
