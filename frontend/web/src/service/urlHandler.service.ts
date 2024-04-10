@@ -23,6 +23,11 @@ export default class URLHandler {
         let urlSplit = window.location.href.split("?")[0]?.split("/")
         urlSplit.splice(0, 3)
 
+        if(urlSplit[0] === "") {
+            pages["rents"].handler()
+            return
+        }
+
         this.handlePage(0, pages, urlSplit)
     }
 

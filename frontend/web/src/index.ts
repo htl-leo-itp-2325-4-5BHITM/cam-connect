@@ -38,7 +38,6 @@ import URLHandler from "./service/urlHandler.service"
 //OMG its our single swouce of THWQUUUCE
 export let model = new Model()
 
-URLHandler.setUrl("/rents/test")
 URLHandler.parseCurrentURL()
 
 /*model.appState.subscribe(data => {
