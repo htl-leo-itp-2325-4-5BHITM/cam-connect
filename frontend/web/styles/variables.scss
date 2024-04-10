@@ -34,9 +34,9 @@ $badBright: hsla(0,67.7%,93.9%,1);
 $midLight: hsl(34, 72%, 58%);
 $mid: hsla(32,59.8%,40%,1);
 $midDark: hsla(32,59.5%,30%,1);
-$goodLight: hsl(118, 27%, 57%);
-$good: hsla(119,21.8%,43.1%,1);
-$goodDark: hsla(118,21.5%,32%,1);
+$goodLight: hsl(118, 27%, 60%);
+$good: hsl(119,21.8%,43.1%);
+$goodDark: hsl(118,21.5%,32%);
 $overlay: hsla(0,0%,24.3%,0.200);
 
 $hoverBackground: hsla(0, 0%, 50%, 0.35);
@@ -71,6 +71,12 @@ $hoverBackgroundTransitionTime: #{$transitionTimeShort};
 }
 @mixin imgIconColorGray800() {
   filter: invert(100%) brightness(80%);
+}
+@mixin imgIconColorGood() {
+  filter: invert(63%) sepia(49%) saturate(302%) hue-rotate(70deg) brightness(93%) contrast(87%);
+}
+@mixin imgIconColorBad() {
+  filter: invert(39%) sepia(16%) saturate(2349%) hue-rotate(312deg) brightness(89%) contrast(92%);
 }
 
 @mixin noScrollbar() {

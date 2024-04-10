@@ -26,7 +26,7 @@ export class AppComponent extends LitElement {
         switch (this.appState.value.page) {
             case PageEnum.EQUIPMENT:
                 sidebar = html`
-                <cc-sidebar accountname="wird später mal ein observable">
+                <cc-sidebar accountname="Martin Huemer">
                     <cc-filter-container slot="primaryFilters" .options="${model.deviceTypeNameFilterOptions}">Gerätetyp</cc-filter-container>
                     <cc-filter-container slot="secondaryFilters" .options="${model.deviceTypeAttributesAsFilterOptions.cameraResolutions}" .visibility="${["camera", "drone"]}">Auflösungen</cc-filter-container>
                     <cc-filter-container slot="secondaryFilters" .options="${model.deviceTypeAttributesAsFilterOptions.cameraSensors}" .visibility="${["camera"]}">Sensoren</cc-filter-container>
@@ -39,11 +39,11 @@ export class AppComponent extends LitElement {
                 break
             case PageEnum.RENTS:
                 page = html`<cc-rent-list class="content"></cc-rent-list>`
-                sidebar = html`<cc-sidebar accountname="wird später mal ein observable"></cc-sidebar>`
+                sidebar = html`<cc-sidebar accountname="Martin Huemer"></cc-sidebar>`
                 break
             case PageEnum.CALENDAR:
                 page = html`<cc-calendar class="content"></cc-calendar>`
-                sidebar = html`<cc-sidebar accountname="wird später mal ein observable"></cc-sidebar>`
+                sidebar = html`<cc-sidebar accountname="Martin Huemer"></cc-sidebar>`
                 break
         }
 

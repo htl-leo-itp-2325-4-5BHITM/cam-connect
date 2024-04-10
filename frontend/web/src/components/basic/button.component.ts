@@ -1,7 +1,7 @@
 import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/button.styles.scss'
-import {SimpleColorEnum, SizeEnum} from "../../base"
+import {ColorEnum, SimpleColorEnum, SizeEnum} from "../../base"
 
 export enum ButtonType {FILLED="filled", OUTLINED="outlined", TEXT="text", UNDERLINED="underlined"}
 
@@ -19,8 +19,8 @@ export class ButtonComponent extends LitElement {
     @property({type: ButtonType})
     type?: ButtonType = ButtonType.FILLED
 
-    @property({type: SimpleColorEnum})
-    color?: SimpleColorEnum = SimpleColorEnum.ACCENT
+    @property({type: ColorEnum})
+    color?: ColorEnum = ColorEnum.ACCENT
 
     @property({type: String})
     text?: String = this.innerText || "Button"
