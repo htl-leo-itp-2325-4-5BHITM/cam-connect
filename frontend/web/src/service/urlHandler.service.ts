@@ -2,19 +2,29 @@ import {model} from "../index"
 import {PageEnum} from "../model"
 
 let pages = {
-    rents: {
-        handler: () => { model.appState.value.page = PageEnum.RENTS },
+    app: {
+        handler: () => { document.body.appendChild(document.createElement("cc-app")) },
         children: {
-            details: {
-                handler: () => { console.log("showing details") }
+            rents: {
+                handler: () => { model.appState.value.page = PageEnum.RENTS },
+                children: {
+                    details: {
+                        handler: () => { console.log("showing details") }
+                    },
+                }
             },
+            equipment: {
+                handler: () => { model.appState.value.page = PageEnum.EQUIPMENT },
+            },
+            calendar: {
+                handler: () => { model.appState.value.page = PageEnum.CALENDAR },
+            }
         }
     },
-    equipment: {
-        handler: () => { model.appState.value.page = PageEnum.EQUIPMENT },
-    },
-    calendar: {
-        handler: () => { model.appState.value.page = PageEnum.CALENDAR },
+    confirm: {
+        handler: () => {
+            document.body.appendChild(document.createElement("cc-external-confirm"))
+        }
     }
 }
 

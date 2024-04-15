@@ -12,6 +12,7 @@ import { SelectComponent } from "../basic/select.component"
 import {AppState} from "../../AppState"
 import DeviceService from "../../service/device.service"
 import RentService from "../../service/rent.service"
+import URLHandler from "../../service/urlHandler.service"
 
 @customElement('cc-navbar')
 export class NavbarComponent extends LitElement {
@@ -44,6 +45,7 @@ export class NavbarComponent extends LitElement {
             <cc-select size="${SizeEnum.MEDIUM}" spacerColor="${SimpleColorEnum.ACCENT}" 
                        .optionSelected = "${(elem) => {
                            this.appState.value.page = elem.dataset.page
+                           URLHandler.setUrl(elem.dataset.page)
                        }
             }">
                 <p data-page="equipment" class="${this.appState.value.page == PageEnum.EQUIPMENT ? 'selected' : ''}"

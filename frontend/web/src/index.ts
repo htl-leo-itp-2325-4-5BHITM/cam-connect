@@ -61,10 +61,6 @@ PopupEngine.init({
     }
 })
 
-document.body.appendChild(document.createElement("cc-external-confirm"))
-
-
-
 KeyBoardShortCut.register([["shift", "n"], ["<"]], () => {model.appState.value.openCreateRentModal()})
 KeyBoardShortCut.register(["escape"], () => {model.appState.value.cancelCurrentAction()}, "cancelCurrentAction", true)
 

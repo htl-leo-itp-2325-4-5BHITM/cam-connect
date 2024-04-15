@@ -111,7 +111,8 @@ public class RentResource {
     @Path("/getbyid/{id: [0-9]+}/return")
     public Response returnRent(@PathParam("id") Long id, RentDTO rentDTO) {
         try {
-            rentRepository.returnRent(id, rentDTO);
+            rentRepository.
+                    returnRent(id, rentDTO);
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }
