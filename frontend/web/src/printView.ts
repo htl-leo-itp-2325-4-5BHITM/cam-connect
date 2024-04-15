@@ -16,33 +16,41 @@ function print() {
     // add newly created iframe to the current DOM
     document.body.appendChild(printIframe);
 
-    // add generated body content
-    printIframe.contentWindow.document.body.innerHTML = generatePrintLayout();
+    // wait for iframe to load before printing
+    printIframe.onload = function() {
+        // add generated body content
+        printIframe.contentWindow.document.body.innerHTML = generatePrintLayout();
 
-    try {
-        // reference to iframe window
-        const contentWindow = printIframe.contentWindow;
+        try {
+            // reference to iframe window
+            const contentWindow = printIframe.contentWindow;
 
-        // execute iframe print command
-        const result = contentWindow.document.execCommand('print', false, null);
+            // execute iframe print command
+            const result = contentWindow.document.execCommand('print', false, null);
 
-        // iframe print listener
-        const printListener = contentWindow.matchMedia('print');
-        printListener.addListener(function(pl) {
-            if (!pl.matches) {
-                printIframe.remove()
-            }
-        });
+            // iframe print listener
+            const printListener = contentWindow.matchMedia('print');
+            printListener.addListener(function(pl) {
+                if (!pl.matches) {
+                    printIframe.remove();
+                }
+            });
 
-        // if execCommand is unsupported
-        if(!result) { contentWindow.print(); }
+            // if execCommand is unsupported
+            if(!result) { contentWindow.print(); }
 
-    } catch (e) {
-        // print fallback
-        window.frames['printFrame'].focus();
-        window.frames['printFrame'].print();
-    }
+        } catch (e) {
+            // print fallback
+            window.frames['printFrame'].focus();
+            window.frames['printFrame'].print();
+        }
+    };
+
+    // Use contentDocument.write for Firefox compatibility
+    printIframe.contentDocument.write('<html><head></head><body></body></html>');
+    printIframe.contentDocument.close();
 }
+
 
 function generatePrintLayout() {
     let html = `<style>${styles}</style>`;
@@ -76,7 +84,7 @@ function generatePrintLayout() {
                         ${rent.teacher_end ? rent.teacher_end.firstname.charAt(0) : ""}
                         ${rent.teacher_end ? rent.teacher_end.lastname : ""}
                     </td>
-                    <td>${rent.note} || ""</td>
+                    <td>${rent.note || ""}</td>
                     <td>${rent.status}</td></tr>`
         })
     })
