@@ -10,7 +10,6 @@ html{
 }
 
 body{
-  background-color: hsl(0,0%,20%);
   color: hsl(0,0%,0%);
   font-family: sans-serif;
   overflow: scroll;
@@ -33,7 +32,6 @@ table{
     height: inherit;
 
     &:nth-of-type(6), &:nth-of-type(10) {
-      background-color: hsl(0, 0%, 90%);
       border-right: .2rem solid #383838;
     }
   }
@@ -45,7 +43,6 @@ table{
 
   th {
     border-bottom: .2rem solid #383838;
-    background-color: hsl(0, 0%, 90%);
     padding: .5rem;
   }
 

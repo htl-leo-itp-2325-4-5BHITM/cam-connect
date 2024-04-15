@@ -25,6 +25,7 @@ import "./components/basic/autocomplete.component"
 
 import "./components/app.component"
 import "./components/externalConfirm.component"
+import "./components/notFound.component"
 
 import "./printView"
 

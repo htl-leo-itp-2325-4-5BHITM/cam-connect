@@ -1,13 +1,11 @@
-import {html, LitElement, PropertyValues, TemplateResult} from 'lit'
+import {html, LitElement, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/rentListEntry.styles.scss'
 import {ButtonType} from "../basic/button.component"
-import {Api, ccResponse, ColorEnum, DatePickerWrapper, SizeEnum} from "../../base"
-import RentService, {Rent, RentStatusEnum, RentTypeEnum} from "../../service/rent.service";
+import {Api, ColorEnum, DatePickerWrapper, SizeEnum} from "../../base"
+import RentService, {Rent, RentStatus, RentTypeEnum} from "../../service/rent.service";
 import {ChipType} from "../basic/chip.component"
 import {model} from "../../index"
-import AirDatepicker from "air-datepicker";
-import localeEn from "air-datepicker/locale/en";
 import {LineColor, LineType} from "../basic/line.component"
 import PopupEngine from "../../popupEngine"
 import {ObservedProperty} from "../../model"
@@ -15,17 +13,17 @@ import {AppState} from "../../AppState"
 import Util from "../../util"
 import {unsafeSVG} from "lit/directives/unsafe-svg.js"
 import {icon} from "@fortawesome/fontawesome-svg-core"
-import {faCamera, faHashtag, faHelicopter, faLightbulb, faMicrophone} from "@fortawesome/free-solid-svg-icons"
+import {faHashtag} from "@fortawesome/free-solid-svg-icons"
 import DeviceService, {Device, DeviceDTO} from "../../service/device.service"
 import {AutocompleteComponent, AutocompleteOption} from "../basic/autocomplete.component"
-import DeviceTypeService, {DeviceType, DeviceTypeSource, DeviceTypeVariantEnum} from "../../service/deviceType.service"
+import DeviceTypeService, {DeviceType, DeviceTypeSource} from "../../service/deviceType.service"
 
 @customElement('cc-rent-list-entry')
 export class RentListEntryComponent extends LitElement {
     @property()
     rent: Rent
 
-    private lastStatus = RentStatusEnum.WAITING
+    private lastStatus = RentStatus.WAITING
 
     @property()
     private appState: ObservedProperty<AppState>
@@ -56,7 +54,6 @@ export class RentListEntryComponent extends LitElement {
         if(!this.datePicker || this.lastStatus != this.rent.status) {
             this.lastStatus = this.rent.status
             this.datePicker = new DatePickerWrapper(input, [new Date(startDate), new Date(endDate)], (dates) => {
-                console.log(dates)
                 RentService.updateProperty(this.rent.rent_id, 'rent_start', Util.formatDateForDb(dates[0]))
                 RentService.updateProperty(this.rent.rent_id, 'rent_end_planned', Util.formatDateForDb(dates[1]))
             })
@@ -64,6 +61,36 @@ export class RentListEntryComponent extends LitElement {
     }
 
     render() {
+        let buttonClickBehavior
+        let buttonColor = ColorEnum.ACCENT
+        let buttonText = ""
+        let chipColor = ColorEnum.GRAY
+        let chipText = ""
+        let chipType
+        switch (this.rent.status) {
+            case RentStatus.CONFIRMED:
+                buttonClickBehavior = this.returnRent
+                buttonText = "Zurückgeben"
+                chipColor = ColorEnum.GOOD
+                chipText = "Bestätigt"
+                break
+            case RentStatus.WAITING:
+                chipColor = ColorEnum.MID
+                chipText = "Warte auf Bestätigung"
+                break
+            case RentStatus.DECLINED:
+                buttonClickBehavior = this.removeRent
+                buttonColor = ColorEnum.GRAY
+                buttonText = "Löschen"
+                chipColor = ColorEnum.BAD
+                chipText = "Abgelehnt"
+                chipType = ChipType.EXPANDABLE
+                break
+            case RentStatus.RETURNED:
+                chipText = "Zurückgegeben"
+                break
+        }
+
         return html`
             <style>${styles}</style>
             
@@ -72,22 +99,22 @@ export class RentListEntryComponent extends LitElement {
             </div>
 
             <div class="area">
-                <!--TODO move this code into a more readable generator function-->
-                <!--TODO this button should not be displayed if the status is waiting-->
-                <!--please no nested ternary operators 🤮 -->
-                <cc-button color="${this.rent.status == RentStatusEnum.DECLINED ? ColorEnum.GRAY : ColorEnum.ACCENT}" 
+                <cc-button color="${buttonColor}" 
                            type="${ButtonType.TEXT}" size="${SizeEnum.SMALL}"
-                           @click="${this.rent.status == RentStatusEnum.DECLINED ? this.removeRent : this.rent.status == RentStatusEnum.CONFIRMED ? this.returnRent : ''}"
-                           text="${this.rentStatusToButtonText(this.rent.status)}">
-                </cc-button>
+                           @click="${buttonClickBehavior}"
+                           text="${buttonText}"
+                ></cc-button>
                 
-                <cc-chip color="${this.rentStatusToColor(this.rent.status)}" size="${SizeEnum.SMALL}"
-                         type="${this.rent.status == RentStatusEnum.DECLINED ? ChipType.EXPANDABLE : ''}" 
-                         text="${this.rentStatusAsString(this.rent.status)}">
+                <cc-chip color="${chipColor}" size="${SizeEnum.SMALL}"
+                         type="${chipType}" 
+                         text="${chipText}">
                     <div class="details">
                         <h2>Angegebener Ablehngrund:</h2>
                         <p>${this.rent.verification_message}</p>
-                        <cc-button closeChip @click="${this.requestConfirmation}" type="${ButtonType.OUTLINED}" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}">Bestätigung erneut Anfragen</cc-button>
+                        <cc-button closeChip @click="${this.requestConfirmation}" 
+                                   type="${ButtonType.OUTLINED}" color="${ColorEnum.GRAY}" 
+                                   size="${SizeEnum.SMALL}">Bestätigung erneut Anfragen
+                        </cc-button>
                     </div>
                 </cc-chip>
                 
@@ -100,7 +127,7 @@ export class RentListEntryComponent extends LitElement {
     }
 
     generateRentContent() {
-        if(this.rent.status == RentStatusEnum.DECLINED) { //editable rent
+        if(this.rent.status == RentStatus.DECLINED) { //editable rent
             return html`
                 ${this.rent.type == RentTypeEnum.DEFAULT ?
                         html`
@@ -247,7 +274,7 @@ export class RentListEntryComponent extends LitElement {
                 {
                     text: "Ja",
                     action: (data) => {
-                        this.rent.status = RentStatusEnum.WAITING
+                        this.rent.status = RentStatus.WAITING
                         RentService.requestConfirmation(this.rent)
                     },
                     closePopup: true
@@ -284,7 +311,7 @@ export class RentListEntryComponent extends LitElement {
                 {
                     text: "Ja",
                     action: (data) => {
-                        RentService.return(this.rent.rent_id)
+                        RentService.return(this.rent)
                     },
                     closePopup: true
                 },
@@ -293,31 +320,6 @@ export class RentListEntryComponent extends LitElement {
                 },
             ]
         })
-    }
-
-    rentStatusToButtonText(status: RentStatusEnum){
-        switch (status) {
-            case RentStatusEnum.CONFIRMED: return "Zurückgeben"
-            case RentStatusEnum.DECLINED: return "Löschen"
-        }
-    }
-
-    rentStatusToColor(status: RentStatusEnum) {
-        switch (status) {
-            case RentStatusEnum.CONFIRMED: return ColorEnum.GOOD
-            case RentStatusEnum.WAITING: return ColorEnum.MID
-            case RentStatusEnum.DECLINED: return ColorEnum.BAD
-            default: return ColorEnum.GRAY
-        }
-    }
-
-    rentStatusAsString(status: RentStatusEnum) {
-        switch (status) {
-            case RentStatusEnum.CONFIRMED: return "Bestätigt"
-            case RentStatusEnum.WAITING: return "Warte auf Bestätigung"
-            case RentStatusEnum.DECLINED: return "Abgelehnt"
-            case RentStatusEnum.RETURNED: return "Zurückgegeben"
-        }
     }
 }
 

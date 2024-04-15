@@ -25,6 +25,20 @@ let pages = {
         handler: () => {
             document.body.appendChild(document.createElement("cc-external-confirm"))
         }
+    },
+    default: {
+        handler: () => {
+            if(document.querySelector('cc-not-found')) {
+                document.body.removeChild(document.querySelector('cc-not-found'))
+            }
+            URLHandler.setUrl("app/rents")
+            URLHandler.parseCurrentURL()
+        }
+    },
+    notFound: {
+        handler: () => {
+            document.body.appendChild(document.createElement("cc-not-found"))
+        }
     }
 }
 
@@ -34,7 +48,7 @@ export default class URLHandler {
         urlSplit.splice(0, 3)
 
         if(urlSplit[0] === "") {
-            pages["rents"].handler()
+            pages.default.handler()
             return
         }
 
@@ -45,7 +59,11 @@ export default class URLHandler {
         if(pageIndex+1 > currentPath.length) return
 
         let nextPage = options[currentPath[pageIndex]]
-        if(!nextPage) return
+
+        if(!nextPage) {
+            pages.notFound.handler();
+            return
+        }
 
         nextPage.handler()
         this.handlePage(pageIndex + 1, nextPage.children, currentPath)
