@@ -14,7 +14,7 @@ import {Teacher} from "./service/teacher.service";
 import {Student} from "./service/student.service";
 import {RentListEntryComponent} from "./components/layout/rentListEntry.component"
 import {AppState} from "./AppState"
-import URLHandler from "./service/urlHandler.service"
+import URLHandler from "./urlHandler"
 
 export enum PageEnum { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar" }
 

@@ -8,7 +8,7 @@ import { ObservedProperty, PageEnum} from "../../model"
 import {ButtonType} from "../basic/button.component"
 import {SimpleColorEnum, SizeEnum} from "../../base"
 import {model} from "../../index"
-import RentService, {RentStatus} from "../../service/rent.service";
+import RentService, {RentStatusEnum} from "../../service/rent.service";
 import PopupEngine from "../../popupEngine";
 import {AppState} from "../../AppState"
 
@@ -32,8 +32,8 @@ export class ToolbarComponent extends LitElement {
     renderRentListBar(){
         let isButtonDisabled = {
             uncheckAll: this.appState.value.selectedRentEntries.size == 0,
-            remove: this.isButtonDisabled(RentStatus.DECLINED),
-            return: this.isButtonDisabled(RentStatus.CONFIRMED)
+            remove: this.isButtonDisabled(RentStatusEnum.DECLINED),
+            return: this.isButtonDisabled(RentStatusEnum.CONFIRMED)
         }
 
         return html`
@@ -75,7 +75,7 @@ export class ToolbarComponent extends LitElement {
         `
     }
 
-    isButtonDisabled(status: RentStatus) {
+    isButtonDisabled(status: RentStatusEnum) {
         if (this.appState.value.selectedRentEntries.size == 0) return true
 
         let isDisabled = false;
@@ -122,7 +122,7 @@ export class ToolbarComponent extends LitElement {
                     text: "Ja",
                     action: (data) => {
                         this.appState.value.selectedRentEntries.forEach((entry) => {
-                            RentService.return(entry.rent)
+                            RentService.return(entry.rent.rent_id)
                         })
                         this.uncheckAll()
                     },

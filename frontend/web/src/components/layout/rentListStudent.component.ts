@@ -3,7 +3,7 @@ import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/rentListStudent.styles.scss'
 import {CircleSelectType} from "../basic/circleSelect.component"
 import {SimpleColorEnum, SizeEnum} from "../../base"
-import {RentByStudentDTO, RentStatus} from "../../service/rent.service";
+import {RentByStudentDTO, RentStatusEnum} from "../../service/rent.service";
 import {model} from "../../index"
 import { ObservedProperty} from "../../model"
 import {RentListEntryComponent} from "./rentListEntry.component"
@@ -37,7 +37,7 @@ export class RentListStudentComponent extends LitElement {
             ${this.generateHeading(student.firstname + " " + student.lastname, student.school_class)}
             <div class="entries">
                 ${rentList.map(rent => {
-                    if(rent.status != RentStatus.RETURNED){
+                    if(rent.status != RentStatusEnum.RETURNED){
                         return html`<cc-rent-list-entry .rent="${rent}"></cc-rent-list-entry>`
                     }
                 })}

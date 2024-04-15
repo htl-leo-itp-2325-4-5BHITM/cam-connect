@@ -84,6 +84,19 @@ public class RentResource {
     }
 
     @GET
+    @Path("/getbyidlist/{ids}")
+    public Response getByIdList(@PathParam("ids") String ids) {
+        List<Rent> rents;
+        try {
+            String[] idList = ids.split(",");
+            rents = rentRepository.getByIdList(idList);
+        } catch (CCException ex) {
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok(rents);
+    }
+
+    @GET
     @Path("/getbyid/{id: [0-9]+}/sendconfirmation")
     public Response sendConfirmation(@PathParam("id") Long id) {
         try {
@@ -96,10 +109,10 @@ public class RentResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/getbyid/{id: [0-9]+}/confirm")
+    @Path("/getbyid/{id: [0-9]+}/updatestatus")
     public Response confirm(@PathParam("id") Long id, RentDTO rentDTO) {
         try {
-            rentRepository.confirm(id, rentDTO);
+            rentRepository.updateStatus(id, rentDTO);
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }
@@ -109,10 +122,9 @@ public class RentResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/getbyid/{id: [0-9]+}/return")
-    public Response returnRent(@PathParam("id") Long id, RentDTO rentDTO) {
+    public Response returnRent(@PathParam("id") Long id) {
         try {
-            rentRepository.
-                    returnRent(id, rentDTO);
+            rentRepository.returnRent(id);
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }

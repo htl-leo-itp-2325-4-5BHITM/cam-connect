@@ -1,5 +1,5 @@
-import {model} from "../index"
-import {PageEnum} from "../model"
+import {model} from "./index"
+import {PageEnum} from "./model"
 
 let pages = {
     app: {
@@ -63,7 +63,7 @@ export default class URLHandler {
             parsedURL.set(key, value)
         }
 
-        return parsedURL.has(param) ? parsedURL.get(param) : "param not found"
+        return parsedURL.has(param) ? parsedURL.get(param) : null
     }
 
     static addParam (param: string, value: string) {

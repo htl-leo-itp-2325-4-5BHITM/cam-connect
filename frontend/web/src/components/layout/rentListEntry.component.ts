@@ -3,7 +3,7 @@ import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/rentListEntry.styles.scss'
 import {ButtonType} from "../basic/button.component"
 import {Api, ccResponse, ColorEnum, DatePickerWrapper, SizeEnum} from "../../base"
-import RentService, {Rent, RentStatus, RentTypeEnum} from "../../service/rent.service";
+import RentService, {Rent, RentStatusEnum, RentTypeEnum} from "../../service/rent.service";
 import {ChipType} from "../basic/chip.component"
 import {model} from "../../index"
 import AirDatepicker from "air-datepicker";
@@ -25,7 +25,7 @@ export class RentListEntryComponent extends LitElement {
     @property()
     rent: Rent
 
-    private lastStatus = RentStatus.WAITING
+    private lastStatus = RentStatusEnum.WAITING
 
     @property()
     private appState: ObservedProperty<AppState>
@@ -75,14 +75,14 @@ export class RentListEntryComponent extends LitElement {
                 <!--TODO move this code into a more readable generator function-->
                 <!--TODO this button should not be displayed if the status is waiting-->
                 <!--please no nested ternary operators 🤮 -->
-                <cc-button color="${this.rent.status == RentStatus.DECLINED ? ColorEnum.GRAY : ColorEnum.ACCENT}" 
+                <cc-button color="${this.rent.status == RentStatusEnum.DECLINED ? ColorEnum.GRAY : ColorEnum.ACCENT}" 
                            type="${ButtonType.TEXT}" size="${SizeEnum.SMALL}"
-                           @click="${this.rent.status == RentStatus.DECLINED ? this.removeRent : this.rent.status == RentStatus.CONFIRMED ? this.returnRent : ''}"
+                           @click="${this.rent.status == RentStatusEnum.DECLINED ? this.removeRent : this.rent.status == RentStatusEnum.CONFIRMED ? this.returnRent : ''}"
                            text="${this.rentStatusToButtonText(this.rent.status)}">
                 </cc-button>
                 
                 <cc-chip color="${this.rentStatusToColor(this.rent.status)}" size="${SizeEnum.SMALL}"
-                         type="${this.rent.status == RentStatus.DECLINED ? ChipType.EXPANDABLE : ''}" 
+                         type="${this.rent.status == RentStatusEnum.DECLINED ? ChipType.EXPANDABLE : ''}" 
                          text="${this.rentStatusAsString(this.rent.status)}">
                     <div class="details">
                         <h2>Angegebener Ablehngrund:</h2>
@@ -100,7 +100,7 @@ export class RentListEntryComponent extends LitElement {
     }
 
     generateRentContent() {
-        if(this.rent.status == RentStatus.DECLINED) { //editable rent
+        if(this.rent.status == RentStatusEnum.DECLINED) { //editable rent
             return html`
                 ${this.rent.type == RentTypeEnum.DEFAULT ?
                         html`
@@ -247,7 +247,7 @@ export class RentListEntryComponent extends LitElement {
                 {
                     text: "Ja",
                     action: (data) => {
-                        this.rent.status = RentStatus.WAITING
+                        this.rent.status = RentStatusEnum.WAITING
                         RentService.requestConfirmation(this.rent)
                     },
                     closePopup: true
@@ -284,7 +284,7 @@ export class RentListEntryComponent extends LitElement {
                 {
                     text: "Ja",
                     action: (data) => {
-                        RentService.return(this.rent)
+                        RentService.return(this.rent.rent_id)
                     },
                     closePopup: true
                 },
@@ -295,28 +295,28 @@ export class RentListEntryComponent extends LitElement {
         })
     }
 
-    rentStatusToButtonText(status: RentStatus){
+    rentStatusToButtonText(status: RentStatusEnum){
         switch (status) {
-            case RentStatus.CONFIRMED: return "Zurückgeben"
-            case RentStatus.DECLINED: return "Löschen"
+            case RentStatusEnum.CONFIRMED: return "Zurückgeben"
+            case RentStatusEnum.DECLINED: return "Löschen"
         }
     }
 
-    rentStatusToColor(status: RentStatus) {
+    rentStatusToColor(status: RentStatusEnum) {
         switch (status) {
-            case RentStatus.CONFIRMED: return ColorEnum.GOOD
-            case RentStatus.WAITING: return ColorEnum.MID
-            case RentStatus.DECLINED: return ColorEnum.BAD
+            case RentStatusEnum.CONFIRMED: return ColorEnum.GOOD
+            case RentStatusEnum.WAITING: return ColorEnum.MID
+            case RentStatusEnum.DECLINED: return ColorEnum.BAD
             default: return ColorEnum.GRAY
         }
     }
 
-    rentStatusAsString(status: RentStatus) {
+    rentStatusAsString(status: RentStatusEnum) {
         switch (status) {
-            case RentStatus.CONFIRMED: return "Bestätigt"
-            case RentStatus.WAITING: return "Warte auf Bestätigung"
-            case RentStatus.DECLINED: return "Abgelehnt"
-            case RentStatus.RETURNED: return "Zurückgegeben"
+            case RentStatusEnum.CONFIRMED: return "Bestätigt"
+            case RentStatusEnum.WAITING: return "Warte auf Bestätigung"
+            case RentStatusEnum.DECLINED: return "Abgelehnt"
+            case RentStatusEnum.RETURNED: return "Zurückgegeben"
         }
     }
 }

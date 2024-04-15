@@ -3,8 +3,9 @@ import {Api, ccResponse, config} from "../base"
 import {Device} from "./device.service"
 import {Teacher} from "./teacher.service";
 import {Student} from "./student.service";
+import PopupEngine from "../popupEngine"
 
-export enum RentStatus {CREATED="CREATED", WAITING="WAITING", CONFIRMED="CONFIRMED", DECLINED="DECLINED", RETURNED="RETURNED"}
+export enum RentStatusEnum {CREATED="CREATED", WAITING="WAITING", CONFIRMED="CONFIRMED", DECLINED="DECLINED", RETURNED="RETURNED"}
 export interface Rent{
     type: RentTypeEnum
     rent_id: number
@@ -19,7 +20,7 @@ export interface Rent{
     creation_date: string //should be date but couldnt get that to work
     verification_code: string
     verification_message: string
-    status: RentStatus
+    status: RentStatusEnum
     note: string
 }
 
@@ -81,8 +82,8 @@ export default class RentService {
             })
     }
 
-    static return(rent: Rent) {
-        Api.postData(`/rent/getbyid/${rent.rent_id}/return`, rent)
+    static return(rentId: number) {
+        Api.fetchData(`/rent/getbyid/${rentId}/return`)
             .then(() => {
                 RentService.fetchAll()
             })
@@ -104,10 +105,29 @@ export default class RentService {
     }
 
     static requestConfirmation(rent: Rent) {
-        console.log(rent)
         Api.fetchData(`/rent/getbyid/${rent.rent_id}/sendconfirmation`)
             .then(() => {
                 RentService.fetchAll()
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
+
+    static updateStatus(rentId: number, code: string, status: RentStatusEnum, message: string) {
+        Api.postData(`/rent/getbyid/${rentId}/updatestatus`, {verification_code: code, status: status, verification_message: message})
+            .then((result) => {
+                if(result.ccStatus.statusCode == 1000){
+                    PopupEngine.createNotification({
+                        heading: "Verleih erfolgreich bestätigt",
+                    })
+                }
+                else if(result.ccStatus.statusCode == 1205){
+                    PopupEngine.createNotification({
+                        heading: "Falscher Bestätigungscode",
+                        text: "Wahrscheinlich ist der angegebene Link ungültig."
+                    })
+                }
             })
             .catch(error => {
                 console.error(error)

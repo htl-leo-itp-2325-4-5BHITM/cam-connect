@@ -18,6 +18,14 @@ interface ModalInput {
 	label?: string
 }
 
+interface NotificationSettings {
+	heading: string,
+	text?: string,
+	position?: string[],
+	CSSClass?: string | string[],
+	lifetime?: number
+}
+
 interface Config{
 	doLogs?: boolean
 	preferedInlinePopupPosition?: ("bottom" | "top")
@@ -34,7 +42,7 @@ interface Config{
 }
 
 interface ModalCallbackData{
-	inputValues?: HTMLInputElement[]
+	inputValues?: (string | number)[]
 	text?: string,
 	heading?: string,
 	buttons?: ModalButton[],
@@ -500,7 +508,7 @@ export default class PopupEngine{
 		}
 	}
 
-	static createNotification(settings){
+	static createNotification(settings: NotificationSettings){
 		if(!this.#checkHTML() || !settings )return
 
 		if(!settings.position)
@@ -774,6 +782,7 @@ export default class PopupEngine{
 			for (let i = 0; i < settings.buttons.length; i++) {
 				let button = document.createElement("button")
 				button.classList.add("popupEngineModalButton")
+				button.classList.add(settings?.buttons[i]?.role)
 				button.innerText = settings.buttons[i].text
 				button.onclick = function () { 
 					PopupEngine.closeModal(
