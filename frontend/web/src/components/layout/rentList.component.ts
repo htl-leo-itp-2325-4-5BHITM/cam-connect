@@ -18,9 +18,9 @@ export class RentListComponent extends LitElement {
             <style>${styles}</style>
             
             ${this.rents.value.map(rentByStudent => {
-            if(rentByStudent.rentList.every(rent => rent.status == RentStatus.RETURNED)) return
-            else return html`<cc-rent-list-student .rentByStudent="${rentByStudent}"></cc-rent-list-student>`
-        })}
+                if(rentByStudent.rentList.every(rent => rent.status == RentStatus.RETURNED)) return
+                else return html`<cc-rent-list-student .rentByStudent="${rentByStudent}"></cc-rent-list-student>`
+            })}
         `
     }
 }
