@@ -21,10 +21,11 @@ let pages = {
             }
         }
     },
+    edit: {
+      handler: () => { document.body.appendChild(document.createElement("cc-edit")) }
+    },
     confirm: {
-        handler: () => {
-            document.body.appendChild(document.createElement("cc-external-confirm"))
-        }
+        handler: () => { document.body.appendChild(document.createElement("cc-external-confirm")) }
     },
     default: {
         handler: () => {
@@ -33,9 +34,7 @@ let pages = {
         }
     },
     notFound: {
-        handler: () => {
-            document.body.appendChild(document.createElement("cc-not-found"))
-        }
+        handler: () => { document.body.appendChild(document.createElement("cc-not-found")) }
     }
 }
 
