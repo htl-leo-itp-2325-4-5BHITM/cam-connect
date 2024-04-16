@@ -25,9 +25,8 @@ export class ExternalConfirmComponent extends LitElement {
 
         this.appState = new ObservedProperty<AppState>(this, model.appState)
 
-        let rentIds = URLHandler.getParam("ids").split(",")
+        let rentIds = URLHandler.getParam("ids")?.split(",") || []
         if(rentIds && rentIds.length > 0) {
-            console.log(rentIds)
             Api.fetchData<Rent[]>(`/rent/getbyidlist/${rentIds.join(",")}`).then((data) => {
                 this.rents = data
                 console.log(this.rents)
@@ -37,14 +36,21 @@ export class ExternalConfirmComponent extends LitElement {
 
         }
 
-        this.rentConfirmationCodes = URLHandler.getParam("codes").split(",")
+        this.rentConfirmationCodes = URLHandler.getParam("codes")?.split(",") || []
         console.log(this.rentConfirmationCodes)
 
-        if(this.rentConfirmationCodes.length != rentIds.length && this.rentConfirmationCodes.length > 0){
+        if(this.rentConfirmationCodes.length != rentIds.length || this.rentConfirmationCodes.length == 0){
             //TODO connect to feedback system
             PopupEngine.createModal({
                 heading: "Fehler",
-                text: "Der angegebene Link ist ungültig, bitter schließe die Seite und klicke den Link erneut. Falls der Fehler weiter auftritt, wenden sie sich an die Administratoren"
+                text: "Der angegebene Link ist ungültig, bitter schließe die Seite und klicke den Link erneut. Falls der Fehler weiter auftritt, wenden sie sich an die Administratoren",
+                buttons: [
+                    {
+                        text: "okay",
+                        role: "confirm",
+                        action: () => { URLHandler.setUrl("/app/rents"); URLHandler.parseCurrentURL() }
+                    }
+                ]
             })
         }
     }
