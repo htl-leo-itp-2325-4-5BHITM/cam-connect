@@ -3,7 +3,7 @@ import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/rentListEntry.styles.scss'
 import {ButtonType} from "../basic/button.component"
 import {Api, ColorEnum, DatePickerWrapper, SizeEnum} from "../../base"
-import RentService, {Rent, RentStatus, RentTypeEnum} from "../../service/rent.service";
+import RentService, {Rent, RentStatusEnum, RentTypeEnum} from "../../service/rent.service";
 import {ChipType} from "../basic/chip.component"
 import {model} from "../../index"
 import {LineColor, LineType} from "../basic/line.component"
@@ -23,7 +23,7 @@ export class RentListEntryComponent extends LitElement {
     @property()
     rent: Rent
 
-    private lastStatus = RentStatus.WAITING
+    private lastStatus = RentStatusEnum.WAITING
 
     @property()
     private appState: ObservedProperty<AppState>
@@ -68,17 +68,17 @@ export class RentListEntryComponent extends LitElement {
         let chipText = ""
         let chipType
         switch (this.rent.status) {
-            case RentStatus.CONFIRMED:
+            case RentStatusEnum.CONFIRMED:
                 buttonClickBehavior = this.returnRent
                 buttonText = "Zurückgeben"
                 chipColor = ColorEnum.GOOD
                 chipText = "Bestätigt"
                 break
-            case RentStatus.WAITING:
+            case RentStatusEnum.WAITING:
                 chipColor = ColorEnum.MID
                 chipText = "Warte auf Bestätigung"
                 break
-            case RentStatus.DECLINED:
+            case RentStatusEnum.DECLINED:
                 buttonClickBehavior = this.removeRent
                 buttonColor = ColorEnum.GRAY
                 buttonText = "Löschen"
@@ -86,7 +86,7 @@ export class RentListEntryComponent extends LitElement {
                 chipText = "Abgelehnt"
                 chipType = ChipType.EXPANDABLE
                 break
-            case RentStatus.RETURNED:
+            case RentStatusEnum.RETURNED:
                 chipText = "Zurückgegeben"
                 break
         }
@@ -127,7 +127,7 @@ export class RentListEntryComponent extends LitElement {
     }
 
     generateRentContent() {
-        if(this.rent.status == RentStatus.DECLINED) { //editable rent
+        if(this.rent.status == RentStatusEnum.DECLINED) { //editable rent
             return html`
                 ${this.rent.type == RentTypeEnum.DEFAULT ?
                         html`
@@ -274,7 +274,7 @@ export class RentListEntryComponent extends LitElement {
                 {
                     text: "Ja",
                     action: (data) => {
-                        this.rent.status = RentStatus.WAITING
+                        this.rent.status = RentStatusEnum.WAITING
                         RentService.requestConfirmation(this.rent)
                     },
                     closePopup: true
@@ -311,7 +311,7 @@ export class RentListEntryComponent extends LitElement {
                 {
                     text: "Ja",
                     action: (data) => {
-                        RentService.return(this.rent)
+                        RentService.return(this.rent.rent_id)
                     },
                     closePopup: true
                 },

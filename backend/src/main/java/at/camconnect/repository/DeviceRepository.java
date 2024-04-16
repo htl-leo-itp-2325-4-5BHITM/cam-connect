@@ -88,6 +88,7 @@ public class DeviceRepository {
                     .setParameter("type_id", type_id)
                     .setParameter("number", number)
                     .getSingleResult();
+            getById(1L);
         }
         catch (Exception ex){
             throw new CCException(1200);

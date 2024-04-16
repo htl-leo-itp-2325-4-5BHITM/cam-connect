@@ -8,10 +8,9 @@ import { ObservedProperty, PageEnum} from "../../model"
 import {ButtonType} from "../basic/button.component"
 import {SimpleColorEnum, SizeEnum} from "../../base"
 import {model} from "../../index"
-import RentService, {RentStatus} from "../../service/rent.service";
+import RentService, {RentStatusEnum} from "../../service/rent.service";
 import PopupEngine from "../../popupEngine";
 import {AppState} from "../../AppState"
-import DeviceService from "../../service/device.service"
 import DeviceTypeService from "../../service/deviceType.service"
 
 @customElement('cc-toolbar')
@@ -113,7 +112,7 @@ export class ToolbarComponent extends LitElement {
         `
     }
 
-    isButtonDisabled(status: RentStatus) {
+    isButtonDisabled(status: RentStatusEnum) {
         if (this.appState.value.selectedRentEntries.size == 0) return true
 
         let isDisabled = false;
@@ -173,7 +172,7 @@ export class ToolbarComponent extends LitElement {
                     text: "Ja",
                     action: (data) => {
                         this.appState.value.selectedRentEntries.forEach((entry) => {
-                            RentService.return(entry.rent)
+                            RentService.return(entry.rent.rent_id)
                         })
                         this.uncheckAll("rent")
                     },
@@ -184,6 +183,36 @@ export class ToolbarComponent extends LitElement {
                 },
             ]
         })
+    }
+
+    renderEquipmentBar() {
+        return html`
+            <style>${styles}</style>
+            <div class="main equipment">
+                <div>
+                    <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}">
+                        <div slot="left" class="icon accent">
+                            ${unsafeSVG(icon(faCamera).html[0])}
+                        </div>
+                        Geräte bearbeiten
+                    </cc-button>
+                </div>
+                
+                <div>
+                    <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}">
+                        <div slot="left" class="icon accent">
+                            <img slot="left" src="../../../assets/icon/select_circle.svg" alt="+">
+                        </div>
+                        Auswahl aufheben
+                    </cc-button>
+    
+                    <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}">
+                        <div slot="left" class="icon accent">${unsafeSVG(icon(faTrash).html[0])}</div>
+                        Gerät(e) löschen
+                    </cc-button>
+                </div>
+            </div>
+        `
     }
 }
 

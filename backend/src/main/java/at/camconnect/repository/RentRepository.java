@@ -24,7 +24,6 @@ import jakarta.ws.rs.core.Response;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -125,6 +124,14 @@ public class RentRepository {
         return result;
     }
 
+    public List<Rent> getByIdList(String[] idList){
+        List<Rent> result = new LinkedList<>();
+        for(String id : idList){
+            result.add(getById(Long.parseLong(id)));
+        }
+        return result;
+    }
+
     /**
      * Sends a confirmation mail to the student
      * @param id the id of the rent
@@ -195,7 +202,7 @@ public class RentRepository {
     }
 
     @Transactional
-    public void confirm(Long rentId, RentDTO rentDTO) {
+    public void updateStatus(Long rentId, RentDTO rentDTO) {
         Rent rent = getById(rentId);
 
         if(!rent.getStatus().equals(RentStatusEnum.WAITING) && !rent.getStatus().equals(RentStatusEnum.CONFIRMED)){
@@ -214,7 +221,7 @@ public class RentRepository {
             throw new CCException(1106);
         }
 
-        Set<RentStatusEnum> allowedStatus = Set.of(RentStatusEnum.CONFIRMED, RentStatusEnum.DECLINED, RentStatusEnum.RETURNED);
+        Set<RentStatusEnum> allowedStatus = Set.of(RentStatusEnum.CONFIRMED, RentStatusEnum.DECLINED);
         // set only if the current status is allowed and if the verification_code is the same as provided
         if (allowedStatus.contains(verificationStatus) && rent.getVerification_code().equals(verificationCode)) {
             rent.setStatus(verificationStatus);
@@ -228,7 +235,7 @@ public class RentRepository {
     }
 
     @Transactional
-    public void returnRent(Long rentId, RentDTO rentDTO){
+    public void returnRent(Long rentId){
         Rent rent = getById(rentId);
 
         //instant return if already confirmed
@@ -302,7 +309,7 @@ public class RentRepository {
             catch(Exception ex){ throw new CCException(1105, "cannot update rent_end_actual " + ex.getMessage()); }
 
         if(validateJsonKey(rentJson,"status"))
-            try{ confirm(id, rentJson.getString("status")); }
+            try{ updateStatus(id, rentJson.getString("status")); }
             catch (CCException ccex){ throw ccex; }
             catch(Exception ex){ throw new CCException(1105, "cannot update status " + ex.getMessage()); }
 
@@ -417,7 +424,7 @@ public class RentRepository {
         rent.setRent_end_actual(LocalDate.parse(date));
     }
 
-    public void confirm(Long rentId, String status) {
+    public void updateStatus(Long rentId, String status) {
         Rent rent = getById(rentId);
         rent.setStatus(RentStatusEnum.valueOf(status));
     }
@@ -435,7 +442,7 @@ public class RentRepository {
         Rent rent = getById(rentId);
         rent.setDevice_string(device_string);
     }
-    public void confirm(Long rentId, RentStatusEnum verificationStatus){
+    public void updateStatus(Long rentId, RentStatusEnum verificationStatus){
         Rent rent = getById(rentId);
 
         if(rent.getStatus() == verificationStatus){

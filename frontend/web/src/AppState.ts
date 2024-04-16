@@ -6,7 +6,7 @@ import {KeyBoardShortCut} from "./base"
 import {AutocompleteComponent} from "./components/basic/autocomplete.component"
 import {Student} from "./service/student.service"
 import {DeviceType} from "./service/deviceType.service"
-import URLHandler from "./service/urlHandler.service"
+import URLHandler from "./urlHandler"
 import {DeviceListEntryComponent} from "./components/layout/deviceListEntry.component"
 
 interface actionCancellation {

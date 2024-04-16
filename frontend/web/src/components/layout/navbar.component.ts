@@ -12,7 +12,7 @@ import { SelectComponent } from "../basic/select.component"
 import {AppState} from "../../AppState"
 import DeviceService from "../../service/device.service"
 import RentService from "../../service/rent.service"
-import URLHandler from "../../service/urlHandler.service"
+import URLHandler from "../../urlHandler"
 
 @customElement('cc-navbar')
 export class NavbarComponent extends LitElement {

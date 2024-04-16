@@ -31,6 +31,10 @@
     margin-bottom: 1rem;
   }
 
+  .popupEngineModalText{
+    margin-bottom: .5rem;
+  }
+
   .popupEngineModalButton{
     margin-top: 1rem;
     background-color: $accent;
@@ -41,6 +45,26 @@
     &:hover{
       background-color: $accentDark;
     }
+
+    &.cancel{
+      background-color: transparent;
+      outline: 2px solid $accent;
+    }
+  }
+
+  .popupEngineModalInput{
+    padding: .5rem;
+  }
+
+  .popupEngineNotification{
+    padding: .5rem;
+    border: 1px solid $gray600;
+    border-radius: .5rem;
+  }
+
+  .popupEngineNotificationHeading{
+    font-weight: bold;
+    margin-bottom: .2rem;
   }
 }
 

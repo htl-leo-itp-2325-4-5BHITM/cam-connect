@@ -35,12 +35,14 @@ import '../styles/index.scss'
 import Model, {ObservedProperty, PageEnum} from "./model"
 import {Api, KeyBoardShortCut} from "./base"
 import PopupEngine from "./popupEngine";
-import URLHandler from "./service/urlHandler.service"
+import URLHandler from "./urlHandler"
 
 //OMG its our single swouce of THWQUUUCE
 export let model = new Model()
 
-URLHandler.parseCurrentURL()
+window.addEventListener("DOMContentLoaded", () => {
+    URLHandler.parseCurrentURL()
+})
 
 /*model.appState.subscribe(data => {
     console.log(data)
@@ -48,7 +50,6 @@ URLHandler.parseCurrentURL()
 
 PopupEngine.init({
     onModalOpen: () => {
-        console.log("modal open")
         model.appState.value.addCurrentActionCancellation(() => {
             PopupEngine.cancelModal()
         }, "modalClose")
