@@ -31,7 +31,7 @@ let pages = {
             if(document.querySelector('cc-not-found')) {
                 document.body.removeChild(document.querySelector('cc-not-found'))
             }
-            URLHandler.setUrl("app/rents")
+            URLHandler.updateUrl("app/rents")
             URLHandler.parseCurrentURL()
         }
     },
@@ -116,10 +116,24 @@ export default class URLHandler {
         window.history.replaceState(params, "", url)
     }
 
-    static setUrl(url: string){
+    /**
+     * updates url to what was supplied without changing the params or reloading the page
+     * ment for navigation between pages like equipment and rents
+     * @param url
+     */
+    static updateUrl(url: string){
         let params = window.location.href.split("?")[1]
 
         window.history.pushState({}, "", url + (params != undefined ? "?" + params : ""))
+    }
+
+    /**
+     * sets url and params to what was supplied, also reloads page
+     * ment for navigation between different pages like app and confirm
+     * @param url
+     */
+    static setUrl(url: string){
+        window.location.href = url
     }
 
     static clearParams() {

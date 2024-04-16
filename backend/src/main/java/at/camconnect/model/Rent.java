@@ -87,24 +87,6 @@ public class Rent {
         this.status = RentStatusEnum.WAITING;
     }
 
-    @Override
-    public String toString() {
-        return "Rent{" +
-                "rent_id=" + rent_id +
-                ", student=" + student +
-                ", device=" + device +
-                ", teacherStart=" + teacher_start +
-                ", teacherEnd=" + teacher_end +
-                ", rent_start=" + rent_start +
-                ", rent_end_planned=" + rent_end_planned +
-                ", rent_end_actual=" + rent_end_actual +
-                ", creation_date=" + creation_date +
-                ", status=" + status +
-                ", code=" + verification_code +
-                ", note='" + note + '\'' +
-                '}';
-    }
-
     public String generateVerification_code() {
         //this could possibly result in a problem with case sensitivity in urls
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -121,6 +103,24 @@ public class Rent {
         this.verification_code = sb.toString();
 
         return this.verification_code;
+    }
+
+    @Override
+    public String toString() {
+        return "Rent{" +
+                "rent_id=" + rent_id +
+                ", student=" + student +
+                ", device=" + device +
+                ", teacherStart=" + teacher_start +
+                ", teacherEnd=" + teacher_end +
+                ", rent_start=" + rent_start +
+                ", rent_end_planned=" + rent_end_planned +
+                ", rent_end_actual=" + rent_end_actual +
+                ", creation_date=" + creation_date +
+                ", status=" + status +
+                ", code=" + verification_code +
+                ", note='" + note + '\'' +
+                '}';
     }
 
     //region getter setter

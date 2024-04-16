@@ -23,13 +23,18 @@ export class ButtonComponent extends LitElement {
     color?: ColorEnum = ColorEnum.ACCENT
 
     @property({type: String})
-    text?: String = this.innerText || "Button"
+    text?: string = this.innerText || "Button"
 
     @property({type: Boolean})
     disabled?: boolean = false
 
     @property({type: Boolean})
     noPadding?: boolean = false
+
+    @property({type: Boolean})
+    loading?: boolean = false
+
+    private storedText: string = "smoothy went wrong"
 
     render() {
         return html`
@@ -39,6 +44,19 @@ export class ButtonComponent extends LitElement {
                 ${this.text}
                 <slot name="right"></slot>
             </button>`
+    }
+
+    protected firstUpdated(_changedProperties: PropertyValues) {
+        super.firstUpdated(_changedProperties);
+        if(this.loading)
+        this.addEventListener("click", () => {
+            this.storedText = this.text
+            this.text = "loading.."
+        })
+    }
+
+    loadingFinished(){
+        this.text = this.storedText
     }
 }
 

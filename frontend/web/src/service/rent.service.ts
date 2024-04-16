@@ -4,6 +4,7 @@ import {Device} from "./device.service"
 import {Teacher} from "./teacher.service";
 import {Student} from "./student.service";
 import PopupEngine from "../popupEngine"
+import Util from "../util"
 
 export enum RentStatusEnum {CREATED="CREATED", WAITING="WAITING", CONFIRMED="CONFIRMED", DECLINED="DECLINED", RETURNED="RETURNED"}
 export interface Rent{
@@ -114,23 +115,34 @@ export default class RentService {
             })
     }
 
-    static updateStatus(rentId: number, code: string, status: RentStatusEnum, message: string) {
-        Api.postData(`/rent/getbyid/${rentId}/updatestatus`, {verification_code: code, status: status, verification_message: message})
-            .then((result) => {
-                if(result.ccStatus.statusCode == 1000){
-                    PopupEngine.createNotification({
-                        heading: "Verleih erfolgreich bestätigt",
-                    })
-                }
-                else if(result.ccStatus.statusCode == 1205){
-                    PopupEngine.createNotification({
-                        heading: "Falscher Bestätigungscode",
-                        text: "Wahrscheinlich ist der angegebene Link ungültig."
-                    })
-                }
-            })
-            .catch(error => {
-                console.error(error)
-            })
+    static async updateStatus(rentId: number, code: string, status: RentStatusEnum, message: string) {
+        return new Promise((resolve, reject) => {
+            Api.postData(`/rent/getbyid/${rentId}/updatestatus`, {verification_code: code, status: status, verification_message: message})
+                .then((result) => {
+                    if(result.ccStatus.statusCode == 1000){
+                        PopupEngine.createNotification({
+                            heading: "Verleih erfolgreich " + Util.rentStatusToHuman(status),
+                        })
+                        resolve(true)
+                    }
+                    else if(result.ccStatus.statusCode == 1205){
+                        PopupEngine.createNotification({
+                            heading: "Falscher Bestätigungscode",
+                            text: "Wahrscheinlich ist der angegebene Link ungültig."
+                        })
+                        resolve(false)
+                    }
+                    else if(result.ccStatus.statusCode == 1201){
+                        PopupEngine.createNotification({
+                            heading: "Fehler",
+                            text: "Dieser verleih wurde schon bestätigt oder abgelehnt."
+                        })
+                        resolve(false)
+                    }
+                })
+                .catch(error => {
+                    console.error(error)
+                })
+        })
     }
 }

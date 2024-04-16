@@ -13,6 +13,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @Path("/rent")
@@ -24,9 +25,9 @@ public class RentResource {
     @POST
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createRent(List<CreateRentDTO> rent) {
+    public Response createRent(List<CreateRentDTO> rents) {
         try{
-            rentRepository.create(rent);
+            rentRepository.create(rents);
         } catch(CCException ex){
             return CCResponse.error(ex);
         }
@@ -100,11 +101,25 @@ public class RentResource {
     @Path("/getbyid/{id: [0-9]+}/sendconfirmation")
     public Response sendConfirmation(@PathParam("id") Long id) {
         try {
-            rentRepository.requestConfirmationMail(id);
+            List<Rent> rentList = new LinkedList<>();
+            rentList.add(rentRepository.getById(id));
+            rentRepository.sendConfirmationEmail(rentList);
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }
         return CCResponse.ok();
+    }
+
+    @GET
+    @Path("/getbyid/{id: [0-9]+}/verifyconfirmationcode/{code}")
+    public Response verifyConfirmationCode(@PathParam("id") Long id, @PathParam("code") String code) {
+        boolean result;
+        try {
+            result = rentRepository.verifyConfirmationCode(id, code);
+        } catch (CCException ex) {
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok(result);
     }
 
     @POST

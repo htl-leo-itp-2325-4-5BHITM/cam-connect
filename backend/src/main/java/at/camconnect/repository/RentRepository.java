@@ -43,8 +43,10 @@ public class RentRepository {
     DeviceRepository deviceRepository;
 
     @Transactional
-    public void create(List<CreateRentDTO> rentList){
-        for(CreateRentDTO rentDTO : rentList){
+    public void create(List<CreateRentDTO> rentDTOs){
+        List<Rent> rents = new LinkedList<>();
+
+        for(CreateRentDTO rentDTO : rentDTOs){
             Rent rent;
             if(rentDTO.type() == RentTypeEnum.DEFAULT){
                 rent = new Rent(
@@ -69,10 +71,11 @@ public class RentRepository {
                 throw new CCException(1206, "Rent type was invalid");
             }
 
+            rents.add(rent);
             em.persist(rent);
-
-            requestConfirmationMail(rent.getRent_id());
         }
+
+        sendConfirmationEmail(rents);
         rentSocket.broadcast();
     }
 
@@ -132,25 +135,17 @@ public class RentRepository {
         return result;
     }
 
-    /**
-     * Sends a confirmation mail to the student
-     * @param id the id of the rent
-     * @return the sent mail
-     */
     @Transactional
-    public MailClient requestConfirmationMail(Long id){
-        Rent rent = getById(id);
-        //does it make sense to check it still, because if it does we have to change something because every rent is waiting by default
-        /**if(rent.getStatus().equals(RentStatusEnum.WAITING)){
-            throw new CCException(1205, "Email is already sent or rent is already confirmed");
-        }**/
+    public void sendConfirmationEmail(List<Rent> rentList){
+        for (Rent rent : rentList) {
+            rent.setStatus(RentStatusEnum.WAITING);
+            rent.generateVerification_code();
+            em.merge(rent);
+        }
 
-        MailMessage message = generateConfirmationMailMessage(id);
+        MailMessage message = generateConfirmationMailMessage(rentList);
 
-        rent.setStatus(RentStatusEnum.WAITING);
-        em.merge(rent);
-
-        return client.sendMail(message, result -> {
+        client.sendMail(message, result -> {
             if (result.succeeded()) {
                 System.out.println("Email sent successfully");
             } else {
@@ -161,52 +156,66 @@ public class RentRepository {
     }
 
     @Transactional
-    public MailMessage generateConfirmationMailMessage(Long id) {
+    public MailMessage generateConfirmationMailMessage(List<Rent> rents) {
+        //TODO do this with env variables
         String FRONTEND_URL = "http://144.24.171.164/public/";
 
         String os = System.getProperty("os.name").toLowerCase();
 
         if (os.contains("win")) {
-            FRONTEND_URL = "http://localhost:3000";
+            FRONTEND_URL = "http://localhost:4200";
         }
-
-        Rent rent = getById(id);
 
         MailMessage message = new MailMessage();
         message.setFrom("signup.camconnect@gmail.com");
-        String email = rent.getStudent().getEmail();
+        String email = rents.get(0).getStudent().getEmail();
         message.setTo(email);
         message.setSubject("Bestätigung des Geräteverleih");
 
-        String verification_code = rent.generateVerification_code();
-        em.merge(rent);
+        StringBuilder rentListString = new StringBuilder();
+        StringBuilder verificationCodes = new StringBuilder();
+        StringBuilder rentIds = new StringBuilder();
 
-        String urlDecline = FRONTEND_URL + "/confirmVerification.html?vcode=" + verification_code + "&id=" + id;
-        String urlAccept = urlDecline + "&isAccepted=true";
+        boolean first = true;
+        for (Rent rent : rents) {
+            if(first){
+                first = false;
+            }
+            else{
+                verificationCodes.append(",");
+                rentIds.append(",");
+            }
 
-        System.out.println(urlDecline);
-        System.out.println(urlAccept);
+            verificationCodes.append(rent.getVerification_code());
+            rentIds.append(rent.getRent_id());
 
-        if(rent.getType() == RentTypeEnum.DEFAULT)
-            message.setHtml("Bitte bestätige oder lehne deinen Verleih ab:<br>" +
-                    "<p>" + rent.getDevice().getType().getName() + " " + rent.getDevice().getNumber() + " von: " + rent.getRent_start() + " bis: " + rent.getRent_end_planned() + "</p>" +
-                     "<div><a style='margin: 2rem; padding: .5rem 1rem; color: black;' href='" + urlAccept + "'>Bestätigen</a>" +
-                    "<a style='margin: 2rem; padding: .5rem 1rem; color: black;' href='" + urlDecline + "'>Ablehnen</a></div>");
-        else
-            message.setHtml("Bitte bestätige oder lehne deinen Verleih ab:<br>" +
-                    "<p>" + rent.getDevice_string() + " von: " + rent.getRent_start() + " bis: " + rent.getRent_end_planned() + "</p>" +
-                     "<div><a style='margin: 2rem; padding: .5rem 1rem; color: black;' href='" + urlAccept + "'>Bestätigen</a>" +
-                    "<a style='margin: 2rem; padding: .5rem 1rem; color: black;' href='" + urlDecline + "'>Ablehnen</a></div>");
+            if(rent.getType() == RentTypeEnum.DEFAULT)
+                rentListString.append("<p>" + rent.getDevice().getType().getName() + " " + rent.getDevice().getNumber() + " von: " + rent.getRent_start() + " bis: " + rent.getRent_end_planned() + "</p>");
+            else
+                rentListString.append("<p>" + rent.getDevice_string() + " von: " + rent.getRent_start() + " bis: " + rent.getRent_end_planned() + "</p>");
+        }
+
+        String url = FRONTEND_URL + "/confirm?ids=" + rentIds + "&codes=" + verificationCodes;
+
+        System.out.println(url);
+
+        message.setHtml("Bitte bestätige oder lehne deinen Verleih ab:<br>" +
+                rentListString +
+                 "<div><a style='margin: 2rem; padding: .5rem 1rem; color: black;' href='" + url + "'>Zur Übersicht</a>");
 
         return message;
+    }
+
+    public boolean verifyConfirmationCode(Long id, String code){
+        return getById(id).getVerification_code().equals(code);
     }
 
     @Transactional
     public void updateStatus(Long rentId, RentDTO rentDTO) {
         Rent rent = getById(rentId);
 
-        if(!rent.getStatus().equals(RentStatusEnum.WAITING) && !rent.getStatus().equals(RentStatusEnum.CONFIRMED)){
-            throw new CCException(1205);
+        if(!rent.getStatus().equals(RentStatusEnum.WAITING)){
+            throw new CCException(1201);
         }
 
         String verificationCode;

@@ -7,6 +7,11 @@ import AirDatepicker from "air-datepicker"
 import localeDe from "air-datepicker/locale/de"
 import {model} from "./index"
 import {config} from "./base"
+import {RentStatusEnum} from "./service/rent.service"
+import {unsafeSVG} from 'lit/directives/unsafe-svg.js'
+import {icon} from "@fortawesome/fontawesome-svg-core"
+import {faCheck, faXmark, faQuestion} from "@fortawesome/free-solid-svg-icons"
+import {html} from "lit"
 export default class Util{
     //TODO this typing does not seem right
     static deviceTypeToFilterOption(deviceTypes: DeviceTypeSource): FilterOption{
@@ -101,6 +106,39 @@ export default class Util{
         }
         else{
             return elem.clientHeight - parseFloat(styles.paddingTop) - parseFloat(styles.paddingBottom)
+        }
+    }
+
+    static rentStatusToHuman(status: RentStatusEnum){
+        switch (status) {
+            case RentStatusEnum.CONFIRMED:
+                return "Bestätigt"
+            case RentStatusEnum.RETURNED:
+                return "Zurückgegeben"
+            case RentStatusEnum.DECLINED:
+                return "Abgelehnt"
+            case RentStatusEnum.WAITING:
+                return "Ausstehend"
+            case RentStatusEnum.CREATED:
+                return "Erstellt"
+            default:
+                return "Unbekannt"
+
+        }
+    }
+
+    static rentStatusToIcon(status: RentStatusEnum){
+        switch (status) {
+            case RentStatusEnum.CONFIRMED:
+                return html`${unsafeSVG(icon(faCheck).html[0])}`
+            case RentStatusEnum.RETURNED:
+                return html`<img src="../assets/icon/return.svg" alt="<-">`
+            case RentStatusEnum.DECLINED:
+                return html`${unsafeSVG(icon(faXmark).html[0])}`
+            case RentStatusEnum.WAITING:
+                return html`${unsafeSVG(icon(faQuestion).html[0])}`
+            case RentStatusEnum.CREATED:
+                return html``
         }
     }
 }

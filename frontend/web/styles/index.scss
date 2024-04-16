@@ -24,6 +24,7 @@
   .popupEngineModalContent{
     padding: 1rem;
     border-radius: 1rem;
+    max-width: min(550px, 80vw);
   }
 
   .popupEngineModalHeading{

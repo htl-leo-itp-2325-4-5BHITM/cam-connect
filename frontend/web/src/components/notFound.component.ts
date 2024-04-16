@@ -16,7 +16,7 @@ export class NotFoundComponent extends LitElement {
     }
 
     backToRentList(){
-        URLHandler.setUrl("/")
+        URLHandler.updateUrl("/")
         URLHandler.parseCurrentURL()
     }
 }

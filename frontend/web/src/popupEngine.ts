@@ -534,11 +534,14 @@ export default class PopupEngine{
 		}
 
 		//generate text
-		let popupText = document.createElement("p")
-		popupText.classList.add("popupEngineNotificationText")
-		popupText.innerHTML = settings.text || "no text specified"
+		if(settings.text && settings.text != "") {
+			let popupText = document.createElement("p")
+			popupText.classList.add("popupEngineNotificationText")
+			popupText.innerHTML = settings.text
 
-		content.appendChild(popupText)
+			content.appendChild(popupText)
+		}
+		
 		noti.appendChild(content)
 
 		//create close icon

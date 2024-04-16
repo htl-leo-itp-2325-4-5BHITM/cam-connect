@@ -73,6 +73,7 @@ export class Api {
 
     static handleCCError(statusCode: number, details: string, url:string): boolean {
         if(statusCode == 1000) return true
+        if(statusCode == 1)
         console.log("something went wrong in the backend trying to reach endpoint: ", url, "statusCode: ", statusCode + ". Details:", details)
         return false
     }

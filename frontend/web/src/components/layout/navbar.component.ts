@@ -45,7 +45,7 @@ export class NavbarComponent extends LitElement {
             <cc-select size="${SizeEnum.MEDIUM}" spacerColor="${SimpleColorEnum.ACCENT}" 
                        .optionSelected = "${(elem) => {
                            this.appState.value.page = elem.dataset.page
-                           URLHandler.setUrl(elem.dataset.page)
+                           URLHandler.updateUrl(elem.dataset.page)
                        }
             }">
                 <p data-page="equipment" class="${this.appState.value.page == PageEnum.EQUIPMENT ? 'selected' : ''}"

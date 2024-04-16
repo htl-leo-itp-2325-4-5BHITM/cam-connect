@@ -46,6 +46,21 @@ ul{
     .date{
       color: $gray700;
     }
+
+    cc-button{
+      margin-left: .5rem;
+    }
+
+    p.done{
+      color: $gray700
+    }
+
+    svg, img{
+      height: 1rem;
+      path{
+        color: $gray700;
+      }
+    }
   }
 }
 
