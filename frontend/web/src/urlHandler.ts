@@ -21,29 +21,32 @@ let pages = {
             }
         }
     },
+    edit: {
+      handler: () => { document.body.appendChild(document.createElement("cc-edit")) }
+    },
     confirm: {
-        handler: () => {
-            document.body.appendChild(document.createElement("cc-external-confirm"))
-        }
+        handler: () => { document.body.appendChild(document.createElement("cc-external-confirm")) }
     },
     default: {
         handler: () => {
-            if(document.querySelector('cc-not-found')) {
-                document.body.removeChild(document.querySelector('cc-not-found'))
-            }
             URLHandler.updateUrl("app/rents")
             URLHandler.parseCurrentURL()
         }
     },
     notFound: {
-        handler: () => {
-            document.body.appendChild(document.createElement("cc-not-found"))
-        }
+        handler: () => { document.body.appendChild(document.createElement("cc-not-found")) }
     }
 }
 
 export default class URLHandler {
     static parseCurrentURL () {
+        let queries = ['cc-not-found', 'cc-external-confirm', 'cc-app']
+        queries.forEach(elem => {
+            if(document.querySelector(elem)) {
+                document.body.removeChild(document.querySelector(elem))
+            }
+        })
+
         let urlSplit = window.location.href.split("?")[0]?.split("/")
         urlSplit.splice(0, 3)
 

@@ -11,11 +11,22 @@ import {
     DeviceTypeVariantEnum,
     DroneType, LensType, LightType, StabilizerType, TripodType, SimpleType
 } from "../../service/deviceType.service"
+import {ObservedProperty} from "../../model"
+import {AppState} from "../../AppState"
+import {model} from "../../index"
 
 @customElement('cc-device-list-entry')
 export class DeviceListEntryComponent extends LitElement {
     @property()
     deviceTypeFull?: DeviceTypeFullDTO
+
+    @property()
+    private appState: ObservedProperty<AppState>
+
+    constructor() {
+        super()
+        this.appState = new ObservedProperty<AppState>(this, model.appState)
+    }
 
     render() {
         let details;
@@ -33,19 +44,24 @@ export class DeviceListEntryComponent extends LitElement {
         return html`
             <style>${styles}</style>
             <h3>${this.deviceTypeFull.deviceType.name}</h3>
-            <div class="tags">
-                ${
+            ${this.deviceTypeFull.deviceTags.length != 0 ? 
+                html`<div class="tags">
+                    ${
                         this.deviceTypeFull.deviceTags.map(tag => {
                             return html`<cc-chip color="${ColorEnum.GRAY}" text="${tag.description}"></cc-chip>`
                         })
-                }
-            </div>
+                    }
+                </div>` : ''
+            }
             ${details}
             <div class="bottom">
-                <cc-chip color="${ColorEnum.GOOD}" text="${this.deviceTypeFull.available} Verfügbar"></cc-chip>
+                <cc-chip color="${this.deviceTypeFull.available ? ColorEnum.GOOD : ColorEnum.BAD}" 
+                         text="${this.deviceTypeFull.available ? (this.deviceTypeFull.available + ' Verfügbar') : 'Vergeben'}"
+                ></cc-chip>
                 <cc-button type="${ButtonType.OUTLINED}">Verleihen</cc-button>
             </div>
-            <cc-circle-select></cc-circle-select>
+            <cc-circle-select .checked="${this.appState.value.selectedDeviceEntries.has(this)}"
+                              @click="${() => {this.toggleDeviceCheck()}}"></cc-circle-select>
         `
     }
 
@@ -54,11 +70,11 @@ export class DeviceListEntryComponent extends LitElement {
         return html`
             <section>
                 <div class="details">
-                    <cc-property-value size="small" property="System" value="${camera.system.name}"></cc-property-value>
-                    <cc-property-value size="small" property="Sensor" value="${camera.sensor}" isLink></cc-property-value>
+                    <cc-property-value size="small" property="System" value="${camera.system.name}" isLink></cc-property-value>
+                    <cc-property-value size="small" property="Sensor" value="${camera.sensor?.name}" isLink></cc-property-value>
                     <cc-property-value size="small" property="Auflösung" value="${camera.resolution.name}"></cc-property-value>
                     <cc-property-value size="small" property="Maximale-Framerate" value="${camera.framerate}fps"></cc-property-value>
-                    <cc-property-value size="small" property="Mount" value="${camera.mount}" isLink></cc-property-value>
+                    <cc-property-value size="small" property="Mount" value="${camera.mount?.name}" isLink></cc-property-value>
                     <cc-property-value size="small" property="Autofokus" value="${camera.autofocus ? 'Ja' : 'Nein'}"></cc-property-value>
                 </div>
                 <div class="image">
@@ -89,8 +105,8 @@ export class DeviceListEntryComponent extends LitElement {
         return html`
             <section>
                 <div class="details">
-                    <cc-property-value size="small" property="Sensor" value="${drone.sensor}"></cc-property-value>
-                    <cc-property-value size="small" property="Auflösung" value="${drone.resolution}"></cc-property-value>
+                    <cc-property-value size="small" property="Sensor" value="${drone.sensor?.name}" isLink></cc-property-value>
+                    <cc-property-value size="small" property="Auflösung" value="${drone.resolution.resolution}"></cc-property-value>
                     <cc-property-value size="small" property="Maximale Reichweite" value="${drone.max_range}"></cc-property-value>
                 </div>
                 <div class="image">
@@ -105,7 +121,7 @@ export class DeviceListEntryComponent extends LitElement {
         return html`
             <section>
                 <div class="details">
-                    <cc-property-value size="small" property="Lensmount" value="${lens.lens_mount}"></cc-property-value>
+                    <cc-property-value size="small" property="Lensmount" value="${lens.lens_mount.name}"></cc-property-value>
                     <cc-property-value size="small" property="Blende" value="${lens.f_stop}"></cc-property-value>
                     <cc-property-value size="small" property="Brennweite" value="${lens.focal_length}"></cc-property-value>
                 </div>
@@ -174,6 +190,20 @@ export class DeviceListEntryComponent extends LitElement {
                 </div>
             </section>
         `
+    }
+
+    toggleDeviceCheck(checked?: boolean){
+        if(!checked) checked = !this.isChecked()
+
+        if(checked){
+            this.appState.value.addSelectedDeviceEntry(this)
+        } else{
+            this.appState.value.removeSelectedDeviceEntry(this)
+        }
+    }
+
+    isChecked(){
+        return this.appState.value.selectedDeviceEntries.has(this)
     }
 }
 

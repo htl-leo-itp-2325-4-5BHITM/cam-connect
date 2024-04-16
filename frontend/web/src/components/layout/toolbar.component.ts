@@ -11,6 +11,8 @@ import {model} from "../../index"
 import RentService, {RentStatusEnum} from "../../service/rent.service";
 import PopupEngine from "../../popupEngine";
 import {AppState} from "../../AppState"
+import DeviceTypeService from "../../service/deviceType.service"
+import {RentStatus} from "../basic/rentStatus.component"
 
 @customElement('cc-toolbar')
 export class ToolbarComponent extends LitElement {
@@ -49,7 +51,7 @@ export class ToolbarComponent extends LitElement {
                 </div>
 
                 <div>
-                    <cc-button @click="${this.uncheckAll}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" 
+                    <cc-button @click="${() => {this.uncheckAll('rent')}}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" 
                                type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.uncheckAll}">
                         <div slot="left" class="icon accent">
                             <img slot="left" src="../../../assets/icon/select_circle.svg" alt="+">
@@ -57,7 +59,7 @@ export class ToolbarComponent extends LitElement {
                         Auswahl aufheben
                     </cc-button>
                     
-                    <cc-button @click="${this.removeSelection}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.remove}">
+                    <cc-button @click="${() => {this.removeSelection('rent')}}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.remove}">
                         <div slot="left" class="icon accent">
                             ${unsafeSVG(icon(faTrash).html[0])}
                         </div>
@@ -69,6 +71,42 @@ export class ToolbarComponent extends LitElement {
                             <img slot="left" src="../../../assets/icon/return.svg" alt="<-">                    
                         </div>
                         Zurückgeben
+                    </cc-button>
+                </div>
+            </div>
+        `
+    }
+
+    renderEquipmentBar() {
+        let isButtonDisabled = {
+            uncheckAll: this.appState.value.selectedDeviceEntries.size == 0,
+            remove: this.appState.value.selectedDeviceEntries.size == 0,
+        }
+
+        return html`
+            <style>${styles}</style>
+            <div class="main equipment">
+                <div>
+                    <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}">
+                        <div slot="left" class="icon accent">
+                            ${unsafeSVG(icon(faCamera).html[0])}
+                        </div>
+                        Geräte bearbeiten
+                    </cc-button>
+                </div>
+                
+                <div>
+                    <cc-button @click=${() => {this.uncheckAll("device")}}
+                               size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.uncheckAll}">
+                        <div slot="left" class="icon accent">
+                            <img slot="left" src="../../../assets/icon/select_circle.svg" alt="+">
+                        </div>
+                        Auswahl aufheben
+                    </cc-button>
+    
+                    <cc-button @click="${() => {this.removeSelection('device')}}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.remove}">
+                        <div slot="left" class="icon accent">${unsafeSVG(icon(faTrash).html[0])}</div>
+                        Gerät(e) löschen
                     </cc-button>
                 </div>
             </div>
@@ -87,23 +125,36 @@ export class ToolbarComponent extends LitElement {
         return isDisabled
     }
 
-    uncheckAll() {
-        this.appState.value.selectedRentEntries.forEach((entry) => {
-            entry.toggleRentCheck(false)
-        })
+    uncheckAll(type) {
+        if(type === "rent"){
+            this.appState.value.selectedRentEntries.forEach((entry) => {
+                entry.toggleRentCheck(false)
+            })
+        } else if(type === "device"){
+            this.appState.value.selectedDeviceEntries.forEach((entry) => {
+                console.log(entry)
+                entry.toggleDeviceCheck(false)
+            })
+        }
     }
 
-    removeSelection() {
+    removeSelection(type) {
         PopupEngine.createModal({
-            text: "Willst du wirklich diese Verleihe löschen?",
+            text: `Willst du wirklich diese ${type === 'rent' ? 'Verleihe' : 'Geräte'} löschen?`,
             buttons: [
                 {
                     text: "Ja",
                     action: (data) => {
-                        this.appState.value.selectedRentEntries.forEach((entry) => {
-                            RentService.remove(entry.rent)
-                        })
-                        this.uncheckAll()
+                        if(type === 'rent'){
+                            this.appState.value.selectedRentEntries.forEach((entry) => {
+                                RentService.remove(entry.rent)
+                            })
+                        } else if(type === 'device'){
+                            this.appState.value.selectedDeviceEntries.forEach((entry) => {
+                                DeviceTypeService.remove(entry.deviceTypeFull.deviceType)
+                            })
+                        }
+                        this.uncheckAll(type)
                     },
                     closePopup: true
                 },
@@ -124,7 +175,7 @@ export class ToolbarComponent extends LitElement {
                         this.appState.value.selectedRentEntries.forEach((entry) => {
                             RentService.return(entry.rent.rent_id)
                         })
-                        this.uncheckAll()
+                        this.uncheckAll("rent")
                     },
                     closePopup: true
                 },
@@ -133,36 +184,6 @@ export class ToolbarComponent extends LitElement {
                 },
             ]
         })
-    }
-
-    renderEquipmentBar() {
-        return html`
-            <style>${styles}</style>
-            <div class="main equipment">
-                <div>
-                    <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}">
-                        <div slot="left" class="icon accent">
-                            ${unsafeSVG(icon(faCamera).html[0])}
-                        </div>
-                        Geräte bearbeiten
-                    </cc-button>
-                </div>
-                
-                <div>
-                    <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}">
-                        <div slot="left" class="icon accent">
-                            <img slot="left" src="../../../assets/icon/select_circle.svg" alt="+">
-                        </div>
-                        Auswahl aufheben
-                    </cc-button>
-    
-                    <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}">
-                        <div slot="left" class="icon accent">${unsafeSVG(icon(faTrash).html[0])}</div>
-                        Gerät(e) löschen
-                    </cc-button>
-                </div>
-            </div>
-        `
     }
 }
 

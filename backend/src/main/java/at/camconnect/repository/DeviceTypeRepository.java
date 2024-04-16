@@ -1,6 +1,7 @@
 package at.camconnect.repository;
 
 import at.camconnect.dtos.*;
+import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.model.DeviceTypeAttributes.*;
 import at.camconnect.model.Student;
 import at.camconnect.model.Tag;
@@ -59,13 +60,13 @@ public class DeviceTypeRepository {
     }
 
     public DeviceTypeCollection getAll(){
-        List<CameraType> cameraTypes = em.createQuery("SELECT d FROM CameraType d", CameraType.class).getResultList();
-        List<DroneType> droneTypes = em.createQuery("SELECT d FROM DroneType d", DroneType.class).getResultList();
-        List<LensType> lensTypes = em.createQuery("SELECT d FROM LensType d", LensType.class).getResultList();
-        List<LightType> lightTypes = em.createQuery("SELECT d FROM LightType d", LightType.class).getResultList();
-        List<MicrophoneType> microphoneTypes = em.createQuery("SELECT d FROM MicrophoneType d", MicrophoneType.class).getResultList();
-        List<StabilizerType> stabilizerTypes = em.createQuery("SELECT d FROM StabilizerType d", StabilizerType.class).getResultList();
-        List<TripodType> tripodTypes = em.createQuery("SELECT d FROM TripodType d", TripodType.class).getResultList();
+        List<CameraType> cameraTypes = em.createQuery("SELECT d FROM CameraType d WHERE d.status != :status", CameraType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
+        List<DroneType> droneTypes = em.createQuery("SELECT d FROM DroneType d where d.status != :status", DroneType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
+        List<LensType> lensTypes = em.createQuery("SELECT d FROM LensType d where d.status != :status", LensType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
+        List<LightType> lightTypes = em.createQuery("SELECT d FROM LightType d where d.status != :status", LightType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
+        List<MicrophoneType> microphoneTypes = em.createQuery("SELECT d FROM MicrophoneType d where d.status != :status", MicrophoneType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
+        List<StabilizerType> stabilizerTypes = em.createQuery("SELECT d FROM StabilizerType d where d.status != :status", StabilizerType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
+        List<TripodType> tripodTypes = em.createQuery("SELECT d FROM TripodType d where d.status != :status", TripodType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
 
         return new DeviceTypeCollection(cameraTypes, droneTypes, lensTypes, lightTypes, microphoneTypes, stabilizerTypes, tripodTypes);
     }
@@ -116,7 +117,9 @@ public class DeviceTypeRepository {
     }
 
     public void remove(Long id){
-        em.remove(getById(id));
+        DeviceType deviceType = getById(id);
+        deviceType.setStatus(DeviceTypeStatusEnum.disabled);
+        em.merge(deviceType);
     }
 
     public DeviceType update(Long id, DeviceTypeGlobalIdDTO data){

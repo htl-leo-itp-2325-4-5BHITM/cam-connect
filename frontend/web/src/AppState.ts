@@ -7,6 +7,7 @@ import {AutocompleteComponent} from "./components/basic/autocomplete.component"
 import {Student} from "./service/student.service"
 import {DeviceType} from "./service/deviceType.service"
 import URLHandler from "./urlHandler"
+import {DeviceListEntryComponent} from "./components/layout/deviceListEntry.component"
 
 interface actionCancellation {
     identifier: string,
@@ -18,6 +19,7 @@ export class AppState{
     private _createRentModalOpen: boolean = false
     private _createMultiRentModalOpen: boolean = false
     private _selectedRentEntries: Set<RentListEntryComponent> = new Set<RentListEntryComponent>()
+    private _selectedDeviceEntries: Set<DeviceListEntryComponent> = new Set<DeviceListEntryComponent>()
     private _cancelCurrentAction: actionCancellation[] = []
     private _createRentElement: CreateRentComponent
     private _appElement: HTMLElement
@@ -95,6 +97,10 @@ export class AppState{
         return this._selectedRentEntries
     }
 
+    get selectedDeviceEntries(): Set<DeviceListEntryComponent> {
+        return this._selectedDeviceEntries
+    }
+
     addSelectedRentEntry(rentEntry: RentListEntryComponent){
         this.selectedRentEntries.add(rentEntry)
         this.update()
@@ -102,6 +108,16 @@ export class AppState{
 
     removeSelectedRentEntry(rentEntry: RentListEntryComponent){
         this.selectedRentEntries.delete(rentEntry)
+        this.update()
+    }
+
+    addSelectedDeviceEntry (deviceEntry: DeviceListEntryComponent ){
+        this.selectedDeviceEntries.add(deviceEntry)
+        this.update()
+    }
+
+    removeSelectedDeviceEntry(deviceEntry: DeviceListEntryComponent){
+        this.selectedDeviceEntries.delete(deviceEntry)
         this.update()
     }
 
