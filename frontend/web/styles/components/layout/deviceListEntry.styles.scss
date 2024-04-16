@@ -30,7 +30,6 @@ section {
 
   div{
     display: flex;
-    justify-content: center;
   }
 }
 
@@ -41,28 +40,6 @@ section {
   border-top: 1px solid $gray500;
   padding-top: .5rem;
   width: 70%;
-}
-
-.image {
-  position: relative;
-  display: grid;
-  grid-template-rows: auto;
-  grid-template-columns: auto;
-
-  img{
-    grid-area: 1 / 1 / 2 / 2;
-    z-index: 2;
-  }
-
-  &::before {
-    content: '';
-    width: 100%;
-    aspect-ratio: 1;
-    background-color: #363636;
-    filter: blur(20px);
-    z-index: 0;
-    grid-area: 1 / 1 / 2 / 2;
-  }
 }
 
 .bottom{

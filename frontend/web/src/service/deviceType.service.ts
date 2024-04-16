@@ -128,6 +128,7 @@ export default class DeviceTypeService {
         Api.fetchData<DeviceTypeVariantCollection>("/devicetype/getall")
             .then(data => {
                 model.loadDeviceTypes(data)
+                console.log(data)
             })
             .catch(error => {
                 console.error(error)
@@ -137,8 +138,17 @@ export default class DeviceTypeService {
     static fetchAllFull(){
         Api.fetchData<DeviceTypeFullDTO[]>("/devicetype/getallfull")
             .then(data => {
-                console.log(data)
                 model.loadDeviceTypesFull(data)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
+
+    static remove(device: DeviceType) {
+        Api.fetchData(`/devicetype/getbyid/${device.type_id}/remove`)
+            .then(() => {
+                DeviceTypeService.fetchAllFull()
             })
             .catch(error => {
                 console.error(error)

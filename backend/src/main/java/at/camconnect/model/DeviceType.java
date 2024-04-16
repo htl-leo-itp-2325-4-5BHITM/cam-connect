@@ -2,6 +2,7 @@ package at.camconnect.model;
 
 import at.camconnect.dtos.DeviceTypeGlobalObjectsDTO;
 import at.camconnect.dtos.DeviceTypeDTO;
+import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import jakarta.json.JsonObject;
 import jakarta.persistence.*;
@@ -20,7 +21,18 @@ public abstract class DeviceType{
     private String name;
     private String image;
 
+    @Enumerated(EnumType.STRING)
+    private DeviceTypeStatusEnum status;
+
     abstract public void update(DeviceTypeGlobalObjectsDTO data);
+
+    public DeviceTypeStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(DeviceTypeStatusEnum status) {
+        this.status = status;
+    }
 
     public void setType_id(Long type_id) {
         this.type_id = type_id;
@@ -43,6 +55,7 @@ public abstract class DeviceType{
     }
 
     public DeviceType(String name) {
+        this.status = DeviceTypeStatusEnum.active;
         this.name = name;
     }
 

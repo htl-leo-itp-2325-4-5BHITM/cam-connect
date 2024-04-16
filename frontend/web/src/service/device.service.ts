@@ -1,7 +1,7 @@
 import {model} from "../index"
 import {config, Api, ccResponse} from "../base"
 import {DeviceType, DeviceTypeSource, DeviceTypeVariantCollection, DeviceTypeVariantEnum} from "./deviceType.service"
-import {RentByStudentDTO} from "./rent.service"
+import {Rent, RentByStudentDTO} from "./rent.service"
 import {AutocompleteOption} from "../components/basic/autocomplete.component"
 
 export interface Device{

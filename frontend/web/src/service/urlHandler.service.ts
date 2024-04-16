@@ -28,9 +28,6 @@ let pages = {
     },
     default: {
         handler: () => {
-            if(document.querySelector('cc-not-found')) {
-                document.body.removeChild(document.querySelector('cc-not-found'))
-            }
             URLHandler.setUrl("app/rents")
             URLHandler.parseCurrentURL()
         }
@@ -44,6 +41,13 @@ let pages = {
 
 export default class URLHandler {
     static parseCurrentURL () {
+        let queries = ['cc-not-found', 'cc-external-confirm', 'cc-app']
+        queries.forEach(elem => {
+            if(document.querySelector(elem)) {
+                document.body.removeChild(document.querySelector(elem))
+            }
+        })
+
         let urlSplit = window.location.href.split("?")[0]?.split("/")
         urlSplit.splice(0, 3)
 
