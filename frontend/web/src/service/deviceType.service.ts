@@ -120,6 +120,7 @@ export interface DeviceTypeFullDTO {
 
 export interface Tag {
     tag_id: number
+    name: string
     description: string
 }
 

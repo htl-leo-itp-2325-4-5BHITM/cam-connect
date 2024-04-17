@@ -18,16 +18,12 @@ export class DeviceListComponent extends LitElement {
         this.deviceTypesFull = new ObservedProperty<DeviceTypeFullDTO[]>(this, model.deviceTypesFull)
     }
     render() {
-        //let deviceTypes = Object.values(this.deviceTypes.value).flat()
-        console.log(this.deviceTypesFull.value)
-
         return html`
             <style>${styles}</style>
 
             <div class="content">
                 ${Object.values(this.deviceTypesFull.value).flat().map(deviceType => {
                     return html`<cc-device-list-entry .deviceTypeFull="${deviceType}"></cc-device-list-entry>`
-                    /*return html`<p>hallo</p>`*/
                 })}
             </div>
         `

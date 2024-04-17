@@ -97,7 +97,7 @@ public class DeviceTypeRepository {
     }
 
     public List<DeviceTypeFullDTO> getAllFull() {
-        List<DeviceType> deviceTypeList = em.createQuery("select dt from DeviceType dt", DeviceType.class).getResultList();
+        List<DeviceType> deviceTypeList = em.createQuery("select dt from DeviceType dt where dt.status = 'active'", DeviceType.class).getResultList();
 
         List<DeviceTypeFullDTO> list = new LinkedList<>();
         for(DeviceType deviceType : deviceTypeList){

@@ -38,49 +38,49 @@ VALUES
 */
 
 -- Camera Types
-insert into DEVICETYPE (variant, dtype, name, system_id, resolution_id, sensor_id, mount_id, autofocus, framerate)
+insert into DEVICETYPE (variant, dtype, name, status, system_id, resolution_id, sensor_id, mount_id, autofocus, framerate)
 values
-    ('camera', 'CameraType', 'Sony A7 III', 1, 3, 4, 8, true, 120),
-    ('camera', 'CameraType', 'Canon EOS R5', 1, 4, 5, 9, true, 120),
-    ('camera', 'CameraType', 'Lumix S5 ii', 2, 3, 4, 6, true, 100),
-    ('camera', 'CameraType', 'Lumix GH6', 2, 3, 5, 7, true, 100);
+    ('camera', 'CameraType', 'Sony A7 III', 'active', 1, 3, 4, 8, true, 120),
+    ('camera', 'CameraType', 'Canon EOS R5', 'active', 1, 4, 5, 9, true, 120),
+    ('camera', 'CameraType', 'Lumix S5 ii', 'active', 2, 3, 4, 6, true, 100),
+    ('camera', 'CameraType', 'Lumix GH6', 'active', 2, 3, 5, 7, true, 100);
 
 -- Simple Types
-insert into DEVICETYPE (variant, dtype, name, description)
+insert into DEVICETYPE (variant, dtype, name, description, status)
 values
-    ('simple', 'SimpleType', 'Kabel', '3 Meter Kabel'),
-    ('simple', 'SimpleType', 'Superkabel', '5 Meter Kabel');
+    ('simple', 'SimpleType', 'Kabel', '3 Meter Kabel', 'active'),
+    ('simple', 'SimpleType', 'Superkabel', '5 Meter Kabel', 'active');
 
 -- Drone Types
-insert into DEVICETYPE (variant, dtype, name, sensor_id, resolution_id, max_range)
+insert into DEVICETYPE (variant, dtype, name, sensor_id, resolution_id, max_range, status)
 values
-    ('drone', 'DroneType', 'Mavic Mini', 5, 4, 100),
-    ('drone', 'DroneType', 'Mavic Pro', 6, 3, 100);
+    ('drone', 'DroneType', 'Mavic Mini', 5, 4, 100, 'active'),
+    ('drone', 'DroneType', 'Mavic Pro', 6, 3, 100, 'active');
 
 -- Lens Types
-insert into DEVICETYPE (variant, dtype, name, mount_id, f_stop, focal_length)
+insert into DEVICETYPE (variant, dtype, name, mount_id, f_stop, focal_length, status)
 values
-    ('lens', 'LensType', 'Lens 1', 10, 2.8, 35),
-    ('lens', 'LensType', 'Lens 2', 11, 3.8, 25),
-    ('lens', 'LensType', 'Lens 3', 12, 4.0, 45);
+    ('lens', 'LensType', 'Lens 1', 10, 2.8, 35, 'active'),
+    ('lens', 'LensType', 'Lens 2', 11, 3.8, 25, 'active'),
+    ('lens', 'LensType', 'Lens 3', 12, 4.0, 45, 'active');
 
 -- Light Types
-insert into DEVICETYPE (variant, dtype, name, watts, rgb, variable_temperature)
+insert into DEVICETYPE (variant, dtype, name, watts, rgb, variable_temperature, status)
 values
-    ('light', 'LightType', 'LED', 600, true, true),
-    ('light', 'LightType', 'Lampenstativ', 525, false, true);
+    ('light', 'LightType', 'LED', 600, true, true, 'active'),
+    ('light', 'LightType', 'Lampenstativ', 525, false, true, 'active');
 
 -- Microphone Types
-insert into DEVICETYPE (variant, dtype, name, windblocker, wireless, needs_recorder)
+insert into DEVICETYPE (variant, dtype, name, windblocker, wireless, needs_recorder, status)
 values
-    ('microphone', 'MicrophoneType', 'Zoom H2', false, true, false),
-    ('microphone', 'MicrophoneType', 'RodeFunkset', true, true, true),
-    ('microphone', 'MicrophoneType', 'X-Vive Funks.', true, true, false);
+    ('microphone', 'MicrophoneType', 'Zoom H2', false, true, false, 'active'),
+    ('microphone', 'MicrophoneType', 'RodeFunkset', true, true, true, 'active'),
+    ('microphone', 'MicrophoneType', 'X-Vive Funks.', true, true, false, 'active');
 
 -- Stabilizer Types
-insert into DEVICETYPE (variant, dtype, name, max_weight_kilograms, number_of_axis)
-values ('stabilizer', 'StabilizerType', 'Schulterrig', 200, 2),
-       ('stabilizer', 'StabilizerType', 'Gopro Gimbal', 150, 3);
+insert into DEVICETYPE (variant, dtype, name, max_weight_kilograms, number_of_axis, status)
+values ('stabilizer', 'StabilizerType', 'Schulterrig', 200, 2, 'active'),
+       ('stabilizer', 'StabilizerType', 'Gopro Gimbal', 150, 3, 'active');
 
 -- assigning tags to devicetypes
 INSERT INTO tag_devicetype (tag_tag_id, type_type_id)

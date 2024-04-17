@@ -17,12 +17,13 @@ public abstract class DeviceType{
 
     @Enumerated(EnumType.STRING)
     private DeviceTypeVariantEnum variant;
-    @Column(length = 20, unique = true)
-    private String name;
-    private String image;
 
     @Enumerated(EnumType.STRING)
     private DeviceTypeStatusEnum status;
+
+    @Column(length = 20, unique = true)
+    private String name;
+    private String image;
 
     abstract public void update(DeviceTypeGlobalObjectsDTO data);
 
@@ -55,7 +56,7 @@ public abstract class DeviceType{
     }
 
     public DeviceType(String name) {
-        this.status = DeviceTypeStatusEnum.active;
+        setStatus(DeviceTypeStatusEnum.active);
         this.name = name;
     }
 

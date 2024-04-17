@@ -4,7 +4,7 @@ import styles from '../../../styles/components/basic/chip.styles.scss'
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { faXmark } from "@fortawesome/free-solid-svg-icons"
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
-import {ColorEnum, SizeEnum} from "../../base"
+import {ColorEnum, SizeEnum, Tooltip} from "../../base"
 import {model} from "../../index"
 import {AnimationHelper} from "../../util"
 
@@ -27,6 +27,9 @@ export class ChipComponent extends LitElement {
     @property({reflect: true})
     private isExpanded: boolean = false
 
+    @property()
+    tooltip: string = ""
+
     @queryAssignedElements()
     private detailElement!: Array<HTMLElement>;
 
@@ -41,7 +44,9 @@ export class ChipComponent extends LitElement {
     render() {
         return html`
             <style>${styles}</style>
-             <div class="cc-chip" color="${this.color}" size="${this.size}" type="${this.type}" @click="${this.handleClick}">
+             <div class="cc-chip" color="${this.color}" size="${this.size}" type="${this.type}" @click="${this.handleClick}"
+                  @mouseenter="${(e:Event) => {this.tooltip != "" ? Tooltip.show(e.target as HTMLElement, this.tooltip, 250) : ''}}"
+                  @mouseleave="${()=>{this.tooltip != "" ? Tooltip.hide(0) : ''}}">
                  ${this.text}
                  ${this.type == ChipType.REMOVABLE && this.isExpanded ? this.renderRemoveButton() : ""}
             </div>
@@ -79,7 +84,6 @@ export class ChipComponent extends LitElement {
     }
 
     toggleExpand(){
-
         if(this.isExpanded){
             AnimationHelper.hide(this.detailElement[0])
             this.isExpanded = false
