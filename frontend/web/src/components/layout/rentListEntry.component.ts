@@ -268,22 +268,8 @@ export class RentListEntryComponent extends LitElement {
     }
 
     requestConfirmation() {
-        PopupEngine.createModal({
-            text: "Willst du wirklich diesen Verleih neu Anfragen?",
-            buttons: [
-                {
-                    text: "Ja",
-                    action: (data) => {
-                        this.rent.status = RentStatusEnum.WAITING
-                        RentService.requestConfirmation(this.rent)
-                    },
-                    closePopup: true
-                },
-                {
-                    text: "Nein",
-                },
-            ]
-        })
+        this.rent.status = RentStatusEnum.WAITING
+        RentService.requestConfirmation(this.rent)
     }
 
     removeRent() {

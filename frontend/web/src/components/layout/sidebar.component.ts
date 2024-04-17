@@ -37,7 +37,8 @@ export class SidebarComponent extends LitElement {
                            @click="${this.openCreateRentMenu}"
                            @mouseenter="${(e) => {Tooltip.show(e.target, 'shift+n oder <', 1000)}}"
                            @mouseleave="${()=>{Tooltip.hide(0)}}"
-                >Neuer Verleih
+                >
+                    Neuer Verleih
                 </cc-button>
                 <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.OUTLINED}">
                     Multi Verleih

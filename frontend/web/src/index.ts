@@ -47,26 +47,26 @@ window.addEventListener("DOMContentLoaded", () => {
     URLHandler.parseCurrentURL()
 
     document.querySelector('head').innerHTML += `<link rel="shortcut icon" href="${favicon}" type="image/x-icon">`
+
+    PopupEngine.init({
+        onModalOpen: () => {
+            model.appState.value.addCurrentActionCancellation(() => {
+                PopupEngine.cancelModal()
+            }, "modalClose")
+            KeyBoardShortCut.register(["Enter"], () => {
+                PopupEngine.confirmModal()
+            }, "confirmModal", true)
+        },
+        onModalClose: () => {
+            model.appState.value.removeCurrentActionCancellation("modalClose")
+            KeyBoardShortCut.remove("confirmModal")
+        }
+    })
 })
 
 /*model.appState.subscribe(data => {
     console.log(data)
 })*/
-
-PopupEngine.init({
-    onModalOpen: () => {
-        model.appState.value.addCurrentActionCancellation(() => {
-            PopupEngine.cancelModal()
-        }, "modalClose")
-        KeyBoardShortCut.register(["Enter"], () => {
-            PopupEngine.confirmModal()
-        }, "confirmModal", true)
-    },
-    onModalClose: () => {
-        model.appState.value.removeCurrentActionCancellation("modalClose")
-        KeyBoardShortCut.remove("confirmModal")
-    }
-})
 
 KeyBoardShortCut.register([["shift", "n"], ["<"]], () => {model.appState.value.openCreateRentModal()})
 KeyBoardShortCut.register(["escape"], () => {model.appState.value.cancelCurrentAction()}, "cancelCurrentAction", true)

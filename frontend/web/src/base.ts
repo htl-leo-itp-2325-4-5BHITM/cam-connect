@@ -3,6 +3,7 @@ import Util from "./util"
 import {model} from "./index"
 import AirDatepicker from "air-datepicker"
 import localeDe from "air-datepicker/locale/de"
+import PopupEngine from "./popupEngine"
 
 export const config = {
     api_url: "http://localhost:8080/api",
@@ -82,16 +83,21 @@ export class Api {
 
     static handleCCError(statusCode: number, details: string, url:string): boolean {
         if(statusCode == 1000) return true
-        if(statusCode == 1101)
-            console.log("invalid id in getter")
+        if(statusCode == 1101) {
+            console.info(`CCException - invalid id in getter - statuscode: ${statusCode} - details: ${details} - url: ${url}`)
+
+            PopupEngine.createNotification({
+                heading: "Ein Fehler ist aufgetreten",
+                text: "Die angeforderten Daten konnten nicht geladen werden - ccStatus: 1101",
+            })
+        }
         console.log("something went wrong in the backend trying to reach endpoint: ", url, "statusCode: ", statusCode + ". Details:", details)
         return false
     }
 
     static handleHttpError(statusCode: number, url:string):boolean{
         if(statusCode >= 200 && statusCode < 300) return true
-        console.log("fatal server error occured trying to reach endpoint: ", url, "statusCode: ", statusCode)
-        return false
+        else return false
     }
 }
 
