@@ -2,6 +2,7 @@ package at.camconnect.boundary;
 
 import at.camconnect.dtos.CreateRentDTO;
 import at.camconnect.dtos.RentDTO;
+import at.camconnect.dtos.RentIdsDTO;
 import at.camconnect.dtos.RentByStudentDTO;
 import at.camconnect.model.Rent;
 import at.camconnect.responseSystem.CCException;
@@ -49,7 +50,7 @@ public class RentResource {
     @GET
     @Path("/getallsinglelist")
     public Response getAllSingleList(){
-        List<Rent> result;
+        List<RentDTO> result;
         try{
             result = rentRepository.getAllSingleList();
         }catch (CCException ex){
@@ -75,9 +76,9 @@ public class RentResource {
     @GET
     @Path("/getbyid/{id: [0-9]+}")
     public Response getById(@PathParam("id") Long id) {
-        Rent rent;
+        RentDTO rent;
         try {
-            rent = rentRepository.getById(id);
+            rent = rentRepository.getByIdCensored(id);
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }
@@ -87,7 +88,7 @@ public class RentResource {
     @GET
     @Path("/getbyidlist/{ids}")
     public Response getByIdList(@PathParam("ids") String ids) {
-        List<Rent> rents;
+        List<RentDTO> rents;
         try {
             String[] idList = ids.split(",");
             rents = rentRepository.getByIdList(idList);
@@ -125,9 +126,9 @@ public class RentResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/getbyid/{id: [0-9]+}/updatestatus")
-    public Response confirm(@PathParam("id") Long id, RentDTO rentDTO) {
+    public Response confirm(@PathParam("id") Long id, RentIdsDTO rentIdsDTO) {
         try {
-            rentRepository.updateStatus(id, rentDTO);
+            rentRepository.updateStatus(id, rentIdsDTO);
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }

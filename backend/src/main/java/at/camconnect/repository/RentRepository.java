@@ -2,6 +2,7 @@ package at.camconnect.repository;
 
 import at.camconnect.dtos.CreateRentDTO;
 import at.camconnect.dtos.RentDTO;
+import at.camconnect.dtos.RentIdsDTO;
 import at.camconnect.dtos.RentByStudentDTO;
 import at.camconnect.enums.RentStatusEnum;
 import at.camconnect.enums.RentTypeEnum;
@@ -92,8 +93,8 @@ public class RentRepository {
         return CCResponse.ok();
     }
 
-    public List<Rent> getAllSingleList(){
-        return em.createQuery("SELECT r FROM Rent r order by r.creation_date", Rent.class).getResultList();
+    public List<RentDTO> getAllSingleList(){
+        return em.createQuery("SELECT new at.camconnect.dtos.RentDTO(rent_id, status, type, device, device_string, teacher_start, teacher_end, rent_start, rent_end_planned, rent_end_actual, accessory, student, note, verification_message) FROM Rent r order by r.creation_date", RentDTO.class).getResultList();
     }
 
     public List<RentByStudentDTO> getAll(){
@@ -109,10 +110,10 @@ public class RentRepository {
         List<RentByStudentDTO> result = new LinkedList<>();
 
         for (Student student : students) {
-            List<Rent> rents = em.createQuery(
-                    "SELECT r FROM Rent r " +
+            List<RentDTO> rents = em.createQuery(
+                    "SELECT new at.camconnect.dtos.RentDTO(rent_id, status, type, device, device_string, teacher_start, teacher_end, rent_start, rent_end_planned, rent_end_actual, accessory, student, note, verification_message) FROM Rent r " +
                             "where r.student.student_id = :studentId " +
-                            "order by r.id", Rent.class)
+                            "order by r.id", RentDTO.class)
                     .setParameter("studentId", student.getStudent_id())
                     .getResultList();
 
@@ -127,10 +128,15 @@ public class RentRepository {
         return result;
     }
 
-    public List<Rent> getByIdList(String[] idList){
-        List<Rent> result = new LinkedList<>();
+    public RentDTO getByIdCensored(Long id){
+        Rent rent = getById(id);
+        return new RentDTO(rent.getRent_id(), rent.getStatus(), rent.getType(), rent.getDevice(), rent.getDevice_string(), rent.getTeacher_start(), rent.getTeacher_end(), rent.getRent_start(), rent.getRent_end_planned(), rent.getRent_end_actual(), rent.getAccessory(), rent.getStudent(), rent.getNote(), rent.getVerification_message());
+    }
+
+    public List<RentDTO> getByIdList(String[] idList){
+        List<RentDTO> result = new LinkedList<>();
         for(String id : idList){
-            result.add(getById(Long.parseLong(id)));
+            result.add(getByIdCensored(Long.parseLong(id)));
         }
         return result;
     }
@@ -211,7 +217,7 @@ public class RentRepository {
     }
 
     @Transactional
-    public void updateStatus(Long rentId, RentDTO rentDTO) {
+    public void updateStatus(Long rentId, RentIdsDTO rentIdsDTO) {
         Rent rent = getById(rentId);
 
         if(!rent.getStatus().equals(RentStatusEnum.WAITING)){
@@ -223,9 +229,9 @@ public class RentRepository {
         RentStatusEnum verificationStatus;
 
         try{
-            verificationCode = rentDTO.verification_code();
-            verificationStatus = rentDTO.status();
-            verificationMessage = rentDTO.verification_message();
+            verificationCode = rentIdsDTO.verification_code();
+            verificationStatus = rentIdsDTO.status();
+            verificationMessage = rentIdsDTO.verification_message();
         } catch (IllegalArgumentException e) {
             throw new CCException(1106);
         }
