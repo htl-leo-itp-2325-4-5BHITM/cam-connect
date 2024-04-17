@@ -2,6 +2,7 @@ package at.camconnect.repository;
 
 import at.camconnect.dtos.AutocompleteOptionDTO;
 import at.camconnect.dtos.DeviceDTO;
+import at.camconnect.dtos.RentDTO;
 import at.camconnect.model.DeviceTypeAttributes.*;
 import at.camconnect.model.DeviceTypeVariants.*;
 import at.camconnect.model.Student;
@@ -12,6 +13,7 @@ import at.camconnect.socket.DeviceSocket;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import org.hibernate.exception.ConstraintViolationException;
 
@@ -100,42 +102,35 @@ public class DeviceRepository {
         return count > 0;
     }
 
-    public List<AutocompleteOptionDTO<DeviceDTO>> search(String searchTerm){
-        List<DeviceDTO> devices = em.createQuery(
-                        "SELECT new at.camconnect.dtos.DeviceDTO(d.id, d.serial, d.number, d.note, d.type.id) FROM Device d " +
-                                "WHERE UPPER(d.number) LIKE :searchTerm " +
-                                "order by number",
-                        DeviceDTO.class)
-                .setParameter("searchTerm", searchTerm.toUpperCase() + "%")
-                .getResultList();
+    public List<AutocompleteOptionDTO<DeviceDTO>> search(String searchTerm, Long type_id, boolean showOnlyAvailableRents){
+        String queryString = "SELECT new at.camconnect.dtos.DeviceDTO(d.id, d.serial, d.number, d.note, d.type.id) FROM Device d " +
+                "WHERE UPPER(d.number) LIKE :searchTerm ";
+        if(type_id >= 0) {
+            queryString += "AND d.type.id = :typeId ";
+        }
+        queryString += "ORDER BY d.number";
 
+        Query query = em.createQuery(queryString, DeviceDTO.class).setParameter("searchTerm", searchTerm.toUpperCase() + "%");
+
+        if (type_id >= 0) {
+            query.setParameter("typeId", type_id);
+        }
+
+        List<DeviceDTO> devices = query.getResultList();
         List<AutocompleteOptionDTO<DeviceDTO>> result = new LinkedList<>();
-
         for (DeviceDTO device : devices) {
+            if(showOnlyAvailableRents && isDeviceAlreadyInUse(device.device_id())){
+                continue;
+            }
             result.add(new AutocompleteOptionDTO<>(device, device.device_id()));
         }
 
         return result;
     }
 
-    public List<AutocompleteOptionDTO<DeviceDTO>>searchWithType(String searchTerm, Long type_id){
-        List<DeviceDTO> devices = em.createQuery(
-                        "SELECT new at.camconnect.dtos.DeviceDTO(d.id, d.serial, d.number, d.note, d.type.id) FROM Device d " +
-                                "WHERE UPPER(d.number) LIKE :searchTerm and " +
-                                "d.type.id = :typeId " +
-                                "order by number",
-                        DeviceDTO.class)
-                .setParameter("searchTerm", searchTerm.toUpperCase() + "%")
-                .setParameter("typeId", type_id)
-                .getResultList();
-
-        List<AutocompleteOptionDTO<DeviceDTO>> result = new LinkedList<>();
-
-        for (DeviceDTO device : devices) {
-            result.add(new AutocompleteOptionDTO<>(device, device.device_id()));
-        }
-
-        return result;
+    public boolean isDeviceAlreadyInUse(long device_id) {
+        List<RentDTO> rentList = em.createQuery("SELECT new at.camconnect.dtos.RentDTO(rent_id, status, type, device, device_string, teacher_start, teacher_end, rent_start, rent_end_planned, rent_end_actual, accessory, student, note, verification_message) FROM Rent r order by r.creation_date", RentDTO.class).getResultList();
+        return rentList.stream().anyMatch(rentDTO -> rentDTO.device().getDevice_id() == device_id);
     }
 
     public List<Device> getAll(){
