@@ -13,6 +13,7 @@ import {AppState} from "../../AppState"
 import DeviceService from "../../service/device.service"
 import RentService from "../../service/rent.service"
 import URLHandler from "../../urlHandler"
+import logo from "../../../assets/logo/cc-wordmark-white.svg"
 
 @customElement('cc-navbar')
 export class NavbarComponent extends LitElement {
@@ -32,14 +33,14 @@ export class NavbarComponent extends LitElement {
             return html`
                 <style>${styles}</style>
                 <div class="logo">
-                    <img src="assets/logo/cc-wordmark-white.svg" alt="cam-connect">
+                    <img src="${logo}" alt="cam-connect">
                 </div>
             `
 
         return html`
             <style>${styles}</style>
             <div class="logo">
-                <img src="assets/logo/cc-wordmark-white.svg" alt="cam-connect">
+                <img src="${logo}" alt="cam-connect">
             </div>
 
             <cc-select size="${SizeEnum.MEDIUM}" spacerColor="${SimpleColorEnum.ACCENT}" 

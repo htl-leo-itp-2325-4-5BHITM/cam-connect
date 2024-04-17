@@ -44,9 +44,9 @@ module.exports = {
                 ],
             },
             {
-                test: /\.svg$/,
-                loader: 'svg-inline-loader'
-            }
+                test: /\.(png|svg|jpg|jpeg|gif)$/i,
+                type: 'asset/resource',
+            },
         ]
     },
     devtool: "cheap-module-source-map",
