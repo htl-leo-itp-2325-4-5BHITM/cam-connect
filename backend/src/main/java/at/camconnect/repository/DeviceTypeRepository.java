@@ -18,6 +18,7 @@ import jakarta.json.JsonObject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Table;
 import jakarta.transaction.Transactional;
+import org.hibernate.exception.ConstraintViolationException;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -194,7 +195,7 @@ public class DeviceTypeRepository {
             while ((line = reader.readLine()) != null) {
                 lineArray = line.split(";");
 
-                if (lineArray.length != headerLength) break;
+                if (lineArray.length != headerLength) throw new CCException(1204, lineArray[0] + " has not a valid structure");
 
                 try {
                     DeviceType deviceType = switch (type) {
@@ -223,8 +224,11 @@ public class DeviceTypeRepository {
                     };
 
                     em.persist(deviceType);
+
                 } catch(NumberFormatException ex){
                     throw new CCException(1106, "Wrong data type in the import file: " + ex.getMessage());
+                }  catch(ConstraintViolationException ex){
+                    throw new CCException(1201, "One device type does already exist");
                 }
             }
         } catch (IOException e) {
