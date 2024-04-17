@@ -37,6 +37,12 @@ cc-line{
   position: relative;
 
   padding-bottom: 1.5rem;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .user{

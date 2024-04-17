@@ -32,7 +32,7 @@ public abstract class CCResponse {
      * @return Response object with status 400
      */
     public static Response error(CCStatus ccStatus){
-        return Response.status(400).entity(new CCResponseDTO(ccStatus, new CCResponseDetailDTO())).build();
+        return Response.status(200).entity(new CCResponseDTO(ccStatus, new CCResponseDetailDTO())).build();
     }
 
     /**

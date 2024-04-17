@@ -32,14 +32,14 @@ export class NavbarComponent extends LitElement {
             return html`
                 <style>${styles}</style>
                 <div class="logo">
-                    <img src="${logo}" alt="cam-connect">
+                    <img src="${logo}" alt="cam-connect" @click="${()=> URLHandler.setUrl("/app/rents")}">
                 </div>
             `
 
         return html`
             <style>${styles}</style>
             <div class="logo">
-                <img src="${logo}" alt="cam-connect">
+                <img src="${logo}" alt="cam-connect" @click="${()=> URLHandler.setUrl("/app/rents")}">
             </div>
 
             <cc-select size="${SizeEnum.MEDIUM}" spacerColor="${SimpleColorEnum.ACCENT}" 
