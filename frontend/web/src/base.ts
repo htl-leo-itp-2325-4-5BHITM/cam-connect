@@ -53,14 +53,18 @@ export class Api {
     }
 
     static postData<In, Out>(path: string, data: In, type: "upload" | "json" = "json"): Promise<any> {
-        let bodyData
-        if(type == "json") bodyData = JSON.stringify(data)
-        if(type == "upload") bodyData = data
+        let bodyData:any = JSON.stringify(data)
+        let contentType = "application/json"
+
+        if(type == "upload") {
+            bodyData = data
+            contentType = "multipart/form-data"
+        }
 
         return fetch(`${config.api_url}${path}`, {
             method: "POST",
             headers: {
-                "Content-Type": "application-"+type,
+                "Content-Type": type,
             },
             body: bodyData,
         })
