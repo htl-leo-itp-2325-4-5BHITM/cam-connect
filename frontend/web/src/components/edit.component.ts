@@ -1,39 +1,48 @@
 import {LitElement, html} from 'lit'
 import {customElement} from 'lit/decorators.js'
 import styles from '../../styles/components/edit.styles.scss'
-import URLHandler from "../urlHandler"
-import DeviceTypeAttributeService from "../service/deviceTypeAttribute.service"
+import {Api, ccResponse, config} from "../base"
 @customElement('cc-edit')
 export class EditComponent extends LitElement {
     render() {
+        let listOfString = ["camera", "drone", "lens", "light", "microphone", "simple", "stabilizer", "tripod"];
+
         return html`
             <style>${styles}</style>
             <cc-navbar type="simple"></cc-navbar>
-            
-            <label for="cameraType">CameraType: </label>
-            <input type="file" id="cameraType" accept=".csv"/>
 
-            <label for="droneType">DroneType: </label>
-            <input type="file" id="droneType" accept=".csv"/>
+            ${
+                listOfString.map(type => {
+                    return html`
+                        <label for="${type}Type">${type + ' Type'} </label>
+                        <input type="file" id="${type}Type" 
+                               @change="${(event) => {this.importDataFromCsv(event, type)}}" accept=".csv"/>`
+                })
+            }
+        `;
+    }
+    importDataFromCsv(event: Event, type:string) {
+        let input = event.target as HTMLInputElement
+        let file:File = input.files[0]
+        const formData = new FormData()
+        formData.append('file', file, file.name)
 
-            <label for="lensType">LensType: </label>
-            <input type="file" id="lensType" accept=".csv"/>
-
-            <label for="lightType">LightType: </label>
-            <input type="file" id="lightType" accept=".csv"/>
-
-            <label for="microphoneType">MicrophoneType: </label>
-            <input type="file" id="microphoneType" accept=".csv"/>
-
-            <label for="simpleType">SimpleType: </label>
-            <input type="file" id="simpleType" accept=".csv"/>
-
-            <label for="stabilizerType">StabilizerType: </label>
-            <input type="file" id="stabilizerType" accept=".csv"/>
-
-            <label for="tripodType">TripodType: </label>
-            <input type="file" id="tripodType" accept=".csv"/>
-        `
+        Api.postData(`/devicetype/import/${type}`, formData, "upload")
+            .then((data) => {
+                console.log(data)
+                switch (data.ccStatus.statusCode){
+                    case 1000:
+                        //@ts-ignore
+                        PopupEngine.createNotification({text: `Successfully imported ${type}`})
+                        break
+                    case 1204:
+                        //@ts-ignore
+                        PopupEngine.createNotification({text: `Konnte nicht importieren weil die filestruktur invalide ist`})
+                        break
+            }})
+            .catch(error => {
+                console.error(error)
+            })
     }
 }
 

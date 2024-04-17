@@ -13,7 +13,9 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.jboss.resteasy.reactive.RestForm;
 
+import java.io.File;
 import java.util.List;
 
 @Path("/devicetype")
@@ -120,5 +122,17 @@ public class DeviceTypeResource {
         }
 
         return CCResponse.ok(result);
+    }
+
+    @POST
+    @Path("/import/{type}")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response uploadCsvFile(@RestForm File file, @PathParam("type")String type) {
+        try{
+            deviceTypeRepository.importDeviceTypes(file, type);
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
 }
