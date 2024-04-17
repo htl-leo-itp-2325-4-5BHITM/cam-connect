@@ -244,9 +244,9 @@ export class RentListEntryComponent extends LitElement {
         }
     }
     async searchForDevice(searchTerm: string): Promise<AutocompleteOption<DeviceDTO>[]> {
-        if(this.rent.device.type.type_id < 0) return DeviceService.search(searchTerm)
+        if(this.rent.device.type.type_id < 0) return DeviceService.search(searchTerm, -1, true)
 
-        return DeviceService.searchWithType(searchTerm, this.rent.device.type.type_id)
+        return DeviceService.search(searchTerm, this.rent.device.type.type_id, true)
     }
 
     provideDeviceIcon(data: DeviceDTO){

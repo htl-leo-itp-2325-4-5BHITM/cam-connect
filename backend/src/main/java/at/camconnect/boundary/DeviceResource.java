@@ -80,29 +80,16 @@ public class DeviceResource {
     public Response search(JsonObject data){
         List<AutocompleteOptionDTO<DeviceDTO>> result;
         try{
-            result = deviceRepository.search(data.getString("searchTerm"));;
+            String searchTerm = data.getString("searchTerm");
+            int type = data.getInt("typeId");
+            boolean showOnlyAvailableDevices = data.getBoolean("onlyAvailable");
+
+            result = deviceRepository.search(searchTerm, (long) type, showOnlyAvailableDevices);
         }catch (CCException ex){
             return CCResponse.error(ex);
         }
 
         return CCResponse.ok(result);
-    }
-
-    //TODO when beeing called with -1 this throws a really cryptic error because Long cant be negative
-    //then when changing the param to int and casting to long it throws a not found.. probably cause of the regex
-    @POST
-    @Path("/searchwithtype/{type_id: [0-9]+}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Transactional
-    public Response searchWithType(@PathParam("type_id") Long type_id, JsonObject data){
-        List<AutocompleteOptionDTO<DeviceDTO>> result;
-        try{
-            result = deviceRepository.searchWithType(data.getString("searchTerm"), type_id);;
-        }catch (CCException ex){
-            return CCResponse.error(ex);
-        }
-
-        return CCResponse.ok(result); //TODO probably a generall response system problem: if result is null - the dto is like there was not data in the first place
     }
 
     @POST

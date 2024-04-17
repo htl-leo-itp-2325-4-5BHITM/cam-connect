@@ -177,9 +177,9 @@ export class CreateRentDeviceEntryComponent extends LitElement {
     }
 
     async searchForDevice(searchTerm: string): Promise<AutocompleteOption<DeviceDTO>[]> {
-        if(this.data.device_type_id < 0) return DeviceService.search(searchTerm)
+        if(this.data.device_type_id < 0) return DeviceService.search(searchTerm, -1, true)
 
-        return DeviceService.searchWithType(searchTerm, this.data.device_type_id)
+        return DeviceService.search(searchTerm, this.data.device_type_id, true)
     }
 
     //TODO find better icon here

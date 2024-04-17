@@ -64,8 +64,15 @@ export default class RentService {
 
     static create(rent: CreateRentDTO[]) {
         Api.postData("/rent/create", rent)
-            .then(() => {
+            .then((result) => {
                 model.appState.value.createRentElement.close()
+
+                if(result.ccStatus.statusCode == 1201){
+                    PopupEngine.createNotification({
+                        heading: "Fehler",
+                        text: "Dieses gerät ist bereit verliehen"
+                    })
+                }
             })
             .catch(error => {
                 console.error(error)

@@ -50,26 +50,12 @@ export default class DeviceService{
             })
     }
 
-    static async search(searchTerm: string): Promise<AutocompleteOption<DeviceDTO>[]> {
+    static async search(searchTerm: string, typeId: number, onlyAvailable: boolean): Promise<AutocompleteOption<DeviceDTO>[]> {
         try {
             const result: ccResponse<AutocompleteOption<DeviceDTO>[]> = await Api.postData(
                 `/device/search`,
-                {searchTerm: searchTerm}
+                {searchTerm: searchTerm, typeId: typeId, onlyAvailable: onlyAvailable}
             )
-            return result.data || []
-        } catch (e) {
-            console.error(e)
-            return []
-        }
-    }
-
-    static async searchWithType(searchTerm: string, type_id: number): Promise<AutocompleteOption<DeviceDTO>[]> {
-        try {
-            const result: ccResponse<AutocompleteOption<DeviceDTO>[]> = await Api.postData(
-                `/device/searchwithtype/${type_id}`,
-                {searchTerm: searchTerm}
-            )
-            //can be undefined if type id is -1
             return result.data || []
         } catch (e) {
             console.error(e)

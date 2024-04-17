@@ -48,7 +48,7 @@ export class DeviceListEntryComponent extends LitElement {
                 html`<div class="tags">
                     ${
                         this.deviceTypeFull.deviceTags.map(tag => {
-                            return html`<cc-chip color="${ColorEnum.GRAY}" text="${tag.description}"></cc-chip>`
+                            return html`<cc-chip color="${ColorEnum.GRAY}" text="${tag.name}" tooltip="${tag.description}"></cc-chip>`
                         })
                     }
                 </div>` : ''
