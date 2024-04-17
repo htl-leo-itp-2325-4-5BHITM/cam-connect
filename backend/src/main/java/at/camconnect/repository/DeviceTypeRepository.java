@@ -9,6 +9,7 @@ import at.camconnect.responseSystem.CCException;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypeVariants.*;
+import at.camconnect.responseSystem.CCStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -16,7 +17,12 @@ import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Table;
+import jakarta.transaction.Transactional;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -169,4 +175,60 @@ public class DeviceTypeRepository {
     }
 
     //endregion
+
+    @Transactional
+    public void importDeviceTypes(File file, String type) {
+        if (file == null) throw new CCException(1105);
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line = reader.readLine();
+            if (line == null || line.isEmpty()) throw new CCException(1203);
+
+            String[] lineArray = line.split(";");
+            int headerLength = lineArray.length;
+            if (lineArray.length <= 1) throw new CCException(1203);
+
+            //removes characters like our friend \uFEFF a invisible zero space character added to csv files when opening excel that throws off my validations :)
+            lineArray[0] = lineArray[0].replaceAll("[^a-zA-Z_-]", "");
+
+            while ((line = reader.readLine()) != null) {
+                lineArray = line.split(";");
+
+                if (lineArray.length != headerLength) break;
+
+                try {
+                    DeviceType deviceType = switch (type) {
+                        case "camera" -> new CameraType(lineArray[0],
+                                em.find(CameraSensor.class, lineArray[1]),
+                                em.find(CameraResolution.class, lineArray[2]),
+                                em.find(LensMount.class, lineArray[3]),
+                                em.find(CameraSystem.class, lineArray[4]),
+                                Integer.parseInt(lineArray[5]), Boolean.parseBoolean(lineArray[6]));
+                        case "drone" -> new DroneType(lineArray[0],
+                                em.find(CameraSensor.class, lineArray[1]),
+                                em.find(CameraResolution.class, lineArray[2]),
+                                Integer.parseInt(lineArray[3]));
+                        case "lens" -> new LensType(lineArray[0], lineArray[1],
+                                em.find(LensMount.class, lineArray[2]), lineArray[3]);
+                        case "light" -> new LightType(lineArray[0], Integer.parseInt(lineArray[1]),
+                                Boolean.parseBoolean(lineArray[2]), Boolean.parseBoolean(lineArray[3]));
+                        case "microphone" -> new MicrophoneType(lineArray[0], Boolean.parseBoolean(lineArray[1]),
+                                Boolean.parseBoolean(lineArray[2]), Boolean.parseBoolean(lineArray[3]));
+                        case "simple" -> new SimpleType(lineArray[0], lineArray[1]);
+                        case "stabilizer" -> new StabilizerType(lineArray[0],
+                                Double.parseDouble(lineArray[1]), Integer.parseInt(lineArray[2]));
+                        case "tripod" -> new TripodType(lineArray[0], Integer.parseInt(lineArray[1]),
+                                em.find(TripodHead.class, lineArray[2]));
+                        default -> null;
+                    };
+
+                    em.persist(deviceType);
+                } catch(NumberFormatException ex){
+                    throw new CCException(1106, "Wrong data type in the import file: " + ex.getMessage());
+                }
+            }
+        } catch (IOException e) {
+            throw new CCException(1204, "File could not be read");
+        }
+    }
 }
