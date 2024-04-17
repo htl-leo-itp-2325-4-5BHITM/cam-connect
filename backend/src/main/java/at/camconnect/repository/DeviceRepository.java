@@ -2,6 +2,9 @@ package at.camconnect.repository;
 
 import at.camconnect.dtos.AutocompleteOptionDTO;
 import at.camconnect.dtos.DeviceDTO;
+import at.camconnect.model.DeviceTypeAttributes.*;
+import at.camconnect.model.DeviceTypeVariants.*;
+import at.camconnect.model.Student;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.model.Device;
 import at.camconnect.model.DeviceType;
@@ -10,10 +13,10 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import org.hibernate.exception.ConstraintViolationException;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -184,6 +187,39 @@ public class DeviceRepository {
             return true;
         } catch(Exception ex){
             return false;
+        }
+    }
+
+    @Transactional
+    public void importDevices(File file) {
+        if(file == null) throw new CCException(1105);
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line = reader.readLine();
+
+            if(line == null || line.equals("")) throw new CCException(1203);
+            String[] lineArray = line.split(";");
+            if (lineArray.length <= 1) throw new CCException(1203);
+
+            lineArray[0] = lineArray[0].replaceAll("[^a-zA-Z_-]", "");
+
+            //checks if the csv file matches the required structure
+            if(lineArray.length != 4) throw new CCException(1204, "invalid line length");
+
+            while ((line = reader.readLine()) != null) {
+                lineArray = line.split(";");
+                if(lineArray.length != 4) break;
+                create(new Device(lineArray[0], lineArray[1], lineArray[2],
+                        em.find(DeviceType.class, lineArray[3])));
+            }
+        } catch (IOException e) {
+            throw new CCException(1204, "File could not be read");
+        } catch(NumberFormatException ex){
+            throw new CCException(1106, "Wrong data type in the import file: " + ex.getMessage());
+        } catch(ConstraintViolationException ex){
+            throw new CCException(1201, "One device type does already exist " + ex.getMessage());
+        } catch(IllegalArgumentException | ArrayIndexOutOfBoundsException ex){
+            throw new CCException(1204);
         }
     }
 }

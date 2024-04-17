@@ -18,14 +18,13 @@ import jakarta.json.JsonObject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Table;
 import jakarta.transaction.Transactional;
+import org.hibernate.exception.ConstraintViolationException;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @ApplicationScoped
 public class DeviceTypeRepository {
@@ -178,6 +177,12 @@ public class DeviceTypeRepository {
 
     @Transactional
     public void importDeviceTypes(File file, String type) {
+        HashMap<Integer, List<String>> typeMap = new HashMap<>();
+        typeMap.put(7, new LinkedList<>(){{ add("camera"); }});
+        typeMap.put(4, new LinkedList<>(){{ add("drone"); add("lens"); add("light"); add("microphone"); }});
+        typeMap.put(3, new LinkedList<>(){{ add("stabilizer"); add("tripod"); }});
+        typeMap.put(2, new LinkedList<>(){{ add("simple"); }});
+
         if (file == null) throw new CCException(1105);
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -186,7 +191,10 @@ public class DeviceTypeRepository {
 
             String[] lineArray = line.split(";");
             int headerLength = lineArray.length;
-            if (lineArray.length <= 1) throw new CCException(1203);
+
+            if(!typeMap.get(headerLength).contains(type)) throw new CCException(1204);
+
+            if (headerLength <= 1) throw new CCException(1203);
 
             //removes characters like our friend \uFEFF a invisible zero space character added to csv files when opening excel that throws off my validations :)
             lineArray[0] = lineArray[0].replaceAll("[^a-zA-Z_-]", "");
@@ -194,7 +202,7 @@ public class DeviceTypeRepository {
             while ((line = reader.readLine()) != null) {
                 lineArray = line.split(";");
 
-                if (lineArray.length != headerLength) break;
+                if (lineArray.length != headerLength) throw new CCException(1204, lineArray[0] + " has not a valid structure");
 
                 try {
                     DeviceType deviceType = switch (type) {
@@ -223,8 +231,13 @@ public class DeviceTypeRepository {
                     };
 
                     em.persist(deviceType);
+
                 } catch(NumberFormatException ex){
                     throw new CCException(1106, "Wrong data type in the import file: " + ex.getMessage());
+                } catch(ConstraintViolationException ex){
+                    throw new CCException(1201, "One device type does already exist " + ex.getMessage());
+                } catch(IllegalArgumentException | ArrayIndexOutOfBoundsException ex){
+                    throw new CCException(1204);
                 }
             }
         } catch (IOException e) {

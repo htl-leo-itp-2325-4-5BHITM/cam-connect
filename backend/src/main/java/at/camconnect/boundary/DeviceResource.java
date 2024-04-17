@@ -12,7 +12,9 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.jboss.resteasy.reactive.RestForm;
 
+import java.io.File;
 import java.util.List;
 
 @Path("/device")
@@ -175,7 +177,6 @@ public class DeviceResource {
         return CCResponse.ok();
     }
     @GET
-
     @Path("/validatenumberandtype/{number}/{type_id}")
     public Response validateNumberAndType(@PathParam("number") String number, @PathParam("type_id") Long type_id) {
         boolean result;
@@ -186,5 +187,17 @@ public class DeviceResource {
         }
 
         return CCResponse.ok(result);
+    }
+
+    @POST
+    @Path("/import")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response uploadCsvFile(@RestForm File file) {
+        try{
+            deviceRepository.importDevices(file);
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
 }
