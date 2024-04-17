@@ -52,13 +52,17 @@ export class Api {
             })
     }
 
-    static postData<In, Out>(path: string, data: In): Promise<any> {
+    static postData<In, Out>(path: string, data: In, type: "upload" | "json" = "json"): Promise<any> {
+        let bodyData
+        if(type == "json") bodyData = JSON.stringify(data)
+        if(type == "upload") bodyData = data
+
         return fetch(`${config.api_url}${path}`, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": type,
             },
-            body: JSON.stringify(data),
+            body: bodyData,
         })
         .then(response => {
             this.handleHttpError(response.status, response.url)
