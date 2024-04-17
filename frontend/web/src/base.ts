@@ -60,7 +60,7 @@ export class Api {
         return fetch(`${config.api_url}${path}`, {
             method: "POST",
             headers: {
-                "Content-Type": type,
+                "Content-Type": "application-"+type,
             },
             body: bodyData,
         })

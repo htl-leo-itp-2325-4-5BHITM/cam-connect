@@ -1,11 +1,7 @@
 import {LitElement, html} from 'lit'
 import {customElement} from 'lit/decorators.js'
 import styles from '../../styles/components/edit.styles.scss'
-import URLHandler from "../urlHandler"
-import DeviceTypeAttributeService from "../service/deviceTypeAttribute.service"
-import {AppState} from "../AppState"
 import {Api, ccResponse, config} from "../base"
-import {model} from "../index"
 @customElement('cc-edit')
 export class EditComponent extends LitElement {
     render() {
@@ -31,13 +27,21 @@ export class EditComponent extends LitElement {
         const formData = new FormData()
         formData.append('file', file, file.name)
 
-        fetch(`${config.api_url}/devicetype/import/${type}`, {
-            method: "POST",
-            body: formData,
-        })
-            .then(response => { return response.json() })
-            .then((result) => {
-                console.log(result)
+        Api.postData(`/devicetype/import/${type}`, formData, "upload")
+            .then((data) => {
+                console.log(data)
+                switch (data.ccStatus.statusCode){
+                    case 1000:
+                        //@ts-ignore
+                        PopupEngine.createNotification({text: `Successfully imported ${type}`})
+                        break
+                    case 1204:
+                        //@ts-ignore
+                        PopupEngine.createNotification({text: `Konnte nicht importieren weil die filestruktur invalide ist`})
+                        break
+            }})
+            .catch(error => {
+                console.error(error)
             })
     }
 }
