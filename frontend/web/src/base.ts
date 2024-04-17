@@ -53,14 +53,18 @@ export class Api {
     }
 
     static postData<In, Out>(path: string, data: In, type: "upload" | "json" = "json"): Promise<any> {
-        let bodyData
-        if(type == "json") bodyData = JSON.stringify(data)
-        if(type == "upload") bodyData = data
+        let bodyData:any = JSON.stringify(data)
+        let contentType = "application/json"
+
+        if(type == "upload") {
+            bodyData = data
+            contentType = "multipart/form-data"
+        }
 
         return fetch(`${config.api_url}${path}`, {
             method: "POST",
             headers: {
-                "Content-Type": type,
+                "Content-Type": contentType,
             },
             body: bodyData,
         })
@@ -77,7 +81,8 @@ export class Api {
 
     static handleCCError(statusCode: number, details: string, url:string): boolean {
         if(statusCode == 1000) return true
-        if(statusCode == 1)
+        if(statusCode == 1101)
+            console.log("invalid id in getter")
         console.log("something went wrong in the backend trying to reach endpoint: ", url, "statusCode: ", statusCode + ". Details:", details)
         return false
     }
