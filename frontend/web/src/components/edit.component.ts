@@ -12,35 +12,47 @@ export class EditComponent extends LitElement {
             <style>${styles}</style>
             <cc-navbar type="simple"></cc-navbar>
 
-            <select name="listOfTypes" id="listOfTypes" @change="${(event) => this.selectOption(event.target.value)}">
-                ${listOfString.map(type => html`<option value="${type}">${type}</option>`)}
-            </select>
+            <div>
+                <h2>Device Type Import</h2>
+                <select name="listOfTypes" id="listOfTypes" @change="${(event) => this.selectOption(event.target.value)}">
+                    ${listOfString.map(type => html`<option value="${type}">${type}</option>`)}
+                </select>
+                <div class="importBox">
+                    <input type="file"
+                           @change="${(event) => {
+                               this.importDataFromCsv(event, "devicetype", listOfString[0])
+                           }}" accept=".csv"/>
+                </div>
+            </div>
 
-            <div class="importBox">
-                <label for="Type">${listOfString[0]} </label>
+            <div>
+                <h2>Device Import</h2>
                 <input type="file"
                        @change="${(event) => {
-                           this.importDataFromCsv(event, listOfString[0])
+                           this.importDataFromCsv(event, "device", "")
                        }}" accept=".csv"/>
             </div>
         `;
     }
     selectOption(type) {
-        this.shadowRoot.querySelector('.importBox').innerHTML = `
-            <label for="Type">${type} </label>
-            <input type="file"
-                @change="${(event) => {
-                    this.importDataFromCsv(event, type)
-                }}" accept=".csv"/>`
+        const importBox = this.shadowRoot.querySelector('.importBox');
+        importBox.innerHTML = '';
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.csv';
+        input.addEventListener('change', (event) => {
+            this.importDataFromCsv(event, "devicetype", type)
+        });
+        importBox.appendChild(input);
     }
 
-    importDataFromCsv(event: Event, type:string) {
+    importDataFromCsv(event: Event, importType: string, type:string, ) {
         let input = event.target as HTMLInputElement
         let file:File = input.files[0]
         const formData = new FormData()
         formData.append('file', file, file.name)
 
-        Api.postData(`/devicetype/import/${type}`, formData, "upload")
+        Api.postData(`/${importType}/import/${type}`, formData, "upload")
             .then((data) => {
                 console.log(data)
                 switch (data.ccStatus.statusCode){
@@ -50,11 +62,15 @@ export class EditComponent extends LitElement {
                         break
                     case 1201:
                         //@ts-ignore
-                        PopupEngine.createNotification({text: `Konnte nicht importieren weil die ein Device Type bereits existiert`})
+                        PopupEngine.createNotification({text: `Konnte nicht importieren, weil der DeviceType bereits existiert`})
+                        break
+                    case 1203:
+                        //@ts-ignore
+                        PopupEngine.createNotification({text: `Konnte nicht importiert werden, weil das File leer ist`})
                         break
                     case 1204:
                         //@ts-ignore
-                        PopupEngine.createNotification({text: `Konnte nicht importieren weil die filestruktur invalide ist`})
+                        PopupEngine.createNotification({text: `Konnte nicht importieren, weil die filestruktur invalide ist`})
                         break
                 }})
             .catch(error => {
