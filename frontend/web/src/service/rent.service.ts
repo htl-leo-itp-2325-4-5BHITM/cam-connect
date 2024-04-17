@@ -15,10 +15,10 @@ export interface Rent{
     device_string?: string
     teacher_start: Teacher
     teacher_end: Teacher
-    rent_start: string //should be date but couldnt get that to work
-    rent_end_planned: string //should be date but couldnt get that to work
-    rent_end_actual: string //should be date but couldnt get that to work
-    creation_date: string //should be date but couldnt get that to work
+    rent_start: string //should be dates but couldnt get that to work
+    rent_end_planned: string
+    rent_end_actual: string
+    creation_date: string
     verification_message: string
     status: RentStatusEnum
     note: string
@@ -119,22 +119,22 @@ export default class RentService {
             Api.postData(`/rent/getbyid/${rentId}/updatestatus`, {verification_code: code, status: status, verification_message: message})
                 .then((result) => {
                     if(result.ccStatus.statusCode == 1000){
-                        PopupEngine.createNotification({
-                            heading: "Verleih erfolgreich " + Util.rentStatusToHuman(status),
-                        })
+                        PopupEngine.createNotification({ heading: "Verleih erfolgreich " + Util.rentStatusToHuman(status), CSSClass: "good" })
                         resolve(true)
                     }
                     else if(result.ccStatus.statusCode == 1205){
                         PopupEngine.createNotification({
                             heading: "Falscher Bestätigungscode",
-                            text: "Wahrscheinlich ist der angegebene Link ungültig."
+                            text: "Wahrscheinlich ist der angegebene Link ungültig.",
+                            CSSClass: "bad"
                         })
                         resolve(false)
                     }
                     else if(result.ccStatus.statusCode == 1201){
                         PopupEngine.createNotification({
                             heading: "Fehler",
-                            text: "Dieser verleih wurde schon bestätigt oder abgelehnt."
+                            text: "Dieser Verleih wurde schon bestätigt oder abgelehnt.",
+                            CSSClass: "bad"
                         })
                         resolve(false)
                     }

@@ -83,6 +83,8 @@ export class AppState{
         this._createRentElement.addDevice("default", false)
 
         this.update()
+
+        console.table(this._cancelCurrentAction)
     }
 
     get createRentModalOpen(): boolean {

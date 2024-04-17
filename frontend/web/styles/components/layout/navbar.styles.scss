@@ -12,6 +12,10 @@
   height: fit-content;
 }
 
+:host([type = "simple"]){
+  justify-content: center;
+}
+
 div.logo{
   height: 1.5rem;
   cursor: pointer;

@@ -13,10 +13,11 @@ import {AppState} from "../../AppState"
 import RentService from "../../service/rent.service"
 import URLHandler from "../../urlHandler"
 import logo from "../../../assets/logo/cc-wordmark-white.svg"
+import Util, {AnimationHelper} from "../../util"
 
 @customElement('cc-navbar')
 export class NavbarComponent extends LitElement {
-    @property()
+    @property({reflect: true})
     type: "default" | "simple" = "default"
 
     @property()
@@ -64,7 +65,7 @@ export class NavbarComponent extends LitElement {
 
             <div class="tools">
                 <icon-cta>${unsafeSVG(icon(faMagnifyingGlass).html[0])}</icon-cta>
-                <icon-cta @click="${this.reload}">${unsafeSVG(icon(faArrowRotateRight).html[0])}</icon-cta>
+                <icon-cta @click="${this.reload}" class="reload">${unsafeSVG(icon(faArrowRotateRight).html[0])}</icon-cta>
                 <icon-cta>${unsafeSVG(icon(faCircleQuestion).html[0])}</icon-cta>
             </div>
         `
@@ -86,7 +87,8 @@ export class NavbarComponent extends LitElement {
         select.selectOptionByIndex(pageIndex)
     }
 
-    reload() { //TODO limit rates
+    reload(e: Event) { //TODO limit rates
+        AnimationHelper.spin(this.shadowRoot.querySelector("icon-cta.reload"))
         RentService.fetchAll()
     }
 }

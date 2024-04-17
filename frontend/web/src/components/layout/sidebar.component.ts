@@ -33,10 +33,14 @@ export class SidebarComponent extends LitElement {
         return html`
             <style>${styles}</style>
             <div class="buttons">
-                <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.FILLED}" 
+                <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.FILLED}"
                            @click="${this.openCreateRentMenu}"
-                           @mouseenter="${(e) => {Tooltip.show(e.target, 'shift+n oder <', 1000)}}"
-                           @mouseleave="${()=>{Tooltip.hide(0)}}"
+                           @mouseenter="${(e) => {
+                               Tooltip.show(e.target, 'shift+n oder <', 1000)
+                           }}"
+                           @mouseleave="${() => {
+                               Tooltip.hide(0)
+                           }}"
                 >
                     Neuer Verleih
                 </cc-button>
@@ -51,7 +55,9 @@ export class SidebarComponent extends LitElement {
                     <p>liste</p>
                 </cc-select>
                 <cc-toggle>Nur verfügbare anzeigen</cc-toggle>
-                <cc-button size="${SizeEnum.MEDIUM}" type="${ButtonType.UNDERLINED}" color="${SimpleColorEnum.GRAY}" noPadding>Filter zurücksetzten</cc-button>
+                <cc-button size="${SizeEnum.MEDIUM}" type="${ButtonType.UNDERLINED}" color="${SimpleColorEnum.GRAY}"
+                           noPadding>Filter zurücksetzten
+                </cc-button>
             </div>
             <cc-line></cc-line>
             <slot name="primaryFilters" @slotchange=${this.handlePrimaryFilterChange}></slot>
@@ -61,7 +67,7 @@ export class SidebarComponent extends LitElement {
             </div>
 
             <div class="user">
-                <img src="../../../assets/user-icon-default.svg" alt="user">
+                <img src="../../../assets/icon/user-icon-default.svg" alt="user">
                 <p>${(this.accountname)}</p>
             </div>
         `

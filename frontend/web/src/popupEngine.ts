@@ -19,11 +19,11 @@ interface ModalInput {
 }
 
 interface NotificationSettings {
-	heading: string,
+	heading?: string,
 	text?: string,
 	position?: string[],
 	CSSClass?: string | string[],
-	lifetime?: number
+	lifetime?: number,
 }
 
 interface Config{

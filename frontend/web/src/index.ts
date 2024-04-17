@@ -73,7 +73,7 @@ KeyBoardShortCut.register(["escape"], () => {model.appState.value.cancelCurrentA
 
 //Api.getbyid("/rent",  1, "/remove").then(data => console.log(data))
 
-//lol i just wanna keep this code arround cause i like it.. i dug arround trying to find a way to prevent keybinds
+//lol i just wanna keep this code around cause i like it.. i dug around trying to find a way to prevent keybinds
 // from happening when you are in an input field.. then i realized that keydown has a event.target property
 /*setInterval(()=>{
     let focusedElem = document.activeElement

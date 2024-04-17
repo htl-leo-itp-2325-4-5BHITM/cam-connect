@@ -70,15 +70,21 @@ export class DeviceListEntryComponent extends LitElement {
         return html`
             <section>
                 <div class="details">
-                    <cc-property-value size="small" property="System" value="${camera.system.name}" isLink></cc-property-value>
-                    <cc-property-value size="small" property="Sensor" value="${camera.sensor?.name}" isLink></cc-property-value>
-                    <cc-property-value size="small" property="Auflösung" value="${camera.resolution.name}"></cc-property-value>
-                    <cc-property-value size="small" property="Maximale-Framerate" value="${camera.framerate}fps"></cc-property-value>
-                    <cc-property-value size="small" property="Mount" value="${camera.mount?.name}" isLink></cc-property-value>
-                    <cc-property-value size="small" property="Autofokus" value="${camera.autofocus ? 'Ja' : 'Nein'}"></cc-property-value>
+                    <cc-property-value size="small" property="System" value="${camera.system.name}"
+                                       isLink></cc-property-value>
+                    <cc-property-value size="small" property="Sensor" value="${camera.sensor?.name}"
+                                       isLink></cc-property-value>
+                    <cc-property-value size="small" property="Auflösung"
+                                       value="${camera.resolution.name}"></cc-property-value>
+                    <cc-property-value size="small" property="Maximale-Framerate"
+                                       value="${camera.framerate}fps"></cc-property-value>
+                    <cc-property-value size="small" property="Mount" value="${camera.mount?.name}"
+                                       isLink></cc-property-value>
+                    <cc-property-value size="small" property="Autofokus"
+                                       value="${camera.autofocus ? 'Ja' : 'Nein'}"></cc-property-value>
                 </div>
                 <div class="image">
-                    <img src="../../../assets/tempCamera.png" alt="">
+                    <img src="../../../assets/icon/tempCamera.png" alt="">
                 </div>
             </section>
         `
@@ -89,12 +95,14 @@ export class DeviceListEntryComponent extends LitElement {
         return html`
             <section>
                 <div class="details">
-                    <cc-property-value size="small" property="Needs Recorder" value="${audio.needsRecorder}"></cc-property-value>
-                    <cc-property-value size="small" property="Windblocker" value="${audio.windblocker}"></cc-property-value>
+                    <cc-property-value size="small" property="Needs Recorder"
+                                       value="${audio.needsRecorder}"></cc-property-value>
+                    <cc-property-value size="small" property="Windblocker"
+                                       value="${audio.windblocker}"></cc-property-value>
                     <cc-property-value size="small" property="Wireless" value="${audio.wireless}"></cc-property-value>
                 </div>
                 <div class="image">
-                    <img src="../../../assets/tempCamera.png" alt="">
+                    <img src="../../../assets/icon/tempCamera.png" alt="">
                 </div>
             </section>
         `
@@ -105,12 +113,15 @@ export class DeviceListEntryComponent extends LitElement {
         return html`
             <section>
                 <div class="details">
-                    <cc-property-value size="small" property="Sensor" value="${drone.sensor?.name}" isLink></cc-property-value>
-                    <cc-property-value size="small" property="Auflösung" value="${drone.resolution.resolution}"></cc-property-value>
-                    <cc-property-value size="small" property="Maximale Reichweite" value="${drone.max_range}"></cc-property-value>
+                    <cc-property-value size="small" property="Sensor" value="${drone.sensor?.name}"
+                                       isLink></cc-property-value>
+                    <cc-property-value size="small" property="Auflösung"
+                                       value="${drone.resolution.resolution}"></cc-property-value>
+                    <cc-property-value size="small" property="Maximale Reichweite"
+                                       value="${drone.max_range}"></cc-property-value>
                 </div>
                 <div class="image">
-                    <img src="../../../assets/tempCamera.png" alt="">
+                    <img src="../../../assets/icon/tempCamera.png" alt="">
                 </div>
             </section>
         `
@@ -121,12 +132,14 @@ export class DeviceListEntryComponent extends LitElement {
         return html`
             <section>
                 <div class="details">
-                    <cc-property-value size="small" property="Lensmount" value="${lens.lens_mount.name}"></cc-property-value>
+                    <cc-property-value size="small" property="Lensmount"
+                                       value="${lens.lens_mount.name}"></cc-property-value>
                     <cc-property-value size="small" property="Blende" value="${lens.f_stop}"></cc-property-value>
-                    <cc-property-value size="small" property="Brennweite" value="${lens.focal_length}"></cc-property-value>
+                    <cc-property-value size="small" property="Brennweite"
+                                       value="${lens.focal_length}"></cc-property-value>
                 </div>
                 <div class="image">
-                    <img src="../../../assets/tempCamera.png" alt="">
+                    <img src="../../../assets/icon/tempCamera.png" alt="">
                 </div>
             </section>
         `
@@ -139,10 +152,11 @@ export class DeviceListEntryComponent extends LitElement {
                 <div class="details">
                     <cc-property-value size="small" property="RGB" value="${light.rgb}"></cc-property-value>
                     <cc-property-value size="small" property="Watts" value="${light.watts}"></cc-property-value>
-                    <cc-property-value size="small" property="Temperatur" value="${light.variable_temperature}"></cc-property-value>
+                    <cc-property-value size="small" property="Temperatur"
+                                       value="${light.variable_temperature}"></cc-property-value>
                 </div>
                 <div class="image">
-                    <img src="../../../assets/tempCamera.png" alt="">
+                    <img src="../../../assets/icon/tempCamera.png" alt="">
                 </div>
             </section>
         `
@@ -153,11 +167,13 @@ export class DeviceListEntryComponent extends LitElement {
         return html`
             <section>
                 <div class="details">
-                    <cc-property-value size="small" property="Maximales Gewicht" value="${stabilizer.max_weight_kilograms}"></cc-property-value>
-                    <cc-property-value size="small" property="Achsen Anzahl" value="${stabilizer.number_of_axis}"></cc-property-value>
+                    <cc-property-value size="small" property="Maximales Gewicht"
+                                       value="${stabilizer.max_weight_kilograms}"></cc-property-value>
+                    <cc-property-value size="small" property="Achsen Anzahl"
+                                       value="${stabilizer.number_of_axis}"></cc-property-value>
                 </div>
                 <div class="image">
-                    <img src="../../../assets/tempCamera.png" alt="">
+                    <img src="../../../assets/icon/tempCamera.png" alt="">
                 </div>
             </section>
         `
@@ -169,10 +185,11 @@ export class DeviceListEntryComponent extends LitElement {
             <section>
                 <div class="details">
                     <cc-property-value size="small" property="Head" value="${tripod.head}"></cc-property-value>
-                    <cc-property-value size="small" property="Höhe" value="${tripod.height_centimeters}"></cc-property-value>
+                    <cc-property-value size="small" property="Höhe"
+                                       value="${tripod.height_centimeters}"></cc-property-value>
                 </div>
                 <div class="image">
-                    <img src="../../../assets/tempCamera.png" alt="">
+                    <img src="../../../assets/icon/tempCamera.png" alt="">
                 </div>
             </section>
         `
@@ -183,10 +200,11 @@ export class DeviceListEntryComponent extends LitElement {
         return html`
             <section>
                 <div class="details">
-                    <cc-property-value size="small" property="Beschreibung" value="${simple.description}"></cc-property-value>
+                    <cc-property-value size="small" property="Beschreibung"
+                                       value="${simple.description}"></cc-property-value>
                 </div>
                 <div class="image">
-                    <img src="../../../assets/tempCamera.png" alt="">
+                    <img src="../../../assets/icon/tempCamera.png" alt="">
                 </div>
             </section>
         `

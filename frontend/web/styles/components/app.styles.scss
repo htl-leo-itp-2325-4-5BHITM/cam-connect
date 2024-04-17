@@ -90,42 +90,49 @@ cc-sidebar{
   overflow-y: auto;
 
   display: none;
-}
 
-.entry{
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-  transition: background-color $transitionTimeShort;
-  border-radius: .3rem;
-  padding: .2rem .5rem;
-  cursor: pointer;
+  .entry{
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    transition: background-color $transitionTimeShort;
+    border-radius: .3rem;
+    padding: .2rem .5rem;
+    cursor: pointer;
 
-  &.focused{
-    background-color: $gray400;
+    &.focused{
+      background-color: $gray400;
+
+      label{
+        color: $gray1000;
+      }
+
+      svg path{
+        color: $gray1000;
+      }
+    }
+
+    svg{
+      height: 1.1rem;
+
+      path{
+        color: $gray800;
+        transition: color $transitionTimeShort;
+      }
+    }
+
+    img{
+      height: 1.2rem;
+      width: 1.2rem;
+      aspect-ratio: 1;
+      @include imgIconColorGray800
+    }
 
     label{
-      color: $gray1000;
-    }
-
-    svg path{
-      color: $gray1000;
-    }
-  }
-
-  svg{
-    height: 1.1rem;
-
-    path{
+      cursor: pointer;
       color: $gray800;
       transition: color $transitionTimeShort;
     }
-  }
-
-  label{
-    cursor: pointer;
-    color: $gray800;
-    transition: color $transitionTimeShort;
   }
 }
 

@@ -58,19 +58,19 @@ export class EditComponent extends LitElement {
                 switch (data.ccStatus.statusCode){
                     case 1000:
                         //@ts-ignore
-                        PopupEngine.createNotification({text: `Successfully imported ${type}`})
+                        PopupEngine.createNotification({text: `Successfully imported ${type}`, CSSClass: "good"})
                         break
                     case 1201:
                         //@ts-ignore
-                        PopupEngine.createNotification({text: `Konnte nicht importieren, weil der DeviceType bereits existiert`})
+                        PopupEngine.createNotification({text: `Konnte nicht importieren, weil der DeviceType bereits existiert`, CSSClass: "bad"})
                         break
                     case 1203:
                         //@ts-ignore
-                        PopupEngine.createNotification({text: `Konnte nicht importiert werden, weil das File leer ist`})
+                        PopupEngine.createNotification({text: `Konnte nicht importiert werden, weil das File leer ist`, CSSClass: "bad"})
                         break
                     case 1204:
                         //@ts-ignore
-                        PopupEngine.createNotification({text: `Konnte nicht importieren, weil die filestruktur invalide ist`})
+                        PopupEngine.createNotification({text: `Konnte nicht importieren, weil die filestruktur invalide ist`, CSSClass: "bad"})
                         break
                 }})
             .catch(error => {

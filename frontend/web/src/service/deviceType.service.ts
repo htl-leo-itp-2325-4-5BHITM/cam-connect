@@ -4,8 +4,12 @@ import {CameraResolution, CameraSensor, CameraSystem, LensMount, TripodHead} fro
 import {html, TemplateResult} from "lit"
 import {unsafeSVG} from 'lit/directives/unsafe-svg.js';
 import {icon} from "@fortawesome/fontawesome-svg-core"
-import {faCamera, faHelicopter, faLightbulb, faMicrophone} from "@fortawesome/free-solid-svg-icons"
+import {faCamera, faHelicopter, faLightbulb, faMicrophone, faGears} from "@fortawesome/free-solid-svg-icons"
 import {AutocompleteOption} from "../components/basic/autocomplete.component"
+import stabilizerIcon from "../../assets/icon/noun-gimbal-5345717.svg"
+import droneIcon from "../../assets/icon/noun-drone-6707036.svg"
+import lensIcon from "../../assets/icon/noun-lens-6134156.svg"
+import tripodIcon from "../../assets/icon/noun-tripod-6660204.svg"
 
 //region devicetype interfaces
 export interface DeviceTypeSource {
@@ -172,12 +176,12 @@ export default class DeviceTypeService {
         switch (data.variant){
             case DeviceTypeVariantEnum.camera: return html`${unsafeSVG(icon(faCamera).html[0])}`
             case DeviceTypeVariantEnum.microphone: return html`${unsafeSVG(icon(faMicrophone).html[0])}`
-            case DeviceTypeVariantEnum.drone: return html`${unsafeSVG(icon(faHelicopter).html[0])}`
-            case DeviceTypeVariantEnum.lens:
+            case DeviceTypeVariantEnum.drone: return html`<img src="${droneIcon}" alt="D">`
+            case DeviceTypeVariantEnum.lens: return html`<img src="${lensIcon}" alt="L">`
             case DeviceTypeVariantEnum.light: return html`${unsafeSVG(icon(faLightbulb).html[0])}`
-            case DeviceTypeVariantEnum.stabilizer:
-            case DeviceTypeVariantEnum.tripod: return html`T`
-            default: return html`Icon`
+            case DeviceTypeVariantEnum.stabilizer: return html`<img src="${stabilizerIcon}" alt="S">`
+            case DeviceTypeVariantEnum.tripod: return html`<img src="${tripodIcon}" alt="T">`
+            default: return html`${unsafeSVG(icon(faGears).html[0])}`
         }
     }
 }

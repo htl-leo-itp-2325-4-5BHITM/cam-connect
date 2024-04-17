@@ -179,6 +179,16 @@ export class AnimationHelper{
         })
     }
 
+    static spin(elem: Element, duration: number = 400){
+        elem.animate([
+            {rotate: '0deg'},
+            {rotate: '720deg'},
+        ], {
+            duration: duration,
+            easing: 'ease-in-out',
+        })
+    }
+
     static remove(elem: Element, duration: number = 200){
         let elemAsHTMLElement = elem as HTMLElement
         elemAsHTMLElement.style.overflow = "hidden"

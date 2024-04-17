@@ -61,6 +61,18 @@
     padding: .5rem;
     border: 1px solid $gray600;
     border-radius: .5rem;
+
+    &.good{
+      background-color: $good;
+    }
+
+    &.bad{
+      background-color: $bad;
+    }
+
+    &.mid{
+      background-color: $mid;
+    }
   }
 
   .popupEngineNotificationHeading{
