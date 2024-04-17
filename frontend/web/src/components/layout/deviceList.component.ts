@@ -24,10 +24,12 @@ export class DeviceListComponent extends LitElement {
         return html`
             <style>${styles}</style>
 
-            ${Object.values(this.deviceTypesFull.value).flat().map(deviceType => {
-                return html`<cc-device-list-entry .deviceTypeFull="${deviceType}"></cc-device-list-entry>`
-                /*return html`<p>hallo</p>`*/
-            })}
+            <div class="content">
+                ${Object.values(this.deviceTypesFull.value).flat().map(deviceType => {
+                    return html`<cc-device-list-entry .deviceTypeFull="${deviceType}"></cc-device-list-entry>`
+                    /*return html`<p>hallo</p>`*/
+                })}
+            </div>
         `
     }
 

@@ -38,11 +38,15 @@ import {Api, KeyBoardShortCut} from "./base"
 import PopupEngine from "./popupEngine";
 import URLHandler from "./urlHandler"
 
+import favicon from "../assets/logo/cc-logomark-accent.svg"
+
 //OMG its our single swouce of THWQUUUCE
 export let model = new Model()
 
 window.addEventListener("DOMContentLoaded", () => {
     URLHandler.parseCurrentURL()
+
+    document.querySelector('head').innerHTML += `<link rel="shortcut icon" href="${favicon}" type="image/x-icon">`
 })
 
 /*model.appState.subscribe(data => {

@@ -6,26 +6,30 @@ $gap: 1rem;
   all: initial;
   column-gap: $gap;
   padding: $gap !important;
-
   overflow-y: scroll;
-
   -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-:host([size="small"]) {
+:host([size="small"]) .content {
   columns: 1;
 }
-:host([size="medium"]) {
+:host([size="medium"]) .content{
   columns: 2;
 }
-:host([size="large"]) {
+:host([size="large"]) .content{
   columns: 3;
 }
-:host([size="xLarge"]) {
+:host([size="xLarge"]) .content{
   columns: 4;
 }
 
-:host > *{
+.content > *{
   break-inside: avoid;
   margin-bottom: $gap;
 }

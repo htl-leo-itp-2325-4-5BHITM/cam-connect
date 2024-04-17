@@ -52,31 +52,32 @@ export class Api {
             })
     }
 
-    static postData<In, Out>(path: string, data: In, type: "upload" | "json" = "json"): Promise<any> {
-        let bodyData:any = JSON.stringify(data)
-        let contentType = "application/json"
+    static async postData<In, Out>(path: string, data: In, type: "upload" | "json" = "json"): Promise<any> {
+        let response
 
+        if(type == "json"){
+            response = await fetch(`${config.api_url}${path}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            })
+        }
         if(type == "upload") {
-            bodyData = data
-            contentType = "multipart/form-data"
+            response = await fetch(`${config.api_url}${path}`, {
+                method: "POST",
+                body: data as any,
+            })
         }
 
-        return fetch(`${config.api_url}${path}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": contentType,
-            },
-            body: bodyData,
-        })
-        .then(response => {
-            this.handleHttpError(response.status, response.url)
-            return response.json() as Promise<ccResponse<Out>>
-        })
-        .then((result: ccResponse<Out>) => {
-            if(result.ccStatus) this.handleCCError(result.ccStatus.statusCode, result.ccStatus.details, path)
-            else console.error("no ccResponse object received from", path, "only got:", result)
-            return result
-        })
+        this.handleHttpError(response.status, response.url)
+
+        let result: ccResponse<Out> = await response.json()
+        if(result.ccStatus) this.handleCCError(result.ccStatus.statusCode, result.ccStatus.details, path)
+        else console.error("no ccResponse object received from", path, "only got:", result)
+
+        return result
     }
 
     static handleCCError(statusCode: number, details: string, url:string): boolean {
