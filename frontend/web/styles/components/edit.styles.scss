@@ -1,0 +1,15 @@
+@import "../base";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+select{
+  width: fit-content;
+}
+
+input{
+  width: fit-content;
+}

@@ -1,10 +1,9 @@
 import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/button.styles.scss'
-import {SizeEnum} from "../../base"
+import {ColorEnum, SimpleColorEnum, SizeEnum} from "../../base"
 
 export enum ButtonType {FILLED="filled", OUTLINED="outlined", TEXT="text", UNDERLINED="underlined"}
-export enum ButtonColor {ACCENT="accent", GRAY="gray"}
 
 /**
  * Buttons accept any element inside them to be assigned a slot="" of left or right. These will be placed before or after the text.
@@ -15,25 +14,49 @@ export enum ButtonColor {ACCENT="accent", GRAY="gray"}
 @customElement('cc-button')
 export class ButtonComponent extends LitElement {
     @property({type: SizeEnum})
-    size?: SizeEnum = SizeEnum.MEDIUM;
+    size?: SizeEnum = SizeEnum.MEDIUM
 
     @property({type: ButtonType})
-    type?: ButtonType = ButtonType.FILLED;
+    type?: ButtonType = ButtonType.FILLED
 
-    @property({type: ButtonColor})
-    color?: ButtonColor = ButtonColor.ACCENT;
+    @property({type: ColorEnum})
+    color?: ColorEnum = ColorEnum.ACCENT
 
     @property({type: String})
-    text?: String = this.innerText || "Button";
+    text?: string = this.innerText || "Button"
+
+    @property({type: Boolean})
+    disabled?: boolean = false
+
+    @property({type: Boolean})
+    noPadding?: boolean = false
+
+    @property({type: Boolean})
+    loading?: boolean = false
+
+    private storedText: string = "smoothy went wrong"
 
     render() {
         return html`
             <style>${styles}</style>
-            <button class="cc-button" color="${this.color}" type="${this.type}" size="${this.size}">
+            <button class="cc-button" part="button" color="${this.color}" type="${this.type}" size="${this.size}" .disabled="${this.disabled}" noPadding="${this.noPadding}">
                 <slot name="left"></slot>
                 ${this.text}
                 <slot name="right"></slot>
             </button>`
+    }
+
+    protected firstUpdated(_changedProperties: PropertyValues) {
+        super.firstUpdated(_changedProperties);
+        if(this.loading)
+        this.addEventListener("click", () => {
+            this.storedText = this.text
+            this.text = "loading.."
+        })
+    }
+
+    loadingFinished(){
+        this.text = this.storedText
     }
 }
 

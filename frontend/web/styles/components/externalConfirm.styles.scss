@@ -1,0 +1,71 @@
+@import "../base";
+
+:host{
+  height: 100vh;
+  max-height: 100vh;
+  background-color: $gray100;
+  position: relative;
+  overflow: hidden;
+}
+
+main{
+  width: 60%;
+  margin-inline: auto;
+}
+
+h1{
+  font-size: 1.8rem;
+  font-weight: 300;
+  margin-top: 2rem;
+  margin-bottom: .8rem;
+}
+
+p.top{
+  font-weight: 400;
+  margin-bottom: .5rem;
+}
+
+ul{
+
+  li{
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+    padding-block: .5rem;
+    padding-inline: 1rem .5rem;
+    border-radius: .3rem;
+    background-color: $gray250;
+    margin-block: .3rem;
+
+    div{
+      display: flex;
+      gap: 1rem;
+      margin-right: auto;
+    }
+
+    .date{
+      color: $gray700;
+    }
+
+    cc-button{
+      margin-left: .5rem;
+    }
+
+    p.done{
+      color: $gray700
+    }
+
+    svg, img{
+      height: 1rem;
+      path{
+        color: $gray700;
+      }
+    }
+  }
+}
+
+.button-container{
+  display: flex;
+  gap: .5rem;
+  margin-top: 2rem;
+}

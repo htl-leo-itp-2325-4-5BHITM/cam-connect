@@ -1,20 +1,29 @@
 package at.camconnect.repository;
 
+import at.camconnect.dtos.AutocompleteOptionDTO;
 import at.camconnect.dtos.DeviceDTO;
+import at.camconnect.dtos.RentDTO;
+import at.camconnect.enums.RentStatusEnum;
+import at.camconnect.model.DeviceTypeAttributes.*;
+import at.camconnect.model.DeviceTypeVariants.*;
+import at.camconnect.model.Rent;
+import at.camconnect.model.Student;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.model.Device;
 import at.camconnect.model.DeviceType;
 import at.camconnect.socket.DeviceSocket;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.json.JsonObject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
+import org.hibernate.exception.ConstraintViolationException;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class DeviceRepository {
@@ -27,39 +36,121 @@ public class DeviceRepository {
     @Transactional
     public void create(Device device){
         em.persist(device);
-        deviceSocket.broadcast(getAll());
+        deviceSocket.broadcast();
     }
 
     @Transactional
     public void remove(Long id){
         em.remove(getById(id));
-        deviceSocket.broadcast(getAll());
+        deviceSocket.broadcast();
     }
 
     @Transactional
     public void update(Long id, DeviceDTO data) {
         try{
             setNumber(id, data.number());
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+        } catch(NumberFormatException ex){ System.out.println(ex.getMessage()); throw new CCException(1106); }
 
         try{
             setNote(id, data.note());
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+        } catch(Exception ex){ System.out.println(ex.getMessage()); throw new CCException(1106); }
 
         try{
             setSerial(id, data.serial());
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
+        } catch(Exception ex){ System.out.println(ex.getMessage()); throw new CCException(1106); }
 
         try{
             setType(id, data.type_id());
-        } catch(Exception ex){ System.out.println(ex.getMessage()); }
-        deviceSocket.broadcast(getAll());
+        } catch(Exception ex){ System.out.println(ex.getMessage()); throw new CCException(1106); }
+
+        deviceSocket.broadcast();
     }
 
-    public Device getById(long id){
+    public Device getById(Long id){
         Device device = em.find(Device.class, id);
         if (device == null) throw new CCException(1101);
         return device;
+    }
+
+    public Device getByNumberAndType(String number, Long type_id){
+        Device device;
+        try{
+            device = em.createQuery("select d from Device d where type.id = :type_id and number = :number", Device.class)
+                    .setParameter("type_id", type_id)
+                    .setParameter("number", number)
+                    .getSingleResult();
+        }
+        catch (Exception ex){
+            throw new CCException(1101);
+        }
+
+        if (device == null) throw new CCException(1101);
+
+        return device;
+    }
+
+    public boolean validateNumberAndType(String number, Long type_id){
+        Long count;
+        try{
+            count = em.createQuery("select count(d) from Device d where type.id = :type_id and number = :number", Long.class)
+                    .setParameter("type_id", type_id)
+                    .setParameter("number", number)
+                    .getSingleResult();
+            getById(1L);
+        }
+        catch (Exception ex){
+            throw new CCException(1200);
+        }
+
+        return count > 0;
+    }
+
+    public List<AutocompleteOptionDTO<Device>> search(String searchTerm, Long type_id, boolean showOnlyAvailableRents){
+        String queryString = "SELECT d FROM Device d " +
+                "WHERE UPPER(d.number) LIKE :searchTerm ";
+        if(type_id >= 0) {
+            queryString += "AND d.type.id = :typeId ";
+        }
+        queryString += "ORDER BY d.number";
+
+        Query query = em.createQuery(queryString, Device.class).setParameter("searchTerm", searchTerm.toUpperCase() + "%");
+
+        if (type_id >= 0) {
+            query.setParameter("typeId", type_id);
+        }
+
+        List<Device> devices = query.getResultList();
+        List<AutocompleteOptionDTO<Device>> result = new LinkedList<>();
+        for (Device device : devices) {
+            if(showOnlyAvailableRents && isDeviceAlreadyInUse(device.getDevice_id())){
+                continue;
+            }
+            result.add(new AutocompleteOptionDTO<>(device, device.getDevice_id()));
+        }
+
+        return result;
+    }
+
+    public boolean isDeviceAlreadyInUse(long device_id) {
+        return !em.createQuery("SELECT r FROM Rent r where r.device.id = :deviceId and r.status != :status order by r.creation_date", Rent.class)
+                .setParameter("deviceId", device_id).setParameter("status", RentStatusEnum.RETURNED)
+                .getResultStream()
+                .map(rent -> new RentDTO(
+                        rent.getRent_id(),
+                        rent.getStatus(),
+                        rent.getType(),
+                        rent.getDevice(),
+                        rent.getDevice_string(),
+                        rent.getTeacher_start(),
+                        rent.getTeacher_end(),
+                        rent.getRent_start(),
+                        rent.getRent_end_planned(),
+                        rent.getRent_end_actual(),
+                        rent.getAccessory(),
+                        rent.getStudent(),
+                        rent.getNote(),
+                        rent.getVerification_message()
+                )).collect(Collectors.toList()).isEmpty();
     }
 
     public List<Device> getAll(){
@@ -67,29 +158,29 @@ public class DeviceRepository {
         return devices;
     }
 
-    public void setNumber(long rentId, String number) {
+    public void setNumber(Long rentId, String number) {
         Device device = getById(rentId);
         device.setNumber(number);
-        deviceSocket.broadcast(getAll());
+        deviceSocket.broadcast();
     }
 
-    public void setSerial(long rentId, String serial) {
+    public void setSerial(Long rentId, String serial) {
         Device device = getById(rentId);
         device.setSerial(serial);
-        deviceSocket.broadcast(getAll());
+        deviceSocket.broadcast();
     }
 
-    public void setNote(long rentId, String serial) {
+    public void setNote(Long rentId, String serial) {
         Device device = getById(rentId);
         device.setNote(serial);
-        deviceSocket.broadcast(getAll());
+        deviceSocket.broadcast();
     }
 
-    public void setType(long rentId, int type) {
+    public void setType(Long rentId, Long type) {
         Device device = getById(rentId);
         DeviceType deviceType = em.find(DeviceType.class, type);
         device.setType(deviceType);
-        deviceSocket.broadcast(getAll());
+        deviceSocket.broadcast();
     }
 
     public boolean importDevices(InputStream fileInputStream) {
@@ -111,6 +202,39 @@ public class DeviceRepository {
             return true;
         } catch(Exception ex){
             return false;
+        }
+    }
+
+    @Transactional
+    public void importDevices(File file) {
+        if(file == null) throw new CCException(1105);
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line = reader.readLine();
+
+            if(line == null || line.equals("")) throw new CCException(1203);
+            String[] lineArray = line.split(";");
+            if (lineArray.length <= 1) throw new CCException(1203);
+
+            lineArray[0] = lineArray[0].replaceAll("[^a-zA-Z_-]", "");
+
+            //checks if the csv file matches the required structure
+            if(lineArray.length != 4) throw new CCException(1204, "invalid line length");
+
+            while ((line = reader.readLine()) != null) {
+                lineArray = line.split(";");
+                if(lineArray.length != 4) break;
+                create(new Device(lineArray[0], lineArray[1], lineArray[2],
+                        em.find(DeviceType.class, lineArray[3])));
+            }
+        } catch (IOException e) {
+            throw new CCException(1204, "File could not be read");
+        } catch(NumberFormatException ex){
+            throw new CCException(1106, "Wrong data type in the import file: " + ex.getMessage());
+        } catch(ConstraintViolationException ex){
+            throw new CCException(1201, "One device type does already exist " + ex.getMessage());
+        } catch(IllegalArgumentException | ArrayIndexOutOfBoundsException ex){
+            throw new CCException(1204);
         }
     }
 }

@@ -3,118 +3,112 @@
 :host {
   all: initial;
   flex-grow: 1;
-}
-
-.student{
-  padding: 1rem;
-}
-
-.heading{
-  display: flex;
-  justify-content: space-between;
-  border: 1px solid $gray500;
-  border-radius: 0.75rem 0.75rem 0rem 0.75rem;
-  background-color: $gray300;
-  padding: .25rem .5rem;
-
-  img{
-    height: 1.5rem;
-    @include imgIconColorAccent;
-  }
-
-  div{
-    display: flex;
-    align-items: center;
-
-    p, cc-button, cc-circle-select{
-      margin-inline: .2rem;
-    }
-  }
-
-  .leftSide p:first-child{
-    font-weight: bold;
-  }
-}
-
-.entries{
-  padding-left: 2.6rem;
-
-  .entry:last-child{
-    border-radius: 0 0 0.75rem 0.75rem;
-  }
-}
-
-.entry{
   display: flex;
   background-color: $gray200;
-  border-top: 1px solid $gray400;
-  padding: 0.5rem;
+  padding: 0.5rem !important;
   gap: 0.75rem;
   align-items: center;
   justify-content: space-between;
+  transition: background-color $transitionTimeShort;
+}
 
-  &.DECLINED{
-    border-top: 1px solid var(--gray400, #424242);
-    background: linear-gradient(90deg, #423333 22.57%, #663D3D 99.01%);
+:host(:hover){
+  //TODO add this as setting
+  /*background-color: $gray300;*/
+}
 
-    input{
-      border-radius: 0.25rem;
-      border: 1px solid var(--gray500, #595959);
-      background: var(--badGrayTransparent, rgba(90, 48, 48, 0.80));
-    }
+:host(:not(:first-of-type)){
+  border-top: 1px solid $gray350;
+}
 
-    label {
-      color: $gray800;
-    }
-  }
-
-
-  div{
-    display: flex;
-    align-items: center;
-    gap: 0.1rem;
-    font-weight: 400;
-    color: $gray800;
-    font-size: $fSizeDesktopDefault;
-
-    p:last-child{
-      color: white;
-      font-weight: 500;
-      margin-left: .2rem;
-    }
-  }
-
-  label{
-    margin-inline: .25rem;
-    color: $gray600;
-
-    &.line{
-      margin: 0;
-      color: $accentDarkmodeLight;
-    }
-  }
-
-  cc-chip{
-    margin-right: 1rem;
-  }
+:host([status="DECLINED"]){
+  background: linear-gradient(90deg, #423333 22.57%, #663D3D 99.01%);
 
   input{
-    padding: 0rem 0.1875rem 0rem 0.25rem;
     border-radius: 0.25rem;
     border: 1px solid $gray500;
-    background: $gray300;
+    background: var(--badGrayTransparent, rgba(90, 48, 48, 0.80));
+  }
 
-    &[type = "text"]{
-      width: 12ch;
-    }
+  span {
+    color: $gray800;
+  }
+}
 
-    &.number{
-      width: 4ch;
-    }
+input, cc-autocomplete{
+  &.name{
+    width: 15ch;
+  }
 
-    &.customDate{
-      width: 6.5ch;
-      text-align: left;
-    }
+  &.date{
+    width: 11ch;
+    text-align: center;
+    padding-inline: .2rem;
+  }
+
+  &.number{
+    width: 5ch;
+  }
+}
+
+//TODO format all dates with more letter spacing as they are in figma
+
+.area{//TODO cleanup this selector
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+  font-weight: 400;
+  color: $gray800;
+  font-size: $fSizeDesktopSmall;
+
+  p:last-child{
+    color: white;
+    font-weight: 500;
+    margin-left: .2rem;
+  }
+
+  &.deviceInfos, &.time{
+    gap: 0.5rem;
+  }
+}
+
+cc-chip{
+  margin-right: 1rem;
+}
+
+cc-line{
+  margin-inline: .5rem;
+}
+
+input{
+  display: flex;
+  padding: 0rem 0.1875rem 0rem 0.25rem;
+  align-items: center;
+  gap: 0.2rem;
+  border-radius: 0.25rem;
+  border: 1px solid $gray500;
+  background: $gray300;
+
+  &[type = "text"]{
+    width: 12ch;
+  }
+
+  &.number{
+    width: 4ch;
+  }
+
+  &[disabled]{
+    background: transparent;
+    border: none;
+  }
+}
+cc-chip .details{
+  h2{
+    font-weight: bold;
+    margin-bottom: .5rem;
+  }
+
+  p{
+    margin-bottom: .5rem;
   }
 }

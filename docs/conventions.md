@@ -124,7 +124,6 @@ function checkLogin(){
   - these should only be used to select the last element of an *unknown* number of items in a list
   - these should not be used for selecting predefined sub containers, text boxes or simmilar
   - since these dont target specific containers but any item of that type they can easily lead to unexpected results
-- 
 
 For those that don't know scss this will seem weird, it's actually pretty easy
 ```SCSS
@@ -154,4 +153,4 @@ $accent: #4095BF; //defines a variable
 
 ## JAVA specific
 - Api routes should be implemented in the same order as they are in the api.md documentation
-- If the route does not jet exist in the docu file it should be added (further instructions in the file) 
+- If the route does not yet exist in the docu file it should be added (further instructions in the file) 

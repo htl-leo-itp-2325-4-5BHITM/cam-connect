@@ -1,21 +1,24 @@
 package at.camconnect.boundary;
 
-import at.camconnect.dtos.DeviceTypeCollection;
+import at.camconnect.dtos.CreateRentDTO;
 import at.camconnect.dtos.RentDTO;
+import at.camconnect.dtos.RentIdsDTO;
 import at.camconnect.dtos.RentByStudentDTO;
+import at.camconnect.model.Rent;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.repository.RentRepository;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @Path("/rent")
+@Produces(MediaType.APPLICATION_JSON)
 public class RentResource {
     @Inject
     RentRepository rentRepository;
@@ -23,23 +26,42 @@ public class RentResource {
     @POST
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Transactional
-    public Response createRent(RentDTO rent) {
-        rentRepository.create(rent);
-        return Response.ok().build();
+    public Response createRent(List<CreateRentDTO> rents) {
+        try{
+            rentRepository.create(rents);
+        } catch(CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
 
     @POST
     @Path("/createempty")
-    @Transactional
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response createRentEmpty() {
-        rentRepository.createEmpty();
-        return Response.ok().build();
+        try{
+            rentRepository.createEmpty();
+        } catch(CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
+    }
+
+    @GET
+    @Path("/getallsinglelist")
+    public Response getAllSingleList(){
+        List<RentDTO> result;
+        try{
+            result = rentRepository.getAllSingleList();
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok(result);
     }
 
     @GET
     @Path("/getall")
-    @Transactional
     public Response getAll(){
         List<RentByStudentDTO> result;
         try{
@@ -54,8 +76,35 @@ public class RentResource {
     @GET
     @Path("/getbyid/{id: [0-9]+}")
     public Response getById(@PathParam("id") Long id) {
+        RentDTO rent;
         try {
-            rentRepository.getById(id);
+            rent = rentRepository.getByIdCensored(id);
+        } catch (CCException ex) {
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok(rent);
+    }
+
+    @GET
+    @Path("/getbyidlist/{ids}")
+    public Response getByIdList(@PathParam("ids") String ids) {
+        List<RentDTO> rents;
+        try {
+            String[] idList = ids.split(",");
+            rents = rentRepository.getByIdList(idList);
+        } catch (CCException ex) {
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok(rents);
+    }
+
+    @GET
+    @Path("/getbyid/{id: [0-9]+}/sendconfirmation")
+    public Response sendConfirmation(@PathParam("id") Long id) {
+        try {
+            List<Rent> rentList = new LinkedList<>();
+            rentList.add(rentRepository.getById(id));
+            rentRepository.sendConfirmationEmail(rentList);
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }
@@ -63,22 +112,23 @@ public class RentResource {
     }
 
     @GET
-    @Path("/getbyid/{id: [0-9]+}/sendconfirmation")
-    public Response sendConfirmation(@PathParam("id") Long id) {
+    @Path("/getbyid/{id: [0-9]+}/verifyconfirmationcode/{code}")
+    public Response verifyConfirmationCode(@PathParam("id") Long id, @PathParam("code") String code) {
+        boolean result;
         try {
-            rentRepository.sendConfirmation(id);
+            result = rentRepository.verifyConfirmationCode(id, code);
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }
-        return CCResponse.ok();
+        return CCResponse.ok(result);
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/getbyid/{id: [0-9]+}/confirm")
-    public Response confirm(@PathParam("id") Long id, RentDTO rentDTO) {
+    @Path("/getbyid/{id: [0-9]+}/updatestatus")
+    public Response confirm(@PathParam("id") Long id, RentIdsDTO rentIdsDTO) {
         try {
-            rentRepository.confirm(id, rentDTO);
+            rentRepository.updateStatus(id, rentIdsDTO);
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }
@@ -88,9 +138,9 @@ public class RentResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/getbyid/{id: [0-9]+}/return")
-    public Response returnRent(@PathParam("id") Long id, RentDTO rentDTO) {
+    public Response returnRent(@PathParam("id") Long id) {
         try {
-            rentRepository.returnRent(id, rentDTO);
+            rentRepository.returnRent(id);
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }
@@ -100,11 +150,15 @@ public class RentResource {
     @GET
     @Path("/getbyid/{id: [0-9]+}/remove")
     public Response remove(@PathParam("id") Long id) {
-        return rentRepository.remove(id);
+        try{
+            rentRepository.remove(id);
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
 
     @POST
-    @Transactional
     @Path("/getbyid/{id: [0-9]+}/update/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Long id, JsonObject rent) {
@@ -117,12 +171,11 @@ public class RentResource {
     }
 
     @POST
-    @Transactional
-    @Path("/getbyid/{id: [0-9]+}/update/{attribute}")
+    @Path("/getbyid/{id: [0-9]+}/update/{property}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("id") Long id, RentDTO rent, @PathParam("attribute") String attribute) {
+    public Response update(@PathParam("id") Long id, @PathParam("property") String property, JsonObject rent) {
         try {
-            rentRepository.updateAttribute(attribute, id, rent);
+            rentRepository.updateProperty(property, id, rent);
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }

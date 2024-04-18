@@ -1,10 +1,13 @@
 import {LitElement, css, html} from 'lit'
 import {customElement, property, queryAssignedElements} from 'lit/decorators.js'
-import styles from '../../../styles/components/layout/filterSidebar.styles.scss'
-import {ButtonColor, ButtonComponent, ButtonType} from '../basic/button.component'
+import styles from '../../../styles/components/layout/sidebar.styles.scss'
+import { ButtonComponent, ButtonType} from '../basic/button.component'
 import {FilterContainerComponent} from "../basic/filterContainer.component"
 import {filter} from "rxjs"
-import {SizeEnum} from "../../base"
+import {SimpleColorEnum, SizeEnum, Tooltip} from "../../base"
+import {model} from "../../index"
+import {ObservedProperty} from "../../model"
+import {AppState} from "../../AppState"
 
 @customElement('cc-sidebar')
 export class SidebarComponent extends LitElement {
@@ -12,13 +15,17 @@ export class SidebarComponent extends LitElement {
     accountname?: string = 'No username provided'
 
     @queryAssignedElements({slot: "primaryFilters"})
-    primaryFilters!: Array<HTMLElement>;
+    private primaryFilters!: Array<HTMLElement>;
 
     @queryAssignedElements({slot: "secondaryFilters"})
-    secondaryFilters!: Array<HTMLElement>;
+    private secondaryFilters!: Array<HTMLElement>;
+
+    @property()
+    private appState: ObservedProperty<AppState>
 
     constructor(username: string) {
         super()
+        this.appState = new ObservedProperty<AppState>(this, model.appState)
         this.accountname = username
     }
 
@@ -26,10 +33,18 @@ export class SidebarComponent extends LitElement {
         return html`
             <style>${styles}</style>
             <div class="buttons">
-                <cc-button size="${SizeEnum.MEDIUM}" color="${ButtonColor.ACCENT}" type="${ButtonType.FILLED}">
+                <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.FILLED}"
+                           @click="${this.openCreateRentMenu}"
+                           @mouseenter="${(e) => {
+                               Tooltip.show(e.target, 'shift+n oder <', 1000)
+                           }}"
+                           @mouseleave="${() => {
+                               Tooltip.hide(0)
+                           }}"
+                >
                     Neuer Verleih
                 </cc-button>
-                <cc-button size="${SizeEnum.MEDIUM}" color="${ButtonColor.ACCENT}" type="${ButtonType.OUTLINED}">
+                <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.OUTLINED}">
                     Multi Verleih
                 </cc-button>
             </div>
@@ -40,7 +55,9 @@ export class SidebarComponent extends LitElement {
                     <p>liste</p>
                 </cc-select>
                 <cc-toggle>Nur verfügbare anzeigen</cc-toggle>
-                <cc-button size="${SizeEnum.MEDIUM}" type="${ButtonType.UNDERLINED}" color="${ButtonColor.GRAY}">Filter zurücksetzten</cc-button>
+                <cc-button size="${SizeEnum.MEDIUM}" type="${ButtonType.UNDERLINED}" color="${SimpleColorEnum.GRAY}"
+                           noPadding>Filter zurücksetzten
+                </cc-button>
             </div>
             <cc-line></cc-line>
             <slot name="primaryFilters" @slotchange=${this.handlePrimaryFilterChange}></slot>
@@ -50,10 +67,14 @@ export class SidebarComponent extends LitElement {
             </div>
 
             <div class="user">
-                <img src="../../../assets/user-icon-default.svg" alt="user">
+                <img src="../../../assets/icon/user-icon-default.svg" alt="user">
                 <p>${(this.accountname)}</p>
             </div>
         `
+    }
+
+    openCreateRentMenu(){
+        this.appState.value.openCreateRentModal()
     }
 
     setSecondaryFilterVisibility(){

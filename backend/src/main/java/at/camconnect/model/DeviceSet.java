@@ -6,10 +6,11 @@ import java.util.List;
 
 @Entity
 public class DeviceSet {
-
+    @Column(length = 20)
     private String name;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(length = 4)
     private Long id;
 
     @OneToMany(fetch = FetchType.EAGER)

@@ -10,6 +10,10 @@ module.exports = {
     module: {
         rules: [
             {
+                test: /\.css$/i,
+                use: ["style-loader", "css-loader"],
+            },
+            {
                 test: /\.ts?$/,
                 use: 'ts-loader',
                 exclude: /node_modules/,
@@ -40,9 +44,9 @@ module.exports = {
                 ],
             },
             {
-                test: /\.svg$/,
-                loader: 'svg-inline-loader'
-            }
+                test: /\.(png|svg|jpg|jpeg|gif)$/i,
+                type: 'asset/resource',
+            },
         ]
     },
     devtool: "cheap-module-source-map",

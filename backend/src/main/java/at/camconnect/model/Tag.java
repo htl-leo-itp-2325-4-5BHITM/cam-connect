@@ -8,13 +8,16 @@ import java.util.List;
 public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(length = 4)
     private Long tag_id;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<DeviceType> type;
 
+    @Column(length = 20, unique = true)
     private String name;
 
+    @Column(length = 150, unique = true)
     private String description;
 
     public Tag(String name, String description) {
@@ -39,5 +42,13 @@ public class Tag {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -1,26 +1,26 @@
 import {model} from "../index"
-import {api} from "../base"
+import {Api} from "../base"
 
 //region interfaces
-export interface DevicetypeAttributeSource{
+export interface DeviceTypeAttributeSource {
     attribute_id: number
     name: string
     details: string
 }
 
-export interface CameraResolution extends DevicetypeAttributeSource{
+export interface CameraResolution extends DeviceTypeAttributeSource{
     resolution: string
 }
 
-export interface CameraSensor extends DevicetypeAttributeSource{
+export interface CameraSensor extends DeviceTypeAttributeSource{
     size: string
 }
 
-export interface CameraSystem extends DevicetypeAttributeSource{}
+export interface CameraSystem extends DeviceTypeAttributeSource{}
 
-export interface LensMount extends DevicetypeAttributeSource{}
+export interface LensMount extends DeviceTypeAttributeSource{}
 
-export interface TripodHead extends DevicetypeAttributeSource{}
+export interface TripodHead extends DeviceTypeAttributeSource{}
 //endregion
 
 export type DeviceTypeAttribute = (CameraResolution | CameraSensor | CameraSystem | LensMount | TripodHead)
@@ -34,7 +34,7 @@ export interface DeviceTypeAttributeCollection{
 
 export default class DeviceTypeAttributeService{
     static fetchAll(){
-        api.fetchData<DeviceTypeAttributeCollection>("/devicetype/attribute/getall")
+        Api.fetchData<DeviceTypeAttributeCollection>("/devicetype/attribute/getall")
             .then(data => {
                 model.loadDeviceTypeAttributes(data)
             })

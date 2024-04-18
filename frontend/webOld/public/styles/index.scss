@@ -1,7 +1,7 @@
 @page { size: A4 landscape }
 
 @media print {
-  #import, #createRent{
+  #controls{
     display: none !important;
   }
 }
@@ -26,7 +26,7 @@ body{
   background-color: hsl(0,0,20%);
   color: hsl(0,0,0%);
   font-family: sans-serif;
-  overflow: hidden;
+  overflow: scroll;
 }
 
 ::selection{
@@ -183,17 +183,17 @@ button{
   cursor: pointer;
 }
 
-#import{
+#controls{
   display: flex;
-  flex-direction: column;
-  position: absolute;
+  position: fixed;
+  align-items: center;
   left: 0;
   bottom: 0;
   background-color: #EEE;
   padding: .5rem;
-  padding-bottom: 2rem;
   border-top-right-radius: .5rem;
   box-shadow: 0 0 .5rem .3rem rgba(0, 0, 0, 0.4);
+  z-index: 1000;
 
   *{
     font-size: .9rem;

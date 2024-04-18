@@ -1,4 +1,8 @@
-import DeviceTypeService, {DeviceTypeCollection} from "./service/deviceType.service"
+import DeviceTypeService, {
+    DeviceType,
+    DeviceTypeFullDTO,
+    DeviceTypeVariantCollection
+} from "./service/deviceType.service"
 import { ReactiveController, ReactiveControllerHost } from 'lit';
 import {BehaviorSubject, lastValueFrom, map, Observable, Subject, Subscription} from 'rxjs';
 import DeviceTypeAttributeService, { DeviceTypeAttributeCollection } from "./service/deviceTypeAttribute.service"
@@ -8,15 +12,11 @@ import RentService, {Rent, RentByStudentDTO} from "./service/rent.service"
 import {FilterOption} from "./components/basic/filterContainer.component"
 import {Teacher} from "./service/teacher.service";
 import {Student} from "./service/student.service";
+import {RentListEntryComponent} from "./components/layout/rentListEntry.component"
+import {AppState} from "./AppState"
+import URLHandler from "./urlHandler"
 
 export enum PageEnum { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar" }
-
-export interface AppState {
-    page: PageEnum,
-    newRentModalOpen: boolean
-}
-
-type AppStatePartial = Partial<AppState>
 
 /**
  * An instance of this class is our singular data provider. It interfaces between the individual service classes which
@@ -28,6 +28,8 @@ type AppStatePartial = Partial<AppState>
  *  - a load function that sets the data in the RXJS Subject and sends an update to all subscribers.
  */
 export default class Model{
+    readonly appState = new BehaviorSubject(new AppState())
+
     readonly rents = new BehaviorSubject(<RentByStudentDTO[]>([]))
 
     readonly teachers = new BehaviorSubject(<Teacher[]>([]))
@@ -35,7 +37,9 @@ export default class Model{
     readonly students = new BehaviorSubject(<Student[]>([]))
 
     readonly devices = new BehaviorSubject<Device[]>([])
-    readonly deviceTypes = new BehaviorSubject<DeviceTypeCollection>({audioTypes: [], cameraTypes: [], droneTypes: [], lensTypes: [], lightTypes: [], stabilizerTypes: [], tripodHeads: []})
+    readonly deviceTypes = new BehaviorSubject<DeviceTypeVariantCollection>({audioTypes: [], cameraTypes: [], droneTypes: [], lensTypes: [], lightTypes: [], stabilizerTypes: [], tripodHeads: []})
+    readonly deviceTypesFull = new BehaviorSubject<DeviceTypeFullDTO[]>([])
+
     readonly deviceTypeAttributes = new BehaviorSubject<DeviceTypeAttributeCollection>({cameraResolutions: [], cameraSensors: [], cameraSystems: [], lensMounts: [], tripodHeads: []})
     /**
      * This is a representation of all the deviceTypeAttributes split up and transformed into FilterOptions that can be
@@ -65,12 +69,6 @@ export default class Model{
         )
     }
 
-    readonly appState = new BehaviorSubject<AppState>({
-        page: PageEnum.EQUIPMENT,
-        newRentModalOpen: false
-    })
-
-
     //TODO details
     readonly deviceTypeNameFilterOptions = new BehaviorSubject<FilterOption[]>([
         {name: "Kamera", id: "camera", details: "Kamera halt"},
@@ -80,43 +78,49 @@ export default class Model{
         {name: "Mikrofon", id: "microphone", details: "Mikro halt"},
         {name: "Stabilisator", id: "stabilizer", details: "Stablisationsysteme"},
         {name: "Stativ", id: "tripod", details: "dings"},
-    ])
+    ] as const)
 
     /**
      * When its created, a new instance gathers all the data from the API endpoints
      */
     constructor() {
         this.queryData()
+        DeviceService.createSocketConnection()
+        RentService.createSocketConnection()
     }
 
     queryData(){
         RentService.fetchAll()
         DeviceService.fetchAll()
         DeviceTypeService.fetchAll()
+        DeviceTypeService.fetchAllFull()
         DeviceTypeAttributeService.fetchAll()
     }
 
-    loadRents(rent: RentByStudentDTO[]){
+    //region load functions: used by the service classes to set the data in the model to whatever the api returned
+    loadRents(rent: RentByStudentDTO[] = []){
         this.rents.next(rent)
     }
 
-    loadTeachers(teacher: Teacher[]){
+    loadTeachers(teacher: Teacher[] = []){
         this.teachers.next(teacher)
     }
 
-    loadStudents(student: Student[]){
+    loadStudents(student: Student[] = []){
         this.students.next(student)
     }
 
-    //region load functions: used by the service classes to set the data in the model to whatever the api returned
-    loadDevices(devices: Device[]){
+    loadDevices(devices: Device[] = []){
         this.devices.next(devices)
     }
-    loadDeviceTypes(deviceTypes: DeviceTypeCollection){
+    loadDeviceTypes(deviceTypes: DeviceTypeVariantCollection = {audioTypes: [], cameraTypes: [], droneTypes: [], lensTypes: [], lightTypes: [], stabilizerTypes: [], tripodHeads: []}){
         this.deviceTypes.next(deviceTypes)
     }
+    loadDeviceTypesFull(deviceTypesFull: DeviceTypeFullDTO[]){
+        this.deviceTypesFull.next(deviceTypesFull)
+    }
 
-    loadDeviceTypeAttributes(deviceTypeAttributes: DeviceTypeAttributeCollection){
+    loadDeviceTypeAttributes(deviceTypeAttributes: DeviceTypeAttributeCollection = {cameraResolutions: [], cameraSensors: [], cameraSystems: [], lensMounts: [], tripodHeads: []}){
         this.deviceTypeAttributes.next(deviceTypeAttributes)
     }
 
@@ -124,18 +128,10 @@ export default class Model{
 
     //region update functions
 
-    updateAppState(data: AppStatePartial){
-        this.appState.next(Object.assign({}, this.appState.value, data))
+    updateAppState(appState: AppState){
+        this.appState.next(appState)
     }
 
-    //sry i cant really test this rn it might throw ewows :3
-    async updateDevice(device: Device){
-        DeviceService.update(device)
-
-        let devices = await lastValueFrom(this.devices)
-        let updatedDevices = Util.replaceItemByIdInJsonArray<Device>(devices, device, device.device_id, "device_id")
-        this.devices.next(updatedDevices)
-    }
     //endregion
 }
 
@@ -144,10 +140,12 @@ export default class Model{
  * This is used by the components in order to easily pass data from the API to the component.
  */
 export class ObservedProperty<T> implements ReactiveController {
-    sub: Subscription | null = null;
+    private sub: Subscription | null = null
+    public value: T
 
     //registers a controller (a instance of this class) on the host (a component)
-    constructor(private host: ReactiveControllerHost, private source: Observable<T>, public value?: T) {
+    constructor(private host: ReactiveControllerHost, private source: Observable<T>, value?: T) {
+        this.value = value
         this.host.addController(this);
     }
 

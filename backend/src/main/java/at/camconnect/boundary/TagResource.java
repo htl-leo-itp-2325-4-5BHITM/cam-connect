@@ -1,7 +1,10 @@
 package at.camconnect.boundary;
 
+import at.camconnect.model.Student;
 import at.camconnect.model.Tag;
 import at.camconnect.repository.TagRepository;
+import at.camconnect.responseSystem.CCException;
+import at.camconnect.responseSystem.CCResponse;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
@@ -11,6 +14,7 @@ import jakarta.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/tag")
+@Produces(MediaType.APPLICATION_JSON)
 public class TagResource {
 
     @Inject
@@ -21,8 +25,12 @@ public class TagResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response createTag(Tag t){
-        tagRepository.addTag(t);
-        return Response.ok().build();
+        try{
+            tagRepository.addTag(t);
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
 
     @POST
@@ -30,26 +38,47 @@ public class TagResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response removeTag(Tag t){
-        tagRepository.deleteTag(t);
-        return Response.ok().build();
+        try{
+            tagRepository.deleteTag(t);
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
 
+    //TODO this is definitly not correct..
     @POST
     @Path("/update{id: [0-9]+}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response upateTag(Tag t){
-        tagRepository.updateTag(t);
-        return Response.ok().build();
+        try{
+            tagRepository.updateTag(t);
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
     @GET
     @Path("/getbyid/{id: [0-9]+}")
-    public Tag getById(@PathParam("id")long id){
-        return tagRepository.getTagById(id);
+    public Response getById(@PathParam("id")long id){
+        Tag tag;
+        try{
+            tag = tagRepository.getTagById(id);
+        } catch(CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok(tag);
     }
     @GET
     @Path("/getall")
-    public List<Tag> getAllTags(){
-        return tagRepository.getAll();
+    public Response getAllTags(){
+        List<Tag> tagList;
+        try{
+            tagList = tagRepository.getAll();
+        } catch(CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok(tagList);
     }
 }

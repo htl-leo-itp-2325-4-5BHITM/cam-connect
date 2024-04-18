@@ -3,7 +3,30 @@
 :host {
   all: initial;
   transition: all $transitionTimeLong;
-  overflow: hidden;
+  position: relative;
+}
+
+:host([color="ACCENT"]){
+  --background: #{$accent};
+  --hover-background: #{$accentLight};
+  --expanded-background: #{darken($accent, 80%)};
+}
+:host([color="GOOD"]){
+  --background: #{$good};
+  --hover-background: #{$goodLight};
+}
+:host([color="MID"]){
+  --background: #{$mid};
+  --hover-background: #{$midLight};
+}
+:host([color="BAD"]){
+  --background: #{$bad};
+  --hover-background: #{$badLight};
+  --expanded-background: #{darken($bad, 30%)};
+}
+:host([color="GRAY"]){
+  --background: #{$gray500};
+  --hover-background: #{$gray400};
 }
 
 .cc-chip{
@@ -14,30 +37,16 @@
   color: white;
   border-radius: .25rem;
   width: fit-content;
-  padding: .1rem .2rem;
-  transition: background-color $transitionTimeShort;
+  padding: .1rem .3rem;
+  transition: background-color $transitionTimeShort, box-shadow $transitionTimeShort, outline-color $transitionTimeShort;
   white-space: nowrap;
+  outline: {
+    color: transparent;
+    style: solid;
+    width: 1.5px;
+  };
 
-  &[color="ACCENT"]{
-    background-color: $accentDarkmode;
-    --hover-background: #{$accentDarkmodeDark};
-  }
-  &[color="GOOD"]{
-    background-color: $good;
-    --hover-background: #{$goodDark};
-  }
-  &[color="MID"]{
-    background-color: $mid;
-    --hover-background: #{$midDark};
-  }
-  &[color="BAD"]{
-    background-color: $bad;
-    --hover-background: #{$badDark};
-  }
-  &[color="GRAY"]{
-    background-color: $gray500;
-    --hover-background: #{$gray400};
-  }
+  background-color: var(--background);
 
   &[size="big"]{
     font-size: $fSizeDesktopDefault;
@@ -54,7 +63,8 @@
     user-select: none;
 
     &:hover{
-      background-color: var(--hover-background);
+      outline-color: var(--hover-background);
+      box-shadow: inset 0 0 2px 2px rgba(0, 0, 0, 0.2);
     }
   }
 
@@ -81,3 +91,17 @@
     }
   }
 }
+
+::slotted(*){
+  position: absolute;
+  background-color: var(--expanded-background);
+  right: 0;
+  top: calc(100% + 3px);
+  z-index: 100;
+  padding: .3rem !important;
+  border: 2px solid $bad;
+  border-radius: .25rem;
+
+  display: none;
+}
+
