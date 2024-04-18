@@ -11,7 +11,7 @@ public class Tag {
     @Column(length = 4)
     private Long tag_id;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<DeviceType> type;
 
     @Column(length = 20, unique = true)

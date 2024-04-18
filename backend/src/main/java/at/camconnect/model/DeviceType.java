@@ -4,11 +4,15 @@ import at.camconnect.dtos.DeviceTypeGlobalObjectsDTO;
 import at.camconnect.dtos.DeviceTypeDTO;
 import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.enums.DeviceTypeVariantEnum;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.json.JsonObject;
 import jakarta.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+//no fucking clue why this is needed, I randomly got the most cryptic error when changing the status of rent to
+//enumeration type string and corrected the inserts so i asked copilot and it told me to do this
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public abstract class DeviceType{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
