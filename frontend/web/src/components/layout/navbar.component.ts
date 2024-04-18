@@ -77,9 +77,17 @@ export class NavbarComponent extends LitElement {
         //INFO
         //this might cause a nasty bug where the event listener is registered multiple times but is fine for now
         //since the nav doesnt change
-        KeyBoardShortCut.register([["shift", "e"], ["1"]], () => {this.selectNavItem(0)})
-        KeyBoardShortCut.register([["shift", "v"], ["2"]], () => {this.selectNavItem(1)})
-        KeyBoardShortCut.register([["shift", "c"], ["3"]], () => {this.selectNavItem(2)})
+        if(this.type == "default") {
+            KeyBoardShortCut.register([["shift", "e"], ["1"]], () => {
+                this.selectNavItem(0)
+            })
+            KeyBoardShortCut.register([["shift", "v"], ["2"]], () => {
+                this.selectNavItem(1)
+            })
+            KeyBoardShortCut.register([["shift", "c"], ["3"]], () => {
+                this.selectNavItem(2)
+            })
+        }
     }
 
     selectNavItem(pageIndex: number) {

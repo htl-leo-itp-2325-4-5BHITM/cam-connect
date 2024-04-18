@@ -53,6 +53,7 @@ export class RentListEntryComponent extends LitElement {
         //todo this.datePicker?.instance.destroy();
         if(!this.datePicker || this.lastStatus != this.rent.status) {
             this.lastStatus = this.rent.status
+            //TODO does not work 100% of the time fuck
             this.datePicker = new DatePickerWrapper(input, [new Date(startDate), new Date(endDate)], (dates) => {
                 RentService.updateProperty(this.rent.rent_id, 'rent_start', Util.formatDateForDb(dates[0]))
                 RentService.updateProperty(this.rent.rent_id, 'rent_end_planned', Util.formatDateForDb(dates[1]))
@@ -136,19 +137,19 @@ export class RentListEntryComponent extends LitElement {
                                      .onSelect="${(option: DeviceType) => {
                                          console.log("typeoption", option)
                                          
-                                        //if the selected device matches the selected type, do nothing
-                                        if (this.rent.device.type == option) return
-                                     
-                                        if(option == null) {
-                                        }
-                                        else {
-                                            this.rent.device.type = option
-                                        }
-            
-                                        //reset the device type
-                                        this.rent.device.device_id = -1
-                                        let numberInput = this.shadowRoot.querySelector('cc-autocomplete.number') as AutocompleteComponent<DeviceDTO>
-                                        numberInput.clear()
+                                         //if the selected device matches the selected type, do nothing
+                                         if (this.rent.device.type == option) return
+                                      
+                                         if(option == null) {
+                                         }
+                                         else {
+                                             this.rent.device.type = option
+                                         }
+             
+                                         //reset the device type
+                                         this.rent.device.device_id = -1
+                                         let numberInput = this.shadowRoot.querySelector('cc-autocomplete.number') as AutocompleteComponent<DeviceDTO>
+                                         numberInput.clear()
                                      }}"
                                      .querySuggestions="${DeviceTypeService.search}"
                                      .iconProvider="${DeviceTypeService.deviceTypeToIcon}"
@@ -157,15 +158,19 @@ export class RentListEntryComponent extends LitElement {
                             ></cc-autocomplete>
                             <cc-autocomplete placeholder="Nr." class="number"
                                      .selected="${{id: this.rent?.device?.device_id, data: this.rent?.device}}"
-                                     .onSelect="${(option: Device) => {
-                                         console.log("deviceoption", option)
-                                            this.rent.device = option
-                
-                                            if(this.rent.device.type == null) return
+                                     .onSelect="${(option: Device, isInitialCall) => {
+                                         console.log("device", option)
+                                         this.rent.device = option
+             
+                                         if(this.rent.device.type == null) return
+                                      
+                                         let typeInput = this.shadowRoot.querySelector('cc-autocomplete.name') as AutocompleteComponent<DeviceType>
+                                         typeInput.selectSuggestion({id: option.type.type_id, data: option.type})
                                          
-                                            let typeInput = this.shadowRoot.querySelector('cc-autocomplete.name') as AutocompleteComponent<DeviceType>
-                                            typeInput.selectSuggestion({id: option.type.type_id, data: option.type})
-                                        }}"
+                                         //TODO dont run these on intial load
+                                         if(option.device_id > -1 && !isInitialCall)
+                                             RentService.updateProperty(this.rent.rent_id, 'device', option.device_id)
+                                     }}"
                                      .querySuggestions="${(searchTerm) => this.searchForDevice(searchTerm)}"
                                      .iconProvider="${this.provideDeviceIcon}"
                                      .contentProvider="${(data: Device) => {return data.number}}"

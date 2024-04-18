@@ -40,14 +40,14 @@ export class Api {
      * querys the backend and returns the resulting data
      * @param url
      */
-    static fetchData<T>(url: string): Promise<T> {
+    static fetchData<Out>(url: string): Promise<Out> {
         return fetch(config.api_url + url)
             .then(response => {
                 this.handleHttpError(response.status, response.url)
-                return response.json() as Promise<ccResponse<T>>
+                return response.json() as Promise<ccResponse<Out>>
             })
-            .then((result: ccResponse<T>) => {
-                if(result.ccStatus) this.handleCCError(result.ccStatus.statusCode, result.ccStatus.details, url)
+            .then((result: ccResponse<Out>) => {
+                if(result.ccStatus) this.handleCCError(result.ccStatus.statusCode, result.ccStatus.details, result.ccStatus.message, url)
                 else console.error("no ccResponse object received from", url, "only got:", result)
                 return result.data
             })
@@ -75,23 +75,23 @@ export class Api {
         this.handleHttpError(response.status, response.url)
 
         let result: ccResponse<Out> = await response.json()
-        if(result.ccStatus) this.handleCCError(result.ccStatus.statusCode, result.ccStatus.details, path)
+        if(result.ccStatus) this.handleCCError(result.ccStatus.statusCode, result.ccStatus.details, result.ccStatus.message, path)
         else console.error("no ccResponse object received from", path, "only got:", result)
 
         return result
     }
 
-    static handleCCError(statusCode: number, details: string, url:string): boolean {
+    static handleCCError(statusCode: number, details: string, message: string, url:string): boolean {
         if(statusCode == 1000) return true
         if(statusCode == 1101) {
-            console.info(`CCException - invalid id in getter - statuscode: ${statusCode} - details: ${details} - url: ${url}`)
+            console.error(`CCException - invalid id in getter - statuscode: ${statusCode} - details: ${details} - url: ${url}`)
 
             PopupEngine.createNotification({
                 heading: "Ein Fehler ist aufgetreten",
                 text: "Die angeforderten Daten konnten nicht geladen werden - ccStatus: 1101",
             })
         }
-        console.log("something went wrong in the backend trying to reach endpoint: ", url, "statusCode: ", statusCode + ". Details:", details)
+        console.error("something went wrong in the backend trying to reach endpoint: ", url, "statusCode: ", statusCode + ". Details:", details, "Message:", message)
         return false
     }
 
