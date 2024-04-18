@@ -1,10 +1,10 @@
 package at.camconnect.boundary;
 
-import at.camconnect.dtos.DeviceTypeCollection;
-import at.camconnect.dtos.DeviceTypeDTO;
+import at.camconnect.dtos.*;
+import at.camconnect.model.Student;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
-import at.camconnect.enums.DeviceTypeEnum;
+import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.repository.DeviceTypeRepository;
 import jakarta.inject.Inject;
@@ -13,6 +13,9 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.jboss.resteasy.reactive.RestForm;
+
+import java.io.File;
 import java.util.List;
 
 @Path("/devicetype")
@@ -25,7 +28,7 @@ public class DeviceTypeResource {
     @Path("/create/{type: [A-z]+}")
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response create(@PathParam("type") DeviceTypeEnum type, JsonObject data){//leave as JsonObject NOT DTO
+    public Response create(@PathParam("type") DeviceTypeVariantEnum type, JsonObject data){//leave as JsonObject NOT DTO
         DeviceType result;
         try{
             result = deviceTypeRepository.create(type, data);
@@ -51,6 +54,20 @@ public class DeviceTypeResource {
     }
 
     @GET
+    @Path("/getallfull")
+    @Transactional
+    public Response getAllFull(){
+        List<DeviceTypeFullDTO> result;
+        try{
+            result = deviceTypeRepository.getAllFull();
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok(result);
+    }
+
+    @GET
     @Path("/getbyid/{id: [0-9]+}")
     @Transactional
     public Response getById(@PathParam("id") Long id){
@@ -68,7 +85,7 @@ public class DeviceTypeResource {
     @Path("/getbyid/{id: [0-9]+}/update")
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("id") Long id, DeviceTypeDTO data){
+    public Response update(@PathParam("id") Long id, DeviceTypeGlobalIdDTO data){
         DeviceType result;
         try{
             result = deviceTypeRepository.update(id, data);
@@ -89,6 +106,33 @@ public class DeviceTypeResource {
             return CCResponse.error(ex);
         }
 
+        return CCResponse.ok();
+    }
+
+    @POST
+    @Path("/search")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response search(JsonObject data){
+        List<AutocompleteOptionDTO<DeviceTypeMinimalDTO>> result;
+        try{
+            result = deviceTypeRepository.search(data.getString("searchTerm"));;
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok(result);
+    }
+
+    @POST
+    @Path("/import/{type}")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response uploadCsvFile(@RestForm File file, @PathParam("type")String type) {
+        try{
+            deviceTypeRepository.importDeviceTypes(file, type);
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
         return CCResponse.ok();
     }
 }

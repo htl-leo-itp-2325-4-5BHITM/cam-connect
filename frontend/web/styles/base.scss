@@ -5,7 +5,7 @@
     margin: 0;
     padding: 0;
     font: inherit;
-    accent-color: $accentDarkmode;
+    accent-color: $accent;
     font-family: 'Quicksand', sans-serif;
     font-weight: 500;
     color: $gray1000;
@@ -23,10 +23,11 @@ img{
 
 html{
     scroll-behavior: smooth;
+    color-scheme: dark;
 }
 
 ::selection{
-    background-color: $accentDarkmodeLight;
+    background-color: $accentLight;
     color: hsl(0, 0%, 0%);
 }
 
@@ -39,24 +40,32 @@ button{
     background-color: transparent;
     border: none;
     color: hsl(0, 0%, 100%);
+    padding-inline: .3rem;
 }
 
+input, p[contenteditable]{
+    border-radius: 0.25rem;
+    border: 1px solid $gray500;
+    padding-inline: .3rem;
+    background-color: transparent;
+    outline-color: transparent;
+    -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;
 
-:global {
-    #tooltip{
-        position: absolute;
-        padding: .4rem;
-        background-color: $gray500;
-        box-sizing: border-box;
-        pointer-events: none;
-        cursor: default;
-        border-radius: .2rem;
-        opacity: 0;
-        max-width: 30ch;
-        top: 0;
-        left: 0;
-        z-index: 100;
-        font-size: $fSizeDesktopSmall;
+    transition: outline-color $transitionTimeShort, border-color $transitionTimeShort;
+
+    &:focus-visible{
+        border-color: $accent;
+        outline: 1px solid $accent;
+    }
+
+    &.error{
+        outline: 1px solid $badDark;
+        border-color: $badDark;
+
+        &:focus-visible{
+            border-color: $bad;
+            outline-color: $bad;
+        }
     }
 }
 

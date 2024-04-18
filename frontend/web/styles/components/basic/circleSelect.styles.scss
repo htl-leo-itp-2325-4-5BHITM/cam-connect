@@ -6,19 +6,23 @@ div{
   cursor: pointer;
   user-select: none;
 
-  margin: -.4rem;
-  padding: .4rem;
+/*  margin: -.4rem;
+  padding: .4rem;*/
 
   border-radius: 50%;
 
-  transition: background-color $hoverBackgroundTransitionTime;
+  /*transition: background-color $hoverBackgroundTransitionTime;
 
   &:hover{
     background-color: $hoverBackground;
-  }
+  }*/
 
+  img{
+    width: 1.2rem;
+    aspect-ratio: 1/1;
+  }
   &.multiple img{
-    width: 1.6rem;
+    width: 1.4rem;
   }
 
   &.accent img {
@@ -26,11 +30,6 @@ div{
   }
   &.gray img {
     @include imgIconColorGray800
-  }
-
-  img{
-    width: 1.2rem;
-    aspect-ratio: 1/1;
   }
 }
 

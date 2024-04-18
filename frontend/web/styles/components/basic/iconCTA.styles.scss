@@ -1,3 +1,5 @@
+@import "../../variables";
+
 :host{
     --padding: 0.4rem;
     --hover-background: transparent;
@@ -13,18 +15,21 @@
     width: fit-content;
 
     display: grid;
-    place-content: center;
+    place-items: center;
 
     transition: background-color .2s;
 
     /*outline:1px solid red;*/
 
     &:active{
-        --hover-background: $hoverBackground;
         animation: svg-cta-click 1s infinite;
     }
 }
 
-:host(:hover){
-    --hover-background: rgba(128, 128, 128, 0.35);
+:host(:hover), :host(:focus-visible){
+    --hover-background: #{$hoverBackground};
+}
+
+:host(:focus-visible){
+    outline: 2px solid $accentLight;
 }

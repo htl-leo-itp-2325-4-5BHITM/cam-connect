@@ -16,6 +16,12 @@ p{
   &[isLink="true"] .value {
     cursor: pointer;
     text-decoration: underline;
+    @include textBackgroundHoverPreparation;
+    transition: background-color $transitionTimeShort;
+
+    &:hover{
+      background-color: $hoverBackground;
+    }
   }
 }
 

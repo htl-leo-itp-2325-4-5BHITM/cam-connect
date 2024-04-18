@@ -1,0 +1,53 @@
+@import "../../base";
+
+:host{
+    display: flex;
+    padding: 0.25rem !important;
+    padding-right: .5rem !important;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 0.25rem;
+    border: 1px solid var(--gray350, #3B3B3B);
+    background: var(--gray300, #363636);
+    gap: 1rem;
+
+    div.left, div.right{
+        display: flex;
+        gap: .5rem;
+        align-items: center;
+    }
+
+    input, cc-autocomplete{
+        &.name{
+            width: 15ch;
+        }
+
+        &.date{
+            width: 11ch;
+            text-align: center;
+            padding-inline: .2rem;
+        }
+
+        &.number{
+            width: 5ch;
+        }
+    }
+
+    svg{
+        height: 1.2rem;
+
+        path{
+            color: $gray900;
+        }
+    }
+}
+
+:host([type = "string"]){
+    .left{
+        flex: 1;
+        input{
+            /* width of the (dropdown + number) + gap .. paddings cancel out between equip input and number input */
+            width: calc(20ch + .5rem)
+        }
+    }
+}

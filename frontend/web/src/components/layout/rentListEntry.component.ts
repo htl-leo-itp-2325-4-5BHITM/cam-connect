@@ -1,140 +1,295 @@
-import {html, LitElement} from 'lit'
+import {html, LitElement, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/rentListEntry.styles.scss'
-import {ButtonColor, ButtonType} from "../basic/button.component"
-import {CircleSelectType} from "../basic/circleSelect.component"
-import {ColorEnum, SizeEnum} from "../../base"
-import {model} from "../../index";
-import {Rent, RentStatus} from "../../service/rent.service";
+import {ButtonType} from "../basic/button.component"
+import {Api, ColorEnum, DatePickerWrapper, SizeEnum} from "../../base"
+import RentService, {Rent, RentStatusEnum, RentTypeEnum} from "../../service/rent.service";
 import {ChipType} from "../basic/chip.component"
+import {model} from "../../index"
+import {LineColor, LineType} from "../basic/line.component"
+import PopupEngine from "../../popupEngine"
+import {ObservedProperty} from "../../model"
+import {AppState} from "../../AppState"
+import Util from "../../util"
+import {unsafeSVG} from "lit/directives/unsafe-svg.js"
+import {icon} from "@fortawesome/fontawesome-svg-core"
+import {faHashtag} from "@fortawesome/free-solid-svg-icons"
+import DeviceService, {Device, DeviceDTO} from "../../service/device.service"
+import {AutocompleteComponent, AutocompleteOption} from "../basic/autocomplete.component"
+import DeviceTypeService, {DeviceType, DeviceTypeSource} from "../../service/deviceType.service"
 
 @customElement('cc-rent-list-entry')
 export class RentListEntryComponent extends LitElement {
     @property()
-    rentNumber?: number
+    rent: Rent
+
+    private lastStatus = RentStatusEnum.WAITING
+
+    @property()
+    private appState: ObservedProperty<AppState>
+
+    private datePicker : DatePickerWrapper
+
+    constructor() {
+        super()
+        this.appState = new ObservedProperty<AppState>(this, model.appState)
+    }
+
+    protected firstUpdated(_changedProperties: PropertyValues) {
+        super.firstUpdated(_changedProperties);
+    }
+
+    protected performUpdate() {
+        super.performUpdate();
+        this.setAttribute("status", this.rent.status)
+    }
+
+    protected updated() {
+        let startDate = this.rent.rent_start
+        let endDate = this.rent.rent_end_planned
+
+        let input = this.renderRoot.querySelector('.date') as HTMLInputElement
+        
+        //todo this.datePicker?.instance.destroy();
+        if(!this.datePicker || this.lastStatus != this.rent.status) {
+            this.lastStatus = this.rent.status
+            //TODO does not work 100% of the time fuck
+            this.datePicker = new DatePickerWrapper(input, [new Date(startDate), new Date(endDate)],
+        (dates) => {
+                    RentService.updateProperty(this.rent.rent_id, 'rent_start', Util.formatDateForDb(dates[0]))
+                    RentService.updateProperty(this.rent.rent_id, 'rent_end_planned', Util.formatDateForDb(dates[1]))
+                }
+            )
+        }
+    }
 
     render() {
-        let rent = model.rents.value[this.rentNumber]
-        console.log(rent)
+        let buttonClickBehavior
+        let buttonColor = ColorEnum.ACCENT
+        let buttonText = ""
+        let chipColor = ColorEnum.GRAY
+        let chipText = ""
+        let chipType
+        switch (this.rent.status) {
+            case RentStatusEnum.CONFIRMED:
+                buttonClickBehavior = this.returnRent
+                buttonText = "Zurückgeben"
+                chipColor = ColorEnum.GOOD
+                chipText = "Bestätigt"
+                break
+            case RentStatusEnum.WAITING:
+                chipColor = ColorEnum.MID
+                chipText = "Warte auf Bestätigung"
+                break
+            case RentStatusEnum.DECLINED:
+                buttonClickBehavior = this.removeRent
+                buttonColor = ColorEnum.GRAY
+                buttonText = "Löschen"
+                chipColor = ColorEnum.BAD
+                chipText = "Abgelehnt"
+                chipType = ChipType.EXPANDABLE
+                break
+            case RentStatusEnum.RETURNED:
+                chipText = "Zurückgegeben"
+                break
+        }
 
         return html`
             <style>${styles}</style>
-
-            ${this.generateHeading(rent.student.firstname + " " + rent.student.lastname, rent.student.school_class)}
-            <div class="entries">
-                ${rent.rentList.map(rent => {
-                    return this.generateRent(rent)
-                })}
+            
+            <div class="area">
+                ${this.generateRentContent()}
             </div>
-        `
-    }
 
-    generateHeading(name: string, schoolClass: string) {
-        return html`
-            <div class="heading">
-                <div class="left">
-                    <p>${name}</p>
-                    <p>•</p>
-                    <p>${schoolClass}</p>
-                </div>
-                <div class="right">
-                    <cc-button>Verleih erstellen</cc-button>
-                    <cc-button color="${ButtonColor.GRAY}">Details anzeigen</cc-button>
-                    <cc-circle-select type="${CircleSelectType.MULTIPLE}" @click="${this.selectAll}"></cc-circle-select>
-                </div>
-            </div>
-        `
-    }
-
-    generateRent(rent: Rent){
-        return html`
-            <div class="entry ${rent.status}">
-                <div>
-                    <input type="text" value="${rent.device.type.name}">
-                    <input type="text" class="number" value="${rent.device.number}">
-                    <label for="">|</label>
-                    <input type="date" class="customDate" value="${rent.rent_start}"/>
-                    <label for="" class="line">-</label>
-                    <input type="date" class="customDate" value="${rent.rent_end_actual || rent.rent_end_planned}"/>
-                    <label for="">|</label>
-
-                    <div>
-                        <p>Erstellt von:</p>
-                        <p>${rent.teacher_start.firstname.charAt(0) + ". " + rent.teacher_start.lastname}</p>
+            <div class="area">
+                <cc-button color="${buttonColor}" 
+                           type="${ButtonType.TEXT}" size="${SizeEnum.SMALL}"
+                           @click="${buttonClickBehavior}"
+                           text="${buttonText}"
+                ></cc-button>
+                
+                <cc-chip color="${chipColor}" size="${SizeEnum.SMALL}"
+                         type="${chipType}" 
+                         text="${chipText}">
+                    <div class="details">
+                        <h2>Angegebener Ablehngrund:</h2>
+                        <p>${this.rent.verification_message}</p>
+                        <cc-button closeChip @click="${this.requestConfirmation}" 
+                                   type="${ButtonType.OUTLINED}" color="${ColorEnum.GRAY}" 
+                                   size="${SizeEnum.SMALL}">Bestätigung erneut Anfragen
+                        </cc-button>
                     </div>
-                </div>
-
-                <div>
-                    <cc-button color="${rent.status == RentStatus.DECLINED ? ColorEnum.GRAY : ColorEnum.ACCENT}" 
-                               type="${ButtonType.TEXT}" 
-                               text="${this.rentStatusToButtonText(rent.status)}">
-                    </cc-button>
-                    
-                    <cc-chip color="${this.rentStatusToColor(rent.status)}" 
-                             type="${rent.status == RentStatus.DECLINED ? ChipType.EXPANDABLE : ChipType.EXPANDABLE}" 
-                             text="${this.rentStatusAsString(rent.status)}"
-                    >
-                        <div class="detail">
-                            <h2>angegebener Ablehngrund</h2>
-                            <p>${rent.verification_message}</p>
-                            <cc-button type="${ButtonType.OUTLINED}" color="${ColorEnum.GRAY}">Bestätigung erneut Anfragen</cc-button>
-                        </div>
-                    </cc-chip>
-                    
-                    <cc-circle-select @click="${this.autoCheckMultipleSelect}"></cc-circle-select>
-                </div>
+                </cc-chip>
+                
+                <cc-circle-select .onToggle="${() => this.toggleRentCheck()}" 
+                                  .checked="${this.appState.value.selectedRentEntries.has(this)}" 
+                                  size="${SizeEnum.SMALL}"
+                ></cc-circle-select>
             </div>
         `
     }
 
-    rentStatusToButtonText(status: RentStatus){
-        switch (status) {
-            case RentStatus.CONFIRMED: return "Zurückgeben"
-            case RentStatus.DECLINED:
-            case RentStatus.RETURNED: return "Löschen"
+    generateRentContent() {
+        if(this.rent.status == RentStatusEnum.DECLINED) { //editable rent
+            return html`
+                ${this.rent.type == RentTypeEnum.DEFAULT ?
+                        html`
+                            <cc-autocomplete placeholder="Name" class="name"
+                                     .selected="${{id: this.rent.device?.type?.type_id, data: this.rent.device?.type}}"
+                                     .onSelect="${(option: DeviceType) => {
+                                         console.log("typeoption", option)
+                                         
+                                         //if the selected device matches the selected type, do nothing
+                                         if (this.rent.device.type == option) return
+                                      
+                                         if(option == null) {
+                                         }
+                                         else {
+                                             this.rent.device.type = option
+                                         }
+             
+                                         //reset the device type
+                                         this.rent.device.device_id = -1
+                                         let numberInput = this.shadowRoot.querySelector('cc-autocomplete.number') as AutocompleteComponent<DeviceDTO>
+                                         numberInput.clear()
+                                     }}"
+                                     .querySuggestions="${DeviceTypeService.search}"
+                                     .iconProvider="${DeviceTypeService.deviceTypeToIcon}"
+                                     .contentProvider="${(data: DeviceType) => {return data.name}}"
+                                     allowNoSelection="true"
+                            ></cc-autocomplete>
+                            <cc-autocomplete placeholder="Nr." class="number"
+                                     .selected="${{id: this.rent?.device?.device_id, data: this.rent?.device}}"
+                                     .onSelect="${(option: Device, isInitialCall) => {
+                                         console.log("device", option)
+                                         this.rent.device = option
+             
+                                         if(this.rent.device.type == null) return
+                                      
+                                         let typeInput = this.shadowRoot.querySelector('cc-autocomplete.name') as AutocompleteComponent<DeviceType>
+                                         typeInput.selectSuggestion({id: option.type.type_id, data: option.type})
+                                         
+                                         //TODO dont run these on intial load
+                                         if(option.device_id > -1 && !isInitialCall)
+                                             RentService.updateProperty(this.rent.rent_id, 'device', option.device_id)
+                                     }}"
+                                     .querySuggestions="${(searchTerm) => this.searchForDevice(searchTerm)}"
+                                     .iconProvider="${this.provideDeviceIcon}"
+                                     .contentProvider="${(data: Device) => {return data.number}}"
+                            ></cc-autocomplete>
+                        ` :
+                        html`
+                            <input type="text" value="${this.rent.device_string}" placeholder="Name">
+                        `
+                }
+                
+                <cc-line color=${LineColor.LIGHT} type="${LineType.VERTICAL}"></cc-line>
+ 
+                <input type="text" class="date">
+                
+                <cc-line color=${LineColor.LIGHT} type="${LineType.VERTICAL}"></cc-line>
+                
+                <cc-property-value size="${SizeEnum.SMALL}" property="Erstellt von" 
+                                   value="${this.rent.teacher_start.firstname.charAt(0)}. ${this.rent.teacher_start.lastname}">
+                </cc-property-value>`
+        } else { //static rent
+            return html`
+                ${this.rent.type == RentTypeEnum.DEFAULT ?
+                        html`
+                            <div class="deviceInfos">
+                                <span>${this.rent.device.type.name}</span>
+                                <span>•</span>
+                                <span>${this.rent.device.number}</span>
+                            </div>
+                        ` :
+                        html`
+                            <p>${this.rent.device_string}</p>
+                        `
+                }
+                
+                
+                <cc-line color=${LineColor.LIGHTER} type="${LineType.VERTICAL}"></cc-line>
+                
+                <div class="time">
+                    <span>
+                        ${Util.formatDateForHuman(this.rent.rent_start)}
+                    </span>
+                    <span>-</span>
+                    <span>
+                        ${Util.formatDateForHuman(this.rent.rent_end_planned)}
+                    </span>
+                </div>
+                
+                <cc-line color=${LineColor.LIGHTER} type="${LineType.VERTICAL}"></cc-line>
+                
+                <cc-property-value size="${SizeEnum.SMALL}" property="Erstellt von"
+                                   value="${this.rent.teacher_start.firstname.charAt(0)}. ${this.rent.teacher_start.lastname}">
+                </cc-property-value>`
+        }
+    }
+    async searchForDevice(searchTerm: string): Promise<AutocompleteOption<Device>[]> {
+        if(this.rent?.device?.type?.type_id < 0) return DeviceService.search(searchTerm, -1, true)
+
+        return DeviceService.search(searchTerm, this.rent.device.type.type_id, true)
+    }
+
+    provideDeviceIcon(data: DeviceDTO){
+        return html`${unsafeSVG(icon(faHashtag).html[0])}`
+    }
+
+    toggleRentCheck(checked?: boolean){
+        if(!checked) checked = !this.isChecked()
+
+        if(checked){
+            this.appState.value.addSelectedRentEntry(this)
+            //whub whub
+        } else{
+            this.appState.value.removeSelectedRentEntry(this)
         }
     }
 
-    rentStatusToColor(status: RentStatus) {
-        switch (status) {
-            case RentStatus.CONFIRMED: return ColorEnum.GOOD
-            case RentStatus.WAITING: return ColorEnum.MID
-            case RentStatus.DECLINED: return ColorEnum.BAD
-            default: return ColorEnum.GRAY
-        }
+    isChecked(){
+        return this.appState.value.selectedRentEntries.has(this)
     }
 
-    rentStatusAsString(status: RentStatus) {
-        switch (status) {
-            case RentStatus.CONFIRMED: return "Bestätigt"
-            case RentStatus.WAITING: return "Warte auf Bestätigung"
-            case RentStatus.DECLINED: return "Abgelehnt"
-            case RentStatus.RETURNED: return "Zurückgegeben"
-        }
+    requestConfirmation() {
+        this.rent.status = RentStatusEnum.WAITING
+        RentService.requestConfirmation(this.rent)
     }
 
-    selectAll(elem) {
-        this.shadowRoot.querySelectorAll("cc-circle-select").forEach(select => {
-            if(select.getAttribute("type") != CircleSelectType.MULTIPLE){
-                select.checked = elem.target.checked
-            }
+    removeRent() {
+        PopupEngine.createModal({
+            text: "Willst du wirklich diesen Verleih löschen?",
+            buttons: [
+                {
+                    text: "Ja",
+                    action: (data) => {
+                        RentService.remove(this.rent)
+                    },
+                    closePopup: true
+                },
+                {
+                    text: "Nein",
+                },
+            ]
         })
     }
 
-    /**
-     * this function detects if all selects are checked or not
-     * if so the multiple select gets checked as well
-     */
-    autoCheckMultipleSelect() {
-        let multiple = this.shadowRoot.querySelector(`cc-circle-select`)
-        multiple.checked = true
-
-        this.shadowRoot.querySelectorAll("cc-circle-select").forEach(select => {
-            if(select.getAttribute("type") != CircleSelectType.MULTIPLE){
-                if(!select.checked){
-                    multiple.checked = false
-                }
-            }
+    returnRent() {
+        PopupEngine.createModal({
+            text: "Willst du wirklich diesen Verleih zurückgeben?",
+            buttons: [
+                {
+                    text: "Ja",
+                    action: (data) => {
+                        RentService.return(this.rent.rent_id)
+                    },
+                    closePopup: true
+                },
+                {
+                    text: "Nein",
+                },
+            ]
         })
     }
 }

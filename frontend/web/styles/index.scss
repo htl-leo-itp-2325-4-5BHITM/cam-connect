@@ -1,5 +1,11 @@
 @import "base";
 
+@media print{
+  @page {
+    size: landscape letter;
+  }
+}
+
 :global{
   body{
     height: 100svh;
@@ -10,5 +16,88 @@
     width: 5rem;
     height: 5rem;
     @include imgIconColorAccent
+  }
+}
+
+//popupEngine styles
+:global{
+  .popupEngineModalContent{
+    padding: 1rem;
+    border-radius: 1rem;
+    max-width: min(550px, 80vw);
+  }
+
+  .popupEngineModalHeading{
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .popupEngineModalText{
+    margin-bottom: .5rem;
+  }
+
+  .popupEngineModalButton{
+    margin-top: 1rem;
+    background-color: $accent;
+    padding: .2rem .5rem;
+    border-radius: .5rem;
+    transition: background-color $transitionTimeShort;
+
+    &:hover{
+      background-color: $accentDark;
+    }
+
+    &.cancel{
+      background-color: transparent;
+      outline: 2px solid $accent;
+    }
+  }
+
+  .popupEngineModalInput{
+    padding: .5rem;
+  }
+
+  .popupEngineNotification{
+    padding: .5rem;
+    border-radius: .5rem;
+
+    &.good{
+      background-color: $good;
+    }
+
+    &.bad{
+      background-color: $bad;
+    }
+
+    &.mid{
+      background-color: $mid;
+    }
+  }
+
+  .popupEngineNotificationHeading{
+    font-weight: bold;
+    margin-bottom: .2rem;
+  }
+}
+
+//date picker overrides
+:global{
+  .air-datepicker{
+    --adp-background-color: #{$gray300};
+    --adp-border-color: #{$gray600};
+    --adp-cell-background-color-hover: #{$gray400};
+    --adp-background-color-hover: #{$gray400};
+    --adp-color-other-month: #{$gray600};
+    --adp-color: #{$gray800};
+    --adp-cell-background-color-selected: #{$accent};
+    --adp-background-color-selected-other-month: #{$accentLight};
+  }
+
+  .air-datepicker--pointer::after{
+    background-color: #{$gray300};
+  }
+
+  .air-datepicker-body--day-name{
+    color: #{$accentLight};
   }
 }

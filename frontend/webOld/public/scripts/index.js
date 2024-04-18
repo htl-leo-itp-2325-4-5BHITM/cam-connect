@@ -1,5 +1,5 @@
 var APPLICATION_URL = "http://localhost:8080/api";
-if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
+if (window.location.hostname !== "localhost") {
     APPLICATION_URL = "http://144.24.171.164/api";
 }
 var allRents = [];
@@ -15,6 +15,7 @@ function requestAllStudents() {
     })
         .then(function (data) {
         allStudents = data;
+        console.log(data);
         requestAllTeachers();
     })
         .catch(function (error) { return console.error(error); });
@@ -27,18 +28,21 @@ function requestAllTeachers() {
     })
         .then(function (data) {
         allTeachers = data;
+        console.log(data);
         requestAllRents();
     })
         .catch(function (error) { return console.error(error); });
 }
 function requestAllRents() {
     allRents = [];
-    fetch(APPLICATION_URL + "/rent/getall")
+    fetch(APPLICATION_URL + "/rent/getallsinglelist")
         .then(function (result) {
         return result.json();
     })
         .then(function (data) {
-        allRents = data;
+        allRents = data.data;
+        if (allRents.length == 0)
+            createRent();
         generateTable();
     })
         .catch(function (error) { return console.error(error); });
@@ -53,8 +57,8 @@ var columns = [
     { name: "Rückgabe tatsächlich", inputType: "date", cellType: "rent_end_actual" },
     { name: "Paraphe Lehkraft", inputType: "text", cellType: "teacher_end" },
     { name: "Anmerkung", inputType: "text", cellType: "note" },
-    { name: "VStatus", inputType: "none", cellType: "verification_status" },
-    { name: "DeleteRow", inputType: "text", cellType: "delete_row" }
+    { name: "Status", inputType: "none", cellType: "verification_status" },
+    { name: "Eintrag Löschen", inputType: "text", cellType: "delete_row" }
 ];
 var statusResolved = {
     "WAITING": "wartend",
@@ -65,21 +69,29 @@ var statusResolved = {
 };
 function generateTable() {
     var _a;
-    var headingHtml = document.createElement("tr");
+    var pages = document.querySelector(".pages");
+    pages.innerHTML = "";
+    var headingHtml = "<tr>";
     columns.forEach(function (column) {
         var headRow = document.createElement("th");
         headRow.innerText = column.name;
-        headingHtml.appendChild(headRow);
+        headingHtml += headRow.outerHTML;
     });
-    var table = document.querySelector('table');
-    table.innerHTML = "";
-    table.appendChild(headingHtml);
-    var html = [];
+    headingHtml += "</tr>";
+    var table;
     var _loop_1 = function (i) {
+        if (i % 15 == 0) {
+            var page = document.createElement("section");
+            page.classList.add("sheet", "padding-10mm");
+            table = document.createElement('table');
+            page.appendChild(table);
+            table.innerHTML = headingHtml;
+            pages.appendChild(page);
+        }
         var row = document.createElement("tr");
         row.setAttribute("rent_id", String((_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id));
         columns.forEach(function (column) {
-            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w;
+            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0;
             var cell = document.createElement("td");
             if (column.inputType !== "none") {
                 var cellinput_1 = document.createElement("input");
@@ -92,8 +104,8 @@ function generateTable() {
                             var _a;
                             openStudentPicker(cellinput_1, (_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id);
                         });
-                        cellinput_1.value = ((_b = (_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.student) === null || _b === void 0 ? void 0 : _b.firstname) || "";
-                        if (((_c = allRents[i]) === null || _c === void 0 ? void 0 : _c.status) == "CONFIRMED" || ((_d = allRents[i]) === null || _d === void 0 ? void 0 : _d.status) == "WAITING") {
+                        cellinput_1.value = ((_b = (_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.student) === null || _b === void 0 ? void 0 : _b.firstname) ? "".concat((_d = (_c = allRents[i]) === null || _c === void 0 ? void 0 : _c.student) === null || _d === void 0 ? void 0 : _d.firstname, " ").concat((_f = (_e = allRents[i]) === null || _e === void 0 ? void 0 : _e.student) === null || _f === void 0 ? void 0 : _f.lastname) : "";
+                        if (((_g = allRents[i]) === null || _g === void 0 ? void 0 : _g.status) == "CONFIRMED" || ((_h = allRents[i]) === null || _h === void 0 ? void 0 : _h.status) == "WAITING") {
                             cellinput_1.disabled = true;
                         }
                         break;
@@ -102,8 +114,8 @@ function generateTable() {
                             var _a;
                             openTeacherPicker(cellinput_1, (_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id, column.cellType + "_id");
                         });
-                        cellinput_1.value = ((_e = allRents[i][column.cellType]) === null || _e === void 0 ? void 0 : _e.lastname) || "";
-                        if (((_f = allRents[i]) === null || _f === void 0 ? void 0 : _f.status) == "CONFIRMED" || ((_g = allRents[i]) === null || _g === void 0 ? void 0 : _g.status) == "WAITING") {
+                        cellinput_1.value = ((_j = allRents[i][column.cellType]) === null || _j === void 0 ? void 0 : _j.lastname) || "";
+                        if (((_k = allRents[i]) === null || _k === void 0 ? void 0 : _k.status) == "CONFIRMED" || ((_l = allRents[i]) === null || _l === void 0 ? void 0 : _l.status) == "WAITING") {
                             cellinput_1.disabled = true;
                         }
                         break;
@@ -112,8 +124,8 @@ function generateTable() {
                             var _a;
                             openTeacherPicker(cellinput_1, (_a = allRents[i]) === null || _a === void 0 ? void 0 : _a.rent_id, column.cellType + "_id");
                         });
-                        cellinput_1.value = ((_h = allRents[i][column.cellType]) === null || _h === void 0 ? void 0 : _h.lastname) || "";
-                        if (((_j = allRents[i]) === null || _j === void 0 ? void 0 : _j.status) !== "CONFIRMED") {
+                        cellinput_1.value = ((_m = allRents[i][column.cellType]) === null || _m === void 0 ? void 0 : _m.lastname) || "";
+                        if (((_o = allRents[i]) === null || _o === void 0 ? void 0 : _o.status) !== "CONFIRMED") {
                             cellinput_1.disabled = true;
                         }
                         break;
@@ -122,7 +134,7 @@ function generateTable() {
                             updateRent(cellinput_1, column.cellType, cellinput_1.value);
                         });
                         cellinput_1.value = allRents[i][column.cellType] || "";
-                        if (((_k = allRents[i]) === null || _k === void 0 ? void 0 : _k.status) !== "CONFIRMED") {
+                        if (((_p = allRents[i]) === null || _p === void 0 ? void 0 : _p.status) !== "CONFIRMED") {
                             cellinput_1.disabled = true;
                         }
                         break;
@@ -132,32 +144,32 @@ function generateTable() {
                             updateRent(cellinput_1, column.cellType, cellinput_1.value);
                         });
                         cellinput_1.value = allRents[i][column.cellType] || "";
-                        if (((_l = allRents[i]) === null || _l === void 0 ? void 0 : _l.status) == "CONFIRMED" || ((_m = allRents[i]) === null || _m === void 0 ? void 0 : _m.status) == "WAITING") {
+                        if (((_q = allRents[i]) === null || _q === void 0 ? void 0 : _q.status) == "CONFIRMED" || ((_r = allRents[i]) === null || _r === void 0 ? void 0 : _r.status) == "WAITING") {
                             cellinput_1.disabled = true;
                         }
                         break;
                     case "rent_start":
                     case "rent_end_planned":
-                        cellinput_1.addEventListener("input", function () {
+                        cellinput_1.addEventListener("blur", function () {
                             updateRent(cellinput_1, column.cellType, cellinput_1.value);
                         });
                         cellinput_1.value = allRents[i][column.cellType] || "";
-                        if (((_o = allRents[i]) === null || _o === void 0 ? void 0 : _o.status) == "CONFIRMED" || ((_p = allRents[i]) === null || _p === void 0 ? void 0 : _p.status) == "WAITING") {
+                        if (((_s = allRents[i]) === null || _s === void 0 ? void 0 : _s.status) == "CONFIRMED" || ((_t = allRents[i]) === null || _t === void 0 ? void 0 : _t.status) == "WAITING") {
                             cellinput_1.disabled = true;
                         }
                         break;
                     case "rent_end_actual":
-                        cellinput_1.addEventListener("input", function () {
+                        cellinput_1.addEventListener("blur", function () {
                             updateRent(cellinput_1, column.cellType, cellinput_1.value);
                         });
                         cellinput_1.value = allRents[i][column.cellType] || "";
-                        if (((_q = allRents[i]) === null || _q === void 0 ? void 0 : _q.status) !== "CONFIRMED") {
+                        if (((_u = allRents[i]) === null || _u === void 0 ? void 0 : _u.status) !== "CONFIRMED") {
                             cellinput_1.disabled = true;
                         }
                         break;
                     case "delete_row":
                         var button = document.createElement('button');
-                        switch ((_r = allRents[i]) === null || _r === void 0 ? void 0 : _r.status) {
+                        switch ((_v = allRents[i]) === null || _v === void 0 ? void 0 : _v.status) {
                             case null:
                             case undefined:
                             case "CREATED":
@@ -184,7 +196,7 @@ function generateTable() {
                         cell.appendChild(button);
                         break;
                 }
-                if (((_s = allRents[i]) === null || _s === void 0 ? void 0 : _s.status) == "RETURNED") {
+                if (((_w = allRents[i]) === null || _w === void 0 ? void 0 : _w.status) == "RETURNED") {
                     cellinput_1.disabled = true;
                 }
                 if (column.cellType != "delete_row") {
@@ -192,7 +204,7 @@ function generateTable() {
                 }
             }
             if (column.cellType == "verification_status") {
-                switch ((_t = allRents[i]) === null || _t === void 0 ? void 0 : _t.status) {
+                switch ((_x = allRents[i]) === null || _x === void 0 ? void 0 : _x.status) {
                     case null:
                     case undefined:
                     case "CREATED":
@@ -208,9 +220,9 @@ function generateTable() {
                     default:
                         var cellChip = document.createElement('div');
                         cellChip.classList.add("verification_chip");
-                        cellChip.setAttribute("status", (_u = allRents[i]) === null || _u === void 0 ? void 0 : _u.status);
-                        cellChip.innerHTML = statusResolved[(_v = allRents[i]) === null || _v === void 0 ? void 0 : _v.status];
-                        if (((_w = allRents[i]) === null || _w === void 0 ? void 0 : _w.status) == "DECLINED") {
+                        cellChip.setAttribute("status", (_y = allRents[i]) === null || _y === void 0 ? void 0 : _y.status);
+                        cellChip.innerHTML = statusResolved[(_z = allRents[i]) === null || _z === void 0 ? void 0 : _z.status];
+                        if (((_0 = allRents[i]) === null || _0 === void 0 ? void 0 : _0.status) == "DECLINED") {
                             cellChip.setAttribute("data-popup-heading", "Ablehnungsnachricht");
                             cellChip.setAttribute("data-popup-text", "Anfrage nochmal senden");
                             cellChip.addEventListener("click", function () {
@@ -239,12 +251,11 @@ function generateTable() {
             }
             row.appendChild(cell);
         });
-        html.push(row);
+        table.appendChild(row);
     };
-    for (var i = 0; i < Math.min(allRents.length, 20); i++) {
+    for (var i = 0; i < allRents.length; i++) {
         _loop_1(i);
     }
-    table.append.apply(table, html);
 }
 function returnRent(rentId, code) {
     fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/return"), {
@@ -253,7 +264,7 @@ function returnRent(rentId, code) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            "verification_code": code || "",
+            "verification_code": code || "lasdnhfgköj",
             "verification_status": "RETURNED",
             "verification_message": " "
         })
@@ -274,24 +285,36 @@ function returnRent(rentId, code) {
 function removeRow(rentId) {
     var _a, _b;
     if (((_a = allRents[rentId]) === null || _a === void 0 ? void 0 : _a.status) != "WAITING" && ((_b = allRents[rentId]) === null || _b === void 0 ? void 0 : _b.status) != "RETURNED") {
-        var confirmation = confirm("Are you sure you want to delete this row?");
-        if (confirmation) {
-            fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/remove"))
-                .then(function (response) {
-                return response.json();
-            })
-                .then(function (data) {
-                console.log(data);
-                requestAllRents();
-                if (data.ccStatus.statusCode == 1000) {
-                    PopupEngine.createNotification({ text: "Verleih wurde erfolgreich gel\u00F6scht" });
-                }
-                else {
-                    PopupEngine.createNotification({ text: "Es gab einen Fehler beim L\u00F6schen des Verleihs" });
-                }
-            })
-                .catch(function (error) { return console.error(error); });
-        }
+        PopupEngine.createModal({
+            heading: "Bestätigen",
+            text: "Sicher das sie diesen Eintrag Löschen wollen?",
+            buttons: [
+                {
+                    text: "Löschen",
+                    action: function () {
+                        fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId, "/remove"))
+                            .then(function (response) {
+                            return response.json();
+                        })
+                            .then(function (data) {
+                            console.log(data);
+                            requestAllRents();
+                            if (data.ccStatus.statusCode == 1000) {
+                                PopupEngine.createNotification({ text: "Verleih wurde erfolgreich gel\u00F6scht" });
+                            }
+                            else {
+                                PopupEngine.createNotification({ text: "Es gab einen Fehler beim L\u00F6schen des Verleihs" });
+                            }
+                        })
+                            .catch(function (error) { return console.error(error); });
+                    },
+                    closePopup: true
+                },
+                {
+                    text: "Abbrechen",
+                },
+            ]
+        });
     }
 }
 function sendVerificationRequest(rentId) {
@@ -316,7 +339,7 @@ function openStudentPicker(input, rentId) {
     studentSelectionPopup.querySelector("input").value = "";
     studentSelectionPopup.querySelector("input").setAttribute("rent_id", String(rentId));
     var bounds = input.getBoundingClientRect();
-    studentSelectionPopup.style.top = bounds.top + "px";
+    studentSelectionPopup.style.top = bounds.top + window.scrollY + "px";
     studentSelectionPopup.style.left = bounds.left + "px";
     studentSelectionPopup.style.display = "block";
     studentSearchbar.focus();
@@ -374,7 +397,7 @@ function openTeacherPicker(input, rentId, teacherType) {
     teacherSelectionPopup.querySelector("input").setAttribute("rent_id", String(rentId));
     teacherSelectionPopup.querySelector("input").setAttribute("teacher_type", teacherType);
     var bounds = input.getBoundingClientRect();
-    teacherSelectionPopup.style.top = bounds.top + "px";
+    teacherSelectionPopup.style.top = bounds.top + window.scrollY + "px";
     teacherSelectionPopup.style.left = bounds.left + "px";
     teacherSelectionPopup.style.display = "block";
     teacherSearchbar.focus();
@@ -481,13 +504,16 @@ function createRent() {
     })
         .catch(function (error) { return console.error(error); });
 }
-function importDataFromCsv(button) {
-    var file = button.closest("div").querySelector("input").files[0];
+var studentInput = document.querySelector('#schueler-in');
+studentInput.addEventListener("input", function () { importDataFromCsv(studentInput, 'student'); });
+var teacherInput = document.querySelector('#lehrer-in');
+teacherInput.addEventListener("input", function () { importDataFromCsv(teacherInput, 'teacher'); });
+function importDataFromCsv(input, type) {
+    var file = input.files[0];
     var formData = new FormData();
     formData.append('file', file);
     console.log(formData, file);
-    var importType = button.closest("div").getAttribute("data-import");
-    fetch(APPLICATION_URL + "/".concat(importType, "/import"), {
+    fetch(APPLICATION_URL + "/".concat(type, "/import"), {
         method: 'POST',
         body: formData,
     })
@@ -498,7 +524,7 @@ function importDataFromCsv(button) {
         console.log(data);
         switch (data.ccStatus.statusCode) {
             case 1000:
-                PopupEngine.createNotification({ text: "Successfully imported ".concat(importType) });
+                PopupEngine.createNotification({ text: "Successfully imported ".concat(type) });
                 break;
             case 1204:
                 PopupEngine.createNotification({ text: "Konnte nicht importieren weil die filestruktur invalide ist" });
@@ -510,10 +536,6 @@ function importDataFromCsv(button) {
         console.error(error);
     });
 }
-var importButtonss = document.querySelectorAll('#import button');
-importButtonss.forEach(function (elem) {
-    elem.addEventListener("click", function () { importDataFromCsv(elem); });
-});
 function findRentById(id) {
     var res = null;
     allRents.forEach(function (rent) {

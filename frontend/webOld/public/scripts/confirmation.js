@@ -1,4 +1,7 @@
 var APPLICATION_URL = "http://localhost:8080/api";
+if (window.location.hostname !== "localhost") {
+    APPLICATION_URL = "http://144.24.171.164/api";
+}
 PopupEngine.init({ textColor: "black", backgroundColor: "white", elemBackground: "#EEE" });
 var urlParams = new URLSearchParams(window.location.search);
 var rentId = urlParams.get("id");
@@ -15,6 +18,7 @@ fetch(APPLICATION_URL + "/rent/getbyid/".concat(rentId))
     return result.json();
 })
     .then(function (data) {
+    data = data.data;
     console.log(data);
     document.querySelector('.rentData').innerHTML = "\n            <p>".concat(data.student.firstname, " ").concat(data.student.lastname, "</p>\n            <p>Ger\u00E4t Nr: ").concat(data.device_string, ", mit Zubeh\u00F6r: ").concat(data.accessory || "keinem", "</p>\n            <p>von: ").concat(data.rent_start, ", bis (geplant): ").concat(data.rent_end_planned || "unbekannt", "</p>\n        ");
 })
@@ -28,7 +32,7 @@ function confirmRent(verificationStatus) {
         },
         body: JSON.stringify({
             "verification_code": code || "",
-            "verification_status": verificationStatus || "",
+            "status": verificationStatus.toUpperCase() || "",
             "verification_message": verificationMessage || ""
         })
     })
@@ -43,6 +47,9 @@ function confirmRent(verificationStatus) {
                 else if (verificationStatus == "declined") {
                     PopupEngine.createModal({ text: "Verleihung wurde erfolgreich abgelehnt. Sie k\u00F6nnen diese Seite nun schlie\u00DFen." });
                 }
+                break;
+            case 1106:
+                PopupEngine.createModal({ text: data.ccStatus.message });
                 break;
             case 1205:
                 PopupEngine.createModal({ text: "Die Verleihung wurde bereits best\u00E4tigt oder abgelehnt" });

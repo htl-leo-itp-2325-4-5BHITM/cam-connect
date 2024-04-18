@@ -1,0 +1,56 @@
+@import "../../base";
+
+:host {
+  all: initial;
+  flex-grow: 1;
+  margin: 1rem !important;
+}
+
+.student{
+  padding: 1rem;
+}
+
+.heading{
+  display: flex;
+  justify-content: space-between;
+  /*border: 1px solid $gray500;*/
+  border-radius: 0.75rem 0.75rem 0rem 0.75rem;
+  background-color: $gray300;
+  padding: .3rem;
+  font-size: $fSizeDesktopSmall;
+  -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;
+
+  img{
+    height: 1.5rem;
+    @include imgIconColorAccent;
+  }
+
+  div{
+    display: flex;
+    align-items: center;
+
+    p{
+      color: $gray900;
+    }
+
+    p, cc-button, cc-circle-select{
+      margin-inline: .2rem;
+    }
+
+    cc-circle-select{
+      margin-left: .5rem;
+    }
+  }
+
+  .left p.bold{
+    font-weight: bold;
+  }
+}
+
+.entries{
+  padding-left: 2.6rem;
+
+  cc-rent-list-entry:last-child{
+    border-radius: 0 0 0.75rem 0.75rem;
+  }
+}

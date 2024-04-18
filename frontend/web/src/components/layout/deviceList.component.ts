@@ -1,33 +1,37 @@
 import {LitElement, css, html} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/deviceList.styles.scss'
-import { icon } from '@fortawesome/fontawesome-svg-core'
-import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
-import { faTrash } from "@fortawesome/free-solid-svg-icons"
-import {ButtonColor, ButtonType} from "../basic/button.component"
-import {CircleSelectType} from "../basic/circleSelect.component"
-import {ColorEnum} from "../../base"
-import {Device} from "../../service/device.service"
 import {model} from "../../index";
+import {WidthResizeObserver} from "../../base"
+import {ObservedProperty} from "../../model"
+import {Device} from "../../service/device.service"
+import {RentByStudentDTO} from "../../service/rent.service"
+import {DeviceType, DeviceTypeFullDTO, DeviceTypeVariantCollection} from "../../service/deviceType.service"
 
 @customElement('cc-device-list')
 export class DeviceListComponent extends LitElement {
-    render() {
-        let count = 0;
+    @property()
+    private deviceTypesFull: ObservedProperty<DeviceTypeFullDTO[]>
 
+    constructor() {
+        super()
+        this.deviceTypesFull = new ObservedProperty<DeviceTypeFullDTO[]>(this, model.deviceTypesFull)
+    }
+    render() {
         return html`
             <style>${styles}</style>
-            
-            ${model.devices.value.map(device => {
-                return this.generateStudent(count++)
-            })}
+
+            <div class="content">
+                ${Object.values(this.deviceTypesFull.value).flat().map(deviceType => {
+                    return html`<cc-device-list-entry .deviceTypeFull="${deviceType}"></cc-device-list-entry>`
+                })}
+            </div>
         `
     }
 
-    generateStudent(count: number){
-        return html`
-            <cc-device-list-entry deviceNumber="${count}"></cc-device-list-entry>
-        `
+    connectedCallback() {
+        super.connectedCallback();
+        new WidthResizeObserver(this, [{size: 0, key: "small"}, {size: 600, key: "medium"}, {size: 1000, key: "large"}, {size: 1600, key: "xLarge"}])
     }
 }
 

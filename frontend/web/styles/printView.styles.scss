@@ -1,0 +1,52 @@
+//region resets
+*{
+  margin: 0;
+  padding: 0;
+  font: inherit;
+}
+
+html{
+  scroll-behavior: smooth;
+}
+
+body{
+  color: hsl(0,0%,0%);
+  font-family: sans-serif;
+  overflow: scroll;
+}
+//endregion
+
+/* main */
+
+table{
+  border-collapse: collapse;
+  font-size: .8rem;
+
+  tbody{
+    height: 100%;
+    width: 100%;
+  }
+
+  th,td {
+    border: 1px solid gray;
+    height: inherit;
+
+    &:nth-of-type(6), &:nth-of-type(10) {
+      border-right: .2rem solid #383838;
+    }
+  }
+
+  td{
+    padding-inline: .25rem;
+    text-align: center;
+  }
+
+  th {
+    border-bottom: .2rem solid #383838;
+    padding: .5rem;
+  }
+
+  tr {
+    height: 2rem;
+  }
+}

@@ -3,6 +3,9 @@ package at.camconnect.socket;
 import at.camconnect.model.Device;
 import at.camconnect.model.DeviceType;
 import at.camconnect.repository.DeviceRepository;
+import at.camconnect.responseSystem.CCStatus;
+import at.camconnect.responseSystem.dtos.CCDataResponseDTO;
+import at.camconnect.responseSystem.dtos.CCResponseDetailDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,7 +20,7 @@ import java.util.List;
 
 @ServerEndpoint("/socket/devices")
 @ApplicationScoped
-public class DeviceSocket {
+public class DeviceSocket { //TODO this should be for deviceTypeFull
     List<Session> sessions = new ArrayList<>();
 
     @Inject
@@ -35,18 +38,10 @@ public class DeviceSocket {
         sessions.remove(session);
     }
 
-    public void broadcast(List<Device> response) {
-        //convert data to a string (json-string)
-        String responseString = "";
-        try{
-            responseString = objectMapper.writeValueAsString(response);
-        }catch (JsonProcessingException ex){
-            responseString = "ewow";
-        }
-
-        String finalResponseString = responseString;
+    //TODO reformat like the RentSocket
+    public void broadcast() {
         sessions.forEach(s -> {
-            s.getAsyncRemote().sendObject(finalResponseString, result -> {
+            s.getAsyncRemote().sendObject("update", result -> {
                if (result.getException() != null){
                    System.out.println("Unable to send message: " + result.getException());
                }

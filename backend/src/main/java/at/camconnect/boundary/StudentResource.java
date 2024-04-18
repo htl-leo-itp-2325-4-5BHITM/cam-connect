@@ -1,11 +1,13 @@
 package at.camconnect.boundary;
 
+import at.camconnect.dtos.AutocompleteOptionDTO;
 import at.camconnect.dtos.StudentDTO;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.model.Student;
 import at.camconnect.repository.StudentRepository;
 import jakarta.inject.Inject;
+import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -16,6 +18,7 @@ import java.io.File;
 import java.util.List;
 
 @Path("/student")
+@Produces(MediaType.APPLICATION_JSON)
 public class StudentResource {
     @Inject
     StudentRepository studentRepository;
@@ -23,60 +26,84 @@ public class StudentResource {
     @POST
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response createStudent(Student s){
-        studentRepository.create(s);
-        return Response.ok().build();
+        try{
+            studentRepository.create(s);
+        } catch(CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
 
     @POST
     @Path("/remove")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response removeStudent(Student s){
-        studentRepository.remove(s);
-        return Response.ok().build();
+        try{
+            studentRepository.remove(s);
+        } catch(CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
 
     @POST
     @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response updateStudent(Student s){
-        studentRepository.update(s);
-        return Response.ok().build();
+        try{
+            studentRepository.update(s);
+        } catch(CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
 
     @GET
     @Path("/getbyid/{id: [0-9]+}")
-
-    public Student getById(@PathParam("id")Long id) {
-        return studentRepository.getById(id);
+    public Response getById(@PathParam("id")Long id) {
+        Student student;
+        try{
+            student = studentRepository.getById(id);
+        } catch(CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok(student);
     }
 
     @POST
     @Path("/search")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public List<Student> search(StudentDTO studentDTO){
-        return studentRepository.search(studentDTO);
+    public Response search(JsonObject data){
+        List<AutocompleteOptionDTO> result;
+        try{
+            result = studentRepository.search(data.getString("searchTerm"));;
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok(result);
     }
 
     @GET
     @Path("/getall")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Student> getAll() {
-        return studentRepository.getAll();
+    public Response getAll() {
+        List<Student> studentList;
+        try{
+            studentList = studentRepository.getAll();
+        } catch(CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok(studentList);
     }
 
     @POST
     @Path("/import")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response uploadCsvFile(@RestForm File file) {
         try{
             studentRepository.importStudents(file);

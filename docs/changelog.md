@@ -24,3 +24,20 @@ This file should be updated when ending a sprint and contain the same info as th
   - delete / return button functionality
   - disabled editing of confirmed rents
 - switched to postgres db for deployment to oracle
+
+## Sprint 6
+
+- cleaned up components
+  - migrated from lit-html to LIT
+  - got fontawesome icons working
+  - added icon support to buttons
+- added the navbar and toolbar
+- Implemented filter sidebar
+  - filters are loaded from the backend
+  - secondary filters only show when relevant primary filter is selected
+- Updated all POST routes to use DTOs
+- updated Import.sql to properly insert demo data
+- created Tooltip system
+- created Service System
+- switched to websockets
+- ?implemented basic page functionality?
