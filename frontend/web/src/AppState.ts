@@ -8,6 +8,7 @@ import {Student} from "./service/student.service"
 import {DeviceType} from "./service/deviceType.service"
 import URLHandler from "./urlHandler"
 import {DeviceListEntryComponent} from "./components/layout/deviceListEntry.component"
+import {Device} from "./service/device.service"
 
 interface actionCancellation {
     identifier: string,
@@ -46,6 +47,20 @@ export class AppState{
         KeyBoardShortCut.remove("addDevice")
         KeyBoardShortCut.remove("createRent")
         this.update()
+    }
+
+    openCreateRentModalWithDevices(devices?: Set<DeviceListEntryComponent>){
+        devices.forEach(device => {
+            let deviceSelector = this._createRentElement.shadowRoot.querySelector("cc-autocomplete") as AutocompleteComponent<Device>
+            let deviceId = device.deviceTypeFull.deviceType.type_id;
+
+            if(deviceId){
+                deviceSelector.generateSuggestions(undefined, "")
+                    .then(() => {
+                        deviceSelector.selectSuggestion(deviceId)
+                    })
+            }
+        })
     }
 
     openCreateRentModal(withStudentId?: number){

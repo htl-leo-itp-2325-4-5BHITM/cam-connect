@@ -91,7 +91,7 @@ public class RentRepository {
     }
 
     public boolean isDeviceAlreadyInUse(Device device) {
-        return getAllSingleList().stream().anyMatch(rentDTO -> rentDTO.device().equals(device));
+        return getAllSingleList().stream().anyMatch(rentDTO -> rentDTO.device().equals(device) && rentDTO.status() == RentStatusEnum.RETURNED);
     }
 
     @Transactional

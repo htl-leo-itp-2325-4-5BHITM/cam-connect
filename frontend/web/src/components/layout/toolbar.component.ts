@@ -59,7 +59,7 @@ export class ToolbarComponent extends LitElement {
                         Auswahl aufheben
                     </cc-button>
                     
-                    <cc-button @click="${() => {this.removeSelection('rent')}}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.remove}">
+                    <cc-button @click="${() => {this.removeSelection()}}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.remove}">
                         <div slot="left" class="icon accent">
                             ${unsafeSVG(icon(faTrash).html[0])}
                         </div>
@@ -104,9 +104,11 @@ export class ToolbarComponent extends LitElement {
                         Auswahl aufheben
                     </cc-button>
     
-                    <cc-button @click="${() => {this.removeSelection('device')}}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.remove}">
-                        <div slot="left" class="icon accent">${unsafeSVG(icon(faTrash).html[0])}</div>
-                        Gerät(e) löschen
+                    <cc-button @click="${() => {this.rentSelection()}}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.remove}">
+                        <div slot="left" class="icon accent">
+                            <img slot="left" src="../../../assets/icon/return.svg" alt="<-">
+                        </div>
+                        Gerät(e) verleihen
                     </cc-button>
                 </div>
             </div>
@@ -138,23 +140,21 @@ export class ToolbarComponent extends LitElement {
         }
     }
 
-    removeSelection(type) {
+    rentSelection() {
+        model.appState.value.openCreateRentModalWithDevices(this.appState.value.selectedDeviceEntries)
+    }
+
+    removeSelection() {
         PopupEngine.createModal({
-            text: `Willst du wirklich diese ${type === 'rent' ? 'Verleihe' : 'Geräte'} löschen?`,
+            text: `Willst du wirklich diese Verleihe löschen?`,
             buttons: [
                 {
                     text: "Ja",
                     action: (data) => {
-                        if(type === 'rent'){
-                            this.appState.value.selectedRentEntries.forEach((entry) => {
-                                RentService.remove(entry.rent)
-                            })
-                        } else if(type === 'device'){
-                            this.appState.value.selectedDeviceEntries.forEach((entry) => {
-                                DeviceTypeService.remove(entry.deviceTypeFull.deviceType)
-                            })
-                        }
-                        this.uncheckAll(type)
+                        this.appState.value.selectedRentEntries.forEach((entry) => {
+                            RentService.remove(entry.rent)
+                        })
+                        this.uncheckAll("rent")
                     },
                     closePopup: true
                 },
