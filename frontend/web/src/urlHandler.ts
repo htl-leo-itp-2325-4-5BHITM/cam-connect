@@ -18,11 +18,11 @@ let pages = {
             },
             calendar: {
                 handler: () => { model.appState.value.page = PageEnum.CALENDAR },
+            },
+            edit: {
+                handler: () => { clearAllElements(); document.body.appendChild(document.createElement("cc-edit")) }
             }
         }
-    },
-    edit: {
-      handler: () => { document.body.appendChild(document.createElement("cc-edit")) }
     },
     confirm: {
         handler: () => { document.body.appendChild(document.createElement("cc-external-confirm")) }
@@ -38,14 +38,18 @@ let pages = {
     }
 }
 
+function clearAllElements(){
+    let queries = ['cc-not-found', 'cc-external-confirm', 'cc-app', 'cc-edit']
+    queries.forEach(elem => {
+        if(document.querySelector(elem)) {
+            document.body.removeChild(document.querySelector(elem))
+        }
+    })
+}
+
 export default class URLHandler {
     static parseCurrentURL () {
-        let queries = ['cc-not-found', 'cc-external-confirm', 'cc-app']
-        queries.forEach(elem => {
-            if(document.querySelector(elem)) {
-                document.body.removeChild(document.querySelector(elem))
-            }
-        })
+        clearAllElements()
 
         let urlSplit = window.location.href.split("?")[0]?.split("/")
         urlSplit.splice(0, 3)
