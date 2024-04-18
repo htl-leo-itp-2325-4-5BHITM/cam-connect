@@ -127,12 +127,12 @@ VALUES
     (2, 3);  -- Student 2 likes DeviceType 3
 
 -- Inserting data into rent table
-INSERT INTO rent (type, rent_end_planned, rent_start, status, creation_date, device_id, student_id, teacher_id_end, teacher_id_start, accessory, device_string, note, verification_code)
+INSERT INTO rent (type, rent_end_planned, rent_start, status, creation_date, device_id, student_id, teacher_id_start)
 VALUES
-    ('DEFAULT', '2024-02-01', '2024-01-15', 'DECLINED', CURRENT_TIMESTAMP, 1, 1, 1, 2, 'Tripod', 'Camera rental for event', 'Event Coverage', 'lasdnhfgköj'),
-    ('DEFAULT', '2024-03-01', '2024-02-15', 'WAITING', CURRENT_TIMESTAMP, 2, 2, 2, 1, 'Lens', 'Lens rental for project', 'Project Photography', 'lasdnhfgköj'),
-    ('DEFAULT', '2024-04-01', '2024-03-15', 'CONFIRMED', CURRENT_TIMESTAMP, 3, 2, 1, 2, 'Battery Pack', 'Additional power for shoot', 'Outdoor Photography', 'lasdnhfgköj'),
-    ('DEFAULT', '2024-05-01', '2024-04-15', 'WAITING', CURRENT_TIMESTAMP, 4, 1, 2, 1, 'Microphone', 'Audio enhancement for video', 'Video Production', 'lasdnhfgköj'),
-    ('DEFAULT', '2024-05-01', '2024-04-15', 'CONFIRMED', CURRENT_TIMESTAMP, 5, 1, 2, 1, 'Microphone', 'Audio enhancement for video', 'Video Production', 'lasdnhfgköj'),
-    ('DEFAULT', '2024-06-01', '2024-05-15', 'WAITING', CURRENT_TIMESTAMP, 6, 2, 1, 2, 'Tripod', 'Stable support for shooting', 'Documentary Film', 'lasdnhfgköj');
+    ('DEFAULT', '2024-02-01', '2024-01-15', 'DECLINED', CURRENT_TIMESTAMP, 1, 1, 2),
+    ('DEFAULT', '2024-03-01', '2024-02-15', 'WAITING', CURRENT_TIMESTAMP, 2, 2, 1),
+    ('DEFAULT', '2024-04-01', '2024-03-15', 'CONFIRMED', CURRENT_TIMESTAMP, 3, 2, 2),
+    ('DEFAULT', '2024-05-01', '2024-04-15', 'WAITING', CURRENT_TIMESTAMP, 4, 1,1),
+    ('DEFAULT', '2024-05-01', '2024-04-15', 'CONFIRMED', CURRENT_TIMESTAMP, 5, 1, 1),
+    ('DEFAULT', '2024-06-01', '2024-05-15', 'WAITING', CURRENT_TIMESTAMP, 6, 2, 2);
 
