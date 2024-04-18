@@ -218,9 +218,12 @@ export class AnimationHelper{
     }
 
     static show(elem: Element, display: string = "block", duration: number = 200){
+        console.log("showing")
         let elemAsHTMLElement = elem as HTMLElement
 
         if(elemAsHTMLElement.dataset.visibility == "visible") return
+
+        elemAsHTMLElement.dataset.visibility = "showing"
 
         elemAsHTMLElement.style.opacity = "0"
         elemAsHTMLElement.style.display = display
@@ -239,6 +242,7 @@ export class AnimationHelper{
             elemAsHTMLElement.style.opacity = "1"
             elemAsHTMLElement.style.display = display
             elemAsHTMLElement.dataset.visibility = "visible"
+            console.log("actually showing")
         },duration)
     }
 
@@ -246,6 +250,10 @@ export class AnimationHelper{
         let elemAsHTMLElement = elem as HTMLElement
 
         if(elemAsHTMLElement.dataset.visibility == "hidden") return
+
+        elemAsHTMLElement.dataset.visibility = "hiding"
+
+        console.log("hiding")
 
         elem.animate([
             {opacity: 1, transform: "translateY(0)"},
@@ -258,8 +266,11 @@ export class AnimationHelper{
 
 
         setTimeout(() => {
-            elemAsHTMLElement.style.display = "none"
-            elemAsHTMLElement.dataset.visibility = "hidden"
+            if(elemAsHTMLElement.dataset.visibility == "hidden") {
+                elemAsHTMLElement.style.display = "none"
+                elemAsHTMLElement.dataset.visibility = "hidden"
+                console.log("actually hiding")
+            }
         },duration)
     }
 }

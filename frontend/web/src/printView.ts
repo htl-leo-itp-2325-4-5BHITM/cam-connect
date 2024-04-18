@@ -1,5 +1,6 @@
 import styles from "../styles/printView.styles.scss"
 import {model} from "./index"
+import Util from "./util"
 
 document.addEventListener("keydown", function (event) {
     if((event.ctrlKey || event.metaKey) && event.key == "p") {
@@ -85,7 +86,7 @@ function generatePrintLayout() {
                         ${rent.teacher_end ? rent.teacher_end.lastname : ""}
                     </td>
                     <td>${rent.note || ""}</td>
-                    <td>${rent.status}</td></tr>`
+                    <td>${Util.rentStatusToHuman(rent.status)}</td></tr>`
         })
     })
 
