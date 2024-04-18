@@ -155,7 +155,7 @@ export class ExternalConfirmComponent extends LitElement {
                     text: "Der angegebene Link ist abgelaufen, bitte überprüfe dein Postfach auf neuere Emails. Wahrscheinlich wurde in der Zwischenzeit bereits erneut um Bestätigung angefragt. Falls der Fehler weiter auftritt, wende dich an die Administratoren.",
                     buttons: [
                         {
-                            text: "Zurück zur Verleihliste",
+                            text: "Zurück zum Dashboard",
                             role: "confirm",
                             action: () => { URLHandler.setUrl("/app/rents") }
                         }
@@ -168,7 +168,7 @@ export class ExternalConfirmComponent extends LitElement {
                     text: "Der angegebene Link ist ungültig, bitte schließe die Seite und klicke den Link erneut. Falls der Fehler weiter auftritt, wende dich an die Administratoren.",
                     buttons: [
                         {
-                            text: "Zurück zur Verleihliste",
+                            text: "Zurück zum Dashboard",
                             role: "confirm",
                             action: () => {
                                 URLHandler.setUrl("/app/rents")

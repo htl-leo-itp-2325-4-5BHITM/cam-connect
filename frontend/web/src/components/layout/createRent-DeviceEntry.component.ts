@@ -175,8 +175,6 @@ export class CreateRentDeviceEntryComponent extends LitElement {
     }
 
     async searchForDevice(searchTerm: string): Promise<AutocompleteOption<Device>[]> {
-        if(this.data.device_type_id < 0) return DeviceService.search(searchTerm, -1, true)
-
         return DeviceService.search(searchTerm, this.data.device_type_id, true)
     }
 

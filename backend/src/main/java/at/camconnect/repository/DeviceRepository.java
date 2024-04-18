@@ -6,6 +6,7 @@ import at.camconnect.dtos.RentDTO;
 import at.camconnect.enums.RentStatusEnum;
 import at.camconnect.model.DeviceTypeAttributes.*;
 import at.camconnect.model.DeviceTypeVariants.*;
+import at.camconnect.model.Rent;
 import at.camconnect.model.Student;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.model.Device;
@@ -22,6 +23,7 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class DeviceRepository {
@@ -130,8 +132,25 @@ public class DeviceRepository {
     }
 
     public boolean isDeviceAlreadyInUse(long device_id) {
-        List<RentDTO> rentList = em.createQuery("SELECT new at.camconnect.dtos.RentDTO(rent_id, status, type, device, device_string, teacher_start, teacher_end, rent_start, rent_end_planned, rent_end_actual, accessory, student, note, verification_message) FROM Rent r order by r.creation_date", RentDTO.class).getResultList();
-        return rentList.stream().anyMatch(rentDTO -> rentDTO.device().getDevice_id() == device_id && rentDTO.status() == RentStatusEnum.RETURNED);
+        return !em.createQuery("SELECT r FROM Rent r where r.device.id = :deviceId and r.status != :status order by r.creation_date", Rent.class)
+                .setParameter("deviceId", device_id).setParameter("status", RentStatusEnum.RETURNED)
+                .getResultStream()
+                .map(rent -> new RentDTO(
+                        rent.getRent_id(),
+                        rent.getStatus(),
+                        rent.getType(),
+                        rent.getDevice(),
+                        rent.getDevice_string(),
+                        rent.getTeacher_start(),
+                        rent.getTeacher_end(),
+                        rent.getRent_start(),
+                        rent.getRent_end_planned(),
+                        rent.getRent_end_actual(),
+                        rent.getAccessory(),
+                        rent.getStudent(),
+                        rent.getNote(),
+                        rent.getVerification_message()
+                )).collect(Collectors.toList()).isEmpty();
     }
 
     public List<Device> getAll(){

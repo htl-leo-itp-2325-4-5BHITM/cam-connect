@@ -140,8 +140,6 @@ public class RentRepository {
         //this is currently just joining to half the db and not using a propper DTO,
         // this might cause performance problems in the future but is fine for now
 
-        System.out.println("started with getting all");
-
         List<Student> students = em.createQuery(
                 "SELECT s FROM Rent r " +
                         "join Student s on r.student.student_id = s.student_id " +
@@ -149,8 +147,6 @@ public class RentRepository {
                         "order by s.student_id", Student.class).getResultList();
 
         List<RentByStudentDTO> result = new LinkedList<>();
-
-        System.out.println(students.size());
 
         for (Student student : students) {
             System.out.println(student.toString());
