@@ -3,6 +3,7 @@ package at.camconnect.repository;
 import at.camconnect.dtos.AutocompleteOptionDTO;
 import at.camconnect.dtos.DeviceDTO;
 import at.camconnect.dtos.RentDTO;
+import at.camconnect.enums.RentStatusEnum;
 import at.camconnect.model.DeviceTypeAttributes.*;
 import at.camconnect.model.DeviceTypeVariants.*;
 import at.camconnect.model.Student;
@@ -130,7 +131,7 @@ public class DeviceRepository {
 
     public boolean isDeviceAlreadyInUse(long device_id) {
         List<RentDTO> rentList = em.createQuery("SELECT new at.camconnect.dtos.RentDTO(rent_id, status, type, device, device_string, teacher_start, teacher_end, rent_start, rent_end_planned, rent_end_actual, accessory, student, note, verification_message) FROM Rent r order by r.creation_date", RentDTO.class).getResultList();
-        return rentList.stream().anyMatch(rentDTO -> rentDTO.device().getDevice_id() == device_id);
+        return rentList.stream().anyMatch(rentDTO -> rentDTO.device().getDevice_id() == device_id && rentDTO.status() == RentStatusEnum.RETURNED);
     }
 
     public List<Device> getAll(){
