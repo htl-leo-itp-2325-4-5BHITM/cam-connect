@@ -266,7 +266,7 @@ export class AnimationHelper{
 
 
         setTimeout(() => {
-            if(elemAsHTMLElement.dataset.visibility == "hidden") {
+            if(elemAsHTMLElement.dataset.visibility == "hiding") {
                 elemAsHTMLElement.style.display = "none"
                 elemAsHTMLElement.dataset.visibility = "hidden"
                 console.log("actually hiding")

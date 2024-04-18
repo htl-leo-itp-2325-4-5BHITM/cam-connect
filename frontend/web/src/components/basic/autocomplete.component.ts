@@ -82,7 +82,7 @@ export class AutocompleteComponent<T> extends LitElement {
 
     static suggestionElement: HTMLElement //the absolute positioned element that contains the suggestions
 
-    private logger = new Logger(true, "autocomplete")
+    private logger = new Logger(false, "autocomplete")
 
     constructor() {
         super()
@@ -138,9 +138,9 @@ export class AutocompleteComponent<T> extends LitElement {
      * displays the suggestion container
      */
     showSuggestions(){
+        console.log("showing autocomplete suggestions")
         this.logger.log("----SHOWING SUGGESTIONS----", this.placeholder, this.selected)
         AutocompleteComponent.suggestionsVisible = this
-        this.logger.log(AutocompleteComponent.suggestionsVisible)
 
         this.openedThroughClick = false
 
