@@ -10,7 +10,7 @@ public record RentByStudentDTO(Student student, List<RentDTO> rentList) {
     public RentByStudentDTO {
     }
 
-    public RentByStudentDTO(Student student) {
+   /* public RentByStudentDTO(Student student) {
         this(student, null);
-    }
+    }*/
 }

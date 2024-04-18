@@ -2,6 +2,8 @@ package at.camconnect.model;
 
 import at.camconnect.enums.RentStatusEnum;
 import at.camconnect.enums.RentTypeEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -15,19 +17,24 @@ public class Rent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(length = 4)
     private Long rent_id;
-
+    @Enumerated(EnumType.STRING)
+    private RentStatusEnum status;
     @Enumerated(EnumType.STRING)
     private RentTypeEnum type;
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
     private Student student;
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "device_id")
     private Device device;
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id_start")
     private Teacher teacher_start;
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id_end")
     private Teacher teacher_end;
     @Temporal(TemporalType.DATE)
@@ -41,9 +48,6 @@ public class Rent {
     private String verification_code;
     @Column(length = 150)
     private String verification_message;
-
-    @Enumerated(EnumType.STRING)
-    private RentStatusEnum status;
     @Column(length = 150)
     private String note;
     @Column(length = 100)

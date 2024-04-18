@@ -28,6 +28,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class RentRepository {
@@ -101,8 +102,37 @@ public class RentRepository {
         return CCResponse.ok();
     }
 
+    /*
+    * INFO
+    * about the select syntax used in both the getAlls
+    * quarkus can handle the incredibly complex joins to all multiple tables and all their children through inheritance
+    * just fine when you select a nativeObject, when however selecting a new RentDTO it all breaks down and throws cryptic errors
+    * without line numbers if your lucky or just does not return any results at all if any of the joined tables are null
+    *
+    * just leave it as streams and don't touch
+    */
+
     public List<RentDTO> getAllSingleList(){
-        return em.createQuery("SELECT new at.camconnect.dtos.RentDTO(rent_id, status, type, device, device_string, teacher_start, teacher_end, rent_start, rent_end_planned, rent_end_actual, accessory, student, note, verification_message) FROM Rent r order by r.creation_date", RentDTO.class).getResultList();
+        return em.createQuery("SELECT r FROM Rent r order by r.creation_date", Rent.class)
+                .getResultStream()
+                .map(rent -> new RentDTO(
+                        rent.getRent_id(),
+                        rent.getStatus(),
+                        rent.getType(),
+                        rent.getDevice(),
+                        rent.getDevice_string(),
+                        rent.getTeacher_start(),
+                        rent.getTeacher_end(),
+                        rent.getRent_start(),
+                        rent.getRent_end_planned(),
+                        rent.getRent_end_actual(),
+                        rent.getAccessory(),
+                        rent.getStudent(),
+                        rent.getNote(),
+                        rent.getVerification_message()
+                ))
+                .collect(Collectors.toList());
+
     }
 
     public List<RentByStudentDTO> getAll(){
@@ -119,11 +149,28 @@ public class RentRepository {
 
         for (Student student : students) {
             List<RentDTO> rents = em.createQuery(
-                    "SELECT new at.camconnect.dtos.RentDTO(rent_id, status, type, device, device_string, teacher_start, teacher_end, rent_start, rent_end_planned, rent_end_actual, accessory, student, note, verification_message) FROM Rent r " +
+                    "SELECT r FROM Rent r " +
                             "where r.student.student_id = :studentId " +
-                            "order by r.id", RentDTO.class)
+                            "order by r.id", Rent.class)
                     .setParameter("studentId", student.getStudent_id())
-                    .getResultList();
+                    .getResultStream()
+                    .map(rent -> new RentDTO(
+                            rent.getRent_id(),
+                            rent.getStatus(),
+                            rent.getType(),
+                            rent.getDevice(),
+                            rent.getDevice_string(),
+                            rent.getTeacher_start(),
+                            rent.getTeacher_end(),
+                            rent.getRent_start(),
+                            rent.getRent_end_planned(),
+                            rent.getRent_end_actual(),
+                            rent.getAccessory(),
+                            rent.getStudent(),
+                            rent.getNote(),
+                            rent.getVerification_message()
+                    ))
+                    .collect(Collectors.toList());
 
             result.add(new RentByStudentDTO(student, rents));
         }
