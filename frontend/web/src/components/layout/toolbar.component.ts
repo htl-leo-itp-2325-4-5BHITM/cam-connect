@@ -13,6 +13,7 @@ import PopupEngine from "../../popupEngine";
 import {AppState} from "../../AppState"
 import DeviceTypeService from "../../service/deviceType.service"
 import {RentStatus} from "../basic/rentStatus.component"
+import URLHandler from "../../urlHandler";
 
 @customElement('cc-toolbar')
 export class ToolbarComponent extends LitElement {
@@ -42,7 +43,7 @@ export class ToolbarComponent extends LitElement {
             <style>${styles}</style>
             <div class="main rentlist">
                 <div>
-                    <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}">
+                    <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" @click="${() => {URLHandler.setUrl('/app/edit')}}">
                         <div slot="left" class="icon accent">
                             ${unsafeSVG(icon(faCamera).html[0])}
                         </div>
@@ -87,7 +88,7 @@ export class ToolbarComponent extends LitElement {
             <style>${styles}</style>
             <div class="main equipment">
                 <div>
-                    <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}">
+                    <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" @click="${() => {URLHandler.setUrl('/app/edit')}}">
                         <div slot="left" class="icon accent">
                             ${unsafeSVG(icon(faCamera).html[0])}
                         </div>

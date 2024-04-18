@@ -56,14 +56,14 @@ export class AutocompleteComponent<T> extends LitElement {
     querySuggestions: (searchTerm: string) => Promise<AutocompleteOption<T>[]> = (searchTerm) => {return Promise.resolve([])}
 
     /**
-     * should provide the icon for the suggestion that wille be displayed alongside the content
+     * should provide the icon for the suggestion that will be displayed alongside the content
      * @param data
      */
     @property()
     iconProvider: (data: T) => TemplateResult = (data) => {return html`no icon provider`}
 
     /**
-     * converts a options data into a string that can be displayed to the user
+     * converts an options data into a string that can be displayed to the user
      */
     @property()
     contentProvider: (data: T) => string = () => {return "no content provider"}
@@ -114,8 +114,7 @@ export class AutocompleteComponent<T> extends LitElement {
                         </div>
                     `
                 })
-            }`,
-            AutocompleteComponent.suggestionElement
+            }`, AutocompleteComponent.suggestionElement
         )
 
         return html`
@@ -123,7 +122,7 @@ export class AutocompleteComponent<T> extends LitElement {
             <input type="text" placeholder="${this.placeholder}" .disabled="${this.disabled}" data-role="autocompleteInput" value="${this.selected.id > -1 ? this.contentProvider(this.selected.data) : ""}"
                    @mouseup="${ this.generateSuggestions }"
                    @keyup="${ (e)=> this.generateSuggestions(e) }"
-                   @keydown="${this.handelTabOut}"
+                   @keydown="${this.handleTabOut}"
                    @mousedown="${() => this.openedThroughClick = true}"
                    @focus="${(e) => {
                         if (!this.openedThroughClick) this.generateSuggestions(e)
@@ -158,7 +157,7 @@ export class AutocompleteComponent<T> extends LitElement {
 
         this.updateSuggestionPosition()
 
-        //TODO these are not working properyl and seem to impact performance significantly
+        //TODO these are not working properly and seem to impact performance significantly
         //these should update the position of the suggestion box dynamically
         /*document.addEventListener("mousewheel", this.boundUpdateSuggestionPosition);
         document.addEventListener("touchmove", this.boundUpdateSuggestionPosition);*/
@@ -166,7 +165,7 @@ export class AutocompleteComponent<T> extends LitElement {
         /*AutocompleteComponent.suggestionElement.classList.add("visible") //show the suggestion box*/
         AnimationHelper.show(AutocompleteComponent.suggestionElement, "flex")
 
-        document.addEventListener("click", this.boundHandelAutoClose) //close when clicking outside the suggestion box
+        document.addEventListener("click", this.boundHandleAutoClose) //close when clicking outside the suggestion box
 
         KeyBoardShortCut.register(["ArrowUp"], () => this.moveFocus("up"), "autocomplete", true)
         KeyBoardShortCut.register(["ArrowDown"], () => this.moveFocus("down"), "autocomplete", true)
@@ -233,10 +232,11 @@ export class AutocompleteComponent<T> extends LitElement {
             input.value = this.contentProvider(this.selected.data)
             this.logger.log("setting content", this.selected)
         }
-        else
+        else{
             input.value = ""
+        }
 
-        document.removeEventListener("click", this.boundHandelAutoClose)
+        document.removeEventListener("click", this.boundHandleAutoClose)
 
         //unused, would be for dynamic positioning
         document.removeEventListener("mousewheel", this.boundUpdateSuggestionPosition);
@@ -276,7 +276,7 @@ export class AutocompleteComponent<T> extends LitElement {
      */
     generateSuggestions(e?: KeyboardEvent, searchTermOverride?: string){
         return new Promise((resolve, reject) => {
-            //TODO we might want to limit rates on this function, if we do that wed have to delay the query by a few ms
+            //TODO we might want to limit rates on this function, if we do that we have to delay the query by a few ms
             // and check if a new query showed up when the delay is over we cant just exit out of the function if the last
             // call was less than XXms ago cause then the search query of the new call would be ignored
 
@@ -323,7 +323,7 @@ export class AutocompleteComponent<T> extends LitElement {
         })
     }
 
-    boundHandelAutoClose = this.handleAutoClose.bind(this)
+    boundHandleAutoClose = this.handleAutoClose.bind(this)
     /**
      * closes the suggestion box if focus is lost
      * @param e
@@ -340,7 +340,7 @@ export class AutocompleteComponent<T> extends LitElement {
         this.hideSuggestions()
     }
 
-    handelTabOut(e: KeyboardEvent){
+    handleTabOut(e: KeyboardEvent){
         if(e.key == "Tab") this.hideSuggestions()
     }
 

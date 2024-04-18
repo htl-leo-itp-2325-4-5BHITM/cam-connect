@@ -130,7 +130,7 @@ export class ExternalConfirmComponent extends LitElement {
                 </ul>
                 <div class="button-container">
                     <cc-button @click="${() => {URLHandler.setUrl("/app/rents")}}">
-                        Zurück zum Dashboard
+                        Zurück zur Verleihliste
                     </cc-button>
                 </div>
             </main>
@@ -152,10 +152,10 @@ export class ExternalConfirmComponent extends LitElement {
             if(invalidCodes){ //the length of the rents can be 0 because of this, in that case its likely because the user kept the window open while a new code was generated
                 PopupEngine.createModal({
                     heading: "Fehler",
-                    text: "Der angegebene Link ist abgelaufen, bitte überprüfe dein Postfach auf neuere emails. Warscheinlich wurde in der zwischenzeit bereits erneut um bestätigung angefragt. Falls der Fehler weiter auftritt, wende dich an die Administratoren",
+                    text: "Der angegebene Link ist abgelaufen, bitte überprüfe dein Postfach auf neuere Emails. Wahrscheinlich wurde in der Zwischenzeit bereits erneut um Bestätigung angefragt. Falls der Fehler weiter auftritt, wende dich an die Administratoren.",
                     buttons: [
                         {
-                            text: "zurück zum Dashboard",
+                            text: "Zurück zur Verleihliste",
                             role: "confirm",
                             action: () => { URLHandler.setUrl("/app/rents") }
                         }
@@ -165,10 +165,10 @@ export class ExternalConfirmComponent extends LitElement {
             else{
                 PopupEngine.createModal({
                     heading: "Fehler",
-                    text: "Der angegebene Link ist ungültig, bitte schließe die Seite und klicke den Link erneut. Falls der Fehler weiter auftritt, wende dich an die Administratoren",
+                    text: "Der angegebene Link ist ungültig, bitte schließe die Seite und klicke den Link erneut. Falls der Fehler weiter auftritt, wende dich an die Administratoren.",
                     buttons: [
                         {
-                            text: "zurück zum Dashboard",
+                            text: "Zurück zur Verleihliste",
                             role: "confirm",
                             action: () => {
                                 URLHandler.setUrl("/app/rents")
