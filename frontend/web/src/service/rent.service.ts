@@ -100,7 +100,6 @@ export default class RentService {
     }
 
     static updateProperty(id: number, property: string, data: any) {
-        console.log("updated: ")
         let theData = {value: data}
         Api.postData(`/rent/getbyid/${id}/update/${property}`, theData)
             .then((data) => {

@@ -410,8 +410,6 @@ public class RentRepository {
     public void updateProperty(String property, Long rentId, JsonObject data){
         Rent rent = getById(rentId);
 
-        System.out.println(property + " - " + rentId + " - " + data.toString());
-
         switch (property){
             case "student":
                 Student student = em.find(Student.class, data.getInt("value"));

@@ -44,9 +44,10 @@ export class AutocompleteComponent<T> extends LitElement {
      * a custom function that is called whenever the user selects an option
      * this is typically used to update the state of the parent component
      * @param option
+     * @param isInitialCall
      */
     @property()
-    onSelect = (option: T) => {}
+    onSelect = (option: T, isInitialCall?: boolean) => {}
 
     /**
      * should provide the applicable suggestions based on the search term
@@ -205,6 +206,7 @@ export class AutocompleteComponent<T> extends LitElement {
     /**
      * hides the suggestion container and cleans up the event listeners and selections
      * @param afterSelection
+     * @param isInitialCall
      */
     hideSuggestions( afterSelection = false){
         this.logger.log("hiding", this.placeholder)
@@ -249,8 +251,9 @@ export class AutocompleteComponent<T> extends LitElement {
     /**
      * select a specific option (by clicking or using keyboard)
      * @param option either a AutocompleteOption or the id of the option
+     * @param isInitialCall
      */
-    selectSuggestion(option: AutocompleteOption<T> | number){
+    selectSuggestion(option: AutocompleteOption<T> | number, isInitialCall?: boolean){
         this.logger.log("selecting", this.placeholder, option)
 
         if(typeof option == "number") option = this.options.find(item => item.id == option)
@@ -262,7 +265,7 @@ export class AutocompleteComponent<T> extends LitElement {
         }
         this.selected = option
         this.hideSuggestions(true)
-        this.onSelect(this.selected.data) //custom function that's different for each component
+        this.onSelect(this.selected.data, isInitialCall) //custom function that's different for each component
 
         this.classList.remove("error")
 
