@@ -78,7 +78,7 @@ public class DeviceResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response search(JsonObject data){
-        List<AutocompleteOptionDTO<DeviceDTO>> result;
+        List<AutocompleteOptionDTO<Device>> result;
         try{
             String searchTerm = data.getString("searchTerm");
             int type = data.getInt("typeId");

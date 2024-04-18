@@ -102,27 +102,27 @@ public class DeviceRepository {
         return count > 0;
     }
 
-    public List<AutocompleteOptionDTO<DeviceDTO>> search(String searchTerm, Long type_id, boolean showOnlyAvailableRents){
-        String queryString = "SELECT new at.camconnect.dtos.DeviceDTO(d.id, d.serial, d.number, d.note, d.type.id) FROM Device d " +
+    public List<AutocompleteOptionDTO<Device>> search(String searchTerm, Long type_id, boolean showOnlyAvailableRents){
+        String queryString = "SELECT d FROM Device d " +
                 "WHERE UPPER(d.number) LIKE :searchTerm ";
         if(type_id >= 0) {
             queryString += "AND d.type.id = :typeId ";
         }
         queryString += "ORDER BY d.number";
 
-        Query query = em.createQuery(queryString, DeviceDTO.class).setParameter("searchTerm", searchTerm.toUpperCase() + "%");
+        Query query = em.createQuery(queryString, Device.class).setParameter("searchTerm", searchTerm.toUpperCase() + "%");
 
         if (type_id >= 0) {
             query.setParameter("typeId", type_id);
         }
 
-        List<DeviceDTO> devices = query.getResultList();
-        List<AutocompleteOptionDTO<DeviceDTO>> result = new LinkedList<>();
-        for (DeviceDTO device : devices) {
-            if(showOnlyAvailableRents && isDeviceAlreadyInUse(device.device_id())){
+        List<Device> devices = query.getResultList();
+        List<AutocompleteOptionDTO<Device>> result = new LinkedList<>();
+        for (Device device : devices) {
+            if(showOnlyAvailableRents && isDeviceAlreadyInUse(device.getDevice_id())){
                 continue;
             }
-            result.add(new AutocompleteOptionDTO<>(device, device.device_id()));
+            result.add(new AutocompleteOptionDTO<>(device, device.getDevice_id()));
         }
 
         return result;

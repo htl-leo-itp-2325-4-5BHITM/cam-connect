@@ -42,6 +42,7 @@ public class Rent {
     @Column(length = 150)
     private String verification_message;
 
+    @Enumerated(EnumType.STRING)
     private RentStatusEnum status;
     @Column(length = 150)
     private String note;

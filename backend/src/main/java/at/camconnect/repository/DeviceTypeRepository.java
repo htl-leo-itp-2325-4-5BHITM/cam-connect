@@ -103,7 +103,7 @@ public class DeviceTypeRepository {
         for(DeviceType deviceType : deviceTypeList){
             Long availableDevices = em.createQuery(
                      "select coalesce(count(d), 0) from Device d " +
-                        "where d.device_id not in (select r.device.device_id from Rent r where r.status != 3 and r.status != 4)" +
+                        "where d.device_id not in (select r.device.device_id from Rent r where r.status != 'CREATED' and r.status != 'RETURNED')" +
                         "group by d.type.type_id " +
                         "having d.type.type_id = :type_id", Long.class)
                     .setParameter("type_id", deviceType.getType_id())

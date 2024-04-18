@@ -132,67 +132,44 @@ export class RentListEntryComponent extends LitElement {
                 ${this.rent.type == RentTypeEnum.DEFAULT ?
                         html`
                             <cc-autocomplete placeholder="Name" class="name"
-                                             .selected="${{id: this.rent.device.type.type_id, data: this.rent.device.type}}"
-                                             .onSelect="${(option: DeviceType) => {
-                                                 this.rent.device.type = option
-                                                 let numberInput = this.shadowRoot.querySelector('cc-autocomplete.number') as AutocompleteComponent<DeviceDTO>
-                                                 numberInput.clear()
-                                             }}"
-                                             .querySuggestions="${DeviceTypeService.search}"
-                                             .iconProvider="${DeviceTypeService.deviceTypeToIcon}"
-                                             .contentProvider="${(data: DeviceTypeSource) => {return data.name}}">
-                            </cc-autocomplete>
-                            <cc-autocomplete placeholder="Nr." class="number"
-                                             .selected="${{id: this.rent.device.device_id, data: this.rent.device}}"
-                                             .onSelect="${(option: Device) => {
-                                                 let type = this.rent.device.type
-                                                 this.rent.device = option
-                                                 this.rent.device.type = type
-                                                 RentService.updateProperty(this.rent.rent_id, 'device', this.rent.device)
-                                             }}"
-                                             .querySuggestions="${(searchTerm) => this.searchForDevice(searchTerm)}"
-                                             .iconProvider="${this.provideDeviceIcon}"
-                                             .contentProvider="${(data: DeviceDTO) => {return data.number}}">
-                            </cc-autocomplete>
-                            <!--<cc-autocomplete placeholder="Name" class="name"
-                                     .selected="${{id: this.rent.device.type.type_id, data: this.rent.device.type}}"
+                                     .selected="${{id: this.rent.device?.type?.type_id, data: this.rent.device?.type}}"
                                      .onSelect="${(option: DeviceType) => {
-                                            if(option == null) {
-                                                this.rent.device.type = null
-                                            }
-                                            else {
-                                                this.rent.device.type = option
-                                            }
-                
-                                            //if the selected device matches the selected type, do nothing
-                                            if (this.rent.device.type == this.rent.device.type) return
-                
-                                            //reset the device type
-                                            this.rent.device = null
-                                            let numberInput = this.shadowRoot.querySelector('cc-autocomplete.number') as AutocompleteComponent<DeviceDTO>
-                                            numberInput.clear()
-                                        }}"
+                                         console.log("typeoption", option)
+                                         
+                                        //if the selected device matches the selected type, do nothing
+                                        if (this.rent.device.type == option) return
+                                     
+                                        if(option == null) {
+                                        }
+                                        else {
+                                            this.rent.device.type = option
+                                        }
+            
+                                        //reset the device type
+                                        this.rent.device.device_id = -1
+                                        let numberInput = this.shadowRoot.querySelector('cc-autocomplete.number') as AutocompleteComponent<DeviceDTO>
+                                        numberInput.clear()
+                                     }}"
                                      .querySuggestions="${DeviceTypeService.search}"
                                      .iconProvider="${DeviceTypeService.deviceTypeToIcon}"
                                      .contentProvider="${(data: DeviceType) => {return data.name}}"
                                      allowNoSelection="true"
                             ></cc-autocomplete>
-                            <cc-autocomplete placeholder="Nr." class="number" 
-                                             .onSelect="${(option: Device) => {
-                                                    this.rent.device = option
-                        
-                                                    if(this.rent.device.type == null) return
-                        
-                                                    Api.fetchData<DeviceTypeSource>(`/devicetype/getbyid/${option.type.type_id}`)
-                                                            .then((deviceType: DeviceType) => {
-                                                                let typeInput = this.shadowRoot.querySelector('cc-autocomplete.name') as AutocompleteComponent<DeviceType>
-                                                                typeInput.selectSuggestion({id: deviceType.type_id, data: deviceType})
-                                                            })
-                                                }}"
-                                             .querySuggestions="${(searchTerm) => this.searchForDevice(searchTerm)}"
-                                             .iconProvider="${this.provideDeviceIcon}"
-                                             .contentProvider="${(data: DeviceDTO) => {return data.number}}"
-                            ></cc-autocomplete>-->
+                            <cc-autocomplete placeholder="Nr." class="number"
+                                     .selected="${{id: this.rent?.device?.device_id, data: this.rent?.device}}"
+                                     .onSelect="${(option: Device) => {
+                                         console.log("deviceoption", option)
+                                            this.rent.device = option
+                
+                                            if(this.rent.device.type == null) return
+                                         
+                                            let typeInput = this.shadowRoot.querySelector('cc-autocomplete.name') as AutocompleteComponent<DeviceType>
+                                            typeInput.selectSuggestion({id: option.type.type_id, data: option.type})
+                                        }}"
+                                     .querySuggestions="${(searchTerm) => this.searchForDevice(searchTerm)}"
+                                     .iconProvider="${this.provideDeviceIcon}"
+                                     .contentProvider="${(data: Device) => {return data.number}}"
+                            ></cc-autocomplete>
                         ` :
                         html`
                             <input type="text" value="${this.rent.device_string}" placeholder="Name">
@@ -243,8 +220,8 @@ export class RentListEntryComponent extends LitElement {
                 </cc-property-value>`
         }
     }
-    async searchForDevice(searchTerm: string): Promise<AutocompleteOption<DeviceDTO>[]> {
-        if(this.rent.device.type.type_id < 0) return DeviceService.search(searchTerm, -1, true)
+    async searchForDevice(searchTerm: string): Promise<AutocompleteOption<Device>[]> {
+        if(this.rent?.device?.type?.type_id < 0) return DeviceService.search(searchTerm, -1, true)
 
         return DeviceService.search(searchTerm, this.rent.device.type.type_id, true)
     }
@@ -258,6 +235,7 @@ export class RentListEntryComponent extends LitElement {
 
         if(checked){
             this.appState.value.addSelectedRentEntry(this)
+            //whub whub
         } else{
             this.appState.value.removeSelectedRentEntry(this)
         }

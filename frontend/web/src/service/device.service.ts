@@ -50,9 +50,9 @@ export default class DeviceService{
             })
     }
 
-    static async search(searchTerm: string, typeId: number, onlyAvailable: boolean): Promise<AutocompleteOption<DeviceDTO>[]> {
+    static async search(searchTerm: string, typeId: number, onlyAvailable: boolean): Promise<AutocompleteOption<Device>[]> {
         try {
-            const result: ccResponse<AutocompleteOption<DeviceDTO>[]> = await Api.postData(
+            const result: ccResponse<AutocompleteOption<Device>[]> = await Api.postData<unknown, Device>(
                 `/device/search`,
                 {searchTerm: searchTerm, typeId: typeId, onlyAvailable: onlyAvailable}
             )

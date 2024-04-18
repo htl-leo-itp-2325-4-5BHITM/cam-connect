@@ -163,6 +163,8 @@ export class CreateRentComponent extends LitElement {
 
         if(!valid) return
 
+        console.log(data)
+
         RentService.create(data)
     }
 

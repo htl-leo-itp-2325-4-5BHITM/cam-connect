@@ -46,7 +46,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
 
     datePicker: DatePickerWrapper
 
-    selectedDevice: DeviceDTO
+    selectedDevice: Device
 
     constructor(parent: CreateRentComponent, type: RentDeviceEntryComponentType = "default", dates?: Date[]){
         super()
@@ -62,9 +62,10 @@ export class CreateRentDeviceEntryComponent extends LitElement {
         }
         this.selectedDevice = {
             device_id: -1,
-            serial: "",
+            note: "",
             number: "",
-            type_id: -1
+            serial: "",
+            type: null
         }
     }
 
@@ -102,7 +103,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                                          }
                                          
                                          //if the selected device matches the selected type, do nothing
-                                         if (this.data.device_type_id == this.selectedDevice.type_id || this.data.device_id == -1) return
+                                         if (this.data.device_type_id == this.selectedDevice?.type?.type_id || this.data.device_id == -1) return
                                          
                                          //reset the device type
                                          this.data.device_id = -1
@@ -115,21 +116,18 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                                      allowNoSelection="true"
                     ></cc-autocomplete>
                     <cc-autocomplete placeholder="Nr." class="number" 
-                                     .onSelect="${(option: DeviceDTO) => {
+                                     .onSelect="${(option: Device) => {
                                          this.data.device_id = option.device_id
                                          this.selectedDevice = option
                                          
                                          if(this.data.device_type_id != -1) return
-
-                                         Api.fetchData<DeviceTypeSource>(`/devicetype/getbyid/${option.type_id}`)
-                                             .then((deviceType: DeviceType) => {
-                                                 let typeInput = this.shadowRoot.querySelector('cc-autocomplete.name') as AutocompleteComponent<DeviceTypeSource>
-                                                 typeInput.selectSuggestion({id: deviceType.type_id, data: deviceType})
-                                             })
+                                         
+                                         let typeInput = this.shadowRoot.querySelector('cc-autocomplete.name') as AutocompleteComponent<DeviceTypeSource>
+                                         typeInput.selectSuggestion({id: option.type.type_id, data: option.type})
                                      }}"
                                      .querySuggestions="${(searchTerm) => this.searchForDevice(searchTerm)}"
                                      .iconProvider="${this.provideDeviceIcon}"
-                                     .contentProvider="${(data: DeviceDTO) => {return data.number}}"
+                                     .contentProvider="${(data: Device) => {return data.number}}"
                     ></cc-autocomplete>
                 </div>
     
@@ -176,7 +174,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
         })
     }
 
-    async searchForDevice(searchTerm: string): Promise<AutocompleteOption<DeviceDTO>[]> {
+    async searchForDevice(searchTerm: string): Promise<AutocompleteOption<Device>[]> {
         if(this.data.device_type_id < 0) return DeviceService.search(searchTerm, -1, true)
 
         return DeviceService.search(searchTerm, this.data.device_type_id, true)

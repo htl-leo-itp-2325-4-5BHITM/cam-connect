@@ -12,6 +12,7 @@ import {unsafeSVG} from 'lit/directives/unsafe-svg.js'
 import {icon} from "@fortawesome/fontawesome-svg-core"
 import {faCheck, faXmark, faQuestion} from "@fortawesome/free-solid-svg-icons"
 import {html} from "lit"
+import {Device, DeviceDTO} from "./service/device.service"
 export default class Util{
     //TODO this typing does not seem right
     static deviceTypeToFilterOption(deviceTypes: DeviceTypeSource): FilterOption{
@@ -34,6 +35,16 @@ export default class Util{
             name: devicetypeAttribute.name,
             details: devicetypeAttribute.details + " " + extras, //sorry if this space gets annoying at some point
             id: devicetypeAttribute.attribute_id,
+        }
+    }
+
+    static deviceToDeviceDTO(device: Device): DeviceDTO{
+        return {
+            device_id: device.device_id,
+            serial: device.serial,
+            number: device.number,
+            note: device.note,
+            type_id: device.type.type_id,
         }
     }
 
