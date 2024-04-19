@@ -1,3 +1,41 @@
+$accentDark: var(--accentDark);
+$accent: var(--accent);
+$accentLight: var(--accentLight);
+$accentLight01: var(--accentLight01);
+$accentGray: var(--accentGray);
+
+$gray100: var(--gray100);
+$gray150: var(--gray150);
+$gray200: var(--gray200);
+$gray250: var(--gray250);
+$gray300: var(--gray300);
+$gray350: var(--gray350);
+$gray400: var(--gray400);
+$gray500: var(--gray500);
+$gray600: var(--gray600);
+$gray700: var(--gray700);
+$gray800: var(--gray800);
+$gray900: var(--gray900);
+$gray1000: var(--gray1000);
+
+$badLight: var(--badLight);
+$bad: var(--bad);
+$badDark: var(--badDark);
+$badGray: var(--badGray);
+$badGrayTransparent: var(--badGrayTransparent);
+$badBright: var(--badBright);
+$badBright01: var(--badBright01);
+$midLight: var(--midLight);
+$mid: var(--mid);
+$midDark: var(--midDark);
+$goodLight: var(--goodLight);
+$good: var(--good);
+$goodDark: var(--goodDark);
+$overlay: var(--overlay);
+
+$hoverBackground: var(--hoverBackground);
+$hoverBackgroundLight: var(--hoverBackgroundLight);
+
 $fSizeDesktopLarge: 1.1rem;
 $fSizeDesktopDefault: 1rem;
 $fSizeDesktopSmall: 0.9rem;
@@ -7,40 +45,6 @@ $transitionTimeShort: 200ms;
 $transitionTimeMedium: 300ms;
 $transitionTimeLong: 500ms;
 
-$accentDark: hsla(201,50.3%,37.1%,1);
-$accent: hsl(200,50%,50%);
-$accentLight: hsla(202,55.1%,65.1%,1);
-
-$gray100: rgba(26,26,26,1);
-$gray150: rgba(33,33,33,1);
-$gray200: rgba(38,38,38,1);
-$gray250: rgba(43,43,43,1);
-$gray300: rgba(46,46,46,1);
-$gray350: rgba(59,59,59,1);
-$gray400: rgba(66,66,66,1);
-$gray500: rgba(89,89,89,1);
-$gray600: rgba(140,140,140,1);
-$gray700: rgba(173,173,173,1);
-$gray800: rgba(204,204,204,1);
-$gray900: rgba(230,230,230,1);
-$gray1000: rgba(255,255,255,1);
-
-$badLight: hsl(0, 64%, 62%);
-$bad: hsla(0,45.1%,50%,1);
-$badDark: hsla(0,45.1%,40%,1);
-$badGray: hsla(0,25.2%,32%,1);
-$badGrayTransparent: hsla(0,30.4%,27.1%,0.800);
-$badBright: hsla(0,67.7%,93.9%,1);
-$midLight: hsl(34, 72%, 58%);
-$mid: hsla(32,59.8%,40%,1);
-$midDark: hsla(32,59.5%,30%,1);
-$goodLight: hsl(118, 27%, 60%);
-$good: hsl(119,21.8%,43.1%);
-$goodDark: hsl(118,21.5%,32%);
-$overlay: hsla(0,0%,24.3%,0.200);
-
-$hoverBackground: hsla(0, 0%, 50%, 0.35);
-$hoverBackgroundLight: hsla(0, 0%, 50%, 0.2);
 $hoverBackgroundTransitionTime: #{$transitionTimeShort};
 
 @mixin textBackgroundHoverPreparation() {

@@ -84,3 +84,91 @@ KeyBoardShortCut.register(["escape"], () => {model.appState.value.cancelCurrentA
     }
     console.log(focusedElem)
 }, 2000)*/
+
+const theme = {
+    dark: [
+        {key: "--accentDark", value: "hsl(201, 50.3%, 37.1%)"},
+        {key: "--accent", value: "hsl(200, 50%, 50%)"},
+        {key: "--accentLight", value: "hsl(202, 55.1%, 65.1%)"},
+        {key: "--accentLight01", value: "hsla(202, 55.1%, 65.1%, 0.1)"},
+        {key: "--accentGray", value: "hsl(200, 50%, 10%)"},
+
+        {key: "--gray100", value: "rgba(26, 26, 26, 1)"},
+        {key: "--gray150", value: "rgba(33, 33, 33, 1)"},
+        {key: "--gray200", value: "rgba(38, 38, 38, 1)"},
+        {key: "--gray250", value: "rgba(43, 43, 43, 1)"},
+        {key: "--gray300", value: "rgba(46, 46, 46, 1)"},
+        {key: "--gray350", value: "rgba(59, 59, 59, 1)"},
+        {key: "--gray400", value: "rgba(66, 66, 66, 1)"},
+        {key: "--gray500", value: "rgba(89, 89, 89, 1)"},
+        {key: "--gray600", value: "rgba(140, 140, 140, 1)"},
+        {key: "--gray700", value: "rgba(173, 173, 173, 1)"},
+        {key: "--gray800", value: "rgba(204, 204, 204, 1)"},
+        {key: "--gray900", value: "rgba(230, 230, 230, 1)"},
+        {key: "--gray1000", value: "rgba(255, 255, 255, 1)"},
+
+        {key: "--badLight", value: "hsl(0, 64%, 62%)"},
+        {key: "--bad", value: "hsl(0, 45.1%, 50%)"},
+        {key: "--badDark", value: "hsl(0, 45.1%, 40%)"},
+        {key: "--badGray", value: "hsl(0, 45.1%, 27%)"},
+        {key: "--badGrayTransparent", value: "hsla(0, 30.4%, 27.1%, 0.800)"},
+        {key: "--badBright", value: "hsl(0, 67.7%, 93.9%)"},
+        {key: "--badBright01", value: "hsla(0, 67.7%, 93.9%, 0.1)"},
+        {key: "--midLight", value: "hsl(34, 72%, 58%)"},
+        {key: "--mid", value: "hsla(32, 59.8%, 40%, 1)"},
+        {key: "--midDark", value: "hsla(32, 59.5%, 30%, 1)"},
+        {key: "--goodLight", value: "hsl(118, 27%, 60%)"},
+        {key: "--good", value: "hsl(119, 21.8%, 43.1%)"},
+        {key: "--goodDark", value: "hsl(118, 21.5%, 32%)"},
+        {key: "--overlay", value: "hsla(0, 0%, 24.3%, 0.200)"},
+
+        {key: "--hoverBackground", value: "hsla(0, 0%, 50%, 0.35)"},
+        {key: "--hoverBackgroundLight", value: "hsla(0, 0%, 50%, 0.2)"},
+    ],
+    light: [
+        {key: "--accentDark", value: "hsl(201, 50.3%, 37.1%)"},
+        {key: "--accent", value: "hsl(200, 50%, 50%)"},
+        {key: "--accentLight", value: "hsl(202, 55.1%, 65.1%)"},
+        {key: "--accentLight01", value: "hsla(202, 55.1%, 65.1%, 0.1)"},
+        {key: "--accentGray", value: "hsl(200, 50%, 10%)"},
+
+        {key: "--gray1000", value: "rgb(26, 26, 26)"},
+        {key: "--gray900", value: "rgb(33, 33, 33)"},
+        {key: "--gray800", value: "rgb(38, 38, 38)"},
+        {key: "--gray700", value: "rgb(43, 43, 43)"},
+        {key: "--gray600", value: "rgb(46, 46, 46)"},
+        {key: "--gray500", value: "rgb(59, 59, 59)"},
+        {key: "--gray400", value: "rgb(66, 66, 66)"},
+        {key: "--gray350", value: "rgb(89, 89, 89)"},
+        {key: "--gray300", value: "rgb(140, 140, 140)"},
+        {key: "--gray250", value: "rgb(173, 173, 173)"},
+        {key: "--gray200", value: "rgb(204, 204, 204)"},
+        {key: "--gray150", value: "rgb(230, 230, 230)"},
+        {key: "--gray100", value: "rgb(255, 255, 255)"},
+
+        {key: "--badLight", value: "hsl(0, 64%, 62%)"},
+        {key: "--bad", value: "hsl(0, 45.1%, 50%)"},
+        {key: "--badDark", value: "hsl(0, 45.1%, 40%)"},
+        {key: "--badGray", value: "hsl(0, 45.1%, 27%)"},
+        {key: "--badGrayTransparent", value: "hsla(0, 30.4%, 27.1%, 0.800)"},
+        {key: "--badBright", value: "hsl(0, 67.7%, 93.9%)"},
+        {key: "--badBright01", value: "hsla(0, 67.7%, 93.9%, 0.1)"},
+        {key: "--midLight", value: "hsl(34, 72%, 58%)"},
+        {key: "--mid", value: "hsla(32, 59.8%, 40%, 1)"},
+        {key: "--midDark", value: "hsla(32, 59.5%, 30%, 1)"},
+        {key: "--goodLight", value: "hsl(118, 27%, 60%)"},
+        {key: "--good", value: "hsl(119, 21.8%, 43.1%)"},
+        {key: "--goodDark", value: "hsl(118, 21.5%, 32%)"},
+        {key: "--overlay", value: "hsla(0, 0%, 24.3%, 0.200)"},
+
+        {key: "--hoverBackground", value: "hsla(0, 0%, 50%, 0.35)"},
+        {key: "--hoverBackgroundLight", value: "hsla(0, 0%, 50%, 0.2)"},
+    ]
+}
+
+toggleTheme()
+function toggleTheme(){
+    theme.dark.forEach(variable => {
+        document.documentElement.style.setProperty(variable.key, variable.value);
+    })
+}
