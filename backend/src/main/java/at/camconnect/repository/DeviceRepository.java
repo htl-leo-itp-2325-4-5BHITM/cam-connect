@@ -108,14 +108,14 @@ public class DeviceRepository {
     public List<AutocompleteOptionDTO<Device>> search(String searchTerm, Long type_id, boolean showOnlyAvailableRents){
         String queryString = "SELECT d FROM Device d " +
                 "WHERE UPPER(d.number) LIKE :searchTerm ";
-        if(type_id >= 0) {
+        if(type_id > 0) {
             queryString += "AND d.type.id = :typeId ";
         }
         queryString += "ORDER BY d.number";
 
         Query query = em.createQuery(queryString, Device.class).setParameter("searchTerm", searchTerm.toUpperCase() + "%");
 
-        if (type_id >= 0) {
+        if (type_id > 0) {
             query.setParameter("typeId", type_id);
         }
 
@@ -132,25 +132,14 @@ public class DeviceRepository {
     }
 
     public boolean isDeviceAlreadyInUse(long device_id) {
-        return !em.createQuery("SELECT r FROM Rent r where r.device.id = :deviceId and r.status != :status order by r.creation_date", Rent.class)
-                .setParameter("deviceId", device_id).setParameter("status", RentStatusEnum.RETURNED)
+        return !em.createQuery("SELECT r FROM Rent r " +
+                                  "where r.device.id = :deviceId and r.status != :status ",
+                Rent.class)
+                .setParameter("deviceId", device_id)
+                .setParameter("status", RentStatusEnum.RETURNED)
                 .getResultStream()
-                .map(rent -> new RentDTO(
-                        rent.getRent_id(),
-                        rent.getStatus(),
-                        rent.getType(),
-                        rent.getDevice(),
-                        rent.getDevice_string(),
-                        rent.getTeacher_start(),
-                        rent.getTeacher_end(),
-                        rent.getRent_start(),
-                        rent.getRent_end_planned(),
-                        rent.getRent_end_actual(),
-                        rent.getAccessory(),
-                        rent.getStudent(),
-                        rent.getNote(),
-                        rent.getVerification_message()
-                )).collect(Collectors.toList()).isEmpty();
+                .toList()
+                .isEmpty();
     }
 
     public List<Device> getAll(){
