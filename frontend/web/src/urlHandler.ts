@@ -3,7 +3,7 @@ import {PageEnum} from "./model"
 
 let pages = {
     app: {
-        handler: () => { document.body.appendChild(document.createElement("cc-app")) },
+        handler: () => { changeOrigin("cc-app") },
         children: {
             rents: {
                 handler: () => { model.appState.value.page = PageEnum.RENTS },
@@ -20,12 +20,12 @@ let pages = {
                 handler: () => { model.appState.value.page = PageEnum.CALENDAR },
             },
             edit: {
-                handler: () => { clearAllElements(); document.body.appendChild(document.createElement("cc-edit")) }
+                handler: () => { changeOrigin("cc-edit") }
             }
         }
     },
     confirm: {
-        handler: () => { document.body.appendChild(document.createElement("cc-external-confirm")) }
+        handler: () => { changeOrigin("cc-external-confirm") }
     },
     default: {
         handler: () => {
@@ -34,25 +34,23 @@ let pages = {
         }
     },
     notFound: {
-        handler: () => { document.body.appendChild(document.createElement("cc-not-found")) }
+        handler: () => { changeOrigin("cc-not-found") }
     }
 }
 
-function clearAllElements(){
-    let queries = ['cc-not-found', 'cc-external-confirm', 'cc-app', 'cc-edit']
-    queries.forEach(elem => {
-        if(document.querySelector(elem)) {
-            document.body.removeChild(document.querySelector(elem))
-        }
+function changeOrigin(tagName: string){
+    document.querySelectorAll(".origin").forEach(elem => {
+        elem.remove()
     })
+    let elem = document.createElement(tagName)
+    elem.classList.add("origin")
+    document.body.appendChild(elem)
 }
 
 export default class URLHandler {
     static parseCurrentURL () {
-        clearAllElements()
-
         let urlSplit = window.location.href.split("?")[0]?.split("/")
-        urlSplit.splice(0, 3)
+        urlSplit.splice(0, 3) //might break if basic url structure changes
 
         if(urlSplit[0] === "") {
             pages.default.handler()
@@ -62,6 +60,12 @@ export default class URLHandler {
         this.handlePage(0, pages, urlSplit)
     }
 
+    /**
+     * searches for next part of the url in the provided options and calls the handler
+     * @param pageIndex
+     * @param options
+     * @param currentPath
+     */
     static handlePage(pageIndex, options, currentPath){
         if(pageIndex+1 > currentPath.length) return
 
@@ -76,6 +80,10 @@ export default class URLHandler {
         this.handlePage(pageIndex + 1, nextPage.children, currentPath)
     }
 
+    /**
+     * returns the value of a specific ? param in the url
+     * @param param
+     */
     static getParam (param: string) : string {
         let url = window.location.href
         let params = url.split("?")[1]?.split("&")
@@ -91,7 +99,12 @@ export default class URLHandler {
         return parsedURL.has(param) ? parsedURL.get(param) : null
     }
 
-    static addParam (param: string, value: string) {
+    /**
+     * set a ? params value in the url or add it if it does not exist yet
+     * @param param
+     * @param value
+     */
+    static setParam (param: string, value: string) {
         let url = window.location.href
         let params = url.split("?")[1]?.split("&")
         url = "?"
@@ -100,7 +113,7 @@ export default class URLHandler {
             params = []
         }
 
-        // look if param is already in the url and set the value
+        // check if param is already in the url and if so set its value
         let isAlreadyInURL = false
         for (let i = 0; i < params.length; i++) {
             let keyValue = params[i].split("=")
@@ -111,6 +124,7 @@ export default class URLHandler {
             params[i] = keyValue[0] + "=" + keyValue[1]
         }
 
+        //add the param to the url
         if(!isAlreadyInURL){
             params.push(param + "=" + value)
         }
