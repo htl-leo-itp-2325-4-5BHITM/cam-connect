@@ -20,6 +20,12 @@
   font-size: $fSizeDesktopSmall;
   -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;
 
+  transition: {
+    property: border-radius;
+    duration: $transitionTimeShort;
+    delay: 0s;
+  };
+
   img{
     height: 1.5rem;
     @include imgIconColorAccent;
@@ -45,10 +51,26 @@
   .left p.bold{
     font-weight: bold;
   }
+
+  .icon {
+    transition: rotate $transitionTimeShort;
+    height: .7rem;
+  }
+}
+
+:host([minimized]) .heading{
+  transition-delay: $transitionTimeShort;
+  border-radius: 0.75rem;
+
+  .icon{
+    rotate: -90deg;
+  }
 }
 
 .entries{
   padding-left: 2.6rem;
+  overflow-y: hidden;
+  transition: max-height $transitionTimeShort;
 
   cc-rent-list-entry:last-child{
     border-radius: 0 0 0.75rem 0.75rem;
