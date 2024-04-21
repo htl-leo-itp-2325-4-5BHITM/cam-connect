@@ -55,8 +55,13 @@ export class SidebarComponent extends LitElement {
                     <p>liste</p>
                 </cc-select>
                 <cc-toggle>Nur verfügbare anzeigen</cc-toggle>
-                <cc-button size="${SizeEnum.MEDIUM}" type="${ButtonType.UNDERLINED}" color="${SimpleColorEnum.GRAY}"
-                           noPadding>Filter zurücksetzten
+                <cc-button size="${SizeEnum.MEDIUM}" type="${ButtonType.UNDERLINED}" color="${SimpleColorEnum.GRAY}" noPadding
+                >
+                    Alle ein/ausklappen
+                </cc-button>
+                <cc-button size="${SizeEnum.MEDIUM}" type="${ButtonType.UNDERLINED}" color="${SimpleColorEnum.GRAY}" noPadding
+                >
+                    Filter zurücksetzten
                 </cc-button>
             </div>
             <cc-line></cc-line>

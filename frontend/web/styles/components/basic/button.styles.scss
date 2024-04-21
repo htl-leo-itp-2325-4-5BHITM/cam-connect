@@ -87,7 +87,7 @@
     &:not([disabled]):hover, &:not([disabled]):focus-visible{
       box-shadow: 0 0 0 2px var(--color-light) inset;
       background-color: rgba(var(--color-main), 0.5);
-      color: white;
+      color: $gray1000;
     }
   }
   &[type = "text"]{

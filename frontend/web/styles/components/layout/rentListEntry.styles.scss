@@ -22,7 +22,7 @@
 }
 
 :host([status="DECLINED"]){
-  background: linear-gradient(90deg, #423333 22.57%, #663D3D 99.01%);
+  background: $badGradient;
 
   input{
     border-radius: 0.25rem;

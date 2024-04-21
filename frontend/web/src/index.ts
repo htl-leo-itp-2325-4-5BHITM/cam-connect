@@ -112,6 +112,7 @@ const theme = {
         {key: "--badDark", value: "hsl(0, 45.1%, 40%)"},
         {key: "--badGray", value: "hsl(0, 45.1%, 27%)"},
         {key: "--badGrayTransparent", value: "hsla(0, 30.4%, 27.1%, 0.800)"},
+        {key: "--badGradient", value: "linear-gradient(90deg, #423333 22.57%, #663D3D 99.01%)"},
         {key: "--badBright", value: "hsl(0, 67.7%, 93.9%)"},
         {key: "--badBright01", value: "hsla(0, 67.7%, 93.9%, 0.1)"},
         {key: "--midLight", value: "hsl(34, 72%, 58%)"},
@@ -128,29 +129,44 @@ const theme = {
     light: [
         {key: "--accentDark", value: "hsl(201, 50.3%, 37.1%)"},
         {key: "--accent", value: "hsl(200, 50%, 50%)"},
-        {key: "--accentLight", value: "hsl(202, 55.1%, 65.1%)"},
+        {key: "--accentLight", value: "hsl(202,55%,59%)"},
         {key: "--accentLight01", value: "hsla(202, 55.1%, 65.1%, 0.1)"},
         {key: "--accentGray", value: "hsl(200, 50%, 10%)"},
 
-        {key: "--gray1000", value: "rgb(26, 26, 26)"},
-        {key: "--gray900", value: "rgb(33, 33, 33)"},
-        {key: "--gray800", value: "rgb(38, 38, 38)"},
-        {key: "--gray700", value: "rgb(43, 43, 43)"},
-        {key: "--gray600", value: "rgb(46, 46, 46)"},
-        {key: "--gray500", value: "rgb(59, 59, 59)"},
-        {key: "--gray400", value: "rgb(66, 66, 66)"},
-        {key: "--gray350", value: "rgb(89, 89, 89)"},
-        {key: "--gray300", value: "rgb(140, 140, 140)"},
-        {key: "--gray250", value: "rgb(173, 173, 173)"},
-        {key: "--gray200", value: "rgb(204, 204, 204)"},
-        {key: "--gray150", value: "rgb(230, 230, 230)"},
-        {key: "--gray100", value: "rgb(255, 255, 255)"},
+        /*{key: "--gray1000", value: "hsl(0, 0%, 0%)"},
+        {key: "--gray900", value: "hsl(0, 0%, 84%)"},
+        {key: "--gray800", value: "hsl(0, 0%, 86%)"},
+        {key: "--gray700", value: "hsl(0, 0%, 88%)"},
+        {key: "--gray600", value: "hsl(0, 0%, 90%)"},
+        {key: "--gray500", value: "hsl(0, 0%, 92%)"},
+        {key: "--gray400", value: "hsl(0, 0%, 94%)"},
+        {key: "--gray350", value: "hsl(0, 0%, 95%)"},
+        {key: "--gray300", value: "hsl(0, 0%, 96%)"},
+        {key: "--gray250", value: "hsl(0, 0%, 97%)"},
+        {key: "--gray200", value: "hsl(0, 0%, 98%)"},
+        {key: "--gray150", value: "hsl(0, 0%, 99%)"},
+        {key: "--gray100", value: "hsl(0, 0%, 100%)"},*/
+
+        {key: "--gray1000", value: "hsl(0, 0%, 0%)"},
+        {key: "--gray900", value: "hsl(0, 0%, 10%)"},
+        {key: "--gray800", value: "hsl(0, 0%, 20%)"},
+        {key: "--gray700", value: "hsl(0, 0%, 30%)"},
+        {key: "--gray600", value: "hsl(0, 0%, 40%)"},
+        {key: "--gray500", value: "hsl(0, 0%, 50%)"},
+        {key: "--gray400", value: "hsl(0, 0%, 88%)"},
+        {key: "--gray350", value: "hsl(0, 0%, 90%)"},
+        {key: "--gray300", value: "hsl(0, 0%, 92%)"},
+        {key: "--gray250", value: "hsl(0, 0%, 94%)"},
+        {key: "--gray200", value: "hsl(0, 0%, 96%)"},
+        {key: "--gray150", value: "hsl(0, 0%, 98%)"},
+        {key: "--gray100", value: "hsl(0, 0%, 100%)"},
 
         {key: "--badLight", value: "hsl(0, 64%, 62%)"},
         {key: "--bad", value: "hsl(0, 45.1%, 50%)"},
         {key: "--badDark", value: "hsl(0, 45.1%, 40%)"},
-        {key: "--badGray", value: "hsl(0, 45.1%, 27%)"},
-        {key: "--badGrayTransparent", value: "hsla(0, 30.4%, 27.1%, 0.800)"},
+        {key: "--badGray", value: "hsl(0,59%,65%)"},
+        {key: "--badGrayTransparent", value: "hsla(0,48%,67%,0.8)"},
+        {key: "--badGradient", value: "linear-gradient(90deg, #cb9797 22.57%, #b27272 99.01%)"},
         {key: "--badBright", value: "hsl(0, 67.7%, 93.9%)"},
         {key: "--badBright01", value: "hsla(0, 67.7%, 93.9%, 0.1)"},
         {key: "--midLight", value: "hsl(34, 72%, 58%)"},
@@ -161,14 +177,14 @@ const theme = {
         {key: "--goodDark", value: "hsl(118, 21.5%, 32%)"},
         {key: "--overlay", value: "hsla(0, 0%, 24.3%, 0.200)"},
 
-        {key: "--hoverBackground", value: "hsla(0, 0%, 50%, 0.35)"},
-        {key: "--hoverBackgroundLight", value: "hsla(0, 0%, 50%, 0.2)"},
+        {key: "--hoverBackground", value: "hsla(0, 0%, 70%, 0.35)"},
+        {key: "--hoverBackgroundLight", value: "hsla(0, 0%, 70%, 0.2)"},
     ]
 }
 
 toggleTheme()
 function toggleTheme(){
-    theme.dark.forEach(variable => {
+    theme.light.forEach(variable => {
         document.documentElement.style.setProperty(variable.key, variable.value);
     })
 }
