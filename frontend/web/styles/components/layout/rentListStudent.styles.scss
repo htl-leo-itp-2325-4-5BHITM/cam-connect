@@ -22,7 +22,7 @@
 
   transition: {
     property: border-radius;
-    duration: $transitionTimeShort;
+    duration: 0.1s;
     delay: 0s;
   };
 
@@ -59,7 +59,7 @@
 }
 
 :host([minimized]) .heading{
-  transition-delay: $transitionTimeShort;
+  transition-delay: 150ms;
   border-radius: 0.75rem;
 
   .icon{
