@@ -44,7 +44,7 @@ export class SidebarComponent extends LitElement {
                 >
                     Neuer Verleih
                 </cc-button>
-                <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.OUTLINED}">
+                <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.OUTLINED}" disabled>
                     Multi Verleih
                 </cc-button>
             </div>

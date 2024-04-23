@@ -9,11 +9,17 @@ import { ObservedProperty} from "../../model"
 import {RentListEntryComponent} from "./rentListEntry.component"
 import {ButtonType} from "../basic/button.component"
 import {AppState} from "../../AppState"
+import { icon } from '@fortawesome/fontawesome-svg-core'
+import { faCaretDown } from "@fortawesome/free-solid-svg-icons"
+import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 
 @customElement('cc-rent-list-student')
 export class RentListStudentComponent extends LitElement {
     @property()
     rentByStudent?: RentByStudentDTO
+
+    @property({type: Boolean, reflect: true})
+    minimized: boolean = false
 
     constructor() {
         super()
@@ -47,24 +53,37 @@ export class RentListStudentComponent extends LitElement {
     generateHeading(name: string, schoolClass: string) {
         return html`
             <div class="heading">
-                <div class="left">
-                    <p class="bold">${name}</p>
-                    <p>•</p>
-                    <p>${schoolClass}</p>
-                </div>
+                <cc-button class="left"
+                    .text="${html`
+                        <p class="bold">${name}</p>
+                        <p>•</p>
+                        <p>${schoolClass}</p>`
+                    }" 
+                    type="${ButtonType.TEXT}"
+                    @click="${this.toggleMinimization}"
+                >
+                    <div slot="left" class="icon">
+                        ${unsafeSVG(icon(faCaretDown).html[0])}
+                    </div>
+                </cc-button>
                 <div class="right">
                     <cc-button type="${ButtonType.OUTLINED}" size="${SizeEnum.SMALL}" @click="${() => model.appState.value.openCreateRentModal(this.rentByStudent.student.student_id)}">Verleih erstellen</cc-button>
                     <cc-button type="${ButtonType.TEXT}" color="${SimpleColorEnum.GRAY}" size="${SizeEnum.SMALL}">Details anzeigen</cc-button>
                     <cc-circle-select type="${CircleSelectType.MULTIPLE}" size="${SizeEnum.SMALL}" 
-                                      .onToggle="${() => this.selectAll()}"
+                                      .onToggle="${() => this.toggleSelectAll()}"
                     ></cc-circle-select>
                 </div>
             </div>
         `
     }
 
-    selectAll() {
+    toggleSelectAll(overrideState?: boolean) {
         let isChecked = this.shadowRoot.querySelector("cc-circle-select").checked
+
+        if(overrideState == isChecked) return
+        else isChecked = overrideState
+
+        this.toggleMinimization(false)
         this.shadowRoot.querySelectorAll("cc-rent-list-entry").forEach(rentListEntry => {
             if(isChecked)
                 rentListEntry.toggleRentCheck(true)
@@ -88,6 +107,30 @@ export class RentListStudentComponent extends LitElement {
                 multiple.checked = false
             }
         })
+    }
+
+    fullHeight = -1
+    toggleMinimization(overrideState?: boolean){
+        if(overrideState == this.minimized) return
+
+        let entryContainerElement = this.shadowRoot.querySelector(".entries") as HTMLElement
+        if(this.minimized){ // expand the entries
+            entryContainerElement.style.maxHeight = this.fullHeight + "px"
+        }
+        else{ //minimize the entries
+            this.toggleSelectAll(false)
+
+            //this approach is necessary because it's possible that a minimize is triggered while the animation is running which would result in a too small fullHeight value
+            let entryElements = entryContainerElement.querySelectorAll("cc-rent-list-entry")
+            this.fullHeight = entryElements[0].clientHeight * entryElements.length
+
+            entryContainerElement.style.maxHeight = this.fullHeight + "px"
+            setTimeout(() => {
+                entryContainerElement.style.maxHeight = "0px"
+            },)
+        }
+
+        this.minimized = !this.minimized
     }
 }
 

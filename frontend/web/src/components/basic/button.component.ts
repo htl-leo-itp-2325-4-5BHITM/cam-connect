@@ -23,7 +23,7 @@ export class ButtonComponent extends LitElement {
     color?: ColorEnum = ColorEnum.ACCENT
 
     @property({type: String})
-    text?: string = this.innerText || "Button"
+    text?: string | TemplateStringsArray = this.innerText || "Button"
 
     @property({type: Boolean})
     disabled?: boolean = false
@@ -34,7 +34,7 @@ export class ButtonComponent extends LitElement {
     @property({type: Boolean})
     loading?: boolean = false
 
-    private storedText: string = "smoothy went wrong"
+    private storedText: string | TemplateStringsArray = "smoothy went wrong"
 
     render() {
         return html`
