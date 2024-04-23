@@ -3,10 +3,12 @@ import {customElement} from 'lit/decorators.js'
 import styles from '../../styles/components/edit.styles.scss'
 import {Api, ccResponse, config} from "../base"
 import PopupEngine from "../popupEngine"
+import {DeviceTypeVariantEnum} from "../service/deviceType.service"
+import Util from "../util"
 @customElement('cc-edit')
 export class EditComponent extends LitElement {
     render() {
-        let listOfString = ["camera", "drone", "lens", "light", "microphone", "simple", "stabilizer", "tripod"];
+        let listOfStrings = ["camera", "drone", "lens", "light", "microphone", "simple", "stabilizer", "tripod"];
 
         return html`
             <style>${styles}</style>
@@ -15,12 +17,12 @@ export class EditComponent extends LitElement {
             <div>
                 <h2>Device Type Import</h2>
                 <select name="listOfTypes" id="listOfTypes" @change="${(event) => this.selectOption(event.target.value)}">
-                    ${listOfString.map(type => html`<option value="${type}">${type}</option>`)}
+                    ${listOfStrings.map(type => html`<option value="${type}">${type}</option>`)}
                 </select>
                 <div class="importBox">
                     <input type="file"
                            @change="${(event) => {
-                               this.importDataFromCsv(event, "devicetype", listOfString[0])
+                               this.importDataFromCsv(event, "devicetype", listOfStrings[0])
                            }}" accept=".csv"/>
                 </div>
             </div>
