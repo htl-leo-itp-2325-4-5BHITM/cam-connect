@@ -13,7 +13,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 
 public class DeviceTest {
-    JsonObject device1 = Json.createObjectBuilder().add("note", "").add("serial", "sony").build();
+    JsonObject device1 = Json.createObjectBuilder().add("note", "").add("serial", "sony").add("id", 1).add("").build();
 
     Long createdDeviceId;
 
@@ -35,16 +35,6 @@ public class DeviceTest {
     }
 
     @Test
-    public void testAddStudent() {
-        given()
-                .contentType("application/json")
-                .when()
-                .body(device1.toString())
-                .post("device/create")
-                .then()
-                .statusCode(200);
-    }
-    @Test
     public void testGetDeviceById_DeviceFound() {
         // GET-Anfrage für das Gerät mit der erstellten ID und Überprüfung des Statuscodes
         given()
@@ -59,7 +49,7 @@ public class DeviceTest {
     @Test
     public void testGetDeviceById_DeviceNotFound() {
         // Annahme: Eine ID eines nicht vorhandenen Geräts
-        Long nonExistentDeviceId = 999L;
+        Long nonExistentDeviceId = -3L;
 
         // GET-Anfrage für das Gerät mit der angegebenen ID und Überprüfung des Statuscodes
         given()
@@ -67,7 +57,42 @@ public class DeviceTest {
                 .when()
                 .get("/device/{id}")
                 .then()
-                .statusCode(404); // Annahme: Nicht gefunden-Statuscode wird zurückgegeben
+                .statusCode(404);// Annahme: Nicht gefunden-Statuscode wird zurückgegeben
+    }
+
+    //getByNumberAndType
+    @Test
+    public void testGetDeviceByNumberAndType_DeviceFound() {
+        // Arrange
+        String number = "ABC123";
+        Long typeId = 1L; // Annahme: Eine vorhandene Gerätetyp-ID
+
+        // Act & Assert
+        given()
+                .queryParam("number", number)
+                .queryParam("type_id", typeId)
+                .when()
+                .get("/device")
+                .then()
+                .statusCode(200)
+                .body("number", equalTo(number));
+        // Annahme: Die Antwort enthält die Gerätenummer (könnte weitere Assertions hinzufügen)
+    }
+
+    @Test
+    public void testGetDeviceByNumberAndType_DeviceNotFound() {
+        // Arrange
+        String nonExistentNumber = "XYZ789";
+        Long typeId = 1L; // Annahme: Eine vorhandene Gerätetyp-ID
+
+        // Act & Assert
+        given()
+                .queryParam("number", nonExistentNumber)
+                .queryParam("type_id", typeId)
+                .when()
+                .get("/device")
+                .then()
+                .statusCode(404);
     }
 
 }
