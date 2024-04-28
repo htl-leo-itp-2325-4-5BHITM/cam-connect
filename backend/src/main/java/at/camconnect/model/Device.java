@@ -2,6 +2,8 @@ package at.camconnect.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 public class Device {
     @Id
@@ -17,8 +19,10 @@ public class Device {
     @ManyToOne
     @JoinColumn(name = "type_id")
     private DeviceType type;
+    private LocalDateTime creation_date;
 
     public Device() {
+        this.creation_date = LocalDateTime.now();
     }
 
     public Device(String serial, String number, String note, DeviceType type) {
@@ -26,6 +30,7 @@ public class Device {
         this.number = number;
         this.note = note;
         this.type = type;
+        this.creation_date = LocalDateTime.now();
     }
 
     @Override
