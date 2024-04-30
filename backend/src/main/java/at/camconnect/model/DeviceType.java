@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.json.JsonObject;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 //no fucking clue why this is needed, I randomly got the most cryptic error when changing the status of rent to
@@ -28,7 +30,7 @@ public abstract class DeviceType{
     @Column(length = 20, unique = true)
     private String name;
     private String image;
-
+    private LocalDateTime creation_date;
     abstract public void update(DeviceTypeGlobalObjectsDTO data);
 
     public DeviceTypeStatusEnum getStatus() {
@@ -62,9 +64,11 @@ public abstract class DeviceType{
     public DeviceType(String name) {
         setStatus(DeviceTypeStatusEnum.active);
         this.name = name;
+        this.creation_date = LocalDateTime.now();
     }
 
     public DeviceType() {
+        this.creation_date = LocalDateTime.now();
     }
 
     //region Getter und Setter
