@@ -42,6 +42,7 @@ import favicon from "../assets/logo/cc-logomark-accent.svg"
 
 //OMG its our single swouce of THWQUUUCE
 export let model = new Model()
+model.queryData()
 
 window.addEventListener("DOMContentLoaded", () => {
     URLHandler.parseCurrentURL()

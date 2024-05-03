@@ -5,6 +5,9 @@ import {Teacher} from "./teacher.service";
 import {Student} from "./student.service";
 import PopupEngine from "../popupEngine"
 import Util from "../util"
+import {DeviceTypeVariantEnum} from "./deviceType.service"
+import {AppState} from "../AppState"
+import Model from "../model"
 
 export enum RentStatusEnum {CREATED="CREATED", WAITING="WAITING", CONFIRMED="CONFIRMED", DECLINED="DECLINED", RETURNED="RETURNED"}
 export interface Rent{
@@ -32,7 +35,7 @@ export interface RentByStudentDTO {
 export enum RentTypeEnum { DEFAULT="DEFAULT", STRING="STRING" }
 
 export interface CreateRentDTO {
-    type: RentTypeEnum,
+    type: RentTypeEnum
     student_id: number
     device_id?: number
     device_string?: string
@@ -42,12 +45,25 @@ export interface CreateRentDTO {
     note: string
 }
 
+export interface RentFilters {
+    orderBy: OrderByFilterRent
+    statuses: RentStatusEnum[]
+    schoolClasses: string[]
+}
+
+export enum OrderByFilterRent {
+    ALPHABETICAL_ASC="ALPHABETICAL_ASC",
+    ALPHABETICAL_DESC="ALPHABETICAL_DESC",
+    DATE_ASC="DATE_ASC",
+    DATE_DESC="DATE_DESC",
+}
+
 export default class RentService {
     static fetchAll() {
-        Api.fetchData<RentByStudentDTO[]>("/rent/getall")
-            .then(data => {
-                model.loadRents(data)
-                console.log(data as RentByStudentDTO[])
+        Api.postData<RentFilters, RentByStudentDTO[]>("/rent/getall", model.appState.value.rentFilters)
+            .then(result => {
+                console.log(result)
+                model.loadRents(result.data || [])
             })
             .catch(error => {
                 console.error(error)

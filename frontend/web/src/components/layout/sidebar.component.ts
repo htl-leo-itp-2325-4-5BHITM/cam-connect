@@ -50,14 +50,7 @@ export class SidebarComponent extends LitElement {
             </div>
             <cc-line></cc-line>
             <div class="sorts">
-                <cc-select size="${SizeEnum.MEDIUM}">
-                    <p class="selected">raster</p>
-                    <p>liste</p>
-                </cc-select>
-                <cc-toggle>Nur verfügbare anzeigen</cc-toggle>
-                <cc-button size="${SizeEnum.MEDIUM}" type="${ButtonType.UNDERLINED}" color="${SimpleColorEnum.GRAY}"
-                           noPadding>Filter zurücksetzten
-                </cc-button>
+                <slot name="sorts" @slotchange=${this.handlePrimaryFilterChange}></slot>
             </div>
             <cc-line></cc-line>
             <slot name="primaryFilters" @slotchange=${this.handlePrimaryFilterChange}></slot>

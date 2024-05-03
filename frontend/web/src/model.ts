@@ -84,12 +84,12 @@ export default class Model{
      * When its created, a new instance gathers all the data from the API endpoints
      */
     constructor() {
-        this.queryData()
         DeviceService.createSocketConnection()
         RentService.createSocketConnection()
     }
 
     queryData(){
+        console.log("querying data")
         RentService.fetchAll()
         DeviceService.fetchAll()
         DeviceTypeService.fetchAll()

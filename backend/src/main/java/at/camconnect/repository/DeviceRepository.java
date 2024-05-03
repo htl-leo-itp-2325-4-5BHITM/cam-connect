@@ -2,12 +2,8 @@ package at.camconnect.repository;
 
 import at.camconnect.dtos.AutocompleteOptionDTO;
 import at.camconnect.dtos.DeviceDTO;
-import at.camconnect.dtos.RentDTO;
 import at.camconnect.enums.RentStatusEnum;
-import at.camconnect.model.DeviceTypeAttributes.*;
-import at.camconnect.model.DeviceTypeVariants.*;
 import at.camconnect.model.Rent;
-import at.camconnect.model.Student;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.model.Device;
 import at.camconnect.model.DeviceType;
@@ -20,10 +16,8 @@ import jakarta.transaction.Transactional;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.io.*;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class DeviceRepository {

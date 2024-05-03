@@ -1,9 +1,10 @@
 package at.camconnect.repository;
 
-import at.camconnect.dtos.CreateRentDTO;
-import at.camconnect.dtos.RentDTO;
-import at.camconnect.dtos.RentIdsDTO;
-import at.camconnect.dtos.RentByStudentDTO;
+import at.camconnect.dtos.filters.RentFilters;
+import at.camconnect.dtos.rent.CreateRentDTO;
+import at.camconnect.dtos.rent.RentDTO;
+import at.camconnect.dtos.rent.RentIdsDTO;
+import at.camconnect.dtos.rent.RentByStudentDTO;
 import at.camconnect.enums.RentStatusEnum;
 import at.camconnect.enums.RentTypeEnum;
 import at.camconnect.responseSystem.CCException;
@@ -136,26 +137,43 @@ public class RentRepository {
 
     }
 
-    public List<RentByStudentDTO> getAll(){
-        //INFO
-        //this is currently just joining to half the db and not using a propper DTO,
-        // this might cause performance problems in the future but is fine for now
+    public List<RentByStudentDTO> getAll(RentFilters filters){
+
+        String orderByString = "";
+        switch (filters.orderBy()) {
+            case ALPHABETICAL_ASC: orderByString = "order by s.firstname asc, s.lastname asc"; break;
+            case ALPHABETICAL_DESC: orderByString = "order by s.firstname desc, s.lastname desc"; break;
+            case DATE_ASC: orderByString = "order by MAX(r.change_date) asc"; break;
+            case DATE_DESC: orderByString = "order by MAX(r.change_date) desc"; break;
+        }
 
         List<Student> students = em.createQuery(
                 "SELECT s FROM Rent r " +
                         "join Student s on r.student.student_id = s.student_id " +
+                        "where (s.school_class IN :schoolClasses OR :schoolClassesEmpty = true) " +
                         "group by s.student_id " +
-                        "order by s.student_id", Student.class).getResultList();
+                        orderByString
+                ,Student.class)
+                .setParameter("schoolClasses", filters.schoolClasses())
+                .setParameter("schoolClassesEmpty", filters.schoolClasses().isEmpty())
+                .getResultList();
 
         List<RentByStudentDTO> result = new LinkedList<>();
 
+        //INFO
+        //this is currently just joining to half the db and not using a propper DTO,
+        // this might cause performance problems in the future but is fine for now
         for (Student student : students) {
             System.out.println(student.toString());
             List<RentDTO> rents = em.createQuery(
                     "SELECT r FROM Rent r " +
                             "where r.student.student_id = :studentId " +
-                            "order by r.id", Rent.class)
+                            "and (r.status IN :statuses OR :statusesEmpty = true) " +
+                            "order by r.id"
+                    , Rent.class)
                     .setParameter("studentId", student.getStudent_id())
+                    .setParameter("statuses", filters.statuses())
+                    .setParameter("statusesEmpty", filters.statuses().isEmpty())
                     .getResultStream()
                     .map(rent -> new RentDTO(
                             rent.getRent_id(),

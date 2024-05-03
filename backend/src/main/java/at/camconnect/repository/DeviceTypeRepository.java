@@ -1,22 +1,20 @@
 package at.camconnect.repository;
 
 import at.camconnect.dtos.*;
+import at.camconnect.dtos.deviceType.*;
 import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.model.DeviceTypeAttributes.*;
-import at.camconnect.model.Student;
 import at.camconnect.model.Tag;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypeVariants.*;
-import at.camconnect.responseSystem.CCStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.Table;
 import jakarta.transaction.Transactional;
 import org.hibernate.exception.ConstraintViolationException;
 
@@ -80,7 +78,7 @@ public class DeviceTypeRepository {
         List<DeviceTypeMinimalDTO> deviceTypes = new LinkedList<DeviceTypeMinimalDTO>();
 
         deviceTypes = em.createQuery(
-                        "SELECT new at.camconnect.dtos.DeviceTypeMinimalDTO(d.id, d.variant, d.name, d.image) FROM DeviceType d " +
+                        "SELECT new at.camconnect.dtos.deviceType.DeviceTypeMinimalDTO(d.id, d.variant, d.name, d.image) FROM DeviceType d " +
                                 "WHERE UPPER(d.name) LIKE :searchTerm " +
                                 "order by name",
                         DeviceTypeMinimalDTO.class)

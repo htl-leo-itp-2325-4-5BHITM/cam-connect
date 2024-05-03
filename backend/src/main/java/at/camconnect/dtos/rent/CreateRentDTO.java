@@ -1,4 +1,4 @@
-package at.camconnect.dtos;
+package at.camconnect.dtos.rent;
 
 import at.camconnect.enums.RentTypeEnum;
 

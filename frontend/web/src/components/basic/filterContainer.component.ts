@@ -38,12 +38,28 @@ export class FilterContainerComponent extends LitElement {
             <style>${styles}</style>
             <div class="filter-block">
                 <p class="heading">${this.name}<span class="clear" @click="${this.clearSelection}">löschen</span></p>
-                ${this.theOptions?.value?.map((option) => //loop over all options and map(return/create) a select option for each
-                        html`<p class="option ${option.selected ? 'selected' : ''}" 
-                                @click="${(e:Event) => {this.selectOption(e, option); Tooltip.hide(0, true)}}"
-                                @mouseenter="${(e:Event) => {Tooltip.show(e.target as HTMLElement, option.details, 1000)}}"
-                                @mouseleave="${()=>{Tooltip.hide(0)}}"
+                ${this.theOptions?.value?.map((option) => { //loop over all options and map(return/create) a select option for each
+                    if(option.details)
+                        return html`<p class="option ${option.selected ? 'selected' : ''}" 
+                            @click="${(e: Event) => {
+                                this.selectOption(e, option);
+                                Tooltip.hide(0, true)
+                            }}"
+                            @mouseenter="${(e: Event) => {
+                                Tooltip.show(e.target as HTMLElement, option.details, 1000)
+                            }}"
+                            @mouseleave="${() => {
+                                Tooltip.hide(0)
+                            }}"
                         >${option.name}</p>`
+                    else
+                        return html`<p class="option ${option.selected ? 'selected' : ''}" 
+                            @click="${(e: Event) => {
+                                this.selectOption(e, option)
+                            }
+                        }"
+                        >${option.name}</p>`
+                    }
                 )}
             </div>`
     }

@@ -1,6 +1,6 @@
 package at.camconnect.model.DeviceTypeVariants;
 
-import at.camconnect.dtos.DeviceTypeGlobalObjectsDTO;
+import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.responseSystem.CCException;

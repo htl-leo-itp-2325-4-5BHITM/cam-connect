@@ -1,9 +1,10 @@
 package at.camconnect.boundary;
 
-import at.camconnect.dtos.CreateRentDTO;
-import at.camconnect.dtos.RentDTO;
-import at.camconnect.dtos.RentIdsDTO;
-import at.camconnect.dtos.RentByStudentDTO;
+import at.camconnect.dtos.filters.RentFilters;
+import at.camconnect.dtos.rent.CreateRentDTO;
+import at.camconnect.dtos.rent.RentDTO;
+import at.camconnect.dtos.rent.RentIdsDTO;
+import at.camconnect.dtos.rent.RentByStudentDTO;
 import at.camconnect.model.Rent;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
@@ -60,12 +61,13 @@ public class RentResource {
         return CCResponse.ok(result);
     }
 
-    @GET
+    @POST
     @Path("/getall")
-    public Response getAll(){
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getAll(RentFilters filters){
         List<RentByStudentDTO> result;
         try{
-            result = rentRepository.getAll();
+            result = rentRepository.getAll(filters);
         }catch (CCException ex){
             return CCResponse.error(ex);
         }

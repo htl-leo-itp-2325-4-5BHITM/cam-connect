@@ -199,7 +199,7 @@ export class Tooltip {
         let topOffset = bounds.top - this.tooltip.clientHeight - 10
         if(topOffset < 0) topOffset = bounds.bottom + 5
         this.tooltip.style.top = topOffset + "px" //align the bottom of the toolip with the top of the hovered elem
-        this.tooltip.style.left = bounds.left + bounds.width/2 + "px"
+        this.tooltip.style.left = Math.max(0, bounds.left + bounds.width/2) + "px"
 
         if (Date.now() - this.lastTimeHidden < 100) { //if the last tooltip was closed less the 100ms ago
             /*this.lastTimeHidden = Date.now()*/

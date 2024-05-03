@@ -6,9 +6,9 @@ import {KeyBoardShortCut} from "./base"
 import {AutocompleteComponent} from "./components/basic/autocomplete.component"
 import {Student} from "./service/student.service"
 import {DeviceType} from "./service/deviceType.service"
-import URLHandler from "./urlHandler"
 import {DeviceListEntryComponent} from "./components/layout/deviceListEntry.component"
 import {Device} from "./service/device.service"
+import RentService, {OrderByFilterRent, RentFilters} from "./service/rent.service"
 
 interface actionCancellation {
     identifier: string,
@@ -24,6 +24,7 @@ export class AppState{
     private _cancelCurrentAction: actionCancellation[] = []
     private _createRentElement: CreateRentComponent
     private _appElement: HTMLElement
+    private _rentFilters: RentFilters = {orderBy: OrderByFilterRent.ALPHABETICAL_ASC, statuses: [], schoolClasses: []}
 
     /**
      * there is a really small chance here that this possibly falls victim to a race condition
@@ -188,5 +189,16 @@ export class AppState{
     set appElement(value: HTMLElement) {
         this._appElement = value
         this.update()
+    }
+
+
+    get rentFilters(): RentFilters {
+        return this._rentFilters
+    }
+
+    set rentFilters(value: RentFilters) {
+        this._rentFilters = value
+        this.update()
+        RentService.fetchAll()
     }
 }

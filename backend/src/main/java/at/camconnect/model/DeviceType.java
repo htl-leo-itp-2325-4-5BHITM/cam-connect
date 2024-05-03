@@ -1,11 +1,9 @@
 package at.camconnect.model;
 
-import at.camconnect.dtos.DeviceTypeGlobalObjectsDTO;
-import at.camconnect.dtos.DeviceTypeDTO;
+import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
 import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.json.JsonObject;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
