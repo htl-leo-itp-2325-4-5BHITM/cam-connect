@@ -19,6 +19,12 @@ export interface DeviceDTO{
     type_id: number
 }
 
+export interface SearchDTO{
+    searchTerm: string
+    typeId: number
+    onlyAvailable: boolean
+}
+
 export default class DeviceService{
     static fetchAll(){
         Api.fetchData<Device[]>("/device/getall")
@@ -49,11 +55,11 @@ export default class DeviceService{
             })
     }
 
-    static async search(searchTerm: string, typeId: number, onlyAvailable: boolean): Promise<SimpleOption<number, Device>[]> {
+    static async search(searchDTO: SearchDTO): Promise<SimpleOption<Device>[]> {
         try {
             const result: ccResponse<SimpleOption<number, Device>[]> = await Api.postData<unknown, Device>(
                 `/device/search`,
-                {searchTerm: searchTerm, typeId: typeId, onlyAvailable: onlyAvailable}
+                searchDTO
             )
             return result.data || []
         } catch (e) {

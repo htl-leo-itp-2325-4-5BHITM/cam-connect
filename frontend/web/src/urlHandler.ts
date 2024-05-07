@@ -19,6 +19,9 @@ let pages = {
             calendar: {
                 handler: () => { model.appState.value.page = PageEnum.CALENDAR },
             },
+            user: {
+                handler: () => { changeOrigin("cc-user-settings") }
+            },
             edit: {
                 handler: () => { changeOrigin("cc-edit") }
             }

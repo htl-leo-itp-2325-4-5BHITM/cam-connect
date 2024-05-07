@@ -137,8 +137,7 @@ public class RentResource {
         return CCResponse.ok();
     }
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
+    @PUT
     @Path("/getbyid/{id: [0-9]+}/return")
     public Response returnRent(@PathParam("id") Long id) {
         try {

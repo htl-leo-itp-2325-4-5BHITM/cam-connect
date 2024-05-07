@@ -50,7 +50,7 @@ public class RentRepository {
         List<Rent> rents = new LinkedList<>();
 
         for(CreateRentDTO rentDTO : rentDTOs){
-            if(isDeviceAlreadyInUse(deviceRepository.getById(rentDTO.device_id()))) {
+            if(deviceRepository.isDeviceAlreadyInUse(rentDTO.device_id())) {
                 throw new CCException(1201, "Device is already used in an other rent");
             }
 
@@ -91,10 +91,6 @@ public class RentRepository {
     public void createEmpty(){
         em.persist(new Rent());
         rentSocket.broadcast();
-    }
-
-    public boolean isDeviceAlreadyInUse(Device device) {
-        return getAllSingleList().stream().anyMatch(rentDTO -> rentDTO.device().equals(device) && rentDTO.status() == RentStatusEnum.RETURNED);
     }
 
     @Transactional

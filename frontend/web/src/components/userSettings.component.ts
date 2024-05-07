@@ -1,47 +1,29 @@
 import {LitElement, html} from 'lit'
 import {customElement} from 'lit/decorators.js'
 import styles from '../../styles/components/edit.styles.scss'
-import {Api, ccResponse, config} from "../base"
 import PopupEngine from "../popupEngine"
-@customElement('cc-edit')
-export class EditComponent extends LitElement {
+import {Api} from "../base"
+@customElement('cc-user-settings')
+export class UserSettingsComponent extends LitElement {
     render() {
-        let listOfString = ["camera", "drone", "lens", "light", "microphone", "simple", "stabilizer", "tripod"];
-
         return html`
             <style>${styles}</style>
             <cc-navbar type="simple"></cc-navbar>
 
             <div>
-                <h2>Device Type Import</h2>
-                <select id="listOfTypes" @change="${(event) => this.selectOption(event.target.value)}">
-                    ${listOfString.map(type => html`<option value="${type}">${type}</option>`)}
-                </select>
-                <div class="importBox">
-                    <input type="file"
-                           data-devicetype="camera"
-                           @change="${(event) => {
-                               this.importDataFromCsv(event, "devicetype", event.target.dataset.devicetype)
-                           }}" 
-                           accept=".csv"
-                    />
-                </div>
-            </div>
-
-            <div>
-                <h2>Device Import</h2>
+                <cc-button @click="${this.exportRent}">Export all rents</cc-button>
                 <input type="file"
                        @change="${(event) => {
                            this.importDataFromCsv(event, "device", "")
-                       }}" 
+                       }}"
                        accept=".csv"
                 />
             </div>
         `
     }
 
-    selectOption(type) {
-        (this.shadowRoot.querySelector('.importBox input') as HTMLInputElement).dataset.devicetype = type
+    exportRent(){
+        
     }
 
     importDataFromCsv(event: Event, importType: string, type:string) {
@@ -74,6 +56,6 @@ export class EditComponent extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "cc-edit": EditComponent
+        "cc-user-settings": UserSettingsComponent
     }
 }

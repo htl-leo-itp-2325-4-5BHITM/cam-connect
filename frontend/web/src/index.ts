@@ -27,6 +27,7 @@ import "./components/basic/dropdown.component"
 import "./components/app.component"
 import "./components/externalConfirm.component"
 import "./components/notFound.component"
+import "./components/userSettings.component"
 import "./components/edit.component"
 
 import "./printView"
