@@ -100,17 +100,18 @@ public class DeviceRepository {
     }
 
     public List<AutocompleteOptionDTO<Device>> search(String searchTerm, Long type_id, boolean showOnlyAvailableRents){
-        String queryString = "SELECT d FROM Device d " +
-                "WHERE UPPER(d.number) LIKE :searchTerm ";
+
+        Query query;
         if(type_id > 0) {
-            queryString += "AND d.type.id = :typeId ";
-        }
-        queryString += "ORDER BY d.number";
-
-        Query query = em.createQuery(queryString, Device.class).setParameter("searchTerm", searchTerm.toUpperCase() + "%");
-
-        if (type_id > 0) {
+            query = em.createQuery("SELECT d FROM Device d " +
+                    "WHERE UPPER(d.number) LIKE :searchTerm " +
+                    "AND d.type.id = :typeId " +
+                    "ORDER BY d.number", Device.class).setParameter("searchTerm", searchTerm.toUpperCase() + "%");
             query.setParameter("typeId", type_id);
+        } else{
+            query = em.createQuery("SELECT d FROM Device d " +
+                    "WHERE UPPER(d.number) LIKE :searchTerm " +
+                    "ORDER BY d.number", Device.class).setParameter("searchTerm", searchTerm.toUpperCase() + "%");
         }
 
         List<Device> devices = query.getResultList();

@@ -14,7 +14,7 @@ import Util from "../../util"
 import {unsafeSVG} from "lit/directives/unsafe-svg.js"
 import {icon} from "@fortawesome/fontawesome-svg-core"
 import {faHashtag} from "@fortawesome/free-solid-svg-icons"
-import DeviceService, {Device, DeviceDTO} from "../../service/device.service"
+import DeviceService, {Device, DeviceDTO, SearchDTO} from "../../service/device.service"
 import {AutocompleteComponent, AutocompleteOption} from "../basic/autocomplete.component"
 import DeviceTypeService, {DeviceType, DeviceTypeSource} from "../../service/deviceType.service"
 
@@ -228,9 +228,15 @@ export class RentListEntryComponent extends LitElement {
         }
     }
     async searchForDevice(searchTerm: string): Promise<AutocompleteOption<Device>[]> {
-        if(this.rent?.device?.type?.type_id < 0) return DeviceService.search(searchTerm, -1, true)
+        let searchDTO : SearchDTO = {
+            searchTerm: searchTerm,
+            typeId: this.rent?.device.type.type_id < 0 ? this.rent.device.type.type_id : -1,
+            onlyAvailable: true
+        }
 
-        return DeviceService.search(searchTerm, this.rent.device.type.type_id, true)
+        if(this.rent?.device?.type?.type_id < 0) return DeviceService.search(searchDTO)
+
+        return DeviceService.search(searchDTO)
     }
 
     provideDeviceIcon(data: DeviceDTO){
