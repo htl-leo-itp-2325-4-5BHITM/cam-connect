@@ -8,6 +8,7 @@ import {SimpleColorEnum, SizeEnum, Tooltip} from "../../base"
 import {model} from "../../index"
 import {ObservedProperty} from "../../model"
 import {AppState} from "../../AppState"
+import URLHandler from "../../urlHandler"
 
 @customElement('cc-sidebar')
 export class SidebarComponent extends LitElement {
@@ -59,7 +60,7 @@ export class SidebarComponent extends LitElement {
                 <slot name="secondaryFilters"></slot>
             </div>
 
-            <div class="user">
+            <div class="user" @click="${() => {URLHandler.setUrl('user')}}">
                 <img src="../../../assets/icon/user-icon-default.svg" alt="user">
                 <p>${(this.accountname)}</p>
             </div>

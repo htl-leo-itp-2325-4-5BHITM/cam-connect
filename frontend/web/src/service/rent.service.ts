@@ -106,7 +106,7 @@ export default class RentService {
     }
 
     static return(rentId: number) {
-        Api.fetchData(`/rent/getbyid/${rentId}/return`)
+        Api.postData(`/rent/getbyid/${rentId}/return`, "")
             .then(() => {
                 RentService.fetchAll()
             })
