@@ -43,6 +43,7 @@ public class Device {
     }
 
     public long getDevice_id() {
+        System.out.println(device_id);
         return device_id;
     }
 
