@@ -55,7 +55,7 @@ export default class DeviceService{
             })
     }
 
-    static async search(searchDTO: SearchDTO): Promise<SimpleOption<Device>[]> {
+    static async search(searchDTO: SearchDTO): Promise<SimpleOption<number, Device>[]> {
         try {
             const result: ccResponse<SimpleOption<number, Device>[]> = await Api.postData<unknown, Device>(
                 `/device/search`,

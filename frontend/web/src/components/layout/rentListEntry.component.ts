@@ -227,7 +227,7 @@ export class RentListEntryComponent extends LitElement {
                 </cc-property-value>`
         }
     }
-    async searchForDevice(searchTerm: string): Promise<SimpleOption<Device>[]> {
+    async searchForDevice(searchTerm: string): Promise<SimpleOption<number, Device>[]> {
         let searchDTO : SearchDTO = {
             searchTerm: searchTerm,
             typeId: this.rent?.device.type.type_id < 0 ? this.rent.device.type.type_id : -1,
