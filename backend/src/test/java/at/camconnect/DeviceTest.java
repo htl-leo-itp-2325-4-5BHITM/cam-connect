@@ -13,7 +13,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 
 public class DeviceTest {
-    JsonObject device1 = Json.createObjectBuilder().add("note", "").add("serial", "sony").add("id", 1).add("").build();
+    JsonObject device1 = Json.createObjectBuilder().add("note", "").add("serial", "sony").add("id", 1).build();
 
     Long createdDeviceId;
 
@@ -65,7 +65,7 @@ public class DeviceTest {
     public void testGetDeviceByNumberAndType_DeviceFound() {
         // Arrange
         String number = "ABC123";
-        Long typeId = 1L; // Annahme: Eine vorhandene Gerätetyp-ID
+        Long typeId = createdDeviceId; // Annahme: Eine vorhandene Gerätetyp-ID
 
         // Act & Assert
         given()
@@ -83,7 +83,7 @@ public class DeviceTest {
     public void testGetDeviceByNumberAndType_DeviceNotFound() {
         // Arrange
         String nonExistentNumber = "XYZ789";
-        Long typeId = 1L; // Annahme: Eine vorhandene Gerätetyp-ID
+        Long typeId = -3L; // Annahme: Eine vorhandene Gerätetyp-ID
 
         // Act & Assert
         given()
@@ -93,6 +93,23 @@ public class DeviceTest {
                 .get("/device")
                 .then()
                 .statusCode(404);
+    }
+    @Test
+    public void validateNumberAndType_DeviceFound(){
+        // Arrange
+        String number = "ABC123";
+        Long typeId = createdDeviceId; // Annahme: Eine vorhandene Gerätetyp-ID
+
+        // Act & Assert
+        given()
+                .queryParam("number", number)
+                .queryParam("type_id", typeId)
+                .when()
+                .get("/device")
+                .then()
+                .statusCode(200)
+                .body("number", equalTo(number));
+        // Annahme: Die Antwort enthält die Gerätenummer
     }
 
 }
