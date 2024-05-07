@@ -19,8 +19,9 @@ export class EditComponent extends LitElement {
                 </select>
                 <div class="importBox">
                     <input type="file"
+                           data-devicetype="camera"
                            @change="${(event) => {
-                               this.importDataFromCsv(event, "devicetype", listOfString[0])
+                               this.importDataFromCsv(event, "devicetype", event.target.dataset.devicetype)
                            }}" 
                            accept=".csv"
                     />
@@ -40,21 +41,7 @@ export class EditComponent extends LitElement {
     }
 
     selectOption(type) {
-        //TODO why is this code structured like this
-        //you completely remove and re add the input instead of simply changing the type
-        //either change this to a class variable that or use a data-type property on the input
-        //both can be easily referenced in the @click binding on the input
-
-        const importBox = this.shadowRoot.querySelector('.importBox')
-        importBox.innerHTML = ''
-
-        const input = document.createElement('input')
-        input.type = 'file'
-        input.accept = '.csv'
-        input.addEventListener('change', (event) => {
-            this.importDataFromCsv(event, "devicetype", type)
-        })
-        importBox.appendChild(input)
+        (this.shadowRoot.querySelector('.importBox input') as HTMLInputElement).dataset.devicetype = type
     }
 
     importDataFromCsv(event: Event, importType: string, type:string) {
