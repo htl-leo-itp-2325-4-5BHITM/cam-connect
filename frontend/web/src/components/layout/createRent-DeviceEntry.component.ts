@@ -18,7 +18,7 @@ import localeDe from "air-datepicker/locale/de"
 import {AutocompleteComponent, AutocompleteOption} from "../basic/autocomplete.component"
 import DeviceTypeService, {DeviceType, DeviceTypeSource, DeviceTypeVariantEnum} from "../../service/deviceType.service"
 import Util, {AnimationHelper} from "../../util"
-import DeviceService, {Device, DeviceDTO} from "../../service/device.service"
+import DeviceService, {Device, DeviceDTO, SearchDTO} from "../../service/device.service"
 
 export interface CreateRentDeviceEntryData {
     device_id: number
@@ -175,7 +175,13 @@ export class CreateRentDeviceEntryComponent extends LitElement {
     }
 
     async searchForDevice(searchTerm: string): Promise<AutocompleteOption<Device>[]> {
-        return DeviceService.search(searchTerm, this.data.device_type_id, true)
+        let searchDTO: SearchDTO = {
+            searchTerm: searchTerm,
+            typeId: this.data.device_type_id,
+            onlyAvailable: true
+        }
+
+        return DeviceService.search(searchDTO)
     }
 
     //TODO find better icon here
