@@ -48,6 +48,12 @@ export interface CreateRentDTO {
 export interface RentFilters {
     orderBy: OrderByFilterRent
     statuses: RentStatusEnum[]
+    schoolClasses: Set<string>
+}
+
+export interface RentFilterDTO {
+    orderBy: OrderByFilterRent
+    statuses: RentStatusEnum[]
     schoolClasses: string[]
 }
 
@@ -60,7 +66,14 @@ export enum OrderByFilterRent {
 
 export default class RentService {
     static fetchAll() {
-        Api.postData<RentFilters, RentByStudentDTO[]>("/rent/getall", model.appState.value.rentFilters)
+        console.log("fetching all")
+        let rentFiltersForBackend = {
+            orderBy: model.appState.value.rentFilters.orderBy,
+            statuses: model.appState.value.rentFilters.statuses,
+            schoolClasses: Array.from(model.appState.value.rentFilters.schoolClasses)
+        }
+
+        Api.postData<RentFilterDTO, RentByStudentDTO[]>("/rent/getall", rentFiltersForBackend)
             .then(result => {
                 console.log(result)
                 model.loadRents(result.data || [])

@@ -1,11 +1,10 @@
-import {Api, ccResponse} from '../base'
+import {Api, ccResponse, SimpleOption} from '../base'
 import {model} from "../index"
 import {CameraResolution, CameraSensor, CameraSystem, LensMount, TripodHead} from "./deviceTypeAttribute.service"
 import {html, TemplateResult} from "lit"
 import {unsafeSVG} from 'lit/directives/unsafe-svg.js';
 import {icon} from "@fortawesome/fontawesome-svg-core"
 import {faCamera, faHelicopter, faLightbulb, faMicrophone, faGears} from "@fortawesome/free-solid-svg-icons"
-import {AutocompleteOption} from "../components/basic/autocomplete.component"
 import stabilizerIcon from "../../assets/icon/noun-gimbal-5345717.svg"
 import droneIcon from "../../assets/icon/noun-drone-6707036.svg"
 import lensIcon from "../../assets/icon/noun-lens-6134156.svg"
@@ -160,9 +159,9 @@ export default class DeviceTypeService {
             })
     }
 
-    static async search(searchTerm: string): Promise<AutocompleteOption<DeviceType>[]> {
+    static async search(searchTerm: string): Promise<SimpleOption<number, DeviceType>[]> {
         try {
-            const result: ccResponse<AutocompleteOption<DeviceType>[]> = await Api.postData(
+            const result: ccResponse<SimpleOption<number, DeviceType>[]> = await Api.postData(
                 "/devicetype/search",
                 {searchTerm: searchTerm}
             )

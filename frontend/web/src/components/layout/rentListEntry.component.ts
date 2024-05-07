@@ -2,7 +2,7 @@ import {html, LitElement, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/rentListEntry.styles.scss'
 import {ButtonType} from "../basic/button.component"
-import {Api, ColorEnum, DatePickerWrapper, SizeEnum} from "../../base"
+import {Api, ColorEnum, DatePickerWrapper, SimpleOption, SizeEnum} from "../../base"
 import RentService, {Rent, RentStatusEnum, RentTypeEnum} from "../../service/rent.service";
 import {ChipType} from "../basic/chip.component"
 import {model} from "../../index"
@@ -15,7 +15,7 @@ import {unsafeSVG} from "lit/directives/unsafe-svg.js"
 import {icon} from "@fortawesome/fontawesome-svg-core"
 import {faHashtag} from "@fortawesome/free-solid-svg-icons"
 import DeviceService, {Device, DeviceDTO} from "../../service/device.service"
-import {AutocompleteComponent, AutocompleteOption} from "../basic/autocomplete.component"
+import {AutocompleteComponent} from "../basic/autocomplete.component"
 import DeviceTypeService, {DeviceType, DeviceTypeSource} from "../../service/deviceType.service"
 
 @customElement('cc-rent-list-entry')
@@ -227,7 +227,7 @@ export class RentListEntryComponent extends LitElement {
                 </cc-property-value>`
         }
     }
-    async searchForDevice(searchTerm: string): Promise<AutocompleteOption<Device>[]> {
+    async searchForDevice(searchTerm: string): Promise<SimpleOption<number, Device>[]> {
         if(this.rent?.device?.type?.type_id < 0) return DeviceService.search(searchTerm, -1, true)
 
         return DeviceService.search(searchTerm, this.rent.device.type.type_id, true)

@@ -21,6 +21,8 @@ export class RentListComponent extends LitElement {
                 if(rentByStudent.rentList.every(rent => rent.status == RentStatusEnum.RETURNED)) return
                 else return html`<cc-rent-list-student .rentByStudent="${rentByStudent}"></cc-rent-list-student>`
             })}
+            
+            ${this.rents.value.length == 0 ? html`<p class="noResults">Keine Ergebnisse gefunden</p>` : ""}
         `
     }
 }

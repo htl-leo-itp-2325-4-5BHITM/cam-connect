@@ -1,8 +1,7 @@
 import {model} from "../index"
-import {config, Api, ccResponse} from "../base"
+import {config, Api, ccResponse, SimpleOption} from "../base"
 import {DeviceType, DeviceTypeSource, DeviceTypeVariantCollection, DeviceTypeVariantEnum} from "./deviceType.service"
 import {Rent, RentByStudentDTO} from "./rent.service"
-import {AutocompleteOption} from "../components/basic/autocomplete.component"
 
 export interface Device{
     device_id: number
@@ -50,9 +49,9 @@ export default class DeviceService{
             })
     }
 
-    static async search(searchTerm: string, typeId: number, onlyAvailable: boolean): Promise<AutocompleteOption<Device>[]> {
+    static async search(searchTerm: string, typeId: number, onlyAvailable: boolean): Promise<SimpleOption<number, Device>[]> {
         try {
-            const result: ccResponse<AutocompleteOption<Device>[]> = await Api.postData<unknown, Device>(
+            const result: ccResponse<SimpleOption<number, Device>[]> = await Api.postData<unknown, Device>(
                 `/device/search`,
                 {searchTerm: searchTerm, typeId: typeId, onlyAvailable: onlyAvailable}
             )

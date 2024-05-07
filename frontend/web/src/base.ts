@@ -19,11 +19,7 @@ export const Regex = {
 }
 
 export interface ccResponse<T>{
-    ccStatus: {
-        statusCode: number
-        details: string
-        message: string
-    }
+    ccStatus: ccStatus
     details: {
         time: string
         dataType: string
@@ -31,10 +27,20 @@ export interface ccResponse<T>{
     data: T
 }
 
+export interface ccStatus{
+    statusCode: number
+    details: string
+    message: string
+}
+
 export enum ColorEnum {ACCENT="accent", GOOD="good", MID="mid", BAD="bad", GRAY="gray"}
 export enum SimpleColorEnum {ACCENT="accent", GRAY="gray"}
 export enum SizeEnum {BIG="big", MEDIUM="medium", SMALL="small"}
 
+export interface SimpleOption<ID, DATA> {
+    id: ID
+    data: DATA
+}
 export class Api {
     /**
      * querys the backend and returns the resulting data
@@ -47,8 +53,25 @@ export class Api {
                 return response.json() as Promise<ccResponse<Out>>
             })
             .then((result: ccResponse<Out>) => {
-                if(result.ccStatus) this.handleCCError(result.ccStatus.statusCode, result.ccStatus.details, result.ccStatus.message, url)
-                else console.error("no ccResponse object received from", url, "only got:", result)
+                this.handleCCError(result.ccStatus, url)
+                return result.data
+            })
+    }
+
+    static putData<In>(url: string, data): Promise<ccResponse<null>> {
+        return fetch(config.api_url + url, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => {
+                this.handleHttpError(response.status, response.url)
+                return response.json() as Promise<ccResponse<null>>
+            })
+            .then((result: ccResponse<null>) => {
+                this.handleCCError(result.ccStatus, url)
                 return result.data
             })
     }
@@ -75,23 +98,24 @@ export class Api {
         this.handleHttpError(response.status, response.url)
 
         let result: ccResponse<Out> = await response.json()
-        if(result.ccStatus) this.handleCCError(result.ccStatus.statusCode, result.ccStatus.details, result.ccStatus.message, path)
-        else console.error("no ccResponse object received from", path, "only got:", result)
+        this.handleCCError(result.ccStatus, path)
 
         return result
     }
 
-    static handleCCError(statusCode: number, details: string, message: string, url:string): boolean {
-        if(statusCode == 1000) return true
-        if(statusCode == 1101) {
-            console.error(`CCException - invalid id in getter - statuscode: ${statusCode} - details: ${details} - url: ${url}`)
+    static handleCCError(status: ccStatus, url:string): boolean {
+        if(!status)  console.error("no ccResponse object received from", url)
+
+        if(status.statusCode == 1000) return true
+        if(status.statusCode == 1101) {
+            console.error(`CCException - invalid id in getter - statuscode: ${status.statusCode} - details: ${status.details} - url: ${url}`)
 
             PopupEngine.createNotification({
                 heading: "Ein Fehler ist aufgetreten",
                 text: "Die angeforderten Daten konnten nicht geladen werden - ccStatus: 1101",
             })
         }
-        console.error("something went wrong in the backend trying to reach endpoint: ", url, "statusCode: ", statusCode + ". Details:", details, "Message:", message)
+        console.error("something went wrong in the backend trying to reach endpoint: ", url, "statusCode: ", status.statusCode + ". Details:", status.details, "Message:", status.message)
         return false
     }
 
