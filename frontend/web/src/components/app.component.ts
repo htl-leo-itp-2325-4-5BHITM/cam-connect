@@ -98,7 +98,13 @@ export class AppComponent extends LitElement {
                             {id: OrderByFilterRent.ALPHABETICAL_DESC, data: 'alphabetisch (abst.)'},
                             {id: OrderByFilterRent.DATE_ASC, data: 'datum (neueste zuerst)'},
                             {id: OrderByFilterRent.DATE_DESC, data: 'datum (älteste zuerst)'},
-                        ]}"></cc-dropdown>
+                        ]}"
+                            .onSelect="${(option) => {
+                                let newFilters = model.appState.value.rentFilters
+                                newFilters.orderBy = option.id
+                                model.appState.value.rentFilters = newFilters
+                            }}"
+                        ></cc-dropdown>
                         <cc-button slot="sorts" size="${SizeEnum.MEDIUM}" type="${ButtonType.UNDERLINED}" color="${SimpleColorEnum.GRAY}" noPadding @click="${this.clearFilters}">
                             Filter zurücksetzten
                         </cc-button>

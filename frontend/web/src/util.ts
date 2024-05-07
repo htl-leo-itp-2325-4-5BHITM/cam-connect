@@ -64,17 +64,6 @@ export default class Util{
         return focusedElem
     }
 
-    //TODO constrain the generic so that it has to have a properly named id column, something like: extends {[keyName]:(number | string)}
-    static replaceItemByIdInJsonArray<T>(data: T[], replacement: T, id: (number | string), keyName: keyof T):T[] {
-        for (let i = 0; i < data.length; i++) {
-            if(data[i][keyName] === id){
-                data[i] = replacement
-                return data
-            }
-        }
-        return data
-    }
-
     static selectText(element: HTMLElement) {
         const range = document.createRange();
         range.selectNodeContents(element);

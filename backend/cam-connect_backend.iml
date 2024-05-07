@@ -6,14 +6,10 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
-          <factory-entry name="cam-connect_backend" value="f9c72a71-35fc-4000-ba47-8306af456533" />
+          <factory-entry name="cam-connect_backend" value="9c4f9b8b-8b47-4f2b-b125-2f194a543a6a" />
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>
     </facet>
-  </component>
-  <component name="NewModuleRootManager" inherit-compiler-output="true">
-    <exclude-output />
-    <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
