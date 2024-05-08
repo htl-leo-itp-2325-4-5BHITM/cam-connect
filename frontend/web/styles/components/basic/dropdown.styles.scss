@@ -73,6 +73,7 @@
 
 svg{
   height: 1rem;
+  transition: rotate $transitionTimeShort;
 
   path{
     fill: $gray1000;

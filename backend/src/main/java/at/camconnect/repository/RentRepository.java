@@ -95,7 +95,7 @@ public class RentRepository {
 
     @Transactional
     public Response remove(Long id){
-        em.remove(getById(id));
+        getById(id).setStatus(RentStatusEnum.DELETED);
         rentSocket.broadcast();
         return CCResponse.ok();
     }
@@ -111,7 +111,7 @@ public class RentRepository {
     */
 
     public List<RentDTO> getAllSingleList(){
-        return em.createQuery("SELECT r FROM Rent r order by r.creation_date", Rent.class)
+        return em.createQuery("SELECT r FROM Rent r where r.status != 'DELETED' order by r.creation_date", Rent.class)
                 .getResultStream()
                 .map(rent -> new RentDTO(
                         rent.getRent_id(),
@@ -133,7 +133,7 @@ public class RentRepository {
 
     }
 
-    public List<RentByStudentDTO> getAll(RentFilters filters){
+    public List<RentByStudentDTO> getAllDashboard(RentFilters filters){
 
         String orderByString = "";
         switch (filters.orderBy()) {
@@ -157,13 +157,13 @@ public class RentRepository {
         List<RentByStudentDTO> result = new LinkedList<>();
 
         //INFO
-        //this is currently just joining to half the db and not using a propper DTO,
+        //this is currently just joining to half the db and not using a proper DTO,
         // this might cause performance problems in the future but is fine for now
         for (Student student : students) {
-            System.out.println(student.toString());
             List<RentDTO> rents = em.createQuery(
                     "SELECT r FROM Rent r " +
                             "where r.student.student_id = :studentId " +
+                            "and r.status != 'DELETED'" +
                             "and (r.status IN :statuses OR :statusesEmpty = true) " +
                             "order by r.id"
                     , Rent.class)
@@ -189,9 +189,6 @@ public class RentRepository {
                     ))
                     .collect(Collectors.toList());
 
-            for (RentDTO rent : rents){
-                System.out.println(rent.toString());
-            }
             result.add(new RentByStudentDTO(student, rents));
         }
         return result;

@@ -67,7 +67,7 @@ public class RentResource {
     public Response getAll(RentFilters filters){
         List<RentByStudentDTO> result;
         try{
-            result = rentRepository.getAll(filters);
+            result = rentRepository.getAllDashboard(filters);
         }catch (CCException ex){
             return CCResponse.error(ex);
         }
