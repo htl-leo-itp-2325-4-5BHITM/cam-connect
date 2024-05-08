@@ -2,6 +2,7 @@ package at.camconnect.repository;
 
 import at.camconnect.dtos.AutocompleteOptionDTO;
 import at.camconnect.dtos.DeviceDTO;
+import at.camconnect.dtos.DeviceSearchDTO;
 import at.camconnect.enums.RentStatusEnum;
 import at.camconnect.model.Rent;
 import at.camconnect.responseSystem.CCException;
@@ -99,25 +100,25 @@ public class DeviceRepository {
         return count > 0;
     }
 
-    public List<AutocompleteOptionDTO<Device>> search(String searchTerm, Long type_id, boolean showOnlyAvailableRents){
+    public List<AutocompleteOptionDTO<Device>> search(DeviceSearchDTO data){
 
         Query query;
-        if(type_id > 0) {
+        if(data.typeId() > 0) {
             query = em.createQuery("SELECT d FROM Device d " +
                     "WHERE UPPER(d.number) LIKE :searchTerm " +
                     "AND d.type.id = :typeId " +
-                    "ORDER BY d.number", Device.class).setParameter("searchTerm", searchTerm.toUpperCase() + "%");
-            query.setParameter("typeId", type_id);
+                    "ORDER BY d.number", Device.class).setParameter("searchTerm", data.searchTerm().toUpperCase() + "%");
+            query.setParameter("typeId", data.typeId());
         } else{
             query = em.createQuery("SELECT d FROM Device d " +
                     "WHERE UPPER(d.number) LIKE :searchTerm " +
-                    "ORDER BY d.number", Device.class).setParameter("searchTerm", searchTerm.toUpperCase() + "%");
+                    "ORDER BY d.number", Device.class).setParameter("searchTerm", data.searchTerm().toUpperCase() + "%");
         }
 
         List<Device> devices = query.getResultList();
         List<AutocompleteOptionDTO<Device>> result = new LinkedList<>();
         for (Device device : devices) {
-            if(showOnlyAvailableRents && isDeviceAlreadyInUse(device.getDevice_id())){
+            if(data.onlyAvailable() && isDeviceAlreadyInUse(device.getDevice_id())){
                 continue;
             }
             result.add(new AutocompleteOptionDTO<>(device, device.getDevice_id()));
