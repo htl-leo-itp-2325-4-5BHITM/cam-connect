@@ -32,6 +32,11 @@ export class RentListStudentComponent extends LitElement {
         })
     }
 
+    attributeChangedCallback(name: string, _old: string | null, value: string | null) {
+        super.attributeChangedCallback(name, _old, value);
+        if(!this.minimized) this.style.maxHeight = "initial"
+    }
+
     render() {
         let student = this.rentByStudent.student
         let rentList = this.rentByStudent.rentList

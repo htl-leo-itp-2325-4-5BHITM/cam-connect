@@ -18,7 +18,9 @@
 
 :host([type = "back"]){
   display: flex;
-  position: relative;
+  /*
+  position: fixed;
+  */
 
   .logo{
     margin-inline: auto;
