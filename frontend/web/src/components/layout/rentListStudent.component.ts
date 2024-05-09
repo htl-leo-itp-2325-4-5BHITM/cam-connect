@@ -5,10 +5,8 @@ import {CircleSelectType} from "../basic/circleSelect.component"
 import {SimpleColorEnum, SizeEnum} from "../../base"
 import {RentByStudentDTO, RentStatusEnum} from "../../service/rent.service";
 import {model} from "../../index"
-import { ObservedProperty} from "../../model"
 import {RentListEntryComponent} from "./rentListEntry.component"
 import {ButtonType} from "../basic/button.component"
-import {AppState} from "../../AppState"
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons"
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
@@ -67,8 +65,13 @@ export class RentListStudentComponent extends LitElement {
                     </div>
                 </cc-button>
                 <div class="right">
-                    <cc-button type="${ButtonType.OUTLINED}" size="${SizeEnum.SMALL}" @click="${() => model.appState.value.openCreateRentModal(this.rentByStudent.student.student_id)}">Verleih erstellen</cc-button>
-                    <cc-button type="${ButtonType.TEXT}" color="${SimpleColorEnum.GRAY}" size="${SizeEnum.SMALL}">Details anzeigen</cc-button>
+                    <cc-button type="${ButtonType.OUTLINED}" size="${SizeEnum.SMALL}" 
+                               @click="${() => model.appState.value.openCreateRentModal(this.rentByStudent.student.student_id)}"
+                    >Verleih erstellen</cc-button>
+                    <cc-button type="${ButtonType.TEXT}" color="${SimpleColorEnum.GRAY}" size="${SizeEnum.SMALL}" 
+                               @click="${() => {model.appState.value.openOverlay()}}"
+                    >Details anzeigen</cc-button>
+                    
                     <cc-circle-select type="${CircleSelectType.MULTIPLE}" size="${SizeEnum.SMALL}" 
                                       .onToggle="${() => this.toggleSelectAll()}"
                     ></cc-circle-select>
@@ -80,7 +83,7 @@ export class RentListStudentComponent extends LitElement {
     toggleSelectAll(overrideState?: boolean) {
         let isChecked = this.shadowRoot.querySelector("cc-circle-select").checked
 
-        if(overrideState == isChecked) return
+        if(overrideState == isChecked) return //state is already the same
         else isChecked = overrideState
 
         this.toggleMinimization(false)

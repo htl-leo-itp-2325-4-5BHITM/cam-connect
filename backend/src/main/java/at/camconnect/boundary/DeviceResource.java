@@ -81,8 +81,7 @@ public class DeviceResource {
     public Response search(DeviceSearchDTO data){
         List<AutocompleteOptionDTO<Device>> result;
         try{
-            System.out.println(data);
-            result = deviceRepository.search(data.searchTerm(), (long) data.typeId(), data.onlyAvailable());
+            result = deviceRepository.search(data);
         }catch (CCException ex){
             return CCResponse.error(ex);
         }

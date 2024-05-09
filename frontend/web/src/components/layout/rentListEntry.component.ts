@@ -242,9 +242,10 @@ export class RentListEntryComponent extends LitElement {
     }
 
     toggleRentCheck(checked?: boolean){
-        if(!checked) checked = !this.isChecked()
+        //TODO changing this from !checked breaks multi select
+        if(checked == undefined) checked = !this.isChecked()
 
-        if(checked){
+        if(checked == true){
             this.appState.value.addSelectedRentEntry(this)
             //whub whub
         } else{

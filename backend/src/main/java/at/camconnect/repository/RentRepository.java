@@ -1,18 +1,14 @@
 package at.camconnect.repository;
 
 import at.camconnect.dtos.filters.RentFilters;
-import at.camconnect.dtos.rent.CreateRentDTO;
-import at.camconnect.dtos.rent.RentDTO;
-import at.camconnect.dtos.rent.RentIdsDTO;
-import at.camconnect.dtos.rent.RentByStudentDTO;
+import at.camconnect.dtos.rent.*;
 import at.camconnect.enums.RentStatusEnum;
 import at.camconnect.enums.RentTypeEnum;
+import at.camconnect.model.*;
+import at.camconnect.model.DeviceTypeAttributes.*;
+import at.camconnect.model.DeviceTypeVariants.*;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.socket.RentSocket;
-import at.camconnect.model.Device;
-import at.camconnect.model.Rent;
-import at.camconnect.model.Student;
-import at.camconnect.model.Teacher;
 import at.camconnect.responseSystem.CCResponse;
 import io.vertx.ext.mail.MailClient;
 import io.vertx.ext.mail.MailMessage;
@@ -23,9 +19,13 @@ import jakarta.json.JsonValue;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.StreamingOutput;
+import org.hibernate.exception.ConstraintViolationException;
 
+import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -95,7 +95,7 @@ public class RentRepository {
 
     @Transactional
     public Response remove(Long id){
-        em.remove(getById(id));
+        getById(id).setStatus(RentStatusEnum.DELETED);
         rentSocket.broadcast();
         return CCResponse.ok();
     }
@@ -111,7 +111,7 @@ public class RentRepository {
     */
 
     public List<RentDTO> getAllSingleList(){
-        return em.createQuery("SELECT r FROM Rent r order by r.creation_date", Rent.class)
+        return em.createQuery("SELECT r FROM Rent r where r.status != 'DELETED' order by r.creation_date", Rent.class)
                 .getResultStream()
                 .map(rent -> new RentDTO(
                         rent.getRent_id(),
@@ -133,7 +133,7 @@ public class RentRepository {
 
     }
 
-    public List<RentByStudentDTO> getAll(RentFilters filters){
+    public List<RentByStudentDTO> getAllDashboard(RentFilters filters){
 
         String orderByString = "";
         switch (filters.orderBy()) {
@@ -157,13 +157,13 @@ public class RentRepository {
         List<RentByStudentDTO> result = new LinkedList<>();
 
         //INFO
-        //this is currently just joining to half the db and not using a propper DTO,
+        //this is currently just joining to half the db and not using a proper DTO,
         // this might cause performance problems in the future but is fine for now
         for (Student student : students) {
-            System.out.println(student.toString());
             List<RentDTO> rents = em.createQuery(
                     "SELECT r FROM Rent r " +
                             "where r.student.student_id = :studentId " +
+                            "and r.status != 'DELETED'" +
                             "and (r.status IN :statuses OR :statusesEmpty = true) " +
                             "order by r.id"
                     , Rent.class)
@@ -189,9 +189,6 @@ public class RentRepository {
                     ))
                     .collect(Collectors.toList());
 
-            for (RentDTO rent : rents){
-                System.out.println(rent.toString());
-            }
             result.add(new RentByStudentDTO(student, rents));
         }
         return result;
@@ -288,7 +285,9 @@ public class RentRepository {
     }
 
     public boolean verifyConfirmationCode(Long id, String code){
-        return getById(id).getVerification_code().equals(code);
+        Rent rent = getById(id);
+        if(rent.generateVerification_code() == null) return false;
+        return rent.getVerification_code().equals(code);
     }
 
     @Transactional
@@ -546,4 +545,91 @@ public class RentRepository {
         return (jsonObject.containsKey(key) && jsonObject.get(key) != null && jsonObject.get(key) != JsonValue.NULL);
     }
     //endregion
+
+
+    public Response exportAllRents(){
+        // hab angst vor schläge von yanik wegen dem code :c
+        StreamingOutput stream = new StreamingOutput() {
+            public void write(OutputStream os) throws IOException {
+                Writer writer = new BufferedWriter(new OutputStreamWriter(os));
+
+                for (RentDTO rent : getAllSingleList()) {
+                    Long rentId = rent.rent_id();
+                    RentStatusEnum status = rent.status();
+                    RentTypeEnum type = rent.type();
+                    Long deviceId = rent.device().getDevice_id();
+                    String deviceString = rent.device_string();
+
+                    Long teacherStartId = rent.teacher_start().getTeacher_id();
+                    String teacherStartName = rent.teacher_start().getFirstname() + " " + rent.teacher_start().getLastname();
+
+                    Long teacherEndId = null;
+                    String teacherEndName = null;
+
+                    if (rent.teacher_end() != null) {
+                        teacherEndId = rent.teacher_end().getTeacher_id();
+                        teacherEndName = rent.teacher_end().getFirstname() + " " + rent.teacher_end().getLastname();
+                    }
+
+                    LocalDate rentStart = rent.rent_start();
+                    LocalDate rentEndPlanned = rent.rent_end_planned();
+                    LocalDate rentEndActual = rent.rent_end_actual();
+                    Long studentId = rent.student().getStudent_id();
+                    String studentName = rent.student().getFirstname() + " " + rent.student().getLastname();
+                    String note = rent.note();
+                    String verificationMessage = rent.verification_message();
+
+                    RentCSVDTO rentCSV = new RentCSVDTO(
+                            rentId, status, type, deviceId, deviceString,
+                            teacherStartId, teacherStartName,
+                            teacherEndId, teacherEndName,
+                            rentStart, rentEndPlanned, rentEndActual,
+                            studentId, studentName,
+                            note, verificationMessage
+                    );
+
+                    writer.write(rentCSV + "\n");
+                }
+
+                writer.flush();
+                writer.close();
+            }
+        };
+        return Response.ok(stream).header("Content-Disposition", "attachment; filename=\"file.csv\"").build();
+    }
+
+    public void importRents(File file){
+        if (file == null) throw new CCException(1105);
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line = reader.readLine();
+            if (line == null || line.isEmpty()) throw new CCException(1203);
+
+            String[] lineArray = line.split(";");
+            int headerLength = lineArray.length;
+
+            if (headerLength <= 1) throw new CCException(1203);
+
+            //removes characters like our friend \uFEFF a invisible zero space character added to csv files when opening excel that throws off my validations :)
+            lineArray[0] = lineArray[0].replaceAll("[^a-zA-Z_-]", "");
+
+            while ((line = reader.readLine()) != null) {
+                lineArray = line.split(";");
+
+                if (lineArray.length != headerLength) throw new CCException(1204, lineArray[0] + " has not a valid structure");
+
+                try {
+
+                } catch(NumberFormatException ex){
+                    throw new CCException(1106, "Wrong data type in the import file: " + ex.getMessage());
+                } catch(ConstraintViolationException ex){
+                    throw new CCException(1201, "One device type does already exist " + ex.getMessage());
+                } catch(IllegalArgumentException | ArrayIndexOutOfBoundsException ex){
+                    throw new CCException(1204);
+                }
+            }
+        } catch (IOException e) {
+            throw new CCException(1204, "File could not be read");
+        }
+    }
 }

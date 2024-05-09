@@ -25,6 +25,7 @@ export class AppState{
     private _createRentElement: CreateRentComponent
     private _appElement: HTMLElement
     private _rentFilters: RentFilters = {orderBy: OrderByFilterRent.ALPHABETICAL_ASC, statuses: [], schoolClasses: new Set<string>()}
+    private _overlayElement: HTMLElement
     /**
      * there is a really small chance here that this possibly falls victim to a race condition
      * but i think we can ignore that for now
@@ -199,5 +200,24 @@ export class AppState{
         this._rentFilters = value
         this.update()
         RentService.fetchAll()
+    }
+
+    get overlayElement(): HTMLElement {
+        return this._overlayElement
+    }
+
+    set overlayElement(value: HTMLElement) {
+        this._overlayElement = value
+        this.update()
+    }
+
+    openOverlay(){
+        this._overlayElement.classList.add("visible")
+        this.addCurrentActionCancellation(() => this.closeOverlay(), "overlay")
+    }
+
+    closeOverlay(){
+        this._overlayElement.classList.remove("visible")
+        this.removeCurrentActionCancellation("overlay")
     }
 }

@@ -1,10 +1,9 @@
 package at.camconnect.boundary;
 
 import at.camconnect.dtos.filters.RentFilters;
-import at.camconnect.dtos.rent.CreateRentDTO;
-import at.camconnect.dtos.rent.RentDTO;
-import at.camconnect.dtos.rent.RentIdsDTO;
-import at.camconnect.dtos.rent.RentByStudentDTO;
+import at.camconnect.dtos.rent.*;
+import at.camconnect.enums.RentStatusEnum;
+import at.camconnect.enums.RentTypeEnum;
 import at.camconnect.model.Rent;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
@@ -14,7 +13,11 @@ import jakarta.json.JsonObject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.StreamingOutput;
+import org.jboss.resteasy.reactive.RestForm;
 
+import java.io.*;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -67,7 +70,7 @@ public class RentResource {
     public Response getAll(RentFilters filters){
         List<RentByStudentDTO> result;
         try{
-            result = rentRepository.getAll(filters);
+            result = rentRepository.getAllDashboard(filters);
         }catch (CCException ex){
             return CCResponse.error(ex);
         }
@@ -177,6 +180,29 @@ public class RentResource {
     public Response update(@PathParam("id") Long id, @PathParam("property") String property, JsonObject rent) {
         try {
             rentRepository.updateProperty(property, id, rent);
+        } catch (CCException ex) {
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
+    }
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/getcsv")
+    public Response exportAllRents() {
+        try {
+            return rentRepository.exportAllRents();
+        } catch (CCException ex) {
+            return CCResponse.error(ex);
+        }
+    }
+
+    @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Path("/import")
+    public Response importCSV(@RestForm File file){
+        try{
+            rentRepository.importRents(file);
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }

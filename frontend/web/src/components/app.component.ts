@@ -1,4 +1,4 @@
-import {LitElement, html} from 'lit'
+import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../styles/components/app.styles.scss'
 import {model} from "../index"
@@ -55,6 +55,11 @@ export class AppComponent extends LitElement {
         this.appState = new ObservedProperty<AppState>(this, model.appState)
 
         model.appState.value.appElement = this
+    }
+
+    protected firstUpdated(_changedProperties: PropertyValues) {
+        super.firstUpdated(_changedProperties);
+        model.appState.value.overlayElement = this.shadowRoot.querySelector("#overlay") as HTMLElement
     }
 
     render() {
@@ -142,6 +147,9 @@ export class AppComponent extends LitElement {
             
             <div id="tooltip"></div>
             <div id="autocompleteSuggestions"></div>
+            <div id="overlay" @click="${this.autoCloseOverlay}">
+                <div class="content"></div>
+            </div>
         `
     }
 
@@ -162,6 +170,10 @@ export class AppComponent extends LitElement {
             }
         })
         model.appState.value.rentFilters = newRentFilters
+    }
+
+    autoCloseOverlay(event: MouseEvent){
+        if(event.composedPath()[0] == this.shadowRoot.querySelector("#overlay")) model.appState.value.closeOverlay()
     }
 }
 
