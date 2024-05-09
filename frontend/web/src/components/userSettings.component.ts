@@ -2,7 +2,7 @@ import {LitElement, html} from 'lit'
 import {customElement} from 'lit/decorators.js'
 import styles from '../../styles/components/edit.styles.scss'
 import PopupEngine from "../popupEngine"
-import {Api} from "../base"
+import {Api, config} from "../base"
 @customElement('cc-user-settings')
 export class UserSettingsComponent extends LitElement {
     render() {
@@ -11,10 +11,12 @@ export class UserSettingsComponent extends LitElement {
             <cc-navbar type="simple"></cc-navbar>
 
             <div>
-                <cc-button @click="${this.exportRent}">Export all rents</cc-button>
+                <a href="${config.api_url}/rent/getcsv" download="file.csv">
+                    <cc-button>Export all rents</cc-button>
+                </a>
                 <input type="file"
                        @change="${(event) => {
-                           this.importDataFromCsv(event, "device", "")
+                           this.importDataFromCsv(event)
                        }}"
                        accept=".csv"
                 />
@@ -22,21 +24,17 @@ export class UserSettingsComponent extends LitElement {
         `
     }
 
-    exportRent(){
-        
-    }
-
-    importDataFromCsv(event: Event, importType: string, type:string) {
+    importDataFromCsv(event: Event) {
         let input = event.target as HTMLInputElement
         let file:File = input.files[0]
         const formData = new FormData()
         formData.append('file', file, file.name)
 
-        Api.postData(`/${importType}/import/${type}`, formData, "upload")
+        Api.postData(`/rent/import`, formData, "upload")
             .then((data) => {
                 switch (data.ccStatus.statusCode){
                     case 1000:
-                        PopupEngine.createNotification({text: `Successfully imported ${type}`, CSSClass: "good"})
+                        PopupEngine.createNotification({text: `Successfully imported rents`, CSSClass: "good"})
                         break
                     case 1201:
                         PopupEngine.createNotification({text: `Konnte nicht importieren, weil der DeviceType bereits existiert`, CSSClass: "bad"})
