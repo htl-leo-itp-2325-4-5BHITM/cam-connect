@@ -3,6 +3,7 @@ import {customElement} from 'lit/decorators.js'
 import styles from '../../styles/components/edit.styles.scss'
 import {Api, ccResponse, config} from "../base"
 import PopupEngine from "../popupEngine"
+
 @customElement('cc-edit')
 export class EditComponent extends LitElement {
     render() {
@@ -10,7 +11,7 @@ export class EditComponent extends LitElement {
 
         return html`
             <style>${styles}</style>
-            <cc-navbar type="simple"></cc-navbar>
+            <cc-navbar type="back"></cc-navbar>
 
             <div>
                 <h2>Device Type Import</h2>

@@ -3,7 +3,7 @@ import {PageEnum} from "./model"
 
 let pages = {
     app: {
-        handler: () => { changeOrigin("cc-app") },
+        handler: () => { URLHandler.changeOrigin("cc-app") },
         children: {
             rents: {
                 handler: () => { model.appState.value.page = PageEnum.RENTS },
@@ -20,15 +20,15 @@ let pages = {
                 handler: () => { model.appState.value.page = PageEnum.CALENDAR },
             },
             user: {
-                handler: () => { changeOrigin("cc-user-settings") }
+                handler: () => { URLHandler.changeOrigin("cc-user-settings") }
             },
             edit: {
-                handler: () => { changeOrigin("cc-edit") }
+                handler: () => { URLHandler.changeOrigin("cc-edit") }
             }
         }
     },
     confirm: {
-        handler: () => { changeOrigin("cc-external-confirm") }
+        handler: () => { URLHandler.changeOrigin("cc-external-confirm") }
     },
     default: {
         handler: () => {
@@ -37,23 +37,17 @@ let pages = {
         }
     },
     notFound: {
-        handler: () => { changeOrigin("cc-not-found") }
+        handler: () => { URLHandler.changeOrigin("cc-not-found") }
     }
-}
-
-function changeOrigin(tagName: string){
-    document.querySelectorAll(".origin").forEach(elem => {
-        elem.remove()
-    })
-    let elem = document.createElement(tagName)
-    elem.classList.add("origin")
-    document.body.appendChild(elem)
 }
 
 export default class URLHandler {
     static parseCurrentURL () {
+        console.log("parsing url")
+
         let urlSplit = window.location.href.split("?")[0]?.split("/")
         urlSplit.splice(0, 3) //might break if basic url structure changes
+        console.log(urlSplit)
 
         if(urlSplit[0] === "") {
             pages.default.handler()
@@ -61,6 +55,15 @@ export default class URLHandler {
         }
 
         this.handlePage(0, pages, urlSplit)
+    }
+
+    static changeOrigin(tagName: string){
+        document.querySelectorAll(".origin").forEach(elem => {
+            elem.remove()
+        })
+        let elem = document.createElement(tagName)
+        elem.classList.add("origin")
+        document.body.appendChild(elem)
     }
 
     /**
@@ -142,7 +145,7 @@ export default class URLHandler {
 
     /**
      * updates url to what was supplied without changing the params or reloading the page
-     * ment for navigation between pages like equipment and rents
+     * ment for updating the url when navigating the dashboard
      * @param url
      */
     static updateUrl(url: string){
@@ -153,11 +156,23 @@ export default class URLHandler {
 
     /**
      * sets url and params to what was supplied, also reloads page
-     * ment for navigation between different pages like app and confirm
+     * ment for navigation between whole different pages like app and confirm without keeping any data
      * @param url
      */
     static setUrl(url: string){
         window.location.href = url
+    }
+
+    /**
+     * goes to a specific page without changing the params or reloading the page
+     * als stores the current url as the back url
+     * ment for navgation to sub pages outside the dashboard like edit or user settings
+     * @param page
+     */
+    static goToPage(page: string){
+        model.appState.value.updateBackUrl()
+        URLHandler.updateUrl(page)
+        URLHandler.parseCurrentURL()
     }
 
     static clearParams() {

@@ -548,6 +548,7 @@ public class RentRepository {
 
     public Response exportAllRents(){
         // hab angst vor schläge von yanik wegen dem code :c
+        // <3
         StreamingOutput stream = new StreamingOutput() {
             public void write(OutputStream os) throws IOException {
                 Writer writer = new BufferedWriter(new OutputStreamWriter(os));

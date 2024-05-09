@@ -8,7 +8,7 @@ export class UserSettingsComponent extends LitElement {
     render() {
         return html`
             <style>${styles}</style>
-            <cc-navbar type="simple"></cc-navbar>
+            <cc-navbar type="back"></cc-navbar>
 
             <div>
                 <a href="${config.api_url}/rent/getcsv" download="file.csv">

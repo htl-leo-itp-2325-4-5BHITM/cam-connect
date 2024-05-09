@@ -38,8 +38,7 @@ public class Device {
         return "Device{" +
                 "device_id=" + device_id +
                 ", serial='" + serial + '\'' +
-                ", note='" + note + '\'' +
-                '}';
+                ", note='" + note + '\'';
     }
 
     public long getDevice_id() {

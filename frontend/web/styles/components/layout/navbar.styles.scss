@@ -16,6 +16,18 @@
   justify-content: center;
 }
 
+:host([type = "back"]){
+  display: flex;
+  position: relative;
+
+  .logo{
+    margin-inline: auto;
+    position: absolute;
+    left: 50%;
+    translate: -50% 0%;
+  }
+}
+
 div.logo{
   height: 1.5rem;
   cursor: pointer;
