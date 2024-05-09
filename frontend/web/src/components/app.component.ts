@@ -116,9 +116,10 @@ export class AppComponent extends LitElement {
                         
                         <cc-filter-container slot="primaryFilters" .options="${this.rentStatusFilterOptions}" 
                              .onUpdate="${(options: FilterOption[])=> {
-                                let newFilters = model.appState.value.rentFilters 
-                                newFilters.statuses = options.filter(option => option.selected == true).map(option => RentStatusEnum[option.id])
-                                model.appState.value.rentFilters = newFilters
+                                 let newFilters = model.appState.value.rentFilters 
+                                 newFilters.statuses = options.filter(option => option.selected == true).map(option => RentStatusEnum[option.id])
+                                 if(newFilters.statuses.length == 0) newFilters.statuses = [RentStatusEnum.CONFIRMED, RentStatusEnum.DECLINED, RentStatusEnum.WAITING]
+                                 model.appState.value.rentFilters = newFilters
                              }}"
                         >Status</cc-filter-container>
                         

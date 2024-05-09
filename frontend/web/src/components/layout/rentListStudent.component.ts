@@ -10,6 +10,7 @@ import {ButtonType} from "../basic/button.component"
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons"
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
+import {Student} from "../../service/student.service"
 
 @customElement('cc-rent-list-student')
 export class RentListStudentComponent extends LitElement {
@@ -38,7 +39,7 @@ export class RentListStudentComponent extends LitElement {
         return html`
             <style>${styles}</style>
 
-            ${this.generateHeading(student.firstname + " " + student.lastname, student.school_class)}
+            ${this.generateHeading(student)}
             <div class="entries">
                 ${rentList.map(rent => {
                     if(rent.status != RentStatusEnum.RETURNED){
@@ -48,14 +49,14 @@ export class RentListStudentComponent extends LitElement {
             </div>`
     }
 
-    generateHeading(name: string, schoolClass: string) {
+    generateHeading(student: Student){
         return html`
             <div class="heading">
                 <cc-button class="left"
                     .text="${html`
-                        <p class="bold">${name}</p>
+                        <p class="bold">${student.firstname + " " + student.lastname}</p>
                         <p>•</p>
-                        <p>${schoolClass}</p>`
+                        <p>${student.school_class}</p>`
                     }" 
                     type="${ButtonType.TEXT}"
                     @click="${this.toggleMinimization}"
@@ -69,7 +70,7 @@ export class RentListStudentComponent extends LitElement {
                                @click="${() => model.appState.value.openCreateRentModal(this.rentByStudent.student.student_id)}"
                     >Verleih erstellen</cc-button>
                     <cc-button type="${ButtonType.TEXT}" color="${SimpleColorEnum.GRAY}" size="${SizeEnum.SMALL}" 
-                               @click="${() => {model.appState.value.openOverlay()}}"
+                               @click="${() => {model.appState.value.openOverlay(html`<cc-rent-detail-view .student="${student}"></cc-rent-detail-view>`)}}"
                     >Details anzeigen</cc-button>
                     
                     <cc-circle-select type="${CircleSelectType.MULTIPLE}" size="${SizeEnum.SMALL}" 

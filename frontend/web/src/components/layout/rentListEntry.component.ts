@@ -243,11 +243,8 @@ export class RentListEntryComponent extends LitElement {
         if(checked == undefined) checked = !this.isChecked() //inverted because this function changes the state later
 
         if(checked == true){
-            console.log("adding")
             this.appState.value.addSelectedRentEntry(this)
-            //whub whub
         } else{
-            console.log("removing")
             this.appState.value.removeSelectedRentEntry(this)
         }
     }

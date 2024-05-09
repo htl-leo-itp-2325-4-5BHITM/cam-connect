@@ -51,7 +51,7 @@ export class SidebarComponent extends LitElement {
             </div>
             <cc-line></cc-line>
             <div class="sorts">
-                <slot name="sorts" @slotchange=${this.handlePrimaryFilterChange}></slot>
+                <slot name="sorts"></slot>
             </div>
             <cc-line></cc-line>
             <slot name="primaryFilters" @slotchange=${this.handlePrimaryFilterChange}></slot>
@@ -72,14 +72,10 @@ export class SidebarComponent extends LitElement {
     }
 
     setSecondaryFilterVisibility(){
-        console.log("setSecondaryFilterVisibility")
-
         let selectedPrimaryFilters: (string | number)[] = []
         this.primaryFilters.forEach((filter: FilterContainerComponent) => {
             selectedPrimaryFilters = selectedPrimaryFilters.concat(filter.getSelectedOptionsAsIdArray())
         })
-
-        console.log(selectedPrimaryFilters)
 
         this.secondaryFilters.forEach((filter: FilterContainerComponent) => {
             if(filter.visibility.length == 0 || selectedPrimaryFilters.length == 0 || filter.visibility.some(visibilityRequirement => selectedPrimaryFilters.includes(visibilityRequirement))) {
@@ -93,7 +89,7 @@ export class SidebarComponent extends LitElement {
 
     handlePrimaryFilterChange(){
         this.primaryFilters.forEach((filter: FilterContainerComponent) => {
-            filter.onUpdate = () => {this.setSecondaryFilterVisibility()}
+            filter.filterChange = () => {this.setSecondaryFilterVisibility()}
         })
     }
 }

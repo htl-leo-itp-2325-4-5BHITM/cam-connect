@@ -8,7 +8,8 @@ import {Student} from "./service/student.service"
 import {DeviceType} from "./service/deviceType.service"
 import {DeviceListEntryComponent} from "./components/layout/deviceListEntry.component"
 import {Device} from "./service/device.service"
-import RentService, {OrderByFilterRent, RentFilters} from "./service/rent.service"
+import RentService, {OrderByFilterRent, RentFilters, RentStatusEnum} from "./service/rent.service"
+import {html, render, TemplateResult} from "lit"
 
 interface actionCancellation {
     identifier: string,
@@ -24,7 +25,7 @@ export class AppState{
     private _cancelCurrentAction: actionCancellation[] = []
     private _createRentElement: CreateRentComponent
     private _appElement: HTMLElement
-    private _rentFilters: RentFilters = {orderBy: OrderByFilterRent.ALPHABETICAL_ASC, statuses: [], schoolClasses: new Set<string>()}
+    private _rentFilters: RentFilters = {orderBy: OrderByFilterRent.ALPHABETICAL_ASC, statuses: [RentStatusEnum.CONFIRMED, RentStatusEnum.DECLINED, RentStatusEnum.WAITING], schoolClasses: new Set<string>()}
     private _overlayElement: HTMLElement
     /**
      * there is a really small chance here that this possibly falls victim to a race condition
@@ -211,13 +212,15 @@ export class AppState{
         this.update()
     }
 
-    openOverlay(){
+    openOverlay(content: TemplateResult){
         this._overlayElement.classList.add("visible")
         this.addCurrentActionCancellation(() => this.closeOverlay(), "overlay")
+        render(content, this._overlayElement.querySelector(".content") as HTMLElement)
     }
 
     closeOverlay(){
         this._overlayElement.classList.remove("visible")
         this.removeCurrentActionCancellation("overlay")
+        render(html``, this._overlayElement.querySelector(".content") as HTMLElement)
     }
 }

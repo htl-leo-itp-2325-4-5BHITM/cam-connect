@@ -105,8 +105,6 @@ export class Api {
     }
 
     static handleCCError(status: ccStatus, url:string): boolean {
-        console.log(status)
-
         if(!status) {
             console.error("no ccResponse object received from", url)
             return false
