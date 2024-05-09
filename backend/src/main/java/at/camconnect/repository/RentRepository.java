@@ -285,7 +285,9 @@ public class RentRepository {
     }
 
     public boolean verifyConfirmationCode(Long id, String code){
-        return getById(id).getVerification_code().equals(code);
+        Rent rent = getById(id);
+        if(rent.generateVerification_code() == null) return false;
+        return rent.getVerification_code().equals(code);
     }
 
     @Transactional

@@ -137,6 +137,39 @@ cc-sidebar{
   }
 }
 
+#overlay{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: hsl(0, 0%, 0%, 50%);
+  z-index: 100;
+  backdrop-filter: blur(10px);
+
+  display: none;
+  place-content: center;
+
+  cursor: pointer;
+
+  &.visible{
+    display: grid;
+  }
+
+  .content{
+    background-color: $gray200;
+    padding: 1rem;
+    border-radius: .5rem;
+    box-shadow: .3rem .3rem .3rem hsl(0, 0%, 0%, 20%);
+    width: 60vw;
+    max-height: 80vh;
+    min-height: 10rem;
+    overflow-y: auto;
+
+    cursor: initial;
+  }
+}
+
 .empty{
   color: $gray600;
 }
