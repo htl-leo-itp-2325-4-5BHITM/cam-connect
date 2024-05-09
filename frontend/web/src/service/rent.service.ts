@@ -108,7 +108,7 @@ export default class RentService {
     }
 
     static remove(rent: Rent) {
-        Api.fetchData(`/rent/getbyid/${rent.rent_id}/remove`)
+        Api.putData(`/rent/getbyid/${rent.rent_id}/remove`)
             .then(() => {
                 RentService.fetchAll()
             })
@@ -118,7 +118,7 @@ export default class RentService {
     }
 
     static return(rentId: number) {
-        Api.postData(`/rent/getbyid/${rentId}/return`, "")
+        Api.putData(`/rent/getbyid/${rentId}/return`)
             .then(() => {
                 RentService.fetchAll()
             })
@@ -129,7 +129,7 @@ export default class RentService {
 
     static updateProperty(id: number, property: string, data: any) {
         let theData = {value: data}
-        Api.postData(`/rent/getbyid/${id}/update/${property}`, theData)
+        Api.putData<{value: string}, null>(`/rent/getbyid/${id}/update/${property}`, theData)
             .then((data) => {
                 console.log(data)
             })

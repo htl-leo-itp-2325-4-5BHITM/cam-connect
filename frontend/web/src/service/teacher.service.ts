@@ -12,8 +12,8 @@ export interface Teacher{
 export default class TeacherService {
     static fetchAll(){
         Api.fetchData<Teacher[]>("/teacher/getall")
-            .then(data => {
-                model.loadTeachers(data)
+            .then(response => {
+                model.loadTeachers(response.data)
             })
             .catch(error => {
                 console.error(error)

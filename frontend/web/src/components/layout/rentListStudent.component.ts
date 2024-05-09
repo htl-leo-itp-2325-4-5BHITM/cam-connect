@@ -73,22 +73,19 @@ export class RentListStudentComponent extends LitElement {
                     >Details anzeigen</cc-button>
                     
                     <cc-circle-select type="${CircleSelectType.MULTIPLE}" size="${SizeEnum.SMALL}" 
-                                      .onToggle="${() => this.toggleSelectAll()}"
+                                      .onToggle="${(checked: boolean) => this.toggleSelectAll(checked)}"
                     ></cc-circle-select>
                 </div>
             </div>
         `
     }
 
-    toggleSelectAll(overrideState?: boolean) {
-        let isChecked = this.shadowRoot.querySelector("cc-circle-select").checked
-
-        if(overrideState == isChecked) return //state is already the same
-        else isChecked = overrideState
+    toggleSelectAll(newState?: boolean) {
+        if(newState == undefined) newState = !this.shadowRoot.querySelector("cc-circle-select").checked
 
         this.toggleMinimization(false)
         this.shadowRoot.querySelectorAll("cc-rent-list-entry").forEach(rentListEntry => {
-            if(isChecked)
+            if(newState == true)
                 rentListEntry.toggleRentCheck(true)
             else
                 rentListEntry.toggleRentCheck(false)
@@ -119,6 +116,9 @@ export class RentListStudentComponent extends LitElement {
         let entryContainerElement = this.shadowRoot.querySelector(".entries") as HTMLElement
         if(this.minimized){ // expand the entries
             entryContainerElement.style.maxHeight = this.fullHeight + "px"
+            setTimeout(() => {
+                entryContainerElement.style.overflowY = "visible"
+            },200)
         }
         else{ //minimize the entries
             this.toggleSelectAll(false)
@@ -127,6 +127,7 @@ export class RentListStudentComponent extends LitElement {
             let entryElements = entryContainerElement.querySelectorAll("cc-rent-list-entry")
             this.fullHeight = entryElements[0].clientHeight * entryElements.length
 
+            entryContainerElement.style.overflowY = "hidden"
             entryContainerElement.style.maxHeight = this.fullHeight + "px"
             setTimeout(() => {
                 entryContainerElement.style.maxHeight = "0px"

@@ -28,8 +28,8 @@ export interface SearchDTO{
 export default class DeviceService{
     static fetchAll(){
         Api.fetchData<Device[]>("/device/getall")
-            .then(data => {
-                model.loadDevices(data)
+            .then(result => {
+                model.loadDevices(result.data)
             })
             .catch(error => {
                 console.error(error)

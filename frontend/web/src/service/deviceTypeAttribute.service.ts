@@ -35,8 +35,8 @@ export interface DeviceTypeAttributeCollection{
 export default class DeviceTypeAttributeService{
     static fetchAll(){
         Api.fetchData<DeviceTypeAttributeCollection>("/devicetype/attribute/getall")
-            .then(data => {
-                model.loadDeviceTypeAttributes(data)
+            .then(result => {
+                model.loadDeviceTypeAttributes(result.data)
             })
             .catch(error => {
                 console.error(error)

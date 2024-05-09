@@ -151,7 +151,7 @@ public class RentResource {
         return CCResponse.ok();
     }
 
-    @GET
+    @PUT
     @Path("/getbyid/{id: [0-9]+}/remove")
     public Response remove(@PathParam("id") Long id) {
         try{
@@ -162,7 +162,7 @@ public class RentResource {
         return CCResponse.ok();
     }
 
-    @POST
+    @PUT
     @Path("/getbyid/{id: [0-9]+}/update/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Long id, JsonObject rent) {
@@ -174,7 +174,7 @@ public class RentResource {
         return CCResponse.ok();
     }
 
-    @POST
+    @PUT
     @Path("/getbyid/{id: [0-9]+}/update/{property}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Long id, @PathParam("property") String property, JsonObject rent) {

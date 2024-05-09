@@ -46,7 +46,7 @@ export class Api {
      * querys the backend and returns the resulting data
      * @param url
      */
-    static fetchData<Out>(url: string): Promise<Out> {
+    static fetchData<Out>(url: string): Promise<ccResponse<Out>> {
         return fetch(config.api_url + url)
             .then(response => {
                 this.handleHttpError(response.status, response.url)
@@ -54,11 +54,11 @@ export class Api {
             })
             .then((result: ccResponse<Out>) => {
                 this.handleCCError(result.ccStatus, url)
-                return result.data
+                return result
             })
     }
 
-    static putData<In>(url: string, data): Promise<ccResponse<null>> {
+    static putData<In, Out>(url: string, data?: In): Promise<ccResponse<Out>> {
         return fetch(config.api_url + url, {
                 method: "PUT",
                 headers: {
@@ -68,11 +68,11 @@ export class Api {
             })
             .then(response => {
                 this.handleHttpError(response.status, response.url)
-                return response.json() as Promise<ccResponse<null>>
+                return response.json() as Promise<ccResponse<Out>>
             })
-            .then((result: ccResponse<null>) => {
+            .then((result: ccResponse<Out>) => {
                 this.handleCCError(result.ccStatus, url)
-                return result.data
+                return result
             })
     }
 
@@ -98,13 +98,19 @@ export class Api {
         this.handleHttpError(response.status, response.url)
 
         let result: ccResponse<Out> = await response.json()
+
         this.handleCCError(result.ccStatus, path)
 
         return result
     }
 
     static handleCCError(status: ccStatus, url:string): boolean {
-        if(!status)  console.error("no ccResponse object received from", url)
+        console.log(status)
+
+        if(!status) {
+            console.error("no ccResponse object received from", url)
+            return false
+        }
 
         if(status.statusCode == 1000) return true
         if(status.statusCode == 1101) {
