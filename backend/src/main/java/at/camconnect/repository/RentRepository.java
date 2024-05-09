@@ -546,87 +546,104 @@ public class RentRepository {
     //endregion
 
 
-    public Response exportAllRents(){
-        // hab angst vor schläge von yanik wegen dem code :c
-        // <3
-        StreamingOutput stream = new StreamingOutput() {
-            public void write(OutputStream os) throws IOException {
-                Writer writer = new BufferedWriter(new OutputStreamWriter(os));
+    public Response exportAllRents() {
+        StreamingOutput stream = os -> {
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(os))) {
+                writer.write(getCSVHeader());
 
-                for (RentDTO rent : getAllSingleList()) {
-                    Long rentId = rent.rent_id();
-                    RentStatusEnum status = rent.status();
-                    RentTypeEnum type = rent.type();
-                    Long deviceId = rent.device().getDevice_id();
-                    String deviceString = rent.device_string();
-
-                    Long teacherStartId = rent.teacher_start().getTeacher_id();
-                    String teacherStartName = rent.teacher_start().getFirstname() + " " + rent.teacher_start().getLastname();
-
-                    Long teacherEndId = null;
-                    String teacherEndName = null;
-
-                    if (rent.teacher_end() != null) {
-                        teacherEndId = rent.teacher_end().getTeacher_id();
-                        teacherEndName = rent.teacher_end().getFirstname() + " " + rent.teacher_end().getLastname();
-                    }
-
-                    LocalDate rentStart = rent.rent_start();
-                    LocalDate rentEndPlanned = rent.rent_end_planned();
-                    LocalDate rentEndActual = rent.rent_end_actual();
-                    Long studentId = rent.student().getStudent_id();
-                    String studentName = rent.student().getFirstname() + " " + rent.student().getLastname();
-                    String note = rent.note();
-                    String verificationMessage = rent.verification_message();
-
-                    RentCSVDTO rentCSV = new RentCSVDTO(
-                            rentId, status, type, deviceId, deviceString,
-                            teacherStartId, teacherStartName,
-                            teacherEndId, teacherEndName,
-                            rentStart, rentEndPlanned, rentEndActual,
-                            studentId, studentName,
-                            note, verificationMessage
-                    );
-
-                    writer.write(rentCSV + "\n");
+                List<RentDTO> rents = getAllSingleList();
+                for (RentDTO rent : rents) {
+                    String csvLine = buildCSVLine(rent);
+                    writer.write(csvLine);
                 }
-
-                writer.flush();
-                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         };
-        return Response.ok(stream).header("Content-Disposition", "attachment; filename=\"file.csv\"").build();
+
+        return Response.ok(stream)
+                .header("Content-Disposition", "attachment; filename=\"file.csv\"")
+                .build();
     }
 
+    private String getCSVHeader() {
+        return "rent_id;status;type;device_id;device_string;teacher_start_id;teacher_start_name;teacher_end_id;teacher_end_name;rent_start;rent_end_planned;rent_end_actual;student_id;student_name;note;verification_message;\n";
+    }
+
+    private String buildCSVLine(RentDTO rent) {
+        StringBuilder line = new StringBuilder();
+        line.append(rent.rent_id()).append(';')
+                .append(rent.status()).append(';')
+                .append(rent.type()).append(';')
+                .append(rent.device().getDevice_id()).append(';')
+                .append(rent.device_string()).append(';');
+
+        Long teacherEndId = rent.teacher_end() != null ? rent.teacher_end().getTeacher_id() : null;
+        String teacherEndName = rent.teacher_end() != null
+                ? rent.teacher_end().getFirstname() + " " + rent.teacher_end().getLastname()
+                : null;
+
+        line.append(rent.teacher_start().getTeacher_id()).append(';')
+                .append(rent.teacher_start().getFirstname()).append(' ').append(rent.teacher_start().getLastname()).append(';')
+                .append(teacherEndId).append(';')
+                .append(teacherEndName).append(';')
+                .append(rent.rent_start()).append(';')
+                .append(rent.rent_end_planned()).append(';')
+                .append(rent.rent_end_actual()).append(';')
+                .append(rent.student().getStudent_id()).append(';')
+                .append(rent.student().getFirstname()).append(' ').append(rent.student().getLastname()).append(';')
+                .append(rent.note()).append(';')
+                .append(rent.verification_message()).append(";\n");
+
+        return line.toString();
+    }
+
+    @Transactional
     public void importRents(File file){
-        if (file == null) throw new CCException(1105);
+        if(file == null) throw new CCException(1105);
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line = reader.readLine();
-            if (line == null || line.isEmpty()) throw new CCException(1203);
 
+            if(line == null || line.equals("")) throw new CCException(1203);
             String[] lineArray = line.split(";");
-            int headerLength = lineArray.length;
-
-            if (headerLength <= 1) throw new CCException(1203);
+            if (lineArray.length <= 1) throw new CCException(1203);
 
             //removes characters like our friend \uFEFF a invisible zero space character added to csv files when opening excel that throws off my validations :)
             lineArray[0] = lineArray[0].replaceAll("[^a-zA-Z_-]", "");
 
+            //checks if the csv file matches the required structure
+            if(lineArray.length != 16) throw new CCException(1204, "invalid line length");
+
             while ((line = reader.readLine()) != null) {
+                System.out.println(line);
                 lineArray = line.split(";");
+                if(lineArray.length != 16) break;
 
-                if (lineArray.length != headerLength) throw new CCException(1204, lineArray[0] + " has not a valid structure");
-
-                try {
-
-                } catch(NumberFormatException ex){
-                    throw new CCException(1106, "Wrong data type in the import file: " + ex.getMessage());
-                } catch(ConstraintViolationException ex){
-                    throw new CCException(1201, "One device type does already exist " + ex.getMessage());
-                } catch(IllegalArgumentException | ArrayIndexOutOfBoundsException ex){
-                    throw new CCException(1204);
+                Teacher teacherEnd = null;
+                if(!lineArray[7].equals("null")){
+                    teacherEnd = em.find(Teacher.class, lineArray[7]);
                 }
+
+                LocalDate rent_end_planned = null;
+                if(!lineArray[10].equals("null")){
+                    rent_end_planned = LocalDate.parse(lineArray[10]);
+                }
+
+                LocalDate rent_end_actual = null;
+                if(!lineArray[11].equals("null")){
+                    rent_end_actual = LocalDate.parse(lineArray[11]);
+                }
+
+                Rent rent = new Rent(Long.valueOf(lineArray[0]),
+                    RentStatusEnum.valueOf(lineArray[1]), RentTypeEnum.valueOf(lineArray[2]),
+                    em.find(Device.class, lineArray[3]), lineArray[4],
+                    em.find(Teacher.class, lineArray[5]), teacherEnd,
+                    LocalDate.parse(lineArray[9]), rent_end_planned, rent_end_actual,
+                    em.find(Student.class, lineArray[12]),
+                    lineArray[14], lineArray[15]);
+
+                em.persist(rent);
             }
         } catch (IOException e) {
             throw new CCException(1204, "File could not be read");

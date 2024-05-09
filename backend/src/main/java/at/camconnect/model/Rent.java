@@ -99,6 +99,25 @@ public class Rent {
         this.change_date = LocalDateTime.now();
     }
 
+    public Rent(Long rent_id, RentStatusEnum status, RentTypeEnum type, Device device, String device_string, Teacher teacher_start, Teacher teacher_end, LocalDate rent_start, LocalDate rent_end_planned, LocalDate rent_end_actual, Student student, String note, String verification_message){
+        super();
+        this.status = status;
+        this.type = type;
+        this.device = device;
+        this.device_string = device_string;
+        this.teacher_start = teacher_start;
+        this.teacher_end = teacher_end;
+        this.rent_start = rent_start;
+        this.rent_end_planned = rent_end_planned;
+        this.rent_end_actual = rent_end_actual;
+        this.student = student;
+        this.note = note;
+        this.verification_message = verification_message;
+
+        this.creation_date = LocalDateTime.now();
+        this.change_date = LocalDateTime.now();
+    }
+
     public String generateVerification_code() {
         //this could possibly result in a problem with case sensitivity in urls
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
