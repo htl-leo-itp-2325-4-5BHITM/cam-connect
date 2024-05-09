@@ -25,7 +25,6 @@ export class AppState{
     private _createRentElement: CreateRentComponent
     private _appElement: HTMLElement
     private _rentFilters: RentFilters = {orderBy: OrderByFilterRent.ALPHABETICAL_ASC, statuses: [], schoolClasses: new Set<string>()}
-
     /**
      * there is a really small chance here that this possibly falls victim to a race condition
      * but i think we can ignore that for now

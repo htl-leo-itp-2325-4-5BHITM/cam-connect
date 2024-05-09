@@ -137,8 +137,6 @@ export class RentListEntryComponent extends LitElement {
                             <cc-autocomplete placeholder="Name" class="name"
                                      .selected="${{id: this.rent.device?.type?.type_id, data: this.rent.device?.type}}"
                                      .onSelect="${(option: DeviceType) => {
-                                         console.log("typeoption", option)
-                                         
                                          //if the selected device matches the selected type, do nothing
                                          if (this.rent.device.type == option) return
                                       

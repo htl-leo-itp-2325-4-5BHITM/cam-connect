@@ -75,7 +75,6 @@ export default class RentService {
 
         Api.postData<RentFilterDTO, RentByStudentDTO[]>("/rent/getall", rentFiltersForBackend)
             .then(result => {
-                console.log(result)
                 model.loadRents(result.data || [])
             })
             .catch(error => {
