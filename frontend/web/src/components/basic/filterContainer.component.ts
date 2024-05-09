@@ -24,6 +24,9 @@ export class FilterContainerComponent extends LitElement {
     @property()
     onUpdate: (options: FilterOption[]) => void = () => {}
 
+    @property()
+    filterChange: () => void = () => {}
+
     constructor() {
         super()
     }
@@ -42,7 +45,7 @@ export class FilterContainerComponent extends LitElement {
                     if(option.details)
                         return html`<p class="option ${option.selected ? 'selected' : ''}" 
                             @click="${(e: Event) => {
-                                this.selectOption(e, option);
+                                this.selectOption(e, option)
                                 Tooltip.hide(0, true)
                             }}"
                             @mouseenter="${(e: Event) => {
@@ -65,14 +68,14 @@ export class FilterContainerComponent extends LitElement {
     }
 
     /**
-     * handles the users click on a filter option, highlights it and passes it back to the index.js
+     * handles the users click on a filter option, highlights it and passes it back
      * @param e
      * @param option
      */
     selectOption(e:Event, option:FilterOption){
-        console.log("option selected")
         option.selected = !option.selected
         this.onUpdate(this.theOptions.value)
+        this.filterChange()
         this.requestUpdate()
     }
 
@@ -89,6 +92,7 @@ export class FilterContainerComponent extends LitElement {
             option.selected = false
         })
         this.onUpdate(this.theOptions.value)
+        this.filterChange()
         this.requestUpdate()
     }
 }

@@ -2,8 +2,6 @@ package at.camconnect.boundary;
 
 import at.camconnect.dtos.filters.RentFilters;
 import at.camconnect.dtos.rent.*;
-import at.camconnect.enums.RentStatusEnum;
-import at.camconnect.enums.RentTypeEnum;
 import at.camconnect.model.Rent;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
@@ -13,11 +11,9 @@ import jakarta.json.JsonObject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.StreamingOutput;
 import org.jboss.resteasy.reactive.RestForm;
 
 import java.io.*;
-import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -70,7 +66,7 @@ public class RentResource {
     public Response getAll(RentFilters filters){
         List<RentByStudentDTO> result;
         try{
-            result = rentRepository.getAllDashboard(filters);
+            result = rentRepository.getAll(filters);
         }catch (CCException ex){
             return CCResponse.error(ex);
         }
@@ -151,7 +147,7 @@ public class RentResource {
         return CCResponse.ok();
     }
 
-    @GET
+    @PUT
     @Path("/getbyid/{id: [0-9]+}/remove")
     public Response remove(@PathParam("id") Long id) {
         try{
@@ -162,7 +158,7 @@ public class RentResource {
         return CCResponse.ok();
     }
 
-    @POST
+    @PUT
     @Path("/getbyid/{id: [0-9]+}/update/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Long id, JsonObject rent) {
@@ -174,7 +170,7 @@ public class RentResource {
         return CCResponse.ok();
     }
 
-    @POST
+    @PUT
     @Path("/getbyid/{id: [0-9]+}/update/{property}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Long id, @PathParam("property") String property, JsonObject rent) {

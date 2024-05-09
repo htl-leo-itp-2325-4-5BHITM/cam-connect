@@ -10,6 +10,7 @@ import {ButtonType} from "../basic/button.component"
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons"
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
+import {Student} from "../../service/student.service"
 
 @customElement('cc-rent-list-student')
 export class RentListStudentComponent extends LitElement {
@@ -38,7 +39,7 @@ export class RentListStudentComponent extends LitElement {
         return html`
             <style>${styles}</style>
 
-            ${this.generateHeading(student.firstname + " " + student.lastname, student.school_class)}
+            ${this.generateHeading(student)}
             <div class="entries">
                 ${rentList.map(rent => {
                     if(rent.status != RentStatusEnum.RETURNED){
@@ -48,14 +49,14 @@ export class RentListStudentComponent extends LitElement {
             </div>`
     }
 
-    generateHeading(name: string, schoolClass: string) {
+    generateHeading(student: Student){
         return html`
             <div class="heading">
                 <cc-button class="left"
                     .text="${html`
-                        <p class="bold">${name}</p>
+                        <p class="bold">${student.firstname + " " + student.lastname}</p>
                         <p>•</p>
-                        <p>${schoolClass}</p>`
+                        <p>${student.school_class}</p>`
                     }" 
                     type="${ButtonType.TEXT}"
                     @click="${this.toggleMinimization}"
@@ -69,26 +70,23 @@ export class RentListStudentComponent extends LitElement {
                                @click="${() => model.appState.value.openCreateRentModal(this.rentByStudent.student.student_id)}"
                     >Verleih erstellen</cc-button>
                     <cc-button type="${ButtonType.TEXT}" color="${SimpleColorEnum.GRAY}" size="${SizeEnum.SMALL}" 
-                               @click="${() => {model.appState.value.openOverlay()}}"
+                               @click="${() => {model.appState.value.openOverlay(html`<cc-rent-detail-view .student="${student}"></cc-rent-detail-view>`)}}"
                     >Details anzeigen</cc-button>
                     
                     <cc-circle-select type="${CircleSelectType.MULTIPLE}" size="${SizeEnum.SMALL}" 
-                                      .onToggle="${() => this.toggleSelectAll()}"
+                                      .onToggle="${(checked: boolean) => this.toggleSelectAll(checked)}"
                     ></cc-circle-select>
                 </div>
             </div>
         `
     }
 
-    toggleSelectAll(overrideState?: boolean) {
-        let isChecked = this.shadowRoot.querySelector("cc-circle-select").checked
-
-        if(overrideState == isChecked) return //state is already the same
-        else isChecked = overrideState
+    toggleSelectAll(newState?: boolean) {
+        if(newState == undefined) newState = !this.shadowRoot.querySelector("cc-circle-select").checked
 
         this.toggleMinimization(false)
         this.shadowRoot.querySelectorAll("cc-rent-list-entry").forEach(rentListEntry => {
-            if(isChecked)
+            if(newState == true)
                 rentListEntry.toggleRentCheck(true)
             else
                 rentListEntry.toggleRentCheck(false)
@@ -119,6 +117,9 @@ export class RentListStudentComponent extends LitElement {
         let entryContainerElement = this.shadowRoot.querySelector(".entries") as HTMLElement
         if(this.minimized){ // expand the entries
             entryContainerElement.style.maxHeight = this.fullHeight + "px"
+            setTimeout(() => {
+                entryContainerElement.style.overflowY = "visible"
+            },200)
         }
         else{ //minimize the entries
             this.toggleSelectAll(false)
@@ -127,6 +128,7 @@ export class RentListStudentComponent extends LitElement {
             let entryElements = entryContainerElement.querySelectorAll("cc-rent-list-entry")
             this.fullHeight = entryElements[0].clientHeight * entryElements.length
 
+            entryContainerElement.style.overflowY = "hidden"
             entryContainerElement.style.maxHeight = this.fullHeight + "px"
             setTimeout(() => {
                 entryContainerElement.style.maxHeight = "0px"

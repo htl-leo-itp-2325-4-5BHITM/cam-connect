@@ -5,8 +5,6 @@ import at.camconnect.dtos.rent.*;
 import at.camconnect.enums.RentStatusEnum;
 import at.camconnect.enums.RentTypeEnum;
 import at.camconnect.model.*;
-import at.camconnect.model.DeviceTypeAttributes.*;
-import at.camconnect.model.DeviceTypeVariants.*;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.socket.RentSocket;
 import at.camconnect.responseSystem.CCResponse;
@@ -25,7 +23,6 @@ import org.hibernate.exception.ConstraintViolationException;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -133,7 +130,7 @@ public class RentRepository {
 
     }
 
-    public List<RentByStudentDTO> getAllDashboard(RentFilters filters){
+    public List<RentByStudentDTO> getAll(RentFilters filters){
 
         String orderByString = "";
         switch (filters.orderBy()) {
@@ -147,11 +144,14 @@ public class RentRepository {
                 "SELECT s FROM Rent r " +
                         "join Student s on r.student.student_id = s.student_id " +
                         "where (s.school_class IN :schoolClasses OR :schoolClassesEmpty = true) " +
+                        "and (s.student_id IN :studentIds OR :studentIdsEmpty = true) " +
                         "group by s.student_id " +
                         orderByString
                 ,Student.class)
                 .setParameter("schoolClasses", filters.schoolClasses())
-                .setParameter("schoolClassesEmpty", filters.schoolClasses().isEmpty())
+                .setParameter("schoolClassesEmpty", filters.schoolClasses() == null || filters.schoolClasses().isEmpty())
+                .setParameter("studentIds", filters.studentIds())
+                .setParameter("studentIdsEmpty", filters.studentIds() == null || filters.studentIds().isEmpty())
                 .getResultList();
 
         List<RentByStudentDTO> result = new LinkedList<>();
@@ -163,13 +163,12 @@ public class RentRepository {
             List<RentDTO> rents = em.createQuery(
                     "SELECT r FROM Rent r " +
                             "where r.student.student_id = :studentId " +
-                            "and r.status != 'DELETED'" +
                             "and (r.status IN :statuses OR :statusesEmpty = true) " +
                             "order by r.id"
                     , Rent.class)
                     .setParameter("studentId", student.getStudent_id())
                     .setParameter("statuses", filters.statuses())
-                    .setParameter("statusesEmpty", filters.statuses().isEmpty())
+                    .setParameter("statusesEmpty", filters.statuses() == null || filters.statuses().isEmpty())
                     .getResultStream()
                     .map(rent -> new RentDTO(
                             rent.getRent_id(),

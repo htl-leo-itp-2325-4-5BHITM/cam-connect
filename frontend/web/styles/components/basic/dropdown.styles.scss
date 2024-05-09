@@ -9,17 +9,12 @@
   .dropdown{
     background-color: $gray300;
     border: 1px solid $gray600;
-    border-bottom-color: transparent;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
 
   svg{
     rotate: 180deg;
-  }
-
-  .dropdownOptions {
-    display: flex;
   }
 }
 
@@ -30,10 +25,11 @@
   width: fit-content;
   border: 1px solid transparent;
 
+  transition: border $transitionTimeShort, background-color $transitionTimeShort;
+
   cursor: pointer;
 
   @include textBackgroundHoverPreparation;
-  transition: background-color $transitionTimeShort;
 
   &:hover{
     background-color: $hoverBackground;

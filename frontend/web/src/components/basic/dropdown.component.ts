@@ -5,7 +5,7 @@ import {SimpleOption} from "../../base"
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons"
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
-import Util from "../../util"
+import Util, {AnimationHelper} from "../../util"
 
 @customElement('cc-dropdown')
 export class DropdownComponent extends LitElement {
@@ -46,9 +46,11 @@ export class DropdownComponent extends LitElement {
 
         if(this.isOpen){
             document.addEventListener('mousedown', this.boundHandleAutoclose)
+            AnimationHelper.show(this.shadowRoot.querySelector('.dropdownOptions'), "flex")
         }
         else{
             document.removeEventListener('mousedown', this.boundHandleAutoclose)
+            AnimationHelper.hide(this.shadowRoot.querySelector('.dropdownOptions'))
         }
     }
 

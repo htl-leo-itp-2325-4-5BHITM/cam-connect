@@ -69,7 +69,6 @@
 
 .entries{
   padding-left: 2.6rem;
-  overflow-y: hidden;
   transition: max-height $transitionTimeShort;
 
   cc-rent-list-entry:last-child{

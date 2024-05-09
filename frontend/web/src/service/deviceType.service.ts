@@ -130,9 +130,8 @@ export interface Tag {
 export default class DeviceTypeService {
     static fetchAll(){
         Api.fetchData<DeviceTypeVariantCollection>("/devicetype/getall")
-            .then(data => {
-                model.loadDeviceTypes(data)
-                console.log(data)
+            .then(result => {
+                model.loadDeviceTypes(result.data)
             })
             .catch(error => {
                 console.error(error)
@@ -141,8 +140,8 @@ export default class DeviceTypeService {
 
     static fetchAllFull(){
         Api.fetchData<DeviceTypeFullDTO[]>("/devicetype/getallfull")
-            .then(data => {
-                model.loadDeviceTypesFull(data)
+            .then(result => {
+                model.loadDeviceTypesFull(result.data)
             })
             .catch(error => {
                 console.error(error)

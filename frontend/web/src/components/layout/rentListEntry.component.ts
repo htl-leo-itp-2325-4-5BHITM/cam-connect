@@ -121,7 +121,7 @@ export class RentListEntryComponent extends LitElement {
                     </div>
                 </cc-chip>
                 
-                <cc-circle-select .onToggle="${() => this.toggleRentCheck()}" 
+                <cc-circle-select .onToggle="${(checked: boolean) => this.toggleRentCheck(checked)}" 
                                   .checked="${this.appState.value.selectedRentEntries.has(this)}" 
                                   size="${SizeEnum.SMALL}"
                 ></cc-circle-select>
@@ -137,8 +137,6 @@ export class RentListEntryComponent extends LitElement {
                             <cc-autocomplete placeholder="Name" class="name"
                                      .selected="${{id: this.rent.device?.type?.type_id, data: this.rent.device?.type}}"
                                      .onSelect="${(option: DeviceType) => {
-                                         console.log("typeoption", option)
-                                         
                                          //if the selected device matches the selected type, do nothing
                                          if (this.rent.device.type == option) return
                                       
@@ -230,11 +228,9 @@ export class RentListEntryComponent extends LitElement {
     async searchForDevice(searchTerm: string): Promise<SimpleOption<number, Device>[]> {
         let searchDTO : SearchDTO = {
             searchTerm: searchTerm,
-            typeId: this.rent?.device.type.type_id < 0 ? this.rent.device.type.type_id : -1,
+            typeId: this.rent?.device.type.type_id,
             onlyAvailable: true
         }
-
-        if(this.rent?.device?.type?.type_id < 0) return DeviceService.search(searchDTO)
 
         return DeviceService.search(searchDTO)
     }
@@ -244,12 +240,10 @@ export class RentListEntryComponent extends LitElement {
     }
 
     toggleRentCheck(checked?: boolean){
-        //TODO changing this from !checked breaks multi select
-        if(checked == undefined) checked = !this.isChecked()
+        if(checked == undefined) checked = !this.isChecked() //inverted because this function changes the state later
 
         if(checked == true){
             this.appState.value.addSelectedRentEntry(this)
-            //whub whub
         } else{
             this.appState.value.removeSelectedRentEntry(this)
         }

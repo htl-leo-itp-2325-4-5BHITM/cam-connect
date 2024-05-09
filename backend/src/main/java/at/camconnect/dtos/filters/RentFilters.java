@@ -5,5 +5,5 @@ import at.camconnect.enums.filters.OrderByFilterRent;
 
 import java.util.List;
 
-public record RentFilters(OrderByFilterRent orderBy, List<RentStatusEnum> statuses, List<String> schoolClasses) {
+public record RentFilters(OrderByFilterRent orderBy, List<RentStatusEnum> statuses, List<String> schoolClasses, List<Long> studentIds) {
 }

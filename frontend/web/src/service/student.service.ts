@@ -15,8 +15,8 @@ export interface Student{
 export default class StudentService {
     static fetchAll(){
         Api.fetchData<Student[]>("/student/getall")
-            .then(data => {
-                model.loadStudents(data)
+            .then(response => {
+                model.loadStudents(response.data)
             })
             .catch(error => {
                 console.error(error)
