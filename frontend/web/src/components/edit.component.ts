@@ -3,6 +3,7 @@ import {customElement} from 'lit/decorators.js'
 import styles from '../../styles/components/edit.styles.scss'
 import {Api, ccResponse, config} from "../base"
 import PopupEngine from "../popupEngine"
+
 @customElement('cc-edit')
 export class EditComponent extends LitElement {
     render() {
@@ -10,18 +11,21 @@ export class EditComponent extends LitElement {
 
         return html`
             <style>${styles}</style>
-            <cc-navbar type="simple"></cc-navbar>
+            <cc-navbar type="back"></cc-navbar>
 
             <div>
                 <h2>Device Type Import</h2>
-                <select name="listOfTypes" id="listOfTypes" @change="${(event) => this.selectOption(event.target.value)}">
+                <select id="listOfTypes" @change="${(event) => this.selectOption(event.target.value)}">
                     ${listOfString.map(type => html`<option value="${type}">${type}</option>`)}
                 </select>
                 <div class="importBox">
                     <input type="file"
+                           data-devicetype="camera"
                            @change="${(event) => {
-                               this.importDataFromCsv(event, "devicetype", listOfString[0])
-                           }}" accept=".csv"/>
+                               this.importDataFromCsv(event, "devicetype", event.target.dataset.devicetype)
+                           }}" 
+                           accept=".csv"
+                    />
                 </div>
             </div>
 
@@ -30,23 +34,18 @@ export class EditComponent extends LitElement {
                 <input type="file"
                        @change="${(event) => {
                            this.importDataFromCsv(event, "device", "")
-                       }}" accept=".csv"/>
+                       }}" 
+                       accept=".csv"
+                />
             </div>
-        `;
-    }
-    selectOption(type) {
-        const importBox = this.shadowRoot.querySelector('.importBox');
-        importBox.innerHTML = '';
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = '.csv';
-        input.addEventListener('change', (event) => {
-            this.importDataFromCsv(event, "devicetype", type)
-        });
-        importBox.appendChild(input);
+        `
     }
 
-    importDataFromCsv(event: Event, importType: string, type:string, ) {
+    selectOption(type) {
+        (this.shadowRoot.querySelector('.importBox input') as HTMLInputElement).dataset.devicetype = type
+    }
+
+    importDataFromCsv(event: Event, importType: string, type:string) {
         let input = event.target as HTMLInputElement
         let file:File = input.files[0]
         const formData = new FormData()
@@ -54,22 +53,17 @@ export class EditComponent extends LitElement {
 
         Api.postData(`/${importType}/import/${type}`, formData, "upload")
             .then((data) => {
-                console.log(data)
                 switch (data.ccStatus.statusCode){
                     case 1000:
-                        //@ts-ignore
                         PopupEngine.createNotification({text: `Successfully imported ${type}`, CSSClass: "good"})
                         break
                     case 1201:
-                        //@ts-ignore
                         PopupEngine.createNotification({text: `Konnte nicht importieren, weil der DeviceType bereits existiert`, CSSClass: "bad"})
                         break
                     case 1203:
-                        //@ts-ignore
                         PopupEngine.createNotification({text: `Konnte nicht importiert werden, weil das File leer ist`, CSSClass: "bad"})
                         break
                     case 1204:
-                        //@ts-ignore
                         PopupEngine.createNotification({text: `Konnte nicht importieren, weil die filestruktur invalide ist`, CSSClass: "bad"})
                         break
                 }})

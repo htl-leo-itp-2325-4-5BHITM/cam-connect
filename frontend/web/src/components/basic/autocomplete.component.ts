@@ -2,7 +2,7 @@
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/autocomplete.styles.scss'
 import Util, {AnimationHelper, Logger} from "../../util"
-import {KeyBoardShortCut, Regex, SimpleColorEnum, SizeEnum} from "../../base"
+import {SimpleOption, KeyBoardShortCut, Regex, SimpleColorEnum, SizeEnum} from "../../base"
 import {model} from "../../index"
 import {unsafeSVG} from 'lit/directives/unsafe-svg.js';
 import {icon} from '@fortawesome/fontawesome-svg-core'
@@ -10,10 +10,6 @@ import {faCaretDown} from "@fortawesome/free-solid-svg-icons"
 import {ObservedProperty} from "../../model"
 import {AppState} from "../../AppState"
 
-export interface AutocompleteOption<T> {
-    id: number
-    data: T
-}
 
 //TODO check why when clicking away it
 
@@ -35,10 +31,10 @@ export class AutocompleteComponent<T> extends LitElement {
     allowNoSelection: boolean = false
 
     @property()
-    selected: AutocompleteOption<T> = {id: -1, data: null}
+    selected: SimpleOption<number, T> = {id: -1, data: null}
 
     @property()
-    options: AutocompleteOption<T>[] = []
+    options: SimpleOption<number, T>[] = []
 
     /**
      * a custom function that is called whenever the user selects an option
@@ -54,7 +50,7 @@ export class AutocompleteComponent<T> extends LitElement {
      * @param searchTerm string
      */
     @property()
-    querySuggestions: (searchTerm: string) => Promise<AutocompleteOption<T>[]> = (searchTerm) => {return Promise.resolve([])}
+    querySuggestions: (searchTerm: string) => Promise<SimpleOption<number, T>[]> = (searchTerm) => {return Promise.resolve([])}
 
     /**
      * should provide the icon for the suggestion that will be displayed alongside the content
@@ -254,7 +250,7 @@ export class AutocompleteComponent<T> extends LitElement {
      * @param option either a AutocompleteOption or the id of the option
      * @param isInitialCall
      */
-    selectSuggestion(option: AutocompleteOption<T> | number, isInitialCall?: boolean){
+    selectSuggestion(option: SimpleOption<number, T> | number, isInitialCall?: boolean){
         this.logger.log("selecting", this.placeholder, option)
 
         if(typeof option == "number") option = this.options.find(item => item.id == option)

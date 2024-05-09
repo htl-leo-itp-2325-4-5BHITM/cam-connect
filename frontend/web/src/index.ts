@@ -10,6 +10,8 @@ import "./components/basic/valueChain.component"
 import "./components/basic/line.component"
 import "./components/basic/toggle.component"
 import "./components/basic/iconCTA.component"
+import "./components/basic/autocomplete.component"
+import "./components/basic/dropdown.component"
 
 import "./components/layout/sidebar.component"
 import "./components/layout/navbar.component"
@@ -21,11 +23,12 @@ import "./components/layout/rentListStudent.component"
 import "./components/layout/rentListEntry.component"
 import "./components/layout/deviceList.component"
 import "./components/layout/deviceListEntry.component"
-import "./components/basic/autocomplete.component"
+import "./components/layout/rentDetailView.component"
 
 import "./components/app.component"
 import "./components/externalConfirm.component"
 import "./components/notFound.component"
+import "./components/userSettings.component"
 import "./components/edit.component"
 
 import "./printView"
@@ -42,6 +45,7 @@ import favicon from "../assets/logo/cc-logomark-accent.svg"
 
 //OMG its our single swouce of THWQUUUCE
 export let model = new Model()
+model.queryData()
 
 window.addEventListener("DOMContentLoaded", () => {
     URLHandler.parseCurrentURL()

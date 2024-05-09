@@ -1,9 +1,7 @@
 package at.camconnect.boundary;
 
-import at.camconnect.dtos.CreateRentDTO;
-import at.camconnect.dtos.RentDTO;
-import at.camconnect.dtos.RentIdsDTO;
-import at.camconnect.dtos.RentByStudentDTO;
+import at.camconnect.dtos.filters.RentFilters;
+import at.camconnect.dtos.rent.*;
 import at.camconnect.model.Rent;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
@@ -13,7 +11,9 @@ import jakarta.json.JsonObject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.jboss.resteasy.reactive.RestForm;
 
+import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -60,12 +60,13 @@ public class RentResource {
         return CCResponse.ok(result);
     }
 
-    @GET
+    @POST
     @Path("/getall")
-    public Response getAll(){
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getAll(RentFilters filters){
         List<RentByStudentDTO> result;
         try{
-            result = rentRepository.getAll();
+            result = rentRepository.getAll(filters);
         }catch (CCException ex){
             return CCResponse.error(ex);
         }
@@ -135,8 +136,7 @@ public class RentResource {
         return CCResponse.ok();
     }
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
+    @PUT
     @Path("/getbyid/{id: [0-9]+}/return")
     public Response returnRent(@PathParam("id") Long id) {
         try {
@@ -147,7 +147,7 @@ public class RentResource {
         return CCResponse.ok();
     }
 
-    @GET
+    @PUT
     @Path("/getbyid/{id: [0-9]+}/remove")
     public Response remove(@PathParam("id") Long id) {
         try{
@@ -158,7 +158,7 @@ public class RentResource {
         return CCResponse.ok();
     }
 
-    @POST
+    @PUT
     @Path("/getbyid/{id: [0-9]+}/update/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Long id, JsonObject rent) {
@@ -170,12 +170,35 @@ public class RentResource {
         return CCResponse.ok();
     }
 
-    @POST
+    @PUT
     @Path("/getbyid/{id: [0-9]+}/update/{property}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Long id, @PathParam("property") String property, JsonObject rent) {
         try {
             rentRepository.updateProperty(property, id, rent);
+        } catch (CCException ex) {
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
+    }
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/getcsv")
+    public Response exportAllRents() {
+        try {
+            return rentRepository.exportAllRents();
+        } catch (CCException ex) {
+            return CCResponse.error(ex);
+        }
+    }
+
+    @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Path("/import")
+    public Response importCSV(@RestForm File file){
+        try{
+            rentRepository.importRents(file);
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }

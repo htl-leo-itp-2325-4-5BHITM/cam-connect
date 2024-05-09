@@ -1,7 +1,10 @@
 package at.camconnect.boundary;
 
 import at.camconnect.dtos.*;
-import at.camconnect.model.Student;
+import at.camconnect.dtos.deviceType.DeviceTypeCollection;
+import at.camconnect.dtos.deviceType.DeviceTypeFullDTO;
+import at.camconnect.dtos.deviceType.DeviceTypeGlobalIdDTO;
+import at.camconnect.dtos.deviceType.DeviceTypeMinimalDTO;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.enums.DeviceTypeVariantEnum;

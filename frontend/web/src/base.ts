@@ -19,11 +19,7 @@ export const Regex = {
 }
 
 export interface ccResponse<T>{
-    ccStatus: {
-        statusCode: number
-        details: string
-        message: string
-    }
+    ccStatus: ccStatus
     details: {
         time: string
         dataType: string
@@ -31,25 +27,52 @@ export interface ccResponse<T>{
     data: T
 }
 
+export interface ccStatus{
+    statusCode: number
+    details: string
+    message: string
+}
+
 export enum ColorEnum {ACCENT="accent", GOOD="good", MID="mid", BAD="bad", GRAY="gray"}
 export enum SimpleColorEnum {ACCENT="accent", GRAY="gray"}
 export enum SizeEnum {BIG="big", MEDIUM="medium", SMALL="small"}
 
+export interface SimpleOption<ID, DATA> {
+    id: ID
+    data: DATA
+}
 export class Api {
     /**
      * querys the backend and returns the resulting data
      * @param url
      */
-    static fetchData<Out>(url: string): Promise<Out> {
+    static fetchData<Out>(url: string): Promise<ccResponse<Out>> {
         return fetch(config.api_url + url)
             .then(response => {
                 this.handleHttpError(response.status, response.url)
                 return response.json() as Promise<ccResponse<Out>>
             })
             .then((result: ccResponse<Out>) => {
-                if(result.ccStatus) this.handleCCError(result.ccStatus.statusCode, result.ccStatus.details, result.ccStatus.message, url)
-                else console.error("no ccResponse object received from", url, "only got:", result)
-                return result.data
+                this.handleCCError(result.ccStatus, url)
+                return result
+            })
+    }
+
+    static putData<In, Out>(url: string, data?: In): Promise<ccResponse<Out>> {
+        return fetch(config.api_url + url, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => {
+                this.handleHttpError(response.status, response.url)
+                return response.json() as Promise<ccResponse<Out>>
+            })
+            .then((result: ccResponse<Out>) => {
+                this.handleCCError(result.ccStatus, url)
+                return result
             })
     }
 
@@ -75,23 +98,28 @@ export class Api {
         this.handleHttpError(response.status, response.url)
 
         let result: ccResponse<Out> = await response.json()
-        if(result.ccStatus) this.handleCCError(result.ccStatus.statusCode, result.ccStatus.details, result.ccStatus.message, path)
-        else console.error("no ccResponse object received from", path, "only got:", result)
+
+        this.handleCCError(result.ccStatus, path)
 
         return result
     }
 
-    static handleCCError(statusCode: number, details: string, message: string, url:string): boolean {
-        if(statusCode == 1000) return true
-        if(statusCode == 1101) {
-            console.error(`CCException - invalid id in getter - statuscode: ${statusCode} - details: ${details} - url: ${url}`)
+    static handleCCError(status: ccStatus, url:string): boolean {
+        if(!status) {
+            console.error("no ccResponse object received from", url)
+            return false
+        }
+
+        if(status.statusCode == 1000) return true
+        if(status.statusCode == 1101) {
+            console.error(`CCException - invalid id in getter - statuscode: ${status.statusCode} - details: ${status.details} - url: ${url}`)
 
             PopupEngine.createNotification({
                 heading: "Ein Fehler ist aufgetreten",
                 text: "Die angeforderten Daten konnten nicht geladen werden - ccStatus: 1101",
             })
         }
-        console.error("something went wrong in the backend trying to reach endpoint: ", url, "statusCode: ", statusCode + ". Details:", details, "Message:", message)
+        console.error("something went wrong in the backend trying to reach endpoint: ", url, "statusCode: ", status.statusCode + ". Details:", status.details, "Message:", status.message)
         return false
     }
 
@@ -199,7 +227,7 @@ export class Tooltip {
         let topOffset = bounds.top - this.tooltip.clientHeight - 10
         if(topOffset < 0) topOffset = bounds.bottom + 5
         this.tooltip.style.top = topOffset + "px" //align the bottom of the toolip with the top of the hovered elem
-        this.tooltip.style.left = bounds.left + bounds.width/2 + "px"
+        this.tooltip.style.left = Math.max(0, bounds.left + bounds.width/2) + "px"
 
         if (Date.now() - this.lastTimeHidden < 100) { //if the last tooltip was closed less the 100ms ago
             /*this.lastTimeHidden = Date.now()*/

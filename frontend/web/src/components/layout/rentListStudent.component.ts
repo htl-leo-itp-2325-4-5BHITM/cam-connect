@@ -5,15 +5,20 @@ import {CircleSelectType} from "../basic/circleSelect.component"
 import {SimpleColorEnum, SizeEnum} from "../../base"
 import {RentByStudentDTO, RentStatusEnum} from "../../service/rent.service";
 import {model} from "../../index"
-import { ObservedProperty} from "../../model"
 import {RentListEntryComponent} from "./rentListEntry.component"
 import {ButtonType} from "../basic/button.component"
-import {AppState} from "../../AppState"
+import { icon } from '@fortawesome/fontawesome-svg-core'
+import { faCaretDown } from "@fortawesome/free-solid-svg-icons"
+import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
+import {Student} from "../../service/student.service"
 
 @customElement('cc-rent-list-student')
 export class RentListStudentComponent extends LitElement {
     @property()
     rentByStudent?: RentByStudentDTO
+
+    @property({type: Boolean, reflect: true})
+    minimized: boolean = false
 
     constructor() {
         super()
@@ -27,6 +32,11 @@ export class RentListStudentComponent extends LitElement {
         })
     }
 
+    attributeChangedCallback(name: string, _old: string | null, value: string | null) {
+        super.attributeChangedCallback(name, _old, value);
+        if(!this.minimized) this.style.maxHeight = "initial"
+    }
+
     render() {
         let student = this.rentByStudent.student
         let rentList = this.rentByStudent.rentList
@@ -34,7 +44,7 @@ export class RentListStudentComponent extends LitElement {
         return html`
             <style>${styles}</style>
 
-            ${this.generateHeading(student.firstname + " " + student.lastname, student.school_class)}
+            ${this.generateHeading(student)}
             <div class="entries">
                 ${rentList.map(rent => {
                     if(rent.status != RentStatusEnum.RETURNED){
@@ -44,29 +54,44 @@ export class RentListStudentComponent extends LitElement {
             </div>`
     }
 
-    generateHeading(name: string, schoolClass: string) {
+    generateHeading(student: Student){
         return html`
             <div class="heading">
-                <div class="left">
-                    <p class="bold">${name}</p>
-                    <p>•</p>
-                    <p>${schoolClass}</p>
-                </div>
+                <cc-button class="left"
+                    .text="${html`
+                        <p class="bold">${student.firstname + " " + student.lastname}</p>
+                        <p>•</p>
+                        <p>${student.school_class}</p>`
+                    }" 
+                    type="${ButtonType.TEXT}"
+                    @click="${this.toggleMinimization}"
+                >
+                    <div slot="left" class="icon">
+                        ${unsafeSVG(icon(faCaretDown).html[0])}
+                    </div>
+                </cc-button>
                 <div class="right">
-                    <cc-button type="${ButtonType.OUTLINED}" size="${SizeEnum.SMALL}" @click="${() => model.appState.value.openCreateRentModal(this.rentByStudent.student.student_id)}">Verleih erstellen</cc-button>
-                    <cc-button type="${ButtonType.TEXT}" color="${SimpleColorEnum.GRAY}" size="${SizeEnum.SMALL}">Details anzeigen</cc-button>
+                    <cc-button type="${ButtonType.OUTLINED}" size="${SizeEnum.SMALL}" 
+                               @click="${() => model.appState.value.openCreateRentModal(this.rentByStudent.student.student_id)}"
+                    >Verleih erstellen</cc-button>
+                    <cc-button type="${ButtonType.TEXT}" color="${SimpleColorEnum.GRAY}" size="${SizeEnum.SMALL}" 
+                               @click="${() => {model.appState.value.openOverlay(html`<cc-rent-detail-view .student="${student}"></cc-rent-detail-view>`)}}"
+                    >Details anzeigen</cc-button>
+                    
                     <cc-circle-select type="${CircleSelectType.MULTIPLE}" size="${SizeEnum.SMALL}" 
-                                      .onToggle="${() => this.selectAll()}"
+                                      .onToggle="${(checked: boolean) => this.toggleSelectAll(checked)}"
                     ></cc-circle-select>
                 </div>
             </div>
         `
     }
 
-    selectAll() {
-        let isChecked = this.shadowRoot.querySelector("cc-circle-select").checked
+    toggleSelectAll(newState?: boolean) {
+        if(newState == undefined) newState = !this.shadowRoot.querySelector("cc-circle-select").checked
+
+        this.toggleMinimization(false)
         this.shadowRoot.querySelectorAll("cc-rent-list-entry").forEach(rentListEntry => {
-            if(isChecked)
+            if(newState == true)
                 rentListEntry.toggleRentCheck(true)
             else
                 rentListEntry.toggleRentCheck(false)
@@ -88,6 +113,34 @@ export class RentListStudentComponent extends LitElement {
                 multiple.checked = false
             }
         })
+    }
+
+    fullHeight = -1
+    toggleMinimization(overrideState?: boolean){
+        if(overrideState == this.minimized) return
+
+        let entryContainerElement = this.shadowRoot.querySelector(".entries") as HTMLElement
+        if(this.minimized){ // expand the entries
+            entryContainerElement.style.maxHeight = this.fullHeight + "px"
+            setTimeout(() => {
+                entryContainerElement.style.overflowY = "visible"
+            },200)
+        }
+        else{ //minimize the entries
+            this.toggleSelectAll(false)
+
+            //this approach is necessary because it's possible that a minimize is triggered while the animation is running which would result in a too small fullHeight value
+            let entryElements = entryContainerElement.querySelectorAll("cc-rent-list-entry")
+            this.fullHeight = entryElements[0].clientHeight * entryElements.length
+
+            entryContainerElement.style.overflowY = "hidden"
+            entryContainerElement.style.maxHeight = this.fullHeight + "px"
+            setTimeout(() => {
+                entryContainerElement.style.maxHeight = "0px"
+            },)
+        }
+
+        this.minimized = !this.minimized
     }
 }
 

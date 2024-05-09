@@ -2,7 +2,16 @@ import {LitElement, css, html, PropertyValues} from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/createRent.styles.scss'
 
-import {Api, ccResponse, ColorEnum, DatePickerWrapper, SimpleColorEnum, SizeEnum, Tooltip} from "../../base"
+import {
+    Api,
+    ccResponse,
+    ColorEnum,
+    DatePickerWrapper,
+    SimpleColorEnum,
+    SimpleOption,
+    SizeEnum,
+    Tooltip
+} from "../../base"
 import {ButtonType} from "../basic/button.component"
 import {ObservedProperty} from "../../model"
 import {model} from "../../index"
@@ -17,7 +26,7 @@ import {CreateRentDeviceEntryComponent, RentDeviceEntryComponentType} from "./cr
 import PopupEngine from "../../popupEngine"
 import RentService, {CreateRentDTO} from "../../service/rent.service"
 import {AppState} from "../../AppState"
-import {AutocompleteComponent, AutocompleteOption} from "../basic/autocomplete.component"
+import {AutocompleteComponent} from "../basic/autocomplete.component"
 import {Student} from "../../service/student.service"
 import Util, {AnimationHelper} from "../../util"
 
@@ -212,9 +221,9 @@ export class CreateRentComponent extends LitElement {
         Util.deepEventFocusedElement()?.blur() //removes focus on possible input thats still targeted and preventing the user from using keyboard shortcuts
     }
 
-    async searchForStudent(searchTerm: string): Promise<AutocompleteOption<Student>[]> {
+    async searchForStudent(searchTerm: string): Promise<SimpleOption<number, Student>[]> {
         try {
-            const result: ccResponse<AutocompleteOption<Student>[]> = await Api.postData("/student/search", {searchTerm: searchTerm})
+            const result: ccResponse<SimpleOption<number, Student>[]> = await Api.postData("/student/search", {searchTerm: searchTerm})
             return result.data
         } catch (e) {
             console.error(e)

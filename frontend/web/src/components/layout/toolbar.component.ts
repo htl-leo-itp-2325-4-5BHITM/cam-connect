@@ -88,7 +88,8 @@ export class ToolbarComponent extends LitElement {
             <style>${styles}</style>
             <div class="main equipment">
                 <div>
-                    <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" @click="${() => {URLHandler.setUrl('/app/edit')}}">
+                    <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" 
+                               @click="${() => {URLHandler.goToPage("/app/edit")}}">
                         <div slot="left" class="icon accent">
                             ${unsafeSVG(icon(faCamera).html[0])}
                         </div>

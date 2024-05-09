@@ -6,9 +6,11 @@ import {KeyBoardShortCut} from "./base"
 import {AutocompleteComponent} from "./components/basic/autocomplete.component"
 import {Student} from "./service/student.service"
 import {DeviceType} from "./service/deviceType.service"
-import URLHandler from "./urlHandler"
 import {DeviceListEntryComponent} from "./components/layout/deviceListEntry.component"
 import {Device} from "./service/device.service"
+import RentService, {OrderByFilterRent, RentFilters, RentStatusEnum} from "./service/rent.service"
+import {html, render, TemplateResult} from "lit"
+import content from "*.styles.scss"
 
 interface actionCancellation {
     identifier: string,
@@ -24,7 +26,9 @@ export class AppState{
     private _cancelCurrentAction: actionCancellation[] = []
     private _createRentElement: CreateRentComponent
     private _appElement: HTMLElement
-
+    private _rentFilters: RentFilters = {orderBy: OrderByFilterRent.ALPHABETICAL_ASC, statuses: [RentStatusEnum.CONFIRMED, RentStatusEnum.DECLINED, RentStatusEnum.WAITING], schoolClasses: new Set<string>()}
+    private _overlayElement: HTMLElement
+    private _backUrl: string
     /**
      * there is a really small chance here that this possibly falls victim to a race condition
      * but i think we can ignore that for now
@@ -187,6 +191,51 @@ export class AppState{
 
     set appElement(value: HTMLElement) {
         this._appElement = value
+        this.update()
+    }
+
+
+    get rentFilters(): RentFilters {
+        return this._rentFilters
+    }
+
+    set rentFilters(value: RentFilters) {
+        this._rentFilters = value
+        this.update()
+        RentService.fetchAll()
+    }
+
+    get overlayElement(): HTMLElement {
+        return this._overlayElement
+    }
+
+    set overlayElement(value: HTMLElement) {
+        this._overlayElement = value
+        this.update()
+    }
+
+    openOverlay(content: TemplateResult){
+        this._overlayElement.classList.add("visible")
+        this.addCurrentActionCancellation(() => this.closeOverlay(), "overlay")
+        render(content, this._overlayElement.querySelector(".content") as HTMLElement)
+    }
+
+    closeOverlay(){
+        this._overlayElement.classList.remove("visible")
+        this.removeCurrentActionCancellation("overlay")
+        render(html``, this._overlayElement.querySelector(".content") as HTMLElement)
+    }
+
+
+    get backUrl(): string {
+        if(!this._backUrl) {
+            return "/app/rents"
+        }
+        return this._backUrl
+    }
+
+    updateBackUrl(){
+        this._backUrl = window.location.pathname
         this.update()
     }
 }

@@ -1,6 +1,5 @@
-package at.camconnect.dtos;
+package at.camconnect.dtos.rent;
 
-import at.camconnect.model.Rent;
 import at.camconnect.model.Student;
 
 import java.util.List;

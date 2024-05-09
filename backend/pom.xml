@@ -36,6 +36,12 @@
   </dependencyManagement>
   <dependencies>
     <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>3.12.4</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy-reactive-jackson</artifactId>
     </dependency>

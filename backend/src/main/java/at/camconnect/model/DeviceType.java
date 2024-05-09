@@ -1,12 +1,12 @@
 package at.camconnect.model;
 
-import at.camconnect.dtos.DeviceTypeGlobalObjectsDTO;
-import at.camconnect.dtos.DeviceTypeDTO;
+import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
 import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.json.JsonObject;
 import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -28,7 +28,7 @@ public abstract class DeviceType{
     @Column(length = 20, unique = true)
     private String name;
     private String image;
-
+    private LocalDateTime creation_date;
     abstract public void update(DeviceTypeGlobalObjectsDTO data);
 
     public DeviceTypeStatusEnum getStatus() {
@@ -62,9 +62,11 @@ public abstract class DeviceType{
     public DeviceType(String name) {
         setStatus(DeviceTypeStatusEnum.active);
         this.name = name;
+        this.creation_date = LocalDateTime.now();
     }
 
     public DeviceType() {
+        this.creation_date = LocalDateTime.now();
     }
 
     //region Getter und Setter

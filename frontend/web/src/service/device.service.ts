@@ -1,8 +1,7 @@
 import {model} from "../index"
-import {config, Api, ccResponse} from "../base"
+import {config, Api, ccResponse, SimpleOption} from "../base"
 import {DeviceType, DeviceTypeSource, DeviceTypeVariantCollection, DeviceTypeVariantEnum} from "./deviceType.service"
 import {Rent, RentByStudentDTO} from "./rent.service"
-import {AutocompleteOption} from "../components/basic/autocomplete.component"
 
 export interface Device{
     device_id: number
@@ -20,11 +19,17 @@ export interface DeviceDTO{
     type_id: number
 }
 
+export interface SearchDTO{
+    searchTerm: string
+    typeId: number
+    onlyAvailable: boolean
+}
+
 export default class DeviceService{
     static fetchAll(){
         Api.fetchData<Device[]>("/device/getall")
-            .then(data => {
-                model.loadDevices(data)
+            .then(result => {
+                model.loadDevices(result.data)
             })
             .catch(error => {
                 console.error(error)
@@ -50,11 +55,11 @@ export default class DeviceService{
             })
     }
 
-    static async search(searchTerm: string, typeId: number, onlyAvailable: boolean): Promise<AutocompleteOption<Device>[]> {
+    static async search(searchDTO: SearchDTO): Promise<SimpleOption<number, Device>[]> {
         try {
-            const result: ccResponse<AutocompleteOption<Device>[]> = await Api.postData<unknown, Device>(
+            const result: ccResponse<SimpleOption<number, Device>[]> = await Api.postData<unknown, Device>(
                 `/device/search`,
-                {searchTerm: searchTerm, typeId: typeId, onlyAvailable: onlyAvailable}
+                searchDTO
             )
             return result.data || []
         } catch (e) {

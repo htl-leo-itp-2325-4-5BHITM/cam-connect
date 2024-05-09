@@ -2,7 +2,6 @@ import {DeviceTypeSource} from "./service/deviceType.service"
 import {FilterOption} from "./components/basic/filterContainer.component"
 import {DeviceTypeAttribute} from "./service/deviceTypeAttribute.service"
 import * as repl from "repl"
-import {AutocompleteOption} from "./components/basic/autocomplete.component"
 import AirDatepicker from "air-datepicker"
 import localeDe from "air-datepicker/locale/de"
 import {model} from "./index"
@@ -63,17 +62,6 @@ export default class Util{
             focusedElem = newFocusedElem
         }
         return focusedElem
-    }
-
-    //TODO constrain the generic so that it has to have a properly named id column, something like: extends {[keyName]:(number | string)}
-    static replaceItemByIdInJsonArray<T>(data: T[], replacement: T, id: (number | string), keyName: keyof T):T[] {
-        for (let i = 0; i < data.length; i++) {
-            if(data[i][keyName] === id){
-                data[i] = replacement
-                return data
-            }
-        }
-        return data
     }
 
     static selectText(element: HTMLElement) {

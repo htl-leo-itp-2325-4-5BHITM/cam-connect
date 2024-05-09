@@ -1,17 +1,12 @@
 package at.camconnect.repository;
 
-import at.camconnect.dtos.CreateRentDTO;
-import at.camconnect.dtos.RentDTO;
-import at.camconnect.dtos.RentIdsDTO;
-import at.camconnect.dtos.RentByStudentDTO;
+import at.camconnect.dtos.filters.RentFilters;
+import at.camconnect.dtos.rent.*;
 import at.camconnect.enums.RentStatusEnum;
 import at.camconnect.enums.RentTypeEnum;
+import at.camconnect.model.*;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.socket.RentSocket;
-import at.camconnect.model.Device;
-import at.camconnect.model.Rent;
-import at.camconnect.model.Student;
-import at.camconnect.model.Teacher;
 import at.camconnect.responseSystem.CCResponse;
 import io.vertx.ext.mail.MailClient;
 import io.vertx.ext.mail.MailMessage;
@@ -22,7 +17,10 @@ import jakarta.json.JsonValue;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.StreamingOutput;
+import org.hibernate.exception.ConstraintViolationException;
 
+import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
@@ -49,7 +47,7 @@ public class RentRepository {
         List<Rent> rents = new LinkedList<>();
 
         for(CreateRentDTO rentDTO : rentDTOs){
-            if(isDeviceAlreadyInUse(em.find(Device.class, rentDTO.device_id()))) {
+            if(deviceRepository.isDeviceAlreadyInUse(rentDTO.device_id())) {
                 throw new CCException(1201, "Device is already used in an other rent");
             }
 
@@ -74,7 +72,7 @@ public class RentRepository {
                 );
             }
             else{
-                throw new CCException(1206, "Rent type was invalid");
+                throw new CCException(1206, "Provided rent type was invalid");
             }
 
             rents.add(rent);
@@ -85,19 +83,16 @@ public class RentRepository {
         rentSocket.broadcast();
     }
 
+    //TODO remove when abandoning old web
     @Transactional
     public void createEmpty(){
         em.persist(new Rent());
         rentSocket.broadcast();
     }
 
-    public boolean isDeviceAlreadyInUse(Device device) {
-        return getAllSingleList().stream().anyMatch(rentDTO -> rentDTO.device().equals(device) && rentDTO.status() == RentStatusEnum.RETURNED);
-    }
-
     @Transactional
     public Response remove(Long id){
-        em.remove(getById(id));
+        getById(id).setStatus(RentStatusEnum.DELETED);
         rentSocket.broadcast();
         return CCResponse.ok();
     }
@@ -113,7 +108,7 @@ public class RentRepository {
     */
 
     public List<RentDTO> getAllSingleList(){
-        return em.createQuery("SELECT r FROM Rent r order by r.creation_date", Rent.class)
+        return em.createQuery("SELECT r FROM Rent r where r.status != 'DELETED' order by r.creation_date", Rent.class)
                 .getResultStream()
                 .map(rent -> new RentDTO(
                         rent.getRent_id(),
@@ -135,26 +130,45 @@ public class RentRepository {
 
     }
 
-    public List<RentByStudentDTO> getAll(){
-        //INFO
-        //this is currently just joining to half the db and not using a propper DTO,
-        // this might cause performance problems in the future but is fine for now
+    public List<RentByStudentDTO> getAll(RentFilters filters){
+
+        String orderByString = "";
+        switch (filters.orderBy()) {
+            case ALPHABETICAL_ASC: orderByString = "order by s.firstname asc, s.lastname asc"; break;
+            case ALPHABETICAL_DESC: orderByString = "order by s.firstname desc, s.lastname desc"; break;
+            case DATE_ASC: orderByString = "order by MAX(r.change_date) asc"; break;
+            case DATE_DESC: orderByString = "order by MAX(r.change_date) desc"; break;
+        }
 
         List<Student> students = em.createQuery(
                 "SELECT s FROM Rent r " +
                         "join Student s on r.student.student_id = s.student_id " +
+                        "where (s.school_class IN :schoolClasses OR :schoolClassesEmpty = true) " +
+                        "and (s.student_id IN :studentIds OR :studentIdsEmpty = true) " +
                         "group by s.student_id " +
-                        "order by s.student_id", Student.class).getResultList();
+                        orderByString
+                ,Student.class)
+                .setParameter("schoolClasses", filters.schoolClasses())
+                .setParameter("schoolClassesEmpty", filters.schoolClasses() == null || filters.schoolClasses().isEmpty())
+                .setParameter("studentIds", filters.studentIds())
+                .setParameter("studentIdsEmpty", filters.studentIds() == null || filters.studentIds().isEmpty())
+                .getResultList();
 
         List<RentByStudentDTO> result = new LinkedList<>();
 
+        //INFO
+        //this is currently just joining to half the db and not using a proper DTO,
+        // this might cause performance problems in the future but is fine for now
         for (Student student : students) {
-            System.out.println(student.toString());
             List<RentDTO> rents = em.createQuery(
                     "SELECT r FROM Rent r " +
                             "where r.student.student_id = :studentId " +
-                            "order by r.id", Rent.class)
+                            "and (r.status IN :statuses OR :statusesEmpty = true) " +
+                            "order by r.id"
+                    , Rent.class)
                     .setParameter("studentId", student.getStudent_id())
+                    .setParameter("statuses", filters.statuses())
+                    .setParameter("statusesEmpty", filters.statuses() == null || filters.statuses().isEmpty())
                     .getResultStream()
                     .map(rent -> new RentDTO(
                             rent.getRent_id(),
@@ -174,9 +188,6 @@ public class RentRepository {
                     ))
                     .collect(Collectors.toList());
 
-            for (RentDTO rent : rents){
-                System.out.println(rent.toString());
-            }
             result.add(new RentByStudentDTO(student, rents));
         }
         return result;
@@ -273,7 +284,9 @@ public class RentRepository {
     }
 
     public boolean verifyConfirmationCode(Long id, String code){
-        return getById(id).getVerification_code().equals(code);
+        Rent rent = getById(id);
+        if(rent.generateVerification_code() == null) return false;
+        return rent.getVerification_code().equals(code);
     }
 
     @Transactional
@@ -531,4 +544,109 @@ public class RentRepository {
         return (jsonObject.containsKey(key) && jsonObject.get(key) != null && jsonObject.get(key) != JsonValue.NULL);
     }
     //endregion
+
+
+    public Response exportAllRents() {
+        StreamingOutput stream = os -> {
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(os))) {
+                writer.write(getCSVHeader());
+
+                List<RentDTO> rents = getAllSingleList();
+                for (RentDTO rent : rents) {
+                    String csvLine = buildCSVLine(rent);
+                    writer.write(csvLine);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        };
+
+        return Response.ok(stream)
+                .header("Content-Disposition", "attachment; filename=\"file.csv\"")
+                .build();
+    }
+
+    private String getCSVHeader() {
+        return "rent_id;status;type;device_id;device_string;teacher_start_id;teacher_start_name;teacher_end_id;teacher_end_name;rent_start;rent_end_planned;rent_end_actual;student_id;student_name;note;verification_message;\n";
+    }
+
+    private String buildCSVLine(RentDTO rent) {
+        StringBuilder line = new StringBuilder();
+        line.append(rent.rent_id()).append(';')
+                .append(rent.status()).append(';')
+                .append(rent.type()).append(';')
+                .append(rent.device().getDevice_id()).append(';')
+                .append(rent.device_string()).append(';');
+
+        Long teacherEndId = rent.teacher_end() != null ? rent.teacher_end().getTeacher_id() : null;
+        String teacherEndName = rent.teacher_end() != null
+                ? rent.teacher_end().getFirstname() + " " + rent.teacher_end().getLastname()
+                : null;
+
+        line.append(rent.teacher_start().getTeacher_id()).append(';')
+                .append(rent.teacher_start().getFirstname()).append(' ').append(rent.teacher_start().getLastname()).append(';')
+                .append(teacherEndId).append(';')
+                .append(teacherEndName).append(';')
+                .append(rent.rent_start()).append(';')
+                .append(rent.rent_end_planned()).append(';')
+                .append(rent.rent_end_actual()).append(';')
+                .append(rent.student().getStudent_id()).append(';')
+                .append(rent.student().getFirstname()).append(' ').append(rent.student().getLastname()).append(';')
+                .append(rent.note()).append(';')
+                .append(rent.verification_message()).append(";\n");
+
+        return line.toString();
+    }
+
+    @Transactional
+    public void importRents(File file){
+        if(file == null) throw new CCException(1105);
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line = reader.readLine();
+
+            if(line == null || line.equals("")) throw new CCException(1203);
+            String[] lineArray = line.split(";");
+            if (lineArray.length <= 1) throw new CCException(1203);
+
+            //removes characters like our friend \uFEFF a invisible zero space character added to csv files when opening excel that throws off my validations :)
+            lineArray[0] = lineArray[0].replaceAll("[^a-zA-Z_-]", "");
+
+            //checks if the csv file matches the required structure
+            if(lineArray.length != 16) throw new CCException(1204, "invalid line length");
+
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+                lineArray = line.split(";");
+                if(lineArray.length != 16) break;
+
+                Teacher teacherEnd = null;
+                if(!lineArray[7].equals("null")){
+                    teacherEnd = em.find(Teacher.class, lineArray[7]);
+                }
+
+                LocalDate rent_end_planned = null;
+                if(!lineArray[10].equals("null")){
+                    rent_end_planned = LocalDate.parse(lineArray[10]);
+                }
+
+                LocalDate rent_end_actual = null;
+                if(!lineArray[11].equals("null")){
+                    rent_end_actual = LocalDate.parse(lineArray[11]);
+                }
+
+                Rent rent = new Rent(Long.valueOf(lineArray[0]),
+                    RentStatusEnum.valueOf(lineArray[1]), RentTypeEnum.valueOf(lineArray[2]),
+                    em.find(Device.class, lineArray[3]), lineArray[4],
+                    em.find(Teacher.class, lineArray[5]), teacherEnd,
+                    LocalDate.parse(lineArray[9]), rent_end_planned, rent_end_actual,
+                    em.find(Student.class, lineArray[12]),
+                    lineArray[14], lineArray[15]);
+
+                em.persist(rent);
+            }
+        } catch (IOException e) {
+            throw new CCException(1204, "File could not be read");
+        }
+    }
 }

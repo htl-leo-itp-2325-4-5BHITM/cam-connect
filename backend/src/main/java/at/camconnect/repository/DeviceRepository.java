@@ -2,12 +2,9 @@ package at.camconnect.repository;
 
 import at.camconnect.dtos.AutocompleteOptionDTO;
 import at.camconnect.dtos.DeviceDTO;
-import at.camconnect.dtos.RentDTO;
+import at.camconnect.dtos.DeviceSearchDTO;
 import at.camconnect.enums.RentStatusEnum;
-import at.camconnect.model.DeviceTypeAttributes.*;
-import at.camconnect.model.DeviceTypeVariants.*;
 import at.camconnect.model.Rent;
-import at.camconnect.model.Student;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.model.Device;
 import at.camconnect.model.DeviceType;
@@ -20,10 +17,8 @@ import jakarta.transaction.Transactional;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.io.*;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class DeviceRepository {
@@ -105,24 +100,25 @@ public class DeviceRepository {
         return count > 0;
     }
 
-    public List<AutocompleteOptionDTO<Device>> search(String searchTerm, Long type_id, boolean showOnlyAvailableRents){
-        String queryString = "SELECT d FROM Device d " +
-                "WHERE UPPER(d.number) LIKE :searchTerm ";
-        if(type_id >= 0) {
-            queryString += "AND d.type.id = :typeId ";
-        }
-        queryString += "ORDER BY d.number";
+    public List<AutocompleteOptionDTO<Device>> search(DeviceSearchDTO data){
 
-        Query query = em.createQuery(queryString, Device.class).setParameter("searchTerm", searchTerm.toUpperCase() + "%");
-
-        if (type_id >= 0) {
-            query.setParameter("typeId", type_id);
+        Query query;
+        if(data.typeId() > 0) {
+            query = em.createQuery("SELECT d FROM Device d " +
+                    "WHERE UPPER(d.number) LIKE :searchTerm " +
+                    "AND d.type.id = :typeId " +
+                    "ORDER BY d.number", Device.class).setParameter("searchTerm", data.searchTerm().toUpperCase() + "%");
+            query.setParameter("typeId", data.typeId());
+        } else{
+            query = em.createQuery("SELECT d FROM Device d " +
+                    "WHERE UPPER(d.number) LIKE :searchTerm " +
+                    "ORDER BY d.number", Device.class).setParameter("searchTerm", data.searchTerm().toUpperCase() + "%");
         }
 
         List<Device> devices = query.getResultList();
         List<AutocompleteOptionDTO<Device>> result = new LinkedList<>();
         for (Device device : devices) {
-            if(showOnlyAvailableRents && isDeviceAlreadyInUse(device.getDevice_id())){
+            if(data.onlyAvailable() && isDeviceAlreadyInUse(device.getDevice_id())){
                 continue;
             }
             result.add(new AutocompleteOptionDTO<>(device, device.getDevice_id()));
@@ -132,25 +128,14 @@ public class DeviceRepository {
     }
 
     public boolean isDeviceAlreadyInUse(long device_id) {
-        return !em.createQuery("SELECT r FROM Rent r where r.device.id = :deviceId and r.status != :status order by r.creation_date", Rent.class)
-                .setParameter("deviceId", device_id).setParameter("status", RentStatusEnum.RETURNED)
+        return !em.createQuery("SELECT r FROM Rent r " +
+                                  "where r.device.id = :deviceId and r.status != :status ",
+                Rent.class)
+                .setParameter("deviceId", device_id)
+                .setParameter("status", RentStatusEnum.RETURNED)
                 .getResultStream()
-                .map(rent -> new RentDTO(
-                        rent.getRent_id(),
-                        rent.getStatus(),
-                        rent.getType(),
-                        rent.getDevice(),
-                        rent.getDevice_string(),
-                        rent.getTeacher_start(),
-                        rent.getTeacher_end(),
-                        rent.getRent_start(),
-                        rent.getRent_end_planned(),
-                        rent.getRent_end_actual(),
-                        rent.getAccessory(),
-                        rent.getStudent(),
-                        rent.getNote(),
-                        rent.getVerification_message()
-                )).collect(Collectors.toList()).isEmpty();
+                .toList()
+                .isEmpty();
     }
 
     public List<Device> getAll(){

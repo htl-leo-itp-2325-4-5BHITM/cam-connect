@@ -1,4 +1,4 @@
-package at.camconnect.dtos;
+package at.camconnect.dtos.deviceType;
 
 import at.camconnect.enums.DeviceTypeVariantEnum;
 

@@ -2,7 +2,7 @@ import {html, LitElement, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/rentListEntry.styles.scss'
 import {ButtonType} from "../basic/button.component"
-import {Api, ColorEnum, DatePickerWrapper, SizeEnum} from "../../base"
+import {Api, ColorEnum, DatePickerWrapper, SimpleOption, SizeEnum} from "../../base"
 import RentService, {Rent, RentStatusEnum, RentTypeEnum} from "../../service/rent.service";
 import {ChipType} from "../basic/chip.component"
 import {model} from "../../index"
@@ -14,8 +14,8 @@ import Util from "../../util"
 import {unsafeSVG} from "lit/directives/unsafe-svg.js"
 import {icon} from "@fortawesome/fontawesome-svg-core"
 import {faHashtag} from "@fortawesome/free-solid-svg-icons"
-import DeviceService, {Device, DeviceDTO} from "../../service/device.service"
-import {AutocompleteComponent, AutocompleteOption} from "../basic/autocomplete.component"
+import DeviceService, {Device, DeviceDTO, SearchDTO} from "../../service/device.service"
+import {AutocompleteComponent} from "../basic/autocomplete.component"
 import DeviceTypeService, {DeviceType, DeviceTypeSource} from "../../service/deviceType.service"
 
 @customElement('cc-rent-list-entry')
@@ -121,7 +121,7 @@ export class RentListEntryComponent extends LitElement {
                     </div>
                 </cc-chip>
                 
-                <cc-circle-select .onToggle="${() => this.toggleRentCheck()}" 
+                <cc-circle-select .onToggle="${(checked: boolean) => this.toggleRentCheck(checked)}" 
                                   .checked="${this.appState.value.selectedRentEntries.has(this)}" 
                                   size="${SizeEnum.SMALL}"
                 ></cc-circle-select>
@@ -137,8 +137,6 @@ export class RentListEntryComponent extends LitElement {
                             <cc-autocomplete placeholder="Name" class="name"
                                      .selected="${{id: this.rent.device?.type?.type_id, data: this.rent.device?.type}}"
                                      .onSelect="${(option: DeviceType) => {
-                                         console.log("typeoption", option)
-                                         
                                          //if the selected device matches the selected type, do nothing
                                          if (this.rent.device.type == option) return
                                       
@@ -227,10 +225,14 @@ export class RentListEntryComponent extends LitElement {
                 </cc-property-value>`
         }
     }
-    async searchForDevice(searchTerm: string): Promise<AutocompleteOption<Device>[]> {
-        if(this.rent?.device?.type?.type_id < 0) return DeviceService.search(searchTerm, -1, true)
+    async searchForDevice(searchTerm: string): Promise<SimpleOption<number, Device>[]> {
+        let searchDTO : SearchDTO = {
+            searchTerm: searchTerm,
+            typeId: this.rent?.device.type.type_id,
+            onlyAvailable: true
+        }
 
-        return DeviceService.search(searchTerm, this.rent.device.type.type_id, true)
+        return DeviceService.search(searchDTO)
     }
 
     provideDeviceIcon(data: DeviceDTO){
@@ -238,11 +240,10 @@ export class RentListEntryComponent extends LitElement {
     }
 
     toggleRentCheck(checked?: boolean){
-        if(!checked) checked = !this.isChecked()
+        if(checked == undefined) checked = !this.isChecked() //inverted because this function changes the state later
 
-        if(checked){
+        if(checked == true){
             this.appState.value.addSelectedRentEntry(this)
-            //whub whub
         } else{
             this.appState.value.removeSelectedRentEntry(this)
         }

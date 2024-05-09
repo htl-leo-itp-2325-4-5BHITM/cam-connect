@@ -2,6 +2,7 @@ package at.camconnect.boundary;
 
 import at.camconnect.dtos.AutocompleteOptionDTO;
 import at.camconnect.dtos.DeviceDTO;
+import at.camconnect.dtos.DeviceSearchDTO;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.model.Device;
@@ -77,14 +78,10 @@ public class DeviceResource {
     @Path("/search")
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response search(JsonObject data){
+    public Response search(DeviceSearchDTO data){
         List<AutocompleteOptionDTO<Device>> result;
         try{
-            String searchTerm = data.getString("searchTerm");
-            int type = data.getInt("typeId");
-            boolean showOnlyAvailableDevices = data.getBoolean("onlyAvailable");
-
-            result = deviceRepository.search(searchTerm, (long) type, showOnlyAvailableDevices);
+            result = deviceRepository.search(data);
         }catch (CCException ex){
             return CCResponse.error(ex);
         }

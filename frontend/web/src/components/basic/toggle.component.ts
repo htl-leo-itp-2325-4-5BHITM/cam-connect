@@ -12,7 +12,7 @@ export class ToggleComponent extends LitElement {
     toggled: boolean = false
 
     @property()
-    toggleAction: (toggled: boolean) => void = () => {}
+    onToggle: (toggled: boolean) => void = () => {}
 
     render() {
         return html`
@@ -30,7 +30,7 @@ export class ToggleComponent extends LitElement {
 
     toggle(){
         this.toggled = !this.toggled
-        this.toggleAction(this.toggled)
+        this.onToggle(this.toggled)
     }
 }
 

@@ -5,8 +5,18 @@ import {Teacher} from "./teacher.service";
 import {Student} from "./student.service";
 import PopupEngine from "../popupEngine"
 import Util from "../util"
+import {DeviceTypeVariantEnum} from "./deviceType.service"
+import {AppState} from "../AppState"
+import Model from "../model"
 
-export enum RentStatusEnum {CREATED="CREATED", WAITING="WAITING", CONFIRMED="CONFIRMED", DECLINED="DECLINED", RETURNED="RETURNED"}
+export enum RentStatusEnum {
+    CREATED="CREATED",
+    WAITING="WAITING",
+    CONFIRMED="CONFIRMED",
+    DECLINED="DECLINED",
+    RETURNED="RETURNED",
+    DELETED="DELETED"
+}
 export interface Rent{
     type: RentTypeEnum
     rent_id: number
@@ -32,7 +42,7 @@ export interface RentByStudentDTO {
 export enum RentTypeEnum { DEFAULT="DEFAULT", STRING="STRING" }
 
 export interface CreateRentDTO {
-    type: RentTypeEnum,
+    type: RentTypeEnum
     student_id: number
     device_id?: number
     device_string?: string
@@ -42,12 +52,51 @@ export interface CreateRentDTO {
     note: string
 }
 
+export interface RentFilters {
+    orderBy: OrderByFilterRent
+    statuses?: RentStatusEnum[]
+    schoolClasses?: Set<string>
+    studentIds?: number[]
+}
+
+export interface RentFilterDTO {
+    orderBy: OrderByFilterRent
+    statuses?: RentStatusEnum[]
+    schoolClasses?: string[]
+    studentIds?: number[]
+}
+
+export enum OrderByFilterRent {
+    ALPHABETICAL_ASC="ALPHABETICAL_ASC",
+    ALPHABETICAL_DESC="ALPHABETICAL_DESC",
+    DATE_ASC="DATE_ASC",
+    DATE_DESC="DATE_DESC",
+}
+
 export default class RentService {
     static fetchAll() {
-        Api.fetchData<RentByStudentDTO[]>("/rent/getall")
-            .then(data => {
-                model.loadRents(data)
-                console.log(data as RentByStudentDTO[])
+        let rentFiltersForBackend: RentFilterDTO = {
+            orderBy: model.appState.value.rentFilters.orderBy,
+            statuses: model.appState.value.rentFilters.statuses,
+            schoolClasses: Array.from(model.appState.value.rentFilters.schoolClasses)
+        }
+
+        Api.postData<RentFilterDTO, RentByStudentDTO[]>("/rent/getall", rentFiltersForBackend)
+            .then(result => {
+                model.loadRents(result.data || [])
+                console.log(result)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
+
+    static allRentsByStudent(studentId: number) {
+        return Api.postData<RentFilterDTO, RentByStudentDTO[]>("/rent/getall",
+            {orderBy: OrderByFilterRent.ALPHABETICAL_ASC ,studentIds: [studentId]}
+        )
+            .then(result => {
+                return result.data
             })
             .catch(error => {
                 console.error(error)
@@ -80,7 +129,7 @@ export default class RentService {
     }
 
     static remove(rent: Rent) {
-        Api.fetchData(`/rent/getbyid/${rent.rent_id}/remove`)
+        Api.putData(`/rent/getbyid/${rent.rent_id}/remove`)
             .then(() => {
                 RentService.fetchAll()
             })
@@ -90,7 +139,7 @@ export default class RentService {
     }
 
     static return(rentId: number) {
-        Api.fetchData(`/rent/getbyid/${rentId}/return`)
+        Api.putData(`/rent/getbyid/${rentId}/return`)
             .then(() => {
                 RentService.fetchAll()
             })
@@ -101,7 +150,7 @@ export default class RentService {
 
     static updateProperty(id: number, property: string, data: any) {
         let theData = {value: data}
-        Api.postData(`/rent/getbyid/${id}/update/${property}`, theData)
+        Api.putData<{value: string}, null>(`/rent/getbyid/${id}/update/${property}`, theData)
             .then((data) => {
                 console.log(data)
             })

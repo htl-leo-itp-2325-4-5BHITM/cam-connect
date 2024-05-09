@@ -1,4 +1,4 @@
-package at.camconnect.dtos;
+package at.camconnect.dtos.deviceType;
 
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.Tag;

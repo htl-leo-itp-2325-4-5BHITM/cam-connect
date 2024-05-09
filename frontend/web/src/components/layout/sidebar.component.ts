@@ -8,6 +8,7 @@ import {SimpleColorEnum, SizeEnum, Tooltip} from "../../base"
 import {model} from "../../index"
 import {ObservedProperty} from "../../model"
 import {AppState} from "../../AppState"
+import URLHandler from "../../urlHandler"
 
 @customElement('cc-sidebar')
 export class SidebarComponent extends LitElement {
@@ -44,20 +45,13 @@ export class SidebarComponent extends LitElement {
                 >
                     Neuer Verleih
                 </cc-button>
-                <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.OUTLINED}">
+                <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.OUTLINED}" disabled>
                     Multi Verleih
                 </cc-button>
             </div>
             <cc-line></cc-line>
             <div class="sorts">
-                <cc-select size="${SizeEnum.MEDIUM}">
-                    <p class="selected">raster</p>
-                    <p>liste</p>
-                </cc-select>
-                <cc-toggle>Nur verfügbare anzeigen</cc-toggle>
-                <cc-button size="${SizeEnum.MEDIUM}" type="${ButtonType.UNDERLINED}" color="${SimpleColorEnum.GRAY}"
-                           noPadding>Filter zurücksetzten
-                </cc-button>
+                <slot name="sorts"></slot>
             </div>
             <cc-line></cc-line>
             <slot name="primaryFilters" @slotchange=${this.handlePrimaryFilterChange}></slot>
@@ -66,7 +60,7 @@ export class SidebarComponent extends LitElement {
                 <slot name="secondaryFilters"></slot>
             </div>
 
-            <div class="user">
+            <div class="user" @click="${() => { URLHandler.goToPage('/app/user') }}">
                 <img src="../../../assets/icon/user-icon-default.svg" alt="user">
                 <p>${(this.accountname)}</p>
             </div>
@@ -78,14 +72,10 @@ export class SidebarComponent extends LitElement {
     }
 
     setSecondaryFilterVisibility(){
-        console.log("setSecondaryFilterVisibility")
-
         let selectedPrimaryFilters: (string | number)[] = []
         this.primaryFilters.forEach((filter: FilterContainerComponent) => {
             selectedPrimaryFilters = selectedPrimaryFilters.concat(filter.getSelectedOptionsAsIdArray())
         })
-
-        console.log(selectedPrimaryFilters)
 
         this.secondaryFilters.forEach((filter: FilterContainerComponent) => {
             if(filter.visibility.length == 0 || selectedPrimaryFilters.length == 0 || filter.visibility.some(visibilityRequirement => selectedPrimaryFilters.includes(visibilityRequirement))) {
@@ -99,7 +89,7 @@ export class SidebarComponent extends LitElement {
 
     handlePrimaryFilterChange(){
         this.primaryFilters.forEach((filter: FilterContainerComponent) => {
-            filter.onUpdate = () => {this.setSecondaryFilterVisibility()}
+            filter.filterChange = () => {this.setSecondaryFilterVisibility()}
         })
     }
 }

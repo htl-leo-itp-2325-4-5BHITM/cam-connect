@@ -143,7 +143,7 @@ export class ExternalConfirmComponent extends LitElement {
 
         if(!rentIds || rentIds.length == 0) return
 
-        this.rents = await Api.fetchData<Rent[]>(`/rent/getbyidlist/${rentIds.join(",")}`) || []
+        this.rents = (await Api.fetchData<Rent[]>(`/rent/getbyidlist/${rentIds.join(",")}`)).data || []
 
         let invalidCodes = await this.validateConfirmationCodes()
 
