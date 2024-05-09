@@ -1,27 +1,68 @@
 import {LitElement, html} from 'lit'
 import {customElement} from 'lit/decorators.js'
-import styles from '../../styles/components/edit.styles.scss'
+import styles from '../../styles/components/userSettings.styles.scss'
 import PopupEngine from "../popupEngine"
 import {Api, config} from "../base"
+
 @customElement('cc-user-settings')
 export class UserSettingsComponent extends LitElement {
     render() {
         return html`
             <style>${styles}</style>
             <cc-navbar type="simple"></cc-navbar>
-
-            <div>
-                <a href="${config.api_url}/rent/getcsv" download="file.csv">
-                    <cc-button>Export all rents</cc-button>
-                </a>
-                <input type="file"
-                       @change="${(event) => {
-                           this.importDataFromCsv(event)
-                       }}"
-                       accept=".csv"
-                />
-            </div>
+            
+            <main>
+                <section>
+                    <h1>Account</h1>
+                    ${this.getInputField("Name", "text")}
+                    ${this.getInputField("Email", "email")}
+                    ${this.getInputField("Password", "password")}
+                </section>
+                
+                <section>
+                    <h1>Notifications</h1>
+                    <cc-toggle>Send emails</cc-toggle>
+                    <cc-toggle>Show push notifications</cc-toggle>
+                </section>
+                
+                <section>
+                    <h1>Settings</h1>
+                    <cc-toggle>Darkmode</cc-toggle>
+                    <cc-toggle>New rent as modal or in sidebar</cc-toggle>
+                    <cc-toggle>Automatically apply global date selection in creating rent</cc-toggle>
+                    <cc-toggle>Remember filters on startup</cc-toggle>
+                    <cc-toggle>Select input contents on click</cc-toggle>
+                    <cc-toggle>Use global date as default for new device entries</cc-toggle>
+                    <cc-toggle>Show hover effect of rentListEntry</cc-toggle>
+                </section>
+                
+                <section>
+                    <h1>Keymap</h1>
+                    ${this.getInputField("Name", "text")}
+                    ${this.getInputField("Name", "text")}
+                    ${this.getInputField("Name", "text")}
+                </section>
+                
+                <section>
+                    <h1>Data</h1>
+                    <a href="${config.api_url}/rent/getcsv" download="file.csv">
+                        <cc-button>Export all rents</cc-button>
+                    </a>
+                    
+                    <div class="inputField">
+                        <label for="importRents">Import rents:</label>
+                        <input id="importRents" type="file" @change="${(event) => {this.importDataFromCsv(event)}}" accept=".csv"/>
+                    </div>
+                </section>
+            </main>
         `
+    }
+
+    getInputField(label: string, type: string){
+        return html`<div class="inputField">
+                        <label for="${label}+Id">${label}:</label>
+                        <input type="${type}" id="${label}+Id">
+                    </div>`
     }
 
     importDataFromCsv(event: Event) {
