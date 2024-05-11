@@ -29,6 +29,7 @@ export interface Rent{
     rent_end_planned: string
     rent_end_actual: string
     creation_date: string
+    change_date: string
     verification_message: string
     status: RentStatusEnum
     note: string

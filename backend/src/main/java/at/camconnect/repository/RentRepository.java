@@ -86,8 +86,8 @@ public class RentRepository {
     //TODO remove when abandoning old web
     @Transactional
     public void createEmpty(){
-        em.persist(new Rent());
-        rentSocket.broadcast();
+        /*em.persist(new Rent());
+        rentSocket.broadcast();*/
     }
 
     @Transactional
@@ -124,7 +124,9 @@ public class RentRepository {
                         rent.getAccessory(),
                         rent.getStudent(),
                         rent.getNote(),
-                        rent.getVerification_message()
+                        rent.getVerification_message(),
+                        rent.getCreation_date(),
+                        rent.getChange_date()
                 ))
                 .collect(Collectors.toList());
 
@@ -184,7 +186,9 @@ public class RentRepository {
                             rent.getAccessory(),
                             rent.getStudent(),
                             rent.getNote(),
-                            rent.getVerification_message()
+                            rent.getVerification_message(),
+                            rent.getCreation_date(),
+                            rent.getChange_date()
                     ))
                     .collect(Collectors.toList());
 
@@ -201,7 +205,7 @@ public class RentRepository {
 
     public RentDTO getByIdCensored(Long id){
         Rent rent = getById(id);
-        return new RentDTO(rent.getRent_id(), rent.getStatus(), rent.getType(), rent.getDevice(), rent.getDevice_string(), rent.getTeacher_start(), rent.getTeacher_end(), rent.getRent_start(), rent.getRent_end_planned(), rent.getRent_end_actual(), rent.getAccessory(), rent.getStudent(), rent.getNote(), rent.getVerification_message());
+        return new RentDTO(rent.getRent_id(), rent.getStatus(), rent.getType(), rent.getDevice(), rent.getDevice_string(), rent.getTeacher_start(), rent.getTeacher_end(), rent.getRent_start(), rent.getRent_end_planned(), rent.getRent_end_actual(), rent.getAccessory(), rent.getStudent(), rent.getNote(), rent.getVerification_message(), rent.getCreation_date(), rent.getChange_date());
     }
 
     public List<RentDTO> getByIdList(String[] idList){

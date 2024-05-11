@@ -45,7 +45,7 @@ public class Rent {
     private LocalDate rent_end_planned;
     @Temporal(TemporalType.DATE)
     private LocalDate rent_end_actual;
-    private final LocalDateTime creation_date;
+    private LocalDateTime creation_date;
     private LocalDateTime change_date;
     @Column(length = 20)
     private String verification_code;
@@ -59,16 +59,19 @@ public class Rent {
     //TODO remove these when moving to new UI permanently - also remove them in repo resource and update functions
     private String accessory;
 
-    public Rent() { //TODO remove when moving to new ui
-        rent_start = LocalDate.now();
-        creation_date = LocalDateTime.now();
-        status = RentStatusEnum.CREATED;
+
+    public Rent(){
+        this.status = RentStatusEnum.WAITING;
+        this.creation_date = LocalDateTime.now();
+        this.change_date = LocalDateTime.now();
     }
 
     /**
      * Rent with device as object
      */
     public Rent(Student student, Device device, Teacher teacher_start, LocalDate rent_start, LocalDate rent_end_planned, String note) {
+        super();
+
         this.type = RentTypeEnum.DEFAULT;
         this.student = student;
         this.device = device;
@@ -76,16 +79,14 @@ public class Rent {
         this.rent_start = rent_start;
         this.rent_end_planned = rent_end_planned;
         this.note = note;
-
-        this.status = RentStatusEnum.WAITING;
-        this.creation_date = LocalDateTime.now();
-        this.change_date = LocalDateTime.now();
     }
 
     /**
      * Rent with device as string
      */
     public Rent(Student student, String device_string, Teacher teacher_start, LocalDate rent_start, LocalDate rent_end_planned, String note) {
+        super();
+
         this.type = RentTypeEnum.STRING;
         this.student = student;
         this.device_string = device_string;
@@ -93,14 +94,11 @@ public class Rent {
         this.rent_start = rent_start;
         this.rent_end_planned = rent_end_planned;
         this.note = note;
-
-        this.status = RentStatusEnum.WAITING;
-        this.creation_date = LocalDateTime.now();
-        this.change_date = LocalDateTime.now();
     }
 
     public Rent(Long rent_id, RentStatusEnum status, RentTypeEnum type, Device device, String device_string, Teacher teacher_start, Teacher teacher_end, LocalDate rent_start, LocalDate rent_end_planned, LocalDate rent_end_actual, Student student, String note, String verification_message){
         super();
+
         this.status = status;
         this.type = type;
         this.device = device;
@@ -113,9 +111,6 @@ public class Rent {
         this.student = student;
         this.note = note;
         this.verification_message = verification_message;
-
-        this.creation_date = LocalDateTime.now();
-        this.change_date = LocalDateTime.now();
     }
 
     public String generateVerification_code() {
@@ -285,5 +280,14 @@ public class Rent {
         this.type = type;
         this.updateChangeDate();
     }
+
+    public LocalDateTime getCreation_date() {
+        return creation_date;
+    }
+
+    public LocalDateTime getChange_date() {
+        return change_date;
+    }
+
     //endregion
 }

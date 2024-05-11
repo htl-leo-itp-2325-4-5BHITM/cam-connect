@@ -1,11 +1,10 @@
-import {html, LitElement, PropertyValues} from 'lit'
+import {html, LitElement} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/rentDetailView.styles.scss'
-import {model} from "../../index";
-import RentService, {Rent, RentByStudentDTO, RentStatusEnum} from "../../service/rent.service"
-import {ObservedProperty} from "../../model"
+import RentService, {Rent, RentStatusEnum} from "../../service/rent.service"
 import {Student} from "../../service/student.service"
-import {ColorEnum, SimpleColorEnum} from "../../base"
+import {ColorEnum} from "../../base"
+import Util from "../../util"
 
 interface chipProperty {
     color: ColorEnum
@@ -47,16 +46,40 @@ export class RentDetailViewComponent extends LitElement {
         return html`
             <style>${styles}</style>
             
-            <h3>Verleiheinträge von ${this.student.firstname} ${this.student.lastname}</h3>
+            <h2>Verleiheinträge von ${this.student.firstname} ${this.student.lastname}</h2>
             
-            ${this.rentList.map((rent:Rent) => html`
+            ${this.rentList.map((rent:Rent, index) => html`
                 <div class="rent">
-                    <p>${rent.device.type.name} • ${rent.device.number}</p>
-                    <cc-chip color="${this.chipProperties.get(rent.status).color}" text="${this.chipProperties.get(rent.status)?.text}"></cc-chip>
-                    <p>${rent.rent_start} - ${rent.rent_end_planned}</p>
-                    <p></p>
+                    <div class="heading">
+                        <h3>${rent.device.type.name}</h3>
+                        <cc-chip color="${this.chipProperties.get(rent.status).color}" text="${this.chipProperties.get(rent.status)?.text}"></cc-chip>
+                    </div>
+                    <div class="row">
+                        <cc-property-value property="Geräte Nr." value="${rent.device.number}"></cc-property-value>
+                        <cc-property-value property="Erstellt am" value="${Util.formatDateTimeForHuman(rent.creation_date)}"></cc-property-value>
+                        <cc-property-value property="Bearbeitet am" value="${Util.formatDateTimeForHuman(rent.change_date)}"></cc-property-value>
+                    </div>
+                    <h4>Ausleihung</h4>
+                    <div class="row">
+                        <cc-property-value property="Erstellt von" value="${rent.teacher_start.firstname} ${rent.teacher_start.lastname}"></cc-property-value>
+                        <cc-property-value property="Datum" value="${Util.formatDateForHuman(rent.rent_start)}"></cc-property-value>
+                    </div>
+                    <h4>Rückgabe</h4>
+                    <div class="row">
+                        <cc-property-value property="Geplant" value="${Util.formatDateForHuman(rent.rent_end_planned)}"></cc-property-value>
+                        ${ rent.status == RentStatusEnum.RETURNED ? html`
+                            <cc-property-value property="Tatsächlich" value="${Util.formatDateForHuman(rent.rent_end_actual)}"></cc-property-value>
+                            <cc-property-value property="Zurückgegeben von" value="${rent.teacher_end ? rent.teacher_end.firstname + ' ' + rent.teacher_end.lastname : 'unbekannt'}"></cc-property-value>
+                        ` : html``}
+                    </div>
                 </div>
+                
+                ${this.rentList[index+1] ? html`<cc-line></cc-line>` : ''}
             `)}
+            
+            <div class="bottomBlur"></div>
+            
+            ${this.rentList.length == 0 ? html`<p>Lade Verleiheinträge..</p>` : ''}
         `
     }
 }
