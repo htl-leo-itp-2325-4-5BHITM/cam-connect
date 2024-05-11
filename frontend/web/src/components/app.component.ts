@@ -60,6 +60,7 @@ export class AppComponent extends LitElement {
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
         model.appState.value.overlayElement = this.shadowRoot.querySelector("#overlay") as HTMLElement
+        model.appState.value.originElementLoaded.next(true)
     }
 
     render() {

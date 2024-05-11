@@ -10,7 +10,8 @@ import {DeviceListEntryComponent} from "./components/layout/deviceListEntry.comp
 import {Device} from "./service/device.service"
 import RentService, {OrderByFilterRent, RentFilters, RentStatusEnum} from "./service/rent.service"
 import {html, render, TemplateResult} from "lit"
-import content from "*.styles.scss"
+import URLHandler from "./urlHandler"
+import {BehaviorSubject} from "rxjs"
 
 interface actionCancellation {
     identifier: string,
@@ -29,6 +30,7 @@ export class AppState{
     private _rentFilters: RentFilters = {orderBy: OrderByFilterRent.ALPHABETICAL_ASC, statuses: [RentStatusEnum.CONFIRMED, RentStatusEnum.DECLINED, RentStatusEnum.WAITING], schoolClasses: new Set<string>()}
     private _overlayElement: HTMLElement
     private _backUrl: string
+    private _originElementLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
     /**
      * there is a really small chance here that this possibly falls victim to a race condition
      * but i think we can ignore that for now
@@ -214,13 +216,17 @@ export class AppState{
         this.update()
     }
 
-    openOverlay(content: TemplateResult){
+    private _overlayCloseFunction: () => void = () => {}
+
+    openOverlay(content: TemplateResult, closeFunction: () => void){
+        this._overlayCloseFunction = closeFunction
         this._overlayElement.classList.add("visible")
         this.addCurrentActionCancellation(() => this.closeOverlay(), "overlay")
         render(content, this._overlayElement.querySelector(".content") as HTMLElement)
     }
 
     closeOverlay(){
+        this._overlayCloseFunction()
         this._overlayElement.classList.remove("visible")
         this.removeCurrentActionCancellation("overlay")
         render(html``, this._overlayElement.querySelector(".content") as HTMLElement)
@@ -235,7 +241,11 @@ export class AppState{
     }
 
     updateBackUrl(){
-        this._backUrl = window.location.pathname
+        this._backUrl = URLHandler.getUrl()
         this.update()
+    }
+
+    get originElementLoaded(): BehaviorSubject<boolean> {
+        return this._originElementLoaded
     }
 }

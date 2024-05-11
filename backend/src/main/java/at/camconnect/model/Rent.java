@@ -70,7 +70,7 @@ public class Rent {
      * Rent with device as object
      */
     public Rent(Student student, Device device, Teacher teacher_start, LocalDate rent_start, LocalDate rent_end_planned, String note) {
-        super();
+        this();
 
         this.type = RentTypeEnum.DEFAULT;
         this.student = student;
@@ -85,7 +85,7 @@ public class Rent {
      * Rent with device as string
      */
     public Rent(Student student, String device_string, Teacher teacher_start, LocalDate rent_start, LocalDate rent_end_planned, String note) {
-        super();
+        this();
 
         this.type = RentTypeEnum.STRING;
         this.student = student;
@@ -97,7 +97,7 @@ public class Rent {
     }
 
     public Rent(Long rent_id, RentStatusEnum status, RentTypeEnum type, Device device, String device_string, Teacher teacher_start, Teacher teacher_end, LocalDate rent_start, LocalDate rent_end_planned, LocalDate rent_end_actual, Student student, String note, String verification_message){
-        super();
+        this();
 
         this.status = status;
         this.type = type;

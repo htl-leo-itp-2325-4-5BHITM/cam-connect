@@ -1,5 +1,6 @@
 import {model} from "./index"
 import {PageEnum} from "./model"
+import {html} from "lit"
 
 let pages = {
     app: {
@@ -9,7 +10,16 @@ let pages = {
                 handler: () => { model.appState.value.page = PageEnum.RENTS },
                 children: {
                     details: {
-                        handler: () => { console.log("showing details") }
+                        handler: () => { URLHandler.updateUrl("/app/rents/details")
+                            console.log("opening details")
+                            //TODO because of stuff like this its probably best to move all the logic related to a change in the url to here and only use that
+                            URLHandler.setParam("sid", URLHandler.getParam("sid"))
+                            model.appState.value.openOverlay(
+                                html`<cc-rent-detail-view .studentId="${URLHandler.getParam("sid")}"></cc-rent-detail-view>`,
+                                () => { URLHandler.updateUrl("/app/rents") }
+                            )
+                        },
+                        waitForDom: true
                     },
                 }
             },
@@ -63,6 +73,7 @@ export default class URLHandler {
         })
         let elem = document.createElement(tagName)
         elem.classList.add("origin")
+        console.log("changing orign to", tagName)
         document.body.appendChild(elem)
     }
 
@@ -82,8 +93,21 @@ export default class URLHandler {
             return
         }
 
-        nextPage.handler()
-        this.handlePage(pageIndex + 1, nextPage.children, currentPath)
+        if(nextPage.waitForDom == true) {
+            console.log("waiting")
+            model.appState.value.originElementLoaded.subscribe((status) => {
+                if(status == true){
+                    nextPage.handler()
+                    this.handlePage(pageIndex + 1, nextPage.children, currentPath)
+                    model.appState.value.originElementLoaded.unsubscribe()
+                }
+            })
+        }
+        else {
+            console.log("not waiting")
+            nextPage.handler()
+            this.handlePage(pageIndex + 1, nextPage.children, currentPath)
+        }
     }
 
     /**
@@ -147,9 +171,13 @@ export default class URLHandler {
      * updates url to what was supplied without changing the params or reloading the page
      * ment for updating the url when navigating the dashboard
      * @param url
+     * @param mode
      */
-    static updateUrl(url: string){
+    static updateUrl(url: string, mode: "add" | "replace" = "replace"){
         let params = window.location.href.split("?")[1]
+
+        if(mode == "add")
+            url = URLHandler.getUrl() + url
 
         window.history.pushState({}, "", url + (params != undefined ? "?" + params : ""))
     }
@@ -161,6 +189,10 @@ export default class URLHandler {
      */
     static setUrl(url: string){
         window.location.href = url
+    }
+
+    static getUrl(){
+        return window.location.pathname
     }
 
     /**
