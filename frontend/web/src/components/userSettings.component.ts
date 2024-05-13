@@ -3,6 +3,7 @@ import {customElement} from 'lit/decorators.js'
 import styles from '../../styles/components/userSettings.styles.scss'
 import PopupEngine from "../popupEngine"
 import {Api, config} from "../base"
+import Util from "../util"
 
 @customElement('cc-user-settings')
 export class UserSettingsComponent extends LitElement {
@@ -45,7 +46,7 @@ export class UserSettingsComponent extends LitElement {
                 
                 <section>
                     <h1>Data</h1>
-                    <a href="${config.api_url}/rent/getcsv" download="file.csv">
+                    <a href="${config.api_url}/rent/getcsv" download>
                         <cc-button>Export all rents</cc-button>
                     </a>
                     
@@ -75,7 +76,7 @@ export class UserSettingsComponent extends LitElement {
             .then((data) => {
                 switch (data.ccStatus.statusCode){
                     case 1000:
-                        PopupEngine.createNotification({text: `Successfully imported rents`, CSSClass: "good"})
+                        PopupEngine.createNotification({text: `Verleiheinträge wurden importiert`, CSSClass: "good"})
                         break
                     case 1201:
                         PopupEngine.createNotification({text: `Konnte nicht importieren, weil der DeviceType bereits existiert`, CSSClass: "bad"})
@@ -84,7 +85,7 @@ export class UserSettingsComponent extends LitElement {
                         PopupEngine.createNotification({text: `Konnte nicht importiert werden, weil das File leer ist`, CSSClass: "bad"})
                         break
                     case 1204:
-                        PopupEngine.createNotification({text: `Konnte nicht importieren, weil die filestruktur invalide ist`, CSSClass: "bad"})
+                        PopupEngine.createNotification({text: `Konnte nicht importieren, weil die Filestruktur invalide ist`, CSSClass: "bad"})
                         break
                 }})
             .catch(error => {

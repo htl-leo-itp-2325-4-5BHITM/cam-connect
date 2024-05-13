@@ -43,8 +43,8 @@ export class RentDetailViewComponent extends LitElement {
         super.connectedCallback();
 
         RentService.allRentsByStudent(this.studentId).then(rentList => {
-            this.rentList = rentList[0].rentList || []
-            this.student = rentList[0].student
+            this.rentList = rentList[0]?.rentList || []
+            this.student = rentList[0]?.student
         })
     }
 

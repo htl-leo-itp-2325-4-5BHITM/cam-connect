@@ -29,6 +29,7 @@ public class CCStatus {
             Map.entry(1204, "File has Invalid Structure"),
             Map.entry(1205, "Operation was not allowed"),
             Map.entry(1206, "Invalid Data provided")
+
     );
 
     private int statusCode;

@@ -21,8 +21,10 @@ import jakarta.ws.rs.core.StreamingOutput;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -561,12 +563,14 @@ public class RentRepository {
                     writer.write(csvLine);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new CCException(1200, "File creation failed");
             }
         };
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm");
+
         return Response.ok(stream)
-                .header("Content-Disposition", "attachment; filename=\"file.csv\"")
+                .header("Content-Disposition", "attachment; filename=\"rent-" + dateFormat.format(new Date()) + ".csv\"")
                 .build();
     }
 
