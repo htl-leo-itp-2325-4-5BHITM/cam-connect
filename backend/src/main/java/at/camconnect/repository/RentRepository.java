@@ -134,6 +134,8 @@ public class RentRepository {
 
     public List<RentByStudentDTO> getAll(RentFilters filters){
 
+        System.out.println(filters);
+
         String orderByString = "";
         switch (filters.orderBy()) {
             case ALPHABETICAL_ASC: orderByString = "order by s.firstname asc, s.lastname asc"; break;
@@ -147,13 +149,23 @@ public class RentRepository {
                         "join Student s on r.student.student_id = s.student_id " +
                         "where (s.school_class IN :schoolClasses OR :schoolClassesEmpty = true) " +
                         "and (s.student_id IN :studentIds OR :studentIdsEmpty = true) " +
+                        "and (" +
+                        "       upper(s.firstname) like '%' || :searchTerm || '%' " +
+                        "       OR :searchTerm like '%' || upper(s.firstname) || '%' " +
+                        "       OR upper(s.lastname) like '%' || :searchTerm || '%' " +
+                        "       OR :searchTerm like '%' || upper(s.lastname) || '%' " +
+                        "       OR :searchTerm like '%' || upper(s.firstname) || '%' || upper(s.lastname) || '%' " +
+                        "       OR upper(s.firstname) || '%' || upper(s.lastname) like '%' || :searchTerm || '%' " +
+                        "OR :searchTermEmpty = true) " +
                         "group by s.student_id " +
                         orderByString
                 ,Student.class)
                 .setParameter("schoolClasses", filters.schoolClasses())
-                .setParameter("schoolClassesEmpty", filters.schoolClasses() == null || filters.schoolClasses().isEmpty())
+                .setParameter("schoolClassesEmpty", filters.schoolClasses().isEmpty())
                 .setParameter("studentIds", filters.studentIds())
-                .setParameter("studentIdsEmpty", filters.studentIds() == null || filters.studentIds().isEmpty())
+                .setParameter("studentIdsEmpty", filters.studentIds().isEmpty())
+                .setParameter("searchTerm", filters.searchTerm().toUpperCase())
+                .setParameter("searchTermEmpty", filters.searchTerm().isEmpty())
                 .getResultList();
 
         List<RentByStudentDTO> result = new LinkedList<>();
@@ -170,7 +182,7 @@ public class RentRepository {
                     , Rent.class)
                     .setParameter("studentId", student.getStudent_id())
                     .setParameter("statuses", filters.statuses())
-                    .setParameter("statusesEmpty", filters.statuses() == null || filters.statuses().isEmpty())
+                    .setParameter("statusesEmpty", filters.statuses().isEmpty())
                     .getResultStream()
                     .map(rent -> new RentDTO(
                             rent.getRent_id(),
