@@ -15,9 +15,9 @@ export class UserSettingsComponent extends LitElement {
             <main>
                 <section>
                     <h1>Account</h1>
-                    ${this.getInputField("Name", "text")}
-                    ${this.getInputField("Email", "email")}
-                    ${this.getInputField("Password", "password")}
+                    ${this.generateInputField("Name", "text")}
+                    ${this.generateInputField("Email", "email")}
+                    ${this.generateInputField("Password", "password")}
                 </section>
                 
                 <section>
@@ -39,9 +39,9 @@ export class UserSettingsComponent extends LitElement {
                 
                 <section>
                     <h1>Keymap</h1>
-                    ${this.getInputField("Name", "text")}
-                    ${this.getInputField("Name", "text")}
-                    ${this.getInputField("Name", "text")}
+                    ${this.generateInputField("Name", "text")}
+                    ${this.generateInputField("Name", "text")}
+                    ${this.generateInputField("Name", "text")}
                 </section>
                 
                 <section>
@@ -59,7 +59,7 @@ export class UserSettingsComponent extends LitElement {
         `
     }
 
-    getInputField(label: string, type: string){
+    generateInputField(label: string, type: string){
         return html`<div class="inputField">
                         <label for="${label}+Id">${label}:</label>
                         <input type="${type}" id="${label}+Id">
