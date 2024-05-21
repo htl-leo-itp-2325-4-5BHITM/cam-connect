@@ -59,6 +59,14 @@ h2{
   gap: .5rem;
   align-items: center;
   margin-bottom: .2rem;
+
+  svg{
+    height: 1.3rem;
+
+    path{
+      color: $gray700;
+    }
+  }
 }
 
 h3{

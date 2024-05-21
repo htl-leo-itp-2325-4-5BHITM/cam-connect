@@ -10,6 +10,8 @@ import { icon } from '@fortawesome/fontawesome-svg-core'
 import { faXmark } from "@fortawesome/free-solid-svg-icons"
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import {model} from "../../index"
+import DeviceService from "../../service/device.service"
+import DeviceTypeService from "../../service/deviceType.service"
 
 interface chipProperty {
     color: ColorEnum
@@ -67,6 +69,7 @@ export class RentDetailViewComponent extends LitElement {
                 ${this.rentList.map((rent:Rent, index) => html`
                     <div class="rent">
                         <div class="heading">
+                            ${DeviceTypeService.deviceTypeToIcon(rent.device.type)}
                             <h3>${rent.device.type.name}</h3>
                             <cc-chip color="${this.chipProperties.get(rent.status).color}" text="${this.chipProperties.get(rent.status)?.text}"></cc-chip>
                         </div>

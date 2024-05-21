@@ -58,13 +58,15 @@ export interface RentFilters {
     statuses?: RentStatusEnum[]
     schoolClasses?: Set<string>
     studentIds?: number[]
+    searchTerm?: string
 }
 
 export interface RentFilterDTO {
-    orderBy: OrderByFilterRent
+    orderBy?: OrderByFilterRent
     statuses?: RentStatusEnum[]
     schoolClasses?: string[]
     studentIds?: number[]
+    searchTerm?: string
 }
 
 export enum OrderByFilterRent {
@@ -79,7 +81,8 @@ export default class RentService {
         let rentFiltersForBackend: RentFilterDTO = {
             orderBy: model.appState.value.rentFilters.orderBy,
             statuses: model.appState.value.rentFilters.statuses,
-            schoolClasses: Array.from(model.appState.value.rentFilters.schoolClasses)
+            schoolClasses: Array.from(model.appState.value.rentFilters.schoolClasses),
+            searchTerm: "ichael c leischi"
         }
 
         Api.postData<RentFilterDTO, RentByStudentDTO[]>("/rent/getall", rentFiltersForBackend)
@@ -94,7 +97,7 @@ export default class RentService {
 
     static allRentsByStudent(studentId: number) {
         return Api.postData<RentFilterDTO, RentByStudentDTO[]>("/rent/getall",
-            {orderBy: OrderByFilterRent.ALPHABETICAL_ASC ,studentIds: [studentId]}
+            {orderBy: OrderByFilterRent.ALPHABETICAL_ASC, studentIds: [studentId]}
         )
             .then(result => {
                 return result.data
