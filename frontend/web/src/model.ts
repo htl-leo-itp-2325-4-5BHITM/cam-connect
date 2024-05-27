@@ -15,6 +15,7 @@ import {Student} from "./service/student.service";
 import {RentListEntryComponent} from "./components/layout/rentListEntry.component"
 import {AppState} from "./AppState"
 import URLHandler from "./urlHandler"
+import TagService, {Tag} from "./service/tag.service"
 
 export enum PageEnum { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar" }
 
@@ -29,17 +30,13 @@ export enum PageEnum { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar"
  */
 export default class Model{
     readonly appState = new BehaviorSubject(new AppState())
-
     readonly rents = new BehaviorSubject(<RentByStudentDTO[]>([]))
-
     readonly teachers = new BehaviorSubject(<Teacher[]>([]))
-
     readonly students = new BehaviorSubject(<Student[]>([]))
-
+    readonly tags = new BehaviorSubject(<Tag[]>([]))
     readonly devices = new BehaviorSubject<Device[]>([])
     readonly deviceTypes = new BehaviorSubject<DeviceTypeVariantCollection>({audioTypes: [], cameraTypes: [], droneTypes: [], lensTypes: [], lightTypes: [], stabilizerTypes: [], tripodHeads: []})
     readonly deviceTypesFull = new BehaviorSubject<DeviceTypeFullDTO[]>([])
-
     readonly deviceTypeAttributes = new BehaviorSubject<DeviceTypeAttributeCollection>({cameraResolutions: [], cameraSensors: [], cameraSystems: [], lensMounts: [], tripodHeads: []})
     /**
      * This is a representation of all the deviceTypeAttributes split up and transformed into FilterOptions that can be
@@ -80,6 +77,10 @@ export default class Model{
         {name: "Stativ", id: "tripod", details: "dings"},
     ] as const)
 
+    readonly tagFilterOptions = this.tags.pipe(
+        map(tags => tags.map(tag => ({name: tag.name, details: tag.description, id: tag.tag_id} as FilterOption)))
+    )
+
     /**
      * When its created, a new instance gathers all the data from the API endpoints
      */
@@ -95,6 +96,7 @@ export default class Model{
         DeviceTypeService.fetchAll()
         DeviceTypeService.fetchAllFull()
         DeviceTypeAttributeService.fetchAll()
+        TagService.fetchAll()
     }
 
     //region load functions: used by the service classes to set the data in the model to whatever the api returned
@@ -108,6 +110,10 @@ export default class Model{
 
     loadStudents(student: Student[] = []){
         this.students.next(student)
+    }
+
+    loadTags(tag: Tag[] = []){
+        this.tags.next(tag)
     }
 
     loadDevices(devices: Device[] = []){

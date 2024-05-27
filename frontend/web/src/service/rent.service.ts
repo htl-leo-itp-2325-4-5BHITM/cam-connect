@@ -82,7 +82,7 @@ export default class RentService {
             orderBy: model.appState.value.rentFilters.orderBy,
             statuses: model.appState.value.rentFilters.statuses,
             schoolClasses: Array.from(model.appState.value.rentFilters.schoolClasses),
-            searchTerm: "ichael c leischi"
+            searchTerm: ""
         }
 
         Api.postData<RentFilterDTO, RentByStudentDTO[]>("/rent/getall", rentFiltersForBackend)

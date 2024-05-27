@@ -21,7 +21,12 @@ h1{
   margin-bottom: .8rem;
 }
 
-cc-toggle, .inputField{
+.line{
+  display: flex;
+  justify-content: space-between;
+}
+
+cc-toggle, .inputField, .line{
   margin-block: .25rem;
   padding-block: .25rem;
   border-bottom: 1px solid $gray200;

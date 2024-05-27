@@ -1,6 +1,5 @@
 package at.camconnect.boundary;
 
-import at.camconnect.model.Student;
 import at.camconnect.model.Tag;
 import at.camconnect.repository.TagRepository;
 import at.camconnect.responseSystem.CCException;
@@ -46,7 +45,7 @@ public class TagResource {
         return CCResponse.ok();
     }
 
-    //TODO this is definitly not correct..
+    //TODO this is definitely not correct..
     @POST
     @Path("/update{id: [0-9]+}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -64,7 +63,7 @@ public class TagResource {
     public Response getById(@PathParam("id")long id){
         Tag tag;
         try{
-            tag = tagRepository.getTagById(id);
+            tag = tagRepository.getById(id);
         } catch(CCException ex){
             return CCResponse.error(ex);
         }

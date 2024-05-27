@@ -83,7 +83,7 @@ values ('stabilizer', 'StabilizerType', 'Schulterrig', 200, 2, 'active'),
        ('stabilizer', 'StabilizerType', 'Gopro Gimbal', 150, 3, 'active');
 
 -- assigning tags to devicetypes
-INSERT INTO tag_devicetype (tag_tag_id, type_type_id)
+INSERT INTO tag_devicetype (tag_tag_id, types_type_id)
 VALUES
     (1, 1),  -- Tag 'Foto' associated with DeviceType 1
     (2, 2);  -- Tag 'Video' associated with DeviceType 2

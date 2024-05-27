@@ -15,6 +15,7 @@ import URLHandler from "../../urlHandler"
 import logo from "../../../assets/logo/cc-wordmark-white.svg"
 import Util, {AnimationHelper} from "../../util"
 import {ButtonType} from "../basic/button.component"
+import PopupEngine from "../../popupEngine"
 
 @customElement('cc-navbar')
 export class NavbarComponent extends LitElement {
@@ -65,7 +66,7 @@ export class NavbarComponent extends LitElement {
             </div>
 
             <cc-select size="${SizeEnum.MEDIUM}" spacerColor="${SimpleColorEnum.ACCENT}" 
-                       .optionSelected = "${(elem) => {
+                       .onSelect = "${(elem) => {
                            this.appState.value.page = elem.dataset.page
                            URLHandler.updateUrl(elem.dataset.page)
                        }
@@ -99,13 +100,13 @@ export class NavbarComponent extends LitElement {
         //this might cause a nasty bug where the event listener is registered multiple times but is fine for now
         //since the nav doesnt change
         if(this.type == "default") {
-            KeyBoardShortCut.register([["shift", "e"], ["1"]], () => {
+            KeyBoardShortCut.register(model.appState.value.userSettings.keybinds.equipmentPage, () => {
                 this.selectNavItem(0)
             })
-            KeyBoardShortCut.register([["shift", "v"], ["2"]], () => {
+            KeyBoardShortCut.register(model.appState.value.userSettings.keybinds.rentPage, () => {
                 this.selectNavItem(1)
             })
-            KeyBoardShortCut.register([["shift", "c"], ["3"]], () => {
+            KeyBoardShortCut.register(model.appState.value.userSettings.keybinds.calendarPage, () => {
                 this.selectNavItem(2)
             })
         }
@@ -118,6 +119,7 @@ export class NavbarComponent extends LitElement {
 
     reload(e: Event) { //TODO limit rates
         AnimationHelper.spin(this.shadowRoot.querySelector("icon-cta.reload"))
+        PopupEngine.createNotification({text: "Daten werden aktualisiert", CSSClass: "good"})
         RentService.fetchAll()
     }
 }

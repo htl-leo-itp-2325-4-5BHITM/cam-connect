@@ -2,8 +2,10 @@ import {LitElement, html} from 'lit'
 import {customElement} from 'lit/decorators.js'
 import styles from '../../styles/components/userSettings.styles.scss'
 import PopupEngine from "../popupEngine"
-import {Api, config} from "../base"
+import {Api, ColorEnum, config, SimpleColorEnum, SizeEnum} from "../base"
 import Util from "../util"
+import {ButtonType} from "./basic/button.component"
+import {model} from "../index"
 
 @customElement('cc-user-settings')
 export class UserSettingsComponent extends LitElement {
@@ -28,13 +30,24 @@ export class UserSettingsComponent extends LitElement {
                 
                 <section>
                     <h1>Settings</h1>
-                    <cc-toggle>Darkmode</cc-toggle>
-                    <cc-toggle>New rent as modal or in sidebar</cc-toggle>
-                    <cc-toggle>Automatically apply global date selection in creating rent</cc-toggle>
-                    <cc-toggle>Remember filters on startup</cc-toggle>
-                    <cc-toggle>Select input contents on click</cc-toggle>
-                    <cc-toggle>Use global date as default for new device entries</cc-toggle>
-                    <cc-toggle>Show hover effect of rentListEntry</cc-toggle>
+                    <div class="line">
+                        <p>Darstellung</p>
+                        <cc-select size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.GRAY}" heavy .onSelect="${option=>this.updateSetting("isDarkmode", option, prop => prop=='dark')}">
+                            <p class="${model.appState.value.userSettings.isDarkmode ? '' : 'selected'}" data-prop="light">Hell</p>
+                            <p class="${model.appState.value.userSettings.isDarkmode ? 'selected' : ''}" data-prop="dark">Dunkel</p>
+                        </cc-select>
+                    </div>
+                    <div class="line">
+                        <p>"Verleih-erstellen" Menü</p>
+                        <cc-select size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.GRAY}" heavy>
+                            <p>Sidebar</p>
+                            <p>Modal</p>
+                        </cc-select>
+                    </div>
+                    <cc-toggle>Globales Datum für neue Verleiheinträge verwenden</cc-toggle>
+                    <cc-toggle>Rent Filter nach Schließen der Seite merken</cc-toggle>
+                    <cc-toggle>Eingabefeld Inhalte beim klick markieren</cc-toggle>
+                    <cc-toggle>Hover-Effekt der Verleiheinträge anzeigen</cc-toggle>
                 </section>
                 
                 <section>
@@ -46,9 +59,12 @@ export class UserSettingsComponent extends LitElement {
                 
                 <section>
                     <h1>Data</h1>
-                    <a href="${config.api_url}/rent/getcsv" download>
-                        <cc-button>Export all rents</cc-button>
-                    </a>
+                    <div class="line">
+                        <p>Alle Verleiheinträge exportieren</p>
+                        <a href="${config.api_url}/rent/getcsv" download>
+                            <cc-button type="${ButtonType.OUTLINED}">Exportieren</cc-button>
+                        </a>
+                    </div>
                     
                     <div class="inputField">
                         <label for="importRents">Import rents:</label>
@@ -57,6 +73,13 @@ export class UserSettingsComponent extends LitElement {
                 </section>
             </main>
         `
+    }
+
+    updateSetting(name:string, elem:HTMLElement, getValue: (prop) => any){
+        let prop = elem.getAttribute("data-prop")
+        let newSettings = model.appState.value.userSettings
+        newSettings[name] = getValue(prop)
+        model.appState.value.userSettings = newSettings
     }
 
     generateInputField(label: string, type: string){

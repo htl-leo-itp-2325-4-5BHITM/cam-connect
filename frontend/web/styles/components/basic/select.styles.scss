@@ -27,6 +27,17 @@
     --spacerColor: #{$accent};
   }
 
+  &[color="gray"]{
+    --selected-color: #{$gray1000};
+  }
+  &[color="accent"]{
+    --selected-color: #{$accentLight};
+  }
+
+  &[heavy="true"] ::slotted(*.selected){
+    -webkit-text-stroke: 0.5px var(--selected-color);
+  }
+
   ::slotted(*){
     cursor: pointer;
     color: $gray800 !important;
@@ -41,8 +52,8 @@
   }
 
   ::slotted(*.selected){
-    color: white !important;
     font-weight: 500 !important;
+    color: var(--selected-color) !important;
   }
 
   ::slotted(*:not(:last-child)):after{
@@ -52,5 +63,6 @@
     text-align: center;
     content: "•";
     position: absolute;
+    -webkit-text-stroke: 0 transparent;
   }
 }

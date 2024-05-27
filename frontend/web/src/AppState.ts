@@ -13,9 +13,28 @@ import {html, render, TemplateResult} from "lit"
 import URLHandler from "./urlHandler"
 import {BehaviorSubject} from "rxjs"
 
-interface actionCancellation {
+interface ActionCancellation {
     identifier: string,
     action: () => void
+}
+
+interface UserSettings {
+    prefersEnglish: boolean
+    sendEmails: boolean
+    pushNotifications: boolean
+    isDarkmode: boolean
+    rentAsModal: boolean
+    useGlobalDateForNewRentCreationEntries: boolean
+    rememberFiltersOnStartup: boolean
+    selectInputContentsOnClick: boolean
+    showHoverEffectOfRentListEntry: boolean
+    keybinds: {
+        newRent: string[] | string[][]
+        newRentAddDevice: string[] | string[][]
+        equipmentPage: string[] | string[][]
+        rentPage: string[] | string[][]
+        calendarPage: string[] | string[][]
+    }
 }
 
 export class AppState{
@@ -24,13 +43,31 @@ export class AppState{
     private _createMultiRentModalOpen: boolean = false
     private _selectedRentEntries: Set<RentListEntryComponent> = new Set<RentListEntryComponent>()
     private _selectedDeviceEntries: Set<DeviceListEntryComponent> = new Set<DeviceListEntryComponent>()
-    private _cancelCurrentAction: actionCancellation[] = []
+    private _cancelCurrentAction: ActionCancellation[] = []
     private _createRentElement: CreateRentComponent
     private _appElement: HTMLElement
     private _rentFilters: RentFilters = {orderBy: OrderByFilterRent.ALPHABETICAL_ASC, statuses: [RentStatusEnum.CONFIRMED, RentStatusEnum.DECLINED, RentStatusEnum.WAITING], schoolClasses: new Set<string>()}
     private _overlayElement: HTMLElement
     private _backUrl: string
     private _originElementLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
+    private _userSettings: UserSettings = {
+        isDarkmode: true,
+        prefersEnglish: false,
+        pushNotifications: false,
+        rememberFiltersOnStartup: false,
+        rentAsModal: false,
+        selectInputContentsOnClick: false,
+        sendEmails: false,
+        showHoverEffectOfRentListEntry: false,
+        useGlobalDateForNewRentCreationEntries: false,
+        keybinds: {
+            equipmentPage: [["shift", "e"], ["1"]],
+            rentPage: [["shift", "r"], ["2"]],
+            calendarPage: [["shift", "c"], ["3"]],
+            newRent: [["shift", "n"], ["<"]],
+            newRentAddDevice: ["shift", "g"]
+        },
+    }
     /**
      * there is a really small chance here that this possibly falls victim to a race condition
      * but i think we can ignore that for now
@@ -97,7 +134,7 @@ export class AppState{
         //super weird js behavior here: when passing only the function reference instead of an anonymous function
         //the "this" reference in the CreateRent class will be the AppState, try adding a log of "this" in the cancel method
         this.addCurrentActionCancellation(() => { this._createRentElement?.cancel() }, "createRentModal")
-        KeyBoardShortCut.register(["shift", "g"], () => { this._createRentElement?.addDevice() }, "addDevice", true)
+        KeyBoardShortCut.register(model.appState.value.userSettings.keybinds.newRentAddDevice, () => { this._createRentElement?.addDevice() }, "addDevice", true)
         KeyBoardShortCut.register(["control", "enter"], () => { this._createRentElement?.create() }, "createRent", true)
         this._createRentModalOpen = true
 
@@ -247,5 +284,15 @@ export class AppState{
 
     get originElementLoaded(): BehaviorSubject<boolean> {
         return this._originElementLoaded
+    }
+
+    get userSettings(): UserSettings {
+        return this._userSettings
+    }
+
+    set userSettings(value: UserSettings) {
+        this._userSettings = value
+        console.log(this._userSettings)
+        this.update()
     }
 }

@@ -28,21 +28,25 @@ cc-line{
   margin-block: .5rem;
 }
 
-.secondaryFilters{
+.secondaryFilters, .primaryFilters{
   padding-block: .5rem;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: .3rem;
   position: relative;
 
-  padding-bottom: 1.5rem;
 
-  &::-webkit-scrollbar {
-    display: none;
+  &.secondaryFilters{
+    padding-bottom: 1.5rem;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+
 }
 
 .user{

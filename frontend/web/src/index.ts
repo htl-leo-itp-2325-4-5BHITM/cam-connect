@@ -53,6 +53,7 @@ window.addEventListener("DOMContentLoaded", () => {
     document.querySelector('head').innerHTML += `<link rel="shortcut icon" href="${favicon}" type="image/x-icon">`
 
     PopupEngine.init({
+        notificationOffset: {top: "75px", bottom: "10px", left: "300px", right: "10px"},
         onModalOpen: () => {
             model.appState.value.addCurrentActionCancellation(() => {
                 PopupEngine.cancelModal()
@@ -72,7 +73,7 @@ window.addEventListener("DOMContentLoaded", () => {
     console.log(data)
 })*/
 
-KeyBoardShortCut.register([["shift", "n"], ["<"]], () => {model.appState.value.openCreateRentModal()})
+KeyBoardShortCut.register(model.appState.value.userSettings.keybinds.newRent, () => {model.appState.value.openCreateRentModal()})
 KeyBoardShortCut.register(["escape"], () => {model.appState.value.cancelCurrentAction()}, "cancelCurrentAction", true)
 
 //Api.getbyid("/rent",  1, "/remove").then(data => console.log(data))

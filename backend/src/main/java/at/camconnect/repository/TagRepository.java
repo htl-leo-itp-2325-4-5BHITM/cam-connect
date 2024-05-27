@@ -2,6 +2,7 @@ package at.camconnect.repository;
 
 import at.camconnect.model.Device;
 import at.camconnect.model.Tag;
+import at.camconnect.responseSystem.CCException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -23,11 +24,14 @@ public class TagRepository {
         entityManager.merge(tag);
     }
 
-    public Tag getTagById(long id){
-        return entityManager.find(Tag.class, id);
+    public Tag getById(long id){
+        Tag tag = entityManager.find(Tag.class, id);
+        if (tag == null) throw new CCException(1101);
+        return tag;
     }
+
     public List<Tag> getAll(){
-        List<Tag> rents = entityManager.createQuery("SELECT t FROM Tag t", Tag.class).getResultList();
-        return rents;
+        List<Tag> tags = entityManager.createQuery("SELECT t FROM Tag t", Tag.class).getResultList();
+        return tags;
     }
 }
