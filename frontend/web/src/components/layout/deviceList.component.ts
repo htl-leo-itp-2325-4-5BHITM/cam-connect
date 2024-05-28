@@ -22,7 +22,7 @@ export class DeviceListComponent extends LitElement {
             <style>${styles}</style>
 
             <div class="content">
-                ${Object.values(this.deviceTypesFull.value).flat().map(deviceType => {
+                ${Object.values(this.deviceTypesFull.value)?.flat().map(deviceType => {
                     return html`<cc-device-list-entry .deviceTypeFull="${deviceType}"></cc-device-list-entry>`
                 })}
             </div>

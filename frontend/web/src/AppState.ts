@@ -7,7 +7,7 @@ import {AutocompleteComponent} from "./components/basic/autocomplete.component"
 import {Student} from "./service/student.service"
 import {DeviceType} from "./service/deviceType.service"
 import {DeviceListEntryComponent} from "./components/layout/deviceListEntry.component"
-import {Device} from "./service/device.service"
+import DeviceService, {Device} from "./service/device.service"
 import RentService, {OrderByFilterRent, RentFilters, RentStatusEnum} from "./service/rent.service"
 import {html, render, TemplateResult} from "lit"
 import URLHandler from "./urlHandler"
@@ -62,12 +62,14 @@ export class AppState{
         useGlobalDateForNewRentCreationEntries: false,
         keybinds: {
             equipmentPage: [["shift", "e"], ["1"]],
-            rentPage: [["shift", "r"], ["2"]],
+            rentPage: [["shift", "v"], ["2"]],
             calendarPage: [["shift", "c"], ["3"]],
             newRent: [["shift", "n"], ["<"]],
             newRentAddDevice: ["shift", "g"]
         },
     }
+    private _searchTerm: string = ""
+
     /**
      * there is a really small chance here that this possibly falls victim to a race condition
      * but i think we can ignore that for now
@@ -294,5 +296,16 @@ export class AppState{
         this._userSettings = value
         console.log(this._userSettings)
         this.update()
+    }
+
+    get searchTerm(): string {
+        return this._searchTerm
+    }
+
+    set searchTerm(value: string) {
+        this._searchTerm = value
+        this.update()
+        if(this._page == PageEnum.RENTS) RentService.fetchAll()
+        if(this._page == PageEnum.EQUIPMENT) DeviceService.fetchAll()
     }
 }

@@ -3,7 +3,7 @@ import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/navbar.styles.scss'
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
-import { faMagnifyingGlass, faArrowRotateRight, faArrowLeft } from "@fortawesome/free-solid-svg-icons"
+import { faMagnifyingGlass, faArrowRotateRight, faArrowLeft, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons"
 import {model} from "../../index"
 import {KeyBoardShortCut, SimpleColorEnum, SizeEnum, Tooltip} from "../../base"
@@ -21,6 +21,9 @@ import PopupEngine from "../../popupEngine"
 export class NavbarComponent extends LitElement {
     @property({reflect: true})
     type: "default" | "simple" | "back" = "default"
+
+    @property()
+    searchOpen: boolean = false
 
     @property()
     private appState: ObservedProperty<AppState>
@@ -86,7 +89,15 @@ export class NavbarComponent extends LitElement {
             </cc-select>
 
             <div class="tools">
-                <icon-cta>${unsafeSVG(icon(faMagnifyingGlass).html[0])}</icon-cta>
+                <div class="search-container">
+                    <div class="search ${this.searchOpen ? 'expanded' : ''}">
+                        <input type="text" placeholder="suche">
+                        ${this.searchOpen ? 
+                            html`<icon-cta @click="${this.closeSearch}" class="closeIcon">${unsafeSVG(icon(faXmark).html[0])}</icon-cta>` :
+                            html`<icon-cta @click="${this.openSearch}" class="searchIcon">${unsafeSVG(icon(faMagnifyingGlass).html[0])}</icon-cta>`
+                        }
+                    </div>
+                </div>
                 <icon-cta @click="${this.reload}" class="reload">${unsafeSVG(icon(faArrowRotateRight).html[0])}</icon-cta>
                 <icon-cta>${unsafeSVG(icon(faCircleQuestion).html[0])}</icon-cta>
             </div>
@@ -121,6 +132,18 @@ export class NavbarComponent extends LitElement {
         AnimationHelper.spin(this.shadowRoot.querySelector("icon-cta.reload"))
         PopupEngine.createNotification({text: "Daten werden aktualisiert", CSSClass: "good"})
         RentService.fetchAll()
+    }
+
+    openSearch(){
+        this.searchOpen = true
+        let input = this.shadowRoot.querySelector(".search input") as HTMLInputElement
+        input.focus()
+    }
+
+    closeSearch(){
+        this.searchOpen = false
+        let input = this.shadowRoot.querySelector(".search input") as HTMLInputElement
+        input.value = ""
     }
 }
 

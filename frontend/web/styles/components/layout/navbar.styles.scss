@@ -51,20 +51,43 @@ div.tools{
   }
 }
 
-div.searchBar{
-  width: 22ch;
-  background-color: $gray400;
+.search-container{
+  position: relative;
+  height: 1.2rem;
+}
+
+div.search{
   border-radius: .5rem;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: .2rem;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  translate: 0 -50%;
+  transition: border $transitionTimeShort, gap $transitionTimeShort, padding $transitionTimeShort, margin $transitionTimeShort;
 
   input{
     color: $gray800;
-    background: transparent;
+    -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;
+    opacity: 0;
     border: none;
-    border-bottom: 1px solid $gray800;
+    background-color: $gray350;
+    width: 0;
+
+    transition: width $transitionTimeShort, opacity $transitionTimeShort;
+  }
+
+  &.expanded{
+    border: 1px solid $gray500;
+    gap: .5rem;
     padding: .2rem;
+    padding-right: .3rem;
+    margin-right: -.3rem;
+
+    input{
+      opacity: 1;
+      width: 22ch;
+    }
   }
 }

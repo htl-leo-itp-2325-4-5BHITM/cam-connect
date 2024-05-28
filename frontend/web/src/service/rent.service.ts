@@ -58,7 +58,6 @@ export interface RentFilters {
     statuses?: RentStatusEnum[]
     schoolClasses?: Set<string>
     studentIds?: number[]
-    searchTerm?: string
 }
 
 export interface RentFilterDTO {
