@@ -75,7 +75,7 @@ export class AppComponent extends LitElement {
                         <p class="selected">raster</p>
                         <p>liste</p>
                     </cc-select>
-                    <cc-toggle slot="sorts" onToggle="${(toggled:boolean)=>{
+                    <cc-toggle slot="sorts" .onToggle="${(toggled:boolean)=>{
                         if(toggled){
                             
                         }
