@@ -15,8 +15,8 @@ export class SidebarComponent extends LitElement {
     @property({type:String})
     accountname?: string = 'No username provided'
 
-    @queryAssignedElements({slot: "primaryFilters"})
-    private primaryFilters!: Array<HTMLElement>;
+    @queryAssignedElements({slot: "primaryFilters", selector: "[affectSecondaryFilters]"})
+    private controlFilters!: Array<HTMLElement>;
 
     @queryAssignedElements({slot: "secondaryFilters"})
     private secondaryFilters!: Array<HTMLElement>;
@@ -54,7 +54,9 @@ export class SidebarComponent extends LitElement {
                 <slot name="sorts"></slot>
             </div>
             <cc-line></cc-line>
-            <slot name="primaryFilters" @slotchange=${this.handlePrimaryFilterChange}></slot>
+            <div class="primaryFilters">
+                <slot name="primaryFilters" @slotchange=${this.handlePrimaryFilterChange}></slot>
+            </div>
             <cc-line></cc-line>
             <div class="secondaryFilters">
                 <slot name="secondaryFilters"></slot>
@@ -73,7 +75,7 @@ export class SidebarComponent extends LitElement {
 
     setSecondaryFilterVisibility(){
         let selectedPrimaryFilters: (string | number)[] = []
-        this.primaryFilters.forEach((filter: FilterContainerComponent) => {
+        this.controlFilters.forEach((filter: FilterContainerComponent) => {
             selectedPrimaryFilters = selectedPrimaryFilters.concat(filter.getSelectedOptionsAsIdArray())
         })
 
@@ -88,7 +90,7 @@ export class SidebarComponent extends LitElement {
     }
 
     handlePrimaryFilterChange(){
-        this.primaryFilters.forEach((filter: FilterContainerComponent) => {
+        this.controlFilters.forEach((filter: FilterContainerComponent) => {
             filter.filterChange = () => {this.setSecondaryFilterVisibility()}
         })
     }

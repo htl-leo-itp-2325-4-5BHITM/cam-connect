@@ -6,19 +6,22 @@ import URLHandler from "../../urlHandler"
 
 @customElement('cc-select')
 export class SelectComponent extends LitElement {
-    @queryAssignedElements()
-    options!: Array<HTMLElement>
-    @property()
-    size:SizeEnum = SizeEnum.MEDIUM
-    @property()
-    spacerColor:SimpleColorEnum = SimpleColorEnum.GRAY
-    @property()
-    optionSelected: (option: HTMLElement) => void = () => {}
+    @queryAssignedElements() options!: Array<HTMLElement>
+
+    @property() size:SizeEnum = SizeEnum.MEDIUM
+
+    @property() spacerColor:SimpleColorEnum = SimpleColorEnum.GRAY
+
+    @property() color:SimpleColorEnum = SimpleColorEnum.GRAY
+
+    @property() onSelect: (option: HTMLElement) => void = () => {}
+
+    @property({type: Boolean}) heavy:boolean = false
 
     render() {
         return html`
             <style>${styles}</style>
-            <div class="select" size="${this.size}" spacerColor="${this.spacerColor}">
+            <div class="select" size="${this.size}" spacerColor="${this.spacerColor}" color="${this.color}" heavy="${this.heavy}">
                 <slot></slot>
             </div>`
     }
@@ -33,7 +36,7 @@ export class SelectComponent extends LitElement {
     selectOption(option:HTMLElement){
         this.options.forEach(option => {option.classList.remove("selected")})
         option.classList.add("selected")
-        this.optionSelected(option)
+        this.onSelect(option)
     }
 
     selectOptionByIndex(index:number){

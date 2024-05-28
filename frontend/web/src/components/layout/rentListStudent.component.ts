@@ -11,6 +11,7 @@ import { icon } from '@fortawesome/fontawesome-svg-core'
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons"
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import {Student} from "../../service/student.service"
+import URLHandler from "../../urlHandler"
 
 @customElement('cc-rent-list-student')
 export class RentListStudentComponent extends LitElement {
@@ -75,7 +76,14 @@ export class RentListStudentComponent extends LitElement {
                                @click="${() => model.appState.value.openCreateRentModal(this.rentByStudent.student.student_id)}"
                     >Verleih erstellen</cc-button>
                     <cc-button type="${ButtonType.TEXT}" color="${SimpleColorEnum.GRAY}" size="${SizeEnum.SMALL}" 
-                               @click="${() => {model.appState.value.openOverlay(html`<cc-rent-detail-view .student="${student}"></cc-rent-detail-view>`)}}"
+                               @click="${() => {
+                                   URLHandler.updateUrl("/app/rents/details")
+                                   URLHandler.setParam("sid", student.student_id.toString())
+                                   model.appState.value.openOverlay(
+                                       html`<cc-rent-detail-view .studentId="${student.student_id}"></cc-rent-detail-view>`, 
+                            () => { URLHandler.updateUrl("/app/rents") }
+                                   )
+                               }}"
                     >Details anzeigen</cc-button>
                     
                     <cc-circle-select type="${CircleSelectType.MULTIPLE}" size="${SizeEnum.SMALL}" 

@@ -12,7 +12,7 @@ public class Tag {
     private Long tag_id;
 
     @OneToMany(fetch = FetchType.EAGER)
-    private List<DeviceType> type;
+    private List<DeviceType> types;
 
     @Column(length = 20, unique = true)
     private String name;

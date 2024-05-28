@@ -21,8 +21,10 @@ import jakarta.ws.rs.core.StreamingOutput;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -86,8 +88,8 @@ public class RentRepository {
     //TODO remove when abandoning old web
     @Transactional
     public void createEmpty(){
-        em.persist(new Rent());
-        rentSocket.broadcast();
+        /*em.persist(new Rent());
+        rentSocket.broadcast();*/
     }
 
     @Transactional
@@ -124,13 +126,17 @@ public class RentRepository {
                         rent.getAccessory(),
                         rent.getStudent(),
                         rent.getNote(),
-                        rent.getVerification_message()
+                        rent.getVerification_message(),
+                        rent.getCreation_date(),
+                        rent.getChange_date()
                 ))
                 .collect(Collectors.toList());
 
     }
 
     public List<RentByStudentDTO> getAll(RentFilters filters){
+
+        System.out.println(filters);
 
         String orderByString = "";
         switch (filters.orderBy()) {
@@ -145,13 +151,23 @@ public class RentRepository {
                         "join Student s on r.student.student_id = s.student_id " +
                         "where (s.school_class IN :schoolClasses OR :schoolClassesEmpty = true) " +
                         "and (s.student_id IN :studentIds OR :studentIdsEmpty = true) " +
+                        "and (" +
+                        "       upper(s.firstname) like '%' || :searchTerm || '%' " +
+                        "       OR :searchTerm like '%' || upper(s.firstname) || '%' " +
+                        "       OR upper(s.lastname) like '%' || :searchTerm || '%' " +
+                        "       OR :searchTerm like '%' || upper(s.lastname) || '%' " +
+                        "       OR :searchTerm like '%' || upper(s.firstname) || '%' || upper(s.lastname) || '%' " +
+                        "       OR upper(s.firstname) || '%' || upper(s.lastname) like '%' || :searchTerm || '%' " +
+                        "OR :searchTermEmpty = true) " +
                         "group by s.student_id " +
                         orderByString
                 ,Student.class)
                 .setParameter("schoolClasses", filters.schoolClasses())
-                .setParameter("schoolClassesEmpty", filters.schoolClasses() == null || filters.schoolClasses().isEmpty())
+                .setParameter("schoolClassesEmpty", filters.schoolClasses().isEmpty())
                 .setParameter("studentIds", filters.studentIds())
-                .setParameter("studentIdsEmpty", filters.studentIds() == null || filters.studentIds().isEmpty())
+                .setParameter("studentIdsEmpty", filters.studentIds().isEmpty())
+                .setParameter("searchTerm", filters.searchTerm().toUpperCase())
+                .setParameter("searchTermEmpty", filters.searchTerm().isEmpty())
                 .getResultList();
 
         List<RentByStudentDTO> result = new LinkedList<>();
@@ -168,7 +184,7 @@ public class RentRepository {
                     , Rent.class)
                     .setParameter("studentId", student.getStudent_id())
                     .setParameter("statuses", filters.statuses())
-                    .setParameter("statusesEmpty", filters.statuses() == null || filters.statuses().isEmpty())
+                    .setParameter("statusesEmpty", filters.statuses().isEmpty())
                     .getResultStream()
                     .map(rent -> new RentDTO(
                             rent.getRent_id(),
@@ -184,7 +200,9 @@ public class RentRepository {
                             rent.getAccessory(),
                             rent.getStudent(),
                             rent.getNote(),
-                            rent.getVerification_message()
+                            rent.getVerification_message(),
+                            rent.getCreation_date(),
+                            rent.getChange_date()
                     ))
                     .collect(Collectors.toList());
 
@@ -201,7 +219,7 @@ public class RentRepository {
 
     public RentDTO getByIdCensored(Long id){
         Rent rent = getById(id);
-        return new RentDTO(rent.getRent_id(), rent.getStatus(), rent.getType(), rent.getDevice(), rent.getDevice_string(), rent.getTeacher_start(), rent.getTeacher_end(), rent.getRent_start(), rent.getRent_end_planned(), rent.getRent_end_actual(), rent.getAccessory(), rent.getStudent(), rent.getNote(), rent.getVerification_message());
+        return new RentDTO(rent.getRent_id(), rent.getStatus(), rent.getType(), rent.getDevice(), rent.getDevice_string(), rent.getTeacher_start(), rent.getTeacher_end(), rent.getRent_start(), rent.getRent_end_planned(), rent.getRent_end_actual(), rent.getAccessory(), rent.getStudent(), rent.getNote(), rent.getVerification_message(), rent.getCreation_date(), rent.getChange_date());
     }
 
     public List<RentDTO> getByIdList(String[] idList){
@@ -557,12 +575,14 @@ public class RentRepository {
                     writer.write(csvLine);
                 }
             } catch (IOException e) {
-                throw new CCException(1200);
+                throw new CCException(1200, "File creation failed");
             }
         };
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm");
+
         return Response.ok(stream)
-                .header("Content-Disposition", "attachment; filename=\"file.csv\"")
+                .header("Content-Disposition", "attachment; filename=\"rent-" + dateFormat.format(new Date()) + ".csv\"")
                 .build();
     }
 

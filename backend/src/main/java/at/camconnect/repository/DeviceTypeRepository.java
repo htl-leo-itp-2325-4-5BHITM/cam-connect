@@ -109,7 +109,7 @@ public class DeviceTypeRepository {
 
             List<Tag> tagList = em.createQuery(
                      "SELECT t FROM Tag t " +
-                        "JOIN FETCH t.type dt " +
+                        "JOIN FETCH t.types dt " +
                         "WHERE dt = :deviceType", Tag.class)
                     .setParameter("deviceType", deviceType)
                     .getResultList();

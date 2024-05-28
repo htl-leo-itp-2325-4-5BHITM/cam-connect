@@ -87,6 +87,8 @@ export default class Util{
     }
 
     static formatDateForHuman(input: Date | string){
+        if(input == undefined) return "unbekannt"
+
         let date: Date
         if(typeof input == "string"){
             date = new Date(input)
@@ -96,6 +98,25 @@ export default class Util{
         }
 
         return date.toLocaleDateString("at-DE", {day: "2-digit", month: "2-digit", year: "2-digit"})
+    }
+
+    static formatDateTimeForHuman(input: Date | string){
+        if(input == undefined) return "unbekannt"
+
+        let date: Date
+        if(typeof input == "string"){
+            date = new Date(input)
+        }
+        else{
+            date = input
+        }
+
+        return date.toLocaleDateString("at-DE", {day: "2-digit", month: "2-digit", year: "2-digit", hour: "2-digit", minute: "2-digit"})
+    }
+
+    static currentFullDate(){
+        const formattedDate = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}_${String(new Date().getHours()).padStart(2, '0')}-${String(new Date().getMinutes()).padStart(2, '0')}-${String(new Date().getSeconds()).padStart(2, '0')}`;
+        return formattedDate
     }
 
     static smartHeight(elem: HTMLElement){

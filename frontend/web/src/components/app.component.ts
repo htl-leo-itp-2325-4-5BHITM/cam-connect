@@ -60,6 +60,7 @@ export class AppComponent extends LitElement {
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
         model.appState.value.overlayElement = this.shadowRoot.querySelector("#overlay") as HTMLElement
+        model.appState.value.originElementLoaded.next(true)
     }
 
     render() {
@@ -83,7 +84,8 @@ export class AppComponent extends LitElement {
                                noPadding>Filter zurücksetzten
                     </cc-button>
                     
-                    <cc-filter-container slot="primaryFilters" .options="${model.deviceTypeNameFilterOptions}">Gerätetyp</cc-filter-container>
+                    <cc-filter-container slot="primaryFilters" .options="${model.deviceTypeNameFilterOptions}" affectSecondaryFilters>Gerätetyp</cc-filter-container>
+                    <cc-filter-container slot="primaryFilters" .options="${model.tagFilterOptions}">Tags</cc-filter-container>
                     
                     <cc-filter-container slot="secondaryFilters" .options="${model.deviceTypeAttributesAsFilterOptions.cameraResolutions}" .visibility="${["camera", "drone"]}">Auflösungen</cc-filter-container>
                     <cc-filter-container slot="secondaryFilters" .options="${model.deviceTypeAttributesAsFilterOptions.cameraSensors}" .visibility="${["camera"]}">Sensoren</cc-filter-container>
