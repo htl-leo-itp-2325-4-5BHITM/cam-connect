@@ -58,6 +58,17 @@ public class CameraType extends DeviceType {
         this.autofocus = autofocus;
     }
 
+    @Override
+    public String toString() {
+        return "CameraType{" +
+                "sensor=" + sensor +
+                ", resolution=" + resolution +
+                ", mount=" + mount +
+                ", system=" + system +
+                ", framerate=" + framerate +
+                ", autofocus=" + autofocus +
+                '}';
+    }
 
     public CameraSensor getSensor() {
         return sensor;

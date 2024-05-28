@@ -2,6 +2,7 @@ package at.camconnect.repository;
 
 import at.camconnect.dtos.*;
 import at.camconnect.dtos.deviceType.*;
+import at.camconnect.dtos.rent.RentDTO;
 import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.model.DeviceTypeAttributes.*;
 import at.camconnect.model.Tag;
@@ -16,12 +17,11 @@ import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.StreamingOutput;
 import org.hibernate.exception.ConstraintViolationException;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 @ApplicationScoped
@@ -172,6 +172,30 @@ public class DeviceTypeRepository {
     }
 
     //endregion
+
+
+    public Response exportAllDeviceTypes() {
+        StreamingOutput stream = os -> {
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(os))) {
+                writer.write(getCSVHeader());
+
+                List<DeviceTypeFullDTO> deviceTypeList = getAllFull();
+                for (DeviceTypeFullDTO deviceType : deviceTypeList) {
+                    writer.write(deviceType.deviceType().toString());
+                }
+            } catch (IOException e) {
+                throw new CCException(1200);
+            }
+        };
+
+        return Response.ok(stream)
+                .header("Content-Disposition", "attachment; filename=\"file.csv\"")
+                .build();
+    }
+
+    private String getCSVHeader() {
+        return "rent_id;status;type;device_id;device_string;teacher_start_id;teacher_start_name;teacher_end_id;teacher_end_name;rent_start;rent_end_planned;rent_end_actual;student_id;student_name;note;verification_message;\n";
+    }
 
     @Transactional
     public void importDeviceTypes(File file, String type) {
