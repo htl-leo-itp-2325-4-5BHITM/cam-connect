@@ -557,7 +557,7 @@ public class RentRepository {
                     writer.write(csvLine);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new CCException(1200);
             }
         };
 

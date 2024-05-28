@@ -127,6 +127,17 @@ public class DeviceTypeResource {
         return CCResponse.ok(result);
     }
 
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/getcsv")
+    public Response exportAllRents() {
+        try {
+            return deviceTypeRepository.exportAllDeviceTypes();
+        } catch (CCException ex) {
+            return CCResponse.error(ex);
+        }
+    }
+
     @POST
     @Path("/import/{type}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
