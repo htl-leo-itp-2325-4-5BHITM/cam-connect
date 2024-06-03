@@ -58,22 +58,22 @@ export class Api {
             })
     }
 
-    static putData<In, Out>(url: string, data?: In): Promise<ccResponse<Out>> {
-        return fetch(config.api_url + url, {
+    static async putData<In, Out>(url: string, data?: In): Promise<ccResponse<Out>> {
+        let response = await fetch(config.api_url + url, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(data),
             })
-            .then(response => {
-                this.handleHttpError(response.status, response.url)
-                return response.json() as Promise<ccResponse<Out>>
-            })
-            .then((result: ccResponse<Out>) => {
-                this.handleCCError(result.ccStatus, url)
-                return result
-            })
+
+        this.handleHttpError(response.status, response.url)
+
+        let result: ccResponse<Out> = await response.json()
+
+        this.handleCCError(result.ccStatus, url)
+
+        return result
     }
 
     static async postData<In, Out>(path: string, data: In, type: "upload" | "json" = "json"): Promise<any> {
@@ -215,7 +215,7 @@ export class Tooltip {
     static lastTimeShown = 0
     static timeoutFallback
 
-    static show(elem: HTMLElement, text: string, delay: number) {
+    static show(elem: HTMLElement, text: string, delay: number, autoCloseTimer: number = 10000) {
         if(!this.tooltip) this.tooltip = model.appState.value.appElement.shadowRoot.querySelector("#tooltip")
 
         clearTimeout(this.timeoutFallback)
@@ -241,7 +241,7 @@ export class Tooltip {
 
         this.timeoutFallback = setTimeout(() => {
             this.hide(500)
-        },10000)
+        },autoCloseTimer)
     }
 
     /**

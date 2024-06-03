@@ -81,7 +81,7 @@ export default class RentService {
             orderBy: model.appState.value.rentFilters.orderBy,
             statuses: model.appState.value.rentFilters.statuses,
             schoolClasses: Array.from(model.appState.value.rentFilters.schoolClasses),
-            searchTerm: ""
+            searchTerm: model.appState.value.searchTerm
         }
 
         Api.postData<RentFilterDTO, RentByStudentDTO[]>("/rent/getall", rentFiltersForBackend)
@@ -153,13 +153,7 @@ export default class RentService {
 
     static updateProperty(id: number, property: string, data: any) {
         let theData = {value: data}
-        Api.putData<{value: string}, null>(`/rent/getbyid/${id}/update/${property}`, theData)
-            .then((data) => {
-                console.log(data)
-            })
-            .catch(error => {
-                console.error(error)
-            })
+        return Api.putData<{value: string}, null>(`/rent/getbyid/${id}/update/${property}`, theData)
     }
 
     static requestConfirmation(rent: Rent) {

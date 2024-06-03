@@ -6,6 +6,7 @@ import at.camconnect.model.Rent;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.repository.RentRepository;
+import io.smallrye.common.annotation.Blocking;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
 import jakarta.ws.rs.*;
@@ -172,6 +173,7 @@ public class RentResource {
 
     @PUT
     @Path("/getbyid/{id: [0-9]+}/update/{property}")
+    @Blocking
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Long id, @PathParam("property") String property, JsonObject rent) {
         try {

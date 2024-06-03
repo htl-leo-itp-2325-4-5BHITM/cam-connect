@@ -1,4 +1,4 @@
-import {LitElement, css, html} from 'lit'
+import {LitElement, css, html, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/navbar.styles.scss'
 import { icon } from '@fortawesome/fontawesome-svg-core'
@@ -72,6 +72,7 @@ export class NavbarComponent extends LitElement {
                        .onSelect = "${(elem) => {
                            this.appState.value.page = elem.dataset.page
                            URLHandler.updateUrl(elem.dataset.page)
+                           this.closeSearch()
                        }
             }">
                 <p data-page="equipment" class="${this.appState.value.page == PageEnum.EQUIPMENT ? 'selected' : ''}"
@@ -94,7 +95,11 @@ export class NavbarComponent extends LitElement {
                         <input type="text" placeholder="suche">
                         ${this.searchOpen ? 
                             html`<icon-cta @click="${this.closeSearch}" class="closeIcon">${unsafeSVG(icon(faXmark).html[0])}</icon-cta>` :
-                            html`<icon-cta @click="${this.openSearch}" class="searchIcon">${unsafeSVG(icon(faMagnifyingGlass).html[0])}</icon-cta>`
+                            html`<icon-cta @click="${() => this.openSearch()}" class="searchIcon"
+                                @mouseenter="${(e) => {Tooltip.show(e.target, 'shift+s', 500, 1000)}}" 
+                                @mouseleave="${()=>{Tooltip.hide(0)}}"
+                            >
+                                ${unsafeSVG(icon(faMagnifyingGlass).html[0])}</icon-cta>`
                         }
                     </div>
                 </div>
@@ -120,7 +125,15 @@ export class NavbarComponent extends LitElement {
             KeyBoardShortCut.register(model.appState.value.userSettings.keybinds.calendarPage, () => {
                 this.selectNavItem(2)
             })
+            KeyBoardShortCut.register(model.appState.value.userSettings.keybinds.search, () => {
+                this.openSearch()
+            })
         }
+    }
+
+    protected firstUpdated(_changedProperties: PropertyValues) {
+        super.firstUpdated(_changedProperties);
+        if(URLHandler.getParam("searchTerm") != "") this.openSearch(URLHandler.getParam("searchTerm"))
     }
 
     selectNavItem(pageIndex: number) {
@@ -130,20 +143,41 @@ export class NavbarComponent extends LitElement {
 
     reload(e: Event) { //TODO limit rates
         AnimationHelper.spin(this.shadowRoot.querySelector("icon-cta.reload"))
-        PopupEngine.createNotification({text: "Daten werden aktualisiert", CSSClass: "good"})
         RentService.fetchAll()
+        PopupEngine.createNotification({text: "Daten wurden aktualisiert", CSSClass: "good"})
     }
 
-    openSearch(){
+    openSearch(searchTerm: string = ""){
         this.searchOpen = true
         let input = this.shadowRoot.querySelector(".search input") as HTMLInputElement
+        if(searchTerm != "") {
+            input.value = searchTerm
+            this.handleSearchInput()
+        }
         input.focus()
+        input.addEventListener("keyup", this.handleSearchInput.bind(this))
+        model.appState.value.addCurrentActionCancellation(this.closeSearch.bind(this), "search")
+    }
+
+    lastInputTime: number = 0
+    handleSearchInput(){
+        let input = this.shadowRoot.querySelector(".search input") as HTMLInputElement
+        this.lastInputTime = Date.now()
+        setTimeout(() => {
+            if(Date.now() - this.lastInputTime > 300){
+                model.appState.value.searchTerm = input.value
+            }
+        },300)
     }
 
     closeSearch(){
         this.searchOpen = false
         let input = this.shadowRoot.querySelector(".search input") as HTMLInputElement
+        input.blur()
         input.value = ""
+        model.appState.value.searchTerm = ""
+        input.removeEventListener("keyup", this.handleSearchInput.bind(this))
+        model.appState.value.removeCurrentActionCancellation("search")
     }
 }
 

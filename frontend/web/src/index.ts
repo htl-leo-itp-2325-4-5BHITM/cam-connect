@@ -54,6 +54,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     PopupEngine.init({
         notificationOffset: {top: "75px", bottom: "10px", left: "300px", right: "10px"},
+        defaultNotificationPosition: ["bottom", "right"],
         onModalOpen: () => {
             model.appState.value.addCurrentActionCancellation(() => {
                 PopupEngine.cancelModal()

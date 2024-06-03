@@ -34,6 +34,7 @@ interface UserSettings {
         equipmentPage: string[] | string[][]
         rentPage: string[] | string[][]
         calendarPage: string[] | string[][]
+        search: string[] | string[][]
     }
 }
 
@@ -65,7 +66,8 @@ export class AppState{
             rentPage: [["shift", "v"], ["2"]],
             calendarPage: [["shift", "c"], ["3"]],
             newRent: [["shift", "n"], ["<"]],
-            newRentAddDevice: ["shift", "g"]
+            newRentAddDevice: ["shift", "g"],
+            search: ["shift", "s"]
         },
     }
     private _searchTerm: string = ""
@@ -304,6 +306,7 @@ export class AppState{
 
     set searchTerm(value: string) {
         this._searchTerm = value
+        URLHandler.setParam("searchTerm", value)
         this.update()
         if(this._page == PageEnum.RENTS) RentService.fetchAll()
         if(this._page == PageEnum.EQUIPMENT) DeviceService.fetchAll()

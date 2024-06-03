@@ -37,7 +37,7 @@ export class SidebarComponent extends LitElement {
                 <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.FILLED}"
                            @click="${this.openCreateRentMenu}"
                            @mouseenter="${(e) => {
-                               Tooltip.show(e.target, 'shift+n oder <', 1000)
+                               Tooltip.show(e.target, 'shift+n oder <', 500)
                            }}"
                            @mouseleave="${() => {
                                Tooltip.hide(0)

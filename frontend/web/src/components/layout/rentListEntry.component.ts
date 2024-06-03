@@ -53,10 +53,9 @@ export class RentListEntryComponent extends LitElement {
         //todo this.datePicker?.instance.destroy();
         if(!this.datePicker || this.lastStatus != this.rent.status) {
             this.lastStatus = this.rent.status
-            //TODO does not work 100% of the time fuck
             this.datePicker = new DatePickerWrapper(input, [new Date(startDate), new Date(endDate)],
-        (dates) => {
-                    RentService.updateProperty(this.rent.rent_id, 'rent_start', Util.formatDateForDb(dates[0]))
+        async (dates) => {
+                    await RentService.updateProperty(this.rent.rent_id, 'rent_start', Util.formatDateForDb(dates[0]))
                     RentService.updateProperty(this.rent.rent_id, 'rent_end_planned', Util.formatDateForDb(dates[1]))
                 }
             )
@@ -159,7 +158,6 @@ export class RentListEntryComponent extends LitElement {
                             <cc-autocomplete placeholder="Nr." class="number"
                                      .selected="${{id: this.rent?.device?.device_id, data: this.rent?.device}}"
                                      .onSelect="${(option: Device, isInitialCall) => {
-                                         console.log("device", option)
                                          this.rent.device = option
              
                                          if(this.rent.device.type == null) return

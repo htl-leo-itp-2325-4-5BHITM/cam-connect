@@ -36,9 +36,11 @@ interface Config{
 	notificationOffset?: {top: string, bottom: string, left: string, right: string}
 	notificationOffsetPhone?: {top: string, bottom: string}
 	defaultNotificationLifetime?: number
+	defaultNotificationPosition?: string[]
 	phoneBreakpoint?: number
 	onModalOpen?: () => void
 	onModalClose?: (data: ModalCallbackData) => void
+
 }
 
 interface ModalCallbackData{
@@ -70,6 +72,7 @@ export default class PopupEngine{
 		notificationOffset: {top: "1vw", bottom: "1vw", left: "1vw", right: "1vw"},
 		notificationOffsetPhone: {top: "1vh", bottom: "1vh"},
 		defaultNotificationLifetime: 5000,
+		defaultNotificationPosition: ["top", "right"],
 
 		phoneBreakpoint: 600,
 
@@ -135,6 +138,9 @@ export default class PopupEngine{
 					this.config.defaultNotificationLifetime = config.defaultNotificationLifetime
 				else
 					console.error('invalid default notification lifetime value: "' + config.defaultNotificationLifetime + '" must be a number, will default to "5000".');
+			}
+			if(config.defaultNotificationPosition){
+				this.config.defaultNotificationPosition = config.defaultNotificationPosition
 			}
 
 			if(config.phoneBreakpoint){
@@ -512,7 +518,7 @@ export default class PopupEngine{
 		if(!this.#checkHTML() || !settings )return
 
 		if(!settings.position)
-			settings.position = ["top", "left"]
+			settings.position = this.config.defaultNotificationPosition
 
 		if(settings.position.length !== 2){
 			if(this.config.doLogs)

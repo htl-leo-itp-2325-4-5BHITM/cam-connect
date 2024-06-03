@@ -45,7 +45,7 @@ public class Rent {
     private LocalDate rent_end_planned;
     @Temporal(TemporalType.DATE)
     private LocalDate rent_end_actual;
-    private LocalDateTime creation_date;
+    private final LocalDateTime creation_date;
     private LocalDateTime change_date;
     @Column(length = 20)
     private String verification_code;
