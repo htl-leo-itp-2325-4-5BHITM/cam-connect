@@ -133,7 +133,7 @@ export class NavbarComponent extends LitElement {
 
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
-        if(URLHandler.getParam("searchTerm") != "") this.openSearch(URLHandler.getParam("searchTerm"))
+        if(URLHandler.getParam("searchTerm") != "" && URLHandler.getParam("searchTerm") != null) this.openSearch(URLHandler.getParam("searchTerm"))
     }
 
     selectNavItem(pageIndex: number) {

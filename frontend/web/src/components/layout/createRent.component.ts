@@ -172,7 +172,7 @@ export class CreateRentComponent extends LitElement {
 
         if(!valid) return
 
-        console.log(data)
+        model.appState.value.removeCurrentActionCancellation("createRentModal")
 
         RentService.create(data)
     }
