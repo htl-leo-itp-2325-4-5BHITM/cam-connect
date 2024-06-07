@@ -201,17 +201,18 @@ public class DeviceTypeRepository {
     }
 
     private String getCSVHeader(String type) {
-        switch(type){
-            case "camera": return "type_id;creation_date;name;image;status;variant;sensor_id;resolution_id;mount_id;system_id;framerate;autofocus;\n";
-            case "drone": return "type_id;creation_date;name;image;status;variant;sensor_id;resolution_id;max_range;\n";
-            case "lens": return "type_id;creation_date;name;image;status;variant;f_stop;mount_id;focal_length;\n";
-            case "light": return "type_id;creation_date;name;image;status;variant;watts;rgb;variable_temperature;\n";
-            case "microphone": return "type_id;creation_date;name;image;status;variant;windblocker;wireless;needs_recorder;\n";
-            case "stabilizer": return "type_id;creation_date;name;image;status;variant;max_weight_kilograms;number_of_axis;\n";
-            case "tripod": return "type_id;creation_date;name;image;status;variant;height_centimeters;head_id;\n";
-            case "simple": return "type_id;creation_date;name;image;status;variant;description;\n";
-            default: return "type_id;creation_date;name;image;status;variant;sensor_id;resolution_id;mount_id;system_id;framerate;autofocus;max_range;f_stop;focal_length;watts;rgb;variable_temperature;windblocker;wireless;needs_recorder;max_weight_kilograms;number_of_axis;height_centimeters;head_id;description;\n";
-        }
+        String base = "type_id;creation_date;name;image;status;variant;";
+        return base + switch(type){
+            case "camera" -> "sensor_id;resolution_id;mount_id;system_id;framerate;autofocus;\n";
+            case "drone" -> "sensor_id;resolution_id;max_range;\n";
+            case "lens" -> "f_stop;mount_id;focal_length;\n";
+            case "light" -> "watts;rgb;variable_temperature;\n";
+            case "microphone" -> "windblocker;wireless;needs_recorder;\n";
+            case "stabilizer" ->"max_weight_kilograms;number_of_axis;\n";
+            case "tripod" -> "height_centimeters;head_id;\n";
+            case "simple" -> "description;\n";
+            default -> "sensor_id;resolution_id;mount_id;system_id;framerate;autofocus;max_range;f_stop;focal_length;watts;rgb;variable_temperature;windblocker;wireless;needs_recorder;max_weight_kilograms;number_of_axis;height_centimeters;head_id;description;\n";
+        };
     }
 
     @Transactional
@@ -283,105 +284,64 @@ public class DeviceTypeRepository {
     }
 
     public DeviceType getDeviceTypeByLineArray(String[] lineArray, String type) {
-        switch (type) {
-            case "camera":
-                return new CameraType(
-                        parseLong(lineArray[0]),
-                        parseDate(lineArray[1]),
-                        lineArray[2],
-                        lineArray[3],
-                        parseEnum(DeviceTypeStatusEnum.class, lineArray[4]),
-                        parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
-                        findEntity(CameraSensor.class, lineArray[6]),
-                        findEntity(CameraResolution.class, lineArray[7]),
-                        findEntity(LensMount.class, lineArray[8]),
-                        findEntity(CameraSystem.class, lineArray[9]),
-                        parseInt(lineArray[10]),
-                        parseBoolean(lineArray[11])
-                );
-            case "drone":
-                return new DroneType(
-                        parseLong(lineArray[0]),
-                        parseDate(lineArray[1]),
-                        lineArray[2],
-                        lineArray[3],
-                        parseEnum(DeviceTypeStatusEnum.class, lineArray[4]),
-                        parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
-                        findEntity(CameraSensor.class, lineArray[6]),
-                        findEntity(CameraResolution.class, lineArray[7]),
-                        parseInt(lineArray[8])
-                );
-            case "lens":
-                return new LensType(
-                        parseLong(lineArray[0]),
-                        parseDate(lineArray[1]),
-                        lineArray[2],
-                        lineArray[3],
-                        parseEnum(DeviceTypeStatusEnum.class, lineArray[4]),
-                        parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
-                        findEntity(LensMount.class, lineArray[6]),
-                        lineArray[7],
-                        lineArray[8]
-                );
-            case "light":
-                return new LightType(
-                        parseLong(lineArray[0]),
-                        parseDate(lineArray[1]),
-                        lineArray[2],
-                        lineArray[3],
-                        parseEnum(DeviceTypeStatusEnum.class, lineArray[4]),
-                        parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
-                        parseInt(lineArray[6]),
-                        parseBoolean(lineArray[7]),
-                        parseBoolean(lineArray[8])
-                );
-            case "microphone":
-                return new MicrophoneType(
-                        parseLong(lineArray[0]),
-                        parseDate(lineArray[1]),
-                        lineArray[2],
-                        lineArray[3],
-                        parseEnum(DeviceTypeStatusEnum.class, lineArray[4]),
-                        parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
-                        parseBoolean(lineArray[6]),
-                        parseBoolean(lineArray[7]),
-                        parseBoolean(lineArray[8])
-                );
-            case "simple":
-                return new SimpleType(
-                        parseLong(lineArray[0]),
-                        parseDate(lineArray[1]),
-                        lineArray[2],
-                        lineArray[3],
-                        parseEnum(DeviceTypeStatusEnum.class, lineArray[4]),
-                        parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
-                        lineArray[6]
-                );
-            case "stabilizer":
-                return new StabilizerType(
-                        parseLong(lineArray[0]),
-                        parseDate(lineArray[1]),
-                        lineArray[2],
-                        lineArray[3],
-                        parseEnum(DeviceTypeStatusEnum.class, lineArray[4]),
-                        parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
-                        parseDouble(lineArray[6]),
-                        parseInt(lineArray[7])
-                );
-            case "tripod":
-                return new TripodType(
-                        parseLong(lineArray[0]),
-                        parseDate(lineArray[1]),
-                        lineArray[2],
-                        lineArray[3],
-                        parseEnum(DeviceTypeStatusEnum.class, lineArray[4]),
-                        parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
-                        parseInt(lineArray[6]),
-                        findEntity(TripodHead.class, lineArray[7])
-                );
-            default:
-                return null;
-        }
+        return switch (type) {  
+            case "camera" -> new CameraType(
+                    parseLong(lineArray[0]), parseDate(lineArray[1]), lineArray[2], lineArray[3],
+                    parseEnum(DeviceTypeStatusEnum.class, lineArray[4]), parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
+                    findEntity(CameraSensor.class, lineArray[6]),
+                    findEntity(CameraResolution.class, lineArray[7]),
+                    findEntity(LensMount.class, lineArray[8]),
+                    findEntity(CameraSystem.class, lineArray[9]),
+                    parseInt(lineArray[10]),
+                    parseBoolean(lineArray[11])
+            );
+            case "drone" -> new DroneType(
+                    parseLong(lineArray[0]), parseDate(lineArray[1]), lineArray[2], lineArray[3],
+                    parseEnum(DeviceTypeStatusEnum.class, lineArray[4]), parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
+                    findEntity(CameraSensor.class, lineArray[6]),
+                    findEntity(CameraResolution.class, lineArray[7]),
+                    parseInt(lineArray[8])
+            );
+            case "lens" -> new LensType(
+                    parseLong(lineArray[0]), parseDate(lineArray[1]), lineArray[2], lineArray[3],
+                    parseEnum(DeviceTypeStatusEnum.class, lineArray[4]), parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
+                    findEntity(LensMount.class, lineArray[6]),
+                    lineArray[7],
+                    lineArray[8]
+            );
+            case "light" -> new LightType(
+                    parseLong(lineArray[0]), parseDate(lineArray[1]), lineArray[2], lineArray[3],
+                    parseEnum(DeviceTypeStatusEnum.class, lineArray[4]), parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
+                    parseInt(lineArray[6]),
+                    parseBoolean(lineArray[7]),
+                    parseBoolean(lineArray[8])
+            );
+            case "microphone" -> new MicrophoneType(
+                    parseLong(lineArray[0]), parseDate(lineArray[1]), lineArray[2], lineArray[3],
+                    parseEnum(DeviceTypeStatusEnum.class, lineArray[4]), parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
+                    parseBoolean(lineArray[6]),
+                    parseBoolean(lineArray[7]),
+                    parseBoolean(lineArray[8])
+            );
+            case "simple" -> new SimpleType(
+                    parseLong(lineArray[0]), parseDate(lineArray[1]), lineArray[2], lineArray[3],
+                    parseEnum(DeviceTypeStatusEnum.class, lineArray[4]), parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
+                    lineArray[6]
+            );
+            case "stabilizer" -> new StabilizerType(
+                    parseLong(lineArray[0]), parseDate(lineArray[1]), lineArray[2], lineArray[3],
+                    parseEnum(DeviceTypeStatusEnum.class, lineArray[4]), parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
+                    parseDouble(lineArray[6]),
+                    parseInt(lineArray[7])
+            );
+            case "tripod" -> new TripodType(
+                    parseLong(lineArray[0]), parseDate(lineArray[1]), lineArray[2], lineArray[3],
+                    parseEnum(DeviceTypeStatusEnum.class, lineArray[4]), parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
+                    parseInt(lineArray[6]),
+                    findEntity(TripodHead.class, lineArray[7])
+            );
+            default -> null;
+        };
     }
 
     private Long parseLong(String value) {
