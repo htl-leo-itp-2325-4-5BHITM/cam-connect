@@ -1,11 +1,14 @@
 package at.camconnect.model.DeviceTypeVariants;
 
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
+import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.responseSystem.CCException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+
+import java.time.LocalDateTime;
 
 @Entity
 public class LightType extends DeviceType {
@@ -16,11 +19,12 @@ public class LightType extends DeviceType {
     private boolean variable_temperature;
 
     public LightType() {
+        super();
         setVariant(DeviceTypeVariantEnum.light);
     }
 
-    public LightType(String typeName, int watts, boolean rgb, boolean variable_temperature) {
-        super(typeName);
+    public LightType(Long type_id, LocalDateTime creation_date, String name, String image, DeviceTypeStatusEnum status, DeviceTypeVariantEnum variant, int watts, boolean rgb, boolean variable_temperature) {
+        super(type_id, creation_date, name, image, status, variant);
         this.watts = watts;
         this.rgb = rgb;
         this.variable_temperature = variable_temperature;
@@ -35,6 +39,23 @@ public class LightType extends DeviceType {
         }catch (Exception ex){
             throw new CCException(1106);
         }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%d;%s;%s;%s;%s;%s;%d;%b;%b;\n",
+                getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
+                getWatts(), isRgb(), isVariable_temperature());
+    }
+
+    @Override
+    public String getFullExportString() {
+        return String.format("%d;%s;%s;%s;%s;%s; ; ; ; ; ; ; ; ; ;%d;%b;%b; ; ; ; ; ; ; ; ;\n",
+                getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
+                getWatts(),
+                isRgb(),
+                isVariable_temperature()
+        );
     }
 
     public int getWatts() {

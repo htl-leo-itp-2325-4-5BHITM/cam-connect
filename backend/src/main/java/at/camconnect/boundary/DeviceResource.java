@@ -184,4 +184,15 @@ public class DeviceResource {
         }
         return CCResponse.ok();
     }
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/getcsv")
+    public Response exportAllDevices() {
+        try {
+            return deviceRepository.exportAllDevices();
+        } catch (CCException ex) {
+            return CCResponse.error(ex);
+        }
+    }
 }

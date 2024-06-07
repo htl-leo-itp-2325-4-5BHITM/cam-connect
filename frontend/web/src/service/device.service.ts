@@ -36,14 +36,14 @@ export default class DeviceService{
             })
     }
 
-    static createSocketConnection(){
+/*    static createSocketConnection(){
         let socket = new WebSocket(config.socket_url + "/socket/devices");
 
         socket.onmessage = (m) => {
             let result = JSON.parse(m.data) as ccResponse<Device[]>
             model.loadDevices(result.data)
         }
-    }
+    }*/
 
     static update(device: Device){
         Api.postData(`/device/getbyid/${device.device_id}/update`, device)

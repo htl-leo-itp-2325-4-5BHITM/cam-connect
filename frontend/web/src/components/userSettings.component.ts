@@ -97,12 +97,13 @@ export class UserSettingsComponent extends LitElement {
 
         Api.postData(`/rent/import`, formData, "upload")
             .then((data) => {
+                console.log(data)
                 switch (data.ccStatus.statusCode){
                     case 1000:
                         PopupEngine.createNotification({text: `Verleiheinträge wurden importiert`, CSSClass: "good"})
                         break
                     case 1201:
-                        PopupEngine.createNotification({text: `Konnte nicht importieren, weil der DeviceType bereits existiert`, CSSClass: "bad"})
+                        PopupEngine.createNotification({text: `Konnte nicht importieren, weil der Rent bereits existiert`, CSSClass: "bad"})
                         break
                     case 1203:
                         PopupEngine.createNotification({text: `Konnte nicht importiert werden, weil das File leer ist`, CSSClass: "bad"})

@@ -132,7 +132,18 @@ public class DeviceTypeResource {
     @Path("/getcsv")
     public Response exportAllRents() {
         try {
-            return deviceTypeRepository.exportAllDeviceTypes();
+            return deviceTypeRepository.exportAllDeviceTypes("");
+        } catch (CCException ex) {
+            return CCResponse.error(ex);
+        }
+    }
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/getcsv/{type}")
+    public Response exportAllRents(@PathParam("type")String type) {
+        try {
+            return deviceTypeRepository.exportAllDeviceTypes(type);
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }

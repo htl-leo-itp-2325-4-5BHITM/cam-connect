@@ -1,6 +1,7 @@
 package at.camconnect.model.DeviceTypeVariants;
 
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
+import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypeAttributes.LensMount;
@@ -9,6 +10,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+
+import java.time.LocalDateTime;
 
 @Entity
 public class LensType extends DeviceType {
@@ -21,11 +24,12 @@ public class LensType extends DeviceType {
     private String focal_length;
 
     public LensType() {
+        super();
         setVariant(DeviceTypeVariantEnum.lens);
     }
 
-    public LensType(String typeName, String f_stop, LensMount lens_mount, String focal_length) {
-        super(typeName);
+    public LensType(Long type_id, LocalDateTime creation_date, String name, String image, DeviceTypeStatusEnum status, DeviceTypeVariantEnum variant, LensMount lens_mount, String f_stop, String focal_length) {
+        super(type_id, creation_date, name, image, status, variant);
         this.f_stop = f_stop;
         this.lens_mount = lens_mount;
         this.focal_length = focal_length;
@@ -40,6 +44,25 @@ public class LensType extends DeviceType {
         }catch (Exception ex){
             throw new CCException(1106);
         }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%d;%s;%s;%s;%s;%s;%d;%s;%s;\n",
+                getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
+                getLens_mount() != null ? getLens_mount().getAttribute_id() : null,
+                getF_stop(),
+                getFocal_length());
+    }
+
+    @Override
+    public String getFullExportString() {
+        return String.format("%d;%s;%s;%s;%s;%s; ; ;%d; ; ; ; ;%s;%s; ; ; ; ; ; ; ; ; ; ; ;\n",
+                getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
+                getLens_mount() != null ? getLens_mount().getAttribute_id() : null,
+                getF_stop(),
+                getFocal_length()
+        );
     }
 
     //region getter setter

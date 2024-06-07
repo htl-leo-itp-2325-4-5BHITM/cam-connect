@@ -29,6 +29,17 @@ public abstract class DeviceType{
     private String name;
     private String image;
     private LocalDateTime creation_date;
+
+
+
+    public DeviceType(Long type_id, LocalDateTime creation_date, String name, String image, DeviceTypeStatusEnum status, DeviceTypeVariantEnum variant) {
+        this.variant = variant;
+        this.status = status;
+        this.name = name;
+        this.image = image;
+        this.creation_date = creation_date;
+    }
+
     abstract public void update(DeviceTypeGlobalObjectsDTO data);
 
     public DeviceTypeStatusEnum getStatus() {
@@ -85,5 +96,19 @@ public abstract class DeviceType{
     public void setType_id(long typeId) {
         this.type_id = typeId;
     }
+
+    public LocalDateTime getCreation_date() {
+        return creation_date;
+    }
+
+    public void setCreation_date(LocalDateTime creation_date) {
+        this.creation_date = creation_date;
+    }
+
+    /**
+     * this function is used for the full export of all device types in one file
+     * @return
+     */
+    public abstract String getFullExportString();
     //endregion
 }
