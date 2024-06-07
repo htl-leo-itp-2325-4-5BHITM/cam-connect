@@ -22,6 +22,9 @@ export class CircleSelectComponent extends LitElement {
     @property({ type: Boolean, reflect: true })
     checked?: boolean = false;
 
+    @property({ type: Boolean, reflect: true })
+    disabled?: boolean = false
+
     @property()
     onToggle: (checked: boolean) => void = (checked) => {}
 
@@ -49,15 +52,17 @@ export class CircleSelectComponent extends LitElement {
     render() {
         return html`
             <style>${styles}</style>
-            <icon-cta .clickAction="${()=>{this.toggleSelect(); this.onToggle(this.checked)}}">
-                <div class="${this.type == CircleSelectType.MULTIPLE ? 'multiple' : ''} ${this.color}">
-                    <img src="${this.icon[this.type][this.checked ? "checked" : "unchecked"]}" alt="${this.checked ? "x" : "o"}">\
+            <icon-cta .clickAction="${()=>{this.toggleSelect();this.onToggle(this.checked)}}">
+                <div class="${this.type == CircleSelectType.MULTIPLE ? 'multiple' : ''} ${this.color} ${this.disabled == true ? 'disabled' : ''}">
+                    <img src="${this.icon[this.type][this.checked ? "checked" : "unchecked"]}" alt="${this.checked ? "x" : "o"}">
                 </div>
             </icon-cta>`
     }
 
     toggleSelect() {
-        this.checked = !this.checked;
+        if(this.disabled == false){
+            this.checked = !this.checked;
+        }
     }
 }
 

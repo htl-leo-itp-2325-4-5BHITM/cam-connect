@@ -97,39 +97,56 @@ export class AppState{
     }
 
     openCreateRentModalWithDevices(devices?: Set<DeviceListEntryComponent>){
-        devices.forEach(device => {
-            let deviceSelector = this._createRentElement.shadowRoot.querySelector("cc-autocomplete") as AutocompleteComponent<Device>
-            let deviceId = device.deviceTypeFull.deviceType.type_id;
+        let i = 0;
 
-            if(deviceId){
-                deviceSelector.generateSuggestions(undefined, "")
-                    .then(() => {
-                        deviceSelector.selectSuggestion(deviceId)
-                    })
+        devices.forEach(device => {
+            if(i++ <= 0){
+                this.openCreateRentModal(device.deviceTypeFull.deviceType.type_id, "deviceType")
+            } else{
+                this._createRentElement.addDevice("default", true, device.deviceTypeFull.deviceType.type_id)
             }
         })
     }
 
-    openCreateRentModal(withStudentId?: number){
-        let studentSelector = this._createRentElement.shadowRoot.querySelector("cc-autocomplete.studentSelector") as AutocompleteComponent<Student>
+    openCreateRentModal(withId?: number, idType: "student" | "deviceType" = "student"){
+        let selector = this._createRentElement.shadowRoot.querySelector("cc-autocomplete.studentSelector") as AutocompleteComponent<Student>
+        
+        if(withId){
+            if(idType == "student"){
+                selector.generateSuggestions(undefined,"")
+                    .then(()=>{
+                        selector.selectSuggestion(withId)
 
-        if(withStudentId){
-            studentSelector.generateSuggestions(undefined,"")
-                .then(()=>{
-                    studentSelector.selectSuggestion(withStudentId)
+                        let firstDeviceSelector = this._createRentElement.shadowRoot.querySelector("cc-create-rent-device-entry")
+                            .shadowRoot.querySelectorAll("cc-autocomplete")[0] as AutocompleteComponent<DeviceType>
+
+                        firstDeviceSelector?.setFocus()
+                    })
+            }else{
+                setTimeout(() => {
+                    let firstDeviceSelector = this._createRentElement.shadowRoot.querySelector("cc-create-rent-device-entry")
+                        .shadowRoot.querySelector("cc-autocomplete") as AutocompleteComponent<DeviceType>
+
+                    firstDeviceSelector.generateSuggestions(undefined, "")
+                        .then(() => {
+                            firstDeviceSelector.selectSuggestion(withId)
+
+                            let selector = this._createRentElement.shadowRoot.querySelector("cc-create-rent-device-entry")
+                                .shadowRoot.querySelectorAll("cc-autocomplete")[1] as AutocompleteComponent<DeviceType>
+                            selector?.setFocus()
+                        })
                 })
+            }
 
             //super ugly i know, got something to do with the previous one closing and overriding this one opening
             //TODO cleanup
             setTimeout(() => {
-                let firstDeviceSelector = this._createRentElement.shadowRoot.querySelector("cc-create-rent-device-entry")
-                    .shadowRoot.querySelector("cc-autocomplete") as AutocompleteComponent<DeviceType>
-                firstDeviceSelector?.setFocus()
+
             },250)
         }
         else{
             setTimeout(() => {
-                studentSelector.setFocus()
+                selector.setFocus()
             },200)
         }
 

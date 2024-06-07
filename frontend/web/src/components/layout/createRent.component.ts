@@ -29,6 +29,7 @@ import {AppState} from "../../AppState"
 import {AutocompleteComponent} from "../basic/autocomplete.component"
 import {Student} from "../../service/student.service"
 import Util, {AnimationHelper} from "../../util"
+import {DeviceType} from "../../service/deviceType.service"
 
 @customElement('cc-create-rent')
 export class CreateRentComponent extends LitElement {
@@ -115,7 +116,7 @@ export class CreateRentComponent extends LitElement {
         `
     }
 
-    addDevice(type: RentDeviceEntryComponentType = "default", setFocus = true) {
+    addDevice(type: RentDeviceEntryComponentType = "default", setFocus = true, deviceTypeId?: number) {
         //TODO passing the global date is a setting
         let newDevice = new CreateRentDeviceEntryComponent(this, type, this.globalDatePicker.instance.selectedDates)
         this.devices.add(newDevice)
@@ -125,6 +126,14 @@ export class CreateRentComponent extends LitElement {
         window.requestAnimationFrame(()=>{
             if(type == "default") {
                 let autocomp = newDevice.shadowRoot.querySelector("cc-autocomplete") as AutocompleteComponent<any>
+
+                if(deviceTypeId){
+                    autocomp.generateSuggestions(undefined, "")
+                        .then(() => {
+                            autocomp.selectSuggestion(deviceTypeId)
+                        })
+                }
+
                 autocomp?.setFocus()
             } else {
                 let input = newDevice.shadowRoot.querySelector("input") as HTMLInputElement

@@ -7,15 +7,20 @@ import {ObservedProperty} from "../../model"
 import {Device} from "../../service/device.service"
 import {RentByStudentDTO} from "../../service/rent.service"
 import {DeviceType, DeviceTypeFullDTO, DeviceTypeVariantCollection} from "../../service/deviceType.service"
+import {AppState} from "../../AppState"
 
 @customElement('cc-device-list')
 export class DeviceListComponent extends LitElement {
     @property()
     private deviceTypesFull: ObservedProperty<DeviceTypeFullDTO[]>
 
+    @property()
+    private appState: ObservedProperty<AppState>
+
     constructor() {
         super()
         this.deviceTypesFull = new ObservedProperty<DeviceTypeFullDTO[]>(this, model.deviceTypesFull)
+        this.appState = new ObservedProperty<AppState>(this, model.appState)
     }
     render() {
         return html`
@@ -23,7 +28,10 @@ export class DeviceListComponent extends LitElement {
 
             <div class="content">
                 ${Object.values(this.deviceTypesFull.value)?.flat().map(deviceType => {
-                    return html`<cc-device-list-entry .deviceTypeFull="${deviceType}"></cc-device-list-entry>`
+                    return html`<cc-device-list-entry .deviceTypeFull="${deviceType}" 
+                                                      class="${this.appState.value && this.appState.value.selectedDeviceEntries.size > 0 && deviceType.available > 0 ? 'selection' : ''}"
+                                                      .simpleSelectionIsOn="${this.appState.value && this.appState.value.selectedDeviceEntries.size > 0}"
+                    ></cc-device-list-entry>`
                 })}
             </div>
         `
