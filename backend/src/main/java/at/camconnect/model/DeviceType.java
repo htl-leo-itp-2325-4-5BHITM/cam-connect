@@ -27,8 +27,11 @@ public abstract class DeviceType{
 
     @Column(length = 20, unique = true)
     private String name;
+
     private String image;
-    private LocalDateTime creation_date;
+
+    private final LocalDateTime creation_date;
+
     abstract public void update(DeviceTypeGlobalObjectsDTO data);
 
     public DeviceTypeStatusEnum getStatus() {
