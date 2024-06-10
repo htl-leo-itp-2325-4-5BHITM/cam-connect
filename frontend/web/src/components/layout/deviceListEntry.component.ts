@@ -23,9 +23,22 @@ export class DeviceListEntryComponent extends LitElement {
     @property()
     private appState: ObservedProperty<AppState>
 
+
     constructor() {
         super()
         this.appState = new ObservedProperty<AppState>(this, model.appState)
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
+
+        this.addEventListener('click', (e) => {
+            let target = e.composedPath()[0] as HTMLElement
+
+            if(target.closest("icon-cta")?.tagName != "ICON-CTA" && target.closest("button")?.tagName != "BUTTON" && this.deviceTypeFull.available > 0){
+                this.toggleDeviceCheck(true)
+            }
+        })
     }
 
     render() {
@@ -43,6 +56,7 @@ export class DeviceListEntryComponent extends LitElement {
 
         return html`
             <style>${styles}</style>
+            
             <h3>${this.deviceTypeFull.deviceType.name}</h3>
             ${this.deviceTypeFull.deviceTags.length != 0 ? 
                 html`<div class="tags">
@@ -58,10 +72,13 @@ export class DeviceListEntryComponent extends LitElement {
                 <cc-chip color="${this.deviceTypeFull.available ? ColorEnum.GOOD : ColorEnum.BAD}" 
                          text="${this.deviceTypeFull.available ? (this.deviceTypeFull.available + ' Verfügbar') : 'Vergeben'}"
                 ></cc-chip>
-                <cc-button type="${ButtonType.OUTLINED}">Verleihen</cc-button>
+                <cc-button type="${ButtonType.OUTLINED}" .disabled="${this.deviceTypeFull.available == 0}"
+                           @click="${() => model.appState.value.openCreateRentModal(this.deviceTypeFull.deviceType.type_id, "deviceType")}"
+                >Verleihen</cc-button>
             </div>
             <cc-circle-select .checked="${this.appState.value.selectedDeviceEntries.has(this)}"
-                              @click="${() => {this.toggleDeviceCheck()}}"></cc-circle-select>
+                              .disabled="${this.deviceTypeFull.available == 0}"
+                              @click="${() => {if(this.deviceTypeFull.available > 0)this.toggleDeviceCheck();}}"></cc-circle-select>
         `
     }
 
@@ -210,13 +227,13 @@ export class DeviceListEntryComponent extends LitElement {
         `
     }
 
-    toggleDeviceCheck(checked?: boolean){
-        if(!checked) checked = !this.isChecked()
-
-        if(checked){
-            this.appState.value.addSelectedDeviceEntry(this)
-        } else{
-            this.appState.value.removeSelectedDeviceEntry(this)
+    toggleDeviceCheck(isSimpleClick?: boolean){
+        if(!isSimpleClick || this.appState.value && this.appState.value.selectedDeviceEntries.size > 0){
+            if(!this.isChecked()){
+                this.appState.value.addSelectedDeviceEntry(this)
+            } else{
+                this.appState.value.removeSelectedDeviceEntry(this)
+            }
         }
     }
 

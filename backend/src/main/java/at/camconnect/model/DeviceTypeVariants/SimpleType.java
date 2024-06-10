@@ -1,11 +1,14 @@
 package at.camconnect.model.DeviceTypeVariants;
 
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
+import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.responseSystem.CCException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+
+import java.time.LocalDateTime;
 
 @Entity
 public class SimpleType extends DeviceType {
@@ -13,11 +16,12 @@ public class SimpleType extends DeviceType {
     private String description;
 
     public SimpleType() {
+        super();
         setVariant(DeviceTypeVariantEnum.simple);
     }
 
-    public SimpleType(String name, String description) {
-        super(name);
+    public SimpleType(Long type_id, LocalDateTime creation_date, String name, String image, DeviceTypeStatusEnum status, DeviceTypeVariantEnum variant, String description) {
+        super(type_id, creation_date, name, image, status, variant);
         this.description = description;
     }
 
@@ -28,6 +32,21 @@ public class SimpleType extends DeviceType {
         }catch (Exception ex){
             throw new CCException(1106);
         }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%d;%s;%s;%s;%s;%s;%s;\n",
+                getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
+                getDescription());
+    }
+
+    @Override
+    public String getFullExportString() {
+        return String.format("%d;%s;%s;%s;%s;%s; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;%s;\n",
+                getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
+                getDescription()
+        );
     }
 
     public String getDescription() {

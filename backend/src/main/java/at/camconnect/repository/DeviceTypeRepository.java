@@ -22,6 +22,9 @@ import jakarta.ws.rs.core.StreamingOutput;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @ApplicationScoped
@@ -31,7 +34,6 @@ public class DeviceTypeRepository {
 
     @Inject
     DeviceTypeAttributeRepository deviceTypeAttributeRepository;
-
 
     public DeviceType create(DeviceTypeVariantEnum typeEnum, JsonObject data){
         /* Why JsonData and not DTO
@@ -173,37 +175,55 @@ public class DeviceTypeRepository {
 
     //endregion
 
-
-    public Response exportAllDeviceTypes() {
+    public Response exportAllDeviceTypes(String type) {
         StreamingOutput stream = os -> {
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(os))) {
-                writer.write(getCSVHeader());
+                writer.write(getCSVHeader(type));
 
                 List<DeviceTypeFullDTO> deviceTypeList = getAllFull();
                 for (DeviceTypeFullDTO deviceType : deviceTypeList) {
-                    writer.write(deviceType.deviceType().toString());
+                    if(type.isEmpty()){
+                        writer.write(deviceType.deviceType().getFullExportString());
+                    } else if(deviceType.deviceType().getVariant().equals(DeviceTypeVariantEnum.valueOf(type))){
+                        writer.write(deviceType.deviceType().toString());
+                    }
                 }
             } catch (IOException e) {
                 throw new CCException(1200);
             }
         };
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm");
+
         return Response.ok(stream)
-                .header("Content-Disposition", "attachment; filename=\"file.csv\"")
+                .header("Content-Disposition", "attachment; filename=\"" + (type.isEmpty() ? "devicetype" : type) + "-" + dateFormat.format(new Date()) + ".csv\"")
                 .build();
     }
 
-    private String getCSVHeader() {
-        return "rent_id;status;type;device_id;device_string;teacher_start_id;teacher_start_name;teacher_end_id;teacher_end_name;rent_start;rent_end_planned;rent_end_actual;student_id;student_name;note;verification_message;\n";
+    private String getCSVHeader(String type) {
+        String base = "type_id;creation_date;name;image;status;variant;";
+        return base + switch(type){
+            case "camera" -> "sensor_id;resolution_id;mount_id;system_id;framerate;autofocus;\n";
+            case "drone" -> "sensor_id;resolution_id;max_range;\n";
+            case "lens" -> "f_stop;mount_id;focal_length;\n";
+            case "light" -> "watts;rgb;variable_temperature;\n";
+            case "microphone" -> "windblocker;wireless;needs_recorder;\n";
+            case "stabilizer" ->"max_weight_kilograms;number_of_axis;\n";
+            case "tripod" -> "height_centimeters;head_id;\n";
+            case "simple" -> "description;\n";
+            default -> "sensor_id;resolution_id;mount_id;system_id;framerate;autofocus;max_range;f_stop;focal_length;watts;rgb;variable_temperature;windblocker;wireless;needs_recorder;max_weight_kilograms;number_of_axis;height_centimeters;head_id;description;\n";
+        };
     }
 
     @Transactional
     public void importDeviceTypes(File file, String type) {
-        HashMap<Integer, List<String>> typeMap = new HashMap<>();
-        typeMap.put(7, new LinkedList<>(){{ add("camera"); }});
-        typeMap.put(4, new LinkedList<>(){{ add("drone"); add("lens"); add("light"); add("microphone"); }});
-        typeMap.put(3, new LinkedList<>(){{ add("stabilizer"); add("tripod"); }});
-        typeMap.put(2, new LinkedList<>(){{ add("simple"); }});
+        HashMap<Integer, List<String>> typeMap = new HashMap<>() {{
+            put(26, new LinkedList<>(List.of("all")));
+            put(12, new LinkedList<>(List.of("camera")));
+            put(9, new LinkedList<>(List.of("drone", "lens", "light", "microphone")));
+            put(8, new LinkedList<>(List.of("stabilizer", "tripod")));
+            put(7, new LinkedList<>(List.of("simple")));
+        }};
 
         if (file == null) throw new CCException(1105);
 
@@ -227,31 +247,27 @@ public class DeviceTypeRepository {
                 if (lineArray.length != headerLength) throw new CCException(1204, lineArray[0] + " has not a valid structure");
 
                 try {
-                    DeviceType deviceType = switch (type) {
-                        case "camera" -> new CameraType(lineArray[0],
-                                em.find(CameraSensor.class, lineArray[1]),
-                                em.find(CameraResolution.class, lineArray[2]),
-                                em.find(LensMount.class, lineArray[3]),
-                                em.find(CameraSystem.class, lineArray[4]),
-                                Integer.parseInt(lineArray[5]), Boolean.parseBoolean(lineArray[6]));
-                        case "drone" -> new DroneType(lineArray[0],
-                                em.find(CameraSensor.class, lineArray[1]),
-                                em.find(CameraResolution.class, lineArray[2]),
-                                Integer.parseInt(lineArray[3]));
-                        case "lens" -> new LensType(lineArray[0], lineArray[1],
-                                em.find(LensMount.class, lineArray[2]), lineArray[3]);
-                        case "light" -> new LightType(lineArray[0], Integer.parseInt(lineArray[1]),
-                                Boolean.parseBoolean(lineArray[2]), Boolean.parseBoolean(lineArray[3]));
-                        case "microphone" -> new MicrophoneType(lineArray[0], Boolean.parseBoolean(lineArray[1]),
-                                Boolean.parseBoolean(lineArray[2]), Boolean.parseBoolean(lineArray[3]));
-                        case "simple" -> new SimpleType(lineArray[0], lineArray[1]);
-                        case "stabilizer" -> new StabilizerType(lineArray[0],
-                                Double.parseDouble(lineArray[1]), Integer.parseInt(lineArray[2]));
-                        case "tripod" -> new TripodType(lineArray[0], Integer.parseInt(lineArray[1]),
-                                em.find(TripodHead.class, lineArray[2]));
-                        default -> null;
-                    };
+                    String currType = type;
+                    if(Objects.equals(type, "all")){
+                        currType = lineArray[5];
 
+                        switch(currType){
+                            case "simple": lineArray[6] = lineArray[25]; break;
+                            case "drone": lineArray[8] = lineArray[12]; break;
+                            case "lens": lineArray[6] = lineArray[8]; lineArray[7] = lineArray[13]; lineArray[8] = lineArray[14]; break;
+                            case "light": lineArray[6] = lineArray[15]; lineArray[7] = lineArray[16]; lineArray[8] = lineArray[17]; break;
+                            case "microphone": lineArray[6] = lineArray[18]; lineArray[7] = lineArray[19]; lineArray[8] = lineArray[20]; break;
+                            case "stabilizer":  lineArray[6] = lineArray[21]; lineArray[7] = lineArray[22]; break;
+                        }
+                    }
+
+                    System.out.println(currType);
+                    System.out.println(line);
+                    for (int i = 0; i < lineArray.length; i++) {
+                        System.out.print(lineArray[i] + "-");
+                    }
+                    System.out.println();
+                    DeviceType deviceType = getDeviceTypeByLineArray(lineArray, currType);
                     em.persist(deviceType);
 
                 } catch(NumberFormatException ex){
@@ -259,11 +275,101 @@ public class DeviceTypeRepository {
                 } catch(ConstraintViolationException ex){
                     throw new CCException(1201, "One device type does already exist " + ex.getMessage());
                 } catch(IllegalArgumentException | ArrayIndexOutOfBoundsException ex){
-                    throw new CCException(1204);
+                    throw new CCException(1204, ex.getMessage());
                 }
             }
         } catch (IOException e) {
             throw new CCException(1204, "File could not be read");
         }
     }
+
+    public DeviceType getDeviceTypeByLineArray(String[] lineArray, String type) {
+        return switch (type) {  
+            case "camera" -> new CameraType(
+                    parseLong(lineArray[0]), parseDate(lineArray[1]), lineArray[2], lineArray[3],
+                    parseEnum(DeviceTypeStatusEnum.class, lineArray[4]), parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
+                    findEntity(CameraSensor.class, lineArray[6]),
+                    findEntity(CameraResolution.class, lineArray[7]),
+                    findEntity(LensMount.class, lineArray[8]),
+                    findEntity(CameraSystem.class, lineArray[9]),
+                    parseInt(lineArray[10]),
+                    parseBoolean(lineArray[11])
+            );
+            case "drone" -> new DroneType(
+                    parseLong(lineArray[0]), parseDate(lineArray[1]), lineArray[2], lineArray[3],
+                    parseEnum(DeviceTypeStatusEnum.class, lineArray[4]), parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
+                    findEntity(CameraSensor.class, lineArray[6]),
+                    findEntity(CameraResolution.class, lineArray[7]),
+                    parseInt(lineArray[8])
+            );
+            case "lens" -> new LensType(
+                    parseLong(lineArray[0]), parseDate(lineArray[1]), lineArray[2], lineArray[3],
+                    parseEnum(DeviceTypeStatusEnum.class, lineArray[4]), parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
+                    findEntity(LensMount.class, lineArray[6]),
+                    lineArray[7],
+                    lineArray[8]
+            );
+            case "light" -> new LightType(
+                    parseLong(lineArray[0]), parseDate(lineArray[1]), lineArray[2], lineArray[3],
+                    parseEnum(DeviceTypeStatusEnum.class, lineArray[4]), parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
+                    parseInt(lineArray[6]),
+                    parseBoolean(lineArray[7]),
+                    parseBoolean(lineArray[8])
+            );
+            case "microphone" -> new MicrophoneType(
+                    parseLong(lineArray[0]), parseDate(lineArray[1]), lineArray[2], lineArray[3],
+                    parseEnum(DeviceTypeStatusEnum.class, lineArray[4]), parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
+                    parseBoolean(lineArray[6]),
+                    parseBoolean(lineArray[7]),
+                    parseBoolean(lineArray[8])
+            );
+            case "simple" -> new SimpleType(
+                    parseLong(lineArray[0]), parseDate(lineArray[1]), lineArray[2], lineArray[3],
+                    parseEnum(DeviceTypeStatusEnum.class, lineArray[4]), parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
+                    lineArray[6]
+            );
+            case "stabilizer" -> new StabilizerType(
+                    parseLong(lineArray[0]), parseDate(lineArray[1]), lineArray[2], lineArray[3],
+                    parseEnum(DeviceTypeStatusEnum.class, lineArray[4]), parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
+                    parseDouble(lineArray[6]),
+                    parseInt(lineArray[7])
+            );
+            case "tripod" -> new TripodType(
+                    parseLong(lineArray[0]), parseDate(lineArray[1]), lineArray[2], lineArray[3],
+                    parseEnum(DeviceTypeStatusEnum.class, lineArray[4]), parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
+                    parseInt(lineArray[6]),
+                    findEntity(TripodHead.class, lineArray[7])
+            );
+            default -> null;
+        };
+    }
+
+    private Long parseLong(String value) {
+        return Long.valueOf(value);
+    }
+
+    private LocalDateTime parseDate(String value) {
+        return !Objects.equals(value, "null") ? LocalDateTime.parse(value) : null;
+    }
+
+    private <T extends Enum<T>> T parseEnum(Class<T> enumType, String value) {
+        return !Objects.equals(value, "null") ? Enum.valueOf(enumType, value) : null;
+    }
+
+    private <T> T findEntity(Class<T> entityClass, String value) {
+        return !Objects.equals(value, "null") ? em.find(entityClass, value) : null;
+    }
+
+    private Integer parseInt(String value) {
+        return Integer.parseInt(value);
+    }
+
+    private Boolean parseBoolean(String value) {
+        return Boolean.parseBoolean(value);
+    }
+
+    private Double parseDouble(String value) {
+        return Double.parseDouble(value.replaceAll(",", "."));
+    }
+
 }

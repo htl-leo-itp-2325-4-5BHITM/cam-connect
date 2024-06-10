@@ -25,6 +25,10 @@ div{
     width: 1.4rem;
   }
 
+  &.disabled{
+    opacity: 0.5;
+  }
+
   &.accent img {
     @include imgIconColorAccent
   }

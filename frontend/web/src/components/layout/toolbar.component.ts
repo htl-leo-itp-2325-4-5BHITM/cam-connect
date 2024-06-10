@@ -137,7 +137,7 @@ export class ToolbarComponent extends LitElement {
         } else if(type === "device"){
             this.appState.value.selectedDeviceEntries.forEach((entry) => {
                 console.log(entry)
-                entry.toggleDeviceCheck(false)
+                entry.toggleDeviceCheck()
             })
         }
     }

@@ -1,6 +1,7 @@
 package at.camconnect.model.DeviceTypeVariants;
 
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
+import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypeAttributes.TripodHead;
@@ -9,6 +10,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+
+import java.time.LocalDateTime;
 
 @Entity
 public class TripodType extends DeviceType {
@@ -28,12 +31,30 @@ public class TripodType extends DeviceType {
         }
     }
 
+    @Override
+    public String toString() {
+        return String.format("%d;%s;%s;%s;%s;%s;%d;%d;\n",
+                getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
+                getHeight_centimeters(),
+                getHead() != null ? getHead().getAttribute_id() : null);
+    }
+
+    @Override
+    public String getFullExportString() {
+        return String.format("%d;%s;%s;%s;%s;%s; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;%d;%d;;\n",
+                getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
+                getHeight_centimeters(),
+                getHead() != null ? getHead().getAttribute_id() : null
+        );
+    }
+
     public TripodType() {
+        super();
         setVariant(DeviceTypeVariantEnum.tripod);
     }
 
-    public TripodType(String typeName, int height_centimeters, TripodHead head) {
-        super(typeName);
+    public TripodType(Long type_id, LocalDateTime creation_date, String name, String image, DeviceTypeStatusEnum status, DeviceTypeVariantEnum variant, int height_centimeters, TripodHead head) {
+        super(type_id, creation_date, name, image, status, variant);
         this.height_centimeters = height_centimeters;
         this.head = head;
     }

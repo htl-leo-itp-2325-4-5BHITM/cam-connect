@@ -85,7 +85,9 @@ export default class Model{
      * When its created, a new instance gathers all the data from the API endpoints
      */
     constructor() {
+/*
         DeviceService.createSocketConnection()
+*/
         RentService.createSocketConnection()
     }
 

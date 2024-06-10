@@ -3,6 +3,7 @@ package at.camconnect.repository;
 import at.camconnect.dtos.AutocompleteOptionDTO;
 import at.camconnect.dtos.DeviceDTO;
 import at.camconnect.dtos.DeviceSearchDTO;
+import at.camconnect.dtos.rent.RentDTO;
 import at.camconnect.enums.RentStatusEnum;
 import at.camconnect.model.Rent;
 import at.camconnect.responseSystem.CCException;
@@ -14,9 +15,13 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.StreamingOutput;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -188,6 +193,36 @@ public class DeviceRepository {
         } catch(Exception ex){
             return false;
         }
+    }
+
+    public Response exportAllDevices() {
+        StreamingOutput stream = os -> {
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(os))) {
+                writer.write(getCSVHeader());
+
+                List<Device> devices = getAll();
+                for (Device device : devices) {
+                    String csvLine = buildCSVLine(device);
+                    writer.write(csvLine);
+                }
+            } catch (IOException e) {
+                throw new CCException(1200, "File creation failed");
+            }
+        };
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm");
+
+        return Response.ok(stream)
+                .header("Content-Disposition", "attachment; filename=\"device-" + dateFormat.format(new Date()) + ".csv\"")
+                .build();
+    }
+
+    private String getCSVHeader() {
+        return "serial;number;note;type;\n";
+    }
+
+    private String buildCSVLine(Device device) {
+        return String.format("%s;%s;%s;%s;\n", device.getSerial(), device.getNumber(), device.getNote(), device.getType().getType_id());
     }
 
     @Transactional

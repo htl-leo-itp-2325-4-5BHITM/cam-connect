@@ -620,6 +620,18 @@ public class RentRepository {
 
     @Transactional
     public void importRents(File file){
+        Long highestId = 0L;
+
+        try{
+            Rent latestRent = em.createQuery("select r from Rent r where r.rent_id >= all(select r2.rent_id from Rent r2)", Rent.class).getSingleResult();
+            if(latestRent != null){
+                highestId = latestRent.getRent_id();
+            }
+        } catch(Exception ex){
+            System.out.println(ex.getMessage());
+        }
+
+
         if(file == null) throw new CCException(1105);
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -655,13 +667,17 @@ public class RentRepository {
                     rent_end_actual = LocalDate.parse(lineArray[11]);
                 }
 
+                if(Long.parseLong(lineArray[0]) < highestId){
+                    throw new CCException(1201, "One rent does already exist");
+                }
+
                 Rent rent = new Rent(Long.valueOf(lineArray[0]),
-                    RentStatusEnum.valueOf(lineArray[1]), RentTypeEnum.valueOf(lineArray[2]),
-                    em.find(Device.class, lineArray[3]), lineArray[4],
-                    em.find(Teacher.class, lineArray[5]), teacherEnd,
-                    LocalDate.parse(lineArray[9]), rent_end_planned, rent_end_actual,
-                    em.find(Student.class, lineArray[12]),
-                    lineArray[14], lineArray[15]);
+                RentStatusEnum.valueOf(lineArray[1]), RentTypeEnum.valueOf(lineArray[2]),
+                em.find(Device.class, lineArray[3]), lineArray[4],
+                em.find(Teacher.class, lineArray[5]), teacherEnd,
+                LocalDate.parse(lineArray[9]), rent_end_planned, rent_end_actual,
+                em.find(Student.class, lineArray[12]),
+                lineArray[14], lineArray[15]);
 
                 em.persist(rent);
             }

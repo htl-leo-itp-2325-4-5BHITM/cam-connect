@@ -78,7 +78,7 @@ export class AutocompleteComponent<T> extends LitElement {
 
     static suggestionElement: HTMLElement //the absolute positioned element that contains the suggestions
 
-    private logger = new Logger(false, "autocomplete")
+    private logger = new Logger(true, "autocomplete")
 
     constructor() {
         super()
@@ -394,7 +394,7 @@ export class AutocompleteComponent<T> extends LitElement {
     setFocus(){
         this.logger.log("setting focus", this.placeholder)
         this.shadowRoot.querySelector("input").focus()
-        this.generateSuggestions()
+        this.generateSuggestions(undefined, "")
     }
 
     clear(animated = true){

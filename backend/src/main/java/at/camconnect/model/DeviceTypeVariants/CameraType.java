@@ -1,6 +1,7 @@
 package at.camconnect.model.DeviceTypeVariants;
 
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
+import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypeAttributes.CameraResolution;
@@ -12,6 +13,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+
+import java.time.LocalDateTime;
 
 @Entity
 public class CameraType extends DeviceType {
@@ -46,10 +49,11 @@ public class CameraType extends DeviceType {
     }
 
     public CameraType() {
+        super();
         setVariant(DeviceTypeVariantEnum.camera);
     }
-    public CameraType(String typeName, CameraSensor sensor, CameraResolution resolution, LensMount mount, CameraSystem system, int framerate, boolean autofocus) {
-        super(typeName);
+    public CameraType(Long type_id, LocalDateTime creation_date, String name, String image, DeviceTypeStatusEnum status, DeviceTypeVariantEnum variant, CameraSensor sensor, CameraResolution resolution, LensMount mount, CameraSystem system, int framerate, boolean autofocus) {
+        super(type_id, creation_date, name, image, status, variant);
         this.sensor = sensor;
         this.resolution = resolution;
         this.mount = mount;
@@ -60,14 +64,24 @@ public class CameraType extends DeviceType {
 
     @Override
     public String toString() {
-        return "CameraType{" +
-                "sensor=" + sensor +
-                ", resolution=" + resolution +
-                ", mount=" + mount +
-                ", system=" + system +
-                ", framerate=" + framerate +
-                ", autofocus=" + autofocus +
-                '}';
+        return String.format("%d;%s;%s;%s;%s;%s;%d;%d;%d;%d;%d;%b;\n",
+                getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
+                getSensor() != null ? getSensor().getAttribute_id() : null,
+                getResolution() != null ? getResolution().getAttribute_id() : null,
+                getMount() != null ? getMount().getAttribute_id() : null,
+                getSystem() != null ? getSystem().getAttribute_id(): null,
+                getFramerate(), isAutofocus());
+    }
+
+    @Override
+    public String getFullExportString() {
+        return String.format("%d;%s;%s;%s;%s;%s;%d;%d;%d;%d;%d;%b; ; ; ; ; ; ; ; ; ; ; ; ; ; ;\n",
+                getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
+                getSensor() != null ? getSensor().getAttribute_id() : null,
+                getResolution() != null ? getResolution().getAttribute_id() : null,
+                getMount() != null ? getMount().getAttribute_id() : null,
+                getSystem() != null ? getSystem().getAttribute_id(): null,
+                getFramerate(), isAutofocus());
     }
 
     public CameraSensor getSensor() {

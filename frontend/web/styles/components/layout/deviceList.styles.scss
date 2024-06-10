@@ -29,6 +29,11 @@ $gap: 1rem;
   columns: 4;
 }
 
+cc-device-list-entry.selection{
+  border: 1px solid $accent;
+  cursor: pointer;
+}
+
 .content > *{
   break-inside: avoid;
   margin-bottom: $gap;

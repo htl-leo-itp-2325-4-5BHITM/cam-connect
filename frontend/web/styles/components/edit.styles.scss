@@ -1,9 +1,36 @@
 @import "../base";
 
-:host {
+:host{
+  height: 100vh;
+  max-height: 100vh;
+  background-color: $gray100;
+  position: relative;
+  overflow: hidden;
+}
+
+main{
+  width: 40%;
+  margin-inline: auto;
+  padding-block: 8rem;
+}
+
+
+h1{
+  font-size: 1.8rem;
+  font-weight: 300;
+  margin-top: 2rem;
+  margin-bottom: .8rem;
+}
+
+.line{
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  justify-content: space-between;
+}
+
+cc-toggle, .inputField, .line{
+  margin-block: .25rem;
+  padding-block: .25rem;
+  border-bottom: 1px solid $gray200;
 }
 
 select{
