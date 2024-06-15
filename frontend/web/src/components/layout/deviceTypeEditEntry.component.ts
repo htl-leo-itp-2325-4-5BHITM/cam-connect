@@ -39,60 +39,64 @@ export class DeviceTypeEditEntryComponent extends LitElement {
         `
     }
 
+    getPropertyValue(property: string, value: any){
+        return html`${value ? html`<cc-property-value property="${property}" value="${value}"></cc-property-value>` : ''}`
+    }
+
     renderCamera(cameraType : CameraType){
         return html`
-            ${cameraType.sensor?.name ? html`<cc-property-value property="Sensor" value="${cameraType.sensor?.name}"></cc-property-value>` : ''}
-            ${cameraType.resolution?.name ? html`<cc-property-value property="Auflösung" value="${cameraType.resolution.name}"></cc-property-value>` : ''}
-            ${cameraType.autofocus ? html`<cc-property-value property="Autofokus" value="${cameraType.autofocus}"></cc-property-value>` : ''}
-            ${cameraType.framerate ? html`<cc-property-value property="Maximale-Framerate" value="${cameraType.framerate}"></cc-property-value>` : ''}
-            ${cameraType.mount?.name ? html`<cc-property-value property="Mount" value="${cameraType.mount.name}"></cc-property-value>` : ''}
-            ${cameraType.system?.name ? html`<cc-property-value property="System" value="${cameraType.system.name}"></cc-property-value>` : ''}
-        `;
+            ${this.getPropertyValue("Sensor", cameraType.sensor?.name)}
+            ${this.getPropertyValue("Auflösung", cameraType.resolution?.name)}
+            ${this.getPropertyValue("Autofokus", cameraType.autofocus)}
+            ${this.getPropertyValue("Maximale Framerate", cameraType.framerate)}
+            ${this.getPropertyValue("Mount", cameraType.mount?.name)}
+            ${this.getPropertyValue("System", cameraType.system?.name)}
+        `
     }
 
     renderDrone(droneType : DroneType) {
         return html`
-            ${droneType.sensor?.name ? html`<cc-property-value property="Sensor" value="${droneType.sensor.name}"></cc-property-value>` : ''}
-            ${droneType.resolution?.name ? html`<cc-property-value property="Auflösung" value="${droneType.resolution.name}"></cc-property-value>` : ''}
-            ${droneType.max_range ? html`<cc-property-value property="Maximale Reichweite" value="${droneType.max_range}"></cc-property-value>` : ''}
-        `;
+            ${this.getPropertyValue("Sensor", droneType.sensor?.name)}
+            ${this.getPropertyValue("Auflösung", droneType.resolution?.name)}
+            ${this.getPropertyValue("Maximale Reichweite", droneType.max_range)}
+        `
     }
 
     renderLens(lensType : LensType){
         return html`
-            ${lensType.f_stop ? html`<cc-property-value property="F Stop" value="${lensType.f_stop}"></cc-property-value>` : ''}
-            ${lensType.lens_mount?.name ? html`<cc-property-value property="Lens Mount" value="${lensType.lens_mount?.name}"></cc-property-value>` : ''}
-            ${lensType.focal_length ? html`<cc-property-value property="Focal Length" value="${lensType.focal_length}"></cc-property-value>` : ''}
+            ${this.getPropertyValue("F-Stop", lensType.f_stop)}
+            ${this.getPropertyValue("Lens Mount", lensType.lens_mount?.name)}
+            ${this.getPropertyValue("Focal Length", lensType.focal_length)}
         `
     }
 
     renderLight(lightType : LightType){
         return html`
-            ${lightType.rgb ? html`<cc-property-value property="RGB" value="${lightType.rgb}"></cc-property-value>` : ''}
-            ${lightType.variable_temperature ? html`<cc-property-value property="Variable Temperatur" value="${lightType.variable_temperature}"></cc-property-value>` : ''}
-            ${lightType.watts ? html`<cc-property-value property="Watt" value="${lightType.watts}"></cc-property-value>` : ''}
+            ${this.getPropertyValue("RGB", lightType.rgb)}
+            ${this.getPropertyValue("Variable Temperatur", lightType.variable_temperature)}
+            ${this.getPropertyValue("Watt", lightType.watts)}
         `
     }
 
     renderMicrophone(microphoneType : MicrophoneType){
         return html`
-            ${microphoneType.needsRecorder ? html`<cc-property-value property="Needs Recorder" value="${microphoneType.needsRecorder}"></cc-property-value>` : ''}
-            ${microphoneType.wireless ? html`<cc-property-value property="Wireless" value="${microphoneType.wireless}"></cc-property-value>` : ''}
-            ${microphoneType.windblocker ? html`<cc-property-value property="Windblocker" value="${microphoneType.windblocker}"></cc-property-value>` : ''}
+            ${this.getPropertyValue("Needs Recorder", microphoneType.needsRecorder)}
+            ${this.getPropertyValue("Wireless", microphoneType.wireless)}
+            ${this.getPropertyValue("Windblocker", microphoneType.windblocker)}
         `
     }
 
     renderStabilizer(stabilizerType : StabilizerType){
         return html`
-            ${stabilizerType.number_of_axis ? html`<cc-property-value property="Number of axis" value="${stabilizerType.number_of_axis}"></cc-property-value>` : ''}
-            ${stabilizerType.max_weight_kilograms ? html`<cc-property-value property="Max weight kilograms" value="${stabilizerType.max_weight_kilograms}"></cc-property-value>` : ''}
+            ${this.getPropertyValue("Number of axis", stabilizerType.number_of_axis)}
+            ${this.getPropertyValue("Max weight kilograms", stabilizerType.max_weight_kilograms)}
         `
     }
 
     renderTripod(tripodType : TripodType){
         return html`
-            ${tripodType.head?.name ? html`<cc-property-value property="Head" value="${tripodType.head?.name}"></cc-property-value>` : ''}
-            ${tripodType.height_centimeters ? html`<cc-property-value property="Höhe in Zentimeter" value="${tripodType.height_centimeters}"></cc-property-value>` : ''}
+            ${this.getPropertyValue("Head", tripodType.head?.name)}
+            ${this.getPropertyValue("Höhe in Zentimeter", tripodType.height_centimeters)}
         `
     }
 }
