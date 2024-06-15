@@ -7,7 +7,11 @@ import DeviceTypeService, {
     DeviceTypeFullDTO,
     DeviceTypeSource, DroneType, LensType, LightType, MicrophoneType, StabilizerType, TripodType
 } from "../../service/deviceType.service"
-import {ColorEnum} from "../../base"
+import {ColorEnum, SizeEnum} from "../../base"
+import {faListUl, faPen, faTrash} from "@fortawesome/free-solid-svg-icons"
+import {unsafeSVG} from "lit/directives/unsafe-svg.js"
+import {icon} from "@fortawesome/fontawesome-svg-core"
+import URLHandler from "../../urlHandler"
 
 @customElement('cc-device-type-edit-entry')
 export class DeviceTypeEditEntryComponent extends LitElement {
@@ -15,19 +19,18 @@ export class DeviceTypeEditEntryComponent extends LitElement {
     deviceType: DeviceTypeFullDTO
 
     render() {
-        console.log(this.deviceType)
         return html`
             <style>${styles}</style>
             
-            <p>${this.deviceType.deviceType.name}</p>
+            <h3>${this.deviceType.deviceType.name}</h3>
             
             <div class="tags">
                 ${this.deviceType.deviceTags.map(elem => {
-                    return html`<cc-chip text="${elem.name}" color="${ColorEnum.GRAY}"></cc-chip>`
+                    return html`<cc-chip text="${elem.name}" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}"></cc-chip>`
                 })}
             </div>
             
-            <div>
+            <div class="deviceTypes">
                 ${this.deviceType.deviceType.variant == "camera" ? this.renderCamera(this.deviceType.deviceType as CameraType) : ''}
                 ${this.deviceType.deviceType.variant == "drone" ? this.renderDrone(this.deviceType.deviceType as DroneType) : ''}
                 ${this.deviceType.deviceType.variant == "lens" ? this.renderLens(this.deviceType.deviceType as LensType) : ''}
@@ -36,11 +39,36 @@ export class DeviceTypeEditEntryComponent extends LitElement {
                 ${this.deviceType.deviceType.variant == "stabilizer" ? this.renderStabilizer(this.deviceType.deviceType as StabilizerType) : ''}
                 ${this.deviceType.deviceType.variant == "tripod" ? this.renderTripod(this.deviceType.deviceType as TripodType) : ''}
             </div>
+
+            <div class="edit">
+                <div class="section" @click="${() => {URLHandler.setUrl('/app/edit/type?id=1')}}">
+                    <div slot="left" class="icon accent">
+                        ${unsafeSVG(icon(faListUl).html[0])}
+                    </div>
+                    <p>Zugehörige Geräte</p>    
+                </div>
+
+                <div class="section">
+                    <div slot="left" class="icon accent">
+                        ${unsafeSVG(icon(faPen).html[0])}
+                    </div>
+                    <p>Bearbeiten</p>
+                </div>
+
+                <div class="section">
+                    <div slot="left" class="icon accent">
+                        ${unsafeSVG(icon(faTrash).html[0])}
+                    </div>
+                    <p>Löschen</p>
+                </div>
+            </div>
+            
+            <cc-circle-select></cc-circle-select>
         `
     }
 
     getPropertyValue(property: string, value: any){
-        return html`${value ? html`<cc-property-value property="${property}" value="${value}"></cc-property-value>` : ''}`
+        return html`${value ? html`<cc-property-value property="${property}" value="${value}" size="${SizeEnum.SMALL}"></cc-property-value>` : ''}`
     }
 
     renderCamera(cameraType : CameraType){

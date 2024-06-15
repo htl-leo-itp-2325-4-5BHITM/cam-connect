@@ -33,7 +33,13 @@ let pages = {
                 handler: () => { URLHandler.changeOrigin("cc-user-settings") }
             },
             edit: {
-                handler: () => { URLHandler.changeOrigin("cc-edit") }
+                handler: () => { URLHandler.changeOrigin("cc-edit") },
+                children: {
+                    type: {
+                        handler: () => {
+                        },
+                    }
+                }
             }
         }
     },
