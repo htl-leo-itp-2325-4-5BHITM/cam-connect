@@ -23,6 +23,7 @@ import "./components/layout/rentListStudent.component"
 import "./components/layout/rentListEntry.component"
 import "./components/layout/deviceList.component"
 import "./components/layout/deviceListEntry.component"
+import "./components/layout/deviceTypeEditEntry.component"
 import "./components/layout/rentDetailView.component"
 
 import "./components/app.component"

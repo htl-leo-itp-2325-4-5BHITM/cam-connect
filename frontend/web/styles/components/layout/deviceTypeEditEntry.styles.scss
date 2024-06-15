@@ -1,0 +1,25 @@
+@import "../../base";
+
+:host{
+  display: flex;
+  padding: .375rem .5rem !important;
+  margin-block: .5rem !important;
+  border-radius: .5rem;
+  background-color: $gray200;
+}
+
+p{
+  min-width: 10vw;
+}
+
+div{
+  display: flex;
+
+  &.tags{
+    width: 10vw;
+  }
+
+  cc-property-value{
+    margin-inline: .5rem;
+  }
+}

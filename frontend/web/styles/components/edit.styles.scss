@@ -1,42 +1,46 @@
 @import "../base";
 
 :host{
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
   height: 100vh;
   max-height: 100vh;
   background-color: $gray100;
   position: relative;
-  overflow: hidden;
 }
+
+cc-navbar{
+  grid-column: 1 / 3;
+  grid-row: 1 / 2;
+}
+
+cc-sidebar{
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+}
+
+.toolbar-container{
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+
+  cc-toolbar {
+    grid-column: 1 / 3;
+    grid-row: 1 / 2;
+  }
+
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  width: 100%;
+}
+
 
 main{
-  width: 40%;
-  margin-inline: auto;
-  padding-block: 8rem;
+  margin: 1rem;
+  grid-column: 2 / 3;
+  overflow: auto;
 }
-
-
 h1{
-  font-size: 1.8rem;
-  font-weight: 300;
-  margin-top: 2rem;
-  margin-bottom: .8rem;
-}
-
-.line{
-  display: flex;
-  justify-content: space-between;
-}
-
-cc-toggle, .inputField, .line{
-  margin-block: .25rem;
-  padding-block: .25rem;
-  border-bottom: 1px solid $gray200;
-}
-
-select{
-  width: fit-content;
-}
-
-input{
-  width: fit-content;
+  font-size: 2rem;
 }

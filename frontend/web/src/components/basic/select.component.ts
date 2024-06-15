@@ -4,6 +4,8 @@ import styles from '../../../styles/components/basic/select.styles.scss'
 import {SimpleColorEnum, SizeEnum} from "../../base"
 import URLHandler from "../../urlHandler"
 
+export enum SelectType {VERTICAL="vertical", HORIZONTAL="horizontal"}
+
 @customElement('cc-select')
 export class SelectComponent extends LitElement {
     @queryAssignedElements() options!: Array<HTMLElement>
@@ -18,10 +20,12 @@ export class SelectComponent extends LitElement {
 
     @property({type: Boolean}) heavy:boolean = false
 
+    @property() type: SelectType = SelectType.HORIZONTAL
+
     render() {
         return html`
             <style>${styles}</style>
-            <div class="select" size="${this.size}" spacerColor="${this.spacerColor}" color="${this.color}" heavy="${this.heavy}">
+            <div class="select" size="${this.size}" spacerColor="${this.spacerColor}" color="${this.color}" heavy="${this.heavy}" type="${this.type}">
                 <slot></slot>
             </div>`
     }
