@@ -27,10 +27,11 @@ public abstract class DeviceType{
 
     @Column(length = 20, unique = true)
     private String name;
+
     private String image;
+
     private LocalDateTime creation_date;
-
-
+    private LocalDateTime change_date;
 
     public DeviceType(Long type_id, LocalDateTime creation_date, String name, String image, DeviceTypeStatusEnum status, DeviceTypeVariantEnum variant) {
         this.variant = variant;
@@ -99,10 +100,6 @@ public abstract class DeviceType{
 
     public LocalDateTime getCreation_date() {
         return creation_date;
-    }
-
-    public void setCreation_date(LocalDateTime creation_date) {
-        this.creation_date = creation_date;
     }
 
     /**

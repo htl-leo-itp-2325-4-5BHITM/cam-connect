@@ -128,6 +128,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                                      .querySuggestions="${(searchTerm) => this.searchForDevice(searchTerm)}"
                                      .iconProvider="${this.provideDeviceIcon}"
                                      .contentProvider="${(data: Device) => {return data.number}}"
+                                     .showIcon="${false}"
                     ></cc-autocomplete>
                 </div>
     

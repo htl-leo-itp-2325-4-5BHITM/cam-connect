@@ -68,6 +68,7 @@ div.search{
     border: none;
     background-color: $gray350;
     width: 0;
+    padding-block: .1rem !important;
 
     transition: width $transitionTimeShort, opacity $transitionTimeShort;
   }

@@ -129,18 +129,9 @@ export default class URLHandler {
      * @param param
      */
     static getParam (param: string) : string {
-        let url = window.location.href
-        let params = url.split("?")[1]?.split("&")
+        let searchParams = new URLSearchParams(new URL(window.location.href).search)
 
-        let parsedURL = new Map<string, string>()
-
-        for (const paramsKey in params) {
-            let key = params[paramsKey].split("=")[0]
-            let value = params[paramsKey].split("=")[1]
-            parsedURL.set(key, value)
-        }
-
-        return parsedURL.has(param) ? parsedURL.get(param) : null
+        return searchParams.get(param)
     }
 
     /**
@@ -206,7 +197,7 @@ export default class URLHandler {
     }
 
     static getUrl(){
-        return window.location.pathname
+        return window.location.pathname + window.location.search
     }
 
     /**

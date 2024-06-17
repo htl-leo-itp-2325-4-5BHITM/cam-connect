@@ -303,7 +303,8 @@ export class AppState{
 
 
     get backUrl(): string {
-        if(!this._backUrl) {
+        if(this._backUrl == undefined || this._backUrl == ""){
+            console.log("no back url found")
             return "/app/rents"
         }
         return this._backUrl

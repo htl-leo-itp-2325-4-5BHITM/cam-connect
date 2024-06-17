@@ -44,9 +44,10 @@
   translate: 0 -50%;
   right: .5rem;
   pointer-events: none;
+  --color: #{$gray600};
 
   path{
-    color: $gray600;
+    color: var(--color);
   }
 }
 

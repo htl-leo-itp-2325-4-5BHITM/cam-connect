@@ -166,6 +166,15 @@ export default class RentService {
             })
     }
 
+    /**
+     * Updates the status of a rent
+     * Aberger heheha
+     * @param rentId
+     * @param code
+     * @param status
+     * @param message
+     */
+
     static async updateStatus(rentId: number, code: string, status: RentStatusEnum, message: string) {
         return new Promise((resolve, reject) => {
             Api.postData(`/rent/getbyid/${rentId}/updatestatus`, {verification_code: code, status: status, verification_message: message})
