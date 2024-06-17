@@ -1,5 +1,5 @@
 import {model} from "./index"
-import {PageEnum} from "./model"
+import {EditPageEnum, PageEnum} from "./model"
 import {html} from "lit"
 
 let pages = {
@@ -33,11 +33,19 @@ let pages = {
                 handler: () => { URLHandler.changeOrigin("cc-user-settings") }
             },
             edit: {
-                handler: () => { URLHandler.changeOrigin("cc-edit") },
+                handler: () => {
+                    URLHandler.changeOrigin("cc-edit")
+                    model.appState.value.editPage = EditPageEnum.OVERVIEW
+                },
                 children: {
-                    type: {
-                        handler: () => {
-                        },
+                    children: {
+                        handler: () => { model.appState.value.editPage = EditPageEnum.CHILDREN }
+                    },
+                    device: {
+                        handler: () => { model.appState.value.editPage = EditPageEnum.DEVICE }
+                    },
+                    devicetype: {
+                        handler: () => { model.appState.value.editPage = EditPageEnum.DEVICETYPE }
                     }
                 }
             }

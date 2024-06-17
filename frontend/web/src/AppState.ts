@@ -1,5 +1,5 @@
 import {RentListEntryComponent} from "./components/layout/rentListEntry.component"
-import {PageEnum} from "./model"
+import {EditPageEnum, PageEnum} from "./model"
 import {model} from "./index"
 import {CreateRentComponent} from "./components/layout/createRent.component"
 import {KeyBoardShortCut} from "./base"
@@ -12,6 +12,7 @@ import RentService, {OrderByFilterRent, RentFilters, RentStatusEnum} from "./ser
 import {html, render, TemplateResult} from "lit"
 import URLHandler from "./urlHandler"
 import {BehaviorSubject} from "rxjs"
+import content from "*.styles.scss"
 
 interface ActionCancellation {
     identifier: string,
@@ -40,6 +41,7 @@ interface UserSettings {
 
 export class AppState{
     private _page: PageEnum = PageEnum.RENTS
+    private _editPage: EditPageEnum = EditPageEnum.OVERVIEW;
     private _createRentModalOpen: boolean = false
     private _createMultiRentModalOpen: boolean = false
     private _selectedRentEntries: Set<RentListEntryComponent> = new Set<RentListEntryComponent>()
@@ -87,6 +89,15 @@ export class AppState{
     set page(value: PageEnum) {
         this._page = value
         this.update()
+    }
+
+
+    get editPage(): EditPageEnum {
+        return this._editPage
+    }
+
+    set editPage(value: EditPageEnum) {
+        this._editPage = value
     }
 
     closeCreateRentModal(){

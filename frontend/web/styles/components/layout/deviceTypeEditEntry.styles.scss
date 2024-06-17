@@ -24,19 +24,6 @@
     background: $gray350;
     height: 100%;
     cursor: initial;
-
-    div.section{
-      cursor: pointer;
-      font-size: .75rem;
-      padding-inline: .5rem;
-    }
-
-    svg, img{
-      height: 1rem;
-      aspect-ratio: 1/1;
-      @include imgIconColorAccent;
-      margin-right: .5rem;
-    }
   }
 }
 

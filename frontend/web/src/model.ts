@@ -18,6 +18,7 @@ import URLHandler from "./urlHandler"
 import TagService, {Tag} from "./service/tag.service"
 
 export enum PageEnum { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar" }
+export enum EditPageEnum { OVERVIEW="overview", CHILDREN="children", DEVICE="device", DEVICETYPE="devicetype" }
 
 /**
  * An instance of this class is our singular data provider. It interfaces between the individual service classes which

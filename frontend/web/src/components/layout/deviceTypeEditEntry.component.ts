@@ -41,26 +41,26 @@ export class DeviceTypeEditEntryComponent extends LitElement {
             </div>
 
             <div class="edit">
-                <div class="section" @click="${() => {URLHandler.setUrl('/app/edit/type?id=1')}}">
+                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}">
                     <div slot="left" class="icon accent">
                         ${unsafeSVG(icon(faListUl).html[0])}
                     </div>
                     <p>Zugehörige Geräte</p>    
-                </div>
+                </cc-button>
 
-                <div class="section">
+                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}">
                     <div slot="left" class="icon accent">
                         ${unsafeSVG(icon(faPen).html[0])}
                     </div>
                     <p>Bearbeiten</p>
-                </div>
+                </cc-button>
 
-                <div class="section">
+                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}">
                     <div slot="left" class="icon accent">
                         ${unsafeSVG(icon(faTrash).html[0])}
                     </div>
                     <p>Löschen</p>
-                </div>
+                </cc-button>
             </div>
             
             <cc-circle-select></cc-circle-select>
