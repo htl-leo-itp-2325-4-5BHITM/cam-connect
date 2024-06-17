@@ -1,13 +1,14 @@
 import {html, LitElement} from 'lit';
 import {customElement, property, state} from 'lit/decorators.js';
-import styles from '../../styles/components/edit.styles.scss';
 import {Api, SizeEnum} from "../base";
 import PopupEngine from "../popupEngine";
-import {SelectType} from "./basic/select.component"
-import {ObservedProperty} from "../model"
+import {EditPageEnum, ObservedProperty} from "../model"
 import {AppState} from "../AppState"
-import {DeviceTypeFullDTO, DeviceTypeVariantEnum} from "../service/deviceType.service"
+import {DeviceTypeFullDTO} from "../service/deviceType.service"
 import {model} from "../index"
+import {SelectType} from "./basic/select.component"
+import styles from '../../styles/components/edit.styles.scss'
+import URLHandler from "../urlHandler"
 
 @customElement('cc-edit')
 export class EditComponent extends LitElement {
@@ -46,8 +47,12 @@ export class EditComponent extends LitElement {
                     <h1>Kamera-Gerätetypen</h1>
 
                     ${Object.values(this.deviceTypesFull.value)?.flat().map(deviceType => {
-                        if(deviceType.deviceType.variant == this.currentOption){
+                        if(deviceType.deviceType.variant == this.currentOption && model.appState.value.editPage == EditPageEnum.OVERVIEW){
                             return html`<cc-device-type-edit-entry .deviceType="${deviceType}"></cc-device-type-edit-entry>`
+                        }
+                        // @ts-ignore
+                        if(URLHandler.getParam("gid") == deviceType.deviceType.type_id && model.appState.value.editPage == EditPageEnum.CHILDREN){
+                            return html`<cc-device-type-children .deviceType="${deviceType}"></cc-device-type-children>`
                         }
                     })}
                 </main>
