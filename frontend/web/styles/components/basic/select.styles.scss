@@ -38,6 +38,27 @@
     -webkit-text-stroke: 0.5px var(--selected-color);
   }
 
+  &[type="vertical"] {
+    flex-direction: column;
+    align-items: center;
+    gap: .75rem;
+
+    ::slotted(*) {
+      width: 90%;
+      padding: .25rem .5rem !important;
+      background-color: $gray350;
+    }
+
+    ::slotted(*.selected){
+      font-weight: 500 !important;
+      background-color: $gray500 !important;
+    }
+
+    ::slotted(*:not(:last-child)):after {
+      display: none;
+    }
+  }
+
   ::slotted(*){
     cursor: pointer;
     color: $gray800 !important;

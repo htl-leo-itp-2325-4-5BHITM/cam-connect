@@ -1,73 +1,57 @@
-import {LitElement, html} from 'lit';
-import {customElement, state} from 'lit/decorators.js';
+import {html, LitElement} from 'lit';
+import {customElement, property, state} from 'lit/decorators.js';
 import styles from '../../styles/components/edit.styles.scss';
-import {Api, ccResponse, config} from "../base";
+import {Api, SizeEnum} from "../base";
 import PopupEngine from "../popupEngine";
-import {ButtonType} from "./basic/button.component";
+import {SelectType} from "./basic/select.component"
+import {ObservedProperty} from "../model"
+import {AppState} from "../AppState"
+import {DeviceTypeFullDTO, DeviceTypeVariantEnum} from "../service/deviceType.service"
+import {model} from "../index"
 
 @customElement('cc-edit')
 export class EditComponent extends LitElement {
-    @state() currentOption = "camera";
+    @state() currentOption: string | number = "camera"
+
+    @property() private deviceTypesFull: ObservedProperty<DeviceTypeFullDTO[]>
+
+    @property() private appState: ObservedProperty<AppState>
+
+    constructor() {
+        super()
+        this.deviceTypesFull = new ObservedProperty<DeviceTypeFullDTO[]>(this, model.deviceTypesFull)
+        this.appState = new ObservedProperty<AppState>(this, model.appState)
+    }
 
     render() {
-        let listOfString = ["camera", "drone", "lens", "light", "microphone", "simple", "stabilizer", "tripod"];
-
         return html`
             <style>${styles}</style>
             <cc-navbar type="back"></cc-navbar>
+            
+            <cc-sidebar accountname="Martin Huemer">
+                <cc-button slot="sorts">Neu Erstellen</cc-button>
+                <cc-select slot="primaryFilters" size="${SizeEnum.MEDIUM}" type="${SelectType.VERTICAL}">
+                    ${
+                        model.deviceTypeNameFilterOptions.value.map(value => {
+                            return html`<p class="${value.id == this.currentOption ? 'selected' : ''}" @click="${() => {this.currentOption = value.id}}">${value.name}</p>`
+                        })
+                    }
+                </cc-select>
+            </cc-sidebar>
 
-            <main>
-                <div class="importBox">
-                    <h1>Importieren</h1>
-                    <div class="line">
-                        <input type="file"
-                               @change="${(event) => {this.importDataFromCsv(event, "devicetype", "all")}}"
-                               accept=".csv"
-                        />
-                    </div>
-                    <div class="line">
-                        <input type="file"
-                               data-devicetype="camera"
-                               @change="${(event) => {this.importDataFromCsv(event, "devicetype", "true")}}"
-                               accept=".csv"
-                        />
-                        <select id="listOfTypes" @change="${(event) => this.selectOption(event.target.value, '#listOfTypes')}">
-                            ${listOfString.map(type => html`<option value="${type}">${type}</option>`)}
-                        </select>
-                    </div>
-                    <div class="line">
-                        <input type="file"
-                               @change="${(event) => {this.importDataFromCsv(event, "device", "")}}"
-                               accept=".csv"
-                        />
-                    </div>
-                </div>
+            <div class="toolbar-container">
+                <cc-toolbar></cc-toolbar>
+                
+                <main>
+                    <h1>Kamera-Gerätetypen</h1>
 
-                <div>
-                    <h1>Exportieren</h1>
-                    
-                    <div class="line">
-                        <a href="${config.api_url}/devicetype/getcsv"    download>
-                            <cc-button type="${ButtonType.OUTLINED}">All Device Types</cc-button>
-                        </a>                    
-                    </div>
-
-                    <div class="line">
-                        <a href="${config.api_url}/devicetype/getcsv/${this.currentOption}" download>
-                            <cc-button type="${ButtonType.OUTLINED}">Device Types</cc-button>
-                        </a>
-                        <select id="listOfTypes2" @change="${(event) => this.selectOption(event.target.value, '#listOfTypes2')}">
-                            ${listOfString.map(type => html`<option value="${type}">${type}</option>`)}
-                        </select>
-                    </div>
-
-                    <div class="line">
-                        <a href="${config.api_url}/device/getcsv" download>
-                            <cc-button type="${ButtonType.OUTLINED}">Devices</cc-button>
-                        </a>
-                    </div>
-                </div>
-            </main>
+                    ${Object.values(this.deviceTypesFull.value)?.flat().map(deviceType => {
+                        if(deviceType.deviceType.variant == this.currentOption){
+                            return html`<cc-device-type-edit-entry .deviceType="${deviceType}"></cc-device-type-edit-entry>`
+                        }
+                    })}
+                </main>
+            </div>
         `;
     }
 

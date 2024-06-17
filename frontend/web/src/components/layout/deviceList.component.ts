@@ -11,11 +11,9 @@ import {AppState} from "../../AppState"
 
 @customElement('cc-device-list')
 export class DeviceListComponent extends LitElement {
-    @property()
-    private deviceTypesFull: ObservedProperty<DeviceTypeFullDTO[]>
+    @property() private deviceTypesFull: ObservedProperty<DeviceTypeFullDTO[]>
 
-    @property()
-    private appState: ObservedProperty<AppState>
+    @property() private appState: ObservedProperty<AppState>
 
     constructor() {
         super()
