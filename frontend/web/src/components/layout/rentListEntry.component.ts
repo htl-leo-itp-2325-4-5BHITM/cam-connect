@@ -37,6 +37,11 @@ export class RentListEntryComponent extends LitElement {
 
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
+
+            this.classList.add("hoverHighlighted")
+        if(model.appState.value.userSettings.showHoverEffectOfRentListEntry){
+
+        }
     }
 
     protected performUpdate() {
@@ -179,11 +184,11 @@ export class RentListEntryComponent extends LitElement {
                         `
                 }
                 
-                <cc-line color=${LineColor.LIGHT} type="${LineType.VERTICAL}"></cc-line>
+                <cc-line color=${LineColor.DEFAULT} type="${LineType.VERTICAL}"></cc-line>
  
                 <input type="text" class="date">
                 
-                <cc-line color=${LineColor.LIGHT} type="${LineType.VERTICAL}"></cc-line>
+                <cc-line color=${LineColor.DEFAULT} type="${LineType.VERTICAL}"></cc-line>
                 
                 <cc-property-value size="${SizeEnum.SMALL}" property="Erstellt von" 
                                    value="${this.rent.teacher_start.firstname.charAt(0)}. ${this.rent.teacher_start.lastname}">

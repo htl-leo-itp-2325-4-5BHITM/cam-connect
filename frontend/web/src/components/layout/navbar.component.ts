@@ -16,6 +16,7 @@ import logo from "../../../assets/logo/cc-wordmark-white.svg"
 import Util, {AnimationHelper} from "../../util"
 import {ButtonType} from "../basic/button.component"
 import PopupEngine from "../../popupEngine"
+import * as util from "util"
 
 @customElement('cc-navbar')
 export class NavbarComponent extends LitElement {
@@ -148,9 +149,12 @@ export class NavbarComponent extends LitElement {
     }
 
     openSearch(searchTerm: string = ""){
+        console.log(this.type)
+        if(this.type != "default") return
+
         this.searchOpen = true
         let input = this.shadowRoot.querySelector(".search input") as HTMLInputElement
-        if(searchTerm != "") {
+        if(searchTerm != "" && searchTerm != null) {
             input.value = searchTerm
             this.handleSearchInput()
         }
@@ -159,16 +163,11 @@ export class NavbarComponent extends LitElement {
         model.appState.value.addCurrentActionCancellation(this.closeSearch.bind(this), "search")
     }
 
-    lastInputTime: number = 0
-    handleSearchInput(){
+    handleSearchInput = Util.debounce(() => {
         let input = this.shadowRoot.querySelector(".search input") as HTMLInputElement
-        this.lastInputTime = Date.now()
-        setTimeout(() => {
-            if(Date.now() - this.lastInputTime > 300){
-                model.appState.value.searchTerm = input.value
-            }
-        },300)
-    }
+        model.appState.value.searchTerm = input.value
+        console.log("adsfaf")
+    })
 
     closeSearch(){
         this.searchOpen = false

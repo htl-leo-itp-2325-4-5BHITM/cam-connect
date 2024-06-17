@@ -1,5 +1,6 @@
 package at.camconnect.model;
 
+import at.camconnect.enums.DeviceStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -20,6 +21,8 @@ public class Device {
     @JoinColumn(name = "type_id")
     private DeviceType type;
     private LocalDateTime creation_date;
+    private LocalDateTime change_date;
+    private DeviceStatus status;
 
     public Device() {
         this.creation_date = LocalDateTime.now();
@@ -31,6 +34,7 @@ public class Device {
         this.note = note;
         this.type = type;
         this.creation_date = LocalDateTime.now();
+        this.status = DeviceStatus.ACTIVE;
     }
 
     @Override
@@ -76,5 +80,13 @@ public class Device {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public DeviceStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(DeviceStatus status) {
+        this.status = status;
     }
 }

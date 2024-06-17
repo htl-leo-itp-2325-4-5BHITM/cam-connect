@@ -36,6 +36,9 @@ export class AutocompleteComponent<T> extends LitElement {
     @property()
     options: SimpleOption<number, T>[] = []
 
+    @property()
+    showIcon: boolean = true
+
     /**
      * a custom function that is called whenever the user selects an option
      * this is typically used to update the state of the parent component
@@ -116,17 +119,21 @@ export class AutocompleteComponent<T> extends LitElement {
 
         return html`
             <style>${styles}</style>
-            <input type="text" placeholder="${this.placeholder}" .disabled="${this.disabled}" data-role="autocompleteInput" value="${this.selected.id > -1 ? this.contentProvider(this.selected.data) : ""}"
-                   @mouseup="${ this.generateSuggestions }"
-                   @keyup="${ (e)=> this.generateSuggestions(e) }"
-                   @keydown="${this.handleTabOut}"
-                   @mousedown="${() => this.openedThroughClick = true}"
-                   @focus="${(e) => {
-                        if (!this.openedThroughClick) this.generateSuggestions(e)
-                   }}"
+            <input
+                type="text" placeholder="${this.placeholder}"
+                data-role="autocompleteInput" part="input"
+                .disabled="${this.disabled}"
+                value="${this.selected.id > -1 ? this.contentProvider(this.selected.data) : ""}"
+                @mouseup="${ this.generateSuggestions }"
+                @keyup="${ (e)=> this.generateSuggestions(e) }"
+                @keydown="${this.handleTabOut}"
+                @mousedown="${() => this.openedThroughClick = true}"
+                @focus="${(e) => {
+                if (!this.openedThroughClick) this.generateSuggestions(e)
+                }}"
             >
             <!-- display the dropdown icon if the width is enough -->
-            ${this.clientWidth > 50 || this.selected.id < 0 ? unsafeSVG(icon(faCaretDown).html[0]) : html``}
+            ${(this.clientWidth > 50 || this.selected.id < 0) && this.showIcon == true ? unsafeSVG(icon(faCaretDown, {attributes: {part: "icon"}}).html[0]) : html``}
         `
     }
 

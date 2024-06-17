@@ -12,9 +12,8 @@
   transition: background-color $transitionTimeShort;
 }
 
-:host(:hover){
-  //TODO add this as setting
-  /*background-color: $gray300;*/
+:host(.hoverHighlighted:hover){
+  background-color: $gray300;
 }
 
 :host(:not(:first-of-type)){
@@ -23,11 +22,34 @@
 
 :host([status="DECLINED"]){
   background: linear-gradient(90deg, #423333 22.57%, #663D3D 99.01%);
+  padding-block: .3rem !important;
 
   input{
-    border-radius: 0.25rem;
-    border: 1px solid $gray500;
-    background: var(--badGrayTransparent, rgba(90, 48, 48, 0.80));
+    background: transparent;
+    border-color: $gray600;
+
+    &.date{
+      width: 11ch;
+      text-align: center;
+    }
+  }
+
+  cc-autocomplete{
+    &::part(input){
+      border-color: $gray600;
+    }
+
+    &::part(icon){
+      --color: #{$gray800};
+    }
+
+    &.number{
+      width: 5ch;
+    }
+
+    &.name{
+      width: 12ch;
+    }
   }
 
   span {
@@ -35,28 +57,14 @@
   }
 }
 
-input, cc-autocomplete{
-  &.name{
-    width: 15ch;
-  }
 
-  &.date{
-    width: 11ch;
-    text-align: center;
-    padding-inline: .2rem;
-  }
-
-  &.number{
-    width: 5ch;
-  }
-}
 
 //TODO format all dates with more letter spacing as they are in figma
 
 .area{//TODO cleanup this selector
   display: flex;
   align-items: center;
-  gap: 0.1rem;
+  gap: 0.2rem;
   font-weight: 400;
   color: $gray800;
   font-size: $fSizeDesktopSmall;
@@ -74,41 +82,20 @@ input, cc-autocomplete{
 
 cc-chip{
   margin-right: 1rem;
+
+  .details{
+    h2{
+      font-weight: bold;
+      margin-bottom: .5rem;
+    }
+
+    p{
+      margin-bottom: .5rem;
+    }
+  }
 }
 
 cc-line{
-  margin-inline: .5rem;
+  margin-inline: .3rem;
 }
 
-input{
-  display: flex;
-  padding: 0rem 0.1875rem 0rem 0.25rem;
-  align-items: center;
-  gap: 0.2rem;
-  border-radius: 0.25rem;
-  border: 1px solid $gray500;
-  background: $gray300;
-
-  &[type = "text"]{
-    width: 12ch;
-  }
-
-  &.number{
-    width: 4ch;
-  }
-
-  &[disabled]{
-    background: transparent;
-    border: none;
-  }
-}
-cc-chip .details{
-  h2{
-    font-weight: bold;
-    margin-bottom: .5rem;
-  }
-
-  p{
-    margin-bottom: .5rem;
-  }
-}

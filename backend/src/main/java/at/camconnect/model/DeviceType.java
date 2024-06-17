@@ -31,6 +31,7 @@ public abstract class DeviceType{
     private String image;
 
     private LocalDateTime creation_date;
+    private LocalDateTime change_date;
 
     public DeviceType(Long type_id, LocalDateTime creation_date, String name, String image, DeviceTypeStatusEnum status, DeviceTypeVariantEnum variant) {
         this.variant = variant;
