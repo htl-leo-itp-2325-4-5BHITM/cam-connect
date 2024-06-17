@@ -14,6 +14,10 @@
   box-sizing: border-box;
 }
 
+:host([type="edit"]){
+  width: 15vw;
+}
+
 .buttons, .sorts{
   display: flex;
   padding-inline: .75rem;
@@ -22,6 +26,14 @@
   &.sorts{
     flex-direction: column;
   }
+}
+
+.buttons cc-button{
+  width: 100%;
+}
+
+.nav{
+  padding-inline: .5rem;
 }
 
 cc-line{

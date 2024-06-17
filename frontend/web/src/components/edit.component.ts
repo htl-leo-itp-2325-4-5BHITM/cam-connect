@@ -3,7 +3,6 @@ import {customElement, property, state} from 'lit/decorators.js';
 import styles from '../../styles/components/edit.styles.scss';
 import {Api, SizeEnum} from "../base";
 import PopupEngine from "../popupEngine";
-import {SelectType} from "./basic/select.component"
 import {ObservedProperty} from "../model"
 import {AppState} from "../AppState"
 import {DeviceTypeFullDTO, DeviceTypeVariantEnum} from "../service/deviceType.service"
@@ -28,15 +27,7 @@ export class EditComponent extends LitElement {
             <style>${styles}</style>
             <cc-navbar type="back"></cc-navbar>
             
-            <cc-sidebar accountname="Martin Huemer">
-                <cc-button slot="sorts">Neu Erstellen</cc-button>
-                <cc-select slot="primaryFilters" size="${SizeEnum.MEDIUM}" type="${SelectType.VERTICAL}">
-                    ${
-                        model.deviceTypeNameFilterOptions.value.map(value => {
-                            return html`<p class="${value.id == this.currentOption ? 'selected' : ''}" @click="${() => {this.currentOption = value.id}}">${value.name}</p>`
-                        })
-                    }
-                </cc-select>
+            <cc-sidebar accountname="Martin Huemer" type="edit">
             </cc-sidebar>
 
             <div class="toolbar-container">

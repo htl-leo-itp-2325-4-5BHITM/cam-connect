@@ -80,8 +80,8 @@ export class AppComponent extends LitElement {
                             
                         }
                     }}">Nur verfügbare anzeigen</cc-toggle>
-                    <cc-button slot="sorts" size="${SizeEnum.MEDIUM}" type="${ButtonType.UNDERLINED}" color="${SimpleColorEnum.GRAY}" @click=""
-                               noPadding>Filter zurücksetzten
+                    <cc-button slot="sorts" size="${SizeEnum.MEDIUM}" type="${ButtonType.UNDERLINED}" color="${SimpleColorEnum.GRAY}" @click="">
+                        Filter zurücksetzten
                     </cc-button>
                     
                     <cc-filter-container slot="primaryFilters" .options="${model.deviceTypeNameFilterOptions}" affectSecondaryFilters>Gerätetyp</cc-filter-container>

@@ -36,6 +36,7 @@ export interface ccStatus{
 export enum ColorEnum {ACCENT="accent", GOOD="good", MID="mid", BAD="bad", GRAY="gray"}
 export enum SimpleColorEnum {ACCENT="accent", GRAY="gray"}
 export enum SizeEnum {BIG="big", MEDIUM="medium", SMALL="small"}
+export enum Orientation {HORIZONTAL="horizontal", VERTICAL="vertical"}
 
 export interface SimpleOption<ID, DATA> {
     id: ID
