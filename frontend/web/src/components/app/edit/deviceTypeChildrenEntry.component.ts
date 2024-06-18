@@ -2,12 +2,25 @@ import {html, LitElement, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../../styles/components/app/edit/deviceTypeEditEntry.styles.scss'
 import {Device} from "../../../service/device.service"
-import {SizeEnum} from "../../../base"
+import {ColorEnum, SizeEnum} from "../../../base"
+import {unsafeSVG} from "lit/directives/unsafe-svg.js"
+import {icon} from "@fortawesome/fontawesome-svg-core"
+import {faPen} from "@fortawesome/free-solid-svg-icons"
+import {EditPageEnum, ObservedProperty} from "../../../model"
+import {AppState} from "../../../AppState"
+import {model} from "../../../index"
 
 @customElement('cc-device-type-children-entry')
 export class DeviceTypeChildrenEntryComponent extends LitElement {
     @property()
     device: Device
+
+    @property() private appState: ObservedProperty<AppState>
+
+    constructor(){
+        super()
+        this.appState = new ObservedProperty<AppState>(this, model.appState)
+    }
 
     render() {
         return html`
@@ -21,6 +34,20 @@ export class DeviceTypeChildrenEntryComponent extends LitElement {
                 ${this.getPropertyValue("Bearbeitet am", this.device.change_date)}
                 ${this.getPropertyValue("Notiz", this.device.note)}
             </div>
+            
+            <div class="edit">
+                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}"  @click="${() => {
+                    //UrlHandler.updateUrl('/app/edit/devicetype?gid=' + this.deviceType.deviceType.type_id)
+                    this.appState.value.editComponentElement.showModal(this.device, "update", EditPageEnum.DEVICE)
+                }}">
+                    <div slot="left" class="icon accent">
+                        ${unsafeSVG(icon(faPen).html[0])}
+                    </div>
+                    <p>Bearbeiten</p>
+                </cc-button>
+            </div>
+            
+            <cc-circle-select></cc-circle-select>
         `
     }
 

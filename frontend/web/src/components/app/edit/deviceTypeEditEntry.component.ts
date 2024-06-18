@@ -1,22 +1,36 @@
-import {html, LitElement, PropertyValues} from 'lit'
+import {html, LitElement} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../../styles/components/app/edit/deviceTypeEditEntry.styles.scss'
-import DeviceTypeService, {
+import {
     CameraType,
-    DeviceType,
     DeviceTypeFullDTO,
-    DeviceTypeSource, DroneType, LensType, LightType, MicrophoneType, StabilizerType, TripodType
+    DroneType,
+    LensType,
+    LightType,
+    MicrophoneType,
+    StabilizerType,
+    TripodType
 } from "../../../service/deviceType.service"
 import {ColorEnum, SizeEnum} from "../../../base"
 import {faListUl, faPen, faTrash} from "@fortawesome/free-solid-svg-icons"
 import {unsafeSVG} from "lit/directives/unsafe-svg.js"
 import {icon} from "@fortawesome/fontawesome-svg-core"
 import UrlHandler from "../../../util/UrlHandler"
+import {EditPageEnum, ObservedProperty} from "../../../model"
+import {AppState} from "../../../AppState"
+import {model} from "../../../index"
 
 @customElement('cc-device-type-edit-entry')
 export class DeviceTypeEditEntryComponent extends LitElement {
     @property()
     deviceType: DeviceTypeFullDTO
+
+    @property() private appState: ObservedProperty<AppState>
+
+    constructor(){
+        super()
+        this.appState = new ObservedProperty<AppState>(this, model.appState)
+    }
 
     render() {
         return html`
@@ -48,7 +62,10 @@ export class DeviceTypeEditEntryComponent extends LitElement {
                     <p>Zugehörige Geräte</p>    
                 </cc-button>
 
-                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}"  @click="${() => {UrlHandler.setUrl('/app/edit/devicetype?gid=' + this.deviceType.deviceType.type_id)}}">
+                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}"  @click="${() => {
+                    //UrlHandler.updateUrl('/app/edit/devicetype?gid=' + this.deviceType.deviceType.type_id)
+                    this.appState.value.editComponentElement.showModal(this.deviceType, "update", EditPageEnum.DEVICETYPE)
+                }}">
                     <div slot="left" class="icon accent">
                         ${unsafeSVG(icon(faPen).html[0])}
                     </div>

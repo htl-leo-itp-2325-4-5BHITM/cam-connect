@@ -12,6 +12,7 @@ import {html, render, TemplateResult} from "lit"
 import UrlHandler from "./util/UrlHandler"
 import {BehaviorSubject} from "rxjs"
 import {KeyBoardShortCut} from "./util/KeyboardShortcut"
+import {EditComponent} from "./components/app/edit/edit.component"
 
 interface ActionCancellation {
     identifier: string,
@@ -73,6 +74,7 @@ export class AppState{
         },
     }
     private _searchTerm: string = ""
+    private _editComponentElement: EditComponent;
 
     /**
      * there is a really small chance here that this possibly falls victim to a race condition
@@ -349,5 +351,14 @@ export class AppState{
         this.update()
         if(this._page == PageEnum.RENTS) RentService.fetchAll()
         if(this._page == PageEnum.EQUIPMENT) DeviceService.fetchAll()
+    }
+
+
+    get editComponentElement(): EditComponent {
+        return this._editComponentElement
+    }
+
+    set editComponentElement(value: EditComponent) {
+        this._editComponentElement = value
     }
 }

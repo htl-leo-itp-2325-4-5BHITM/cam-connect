@@ -27,8 +27,7 @@ export class NavbarComponent extends LitElement {
     @property()
     searchOpen: boolean = false
 
-    @property()
-    private appState: ObservedProperty<AppState>
+    @property() private appState: ObservedProperty<AppState>
 
     constructor() {
         super()

@@ -1,22 +1,30 @@
-import {html, LitElement} from 'lit';
+import {html, LitElement, PropertyValues} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 import PopupEngine from "../../../util/PopupEngine";
 import {EditPageEnum, ObservedProperty} from "../../../model"
-import {DeviceTypeFullDTO} from "../../../service/deviceType.service"
+import {DeviceTypeFullDTO, DeviceTypeVariantEnum} from "../../../service/deviceType.service"
 import {model} from "../../../index"
 import styles from '../../../../styles/components/app/edit/edit.styles.scss'
 import UrlHandler from "../../../util/UrlHandler"
 import {Api} from "../../../util/Api"
-import Util from "../../../util/Util"
+import {AppState} from "../../../AppState"
+import {Device} from "../../../service/device.service"
 
 @customElement('cc-edit')
 export class EditComponent extends LitElement {
     @property() private deviceTypesFull: ObservedProperty<DeviceTypeFullDTO[]>
 
+    @property() private appState: ObservedProperty<AppState>
 
     constructor(){
         super()
         this.deviceTypesFull = new ObservedProperty<DeviceTypeFullDTO[]>(this, model.deviceTypesFull)
+        this.appState = new ObservedProperty<AppState>(this, model.appState)
+    }
+
+    protected firstUpdated(_changedProperties: PropertyValues) {
+        super.firstUpdated(_changedProperties);
+        this.appState.value.editComponentElement = this
     }
 
     render() {
@@ -25,22 +33,11 @@ export class EditComponent extends LitElement {
             <cc-navbar type="back"></cc-navbar>
 
             <cc-sidebar accountname="Martin Huemer" type="edit"></cc-sidebar>
-            
-            <div class="editModal">
-                <div class="content">
-                    <h1>Gerätetyp Erstellen</h1>
-                    
-                    <input placeholder="Name">
-                    <input placeholder="Bild">
-                    <input type="file">
-                    
-                    <div>
-                        <cc-line></cc-line>
-                        <cc-line></cc-line>
-                    </div>
-                </div>
+
+            <div class="editModal" hidden="hidden">
+                ${this.getModalContent(EditPageEnum.DEVICETYPE)}
             </div>
-            
+
             ${this.getComponent()}
         `
     }
@@ -60,6 +57,54 @@ export class EditComponent extends LitElement {
             /*let type = this.deviceTypesFull.value.filter(type=> type.deviceType.type_id == parseInt(UrlHandler.getParam("gid")))
 
             return html`<cc-device-type-children .deviceType="${type}"></cc-device-type-children>`*/
+        }
+    }
+
+    showModal(element: Device | DeviceTypeFullDTO, type: "create" | "update", editPageType : EditPageEnum){
+        this.shadowRoot.querySelector(".editModal").setAttribute("hidden", "false")
+
+        console.log(this.getModalContent)
+        //this.shadowRoot.querySelector(".editModal").innerHTML = `${this.getModalContent(editPageType)}`
+    }
+
+    getModalContent(editPageType: EditPageEnum){
+        if(editPageType == EditPageEnum.DEVICETYPE){
+            return html`
+                <h1>Gerätetyp Erstellen</h1>
+                <input placeholder="Name">
+                <input placeholder="Bild">
+                <input type="file">
+                
+                <div>
+                    <cc-line></cc-line>
+                    <cc-dropdown>Kamera</cc-dropdown>
+                    <cc-line></cc-line>
+                </div>
+                
+                <input placeholder="Maximale Bildrate (FPS)">
+                <input placeholder="Anderer Text">
+            `
+        }
+
+        if(editPageType == EditPageEnum.DEVICE){
+            return html`
+                <h1>Gerät Erstellen</h1>
+                <cc-dropdown placeholder="Gerätetyp"></cc-dropdown>
+                <input placeholder="Gerätenummer">
+                <input placeholder="Seriennummer">
+                <cc-line></cc-line>
+                
+                <cc-toggle>Gerät ist aktiv</cc-toggle>
+                <textarea placeholder="Notiz" rows="2"></textarea>
+            `
+        }
+    }
+
+    getModalContentByDeviceType(deviceType : DeviceTypeVariantEnum){
+        switch(deviceType){
+            case DeviceTypeVariantEnum.camera: return html`
+                
+            `
         }
     }
 

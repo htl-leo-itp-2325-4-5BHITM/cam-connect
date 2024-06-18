@@ -51,4 +51,8 @@ cc-sidebar{
     max-height: 80vh;
     padding: 1rem;
   }
+
+  &[hidden = "hidden"]{
+    display: none;
+  }
 }
