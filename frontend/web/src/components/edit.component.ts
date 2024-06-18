@@ -6,33 +6,30 @@ import {EditPageEnum, ObservedProperty} from "../model"
 import {AppState} from "../AppState"
 import {DeviceTypeFullDTO} from "../service/deviceType.service"
 import {model} from "../index"
-import {SelectType} from "./basic/select.component"
 import styles from '../../styles/components/edit.styles.scss'
 import URLHandler from "../urlHandler"
 
 @customElement('cc-edit')
 export class EditComponent extends LitElement {
-    @state() currentOption: string | number = "camera"
-
     @property() private deviceTypesFull: ObservedProperty<DeviceTypeFullDTO[]>
 
-    @state() currentOption: string | number = "camera"
 
     constructor(){
         super()
         this.deviceTypesFull = new ObservedProperty<DeviceTypeFullDTO[]>(this, model.deviceTypesFull)
-        this.appState = new ObservedProperty<AppState>(this, model.appState)
     }
 
     render() {
         return html`
             <style>${styles}</style>
             <cc-navbar type="back"></cc-navbar>
-            
+
             <cc-sidebar accountname="Martin Huemer" type="edit"></cc-sidebar>
-            
+
             ${this.getComponent()}
         `
+    }
+
     getComponent(){
         if(model.appState.value.editPage == EditPageEnum.OVERVIEW){
             return html`<cc-device-type-edit></cc-device-type-edit>`
@@ -46,14 +43,6 @@ export class EditComponent extends LitElement {
                     return html`<cc-device-type-children .deviceType="${elem}"></cc-device-type-children>`
                 }
             })}`
-        }
-    }
-
-    selectOption(type, selectId) {
-        (this.shadowRoot.querySelector(selectId) as HTMLInputElement).dataset.devicetype = type;
-
-        if (selectId == "#listOfTypes2") {
-            this.currentOption = type;
         }
     }
 

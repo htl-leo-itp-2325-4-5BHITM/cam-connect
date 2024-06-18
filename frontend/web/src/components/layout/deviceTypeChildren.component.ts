@@ -32,7 +32,7 @@ export class DeviceTypeChildrenComponent extends LitElement {
 
                 <main>
                     <div>
-                        <icon-cta @click="${() => {URLHandler.setUrl('/app/edit')}}">${unsafeSVG(icon(faArrowLeft).html[0])}</icon-cta>
+                        <icon-cta @click="${() => {URLHandler.setUrl('/app/edit?type=' + this.appState.value.editPageType)}}">${unsafeSVG(icon(faArrowLeft).html[0])}</icon-cta>
                         
                         <div>
                             <h1>${this.deviceType.deviceType.name}</h1>

@@ -2,11 +2,12 @@ import {html, LitElement, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/deviceTypeEdit.styles.scss'
 import {
-    DeviceTypeFullDTO,
+    DeviceTypeFullDTO, DeviceTypeVariantEnum,
 } from "../../service/deviceType.service"
 import {ObservedProperty} from "../../model"
-import {AppState} from "../../AppState"
+import URLHandler from "../../urlHandler"
 import {model} from "../../index"
+import {AppState} from "../../AppState"
 
 @customElement('cc-device-type-edit')
 export class DeviceTypeEditComponent extends LitElement {
@@ -31,7 +32,9 @@ export class DeviceTypeEditComponent extends LitElement {
                     <h1>Kamera-Gerätetypen</h1>
 
                     ${Object.values(this.deviceTypesFull.value)?.flat().map(deviceType => {
-                        return html`<cc-device-type-edit-entry .deviceType="${deviceType}"></cc-device-type-edit-entry>`
+                        if(deviceType.deviceType.variant == this.appState.value.editPageType){
+                            return html`<cc-device-type-edit-entry .deviceType="${deviceType}"></cc-device-type-edit-entry>`
+                        }
                     })}
                 </main>
             </div>
