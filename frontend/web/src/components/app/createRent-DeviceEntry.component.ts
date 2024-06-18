@@ -17,7 +17,7 @@ import {AppState} from "../../AppState"
 import localeDe from "air-datepicker/locale/de"
 import {AutocompleteComponent} from "../basic/autocomplete.component"
 import DeviceTypeService, {DeviceType, DeviceTypeSource, DeviceTypeVariantEnum} from "../../service/deviceType.service"
-import Util, {AnimationHelper} from "../../util"
+import Util, {AnimationHelper} from "../../util/Util"
 import DeviceService, {Device, DeviceDTO, SearchDTO} from "../../service/device.service"
 
 export interface CreateRentDeviceEntryData {

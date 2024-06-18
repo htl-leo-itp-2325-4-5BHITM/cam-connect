@@ -9,10 +9,10 @@ import {icon} from '@fortawesome/fontawesome-svg-core'
 import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons"
 import {unsafeSVG} from 'lit/directives/unsafe-svg.js';
 import RentService, {Rent, RentStatusEnum, RentTypeEnum} from "../service/rent.service"
-import UrlHandler from "../Util/UrlHandler"
-import PopupEngine from "../Util/PopupEngine"
-import Util from "../util"
-import {Api} from "../Util/Api"
+import UrlHandler from "../util/UrlHandler"
+import PopupEngine from "../util/PopupEngine"
+import Util from "../util/Util"
+import {Api} from "../util/Api"
 
 @customElement('cc-external-confirm')
 export class ExternalConfirmComponent extends LitElement {

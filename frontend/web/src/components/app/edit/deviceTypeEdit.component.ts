@@ -5,7 +5,7 @@ import {
     DeviceTypeFullDTO, DeviceTypeVariantEnum,
 } from "../../../service/deviceType.service"
 import {ObservedProperty} from "../../../model"
-import UrlHandler from "../../../Util/UrlHandler"
+import UrlHandler from "../../../util/UrlHandler"
 import {model} from "../../../index"
 import {AppState} from "../../../AppState"
 

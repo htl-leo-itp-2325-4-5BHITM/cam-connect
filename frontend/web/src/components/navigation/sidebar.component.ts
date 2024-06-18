@@ -8,9 +8,9 @@ import {Orientation, SimpleColorEnum, SizeEnum} from "../../base"
 import {model} from "../../index"
 import {ObservedProperty} from "../../model"
 import {AppState} from "../../AppState"
-import UrlHandler from "../../Util/UrlHandler"
+import UrlHandler from "../../util/UrlHandler"
 import {DeviceTypeVariantEnum} from "../../service/deviceType.service"
-import {Tooltip} from "../../Util/Tooltip"
+import {Tooltip} from "../../util/Tooltip"
 
 @customElement('cc-sidebar')
 export class SidebarComponent extends LitElement {
@@ -97,9 +97,8 @@ export class SidebarComponent extends LitElement {
                     ${
                             model.deviceTypeNameFilterOptions.value.map(value => {
                                 return html`
-                                    <p class="${value.id == UrlHandler.getParam("type") ? 'selected' : ''}"
+                                    <p class="${value.id as DeviceTypeVariantEnum == this.appState.value.editPageType ? 'selected' : ''}"
                                        @click="${() => {
-                                           console.log(this.appState.value.editPage)
                                            UrlHandler.setParam("type", value.id as string)
                                            this.appState.value.editPageType = value.id as DeviceTypeVariantEnum
                                        }}"

@@ -2,7 +2,7 @@ import {model} from "../index"
 import {ccResponse, SimpleOption} from "../base"
 import {DeviceType, DeviceTypeSource, DeviceTypeVariantCollection, DeviceTypeVariantEnum} from "./deviceType.service"
 import {Rent, RentByStudentDTO} from "./rent.service"
-import {Api} from "../Util/Api"
+import {Api} from "../util/Api"
 
 export interface Device{
     device_id: number

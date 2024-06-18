@@ -41,11 +41,11 @@ import 'air-datepicker/air-datepicker.css';
 import '../styles/index.scss'
 
 import Model, {ObservedProperty, PageEnum} from "./model"
-import PopupEngine from "./Util/PopupEngine";
-import UrlHandler from "./Util/UrlHandler"
+import PopupEngine from "./util/PopupEngine";
+import UrlHandler from "./util/UrlHandler"
 
 import favicon from "../assets/logo/cc-logomark-accent.svg"
-import {KeyBoardShortCut} from "./Util/KeyboardShortcut"
+import {KeyBoardShortCut} from "./util/KeyboardShortcut"
 
 //OMG its our single swouce of THWQUUUCE
 export let model = new Model()

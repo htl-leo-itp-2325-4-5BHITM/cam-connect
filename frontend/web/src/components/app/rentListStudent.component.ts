@@ -11,7 +11,7 @@ import { icon } from '@fortawesome/fontawesome-svg-core'
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons"
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import {Student} from "../../service/student.service"
-import UrlHandler from "../../Util/UrlHandler"
+import UrlHandler from "../../util/UrlHandler"
 
 @customElement('cc-rent-list-student')
 export class RentListStudentComponent extends LitElement {

@@ -5,7 +5,7 @@ import {SimpleOption} from "../../base"
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons"
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
-import Util, {AnimationHelper} from "../../util"
+import Util, {AnimationHelper} from "../../util/Util"
 
 @customElement('cc-dropdown')
 export class DropdownComponent extends LitElement {

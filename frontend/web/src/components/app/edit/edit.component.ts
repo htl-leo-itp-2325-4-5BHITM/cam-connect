@@ -1,13 +1,13 @@
 import {html, LitElement} from 'lit';
 import {customElement, property, state} from 'lit/decorators.js';
-import PopupEngine from "../../../Util/PopupEngine";
+import PopupEngine from "../../../util/PopupEngine";
 import {EditPageEnum, ObservedProperty} from "../../../model"
 import {AppState} from "../../../AppState"
 import {DeviceTypeFullDTO} from "../../../service/deviceType.service"
 import {model} from "../../../index"
 import styles from '../../../../styles/components/app/edit/edit.styles.scss'
-import UrlHandler from "../../../Util/UrlHandler"
-import {Api} from "../../../Util/Api"
+import UrlHandler from "../../../util/UrlHandler"
+import {Api} from "../../../util/Api"
 
 @customElement('cc-edit')
 export class EditComponent extends LitElement {

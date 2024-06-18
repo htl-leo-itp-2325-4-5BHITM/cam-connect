@@ -3,12 +3,12 @@ import {config} from "../base"
 import {Device} from "./device.service"
 import {Teacher} from "./teacher.service";
 import {Student} from "./student.service";
-import PopupEngine from "../Util/PopupEngine"
-import Util from "../util"
+import PopupEngine from "../util/PopupEngine"
+import Util from "../util/Util"
 import {DeviceTypeVariantEnum} from "./deviceType.service"
 import {AppState} from "../AppState"
 import Model from "../model"
-import {Api} from "../Util/Api"
+import {Api} from "../util/Api"
 
 export enum RentStatusEnum {
     CREATED="CREATED",

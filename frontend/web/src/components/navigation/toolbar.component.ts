@@ -9,11 +9,11 @@ import {ButtonType} from "../basic/button.component"
 import {SimpleColorEnum, SizeEnum} from "../../base"
 import {model} from "../../index"
 import RentService, {RentStatusEnum} from "../../service/rent.service";
-import PopupEngine from "../../Util/PopupEngine";
+import PopupEngine from "../../util/PopupEngine";
 import {AppState} from "../../AppState"
 import DeviceTypeService from "../../service/deviceType.service"
 import {RentStatus} from "../basic/rentStatus.component"
-import UrlHandler from "../../Util/UrlHandler";
+import UrlHandler from "../../util/UrlHandler";
 
 @customElement('cc-toolbar')
 export class ToolbarComponent extends LitElement {

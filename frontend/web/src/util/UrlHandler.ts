@@ -1,6 +1,7 @@
 import {model} from "../index"
 import {EditPageEnum, PageEnum} from "../model"
 import {html} from "lit"
+import {DeviceTypeVariantEnum} from "../service/deviceType.service"
 
 let pages = {
     app: {
@@ -36,6 +37,7 @@ let pages = {
                 handler: () => {
                     UrlHandler.changeOrigin("cc-edit")
                     model.appState.value.editPage = EditPageEnum.OVERVIEW
+                    model.appState.value.editPageType = UrlHandler.getParam("type") as DeviceTypeVariantEnum || DeviceTypeVariantEnum.camera
                 },
                 children: {
                     children: {

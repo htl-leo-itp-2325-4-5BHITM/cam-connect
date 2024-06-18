@@ -1,5 +1,5 @@
 import {model} from "../index"
-import {Api} from "../Util/Api"
+import {Api} from "../util/Api"
 
 export interface Teacher{
     teacher_id: number,

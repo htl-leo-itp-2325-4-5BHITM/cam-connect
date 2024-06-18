@@ -1,7 +1,7 @@
 import {LitElement, html} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../styles/components/notFound.styles.scss'
-import UrlHandler from "../Util/UrlHandler"
+import UrlHandler from "../util/UrlHandler"
 import {ButtonType} from "./basic/button.component"
 @customElement('cc-not-found')
 export class NotFoundComponent extends LitElement {

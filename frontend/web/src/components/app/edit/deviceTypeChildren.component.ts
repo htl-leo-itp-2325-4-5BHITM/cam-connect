@@ -10,7 +10,7 @@ import {model} from "../../../index"
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
 import {unsafeSVG} from "lit/directives/unsafe-svg.js"
 import {icon} from "@fortawesome/fontawesome-svg-core"
-import UrlHandler from "../../../Util/UrlHandler"
+import UrlHandler from "../../../util/UrlHandler"
 
 @customElement('cc-device-type-children')
 export class DeviceTypeChildrenComponent extends LitElement {

@@ -4,7 +4,7 @@ import styles from '../../../styles/components/app/rentDetailView.styles.scss'
 import RentService, {Rent, RentStatusEnum} from "../../service/rent.service"
 import {Student} from "../../service/student.service"
 import {ColorEnum, SimpleColorEnum} from "../../base"
-import Util from "../../util"
+import Util from "../../util/Util"
 import {ButtonType} from "../basic/button.component"
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { faXmark } from "@fortawesome/free-solid-svg-icons"

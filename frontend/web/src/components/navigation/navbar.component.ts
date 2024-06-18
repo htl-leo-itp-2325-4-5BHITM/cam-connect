@@ -11,13 +11,13 @@ import { ObservedProperty, PageEnum} from "../../model"
 import { SelectComponent } from "../basic/select.component"
 import {AppState} from "../../AppState"
 import RentService from "../../service/rent.service"
-import UrlHandler from "../../Util/UrlHandler"
+import UrlHandler from "../../util/UrlHandler"
 import logo from "../../../assets/logo/cc-wordmark-white.svg"
-import Util, {AnimationHelper} from "../../util"
+import Util, {AnimationHelper} from "../../util/Util"
 import {ButtonType} from "../basic/button.component"
-import PopupEngine from "../../Util/PopupEngine"
-import {KeyBoardShortCut} from "../../Util/KeyboardShortcut"
-import {Tooltip} from "../../Util/Tooltip"
+import PopupEngine from "../../util/PopupEngine"
+import {KeyBoardShortCut} from "../../util/KeyboardShortcut"
+import {Tooltip} from "../../util/Tooltip"
 
 @customElement('cc-navbar')
 export class NavbarComponent extends LitElement {

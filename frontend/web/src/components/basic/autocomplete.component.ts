@@ -1,7 +1,7 @@
  import {LitElement, html, PropertyValues, TemplateResult, render} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/autocomplete.styles.scss'
-import Util, {AnimationHelper, Logger} from "../../util"
+import Util, {AnimationHelper, Logger} from "../../util/Util"
 import {SimpleOption, Regex, SimpleColorEnum, SizeEnum} from "../../base"
 import {model} from "../../index"
 import {unsafeSVG} from 'lit/directives/unsafe-svg.js';
@@ -9,7 +9,7 @@ import {icon} from '@fortawesome/fontawesome-svg-core'
 import {faCaretDown} from "@fortawesome/free-solid-svg-icons"
 import {ObservedProperty} from "../../model"
 import {AppState} from "../../AppState"
- import {KeyBoardShortCut} from "../../Util/KeyboardShortcut"
+ import {KeyBoardShortCut} from "../../util/KeyboardShortcut"
 
 
 //TODO check why when clicking away it

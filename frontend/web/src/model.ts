@@ -5,7 +5,7 @@ import DeviceTypeService, {
 import { ReactiveController, ReactiveControllerHost } from 'lit';
 import {BehaviorSubject, lastValueFrom, map, Observable, Subject, Subscription} from 'rxjs';
 import DeviceTypeAttributeService, { DeviceTypeAttributeCollection } from "./service/deviceTypeAttribute.service"
-import Util from "./util"
+import Util from "./util/Util"
 import DeviceService, {Device} from "./service/device.service"
 import RentService, {Rent, RentByStudentDTO} from "./service/rent.service"
 import {FilterOption} from "./components/basic/filterContainer.component"
@@ -44,7 +44,7 @@ export default class Model{
      * - When the value in the deviceTypeAttributes changes (the .next() function is called) each of these Subject is also
      *   updated (this is what the first map function does: It maps every value of the original to this one.)
      * - Instead of just returning value we use a default js function .map that basically iterates over an array and executes
-     *   a function for each value (in this case the Util.deviceTypeAttributeToFilterOption).
+     *   a function for each value (in this case the util.deviceTypeAttributeToFilterOption).
      */
     readonly deviceTypeAttributesAsFilterOptions = {
         cameraResolutions: this.deviceTypeAttributes.pipe(

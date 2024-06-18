@@ -11,7 +11,7 @@ import {ColorEnum, SizeEnum} from "../../../base"
 import {faListUl, faPen, faTrash} from "@fortawesome/free-solid-svg-icons"
 import {unsafeSVG} from "lit/directives/unsafe-svg.js"
 import {icon} from "@fortawesome/fontawesome-svg-core"
-import UrlHandler from "../../../Util/UrlHandler"
+import UrlHandler from "../../../util/UrlHandler"
 
 @customElement('cc-device-type-edit-entry')
 export class DeviceTypeEditEntryComponent extends LitElement {

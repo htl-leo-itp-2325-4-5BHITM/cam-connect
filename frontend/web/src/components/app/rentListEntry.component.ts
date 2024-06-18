@@ -7,16 +7,16 @@ import RentService, {Rent, RentStatusEnum, RentTypeEnum} from "../../service/ren
 import {ChipType} from "../basic/chip.component"
 import {model} from "../../index"
 import {LineColor} from "../basic/line.component"
-import PopupEngine from "../../Util/PopupEngine"
 import {ObservedProperty} from "../../model"
 import {AppState} from "../../AppState"
-import Util from "../../util"
+import Util from "../../util/Util"
 import {unsafeSVG} from "lit/directives/unsafe-svg.js"
 import {icon} from "@fortawesome/fontawesome-svg-core"
 import {faHashtag} from "@fortawesome/free-solid-svg-icons"
 import DeviceService, {Device, DeviceDTO, SearchDTO} from "../../service/device.service"
 import {AutocompleteComponent} from "../basic/autocomplete.component"
 import DeviceTypeService, {DeviceType, DeviceTypeSource} from "../../service/deviceType.service"
+import PopupEngine from "../../util/PopupEngine"
 
 @customElement('cc-rent-list-entry')
 export class RentListEntryComponent extends LitElement {

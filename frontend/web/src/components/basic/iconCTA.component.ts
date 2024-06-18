@@ -1,7 +1,7 @@
 import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, property, queryAssignedElements} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/iconCTA.styles.scss'
-import {AnimationHelper} from "../../util"
+import {AnimationHelper} from "../../util/Util"
 
 @customElement('icon-cta')
 export class iconCTAComponent extends LitElement {

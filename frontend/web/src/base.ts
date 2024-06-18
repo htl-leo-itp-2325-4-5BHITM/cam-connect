@@ -1,9 +1,9 @@
 import * as trace_events from "trace_events"
-import Util from "./util"
+import Util from "./util/Util"
 import {model} from "./index"
 import AirDatepicker from "air-datepicker"
 import localeDe from "air-datepicker/locale/de"
-import PopupEngine from "./Util/PopupEngine"
+import PopupEngine from "./util/PopupEngine"
 
 export const config = {
     api_url: "http://localhost:8080/api",

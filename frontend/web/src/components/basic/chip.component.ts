@@ -6,8 +6,8 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons"
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import {ColorEnum, SizeEnum} from "../../base"
 import {model} from "../../index"
-import {AnimationHelper} from "../../util"
-import {Tooltip} from "../../Util/Tooltip"
+import {AnimationHelper} from "../../util/Util"
+import {Tooltip} from "../../util/Tooltip"
 
 export enum ChipType { EXPANDABLE="expandable", REMOVABLE="removable", CLICKABLE="clickable", DEFAULT="default" }
 

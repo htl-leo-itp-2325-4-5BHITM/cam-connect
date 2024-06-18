@@ -9,9 +9,9 @@ import {DeviceListEntryComponent} from "./components/app/deviceListEntry.compone
 import DeviceService from "./service/device.service"
 import RentService, {OrderByFilterRent, RentFilters, RentStatusEnum} from "./service/rent.service"
 import {html, render, TemplateResult} from "lit"
-import UrlHandler from "./Util/UrlHandler"
+import UrlHandler from "./util/UrlHandler"
 import {BehaviorSubject} from "rxjs"
-import {KeyBoardShortCut} from "./Util/KeyboardShortcut"
+import {KeyBoardShortCut} from "./util/KeyboardShortcut"
 
 interface ActionCancellation {
     identifier: string,

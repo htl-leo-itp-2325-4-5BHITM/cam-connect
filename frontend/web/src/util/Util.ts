@@ -1,17 +1,17 @@
-import {DeviceTypeSource} from "./service/deviceType.service"
-import {FilterOption} from "./components/basic/filterContainer.component"
-import {DeviceTypeAttribute} from "./service/deviceTypeAttribute.service"
+import {DeviceTypeSource} from "../service/deviceType.service"
+import {FilterOption} from "../components/basic/filterContainer.component"
+import {DeviceTypeAttribute} from "../service/deviceTypeAttribute.service"
 import * as repl from "repl"
 import AirDatepicker from "air-datepicker"
 import localeDe from "air-datepicker/locale/de"
-import {model} from "./index"
-import {config} from "./base"
-import {RentStatusEnum} from "./service/rent.service"
+import {model} from "../index"
+import {config} from "../base"
+import {RentStatusEnum} from "../service/rent.service"
 import {unsafeSVG} from 'lit/directives/unsafe-svg.js'
 import {icon} from "@fortawesome/fontawesome-svg-core"
 import {faCheck, faXmark, faQuestion} from "@fortawesome/free-solid-svg-icons"
 import {html} from "lit"
-import {Device, DeviceDTO} from "./service/device.service"
+import {Device, DeviceDTO} from "../service/device.service"
 export default class Util{
     //TODO this typing does not seem right
     static deviceTypeToFilterOption(deviceTypes: DeviceTypeSource): FilterOption{
@@ -152,7 +152,7 @@ export default class Util{
             case RentStatusEnum.CONFIRMED:
                 return html`${unsafeSVG(icon(faCheck).html[0])}`
             case RentStatusEnum.RETURNED:
-                return html`<img src="../assets/icon/return.svg" alt="<-">`
+                return html`<img src="../../assets/icon/return.svg" alt="<-">`
             case RentStatusEnum.DECLINED:
                 return html`${unsafeSVG(icon(faXmark).html[0])}`
             case RentStatusEnum.WAITING:
