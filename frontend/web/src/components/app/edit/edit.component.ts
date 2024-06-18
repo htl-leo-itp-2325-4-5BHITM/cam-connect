@@ -1,13 +1,13 @@
 import {html, LitElement} from 'lit';
-import {customElement, property, state} from 'lit/decorators.js';
+import {customElement, property} from 'lit/decorators.js';
 import PopupEngine from "../../../util/PopupEngine";
 import {EditPageEnum, ObservedProperty} from "../../../model"
-import {AppState} from "../../../AppState"
 import {DeviceTypeFullDTO} from "../../../service/deviceType.service"
 import {model} from "../../../index"
 import styles from '../../../../styles/components/app/edit/edit.styles.scss'
 import UrlHandler from "../../../util/UrlHandler"
 import {Api} from "../../../util/Api"
+import Util from "../../../util/Util"
 
 @customElement('cc-edit')
 export class EditComponent extends LitElement {
@@ -25,7 +25,22 @@ export class EditComponent extends LitElement {
             <cc-navbar type="back"></cc-navbar>
 
             <cc-sidebar accountname="Martin Huemer" type="edit"></cc-sidebar>
-
+            
+            <div class="editModal">
+                <div class="content">
+                    <h1>Gerätetyp Erstellen</h1>
+                    
+                    <input placeholder="Name">
+                    <input placeholder="Bild">
+                    <input type="file">
+                    
+                    <div>
+                        <cc-line></cc-line>
+                        <cc-line></cc-line>
+                    </div>
+                </div>
+            </div>
+            
             ${this.getComponent()}
         `
     }
@@ -37,12 +52,14 @@ export class EditComponent extends LitElement {
 
         if(model.appState.value.editPage == EditPageEnum.CHILDREN){
             return html`${this.deviceTypesFull.value.map(elem => {
-                //@ts-ignore
-                if(elem.deviceType.type_id == UrlHandler.getParam("gid")){
-                    console.log(elem)
+                if(elem.deviceType.type_id == parseInt(UrlHandler.getParam("gid"))){
                     return html`<cc-device-type-children .deviceType="${elem}"></cc-device-type-children>`
                 }
             })}`
+
+            /*let type = this.deviceTypesFull.value.filter(type=> type.deviceType.type_id == parseInt(UrlHandler.getParam("gid")))
+
+            return html`<cc-device-type-children .deviceType="${type}"></cc-device-type-children>`*/
         }
     }
 

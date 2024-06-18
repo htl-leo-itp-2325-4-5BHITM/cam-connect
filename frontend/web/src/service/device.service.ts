@@ -4,12 +4,19 @@ import {DeviceType, DeviceTypeSource, DeviceTypeVariantCollection, DeviceTypeVar
 import {Rent, RentByStudentDTO} from "./rent.service"
 import {Api} from "../util/Api"
 
+export enum DeviceStatus{
+    ACTIVE="active", DELETED="deleted", UNAVAILABLE="unavailable"
+}
+
 export interface Device{
     device_id: number
     serial: string
     number: string
     note: string
     type: DeviceType
+    creation_date: string
+    change_date: string
+    status: DeviceStatus
 }
 
 export interface DeviceDTO{
@@ -18,6 +25,9 @@ export interface DeviceDTO{
     number: string
     note?: string
     type_id: number
+    creation_date: string
+    change_date: string
+    status: DeviceStatus
 }
 
 export interface SearchDTO{

@@ -65,7 +65,10 @@ export class CreateRentDeviceEntryComponent extends LitElement {
             note: "",
             number: "",
             serial: "",
-            type: null
+            type: null,
+            creation_date: "",
+            change_date: "",
+            status: null
         }
     }
 

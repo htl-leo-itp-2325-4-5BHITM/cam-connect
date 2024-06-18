@@ -17,6 +17,8 @@ export class DeviceTypeChildrenEntryComponent extends LitElement {
 
             <div class="deviceInfos">
                 ${this.getPropertyValue("Seriennummer", this.device.serial)}
+                ${this.getPropertyValue("Erstellt am", this.device.creation_date)}
+                ${this.getPropertyValue("Bearbeitet am", this.device.change_date)}
                 ${this.getPropertyValue("Notiz", this.device.note)}
             </div>
         `
