@@ -1,8 +1,8 @@
 import {html, LitElement, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/deviceEditEntry.styles.scss'
-import {ColorEnum, SizeEnum} from "../../base"
-import {Device} from "../../service/device.service"
+import {ColorEnum, SizeEnum} from "../../../base"
+import {Device} from "../../../service/device.service"
 
 @customElement('cc-device-edit-entry')
 export class DeviceEditEntryComponent extends LitElement {

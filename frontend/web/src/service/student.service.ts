@@ -1,5 +1,5 @@
 import {model} from "../index"
-import {Api} from "../base"
+import {Api} from "../Util/Api"
 
 export interface Student{
     student_id: number,

@@ -1,13 +1,13 @@
 import {html, LitElement, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
-import styles from '../../../styles/components/layout/deviceTypeEdit.styles.scss'
+import styles from '../../../../styles/components/app/edit/deviceTypeEdit.styles.scss'
 import {
     DeviceTypeFullDTO, DeviceTypeVariantEnum,
-} from "../../service/deviceType.service"
-import {ObservedProperty} from "../../model"
-import URLHandler from "../../urlHandler"
-import {model} from "../../index"
-import {AppState} from "../../AppState"
+} from "../../../service/deviceType.service"
+import {ObservedProperty} from "../../../model"
+import UrlHandler from "../../../Util/UrlHandler"
+import {model} from "../../../index"
+import {AppState} from "../../../AppState"
 
 @customElement('cc-device-type-edit')
 export class DeviceTypeEditComponent extends LitElement {

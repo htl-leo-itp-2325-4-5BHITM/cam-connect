@@ -1,6 +1,6 @@
 import {html, LitElement, PropertyValues, TemplateResult} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
-import styles from '../../../styles/components/layout/createRent-DeviceEntry.styles.scss'
+import styles from '../../../styles/components/app/createRent-DeviceEntry.styles.scss'
 
 import {ObservedProperty} from "../../model"
 import {model} from "../../index"
@@ -12,7 +12,7 @@ import {faCamera, faHelicopter, faLightbulb, faMicrophone, faXmark, faHashtag} f
 import AirDatepicker from 'air-datepicker';
 import {CreateRentComponent} from "./createRent.component"
 import {CreateRentDTO, RentTypeEnum} from "../../service/rent.service"
-import {Api, ccResponse, config, DatePickerWrapper, Regex, SimpleOption} from "../../base"
+import {ccResponse, config, DatePickerWrapper, Regex, SimpleOption} from "../../base"
 import {AppState} from "../../AppState"
 import localeDe from "air-datepicker/locale/de"
 import {AutocompleteComponent} from "../basic/autocomplete.component"

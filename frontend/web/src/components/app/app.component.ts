@@ -1,14 +1,14 @@
 import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
-import styles from '../../styles/components/app.styles.scss'
-import {model} from "../index"
-import {ObservedProperty, PageEnum} from "../model"
-import {KeyBoardShortCut, SimpleColorEnum, SizeEnum} from "../base"
-import {AppState} from "../AppState"
-import {ButtonType} from "./basic/button.component"
+import styles from '../../../styles/components/app/app.styles.scss'
+import {model} from "../../index"
+import {ObservedProperty, PageEnum} from "../../model"
+import {SimpleColorEnum, SizeEnum} from "../../base"
+import {AppState} from "../../AppState"
+import {ButtonType} from "../basic/button.component"
 import {BehaviorSubject} from "rxjs"
-import {FilterOption} from "./basic/filterContainer.component"
-import {OrderByFilterRent, RentStatusEnum} from "../service/rent.service"
+import {FilterOption} from "../basic/filterContainer.component"
+import {OrderByFilterRent, RentStatusEnum} from "../../service/rent.service"
 
 @customElement('cc-app')
 export class AppComponent extends LitElement {

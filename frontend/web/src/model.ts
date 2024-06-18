@@ -1,5 +1,4 @@
 import DeviceTypeService, {
-    DeviceType,
     DeviceTypeFullDTO,
     DeviceTypeVariantCollection
 } from "./service/deviceType.service"
@@ -12,9 +11,7 @@ import RentService, {Rent, RentByStudentDTO} from "./service/rent.service"
 import {FilterOption} from "./components/basic/filterContainer.component"
 import {Teacher} from "./service/teacher.service";
 import {Student} from "./service/student.service";
-import {RentListEntryComponent} from "./components/layout/rentListEntry.component"
 import {AppState} from "./AppState"
-import URLHandler from "./urlHandler"
 import TagService, {Tag} from "./service/tag.service"
 
 export enum PageEnum { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar" }

@@ -1,6 +1,6 @@
 import {LitElement, css, html} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
-import styles from '../../../styles/components/layout/deviceList.styles.scss'
+import styles from '../../../styles/components/app/deviceList.styles.scss'
 import {model} from "../../index";
 import {WidthResizeObserver} from "../../base"
 import {ObservedProperty} from "../../model"

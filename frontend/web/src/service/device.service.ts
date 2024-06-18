@@ -1,7 +1,8 @@
 import {model} from "../index"
-import {config, Api, ccResponse, SimpleOption} from "../base"
+import {ccResponse, SimpleOption} from "../base"
 import {DeviceType, DeviceTypeSource, DeviceTypeVariantCollection, DeviceTypeVariantEnum} from "./deviceType.service"
 import {Rent, RentByStudentDTO} from "./rent.service"
+import {Api} from "../Util/Api"
 
 export interface Device{
     device_id: number

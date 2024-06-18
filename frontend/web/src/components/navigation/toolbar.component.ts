@@ -1,6 +1,6 @@
 import {html, LitElement} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
-import styles from '../../../styles/components/layout/toolbar.styles.scss'
+import styles from '../../../styles/components/navigation/toolbar.styles.scss'
 import {icon} from '@fortawesome/fontawesome-svg-core'
 import {unsafeSVG} from 'lit/directives/unsafe-svg.js';
 import {faCamera, faTrash} from "@fortawesome/free-solid-svg-icons"
@@ -9,11 +9,11 @@ import {ButtonType} from "../basic/button.component"
 import {SimpleColorEnum, SizeEnum} from "../../base"
 import {model} from "../../index"
 import RentService, {RentStatusEnum} from "../../service/rent.service";
-import PopupEngine from "../../popupEngine";
+import PopupEngine from "../../Util/PopupEngine";
 import {AppState} from "../../AppState"
 import DeviceTypeService from "../../service/deviceType.service"
 import {RentStatus} from "../basic/rentStatus.component"
-import URLHandler from "../../urlHandler";
+import UrlHandler from "../../Util/UrlHandler";
 
 @customElement('cc-toolbar')
 export class ToolbarComponent extends LitElement {
@@ -43,7 +43,7 @@ export class ToolbarComponent extends LitElement {
             <style>${styles}</style>
             <div class="main rentlist">
                 <div>
-                    <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" @click="${() => {URLHandler.goToPage("/app/edit")}}">
+                    <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" @click="${() => {UrlHandler.goToPage("/app/edit")}}">
                         <div slot="left" class="icon accent">
                             ${unsafeSVG(icon(faCamera).html[0])}
                         </div>
@@ -89,7 +89,7 @@ export class ToolbarComponent extends LitElement {
             <div class="main equipment">
                 <div>
                     <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" 
-                               @click="${() => {URLHandler.goToPage("/app/edit")}}">
+                               @click="${() => {UrlHandler.goToPage("/app/edit")}}">
                         <div slot="left" class="icon accent">
                             ${unsafeSVG(icon(faCamera).html[0])}
                         </div>

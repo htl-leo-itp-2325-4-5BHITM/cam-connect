@@ -1,13 +1,13 @@
 import {html, LitElement} from 'lit';
 import {customElement, property, state} from 'lit/decorators.js';
-import {Api, SizeEnum} from "../base";
-import PopupEngine from "../popupEngine";
-import {EditPageEnum, ObservedProperty} from "../model"
-import {AppState} from "../AppState"
-import {DeviceTypeFullDTO} from "../service/deviceType.service"
-import {model} from "../index"
-import styles from '../../styles/components/edit.styles.scss'
-import URLHandler from "../urlHandler"
+import PopupEngine from "../../../Util/PopupEngine";
+import {EditPageEnum, ObservedProperty} from "../../../model"
+import {AppState} from "../../../AppState"
+import {DeviceTypeFullDTO} from "../../../service/deviceType.service"
+import {model} from "../../../index"
+import styles from '../../../../styles/components/app/edit/edit.styles.scss'
+import UrlHandler from "../../../Util/UrlHandler"
+import {Api} from "../../../Util/Api"
 
 @customElement('cc-edit')
 export class EditComponent extends LitElement {
@@ -38,7 +38,7 @@ export class EditComponent extends LitElement {
         if(model.appState.value.editPage == EditPageEnum.CHILDREN){
             return html`${this.deviceTypesFull.value.map(elem => {
                 //@ts-ignore
-                if(elem.deviceType.type_id == URLHandler.getParam("gid")){
+                if(elem.deviceType.type_id == UrlHandler.getParam("gid")){
                     console.log(elem)
                     return html`<cc-device-type-children .deviceType="${elem}"></cc-device-type-children>`
                 }

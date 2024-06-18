@@ -4,9 +4,10 @@ import styles from '../../../styles/components/basic/chip.styles.scss'
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { faXmark } from "@fortawesome/free-solid-svg-icons"
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
-import {ColorEnum, SizeEnum, Tooltip} from "../../base"
+import {ColorEnum, SizeEnum} from "../../base"
 import {model} from "../../index"
 import {AnimationHelper} from "../../util"
+import {Tooltip} from "../../Util/Tooltip"
 
 export enum ChipType { EXPANDABLE="expandable", REMOVABLE="removable", CLICKABLE="clickable", DEFAULT="default" }
 

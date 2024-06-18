@@ -1,17 +1,17 @@
 import {html, LitElement, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
-import styles from '../../../styles/components/layout/deviceTypeEditEntry.styles.scss'
+import styles from '../../../../styles/components/app/edit/deviceTypeEditEntry.styles.scss'
 import DeviceTypeService, {
     CameraType,
     DeviceType,
     DeviceTypeFullDTO,
     DeviceTypeSource, DroneType, LensType, LightType, MicrophoneType, StabilizerType, TripodType
-} from "../../service/deviceType.service"
-import {ColorEnum, SizeEnum} from "../../base"
+} from "../../../service/deviceType.service"
+import {ColorEnum, SizeEnum} from "../../../base"
 import {faListUl, faPen, faTrash} from "@fortawesome/free-solid-svg-icons"
 import {unsafeSVG} from "lit/directives/unsafe-svg.js"
 import {icon} from "@fortawesome/fontawesome-svg-core"
-import URLHandler from "../../urlHandler"
+import UrlHandler from "../../../Util/UrlHandler"
 
 @customElement('cc-device-type-edit-entry')
 export class DeviceTypeEditEntryComponent extends LitElement {
@@ -41,14 +41,14 @@ export class DeviceTypeEditEntryComponent extends LitElement {
             </div>
 
             <div class="edit">
-                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}" @click="${() => {URLHandler.setUrl('/app/edit/children?gid=' + this.deviceType.deviceType.type_id)}}">
+                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}" @click="${() => {UrlHandler.setUrl('/app/edit/children?gid=' + this.deviceType.deviceType.type_id)}}">
                     <div slot="left" class="icon accent">
                         ${unsafeSVG(icon(faListUl).html[0])}
                     </div>
                     <p>Zugehörige Geräte</p>    
                 </cc-button>
 
-                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}"  @click="${() => {URLHandler.setUrl('/app/edit/devicetype?gid=' + this.deviceType.deviceType.type_id)}}">
+                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}"  @click="${() => {UrlHandler.setUrl('/app/edit/devicetype?gid=' + this.deviceType.deviceType.type_id)}}">
                     <div slot="left" class="icon accent">
                         ${unsafeSVG(icon(faPen).html[0])}
                     </div>

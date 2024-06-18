@@ -1,15 +1,16 @@
 import {LitElement, css, html} from 'lit'
 import {customElement, property, queryAssignedElements} from 'lit/decorators.js'
-import styles from '../../../styles/components/layout/sidebar.styles.scss'
+import styles from '../../../styles/components/navigation/sidebar.styles.scss'
 import { ButtonComponent, ButtonType} from '../basic/button.component'
 import {FilterContainerComponent} from "../basic/filterContainer.component"
 import {filter} from "rxjs"
-import {Orientation, SimpleColorEnum, SizeEnum, Tooltip} from "../../base"
+import {Orientation, SimpleColorEnum, SizeEnum} from "../../base"
 import {model} from "../../index"
 import {ObservedProperty} from "../../model"
 import {AppState} from "../../AppState"
-import URLHandler from "../../urlHandler"
+import UrlHandler from "../../Util/UrlHandler"
 import {DeviceTypeVariantEnum} from "../../service/deviceType.service"
+import {Tooltip} from "../../Util/Tooltip"
 
 @customElement('cc-sidebar')
 export class SidebarComponent extends LitElement {
@@ -68,7 +69,7 @@ export class SidebarComponent extends LitElement {
                 </div>
     
                 <div class="user" @click="${() => {
-                URLHandler.goToPage('/app/user')
+                UrlHandler.goToPage('/app/user')
             }}">
                     <img src="../../../assets/icon/user-icon-default.svg" alt="user">
                     <p>${(this.accountname)}</p>
@@ -96,10 +97,10 @@ export class SidebarComponent extends LitElement {
                     ${
                             model.deviceTypeNameFilterOptions.value.map(value => {
                                 return html`
-                                    <p class="${value.id == URLHandler.getParam("type") ? 'selected' : ''}"
+                                    <p class="${value.id == UrlHandler.getParam("type") ? 'selected' : ''}"
                                        @click="${() => {
                                            console.log(this.appState.value.editPage)
-                                           URLHandler.setParam("type", value.id as string)
+                                           UrlHandler.setParam("type", value.id as string)
                                            this.appState.value.editPageType = value.id as DeviceTypeVariantEnum
                                        }}"
                                     >${value.name}</p>
@@ -109,7 +110,7 @@ export class SidebarComponent extends LitElement {
                 </cc-select>
 
                 <div class="user" @click="${() => {
-                    URLHandler.goToPage('/app/user')
+                    UrlHandler.goToPage('/app/user')
                 }}">
                     <img src="../../../assets/icon/user-icon-default.svg" alt="user">
                     <p>${(this.accountname)}</p>

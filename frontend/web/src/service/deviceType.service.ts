@@ -1,4 +1,4 @@
-import {Api, ccResponse, SimpleOption} from '../base'
+import {ccResponse, SimpleOption} from '../base'
 import {model} from "../index"
 import {CameraResolution, CameraSensor, CameraSystem, LensMount, TripodHead} from "./deviceTypeAttribute.service"
 import {html, TemplateResult} from "lit"
@@ -9,6 +9,7 @@ import stabilizerIcon from "../../assets/icon/noun-gimbal-5345717.svg"
 import droneIcon from "../../assets/icon/noun-drone-6707036.svg"
 import lensIcon from "../../assets/icon/noun-lens-6134156.svg"
 import tripodIcon from "../../assets/icon/noun-tripod-6660204.svg"
+import {Api} from "../Util/Api"
 
 //region devicetype interfaces
 export interface DeviceTypeSource {

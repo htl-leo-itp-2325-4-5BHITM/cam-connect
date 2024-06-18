@@ -1,22 +1,23 @@
 import {LitElement, css, html, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
-import styles from '../../../styles/components/layout/navbar.styles.scss'
+import styles from '../../../styles/components/navigation/navbar.styles.scss'
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { faMagnifyingGlass, faArrowRotateRight, faArrowLeft, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons"
 import {model} from "../../index"
-import {KeyBoardShortCut, SimpleColorEnum, SizeEnum, Tooltip} from "../../base"
+import {SimpleColorEnum, SizeEnum} from "../../base"
 import { ObservedProperty, PageEnum} from "../../model"
 import { SelectComponent } from "../basic/select.component"
 import {AppState} from "../../AppState"
 import RentService from "../../service/rent.service"
-import URLHandler from "../../urlHandler"
+import UrlHandler from "../../Util/UrlHandler"
 import logo from "../../../assets/logo/cc-wordmark-white.svg"
 import Util, {AnimationHelper} from "../../util"
 import {ButtonType} from "../basic/button.component"
-import PopupEngine from "../../popupEngine"
-import * as util from "util"
+import PopupEngine from "../../Util/PopupEngine"
+import {KeyBoardShortCut} from "../../Util/KeyboardShortcut"
+import {Tooltip} from "../../Util/Tooltip"
 
 @customElement('cc-navbar')
 export class NavbarComponent extends LitElement {
@@ -39,7 +40,7 @@ export class NavbarComponent extends LitElement {
             return html`
                 <style>${styles}</style>
                 <div class="logo">
-                    <img src="${logo}" alt="cam-connect" @click="${()=> URLHandler.setUrl("/app/rents")}">
+                    <img src="${logo}" alt="cam-connect" @click="${()=> UrlHandler.setUrl("/app/rents")}">
                 </div>
             `
         else if(this.type == "back")
@@ -47,7 +48,7 @@ export class NavbarComponent extends LitElement {
                 <style>${styles}</style>
                 <cc-button type="${ButtonType.TEXT}" color="${SimpleColorEnum.GRAY}"
                    @click="${()=> {
-                        URLHandler.setUrl(model.appState.value.backUrl)
+                        UrlHandler.setUrl(model.appState.value.backUrl)
                     }}"
                    text="Zurück zum Dashboard"
                 >
@@ -55,7 +56,7 @@ export class NavbarComponent extends LitElement {
                 </cc-button>
                 
                 <div class="logo">
-                    <img src="${logo}" alt="cam-connect" @click="${()=> URLHandler.setUrl("/app/rents")}">
+                    <img src="${logo}" alt="cam-connect" @click="${()=> UrlHandler.setUrl("/app/rents")}">
                 </div>
 
                 <div class="tools">
@@ -66,13 +67,13 @@ export class NavbarComponent extends LitElement {
         return html`
             <style>${styles}</style>
             <div class="logo">
-                <img src="${logo}" alt="cam-connect" @click="${()=> URLHandler.setUrl("/app/rents")}">
+                <img src="${logo}" alt="cam-connect" @click="${()=> UrlHandler.setUrl("/app/rents")}">
             </div>
 
             <cc-select size="${SizeEnum.MEDIUM}" spacerColor="${SimpleColorEnum.ACCENT}" 
                        .onSelect = "${(elem) => {
                            this.appState.value.page = elem.dataset.page
-                           URLHandler.updateUrl(elem.dataset.page)
+                           UrlHandler.updateUrl(elem.dataset.page)
                            this.closeSearch()
                        }
             }">
@@ -134,7 +135,7 @@ export class NavbarComponent extends LitElement {
 
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
-        if(URLHandler.getParam("searchTerm") != "" && URLHandler.getParam("searchTerm") != null) this.openSearch(URLHandler.getParam("searchTerm"))
+        if(UrlHandler.getParam("searchTerm") != "" && UrlHandler.getParam("searchTerm") != null) this.openSearch(UrlHandler.getParam("searchTerm"))
     }
 
     selectNavItem(pageIndex: number) {

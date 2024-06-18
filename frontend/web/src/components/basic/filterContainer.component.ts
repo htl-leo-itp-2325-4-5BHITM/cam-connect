@@ -2,8 +2,8 @@ import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/filterContainer.styles.scss'
 import Model, {ObservedProperty} from "../../model"
-import {Tooltip} from "../../base"
 import {Observable} from "rxjs"
+import {Tooltip} from "../../Util/Tooltip"
 
 export interface FilterOption {
     name: string,

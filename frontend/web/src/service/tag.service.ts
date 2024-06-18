@@ -1,6 +1,6 @@
 import {model} from "../index"
-import {Api} from "../base"
 import {DeviceType} from "./deviceType.service"
+import {Api} from "../Util/Api"
 
 export interface Tag{
     tag_id: number

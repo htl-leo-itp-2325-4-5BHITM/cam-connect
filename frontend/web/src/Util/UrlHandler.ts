@@ -1,22 +1,22 @@
-import {model} from "./index"
-import {EditPageEnum, PageEnum} from "./model"
+import {model} from "../index"
+import {EditPageEnum, PageEnum} from "../model"
 import {html} from "lit"
 
 let pages = {
     app: {
-        handler: () => { URLHandler.changeOrigin("cc-app") },
+        handler: () => { UrlHandler.changeOrigin("cc-app") },
         children: {
             rents: {
                 handler: () => { model.appState.value.page = PageEnum.RENTS },
                 children: {
                     details: {
-                        handler: () => { URLHandler.updateUrl("/app/rents/details")
+                        handler: () => { UrlHandler.updateUrl("/app/rents/details")
                             console.log("opening details")
                             //TODO because of stuff like this its probably best to move all the logic related to a change in the url to here and only use that
-                            URLHandler.setParam("sid", URLHandler.getParam("sid"))
+                            UrlHandler.setParam("sid", UrlHandler.getParam("sid"))
                             model.appState.value.openOverlay(
-                                html`<cc-rent-detail-view .studentId="${URLHandler.getParam("sid")}"></cc-rent-detail-view>`,
-                                () => { URLHandler.updateUrl("/app/rents") }
+                                html`<cc-rent-detail-view .studentId="${UrlHandler.getParam("sid")}"></cc-rent-detail-view>`,
+                                () => { UrlHandler.updateUrl("/app/rents") }
                             )
                         },
                         waitForDom: true
@@ -30,11 +30,11 @@ let pages = {
                 handler: () => { model.appState.value.page = PageEnum.CALENDAR },
             },
             user: {
-                handler: () => { URLHandler.changeOrigin("cc-user-settings") }
+                handler: () => { UrlHandler.changeOrigin("cc-user-settings") }
             },
             edit: {
                 handler: () => {
-                    URLHandler.changeOrigin("cc-edit")
+                    UrlHandler.changeOrigin("cc-edit")
                     model.appState.value.editPage = EditPageEnum.OVERVIEW
                 },
                 children: {
@@ -52,20 +52,20 @@ let pages = {
         }
     },
     confirm: {
-        handler: () => { URLHandler.changeOrigin("cc-external-confirm") }
+        handler: () => { UrlHandler.changeOrigin("cc-external-confirm") }
     },
     default: {
         handler: () => {
-            URLHandler.updateUrl("app/rents")
-            URLHandler.parseCurrentURL()
+            UrlHandler.updateUrl("app/rents")
+            UrlHandler.parseCurrentURL()
         }
     },
     notFound: {
-        handler: () => { URLHandler.changeOrigin("cc-not-found") }
+        handler: () => { UrlHandler.changeOrigin("cc-not-found") }
     }
 }
 
-export default class URLHandler {
+export default class UrlHandler {
     static parseCurrentURL () {
         console.log("parsing url")
 
@@ -182,7 +182,7 @@ export default class URLHandler {
         let params = window.location.href.split("?")[1]
 
         if(mode == "add")
-            url = URLHandler.getUrl() + url
+            url = UrlHandler.getUrl() + url
 
         window.history.pushState({}, "", url + (params != undefined ? "?" + params : ""))
     }
@@ -208,8 +208,8 @@ export default class URLHandler {
      */
     static goToPage(page: string){
         model.appState.value.updateBackUrl()
-        URLHandler.updateUrl(page)
-        URLHandler.parseCurrentURL()
+        UrlHandler.updateUrl(page)
+        UrlHandler.parseCurrentURL()
     }
 
     static clearParams() {

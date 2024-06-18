@@ -1,17 +1,17 @@
-import {RentListEntryComponent} from "./components/layout/rentListEntry.component"
+import {RentListEntryComponent} from "./components/app/rentListEntry.component"
 import {EditPageEnum, PageEnum} from "./model"
 import {model} from "./index"
-import {CreateRentComponent} from "./components/layout/createRent.component"
-import {KeyBoardShortCut} from "./base"
+import {CreateRentComponent} from "./components/app/createRent.component"
 import {AutocompleteComponent} from "./components/basic/autocomplete.component"
 import {Student} from "./service/student.service"
 import {DeviceType, DeviceTypeVariantEnum} from "./service/deviceType.service"
-import {DeviceListEntryComponent} from "./components/layout/deviceListEntry.component"
+import {DeviceListEntryComponent} from "./components/app/deviceListEntry.component"
 import DeviceService from "./service/device.service"
 import RentService, {OrderByFilterRent, RentFilters, RentStatusEnum} from "./service/rent.service"
 import {html, render, TemplateResult} from "lit"
-import URLHandler from "./urlHandler"
+import UrlHandler from "./Util/UrlHandler"
 import {BehaviorSubject} from "rxjs"
+import {KeyBoardShortCut} from "./Util/KeyboardShortcut"
 
 interface ActionCancellation {
     identifier: string,
@@ -321,7 +321,7 @@ export class AppState{
     }
 
     updateBackUrl(){
-        this._backUrl = URLHandler.getUrl()
+        this._backUrl = UrlHandler.getUrl()
         this.update()
     }
 
@@ -345,7 +345,7 @@ export class AppState{
 
     set searchTerm(value: string) {
         this._searchTerm = value
-        URLHandler.setParam("searchTerm", value)
+        UrlHandler.setParam("searchTerm", value)
         this.update()
         if(this._page == PageEnum.RENTS) RentService.fetchAll()
         if(this._page == PageEnum.EQUIPMENT) DeviceService.fetchAll()

@@ -1,13 +1,14 @@
 import {model} from "../index"
-import {Api, ccResponse, config} from "../base"
+import {config} from "../base"
 import {Device} from "./device.service"
 import {Teacher} from "./teacher.service";
 import {Student} from "./student.service";
-import PopupEngine from "../popupEngine"
+import PopupEngine from "../Util/PopupEngine"
 import Util from "../util"
 import {DeviceTypeVariantEnum} from "./deviceType.service"
 import {AppState} from "../AppState"
 import Model from "../model"
+import {Api} from "../Util/Api"
 
 export enum RentStatusEnum {
     CREATED="CREATED",

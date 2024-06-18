@@ -3,15 +3,16 @@ import {customElement, property} from 'lit/decorators.js'
 import styles from '../../styles/components/externalConfirm.styles.scss'
 import {model} from "../index"
 import {ObservedProperty} from "../model"
-import {Api, ColorEnum} from "../base"
+import {ColorEnum} from "../base"
 import {AppState} from "../AppState"
 import {icon} from '@fortawesome/fontawesome-svg-core'
 import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons"
 import {unsafeSVG} from 'lit/directives/unsafe-svg.js';
 import RentService, {Rent, RentStatusEnum, RentTypeEnum} from "../service/rent.service"
-import URLHandler from "../urlHandler"
-import PopupEngine from "../popupEngine"
+import UrlHandler from "../Util/UrlHandler"
+import PopupEngine from "../Util/PopupEngine"
 import Util from "../util"
+import {Api} from "../Util/Api"
 
 @customElement('cc-external-confirm')
 export class ExternalConfirmComponent extends LitElement {
@@ -129,7 +130,7 @@ export class ExternalConfirmComponent extends LitElement {
                     }
                 </ul>
                 <div class="button-container">
-                    <cc-button @click="${() => {URLHandler.setUrl("/app/rents")}}">
+                    <cc-button @click="${() => {UrlHandler.setUrl("/app/rents")}}">
                         Zurück zur Verleihliste
                     </cc-button>
                 </div>
@@ -138,8 +139,8 @@ export class ExternalConfirmComponent extends LitElement {
     }
 
     async queryUrlData(){
-        this.rentConfirmationCodes = URLHandler.getParam("codes")?.split(",") || []
-        let rentIds = URLHandler.getParam("ids")?.split(",") || []
+        this.rentConfirmationCodes = UrlHandler.getParam("codes")?.split(",") || []
+        let rentIds = UrlHandler.getParam("ids")?.split(",") || []
 
         if(!rentIds || rentIds.length == 0) return
 
@@ -157,7 +158,7 @@ export class ExternalConfirmComponent extends LitElement {
                         {
                             text: "Zurück zum Dashboard",
                             role: "confirm",
-                            action: () => { URLHandler.setUrl("/app/rents") }
+                            action: () => { UrlHandler.setUrl("/app/rents") }
                         }
                     ]
                 })
@@ -171,7 +172,7 @@ export class ExternalConfirmComponent extends LitElement {
                             text: "Zurück zum Dashboard",
                             role: "confirm",
                             action: () => {
-                                URLHandler.setUrl("/app/rents")
+                                UrlHandler.setUrl("/app/rents")
                             }
                         }
                     ]

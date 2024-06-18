@@ -1,16 +1,16 @@
 import {html, LitElement, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
-import styles from '../../../styles/components/layout/deviceTypeEdit.styles.scss'
+import styles from '../../../../styles/components/app/edit/deviceTypeEdit.styles.scss'
 import {
     DeviceTypeFullDTO,
-} from "../../service/deviceType.service"
-import {ObservedProperty} from "../../model"
-import {AppState} from "../../AppState"
-import {model} from "../../index"
+} from "../../../service/deviceType.service"
+import {ObservedProperty} from "../../../model"
+import {AppState} from "../../../AppState"
+import {model} from "../../../index"
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
 import {unsafeSVG} from "lit/directives/unsafe-svg.js"
 import {icon} from "@fortawesome/fontawesome-svg-core"
-import URLHandler from "../../urlHandler"
+import UrlHandler from "../../../Util/UrlHandler"
 
 @customElement('cc-device-type-children')
 export class DeviceTypeChildrenComponent extends LitElement {
@@ -32,7 +32,7 @@ export class DeviceTypeChildrenComponent extends LitElement {
 
                 <main>
                     <div>
-                        <icon-cta @click="${() => {URLHandler.setUrl('/app/edit?type=' + this.appState.value.editPageType)}}">${unsafeSVG(icon(faArrowLeft).html[0])}</icon-cta>
+                        <icon-cta @click="${() => {UrlHandler.setUrl('/app/edit?type=' + this.appState.value.editPageType)}}">${unsafeSVG(icon(faArrowLeft).html[0])}</icon-cta>
                         
                         <div>
                             <h1>${this.deviceType.deviceType.name}</h1>

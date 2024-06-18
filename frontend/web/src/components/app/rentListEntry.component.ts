@@ -1,13 +1,13 @@
 import {html, LitElement, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
-import styles from '../../../styles/components/layout/rentListEntry.styles.scss'
+import styles from '../../../styles/components/app/rentListEntry.styles.scss'
 import {ButtonType} from "../basic/button.component"
-import {Api, ColorEnum, DatePickerWrapper, Orientation, SimpleOption, SizeEnum} from "../../base"
+import {ColorEnum, DatePickerWrapper, Orientation, SimpleOption, SizeEnum} from "../../base"
 import RentService, {Rent, RentStatusEnum, RentTypeEnum} from "../../service/rent.service";
 import {ChipType} from "../basic/chip.component"
 import {model} from "../../index"
 import {LineColor} from "../basic/line.component"
-import PopupEngine from "../../popupEngine"
+import PopupEngine from "../../Util/PopupEngine"
 import {ObservedProperty} from "../../model"
 import {AppState} from "../../AppState"
 import Util from "../../util"

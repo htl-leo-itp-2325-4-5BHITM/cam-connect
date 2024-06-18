@@ -1,6 +1,6 @@
 import {html, LitElement} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
-import styles from '../../../styles/components/layout/deviceListEntry.styles.scss'
+import styles from '../../../styles/components/app/deviceListEntry.styles.scss'
 import {ButtonType} from "../basic/button.component"
 import {ColorEnum} from "../../base"
 import {DeviceListComponent} from "./deviceList.component";

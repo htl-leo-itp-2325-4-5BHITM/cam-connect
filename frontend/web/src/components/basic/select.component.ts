@@ -2,7 +2,7 @@ import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, queryAssignedElements, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/select.styles.scss'
 import {Orientation, SimpleColorEnum, SizeEnum} from "../../base"
-import URLHandler from "../../urlHandler"
+import UrlHandler from "../../Util/UrlHandler"
 
 @customElement('cc-select')
 export class SelectComponent extends LitElement {

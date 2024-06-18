@@ -1,6 +1,6 @@
 import {html, LitElement} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
-import styles from '../../../styles/components/layout/rentDetailView.styles.scss'
+import styles from '../../../styles/components/app/rentDetailView.styles.scss'
 import RentService, {Rent, RentStatusEnum} from "../../service/rent.service"
 import {Student} from "../../service/student.service"
 import {ColorEnum, SimpleColorEnum} from "../../base"

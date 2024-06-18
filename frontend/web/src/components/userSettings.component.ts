@@ -1,11 +1,12 @@
 import {LitElement, html} from 'lit'
 import {customElement} from 'lit/decorators.js'
 import styles from '../../styles/components/userSettings.styles.scss'
-import PopupEngine from "../popupEngine"
-import {Api, ColorEnum, config, SimpleColorEnum, SizeEnum} from "../base"
+import PopupEngine from "../Util/PopupEngine"
+import {config, SimpleColorEnum, SizeEnum} from "../base"
 import Util from "../util"
 import {ButtonType} from "./basic/button.component"
 import {model} from "../index"
+import {Api} from "../Util/Api"
 
 @customElement('cc-user-settings')
 export class UserSettingsComponent extends LitElement {

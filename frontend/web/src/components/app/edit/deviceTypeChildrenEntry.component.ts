@@ -1,8 +1,8 @@
 import {html, LitElement, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
-import styles from '../../../styles/components/layout/deviceTypeEditEntry.styles.scss'
-import {Device} from "../../service/device.service"
-import {SizeEnum} from "../../base"
+import styles from '../../../../styles/components/app/edit/deviceTypeEditEntry.styles.scss'
+import {Device} from "../../../service/device.service"
+import {SizeEnum} from "../../../base"
 
 @customElement('cc-device-type-children-entry')
 export class DeviceTypeChildrenEntryComponent extends LitElement {

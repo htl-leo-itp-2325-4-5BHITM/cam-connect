@@ -1,6 +1,6 @@
 import {html, LitElement, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
-import styles from '../../../styles/components/layout/rentListStudent.styles.scss'
+import styles from '../../../styles/components/app/rentListStudent.styles.scss'
 import {CircleSelectType} from "../basic/circleSelect.component"
 import {SimpleColorEnum, SizeEnum} from "../../base"
 import {RentByStudentDTO, RentStatusEnum} from "../../service/rent.service";
@@ -11,7 +11,7 @@ import { icon } from '@fortawesome/fontawesome-svg-core'
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons"
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import {Student} from "../../service/student.service"
-import URLHandler from "../../urlHandler"
+import UrlHandler from "../../Util/UrlHandler"
 
 @customElement('cc-rent-list-student')
 export class RentListStudentComponent extends LitElement {
@@ -77,11 +77,11 @@ export class RentListStudentComponent extends LitElement {
                     >Verleih erstellen</cc-button>
                     <cc-button type="${ButtonType.TEXT}" color="${SimpleColorEnum.GRAY}" size="${SizeEnum.SMALL}" 
                                @click="${() => {
-                                   URLHandler.updateUrl("/app/rents/details")
-                                   URLHandler.setParam("sid", student.student_id.toString())
+                                   UrlHandler.updateUrl("/app/rents/details")
+                                   UrlHandler.setParam("sid", student.student_id.toString())
                                    model.appState.value.openOverlay(
                                        html`<cc-rent-detail-view .studentId="${student.student_id}"></cc-rent-detail-view>`, 
-                            () => { URLHandler.updateUrl("/app/rents") }
+                            () => { UrlHandler.updateUrl("/app/rents") }
                                    )
                                }}"
                     >Details anzeigen</cc-button>
