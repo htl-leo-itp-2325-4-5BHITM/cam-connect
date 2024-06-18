@@ -6,11 +6,14 @@ import {EditPageEnum, ObservedProperty} from "../model"
 import {AppState} from "../AppState"
 import {DeviceTypeFullDTO} from "../service/deviceType.service"
 import {model} from "../index"
+import {SelectType} from "./basic/select.component"
 import styles from '../../styles/components/edit.styles.scss'
 import URLHandler from "../urlHandler"
 
 @customElement('cc-edit')
 export class EditComponent extends LitElement {
+    @state() currentOption: string | number = "camera"
+
     @property() private deviceTypesFull: ObservedProperty<DeviceTypeFullDTO[]>
 
     @state() currentOption: string | number = "camera"
@@ -18,6 +21,7 @@ export class EditComponent extends LitElement {
     constructor(){
         super()
         this.deviceTypesFull = new ObservedProperty<DeviceTypeFullDTO[]>(this, model.deviceTypesFull)
+        this.appState = new ObservedProperty<AppState>(this, model.appState)
     }
 
     render() {
@@ -29,8 +33,6 @@ export class EditComponent extends LitElement {
             
             ${this.getComponent()}
         `
-    }
-
     getComponent(){
         if(model.appState.value.editPage == EditPageEnum.OVERVIEW){
             return html`<cc-device-type-edit></cc-device-type-edit>`
