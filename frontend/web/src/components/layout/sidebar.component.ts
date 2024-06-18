@@ -9,6 +9,7 @@ import {model} from "../../index"
 import {ObservedProperty} from "../../model"
 import {AppState} from "../../AppState"
 import URLHandler from "../../urlHandler"
+import {DeviceTypeVariantEnum} from "../../service/deviceType.service"
 
 @customElement('cc-sidebar')
 export class SidebarComponent extends LitElement {
@@ -97,7 +98,9 @@ export class SidebarComponent extends LitElement {
                                 return html`
                                     <p class="${value.id == URLHandler.getParam("type") ? 'selected' : ''}"
                                        @click="${() => {
+                                           console.log(this.appState.value.editPage)
                                            URLHandler.setParam("type", value.id as string)
+                                           this.appState.value.editPageType = value.id as DeviceTypeVariantEnum
                                        }}"
                                     >${value.name}</p>
                                 `

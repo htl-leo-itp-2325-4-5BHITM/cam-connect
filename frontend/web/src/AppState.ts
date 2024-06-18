@@ -5,14 +5,13 @@ import {CreateRentComponent} from "./components/layout/createRent.component"
 import {KeyBoardShortCut} from "./base"
 import {AutocompleteComponent} from "./components/basic/autocomplete.component"
 import {Student} from "./service/student.service"
-import {DeviceType} from "./service/deviceType.service"
+import {DeviceType, DeviceTypeVariantEnum} from "./service/deviceType.service"
 import {DeviceListEntryComponent} from "./components/layout/deviceListEntry.component"
-import DeviceService, {Device} from "./service/device.service"
+import DeviceService from "./service/device.service"
 import RentService, {OrderByFilterRent, RentFilters, RentStatusEnum} from "./service/rent.service"
 import {html, render, TemplateResult} from "lit"
 import URLHandler from "./urlHandler"
 import {BehaviorSubject} from "rxjs"
-import content from "*.styles.scss"
 
 interface ActionCancellation {
     identifier: string,
@@ -42,6 +41,7 @@ interface UserSettings {
 export class AppState{
     private _page: PageEnum = PageEnum.RENTS
     private _editPage: EditPageEnum = EditPageEnum.OVERVIEW;
+    private _editPageType: DeviceTypeVariantEnum = DeviceTypeVariantEnum.camera;
     private _createRentModalOpen: boolean = false
     private _createMultiRentModalOpen: boolean = false
     private _selectedRentEntries: Set<RentListEntryComponent> = new Set<RentListEntryComponent>()
@@ -98,6 +98,16 @@ export class AppState{
 
     set editPage(value: EditPageEnum) {
         this._editPage = value
+        this.update()
+    }
+
+    get editPageType(): DeviceTypeVariantEnum {
+        return this._editPageType
+    }
+
+    set editPageType(value: DeviceTypeVariantEnum) {
+        this._editPageType = value
+        this.update()
     }
 
     closeCreateRentModal(){

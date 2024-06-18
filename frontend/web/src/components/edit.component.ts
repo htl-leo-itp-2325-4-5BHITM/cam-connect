@@ -11,51 +11,38 @@ import URLHandler from "../urlHandler"
 
 @customElement('cc-edit')
 export class EditComponent extends LitElement {
-    @state() currentOption: string | number = "camera"
-
     @property() private deviceTypesFull: ObservedProperty<DeviceTypeFullDTO[]>
 
-    @property() private appState: ObservedProperty<AppState>
 
-    constructor() {
+    constructor(){
         super()
         this.deviceTypesFull = new ObservedProperty<DeviceTypeFullDTO[]>(this, model.deviceTypesFull)
-        this.appState = new ObservedProperty<AppState>(this, model.appState)
     }
 
     render() {
         return html`
             <style>${styles}</style>
             <cc-navbar type="back"></cc-navbar>
-            
-            <cc-sidebar accountname="Martin Huemer" type="edit">
-            </cc-sidebar>
 
-            <div class="toolbar-container">
-                <cc-toolbar></cc-toolbar>
-                
-                <main>
-                    <h1>Kamera-Gerätetypen</h1>
+            <cc-sidebar accountname="Martin Huemer" type="edit"></cc-sidebar>
 
-                    ${Object.values(this.deviceTypesFull.value)?.flat().map(deviceType => {
-                        if(deviceType.deviceType.variant == this.currentOption && model.appState.value.editPage == EditPageEnum.OVERVIEW){
-                            return html`<cc-device-type-edit-entry .deviceType="${deviceType}"></cc-device-type-edit-entry>`
-                        }
-                        // @ts-ignore
-                        if(URLHandler.getParam("gid") == deviceType.deviceType.type_id && model.appState.value.editPage == EditPageEnum.CHILDREN){
-                            return html`<cc-device-type-children .deviceType="${deviceType}"></cc-device-type-children>`
-                        }
-                    })}
-                </main>
-            </div>
-        `;
+            ${this.getComponent()}
+        `
     }
 
-    selectOption(type, selectId) {
-        (this.shadowRoot.querySelector(selectId) as HTMLInputElement).dataset.devicetype = type;
+    getComponent(){
+        if(model.appState.value.editPage == EditPageEnum.OVERVIEW){
+            return html`<cc-device-type-edit></cc-device-type-edit>`
+        }
 
-        if (selectId == "#listOfTypes2") {
-            this.currentOption = type;
+        if(model.appState.value.editPage == EditPageEnum.CHILDREN){
+            return html`${this.deviceTypesFull.value.map(elem => {
+                //@ts-ignore
+                if(elem.deviceType.type_id == URLHandler.getParam("gid")){
+                    console.log(elem)
+                    return html`<cc-device-type-children .deviceType="${elem}"></cc-device-type-children>`
+                }
+            })}`
         }
     }
 
