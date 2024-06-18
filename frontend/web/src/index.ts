@@ -24,6 +24,8 @@ import "./components/layout/rentListEntry.component"
 import "./components/layout/deviceList.component"
 import "./components/layout/deviceListEntry.component"
 import "./components/layout/deviceTypeChildren.component"
+import "./components/layout/deviceTypeChildrenEntry.component"
+import "./components/layout/deviceTypeEdit.component"
 import "./components/layout/deviceTypeEditEntry.component"
 import "./components/layout/rentDetailView.component"
 

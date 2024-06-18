@@ -14,50 +14,34 @@ import URLHandler from "../urlHandler"
 export class EditComponent extends LitElement {
     @state() currentOption: string | number = "camera"
 
-    @property() private deviceTypesFull: ObservedProperty<DeviceTypeFullDTO[]>
-
-    @property() private appState: ObservedProperty<AppState>
-
-    constructor() {
-        super()
-        this.deviceTypesFull = new ObservedProperty<DeviceTypeFullDTO[]>(this, model.deviceTypesFull)
-        this.appState = new ObservedProperty<AppState>(this, model.appState)
-    }
-
     render() {
         return html`
-            <style>${styles}</style>
-            <cc-navbar type="back"></cc-navbar>
-            
-            <cc-sidebar accountname="Martin Huemer">
-                <cc-button slot="sorts">Neu Erstellen</cc-button>
-                <cc-select slot="primaryFilters" size="${SizeEnum.MEDIUM}" type="${SelectType.VERTICAL}">
-                    ${
-                        model.deviceTypeNameFilterOptions.value.map(value => {
-                            return html`<p class="${value.id == this.currentOption ? 'selected' : ''}" @click="${() => {this.currentOption = value.id}}">${value.name}</p>`
-                        })
-                    }
-                </cc-select>
-            </cc-sidebar>
+                <style>${styles}</style>
+                <cc-navbar type="back"></cc-navbar>
 
-            <div class="toolbar-container">
-                <cc-toolbar></cc-toolbar>
+                <cc-sidebar accountname="Martin Huemer">
+                    <cc-button slot="sorts">Neu Erstellen</cc-button>
+                    <cc-select slot="primaryFilters" size="${SizeEnum.MEDIUM}" type="${SelectType.VERTICAL}">
+                        ${
+                            model.deviceTypeNameFilterOptions.value.map(value => {
+                                return html`<p class="${value.id == this.currentOption ? 'selected' : ''}" @click="${() => {this.currentOption = value.id}}">${value.name}</p>`
+                            })
+                        }
+                    </cc-select>
+                </cc-sidebar>
                 
-                <main>
-                    <h1>Kamera-Gerätetypen</h1>
+                ${this.getComponent}
+            `
+    }
 
-                    ${Object.values(this.deviceTypesFull.value)?.flat().map(deviceType => {
-                        if(deviceType.deviceType.variant == this.currentOption && model.appState.value.editPage == EditPageEnum.OVERVIEW){
-                            return html`<cc-device-type-edit-entry .deviceType="${deviceType}"></cc-device-type-edit-entry>`
-                        }
-                        // @ts-ignore
-                        if(URLHandler.getParam("gid") == deviceType.deviceType.type_id && model.appState.value.editPage == EditPageEnum.CHILDREN){
-                            return html`<cc-device-type-children .deviceType="${deviceType}"></cc-device-type-children>`
-                        }
-                    })}
-                </main>
-            </div>
-        `;
+    getComponent(){
+        if(model.appState.value.editPage == EditPageEnum.OVERVIEW){
+            return html`<cc-device-type-edit></cc-device-type-edit>`
+        }
+
+        if(model.appState.value.editPage == EditPageEnum.CHILDREN){
+            return html`<cc-device-type-children></cc-device-type-children>`
+        }
     }
 
     selectOption(type, selectId) {
