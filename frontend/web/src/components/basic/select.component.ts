@@ -1,10 +1,8 @@
 import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, queryAssignedElements, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/select.styles.scss'
-import {SimpleColorEnum, SizeEnum} from "../../base"
+import {Orientation, SimpleColorEnum, SizeEnum} from "../../base"
 import URLHandler from "../../urlHandler"
-
-export enum SelectType {VERTICAL="vertical", HORIZONTAL="horizontal"}
 
 @customElement('cc-select')
 export class SelectComponent extends LitElement {
@@ -20,7 +18,7 @@ export class SelectComponent extends LitElement {
 
     @property({type: Boolean}) heavy:boolean = false
 
-    @property() type: SelectType = SelectType.HORIZONTAL
+    @property() type: Orientation = Orientation.HORIZONTAL
 
     render() {
         return html`

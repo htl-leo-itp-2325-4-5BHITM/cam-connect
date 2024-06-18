@@ -2,11 +2,11 @@ import {html, LitElement, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/layout/rentListEntry.styles.scss'
 import {ButtonType} from "../basic/button.component"
-import {Api, ColorEnum, DatePickerWrapper, SimpleOption, SizeEnum} from "../../base"
+import {Api, ColorEnum, DatePickerWrapper, Orientation, SimpleOption, SizeEnum} from "../../base"
 import RentService, {Rent, RentStatusEnum, RentTypeEnum} from "../../service/rent.service";
 import {ChipType} from "../basic/chip.component"
 import {model} from "../../index"
-import {LineColor, LineType} from "../basic/line.component"
+import {LineColor} from "../basic/line.component"
 import PopupEngine from "../../popupEngine"
 import {ObservedProperty} from "../../model"
 import {AppState} from "../../AppState"
@@ -184,11 +184,11 @@ export class RentListEntryComponent extends LitElement {
                         `
                 }
                 
-                <cc-line color=${LineColor.DEFAULT} type="${LineType.VERTICAL}"></cc-line>
+                <cc-line color=${LineColor.DEFAULT} type="${Orientation.VERTICAL}"></cc-line>
  
                 <input type="text" class="date">
                 
-                <cc-line color=${LineColor.DEFAULT} type="${LineType.VERTICAL}"></cc-line>
+                <cc-line color=${LineColor.DEFAULT} type="${Orientation.VERTICAL}"></cc-line>
                 
                 <cc-property-value size="${SizeEnum.SMALL}" property="Erstellt von" 
                                    value="${this.rent.teacher_start.firstname.charAt(0)}. ${this.rent.teacher_start.lastname}">
@@ -208,8 +208,7 @@ export class RentListEntryComponent extends LitElement {
                         `
                 }
                 
-                
-                <cc-line color=${LineColor.LIGHTER} type="${LineType.VERTICAL}"></cc-line>
+                <cc-line color=${LineColor.LIGHTER} type="${Orientation.VERTICAL}"></cc-line>
                 
                 <div class="time">
                     <span>
@@ -221,7 +220,7 @@ export class RentListEntryComponent extends LitElement {
                     </span>
                 </div>
                 
-                <cc-line color=${LineColor.LIGHTER} type="${LineType.VERTICAL}"></cc-line>
+                <cc-line color=${LineColor.LIGHTER} type="${Orientation.VERTICAL}"></cc-line>
                 
                 <cc-property-value size="${SizeEnum.SMALL}" property="Erstellt von"
                                    value="${this.rent.teacher_start.firstname.charAt(0)}. ${this.rent.teacher_start.lastname}">

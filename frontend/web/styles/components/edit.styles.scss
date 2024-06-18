@@ -34,13 +34,3 @@ cc-sidebar{
   grid-template-rows: auto minmax(0, 1fr);
   width: 100%;
 }
-
-
-main{
-  margin: 1rem;
-  grid-column: 2 / 3;
-  overflow: auto;
-}
-h1{
-  font-size: 2rem;
-}

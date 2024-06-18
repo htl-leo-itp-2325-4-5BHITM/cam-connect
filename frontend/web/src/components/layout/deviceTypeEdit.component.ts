@@ -7,8 +7,6 @@ import {
 import {ObservedProperty} from "../../model"
 import {AppState} from "../../AppState"
 import {model} from "../../index"
-import {Api} from "../../base"
-import PopupEngine from "../../popupEngine"
 
 @customElement('cc-device-type-edit')
 export class DeviceTypeEditComponent extends LitElement {

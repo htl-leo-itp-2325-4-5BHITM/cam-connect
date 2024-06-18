@@ -6,32 +6,29 @@ import {EditPageEnum, ObservedProperty} from "../model"
 import {AppState} from "../AppState"
 import {DeviceTypeFullDTO} from "../service/deviceType.service"
 import {model} from "../index"
-import {SelectType} from "./basic/select.component"
 import styles from '../../styles/components/edit.styles.scss'
 import URLHandler from "../urlHandler"
 
 @customElement('cc-edit')
 export class EditComponent extends LitElement {
+    @property() private deviceTypesFull: ObservedProperty<DeviceTypeFullDTO[]>
+
     @state() currentOption: string | number = "camera"
+
+    constructor(){
+        super()
+        this.deviceTypesFull = new ObservedProperty<DeviceTypeFullDTO[]>(this, model.deviceTypesFull)
+    }
 
     render() {
         return html`
-                <style>${styles}</style>
-                <cc-navbar type="back"></cc-navbar>
-
-                <cc-sidebar accountname="Martin Huemer">
-                    <cc-button slot="sorts">Neu Erstellen</cc-button>
-                    <cc-select slot="primaryFilters" size="${SizeEnum.MEDIUM}" type="${SelectType.VERTICAL}">
-                        ${
-                            model.deviceTypeNameFilterOptions.value.map(value => {
-                                return html`<p class="${value.id == this.currentOption ? 'selected' : ''}" @click="${() => {this.currentOption = value.id}}">${value.name}</p>`
-                            })
-                        }
-                    </cc-select>
-                </cc-sidebar>
-                
-                ${this.getComponent}
-            `
+            <style>${styles}</style>
+            <cc-navbar type="back"></cc-navbar>
+            
+            <cc-sidebar accountname="Martin Huemer" type="edit"></cc-sidebar>
+            
+            ${this.getComponent()}
+        `
     }
 
     getComponent(){
@@ -40,7 +37,13 @@ export class EditComponent extends LitElement {
         }
 
         if(model.appState.value.editPage == EditPageEnum.CHILDREN){
-            return html`<cc-device-type-children></cc-device-type-children>`
+            return html`${this.deviceTypesFull.value.map(elem => {
+                //@ts-ignore
+                if(elem.deviceType.type_id == URLHandler.getParam("gid")){
+                    console.log(elem)
+                    return html`<cc-device-type-children .deviceType="${elem}"></cc-device-type-children>`
+                }
+            })}`
         }
     }
 

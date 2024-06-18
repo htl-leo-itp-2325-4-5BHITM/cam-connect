@@ -4,7 +4,7 @@ import styles from '../../../styles/components/layout/sidebar.styles.scss'
 import { ButtonComponent, ButtonType} from '../basic/button.component'
 import {FilterContainerComponent} from "../basic/filterContainer.component"
 import {filter} from "rxjs"
-import {SimpleColorEnum, SizeEnum, Tooltip} from "../../base"
+import {Orientation, SimpleColorEnum, SizeEnum, Tooltip} from "../../base"
 import {model} from "../../index"
 import {ObservedProperty} from "../../model"
 import {AppState} from "../../AppState"
@@ -12,6 +12,9 @@ import URLHandler from "../../urlHandler"
 
 @customElement('cc-sidebar')
 export class SidebarComponent extends LitElement {
+    @property({reflect: true})
+    type: "default" | "edit" = "default"
+
     @property({type:String})
     accountname?: string = 'No username provided'
 
@@ -31,42 +34,85 @@ export class SidebarComponent extends LitElement {
     }
 
     render() {
-        return html`
-            <style>${styles}</style>
-            <div class="buttons">
-                <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.FILLED}"
-                           @click="${this.openCreateRentMenu}"
-                           @mouseenter="${(e) => {
-                               Tooltip.show(e.target, 'shift+n oder <', 500)
-                           }}"
-                           @mouseleave="${() => {
-                               Tooltip.hide(0)
-                           }}"
-                >
-                    Neuer Verleih
-                </cc-button>
-                <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.OUTLINED}" disabled>
-                    Multi Verleih
-                </cc-button>
-            </div>
-            <cc-line></cc-line>
-            <div class="sorts">
-                <slot name="sorts"></slot>
-            </div>
-            <cc-line></cc-line>
-            <div class="primaryFilters">
-                <slot name="primaryFilters" @slotchange=${this.handlePrimaryFilterChange}></slot>
-            </div>
-            <cc-line></cc-line>
-            <div class="secondaryFilters">
-                <slot name="secondaryFilters"></slot>
-            </div>
+        if(this.type == "default") {
+            return html`
+                <style>${styles}</style>
+                <div class="buttons">
+                    <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.FILLED}"
+                       @click="${this.openCreateRentMenu}"
+                       @mouseenter="${(e) => {
+                           Tooltip.show(e.target, 'shift+n oder <', 500)
+                       }}"
+                                          @mouseleave="${() => {
+                           Tooltip.hide(0)
+                       }}"
+                    >
+                        Neuer Verleih
+                    </cc-button>
+                    <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.OUTLINED}" disabled>
+                        Multi Verleih
+                    </cc-button>
+                </div>
+                <cc-line></cc-line>
+                <div class="sorts">
+                    <slot name="sorts"></slot>
+                </div>
+                <cc-line></cc-line>
+                <div class="primaryFilters">
+                    <slot name="primaryFilters" @slotchange=${this.handlePrimaryFilterChange}></slot>
+                </div>
+                <cc-line></cc-line>
+                <div class="secondaryFilters">
+                    <slot name="secondaryFilters"></slot>
+                </div>
+    
+                <div class="user" @click="${() => {
+                URLHandler.goToPage('/app/user')
+            }}">
+                    <img src="../../../assets/icon/user-icon-default.svg" alt="user">
+                    <p>${(this.accountname)}</p>
+                </div>
+            `
+        }
+        else {
+            return html`
+                <style>${styles}</style>
+                <div class="buttons">
+                    <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.FILLED}"
+                               @click="${this.openCreateRentMenu}"
+                               @mouseenter="${(e) => {
+                                   Tooltip.show(e.target, 'shift+n oder <', 500)
+                               }}"
+                               @mouseleave="${() => {
+                                   Tooltip.hide(0)
+                               }}"
+                    >
+                        Neu Erstellen
+                    </cc-button>
+                </div>
+                <cc-line></cc-line>
+                <cc-select class="nav" size="${SizeEnum.MEDIUM}" type="${Orientation.VERTICAL}">
+                    ${
+                            model.deviceTypeNameFilterOptions.value.map(value => {
+                                return html`
+                                    <p class="${value.id == URLHandler.getParam("type") ? 'selected' : ''}"
+                                       @click="${() => {
+                                           URLHandler.setParam("type", value.id as string)
+                                       }}"
+                                    >${value.name}</p>
+                                `
+                            })
+                    }
+                </cc-select>
 
-            <div class="user" @click="${() => { URLHandler.goToPage('/app/user') }}">
-                <img src="../../../assets/icon/user-icon-default.svg" alt="user">
-                <p>${(this.accountname)}</p>
-            </div>
-        `
+                <div class="user" @click="${() => {
+                    URLHandler.goToPage('/app/user')
+                }}">
+                    <img src="../../../assets/icon/user-icon-default.svg" alt="user">
+                    <p>${(this.accountname)}</p>
+                </div>
+            `
+        }
     }
 
     openCreateRentMenu(){

@@ -1,31 +1,55 @@
 import {html, LitElement, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
-import styles from '../../../styles/components/layout/deviceTypeChildren.styles.scss'
+import styles from '../../../styles/components/layout/deviceTypeEdit.styles.scss'
 import {
     DeviceTypeFullDTO,
 } from "../../service/deviceType.service"
 import {ObservedProperty} from "../../model"
 import {AppState} from "../../AppState"
 import {model} from "../../index"
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
+import {unsafeSVG} from "lit/directives/unsafe-svg.js"
+import {icon} from "@fortawesome/fontawesome-svg-core"
+import URLHandler from "../../urlHandler"
 
 @customElement('cc-device-type-children')
 export class DeviceTypeChildrenComponent extends LitElement {
     @property() deviceType: DeviceTypeFullDTO
 
-    @property() appState: ObservedProperty<AppState>
+    @property() private appState: ObservedProperty<AppState>
 
-    constructor() {
+    constructor(){
         super()
         this.appState = new ObservedProperty<AppState>(this, model.appState)
     }
 
     render() {
-        console.log("test")
-        console.log(this.deviceType)
         return html`
             <style>${styles}</style>
-            <h1>${this.deviceType.deviceType.name}</h1>
-            <p>Zugehörige Geräte</p>
+
+            <div class="toolbar-container">
+                <cc-toolbar></cc-toolbar>
+
+                <main>
+                    <div>
+                        <icon-cta @click="${() => {URLHandler.setUrl('/app/edit')}}">${unsafeSVG(icon(faArrowLeft).html[0])}</icon-cta>
+                        
+                        <div>
+                            <h1>${this.deviceType.deviceType.name}</h1>
+                            <p>Zugehörige Geräte</p>
+                        </div>
+                    </div>
+                    
+                    ${model.devices.value.map(device => {
+                        if(device.type.type_id == this.deviceType.deviceType.type_id){
+                            return html`
+                                <cc-device-type-children-entry .device="${device}"></cc-device-type-children-entry>
+                            `
+                        }
+                    })}
+                </main>
+            </div>
+
         `
     }
 }
