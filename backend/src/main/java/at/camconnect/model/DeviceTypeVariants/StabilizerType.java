@@ -1,5 +1,6 @@
 package at.camconnect.model.DeviceTypeVariants;
 
+import at.camconnect.dtos.deviceType.DeviceTypeGlobalIdDTO;
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
 import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.enums.DeviceTypeVariantEnum;
@@ -52,6 +53,11 @@ public class StabilizerType extends DeviceType {
                 getMax_weight_kilograms(),
                 getNumber_of_axis()
         );
+    }
+
+    @Override
+    public DeviceTypeGlobalIdDTO toGlobalDTO() {
+        return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getImage(), getMax_weight_kilograms(), getNumber_of_axis());
     }
 
     public double getMax_weight_kilograms() {

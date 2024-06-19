@@ -1,5 +1,6 @@
 package at.camconnect.model.DeviceTypeVariants;
 
+import at.camconnect.dtos.deviceType.DeviceTypeGlobalIdDTO;
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
 import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.enums.DeviceTypeVariantEnum;
@@ -46,6 +47,11 @@ public class TripodType extends DeviceType {
                 getHeight_centimeters(),
                 getHead() != null ? getHead().getAttribute_id() : null
         );
+    }
+
+    @Override
+    public DeviceTypeGlobalIdDTO toGlobalDTO() {
+        return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getImage(), getHeight_centimeters(), getHead().getAttribute_id());
     }
 
     public TripodType() {

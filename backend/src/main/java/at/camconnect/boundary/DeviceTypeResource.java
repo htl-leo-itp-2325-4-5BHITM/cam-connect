@@ -130,9 +130,9 @@ public class DeviceTypeResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/getcsv")
-    public Response exportAllRents() {
+    public Response exportAllDeviceVariants() {
         try {
-            return deviceTypeRepository.exportAllDeviceTypes("");
+            return deviceTypeRepository.exportAllDeviceTypeVariants();
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }
@@ -141,9 +141,9 @@ public class DeviceTypeResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/getcsv/{type}")
-    public Response exportAllRents(@PathParam("type")String type) {
+    public Response exportDeviceTypeVariant(@PathParam("type")DeviceTypeVariantEnum variant) {
         try {
-            return deviceTypeRepository.exportAllDeviceTypes(type);
+            return deviceTypeRepository.exportDeviceTypeVariant(variant);
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }

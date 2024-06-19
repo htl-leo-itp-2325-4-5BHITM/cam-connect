@@ -2,7 +2,6 @@ package at.camconnect.repository;
 
 import at.camconnect.dtos.*;
 import at.camconnect.dtos.deviceType.*;
-import at.camconnect.dtos.rent.RentDTO;
 import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.model.DeviceTypeAttributes.*;
 import at.camconnect.model.Tag;
@@ -23,7 +22,6 @@ import org.hibernate.exception.ConstraintViolationException;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -127,6 +125,12 @@ public class DeviceTypeRepository {
         em.merge(deviceType);
     }
 
+    /**
+     * replaces the data in a devicetype with the passed data
+     * @param id
+     * @param data
+     * @return
+     */
     public DeviceType update(Long id, DeviceTypeGlobalIdDTO data){
         DeviceType deviceType = getById(id); //should result in a child of DeviceType like CameraType
 
@@ -135,9 +139,9 @@ public class DeviceTypeRepository {
 
         //The DeviceTypeDTO is converted into a DeviceType global which contains objects instead of ids
         DeviceTypeGlobalObjectsDTO dataWithObjects = new DeviceTypeGlobalObjectsDTO(
-                data.autofocus(), data.f_stop(), data.focal_length(), data.framerate(), data.height_centimeters(), data.max_range(), data.max_weight_kilograms(), data.needsrecorder(), data.number_of_axis(), data.autofocus(), data.variable_temperature(), data.watts(), data.windblocker(), data.wireless(),
+                data.type_id(), data.name(), data.image(), data.autofocus(), data.f_stop(), data.focal_length(), data.height_centimeters(), data.max_range(), data.max_weight_kilograms(), data.needsrecorder(), data.number_of_axis(), data.autofocus(), data.variable_temperature(), data.watts(), data.windblocker(), data.wireless(),
                 getAttribute(TripodHead.class, data.head_id()), getAttribute(LensMount.class, data.mount_id()), getAttribute(CameraResolution.class, data.resolution_id()), getAttribute(CameraSensor.class, data.sensor_id()), getAttribute(CameraSystem.class, data.system_id()),
-                data.type_id(), data.dtype(), data.image(), data.name(), data.description());
+                data.flight_time(), data.description());
 
         //just call the update method on whichever child class it is
         deviceType.update(dataWithObjects);
@@ -175,17 +179,18 @@ public class DeviceTypeRepository {
 
     //endregion
 
-    public Response exportAllDeviceTypes(String type) {
+    public Response exportAllDeviceTypeVariants() {
         StreamingOutput stream = os -> {
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(os))) {
-                writer.write(getCSVHeader(type));
+                writer.write("type_id; name; image; autofocus; f_stop; focal_length; height_centimeters; max_range; max_weight_kilograms; needsrecorder; number_of_axis; rgb; variable_temperature; watts; windblocker; wireless; head_id; mount_id; resolution_id; sensor_id; system_id; flight_time; description\n");
 
                 List<DeviceTypeFullDTO> deviceTypeList = getAllFull();
                 for (DeviceTypeFullDTO deviceType : deviceTypeList) {
-                    if(type.isEmpty()){
-                        writer.write(deviceType.deviceType().getFullExportString());
-                    } else if(deviceType.deviceType().getVariant().equals(DeviceTypeVariantEnum.valueOf(type))){
-                        writer.write(deviceType.deviceType().toString());
+                    try {
+                        writer.write(deviceType.deviceType().toGlobalDTO().toCsvString());
+                        System.out.println(deviceType.deviceType().toGlobalDTO().toCsvString());
+                    }catch (Exception ex){
+                        ex.printStackTrace();
                     }
                 }
             } catch (IOException e) {
@@ -196,14 +201,35 @@ public class DeviceTypeRepository {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm");
 
         return Response.ok(stream)
-                .header("Content-Disposition", "attachment; filename=\"" + (type.isEmpty() ? "devicetype" : type) + "-" + dateFormat.format(new Date()) + ".csv\"")
+                .header("Content-Disposition", "attachment; filename=\"camconnect_devicetype-export_" + dateFormat.format(new Date()) + ".csv\"")
+                .build();
+    }
+
+    public Response exportDeviceTypeVariant(DeviceTypeVariantEnum variant) {
+        StreamingOutput stream = os -> {
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(os))) {
+                writer.write("type_id; name; image; autofocus; f_stop; focal_length; height_centimeters; max_range; max_weight_kilograms; needsrecorder; number_of_axis; rgb; variable_temperature; watts; windblocker; wireless; head_id; mount_id; resolution_id; sensor_id; system_id; flight_time; description");
+
+                List<DeviceTypeFullDTO> deviceTypeList = getAllFull();
+                for (DeviceTypeFullDTO deviceType : deviceTypeList) {
+                    writer.write(deviceType.deviceType().toGlobalDTO().toCsvString());
+                }
+            } catch (IOException e) {
+                throw new CCException(1200);
+            }
+        };
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm");
+
+        return Response.ok(stream)
+                .header("Content-Disposition", "attachment; filename=\"camconnect_devicetype-export_" + dateFormat.format(new Date()) + ".csv\"")
                 .build();
     }
 
     private String getCSVHeader(String type) {
         String base = "type_id;creation_date;name;image;status;variant;";
         return base + switch(type){
-            case "camera" -> "sensor_id;resolution_id;mount_id;system_id;framerate;autofocus;\n";
+            case "camera" -> "sensor_id;resolution_id;mount_id;system_id;autofocus;\n";
             case "drone" -> "sensor_id;resolution_id;max_range;\n";
             case "lens" -> "f_stop;mount_id;focal_length;\n";
             case "light" -> "watts;rgb;variable_temperature;\n";
@@ -211,12 +237,14 @@ public class DeviceTypeRepository {
             case "stabilizer" ->"max_weight_kilograms;number_of_axis;\n";
             case "tripod" -> "height_centimeters;head_id;\n";
             case "simple" -> "description;\n";
-            default -> "sensor_id;resolution_id;mount_id;system_id;framerate;autofocus;max_range;f_stop;focal_length;watts;rgb;variable_temperature;windblocker;wireless;needs_recorder;max_weight_kilograms;number_of_axis;height_centimeters;head_id;description;\n";
+            default -> "";
         };
     }
 
     @Transactional
     public void importDeviceTypes(File file, String type) {
+        if (file == null) throw new CCException(1105);
+
         HashMap<Integer, List<String>> typeMap = new HashMap<>() {{
             put(26, new LinkedList<>(List.of("all")));
             put(12, new LinkedList<>(List.of("camera")));
@@ -224,8 +252,6 @@ public class DeviceTypeRepository {
             put(8, new LinkedList<>(List.of("stabilizer", "tripod")));
             put(7, new LinkedList<>(List.of("simple")));
         }};
-
-        if (file == null) throw new CCException(1105);
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line = reader.readLine();
@@ -244,7 +270,7 @@ public class DeviceTypeRepository {
             while ((line = reader.readLine()) != null) {
                 lineArray = line.split(";");
 
-                if (lineArray.length != headerLength) throw new CCException(1204, lineArray[0] + " has not a valid structure");
+                if (lineArray.length != headerLength) throw new CCException(1204, lineArray[0] + " has no valid structure");
 
                 try {
                     String currType = type;
@@ -266,7 +292,6 @@ public class DeviceTypeRepository {
                     for (int i = 0; i < lineArray.length; i++) {
                         System.out.print(lineArray[i] + "-");
                     }
-                    System.out.println();
                     DeviceType deviceType = getDeviceTypeByLineArray(lineArray, currType);
                     em.persist(deviceType);
 
@@ -284,7 +309,7 @@ public class DeviceTypeRepository {
     }
 
     public DeviceType getDeviceTypeByLineArray(String[] lineArray, String type) {
-        return switch (type) {  
+        /*return switch (type) {
             case "camera" -> new CameraType(
                     parseLong(lineArray[0]), parseDate(lineArray[1]), lineArray[2], lineArray[3],
                     parseEnum(DeviceTypeStatusEnum.class, lineArray[4]), parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
@@ -341,7 +366,8 @@ public class DeviceTypeRepository {
                     findEntity(TripodHead.class, lineArray[7])
             );
             default -> null;
-        };
+        };*/
+        return null;
     }
 
     private Long parseLong(String value) {

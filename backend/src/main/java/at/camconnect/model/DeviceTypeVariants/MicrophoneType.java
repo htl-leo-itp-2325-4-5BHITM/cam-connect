@@ -1,5 +1,6 @@
 package at.camconnect.model.DeviceTypeVariants;
 
+import at.camconnect.dtos.deviceType.DeviceTypeGlobalIdDTO;
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
 import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.enums.DeviceTypeVariantEnum;
@@ -53,6 +54,11 @@ public class MicrophoneType extends DeviceType {
                 isWireless(),
                 isNeeds_recorder()
         );
+    }
+
+    @Override
+    public DeviceTypeGlobalIdDTO toGlobalDTO() {
+        return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getImage(), isNeeds_recorder(), isWireless(), isWindblocker());
     }
 
     public boolean isWindblocker() {

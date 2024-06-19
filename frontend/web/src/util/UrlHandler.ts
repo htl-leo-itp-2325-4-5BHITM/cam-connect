@@ -37,7 +37,7 @@ let pages = {
                 handler: () => {
                     UrlHandler.changeOrigin("cc-edit")
                     model.appState.value.editPage = EditPageEnum.OVERVIEW
-                    model.appState.value.editPageType = UrlHandler.getParam("type") as DeviceTypeVariantEnum || DeviceTypeVariantEnum.camera
+                    model.appState.value.editPageType = UrlHandler.getParam("type") as DeviceTypeVariantEnum/* || DeviceTypeVariantEnum.camera*/
                 },
                 children: {
                     children: {

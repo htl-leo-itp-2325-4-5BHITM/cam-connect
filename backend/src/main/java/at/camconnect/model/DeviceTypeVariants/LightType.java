@@ -1,5 +1,6 @@
 package at.camconnect.model.DeviceTypeVariants;
 
+import at.camconnect.dtos.deviceType.DeviceTypeGlobalIdDTO;
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
 import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.enums.DeviceTypeVariantEnum;
@@ -56,6 +57,11 @@ public class LightType extends DeviceType {
                 isRgb(),
                 isVariable_temperature()
         );
+    }
+
+    @Override
+    public DeviceTypeGlobalIdDTO toGlobalDTO() {
+        return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getImage(), isRgb(), isVariable_temperature(), getWatts());
     }
 
     public int getWatts() {

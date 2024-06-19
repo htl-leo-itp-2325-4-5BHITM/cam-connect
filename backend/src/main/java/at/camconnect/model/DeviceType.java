@@ -1,5 +1,7 @@
 package at.camconnect.model;
 
+import at.camconnect.dtos.deviceType.DeviceTypeFullDTO;
+import at.camconnect.dtos.deviceType.DeviceTypeGlobalIdDTO;
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
 import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.enums.DeviceTypeVariantEnum;
@@ -107,5 +109,7 @@ public abstract class DeviceType{
      * @return
      */
     public abstract String getFullExportString();
+
+    public abstract DeviceTypeGlobalIdDTO toGlobalDTO();
     //endregion
 }

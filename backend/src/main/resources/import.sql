@@ -38,12 +38,12 @@ VALUES
 */
 
 -- Camera Types
-insert into DEVICETYPE (variant, dtype, name, status, system_id, resolution_id, sensor_id, mount_id, autofocus, framerate)
+insert into DEVICETYPE (variant, dtype, name, status, system_id, resolution_id, sensor_id, mount_id, autofocus)
 values
-    ('camera', 'CameraType', 'Sony A7 III', 'active', 1, 3, 4, 8, true, 120),
-    ('camera', 'CameraType', 'Canon EOS R5', 'active', 1, 4, 5, 9, true, 120),
-    ('camera', 'CameraType', 'Lumix S5 ii', 'active', 2, 3, 4, 6, true, 100),
-    ('camera', 'CameraType', 'Lumix GH6', 'active', 2, 3, 5, 7, true, 100);
+    ('camera', 'CameraType', 'Sony A7 III', 'active', 1, 3, 4, 8, true),
+    ('camera', 'CameraType', 'Canon EOS R5', 'active', 1, 4, 5, 9, true),
+    ('camera', 'CameraType', 'Lumix S5 ii', 'active', 2, 3, 4, 6, true),
+    ('camera', 'CameraType', 'Lumix GH6', 'active', 2, 3, 5, 7, true);
 
 -- Simple Types
 insert into DEVICETYPE (variant, dtype, name, description, status)
@@ -52,10 +52,10 @@ values
     ('simple', 'SimpleType', 'Superkabel', '5 Meter Kabel', 'active');
 
 -- Drone Types
-insert into DEVICETYPE (variant, dtype, name, sensor_id, resolution_id, max_range, status)
+insert into DEVICETYPE (variant, dtype, name, sensor_id, resolution_id, max_range_kilometers, flight_time_minutes, status)
 values
-    ('drone', 'DroneType', 'Mavic Mini', 5, 4, 100, 'active'),
-    ('drone', 'DroneType', 'Mavic Pro', 6, 3, 100, 'active');
+    ('drone', 'DroneType', 'Mavic Mini', 5, 4, 10, 50, 'active'),
+    ('drone', 'DroneType', 'Mavic Pro', 6, 3, 10, 50, 'active');
 
 -- Lens Types
 insert into DEVICETYPE (variant, dtype, name, mount_id, f_stop, focal_length, status)

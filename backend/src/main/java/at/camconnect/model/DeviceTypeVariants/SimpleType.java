@@ -1,5 +1,6 @@
 package at.camconnect.model.DeviceTypeVariants;
 
+import at.camconnect.dtos.deviceType.DeviceTypeGlobalIdDTO;
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
 import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.enums.DeviceTypeVariantEnum;
@@ -47,6 +48,11 @@ public class SimpleType extends DeviceType {
                 getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
                 getDescription()
         );
+    }
+
+    @Override
+    public DeviceTypeGlobalIdDTO toGlobalDTO() {
+        return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getDescription(), getImage());
     }
 
     public String getDescription() {

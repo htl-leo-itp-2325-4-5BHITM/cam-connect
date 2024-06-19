@@ -1,5 +1,6 @@
 package at.camconnect.model.DeviceTypeVariants;
 
+import at.camconnect.dtos.deviceType.DeviceTypeGlobalIdDTO;
 import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
@@ -23,26 +24,29 @@ public class DroneType extends DeviceType {
     @JoinColumn(name = "resolution_id")
     private CameraResolution resolution;
     @Column(length = 5)
-    private int max_range;
+    private int max_range_kilometers;
+    private int flight_time_minutes;
 
     public DroneType() {
         super();
         setVariant(DeviceTypeVariantEnum.drone);
     }
 
-    public DroneType(Long type_id, LocalDateTime creation_date, String name, String image, DeviceTypeStatusEnum status, DeviceTypeVariantEnum variant, CameraSensor sensor, CameraResolution resolution, int max_range) {
+    public DroneType(Long type_id, LocalDateTime creation_date, String name, String image, DeviceTypeStatusEnum status, DeviceTypeVariantEnum variant, CameraSensor sensor, CameraResolution resolution, int max_range_kilometers, int flight_time_minutes) {
         super(type_id, creation_date, name, image, status, variant);
         this.sensor = sensor;
         this.resolution = resolution;
-        this.max_range = max_range;
+        this.max_range_kilometers = max_range_kilometers;
+        this.flight_time_minutes = flight_time_minutes;
     }
 
     @Override
     public void update(DeviceTypeGlobalObjectsDTO data) {
         try{
-            setMax_range(data.max_range());
+            setMax_range_kilometers(data.max_range());
             setSensor(data.sensor());
             setResolution(data.resolution());
+            setFlight_time_minutes(data.flight_time_minutes());
         }catch (Exception ex){
             throw new CCException(1106);
         }
@@ -54,7 +58,7 @@ public class DroneType extends DeviceType {
                 getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
                 getSensor() != null ? getSensor().getAttribute_id() : null,
                 getResolution() != null ? getResolution().getAttribute_id() : null,
-                getMax_range());
+                getMax_range_kilometers());
     }
 
 
@@ -64,8 +68,13 @@ public class DroneType extends DeviceType {
                 getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
                 getSensor() != null ? getSensor().getAttribute_id() : null,
                 getResolution() != null ? getResolution().getAttribute_id() : null,
-                getMax_range()
+                getMax_range_kilometers()
         );
+    }
+
+    @Override
+    public DeviceTypeGlobalIdDTO toGlobalDTO() {
+        return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getImage(), sensor.getAttribute_id(), resolution.getAttribute_id(), flight_time_minutes, max_range_kilometers);
     }
 
     public CameraSensor getSensor() {
@@ -84,11 +93,19 @@ public class DroneType extends DeviceType {
         this.resolution = resolution;
     }
 
-    public int getMax_range() {
-        return max_range;
+    public int getMax_range_kilometers() {
+        return max_range_kilometers;
     }
 
-    public void setMax_range(int maxRange) {
-        this.max_range = maxRange;
+    public void setMax_range_kilometers(int maxRange) {
+        this.max_range_kilometers = maxRange;
+    }
+
+    public int getFlight_time_minutes() {
+        return flight_time_minutes;
+    }
+
+    public void setFlight_time_minutes(int flight_time) {
+        this.flight_time_minutes = flight_time;
     }
 }

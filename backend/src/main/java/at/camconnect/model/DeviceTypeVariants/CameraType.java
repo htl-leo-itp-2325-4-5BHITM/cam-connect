@@ -1,5 +1,6 @@
 package at.camconnect.model.DeviceTypeVariants;
 
+import at.camconnect.dtos.deviceType.DeviceTypeGlobalIdDTO;
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
 import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.enums.DeviceTypeVariantEnum;
@@ -9,7 +10,6 @@ import at.camconnect.model.DeviceTypeAttributes.CameraSensor;
 import at.camconnect.model.DeviceTypeAttributes.CameraSystem;
 import at.camconnect.model.DeviceTypeAttributes.LensMount;
 import at.camconnect.responseSystem.CCException;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -30,15 +30,12 @@ public class CameraType extends DeviceType {
     @ManyToOne
     @JoinColumn(name = "system_id")
     private CameraSystem system;
-    @Column(length = 15)
-    private int framerate;
     private boolean autofocus;
 
     @Override
     public void update(DeviceTypeGlobalObjectsDTO data) {
         try {
             setAutofocus(data.autofocus());
-            setFramerate(data.framerate());
             setMount(data.mount());
             setResolution(data.resolution());
             setSystem(data.system());
@@ -58,7 +55,6 @@ public class CameraType extends DeviceType {
         this.resolution = resolution;
         this.mount = mount;
         this.system = system;
-        this.framerate = framerate;
         this.autofocus = autofocus;
     }
 
@@ -70,18 +66,23 @@ public class CameraType extends DeviceType {
                 getResolution() != null ? getResolution().getAttribute_id() : null,
                 getMount() != null ? getMount().getAttribute_id() : null,
                 getSystem() != null ? getSystem().getAttribute_id(): null,
-                getFramerate(), isAutofocus());
+                isAutofocus());
     }
 
     @Override
     public String getFullExportString() {
-        return String.format("%d;%s;%s;%s;%s;%s;%d;%d;%d;%d;%d;%b; ; ; ; ; ; ; ; ; ; ; ; ; ; ;\n",
+        return String.format("%d;%s;%s;%s;%s;%s;%d;%d;%d;%d;%b; ; ; ; ; ; ; ; ; ; ; ; ; ; ;\n",
                 getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
                 getSensor() != null ? getSensor().getAttribute_id() : null,
                 getResolution() != null ? getResolution().getAttribute_id() : null,
                 getMount() != null ? getMount().getAttribute_id() : null,
                 getSystem() != null ? getSystem().getAttribute_id(): null,
-                getFramerate(), isAutofocus());
+                isAutofocus());
+    }
+
+    @Override
+    public DeviceTypeGlobalIdDTO toGlobalDTO() {
+        return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getImage(), isAutofocus(), getMount().getAttribute_id(), getResolution().getAttribute_id(), getSensor().getAttribute_id(), getSystem().getAttribute_id());
     }
 
     public CameraSensor getSensor() {
@@ -106,14 +107,6 @@ public class CameraType extends DeviceType {
 
     public void setMount(LensMount mount) {
         this.mount = mount;
-    }
-
-    public int getFramerate() {
-        return framerate;
-    }
-
-    public void setFramerate(int framerate) {
-        this.framerate = framerate;
     }
 
     public boolean isAutofocus() {

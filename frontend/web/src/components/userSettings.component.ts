@@ -65,6 +65,10 @@ export class UserSettingsComponent extends LitElement {
                         <a href="${config.api_url}/rent/getcsv" download>
                             <cc-button type="${ButtonType.OUTLINED}">Exportieren</cc-button>
                         </a>
+                        
+                        <a href="${config.api_url}/devicetype/getcsv" download>
+                            alle gerätetypen exportieren
+                        </a>
                     </div>
                     
                     <div class="inputField">
