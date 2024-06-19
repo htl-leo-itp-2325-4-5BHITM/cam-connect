@@ -45,11 +45,60 @@ cc-sidebar{
   place-items: center;
 
   .content{
-    background-color: $gray300;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: $gray350;
     border-radius: 1rem;
     width: fit-content;
     max-height: 80vh;
-    padding: 1rem;
+    padding: 1rem 2rem;
+    gap: .5rem;
+
+    p{
+      color: $gray800;
+    }
+
+    h1{
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    cc-input, div{
+      width: 30vw;
+    }
+
+    .contentByDeviceType{
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+
+      div{
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+
+    .tags {
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+
+      div{
+        display: flex;
+        gap: .5rem;
+      }
+    }
+
+    .separator{
+      margin-block: .5rem;
+    }
+
+    .navigation{
+      display: flex;
+      justify-content: space-evenly;
+      margin-block: 2rem .25rem;
+    }
   }
 
   &[hidden = "hidden"]{

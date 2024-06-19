@@ -9,6 +9,7 @@ import {faPen} from "@fortawesome/free-solid-svg-icons"
 import {EditPageEnum, ObservedProperty} from "../../../model"
 import {AppState} from "../../../AppState"
 import {model} from "../../../index"
+import UrlHandler from "../../../util/UrlHandler"
 
 @customElement('cc-device-type-children-entry')
 export class DeviceTypeChildrenEntryComponent extends LitElement {
@@ -37,7 +38,7 @@ export class DeviceTypeChildrenEntryComponent extends LitElement {
             
             <div class="edit">
                 <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}"  @click="${() => {
-                    //UrlHandler.updateUrl('/app/edit/devicetype?gid=' + this.deviceType.deviceType.type_id)
+                    //UrlHandler.updateUrl('/app/edit/device?did=' + this.device.device_id)
                     this.appState.value.editComponentElement.showModal(this.device, "update", EditPageEnum.DEVICE)
                 }}">
                     <div slot="left" class="icon accent">
