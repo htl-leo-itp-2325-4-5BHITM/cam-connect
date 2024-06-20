@@ -10,8 +10,7 @@ import {AppState} from "../../../AppState"
 import {Api} from "../../../util/Api"
 import {Device} from "../../../service/device.service"
 import {InputType} from "../../basic/input.component"
-import {ButtonType} from "../../basic/button.component"
-import {ColorEnum, SimpleColorEnum, SizeEnum} from "../../../base"
+import {ColorEnum, SizeEnum} from "../../../base"
 import {ChipType} from "../../basic/chip.component"
 import TagService, {Tag} from "../../../service/tag.service"
 
@@ -22,6 +21,8 @@ export class EditComponent extends LitElement {
     @property() private appState: ObservedProperty<AppState>
 
     currentEditType : DeviceTypeVariantEnum = DeviceTypeVariantEnum.camera
+
+    isSelectAlreadyUsed : boolean = false
 
     tags: Tag[] = []
 
@@ -96,8 +97,12 @@ export class EditComponent extends LitElement {
                     <cc-dropdown
                             .options="${model.deviceTypeNameFilterOptions.value.map(option => ({ id: option.id, data: option.name }))}"
                             .onSelect="${(option) => {
+                                if(!this.isSelectAlreadyUsed) {
+                                    this.shadowRoot.querySelector(".contentByDeviceType").innerHTML = ""
+                                    this.isSelectAlreadyUsed = true
+                                }
+                                    
                                 this.currentEditType = option.id
-                                this.shadowRoot.querySelector(".contentByDeviceType").innerHTML = ""
                                 render(
                                     this.getModalContentByDeviceType(),
                                     this.shadowRoot.querySelector(".contentByDeviceType") as HTMLElement
@@ -173,7 +178,6 @@ export class EditComponent extends LitElement {
     getModalContentByDeviceType(){
         switch(this.currentEditType){
             case DeviceTypeVariantEnum.camera:
-                console.log("camera")
                 return html`
                 <div>
                     <p>Sensor</p>
@@ -207,7 +211,6 @@ export class EditComponent extends LitElement {
                 <cc-input placeholder="Maximale Bildrate (FPS)"></cc-input>
             `
             case DeviceTypeVariantEnum.drone:
-                console.log("drone")
                 return html`
                     <div>
                         <p>System</p>
@@ -225,7 +228,48 @@ export class EditComponent extends LitElement {
                 
                 <cc-input placeholder="Maximale Reichweite"></cc-input>
             `
-
+            case DeviceTypeVariantEnum.microphone:
+                return html`
+                    <cc-toggle>Windblocker</cc-toggle>
+                    <cc-toggle>Wireless</cc-toggle>
+                    <cc-toggle>Needs Recorder</cc-toggle>
+                `
+            case DeviceTypeVariantEnum.lens:
+                return html`
+                    <cc-input placeholder="f-stop"></cc-input>
+                    <cc-input placeholder="Brennweite"></cc-input>
+                    <div>
+                        <p>Lens Mount</p>
+                        <cc-dropdown
+                                .options="${model.deviceTypeAttributes.value.lensMounts.map(option => ({ id: option.attribute_id, data: option.name }))}"
+                        ></cc-dropdown>
+                    </div>                
+                `
+            case DeviceTypeVariantEnum.light:
+                return html`
+                    <cc-input placeholder="Watts"></cc-input>
+                    <cc-toggle>RGB</cc-toggle>
+                    <cc-toggle>Variable Temperaturen</cc-toggle>
+                `
+            case DeviceTypeVariantEnum.stabilizer:
+                return html`
+                    <cc-input placeholder="Maximales Gewicht (kg)"></cc-input>
+                    <cc-input placeholder="Anzahl an Achsen"></cc-input>
+                `
+            case DeviceTypeVariantEnum.tripod:
+                return html`
+                    <cc-input placeholder="Höhe (cm)"></cc-input>
+                    <div>
+                        <p>Head</p>
+                        <cc-dropdown
+                                .options="${model.deviceTypeAttributes.value.tripodHeads.map(option => ({ id: option.attribute_id, data: option.name }))}"
+                        ></cc-dropdown>
+                    </div>                   
+                `
+            case DeviceTypeVariantEnum.simple:
+                return html`
+                    <cc-input placeholder="Beschreibung"></cc-input>
+                `
         }
     }
 
