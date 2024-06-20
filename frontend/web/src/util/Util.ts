@@ -44,6 +44,9 @@ export default class Util{
             number: device.number,
             note: device.note,
             type_id: device.type.type_id,
+            creation_date: device.creation_date,
+            change_date: device.change_date,
+            status: device.status
         }
     }
 

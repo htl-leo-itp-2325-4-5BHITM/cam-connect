@@ -28,7 +28,7 @@ export class DeviceTypeChildrenComponent extends LitElement {
             <style>${styles}</style>
 
             <div class="toolbar-container">
-                <cc-toolbar></cc-toolbar>
+                <cc-toolbar type="edit"></cc-toolbar>
 
                 <main>
                     <div>

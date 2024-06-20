@@ -1,6 +1,7 @@
 import {model} from "../index"
 import {DeviceType} from "./deviceType.service"
 import {Api} from "../util/Api"
+import {ccResponse, SimpleOption} from "../base"
 
 export interface Tag{
     tag_id: number
@@ -18,5 +19,18 @@ export default class TagService {
             .catch(error => {
                 console.error(error)
             })
+    }
+
+    static async search(searchTerm: string): Promise<SimpleOption<number, DeviceType>[]> {
+        try {
+            const result: ccResponse<SimpleOption<number, DeviceType>[]> = await Api.postData(
+                "/tag/search",
+                {searchTerm: searchTerm}
+            )
+            return result.data
+        } catch (e) {
+            console.error(e)
+            return []
+        }
     }
 }

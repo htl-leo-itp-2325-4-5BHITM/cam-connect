@@ -1,10 +1,13 @@
 package at.camconnect.boundary;
 
+import at.camconnect.dtos.AutocompleteOptionDTO;
+import at.camconnect.dtos.deviceType.DeviceTypeMinimalDTO;
 import at.camconnect.model.Tag;
 import at.camconnect.repository.TagRepository;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
 import jakarta.inject.Inject;
+import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -79,5 +82,20 @@ public class TagResource {
             return CCResponse.error(ex);
         }
         return CCResponse.ok(tagList);
+    }
+
+    @POST
+    @Path("/search")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response search(JsonObject data){
+        List<AutocompleteOptionDTO<Tag>> result;
+        try{
+            result = tagRepository.search(data.getString("searchTerm"));;
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok(result);
     }
 }

@@ -1,5 +1,7 @@
 package at.camconnect.repository;
 
+import at.camconnect.dtos.AutocompleteOptionDTO;
+import at.camconnect.dtos.deviceType.DeviceTypeMinimalDTO;
 import at.camconnect.model.Device;
 import at.camconnect.model.Tag;
 import at.camconnect.responseSystem.CCException;
@@ -7,6 +9,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @ApplicationScoped
@@ -33,5 +36,25 @@ public class TagRepository {
     public List<Tag> getAll(){
         List<Tag> tags = entityManager.createQuery("SELECT t FROM Tag t", Tag.class).getResultList();
         return tags;
+    }
+
+    public List<AutocompleteOptionDTO<Tag>> search(String searchTerm){
+        List<Tag> tags = new LinkedList<Tag>();
+
+        tags = entityManager.createQuery(
+                        "SELECT t FROM Tag t " +
+                                "WHERE UPPER(t.name) LIKE :searchTerm " +
+                                "order by name",
+                        Tag.class)
+                .setParameter("searchTerm", "%" + searchTerm.toUpperCase() + "%")
+                .getResultList();
+
+        List<AutocompleteOptionDTO<Tag>> result = new LinkedList<>();
+
+        for (Tag tag : tags) {
+            result.add(new AutocompleteOptionDTO<>(tag, tag.getTag_id()));
+        }
+
+        return result;
     }
 }

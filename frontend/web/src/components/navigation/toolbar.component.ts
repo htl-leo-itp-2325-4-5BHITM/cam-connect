@@ -3,7 +3,7 @@ import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/navigation/toolbar.styles.scss'
 import {icon} from '@fortawesome/fontawesome-svg-core'
 import {unsafeSVG} from 'lit/directives/unsafe-svg.js';
-import {faCamera, faTrash} from "@fortawesome/free-solid-svg-icons"
+import {faCamera, faTrash, faUpload} from "@fortawesome/free-solid-svg-icons"
 import { ObservedProperty, PageEnum} from "../../model"
 import {ButtonType} from "../basic/button.component"
 import {SimpleColorEnum, SizeEnum} from "../../base"
@@ -21,14 +21,20 @@ export class ToolbarComponent extends LitElement {
     @property()
     private appState: ObservedProperty<AppState>
 
+    @property({reflect: true}) type: "default" | "edit" = "default"
+
     constructor() {
         super()
         this.appState = new ObservedProperty<AppState>(this, model.appState)
     }
     render() {
+        if(this.type == "edit"){
+            return this.renderEditBar()
+        }
+
         switch (this.appState.value.page) {
-            case PageEnum.EQUIPMENT: return this.renderEquipmentBar();
-            case PageEnum.RENTS: return this.renderRentListBar();
+            case PageEnum.EQUIPMENT: return this.renderEquipmentBar()
+            case PageEnum.RENTS: return this.renderRentListBar()
         }
     }
 
@@ -89,7 +95,7 @@ export class ToolbarComponent extends LitElement {
             <style>${styles}</style>
             <div class="main equipment">
                 <div>
-                    <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" 
+                    <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}"
                                @click="${() => {UrlHandler.goToPage("/app/edit")}}">
                         <div slot="left" class="icon accent">
                             ${unsafeSVG(icon(faCamera).html[0])}
@@ -112,6 +118,45 @@ export class ToolbarComponent extends LitElement {
                             <img slot="left" src="../../../assets/icon/return.svg" alt="<-">
                         </div>
                         Gerät(e) verleihen
+                    </cc-button>
+                </div>
+            </div>
+        `
+    }
+
+    renderEditBar(){
+        let isButtonDisabled = {
+            uncheckAll: this.appState.value.selectedDeviceEntries.size == 0,
+            remove: this.appState.value.selectedDeviceEntries.size == 0,
+        }
+
+        return html`
+            <style>${styles}</style>
+            <div class="main equipment">
+                <div>
+                    <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" 
+                               @click="${() => {UrlHandler.goToPage("/app/edit")}}">
+                        <div slot="left" class="icon accent">
+                            ${unsafeSVG(icon(faUpload).html[0])}
+                        </div>
+                        Importieren / Exportieren
+                    </cc-button>
+                </div>
+                
+                <div>
+                    <cc-button @click=${() => {this.uncheckAll("device")}}
+                               size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.uncheckAll}">
+                        <div slot="left" class="icon accent">
+                            <img slot="left" src="../../../assets/icon/select_circle.svg" alt="+">
+                        </div>
+                        Auswahl aufheben
+                    </cc-button>
+
+                    <cc-button @click="${() => {this.removeSelection()}}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.remove}">
+                        <div slot="left" class="icon accent">
+                            ${unsafeSVG(icon(faTrash).html[0])}
+                        </div>
+                        Löschen
                     </cc-button>
                 </div>
             </div>
