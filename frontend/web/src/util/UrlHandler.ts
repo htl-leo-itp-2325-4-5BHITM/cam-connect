@@ -64,6 +64,9 @@ let pages = {
     },
     notFound: {
         handler: () => { UrlHandler.changeOrigin("cc-not-found") }
+    },
+    login: {
+        handler: () => { UrlHandler.changeOrigin("cc-login") }
     }
 }
 

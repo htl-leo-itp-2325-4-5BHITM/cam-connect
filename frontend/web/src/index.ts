@@ -32,6 +32,7 @@ import "./components/app/rentDetailView.component"
 import "./components/app/app.component"
 import "./components/externalConfirm.component"
 import "./components/notFound.component"
+import "./components/login.component"
 import "./components/userSettings.component"
 import "./components/app/edit/edit.component"
 
