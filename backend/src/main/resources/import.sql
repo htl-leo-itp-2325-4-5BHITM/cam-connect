@@ -106,18 +106,18 @@ insert into device (type_id, note, number, serial) values
 
 -- User inserts will break when moving to different user system
 -- Students
-INSERT INTO app_user (email, firstname, lastname, password, school_class, username)
+INSERT INTO app_user (dtype, email, firstname, lastname, password, school_class, username)
 VALUES
-    ('m.leisch@students.htl-leonding.ac.at', 'Michael', 'Leisch', 'michiiii', '4BHITM', 'michiii'),
-    ('y.kendler@students.htl-leonding.ac.at', 'Yanik', 'Kendler', 'yanuki', '4BHITM', 'yanuki'),
-    ('j.jaklitsch@students.htl-leonding.ac.at', 'Julian', 'Jaklitsch', 'jj', '4BHITM', 'jj'),
-    ('l.steinhuber@students.htl-leonding.ac.at', 'Leon', 'Steinhuber', 'stoni', '4BHITM', 'stoni');
+    ('STUDENT', 'm.leisch@students.htl-leonding.ac.at', 'Michael', 'Leisch', 'michiiii', '4BHITM', 'michiii'),
+    ('STUDENT', 'y.kendler@students.htl-leonding.ac.at', 'Yanik', 'Kendler', 'yanuki', '4BHITM', 'yanuki'),
+    ('STUDENT', 'j.jaklitsch@students.htl-leonding.ac.at', 'Julian', 'Jaklitsch', 'jj', '4BHITM', 'jj'),
+    ('STUDENT', 'l.steinhuber@students.htl-leonding.ac.at', 'Leon', 'Steinhuber', 'stoni', '4BHITM', 'stoni');
 
 -- Inserting data into teacher table
-INSERT INTO app_user (email, firstname, lastname, password, username)
+INSERT INTO app_user (dtype, email, firstname, lastname, password, username)
 VALUES
-    ('m.huemer@htl-leonding.ac.at', 'Martin', 'Huemer', 'dff', 'mh'),
-    ('p.engleitner@htl-leonding.ac.at', 'Particia', 'Engleitner', 'ff', 'pe');
+    ('TEACHER', 'm.huemer@htl-leonding.ac.at', 'Martin', 'Huemer', 'dff', 'mh'),
+    ('TEACHER', 'p.engleitner@htl-leonding.ac.at', 'Particia', 'Engleitner', 'ff', 'pe');
 
 -- favourites
 INSERT INTO app_user_devicetype (student_user_id, favourites_type_id)

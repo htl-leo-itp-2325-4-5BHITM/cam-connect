@@ -10,7 +10,7 @@
 
 button{
   font-size: $fSizeDesktopLarge;
-  width: 100%;
+  /*width: 100%;*/ /*TODO check if this broke anything*/
   height: fit-content;
   border-radius: .3rem;
   cursor: pointer;
@@ -24,7 +24,7 @@ button{
   align-items: center;
   gap: .5rem;
 
-  padding-inline: 1rem !important;
+  padding-inline: 1rem;
 
   user-select: none;
 
@@ -57,17 +57,17 @@ button{
   &[size = "big"]{
     font-size: $fSizeDesktopLarge;
     min-width: 8ch;
-    padding-block: .2rem !important;
+    padding-block: .2rem;
   }
   &[size = "medium"]{
     font-size: $fSizeDesktopDefault;
     min-width: 8ch;
-    padding-block: .1rem !important;
+    padding-block: .1rem;
   }
   &[size = "small"]{
     font-size: $fSizeDesktopSmall;
     min-width: 6ch;
-    padding-block: .1rem !important;
+    padding-block: .1rem;
   }
 
   &[type = "filled"]{
@@ -101,8 +101,8 @@ button{
     color: var(--color-text);
 
     min-width: 0;
-    padding-inline: .3rem !important;
-    margin-inline: 0 !important;
+    padding-inline: .3rem;
+    margin-inline: 0;
 
     &[color = "accent"], &[color = "good"], &[color = "bad"]{
       color: var(--color-light);
@@ -137,7 +137,7 @@ button{
   &[type = "text"], &[type="underlined"], &[type="outlined"] {
     &[color="accent"] {
       ::slotted(*) {
-        color: var(--color-light) !important;
+        color: var(--color-light);
         margin: 0;
       }
 
@@ -151,7 +151,7 @@ button{
 
     &[color="gray"] {
       ::slotted(*) {
-        color: var(--color-text) !important;
+        color: var(--color-text);
       }
     }
   }
@@ -162,13 +162,13 @@ button{
   }
 
   &[noPadding="true"]{
-    padding-inline: .5rem !important;
+    padding-inline: .5rem;
     min-width: 0;
   }
 
   ::slotted(*:not(.icon, svg, img)){
     opacity: 80%;
-    font-weight: 400 !important;
+    font-weight: 400;
   }
 
   ::slotted(svg){
@@ -184,7 +184,7 @@ button{
     height: 1rem;
     aspect-ratio: 1;
     /*
-    margin-top: -3px !important;
+    margin-top: -3px;
     */
     vertical-align: center;
   }

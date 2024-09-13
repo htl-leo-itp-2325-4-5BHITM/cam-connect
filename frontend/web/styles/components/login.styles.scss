@@ -15,13 +15,22 @@ main{
   place-content: center;
 }
 
+.content{
+  padding: 2rem;
+  background-color: $gray200;
+  border-radius: 1rem
+}
+
 h1{
   font-size: 3rem;
+  margin-bottom: .3rem;
+  text-align: center;
 }
 
 p{
   color: $gray700;
   margin-bottom: 2rem;
+  text-align: center;
 }
 
 .actions{
@@ -30,9 +39,19 @@ p{
   flex-direction: column;
 }
 
+.buttons{
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
 cc-button{
-    margin-top: 1rem;
-  margin-inline: auto;
+  display: block;
+  width: 100%;
+
+  &::part(button){
+    padding: .5rem;
+  }
 }
 
 input{
@@ -40,4 +59,5 @@ input{
   border: none;
   padding: 0.625rem 1rem;
   margin-bottom: .5rem;
+  width: 100%;
 }

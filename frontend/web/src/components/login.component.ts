@@ -1,9 +1,9 @@
 import {LitElement, html} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../styles/components/login.styles.scss'
-import {ButtonType} from "./basic/button.component"
 import UserService from "../service/user.service"
 import {SizeEnum} from "../base"
+import {ButtonType} from "./basic/button.component"
 @customElement('cc-login')
 export class LoginComponent extends LitElement {
     render() {
@@ -11,13 +11,16 @@ export class LoginComponent extends LitElement {
             <style>${styles}</style>
             <cc-navbar type="simple"></cc-navbar>
             <main>
-                <h1>cam-connect login</h1>
-                <p>Mit IT-User und Password bzw. Lehrer Login</p>
-                
-                <div class="actions">
-                    <input type="text" placeholder="IT999999">
+                <div class="content">
+                    <h1>login</h1>
+                    <p>Mit IT-User und Password bzw. Lehrer Login</p>
+                    <input type="text" placeholder="IT000000">
+                    
                     <input type="password" placeholder="passwort">
-                    <cc-button @click="${this.login}" size="${SizeEnum.BIG}">Einloggen</cc-button>
+                    
+                    <div class="buttons">
+                        <cc-button @click="${this.login}" size="${SizeEnum.BIG}">Einloggen</cc-button>
+                    </div>
                 </div>
             </main>
         `
