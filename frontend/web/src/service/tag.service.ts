@@ -27,6 +27,7 @@ export default class TagService {
                 "/tag/search",
                 {searchTerm: searchTerm}
             )
+            console.log(result)
             return result.data
         } catch (e) {
             console.error(e)

@@ -50,6 +50,7 @@ export class AppState{
     private _cancelCurrentAction: ActionCancellation[] = []
     private _createRentElement: CreateRentComponent
     private _appElement: HTMLElement
+    private _originElement: HTMLElement
     private _rentFilters: RentFilters = {orderBy: OrderByFilterRent.ALPHABETICAL_ASC, statuses: [RentStatusEnum.CONFIRMED, RentStatusEnum.DECLINED, RentStatusEnum.WAITING], schoolClasses: new Set<string>()}
     private _overlayElement: HTMLElement
     private _backUrl: string
@@ -74,7 +75,6 @@ export class AppState{
         },
     }
     private _searchTerm: string = ""
-    private _editComponentElement: EditComponent;
 
     /**
      * there is a really small chance here that this possibly falls victim to a race condition
@@ -278,6 +278,15 @@ export class AppState{
     }
 
 
+    get originElement(): HTMLElement {
+        return this._originElement
+    }
+
+    set originElement(value: HTMLElement) {
+        this._originElement = value
+        this.update()
+    }
+
     get rentFilters(): RentFilters {
         return this._rentFilters
     }
@@ -351,14 +360,5 @@ export class AppState{
         this.update()
         if(this._page == PageEnum.RENTS) RentService.fetchAll()
         if(this._page == PageEnum.EQUIPMENT) DeviceService.fetchAll()
-    }
-
-
-    get editComponentElement(): EditComponent {
-        return this._editComponentElement
-    }
-
-    set editComponentElement(value: EditComponent) {
-        this._editComponentElement = value
     }
 }

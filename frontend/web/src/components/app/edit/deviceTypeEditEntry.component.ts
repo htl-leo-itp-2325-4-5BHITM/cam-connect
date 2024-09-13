@@ -19,6 +19,7 @@ import UrlHandler from "../../../util/UrlHandler"
 import {EditPageEnum, ObservedProperty} from "../../../model"
 import {AppState} from "../../../AppState"
 import {model} from "../../../index"
+import {EditComponent} from "./edit.component"
 
 @customElement('cc-device-type-edit-entry')
 export class DeviceTypeEditEntryComponent extends LitElement {
@@ -64,7 +65,7 @@ export class DeviceTypeEditEntryComponent extends LitElement {
 
                 <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}"  @click="${() => {
                     //UrlHandler.updateUrl('/app/edit/devicetype?gid=' + this.deviceType.deviceType.type_id)
-                    this.appState.value.editComponentElement.showModal(this.deviceType, "update", EditPageEnum.DEVICETYPE)
+                    (model.appState.value.originElement as EditComponent).showModal(this.deviceType, "update", EditPageEnum.DEVICETYPE)
                 }}">
                     <div slot="left" class="icon accent">
                         ${unsafeSVG(icon(faPen).html[0])}

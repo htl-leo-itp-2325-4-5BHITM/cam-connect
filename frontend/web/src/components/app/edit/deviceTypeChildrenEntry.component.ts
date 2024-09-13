@@ -10,11 +10,11 @@ import {EditPageEnum, ObservedProperty} from "../../../model"
 import {AppState} from "../../../AppState"
 import {model} from "../../../index"
 import UrlHandler from "../../../util/UrlHandler"
+import {EditComponent} from "./edit.component"
 
 @customElement('cc-device-type-children-entry')
 export class DeviceTypeChildrenEntryComponent extends LitElement {
-    @property()
-    device: Device
+    @property() device: Device
 
     @property() private appState: ObservedProperty<AppState>
 
@@ -27,7 +27,7 @@ export class DeviceTypeChildrenEntryComponent extends LitElement {
         return html`
             <style>${styles}</style>
             
-            <h3>${this.device.number}</h3>
+            <h3 class="children">${this.device.number}</h3>
 
             <div class="deviceInfos">
                 ${this.getPropertyValue("Seriennummer", this.device.serial)}
@@ -39,7 +39,7 @@ export class DeviceTypeChildrenEntryComponent extends LitElement {
             <div class="edit">
                 <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}"  @click="${() => {
                     //UrlHandler.updateUrl('/app/edit/device?did=' + this.device.device_id)
-                    this.appState.value.editComponentElement.showModal(this.device, "update", EditPageEnum.DEVICE)
+                    (model.appState.value.originElement as EditComponent).showModal(this.device, "update", EditPageEnum.DEVICE)
                 }}">
                     <div slot="left" class="icon accent">
                         ${unsafeSVG(icon(faPen).html[0])}

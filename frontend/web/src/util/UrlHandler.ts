@@ -1,11 +1,11 @@
 import {model} from "../index"
 import {EditPageEnum, PageEnum} from "../model"
-import {html} from "lit"
+import {html, render} from "lit"
 import {DeviceTypeVariantEnum} from "../service/deviceType.service"
 
 let pages = {
     app: {
-        handler: () => { UrlHandler.changeOrigin("cc-app") },
+        handler: () => { UrlHandler.changeOrigin("cc-dashboard") },
         children: {
             rents: {
                 handler: () => { model.appState.value.page = PageEnum.RENTS },
@@ -87,13 +87,15 @@ export default class UrlHandler {
     }
 
     static changeOrigin(tagName: string){
-        document.querySelectorAll(".origin").forEach(elem => {
+        model.appState.value.appElement.querySelectorAll(".origin").forEach(elem => {
             elem.remove()
         })
         let elem = document.createElement(tagName)
         elem.classList.add("origin")
-        console.log("changing orign to", tagName)
-        document.body.appendChild(elem)
+        /*console.log("changing orign to", tagName)
+        render(elem, model.appState.value.appElement)*/
+        model.appState.value.originElement = elem
+        model.appState.value.originElementLoaded.next(true)
     }
 
     /**

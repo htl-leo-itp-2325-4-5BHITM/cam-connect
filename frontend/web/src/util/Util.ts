@@ -57,7 +57,7 @@ export default class Util{
         }
     }*/
 
-    static deepEventFocusedElement(startpoint: HTMLElement = document.querySelector("cc-app") as HTMLElement): HTMLElement{
+    static deepEventFocusedElement(startpoint: HTMLElement = document.querySelector("cc-dashboard") as HTMLElement): HTMLElement{
         let focusedElem:HTMLElement = startpoint
         while (focusedElem != undefined) {
             let newFocusedElem = focusedElem?.shadowRoot?.activeElement as HTMLElement
@@ -273,8 +273,6 @@ export class AnimationHelper{
 
         elemAsHTMLElement.dataset.visibility = "hiding"
 
-        console.log("hiding")
-
         elem.animate([
             {opacity: 1, transform: "translateY(0)"},
             {opacity: 0, transform: "translateY(5px)"},
@@ -289,7 +287,6 @@ export class AnimationHelper{
             if(elemAsHTMLElement.dataset.visibility == "hiding") {
                 elemAsHTMLElement.style.display = "none"
                 elemAsHTMLElement.dataset.visibility = "hidden"
-                console.log("actually hiding")
             }
         },duration)
     }
