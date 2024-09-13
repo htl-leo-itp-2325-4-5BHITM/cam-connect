@@ -29,7 +29,9 @@ export class DeviceTypeEditComponent extends LitElement {
                 <cc-toolbar type="edit"></cc-toolbar>
 
                 <main>
-                    <h1>XXX-Gerätetypen</h1>
+                    <h1>
+                        ${model.deviceTypeNameFilterOptions.getValue().find(value => value.id == this.appState.value.editPageType)?.name}-Gerätetypen
+                    </h1>
 
                     ${Object.values(this.deviceTypesFull.value)?.flat().map(deviceType => {
                         if(deviceType.deviceType.variant == this.appState.value.editPageType){

@@ -44,7 +44,14 @@ div.edit{
 
 h3{
   font-size: 1rem;
-  width: 9vw;
+  width: 15ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &.children{
+    width: 4ch;
+  }
 }
 
 div{
@@ -61,4 +68,5 @@ div{
 
 cc-circle-select{
   margin-left: auto;
+  z-index: 10;
 }

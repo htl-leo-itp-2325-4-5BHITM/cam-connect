@@ -30,6 +30,7 @@ import "./components/app/edit/deviceTypeChildrenEntry.component"
 import "./components/app/rentDetailView.component"
 
 import "./components/app/app.component"
+import "./components/app/dashboard.component"
 import "./components/externalConfirm.component"
 import "./components/notFound.component"
 import "./components/login.component"
@@ -47,6 +48,7 @@ import UrlHandler from "./util/UrlHandler"
 
 import favicon from "../assets/logo/cc-logomark-accent.svg"
 import {KeyBoardShortCut} from "./util/KeyboardShortcut"
+import {AppComponent} from "./components/app/app.component"
 
 //OMG its our single swouce of THWQUUUCE
 export let model = new Model()
@@ -95,3 +97,5 @@ KeyBoardShortCut.register(["escape"], () => {model.appState.value.cancelCurrentA
     }
     console.log(focusedElem)
 }, 2000)*/
+
+document.body.appendChild(new AppComponent())

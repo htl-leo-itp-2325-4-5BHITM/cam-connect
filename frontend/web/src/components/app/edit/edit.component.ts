@@ -34,7 +34,6 @@ export class EditComponent extends LitElement {
 
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
-        this.appState.value.editComponentElement = this
     }
 
     render() {
@@ -43,12 +42,6 @@ export class EditComponent extends LitElement {
             <cc-navbar type="back"></cc-navbar>
 
             <cc-sidebar accountname="Martin Huemer" type="edit"></cc-sidebar>
-
-            <div class="editModal" hidden="hidden">
-                <div class="content">
-                    ${this.getModalContent(this.appState.value.editPage)}
-                </div>
-            </div>
 
             ${this.getComponent()}
         `
@@ -73,12 +66,7 @@ export class EditComponent extends LitElement {
     }
 
     showModal(element: Device | DeviceTypeFullDTO, type: "create" | "update", editPageType : EditPageEnum){
-        this.shadowRoot.querySelector(".editModal").setAttribute("hidden", "false")
-
-        render(
-            this.getModalContent(editPageType),
-            this.shadowRoot.querySelector(".editModal .content") as HTMLElement
-        )
+        model.appState.value.openOverlay(this.getModalContent(editPageType), () => {})
     }
 
     closeModal(){
@@ -156,21 +144,6 @@ export class EditComponent extends LitElement {
                     ></cc-autocomplete>
                 <cc-input placeholder="Gerätenummer"></cc-input>
                 <cc-input placeholder="Seriennummer"></cc-input>
-
-                
-                <div class="separator">
-                    <cc-line></cc-line>
-                </div>
-
-                <div class="tags">
-                    <cc-toggle>Gerät ist aktiv</cc-toggle>
-                    <cc-input placeholder="Notiz" type="${InputType.TEXTAREA}"></cc-input>
-                </div>
-
-                <div class="navigation">
-                    <cc-button color="${ColorEnum.GRAY}" @click="${() => {this.closeModal()}}">Abbrechen</cc-button>
-                    <cc-button>Erstellen</cc-button>
-                </div>
             `
         }
     }
