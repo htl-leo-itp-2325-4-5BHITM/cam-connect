@@ -5,86 +5,26 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-public class Student {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long student_id;
-    
-    private String firstname;
-    private String lastname;
+public class Student extends User {
     private String school_class;
-    private String email;
-    private String username;
-    private String password;
 
     @OneToMany(fetch = FetchType.EAGER)
     private List<DeviceType> favourites;
 
+    public Student(String firstname, String lastname, String email, String username, String password, String school_class) {
+        super(firstname, lastname, email, username, password);
+        this.school_class = school_class;
+    }
+
     public Student() {
     }
 
-    public Student( String school_class, String lastname, String firstname, String email) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.school_class = school_class;
-        this.email = email;
-    }
-
     @Override
-    public String toString() {
-        return "Student{" +
-                "student_id=" + student_id +
-                ", firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", school_class='" + school_class + '\'' +
-                ", password='" + password + '\'' +
-                ", username='" + username + '\'' +
-                '}';
-    }
-
-    public long getStudent_id() {
-        return student_id;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getSchool_class() {
-        return school_class;
-    }
-
-    public void setSchool_class(String schoolclass) {
-        this.school_class = schoolclass;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        //TODO encrypt the password
-        this.password = password;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+    public String getEmail() {
+        if(this.email != null)
+            return this.email;
+        else
+            return this.getFirstname().toLowerCase().charAt(0) + "." + this.getLastname().toLowerCase() + "@students.htl-leonding.ac.at";
     }
 
     public List<DeviceType> getFavourites() {
@@ -93,13 +33,5 @@ public class Student {
 
     public void addFavourite(DeviceType favourite) {
         this.favourites.add(favourite);
-    }
-
-    public String getEmail() {
-        return email != null ? email : firstname.toLowerCase().charAt(0)+"."+lastname.toLowerCase()+"@students.htl-leonding.ac.at";
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 }

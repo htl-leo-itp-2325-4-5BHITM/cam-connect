@@ -48,7 +48,7 @@ public class StudentRepository{
 
     public List<AutocompleteOptionDTO> search(String searchTerm){
         return em.createQuery(
-                        "SELECT new at.camconnect.dtos.AutocompleteOptionDTO(s, s.id) FROM Student s " +
+                        "SELECT new at.camconnect.dtos.AutocompleteOptionDTO(s, s.user_id) FROM Student s " +
                                 "WHERE UPPER(s.firstname) LIKE :searchTerm " +
                                 "OR UPPER(s.lastname) LIKE :searchTerm " +
                                 "OR UPPER(CONCAT(s.firstname, ' ', s.lastname)) LIKE :searchTerm",
@@ -57,6 +57,11 @@ public class StudentRepository{
                 .getResultList();
     }
 
+    /**
+     * Imports students from a csv file
+     * Format: firstname;lastname;email;username;password;school_class
+     * @param file
+     */
     public void importStudents(File file) {
         //TODO fix the null checks when even when no file is uploaded the 1105 is never thrown only the weird arraylength check works
         if(file == null) throw new CCException(1105);
@@ -72,12 +77,12 @@ public class StudentRepository{
             lineArray[0] = lineArray[0].replaceAll("[^a-zA-Z_-]", "");
 
             //checks if the csv file matches the required structure
-            if(lineArray.length != 4) throw new CCException(1204, "invalid line length");
+            if(lineArray.length != 6) throw new CCException(1204, "invalid line length");
 
             while ((line = reader.readLine()) != null) {
                 lineArray = line.split(";");
                 if(lineArray.length != 4) break;
-                create(new Student(lineArray[0], lineArray[1], lineArray[2], lineArray[3]));
+                create(new Student(lineArray[0], lineArray[1], lineArray[2], lineArray[3], lineArray[4], lineArray[5]));
             }
         } catch (IOException e) {
             throw new CCException(1204, "File could not be read");

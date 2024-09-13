@@ -18,7 +18,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.StreamingOutput;
-import org.hibernate.exception.ConstraintViolationException;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -123,7 +122,6 @@ public class RentRepository {
                         rent.getRent_start(),
                         rent.getRent_end_planned(),
                         rent.getRent_end_actual(),
-                        rent.getAccessory(),
                         rent.getStudent(),
                         rent.getNote(),
                         rent.getVerification_message(),
@@ -148,9 +146,9 @@ public class RentRepository {
 
         List<Student> students = em.createQuery(
                 "SELECT s FROM Rent r " +
-                        "join Student s on r.student.student_id = s.student_id " +
+                        "join Student s on r.student.user_id = s.user_id " +
                         "where (s.school_class IN :schoolClasses OR :schoolClassesEmpty = true) " +
-                        "and (s.student_id IN :studentIds OR :studentIdsEmpty = true) " +
+                        "and (s.user_id IN :studentIds OR :studentIdsEmpty = true) " +
                         "and (" +
                         "       upper(s.firstname) like '%' || :searchTerm || '%' " +
                         "       OR :searchTerm like '%' || upper(s.firstname) || '%' " +
@@ -159,7 +157,7 @@ public class RentRepository {
                         "       OR :searchTerm like '%' || upper(s.firstname) || '%' || upper(s.lastname) || '%' " +
                         "       OR upper(s.firstname) || '%' || upper(s.lastname) like '%' || :searchTerm || '%' " +
                         "OR :searchTermEmpty = true) " +
-                        "group by s.student_id " +
+                        "group by s.user_id " +
                         orderByString
                 ,Student.class)
                 .setParameter("schoolClasses", filters.schoolClasses())
@@ -178,11 +176,11 @@ public class RentRepository {
         for (Student student : students) {
             List<RentDTO> rents = em.createQuery(
                     "SELECT r FROM Rent r " +
-                            "where r.student.student_id = :studentId " +
+                            "where r.student.user_id = :studentId " +
                             "and (r.status IN :statuses OR :statusesEmpty = true) " +
                             "order by r.id"
                     , Rent.class)
-                    .setParameter("studentId", student.getStudent_id())
+                    .setParameter("studentId", student.getUser_id())
                     .setParameter("statuses", filters.statuses())
                     .setParameter("statusesEmpty", filters.statuses().isEmpty())
                     .getResultStream()
@@ -197,7 +195,6 @@ public class RentRepository {
                             rent.getRent_start(),
                             rent.getRent_end_planned(),
                             rent.getRent_end_actual(),
-                            rent.getAccessory(),
                             rent.getStudent(),
                             rent.getNote(),
                             rent.getVerification_message(),
@@ -219,7 +216,23 @@ public class RentRepository {
 
     public RentDTO getByIdCensored(Long id){
         Rent rent = getById(id);
-        return new RentDTO(rent.getRent_id(), rent.getStatus(), rent.getType(), rent.getDevice(), rent.getDevice_string(), rent.getTeacher_start(), rent.getTeacher_end(), rent.getRent_start(), rent.getRent_end_planned(), rent.getRent_end_actual(), rent.getAccessory(), rent.getStudent(), rent.getNote(), rent.getVerification_message(), rent.getCreation_date(), rent.getChange_date());
+        return new RentDTO(
+            rent.getRent_id(),
+            rent.getStatus(),
+            rent.getType(),
+            rent.getDevice(),
+            rent.getDevice_string(),
+            rent.getTeacher_start(),
+            rent.getTeacher_end(),
+            rent.getRent_start(),
+            rent.getRent_end_planned(),
+            rent.getRent_end_actual(),
+            rent.getStudent(),
+            rent.getNote(),
+            rent.getVerification_message(),
+            rent.getCreation_date(),
+            rent.getChange_date()
+        );
     }
 
     public List<RentDTO> getByIdList(String[] idList){
@@ -424,11 +437,6 @@ public class RentRepository {
             catch (CCException ccex){ throw ccex; }
             catch(Exception ex){ throw new CCException(1105, "cannot update note " + ex.getMessage()); }
 
-        if(validateJsonKey(rentJson,"accessory"))
-            try{ setAccessory(id, rentJson.getString("accessory")); }
-            catch (CCException ccex){ throw ccex; }
-            catch(Exception ex){ throw new CCException(1105, "cannot update accessory " + ex.getMessage()); }
-
         if(validateJsonKey(rentJson,"device_string"))
             try{ setDeviceString(id, rentJson.getString("device_string")); }
             catch (CCException ccex){ throw ccex; }
@@ -538,10 +546,6 @@ public class RentRepository {
         rent.setNote(note);
     }
 
-    public void setAccessory(Long rentId, String accessory) {
-        Rent rent = getById(rentId);
-        rent.setAccessory(accessory);
-    }
     public void setDeviceString(Long rentId, String device_string) {
         Rent rent = getById(rentId);
         rent.setDevice_string(device_string);
@@ -598,19 +602,19 @@ public class RentRepository {
                 .append(rent.device().getDevice_id()).append(';')
                 .append(rent.device_string()).append(';');
 
-        Long teacherEndId = rent.teacher_end() != null ? rent.teacher_end().getTeacher_id() : null;
+        Long teacherEndId = rent.teacher_end() != null ? rent.teacher_end().getUser_id() : null;
         String teacherEndName = rent.teacher_end() != null
                 ? rent.teacher_end().getFirstname() + " " + rent.teacher_end().getLastname()
                 : null;
 
-        line.append(rent.teacher_start().getTeacher_id()).append(';')
+        line.append(rent.teacher_start().getUser_id()).append(';')
                 .append(rent.teacher_start().getFirstname()).append(' ').append(rent.teacher_start().getLastname()).append(';')
                 .append(teacherEndId).append(';')
                 .append(teacherEndName).append(';')
                 .append(rent.rent_start()).append(';')
                 .append(rent.rent_end_planned()).append(';')
                 .append(rent.rent_end_actual()).append(';')
-                .append(rent.student().getStudent_id()).append(';')
+                .append(rent.student().getUser_id()).append(';')
                 .append(rent.student().getFirstname()).append(' ').append(rent.student().getLastname()).append(';')
                 .append(rent.note()).append(';')
                 .append(rent.verification_message()).append(";\n");

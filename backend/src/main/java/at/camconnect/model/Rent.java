@@ -17,8 +17,10 @@ public class Rent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(length = 4)
     private Long rent_id;
+
     @Enumerated(EnumType.STRING)
     private RentStatusEnum status;
+
     @Enumerated(EnumType.STRING)
     private RentTypeEnum type;
 
@@ -27,38 +29,46 @@ public class Rent {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
     private Student student;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "device_id")
     private Device device;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id_start")
     private Teacher teacher_start;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id_end")
     private Teacher teacher_end;
+
     @Temporal(TemporalType.DATE)
     private LocalDate rent_start;
+
     @Temporal(TemporalType.DATE)
     private LocalDate rent_end_planned;
+
     @Temporal(TemporalType.DATE)
     private LocalDate rent_end_actual;
+
     private final LocalDateTime creation_date;
+
     private LocalDateTime change_date;
+
     @Column(length = 20)
     private String verification_code;
+
     @Column(length = 150)
     private String verification_message;
+
     @Column(length = 150)
     private String note;
+
     @Column(length = 100)
     private String device_string;
-
-    //TODO remove these when moving to new UI permanently - also remove them in repo resource and update functions
-    private String accessory;
-
 
     public Rent(){
         this.status = RentStatusEnum.WAITING;
@@ -156,14 +166,6 @@ public class Rent {
     }
 
     //region getter setter
-    public String getAccessory() {
-        return accessory;
-    }
-
-    public void setAccessory(String accessory) {
-        this.accessory = accessory;
-        this.updateChangeDate();
-    }
 
     public Long getRent_id()  {
         return rent_id;
