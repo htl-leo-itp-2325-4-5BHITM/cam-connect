@@ -238,7 +238,6 @@ export class AnimationHelper{
     }
 
     static show(elem: Element, display: string = "block", duration: number = 200){
-        console.log("showing")
         let elemAsHTMLElement = elem as HTMLElement
 
         if(elemAsHTMLElement.dataset.visibility == "visible") return
@@ -262,7 +261,6 @@ export class AnimationHelper{
             elemAsHTMLElement.style.opacity = "1"
             elemAsHTMLElement.style.display = display
             elemAsHTMLElement.dataset.visibility = "visible"
-            console.log("actually showing")
         },duration)
     }
 

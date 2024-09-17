@@ -72,7 +72,7 @@ export class CreateRentComponent extends LitElement {
             </div>
 
             <cc-autocomplete placeholder="Schüler" class="studentSelector" color="${SimpleColorEnum.ACCENT}" size="${SizeEnum.MEDIUM}"
-                             .onSelect="${(student: Student) => {this.student_id = student.student_id}}"
+                             .onSelect="${(student: Student) => {this.student_id = student.user_id}}"
                              .querySuggestions="${this.searchForStudent}"
                              .iconProvider="${()=>{return html`${unsafeSVG(icon(faUser).html[0])}`}}" 
                              .contentProvider="${(data: Student) => {return `${data.firstname} ${data.lastname} • ${data.school_class}`}}"

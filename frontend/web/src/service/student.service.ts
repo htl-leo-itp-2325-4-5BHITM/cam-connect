@@ -1,15 +1,11 @@
 import {model} from "../index"
 import {Api} from "../util/Api"
+import {User} from "./user.service"
+import {DeviceType} from "./deviceType.service"
 
-export interface Student{
-    student_id: number,
-    firstname: string,
-    lastname: string,
-    email: string,
-    password: string,
-    username: string,
-    favourites: [string],
+export interface Student extends User {
     school_class: string
+    favourites: DeviceType[]
 }
 
 export default class StudentService {

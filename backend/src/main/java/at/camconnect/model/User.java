@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "app_user")
-public class User {
+public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long user_id;
@@ -16,8 +16,8 @@ public class User {
     private String username;
     private String password;
 
-    private final LocalDate creationDate;
-    private LocalDate lastPWCheck;
+    private final LocalDate creation_date;
+    private LocalDate last_pw_check;
 
     public Long getUser_id() {
         return user_id;
@@ -33,7 +33,7 @@ public class User {
     }
 
     public User() {
-        this.creationDate = LocalDate.now();
+        this.creation_date = LocalDate.now();
     }
 
     public String getFirstname() {
@@ -76,11 +76,11 @@ public class User {
         this.username = userId;
     }
 
-    public LocalDate getLastPWCheck() {
-        return lastPWCheck;
+    public LocalDate getLast_pw_check() {
+        return last_pw_check;
     }
 
-    public void setLastPWCheck(LocalDate lastPWCheck) {
-        this.lastPWCheck = lastPWCheck;
+    public void setLast_pw_check(LocalDate lastPWCheck) {
+        this.last_pw_check = lastPWCheck;
     }
 }

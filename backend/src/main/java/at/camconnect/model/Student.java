@@ -1,5 +1,7 @@
 package at.camconnect.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -8,7 +10,8 @@ import java.util.List;
 public class Student extends User {
     private String school_class;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany()
+    @JsonIgnore
     private List<DeviceType> favourites;
 
     public Student(String firstname, String lastname, String email, String username, String password, String school_class) {
@@ -33,5 +36,13 @@ public class Student extends User {
 
     public void addFavourite(DeviceType favourite) {
         this.favourites.add(favourite);
+    }
+
+    public String getSchool_class() {
+        return school_class;
+    }
+
+    public void setSchool_class(String school_class) {
+        this.school_class = school_class;
     }
 }

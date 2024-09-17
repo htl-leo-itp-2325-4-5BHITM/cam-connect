@@ -2,6 +2,7 @@ package at.camconnect.repository;
 
 import at.camconnect.dtos.AutocompleteOptionDTO;
 import at.camconnect.dtos.StudentDTO;
+import at.camconnect.model.User;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.model.Student;
 
@@ -16,26 +17,24 @@ import java.io.*;
 import java.util.*;
 
 @ApplicationScoped
+@Transactional
 public class StudentRepository{
     @Inject
     EntityManager em;
 
-    @Transactional
     public void create(Student s){
         em.persist(s);
     }
 
-    @Transactional
     public void remove(Student s){
         em.remove(s);
     }
 
-    @Transactional
     public void update(Student s){
         em.merge(s);
     }
 
-    public Student getById(long id){
+    public Student getById(Long id){
         Student result = em.find(Student.class, id);
         if (result == null) throw new CCException(1101);
         return result;

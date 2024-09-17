@@ -73,14 +73,14 @@ export class RentListStudentComponent extends LitElement {
                 </cc-button>
                 <div class="right">
                     <cc-button type="${ButtonType.OUTLINED}" size="${SizeEnum.SMALL}" 
-                               @click="${() => model.appState.value.openCreateRentModal(this.rentByStudent.student.student_id)}"
+                               @click="${() => model.appState.value.openCreateRentModal(this.rentByStudent.student.user_id)}"
                     >Verleih erstellen</cc-button>
                     <cc-button type="${ButtonType.TEXT}" color="${SimpleColorEnum.GRAY}" size="${SizeEnum.SMALL}" 
                                @click="${() => {
                                    UrlHandler.updateUrl("/app/rents/details")
-                                   UrlHandler.setParam("sid", student.student_id.toString())
+                                   UrlHandler.setParam("sid", String(student.user_id))
                                    model.appState.value.openOverlay(
-                                       html`<cc-rent-detail-view .studentId="${student.student_id}"></cc-rent-detail-view>`, 
+                                       html`<cc-rent-detail-view .studentId="${student.user_id}"></cc-rent-detail-view>`, 
                             () => { UrlHandler.updateUrl("/app/rents") }
                                    )
                                }}"

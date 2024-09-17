@@ -1,13 +1,8 @@
 import {model} from "../index"
 import {Api} from "../util/Api"
+import {User} from "./user.service"
 
-export interface Teacher{
-    teacher_id: number,
-    firstname: string,
-    lastname: string,
-    email: string,
-    username: string
-}
+export interface Teacher extends User{}
 
 export default class TeacherService {
     static fetchAll(){
