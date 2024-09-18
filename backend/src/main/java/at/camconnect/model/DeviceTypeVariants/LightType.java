@@ -19,21 +19,23 @@ public class LightType extends DeviceType {
     @Column(length = 6)
     private boolean variable_temperature;
 
-    public LightType() {
-        super();
-        setVariant(DeviceTypeVariantEnum.light);
-    }
-
-    public LightType(Long type_id, LocalDateTime creation_date, String name, String image, DeviceTypeStatusEnum status, DeviceTypeVariantEnum variant, int watts, boolean rgb, boolean variable_temperature) {
-        super(type_id, creation_date, name, image, status, variant);
+    public LightType(String name, String image, int watts, boolean rgb, boolean variable_temperature) {
+        super(name, image, DeviceTypeVariantEnum.light);
         this.watts = watts;
         this.rgb = rgb;
         this.variable_temperature = variable_temperature;
     }
 
+    public LightType() {
+        super();
+        setVariant(DeviceTypeVariantEnum.light);
+    }
+
     @Override
     public void update(DeviceTypeGlobalObjectsDTO data) {
         try{
+            setName(data.name());
+            setImage_blob_url(data.image());
             setRgb(data.rgb());
             setWatts(data.watts());
             setVariable_temperature(data.variable_temperature());
@@ -44,24 +46,12 @@ public class LightType extends DeviceType {
 
     @Override
     public String toString() {
-        return String.format("%d;%s;%s;%s;%s;%s;%d;%b;%b;\n",
-                getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
-                getWatts(), isRgb(), isVariable_temperature());
-    }
-
-    @Override
-    public String getFullExportString() {
-        return String.format("%d;%s;%s;%s;%s;%s; ; ; ; ; ; ; ; ; ;%d;%b;%b; ; ; ; ; ; ; ; ;\n",
-                getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
-                getWatts(),
-                isRgb(),
-                isVariable_temperature()
-        );
+        return "asdf";
     }
 
     @Override
     public DeviceTypeGlobalIdDTO toGlobalDTO() {
-        return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getImage(), isRgb(), isVariable_temperature(), getWatts());
+        return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getImage_blob_url(), isRgb(), isVariable_temperature(), getWatts());
     }
 
     public int getWatts() {

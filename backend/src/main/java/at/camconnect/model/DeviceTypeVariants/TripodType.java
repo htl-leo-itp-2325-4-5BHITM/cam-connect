@@ -34,24 +34,12 @@ public class TripodType extends DeviceType {
 
     @Override
     public String toString() {
-        return String.format("%d;%s;%s;%s;%s;%s;%d;%d;\n",
-                getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
-                getHeight_centimeters(),
-                getHead() != null ? getHead().getAttribute_id() : null);
-    }
-
-    @Override
-    public String getFullExportString() {
-        return String.format("%d;%s;%s;%s;%s;%s; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;%d;%d;;\n",
-                getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
-                getHeight_centimeters(),
-                getHead() != null ? getHead().getAttribute_id() : null
-        );
+        return "todo";
     }
 
     @Override
     public DeviceTypeGlobalIdDTO toGlobalDTO() {
-        return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getImage(), getHeight_centimeters(), getHead().getAttribute_id());
+        return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getImage_blob_url(), getHeight_centimeters(), getHead().getAttribute_id());
     }
 
     public TripodType() {
@@ -59,8 +47,8 @@ public class TripodType extends DeviceType {
         setVariant(DeviceTypeVariantEnum.tripod);
     }
 
-    public TripodType(Long type_id, LocalDateTime creation_date, String name, String image, DeviceTypeStatusEnum status, DeviceTypeVariantEnum variant, int height_centimeters, TripodHead head) {
-        super(type_id, creation_date, name, image, status, variant);
+    public TripodType(String name, String image, int height_centimeters, TripodHead head) {
+        super(name, image, DeviceTypeVariantEnum.tripod);
         this.height_centimeters = height_centimeters;
         this.head = head;
     }

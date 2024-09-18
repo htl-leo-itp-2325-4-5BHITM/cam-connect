@@ -3,10 +3,14 @@
 # Simple
 - Name
 - Image
+- Description
 
 # Camera
-- sensor
-- resolution
-- mount
-- 
-- autofocus
+- Name
+- Image
+
+- Sensor
+- Mount
+- Autofocus
+
+# 

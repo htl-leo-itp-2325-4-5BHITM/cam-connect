@@ -21,8 +21,8 @@ public class SimpleType extends DeviceType {
         setVariant(DeviceTypeVariantEnum.simple);
     }
 
-    public SimpleType(Long type_id, LocalDateTime creation_date, String name, String image, DeviceTypeStatusEnum status, DeviceTypeVariantEnum variant, String description) {
-        super(type_id, creation_date, name, image, status, variant);
+    public SimpleType(String name, String image, String description) {
+        super(name, image, DeviceTypeVariantEnum.simple);
         this.description = description;
     }
 
@@ -37,22 +37,12 @@ public class SimpleType extends DeviceType {
 
     @Override
     public String toString() {
-        return String.format("%d;%s;%s;%s;%s;%s;%s;\n",
-                getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
-                getDescription());
-    }
-
-    @Override
-    public String getFullExportString() {
-        return String.format("%d;%s;%s;%s;%s;%s; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;%s;\n",
-                getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
-                getDescription()
-        );
+        return "todo";
     }
 
     @Override
     public DeviceTypeGlobalIdDTO toGlobalDTO() {
-        return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getDescription(), getImage());
+        return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getDescription(), getImage_blob_url());
     }
 
     public String getDescription() {

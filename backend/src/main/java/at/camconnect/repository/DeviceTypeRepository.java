@@ -78,7 +78,7 @@ public class DeviceTypeRepository {
         List<DeviceTypeMinimalDTO> deviceTypes = new LinkedList<DeviceTypeMinimalDTO>();
 
         deviceTypes = em.createQuery(
-                        "SELECT new at.camconnect.dtos.deviceType.DeviceTypeMinimalDTO(d.id, d.variant, d.name, d.image) FROM DeviceType d " +
+                        "SELECT new at.camconnect.dtos.deviceType.DeviceTypeMinimalDTO(d.id, d.variant, d.name, d.image_blob_url) FROM DeviceType d " +
                                 "WHERE UPPER(d.name) LIKE :searchTerm " +
                                 "order by name",
                         DeviceTypeMinimalDTO.class)
@@ -135,13 +135,33 @@ public class DeviceTypeRepository {
         DeviceType deviceType = getById(id); //should result in a child of DeviceType like CameraType
 
         deviceType.setName(data.name());
-        deviceType.setImage(data.image());
+        deviceType.setImage_blob_url(data.image());
 
         //The DeviceTypeDTO is converted into a DeviceType global which contains objects instead of ids
         DeviceTypeGlobalObjectsDTO dataWithObjects = new DeviceTypeGlobalObjectsDTO(
-                data.type_id(), data.name(), data.image(), data.autofocus(), data.f_stop(), data.focal_length(), data.height_centimeters(), data.max_range(), data.max_weight_kilograms(), data.needsrecorder(), data.number_of_axis(), data.autofocus(), data.variable_temperature(), data.watts(), data.windblocker(), data.wireless(),
-                getAttribute(TripodHead.class, data.head_id()), getAttribute(LensMount.class, data.mount_id()), getAttribute(CameraResolution.class, data.resolution_id()), getAttribute(CameraSensor.class, data.sensor_id()), getAttribute(CameraSystem.class, data.system_id()),
-                data.flight_time(), data.description());
+                data.type_id(),
+                data.name(),
+                data.image(),
+                data.autofocus(),
+                data.f_stop(),
+                data.focal_length(),
+                data.height_centimeters(),
+                data.max_weight_kilograms(),
+                data.max_range(),
+                data.flight_time(),
+                data.requires_license(),
+                data.needs_recorder(),
+                data.needs_power(),
+                data.number_of_axis(),
+                data.rgb(),
+                data.variable_temperature(),
+                data.watts(),
+                em.find(AudioConnector.class, data.connector_id()),
+                em.find(TripodHead.class, data.head_id()),
+                em.find(LensMount.class, data.mount_id()),
+                em.find(CameraSystem.class, data.system_id()),
+                data.description()
+        );
 
         //just call the update method on whichever child class it is
         deviceType.update(dataWithObjects);
@@ -182,7 +202,7 @@ public class DeviceTypeRepository {
     public Response exportAllDeviceTypeVariants() {
         StreamingOutput stream = os -> {
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(os))) {
-                writer.write("type_id; name; image; autofocus; f_stop; focal_length; height_centimeters; max_range; max_weight_kilograms; needsrecorder; number_of_axis; rgb; variable_temperature; watts; windblocker; wireless; head_id; mount_id; resolution_id; sensor_id; system_id; flight_time; description\n");
+                writer.write("type_id; name; image; autofocus; f_stop; focal_length; height_centimeters; max_range; max_weight_kilograms; needs_recorder; number_of_axis; rgb; variable_temperature; watts; needs_power; wireless; head_id; mount_id; resolution_id; sensor_id; system; flight_time_minutes; description\n");
 
                 List<DeviceTypeFullDTO> deviceTypeList = getAllFull();
                 for (DeviceTypeFullDTO deviceType : deviceTypeList) {
@@ -208,7 +228,7 @@ public class DeviceTypeRepository {
     public Response exportDeviceTypeVariant(DeviceTypeVariantEnum variant) {
         StreamingOutput stream = os -> {
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(os))) {
-                writer.write("type_id; name; image; autofocus; f_stop; focal_length; height_centimeters; max_range; max_weight_kilograms; needsrecorder; number_of_axis; rgb; variable_temperature; watts; windblocker; wireless; head_id; mount_id; resolution_id; sensor_id; system_id; flight_time; description");
+                writer.write("type_id; name; image; autofocus; f_stop; focal_length; height_centimeters; max_range; max_weight_kilograms; needs_recorder; number_of_axis; rgb; variable_temperature; watts; needs_power; wireless; head_id; mount_id; resolution_id; sensor_id; system; flight_time_minutes; description");
 
                 List<DeviceTypeFullDTO> deviceTypeList = getAllFull();
                 for (DeviceTypeFullDTO deviceType : deviceTypeList) {
@@ -229,11 +249,11 @@ public class DeviceTypeRepository {
     private String getCSVHeader(String type) {
         String base = "type_id;creation_date;name;image;status;variant;";
         return base + switch(type){
-            case "camera" -> "sensor_id;resolution_id;mount_id;system_id;autofocus;\n";
+            case "camera" -> "sensor_id;resolution_id;mount_id;system;autofocus;\n";
             case "drone" -> "sensor_id;resolution_id;max_range;\n";
             case "lens" -> "f_stop;mount_id;focal_length;\n";
             case "light" -> "watts;rgb;variable_temperature;\n";
-            case "microphone" -> "windblocker;wireless;needs_recorder;\n";
+            case "microphone" -> "needs_power;wireless;needs_recorder;\n";
             case "stabilizer" ->"max_weight_kilograms;number_of_axis;\n";
             case "tripod" -> "height_centimeters;head_id;\n";
             case "simple" -> "description;\n";

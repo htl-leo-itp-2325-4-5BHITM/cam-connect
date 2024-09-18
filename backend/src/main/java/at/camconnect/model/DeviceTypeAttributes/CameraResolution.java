@@ -20,6 +20,8 @@ public class CameraResolution extends DeviceTypeAttribute {
     @Override
     public void update(DeviceTypeAttributeDTO data) {
         setResolution(data.resolution());
+        setName(data.name());
+        setDetails(data.details());
     }
 
     public String getResolution() {

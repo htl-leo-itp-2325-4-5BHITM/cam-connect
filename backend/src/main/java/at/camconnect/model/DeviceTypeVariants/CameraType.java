@@ -14,22 +14,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
-import java.time.LocalDateTime;
-
 @Entity
 public class CameraType extends DeviceType {
-    @ManyToOne
-    @JoinColumn(name = "sensor_id")
-    private CameraSensor sensor;
-    @ManyToOne
-    @JoinColumn(name = "resolution_id")
-    private CameraResolution resolution;
     @ManyToOne
     @JoinColumn(name = "mount_id")
     private LensMount mount;
     @ManyToOne
     @JoinColumn(name = "system_id")
     private CameraSystem system;
+    @ManyToOne
+    @JoinColumn(name = "photoresolution_id")
+    private CameraResolution photoresolution;
     private boolean autofocus;
 
     @Override
@@ -37,9 +32,7 @@ public class CameraType extends DeviceType {
         try {
             setAutofocus(data.autofocus());
             setMount(data.mount());
-            setResolution(data.resolution());
             setSystem(data.system());
-            setSensor(data.sensor());
         }catch (Exception ex){
             throw new CCException(1106);
         }
@@ -49,10 +42,8 @@ public class CameraType extends DeviceType {
         super();
         setVariant(DeviceTypeVariantEnum.camera);
     }
-    public CameraType(Long type_id, LocalDateTime creation_date, String name, String image, DeviceTypeStatusEnum status, DeviceTypeVariantEnum variant, CameraSensor sensor, CameraResolution resolution, LensMount mount, CameraSystem system, int framerate, boolean autofocus) {
-        super(type_id, creation_date, name, image, status, variant);
-        this.sensor = sensor;
-        this.resolution = resolution;
+    public CameraType(String name, String image, LensMount mount, CameraSystem system, boolean autofocus) {
+        super(name, image, DeviceTypeVariantEnum.camera);
         this.mount = mount;
         this.system = system;
         this.autofocus = autofocus;
@@ -60,45 +51,12 @@ public class CameraType extends DeviceType {
 
     @Override
     public String toString() {
-        return String.format("%d;%s;%s;%s;%s;%s;%d;%d;%d;%d;%d;%b;\n",
-                getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
-                getSensor() != null ? getSensor().getAttribute_id() : null,
-                getResolution() != null ? getResolution().getAttribute_id() : null,
-                getMount() != null ? getMount().getAttribute_id() : null,
-                getSystem() != null ? getSystem().getAttribute_id(): null,
-                isAutofocus());
-    }
-
-    @Override
-    public String getFullExportString() {
-        return String.format("%d;%s;%s;%s;%s;%s;%d;%d;%d;%d;%b; ; ; ; ; ; ; ; ; ; ; ; ; ; ;\n",
-                getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
-                getSensor() != null ? getSensor().getAttribute_id() : null,
-                getResolution() != null ? getResolution().getAttribute_id() : null,
-                getMount() != null ? getMount().getAttribute_id() : null,
-                getSystem() != null ? getSystem().getAttribute_id(): null,
-                isAutofocus());
+        return "todo";
     }
 
     @Override
     public DeviceTypeGlobalIdDTO toGlobalDTO() {
-        return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getImage(), isAutofocus(), getMount().getAttribute_id(), getResolution().getAttribute_id(), getSensor().getAttribute_id(), getSystem().getAttribute_id());
-    }
-
-    public CameraSensor getSensor() {
-        return sensor;
-    }
-
-    public void setSensor(CameraSensor sensor) {
-        this.sensor = sensor;
-    }
-
-    public CameraResolution getResolution() {
-        return resolution;
-    }
-
-    public void setResolution(CameraResolution resolution) {
-        this.resolution = resolution;
+        return null;
     }
 
     public LensMount getMount() {

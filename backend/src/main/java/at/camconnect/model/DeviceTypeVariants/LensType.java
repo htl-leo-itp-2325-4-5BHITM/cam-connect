@@ -24,21 +24,23 @@ public class LensType extends DeviceType {
     @Column(length = 15)
     private String focal_length;
 
-    public LensType() {
-        super();
-        setVariant(DeviceTypeVariantEnum.lens);
-    }
-
-    public LensType(Long type_id, LocalDateTime creation_date, String name, String image, DeviceTypeStatusEnum status, DeviceTypeVariantEnum variant, LensMount lens_mount, String f_stop, String focal_length) {
-        super(type_id, creation_date, name, image, status, variant);
+    public LensType(String name, String image, LensMount lens_mount, String f_stop, String focal_length) {
+        super(name, image, DeviceTypeVariantEnum.lens);
         this.f_stop = f_stop;
         this.lens_mount = lens_mount;
         this.focal_length = focal_length;
     }
 
+    public LensType() {
+        super();
+        setVariant(DeviceTypeVariantEnum.lens);
+    }
+
     @Override
     public void update(DeviceTypeGlobalObjectsDTO data) {
         try{
+            setName(data.name());
+            setImage_blob_url(data.image());
             setF_stop(data.f_stop());
             setFocal_length(data.focal_length());
             setLens_mount(data.mount());
@@ -49,26 +51,12 @@ public class LensType extends DeviceType {
 
     @Override
     public String toString() {
-        return String.format("%d;%s;%s;%s;%s;%s;%d;%s;%s;\n",
-                getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
-                getLens_mount() != null ? getLens_mount().getAttribute_id() : null,
-                getF_stop(),
-                getFocal_length());
-    }
-
-    @Override
-    public String getFullExportString() {
-        return String.format("%d;%s;%s;%s;%s;%s; ; ;%d; ; ; ; ;%s;%s; ; ; ; ; ; ; ; ; ; ; ;\n",
-                getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
-                getLens_mount() != null ? getLens_mount().getAttribute_id() : null,
-                getF_stop(),
-                getFocal_length()
-        );
+        return "todo";
     }
 
     @Override
     public DeviceTypeGlobalIdDTO toGlobalDTO() {
-        return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getImage(), getF_stop(), getFocal_length(), getLens_mount().getAttribute_id());
+        return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getImage_blob_url(), getF_stop(), getFocal_length(), getLens_mount().getAttribute_id());
     }
 
     //region getter setter

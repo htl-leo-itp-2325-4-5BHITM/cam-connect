@@ -7,12 +7,6 @@ insert into devicetypeattribute(dtype, name, resolution, details) values ('Camer
 insert into devicetypeattribute(dtype, name, resolution, details) values ('CameraResolution', '1080p', '1920 x 1080', 'Standard High Definition resolution');
 insert into devicetypeattribute(dtype, name, resolution, details) values ('CameraResolution', '720p', '1280 x 720', 'Standard High Definition resolution');
 
--- Camera Sensors
-insert into devicetypeattribute(dtype, name, details, size) values ('CameraSensor', 'Full Frame', 'crazy', 'iwie x * y millimeter');
-insert into devicetypeattribute(dtype, name, details, size) values ('CameraSensor', 'Micro Four Thirds', 'cool', ' iwie x * y millimeter');
-insert into devicetypeattribute(dtype, name, details, size) values ('CameraSensor', 'APS-C', 'Good balance of size and quality', 'iwie x * y millimeter');
-insert into devicetypeattribute(dtype, name, details, size) values ('CameraSensor', 'Medium Format', 'Larger sensor for higher image quality', 'iwie x * y millimeter');
-
 -- Lens Mounts
 insert into devicetypeattribute(dtype, name, details) values ('LensMount', 'Canon RF', 'Used by Canon mirrorless cameras');
 insert into devicetypeattribute(dtype, name, details) values ('LensMount', 'Nikon Z', 'Used by Nikon mirrorless cameras');
@@ -23,6 +17,11 @@ insert into devicetypeattribute(dtype, name, details) values ('LensMount', 'Micr
 insert into devicetypeattribute(dtype, name, details) values ('TripodHead', '2 axis', '2 achsen ajustierbar');
 insert into devicetypeattribute(dtype, name, details) values ('TripodHead', '3 axis', '3 achsen ajustierbar');
 insert into devicetypeattribute(dtype, name, details) values ('TripodHead', 'Ballhead', 'In alle richtungen adjustierbarer Kugelkopf');
+
+-- Tripod Heads
+insert into devicetypeattribute(dtype, name, details) values ('AudioConnector', 'wireless', 'verbindet sich via bluetooth oder einem eigenen sender');
+insert into devicetypeattribute(dtype, name, details) values ('AudioConnector', 'aux', '3.5mm aux');
+insert into devicetypeattribute(dtype, name, details) values ('AudioConnector', 'XLR', '3 pin XLR connector');
 
 INSERT INTO tag (name, description)
 VALUES
@@ -37,50 +36,61 @@ VALUES
  * TODO take a look at the default values again, there has to be a better way to do this then through sql (could result in duplicates, is not very readable)
 */
 
--- Camera Types
-insert into DEVICETYPE (variant, dtype, name, status, system_id, resolution_id, sensor_id, mount_id, autofocus)
-values
-    ('camera', 'CameraType', 'Sony A7 III', 'active', 1, 3, 4, 8, true),
-    ('camera', 'CameraType', 'Canon EOS R5', 'active', 1, 4, 5, 9, true),
-    ('camera', 'CameraType', 'Lumix S5 ii', 'active', 2, 3, 4, 6, true),
-    ('camera', 'CameraType', 'Lumix GH6', 'active', 2, 3, 5, 7, true);
+INSERT INTO devicetype (type_id, name, image_blob_url, variant, dtype, connector_id)
+VALUES
+    (1, 'Audio Type 1', 'url1', 'audio', 'AudioType', 1),
+    (2, 'Audio Type 2', 'url2', 'audio', 'AudioType', 2),
+    (3, 'Audio Type 3', 'url3', 'audio', 'AudioType', 3),
+    (4, 'Audio Type 4', 'url4', 'audio', 'AudioType', 1),
+    (5, 'Audio Type 5', 'url5', 'audio', 'AudioType', 2);
 
--- Simple Types
-insert into DEVICETYPE (variant, dtype, name, description, status)
-values
-    ('simple', 'SimpleType', 'Kabel', '3 Meter Kabel', 'active'),
-    ('simple', 'SimpleType', 'Superkabel', '5 Meter Kabel', 'active');
+INSERT INTO devicetype (type_id, name, image_blob_url, variant, dtype, f_stop, focal_length, mount_id)
+VALUES
+    (1, 'Lens Type 1', 'url1', 'lens', 'LensType', 'f1.8', '50mm', 1),
+    (2, 'Lens Type 2', 'url2', 'lens', 'LensType', 'f2.8', '35mm', 2),
+    (3, 'Lens Type 3', 'url3', 'lens', 'LensType', 'f1.4', '85mm', 3),
+    (4, 'Lens Type 4', 'url4', 'lens', 'LensType', 'f2.0', '24mm', 1),
+    (5, 'Lens Type 5', 'url5', 'lens', 'LensType', 'f2.8', '70-200mm', 2);
 
--- Drone Types
-insert into DEVICETYPE (variant, dtype, name, sensor_id, resolution_id, max_range_kilometers, flight_time_minutes, status)
-values
-    ('drone', 'DroneType', 'Mavic Mini', 5, 4, 10, 50, 'active'),
-    ('drone', 'DroneType', 'Mavic Pro', 6, 3, 10, 50, 'active');
+INSERT INTO devicetype (type_id, name, image_blob_url, variant, dtype, watts, rgb, variable_temperature)
+VALUES
+    (1, 'Light Type 1', 'url1', 'light', 'LightType', 100, true, false),
+    (2, 'Light Type 2', 'url2', 'light', 'LightType', 200, false, true),
+    (3, 'Light Type 3', 'url3', 'light', 'LightType', 300, true, true),
+    (4, 'Light Type 4', 'url4', 'light', 'LightType', 400, false, false),
+    (5, 'Light Type 5', 'url5', 'light', 'LightType', 500, true, false);
 
--- Lens Types
-insert into DEVICETYPE (variant, dtype, name, mount_id, f_stop, focal_length, status)
-values
-    ('lens', 'LensType', 'Lens 1', 10, 2.8, 35, 'active'),
-    ('lens', 'LensType', 'Lens 2', 11, 3.8, 25, 'active'),
-    ('lens', 'LensType', 'Lens 3', 12, 4.0, 45, 'active');
+INSERT INTO devicetype (type_id, name, image_blob_url, variant, dtype, needs_recorder, connector_id, needs_power)
+VALUES
+(1, 'Microphone Type 1', 'url1', 'microphone', 'MicrophoneType', true, 1, false),
+(2, 'Microphone Type 2', 'url2', 'microphone', 'MicrophoneType', false, 2, true),
+(3, 'Microphone Type 3', 'url3', 'microphone', 'MicrophoneType', true, 3, false),
+(4, 'Microphone Type 4', 'url4', 'microphone', 'MicrophoneType', false, 1, true),
+(5, 'Microphone Type 5', 'url5', 'microphone', 'MicrophoneType', true, 2, false);
 
--- Light Types
-insert into DEVICETYPE (variant, dtype, name, watts, rgb, variable_temperature, status)
-values
-    ('light', 'LightType', 'LED', 600, true, true, 'active'),
-    ('light', 'LightType', 'Lampenstativ', 525, false, true, 'active');
+INSERT INTO devicetype (type_id, name, image_blob_url, variant, dtype, description)
+VALUES
+(1, 'Simple Type 1', 'url1', 'simple', 'SimpleType', 'Description 1'),
+(2, 'Simple Type 2', 'url2', 'simple', 'SimpleType', 'Description 2'),
+(3, 'Simple Type 3', 'url3', 'simple', 'SimpleType', 'Description 3'),
+(4, 'Simple Type 4', 'url4', 'simple', 'SimpleType', 'Description 4'),
+(5, 'Simple Type 5', 'url5', 'simple', 'SimpleType', 'Description 5');
 
--- Microphone Types
-insert into DEVICETYPE (variant, dtype, name, windblocker, wireless, needs_recorder, status)
-values
-    ('microphone', 'MicrophoneType', 'Zoom H2', false, true, false, 'active'),
-    ('microphone', 'MicrophoneType', 'RodeFunkset', true, true, true, 'active'),
-    ('microphone', 'MicrophoneType', 'X-Vive Funks.', true, true, false, 'active');
+INSERT INTO devicetype (type_id, name, image_blob_url, variant, dtype, max_weight_kilograms, number_of_axis)
+VALUES
+(1, 'Stabilizer Type 1', 'url1', 'stabilizer', 'StabilizerType', 2.5, 3),
+(2, 'Stabilizer Type 2', 'url2', 'stabilizer', 'StabilizerType', 3.0, 2),
+(3, 'Stabilizer Type 3', 'url3', 'stabilizer', 'StabilizerType', 1.5, 3),
+(4, 'Stabilizer Type 4', 'url4', 'stabilizer', 'StabilizerType', 2.0, 2),
+(5, 'Stabilizer Type 5', 'url5', 'stabilizer', 'StabilizerType', 2.5, 3);
 
--- Stabilizer Types
-insert into DEVICETYPE (variant, dtype, name, max_weight_kilograms, number_of_axis, status)
-values ('stabilizer', 'StabilizerType', 'Schulterrig', 200, 2, 'active'),
-       ('stabilizer', 'StabilizerType', 'Gopro Gimbal', 150, 3, 'active');
+INSERT INTO devicetype (type_id, name, image_blob_url, variant, dtype, height_centimeters, head_id)
+VALUES
+(1, 'Tripod Type 1', 'url1', 'tripod', 'TripodType', 150, 1),
+(2, 'Tripod Type 2', 'url2', 'tripod', 'TripodType', 180, 2),
+(3, 'Tripod Type 3', 'url3', 'tripod', 'TripodType', 200, 3),
+(4, 'Tripod Type 4', 'url4', 'tripod', 'TripodType', 170, 1),
+(5, 'Tripod Type 5', 'url5', 'tripod', 'TripodType', 160, 2);
 
 -- assigning tags to devicetypes
 INSERT INTO tag_devicetype (tag_tag_id, types_type_id)

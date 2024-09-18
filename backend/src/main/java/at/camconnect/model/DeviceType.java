@@ -1,6 +1,5 @@
 package at.camconnect.model;
 
-import at.camconnect.dtos.deviceType.DeviceTypeFullDTO;
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalIdDTO;
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
 import at.camconnect.enums.DeviceTypeStatusEnum;
@@ -30,20 +29,39 @@ public abstract class DeviceType{
     @Column(length = 20, unique = true)
     private String name;
 
-    private String image;
+    private String image_blob_url;
 
-    private LocalDateTime creation_date;
+    private final LocalDateTime creation_date;
     private LocalDateTime change_date;
 
-    public DeviceType(Long type_id, LocalDateTime creation_date, String name, String image, DeviceTypeStatusEnum status, DeviceTypeVariantEnum variant) {
+    public DeviceType(String name, String image_blob_url, DeviceTypeVariantEnum variant) {
+        this();
         this.variant = variant;
-        this.status = status;
+        this.status = DeviceTypeStatusEnum.active;
         this.name = name;
-        this.image = image;
-        this.creation_date = creation_date;
+        this.image_blob_url = image_blob_url;
+    }
+
+    public DeviceType(String name) {
+        this();
+        setStatus(DeviceTypeStatusEnum.active);
+        this.name = name;
+    }
+
+    public DeviceType(){
+        updateChangeDate();
+        this.creation_date = LocalDateTime.now();
+    }
+
+    public void updateChangeDate(){
+        this.change_date = LocalDateTime.now();
     }
 
     abstract public void update(DeviceTypeGlobalObjectsDTO data);
+
+    public abstract DeviceTypeGlobalIdDTO toGlobalDTO();
+
+    //getter setter
 
     public DeviceTypeStatusEnum getStatus() {
         return status;
@@ -51,10 +69,7 @@ public abstract class DeviceType{
 
     public void setStatus(DeviceTypeStatusEnum status) {
         this.status = status;
-    }
-
-    public void setType_id(Long type_id) {
-        this.type_id = type_id;
+        this.updateChangeDate();
     }
 
     public DeviceTypeVariantEnum getVariant() {
@@ -63,53 +78,37 @@ public abstract class DeviceType{
 
     public void setVariant(DeviceTypeVariantEnum variant) {
         this.variant = variant;
+        this.updateChangeDate();
     }
 
-    public String getImage() {
-        return image;
+    public String getImage_blob_url() {
+        return image_blob_url;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImage_blob_url(String image) {
+        this.image_blob_url = image;
+        this.updateChangeDate();
     }
 
-    public DeviceType(String name) {
-        setStatus(DeviceTypeStatusEnum.active);
-        this.name = name;
-        this.creation_date = LocalDateTime.now();
-    }
-
-    public DeviceType() {
-        this.creation_date = LocalDateTime.now();
-    }
-
-    //region Getter und Setter
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String typeName) {
-        this.name = typeName;
-    }
-
-    public long getType_id() {
-        return type_id;
-    }
-
-    public void setType_id(long typeId) {
-        this.type_id = typeId;
+    public LocalDateTime getChange_date() {
+        return change_date;
     }
 
     public LocalDateTime getCreation_date() {
         return creation_date;
     }
 
-    /**
-     * this function is used for the full export of all device types in one file
-     * @return
-     */
-    public abstract String getFullExportString();
 
-    public abstract DeviceTypeGlobalIdDTO toGlobalDTO();
-    //endregion
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String typeName) {
+        this.name = typeName;
+        this.updateChangeDate();
+    }
+
+    public Long getType_id() {
+        return type_id;
+    }
 }

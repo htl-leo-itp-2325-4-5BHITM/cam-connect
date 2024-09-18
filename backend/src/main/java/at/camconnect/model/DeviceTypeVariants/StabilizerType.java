@@ -9,8 +9,6 @@ import at.camconnect.responseSystem.CCException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
-import java.time.LocalDateTime;
-
 @Entity
 public class StabilizerType extends DeviceType {
     @Column(length = 6)
@@ -23,8 +21,8 @@ public class StabilizerType extends DeviceType {
         setVariant(DeviceTypeVariantEnum.stabilizer);
     }
 
-    public StabilizerType(Long type_id, LocalDateTime creation_date, String name, String image, DeviceTypeStatusEnum status, DeviceTypeVariantEnum variant, double max_weight_kilograms, int number_of_axis) {
-        super(type_id, creation_date, name, image, status, variant);
+    public StabilizerType(String name, String image_blob_url, double max_weight_kilograms, int number_of_axis) {
+        super(name, image_blob_url, DeviceTypeVariantEnum.stabilizer);
         this.max_weight_kilograms = max_weight_kilograms;
         this.number_of_axis = number_of_axis;
     }
@@ -41,23 +39,12 @@ public class StabilizerType extends DeviceType {
 
     @Override
     public String toString() {
-        return String.format("%d;%s;%s;%s;%s;%s;%f;%d;\n",
-                getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
-                getMax_weight_kilograms(), getNumber_of_axis());
-    }
-
-    @Override
-    public String getFullExportString() {
-        return String.format("%d;%s;%s;%s;%s;%s; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;%f;%d; ; ; ;\n",
-                getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
-                getMax_weight_kilograms(),
-                getNumber_of_axis()
-        );
+        return "needs to be updated";
     }
 
     @Override
     public DeviceTypeGlobalIdDTO toGlobalDTO() {
-        return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getImage(), getMax_weight_kilograms(), getNumber_of_axis());
+        return null;
     }
 
     public double getMax_weight_kilograms() {

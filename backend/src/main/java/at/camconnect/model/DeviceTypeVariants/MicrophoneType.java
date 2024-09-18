@@ -2,38 +2,40 @@ package at.camconnect.model.DeviceTypeVariants;
 
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalIdDTO;
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
-import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
+import at.camconnect.model.DeviceTypeAttributes.AudioConnector;
 import at.camconnect.responseSystem.CCException;
 import jakarta.persistence.Entity;
-
-import java.time.LocalDateTime;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class MicrophoneType extends DeviceType {
-    private boolean windblocker;
-    private boolean wireless;
     private boolean needs_recorder;
+    @ManyToOne
+    @JoinColumn(name = "connector_id")
+    private AudioConnector connector;
+    private boolean needs_power;
 
     public MicrophoneType() {
         super();
         setVariant(DeviceTypeVariantEnum.microphone);
     }
 
-    public MicrophoneType(Long type_id, LocalDateTime creation_date, String name, String image, DeviceTypeStatusEnum status, DeviceTypeVariantEnum variant, boolean windblocker, boolean wireless, boolean needs_recorder) {
-        super(type_id, creation_date, name, image, status, variant);
-        this.windblocker = windblocker;
-        this.wireless = wireless;
+    public MicrophoneType(String name, String image, boolean needs_recorder) {
+        super(name, image, DeviceTypeVariantEnum.microphone);
         this.needs_recorder = needs_recorder;
     }
 
     @Override
     public void update(DeviceTypeGlobalObjectsDTO data) {
         try{
-            setWindblocker(data.windblocker());
-            setWireless(data.wireless());
-            setNeeds_recorder(data.needsrecorder());
+            setName(data.name());
+            setImage_blob_url(data.image());
+            setNeeds_recorder(data.needs_recorder());
+            setConnector(data.connector());
+            setNeeds_power(data.needs_power());
         }catch (Exception ex){
             throw new CCException(1106);
         }
@@ -41,40 +43,12 @@ public class MicrophoneType extends DeviceType {
 
     @Override
     public String toString() {
-        return String.format("%d;%s;%s;%s;%s;%s;%b;%b;%b;\n",
-                getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
-                isWindblocker(), isWireless(), isNeeds_recorder());
-    }
-
-    @Override
-    public String getFullExportString() {
-        return String.format("%d;%s;%s;%s;%s;%s; ; ; ; ; ; ; ; ; ; ; ; ;%b;%b;%b; ; ; ; ; ;\n",
-                getType_id(), getCreation_date(), getName(), getImage(), getStatus(), getVariant(),
-                isWindblocker(),
-                isWireless(),
-                isNeeds_recorder()
-        );
+        return "todo";
     }
 
     @Override
     public DeviceTypeGlobalIdDTO toGlobalDTO() {
-        return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getImage(), isNeeds_recorder(), isWireless(), isWindblocker());
-    }
-
-    public boolean isWindblocker() {
-        return windblocker;
-    }
-
-    public void setWindblocker(boolean windblocker) {
-        this.windblocker = windblocker;
-    }
-
-    public boolean isWireless() {
-        return wireless;
-    }
-
-    public void setWireless(boolean wireless) {
-        this.wireless = wireless;
+        return null;
     }
 
     public boolean isNeeds_recorder() {
@@ -83,5 +57,21 @@ public class MicrophoneType extends DeviceType {
 
     public void setNeeds_recorder(boolean needsRecorder) {
         this.needs_recorder = needsRecorder;
+    }
+
+    public boolean isNeeds_power() {
+        return needs_power;
+    }
+
+    public void setNeeds_power(boolean needs_power) {
+        this.needs_power = needs_power;
+    }
+
+    public AudioConnector getConnector() {
+        return connector;
+    }
+
+    public void setConnector(AudioConnector connector) {
+        this.connector = connector;
     }
 }
