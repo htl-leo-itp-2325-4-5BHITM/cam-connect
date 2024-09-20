@@ -49,6 +49,34 @@ section {
   gap: 1rem;
 }
 
+.image{
+  display: grid;
+  place-items: center;
+
+  *{
+    grid-area: 1 / 1 / 2 / 2;
+    z-index: 5;
+  }
+
+  svg{
+    width: 4rem;
+    height: 4rem;
+
+    path{
+      fill: $gray500;
+    }
+  }
+
+  &::before{
+    content: "";
+    width: 4rem;
+    height: 4rem;
+    background-color: $gray500;
+    filter: blur(35px);
+    grid-area: 1 / 1 / 2 / 2;
+  }
+}
+
 cc-circle-select{
   position: absolute;
   top: .8rem;

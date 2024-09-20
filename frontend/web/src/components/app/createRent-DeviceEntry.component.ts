@@ -114,7 +114,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                                          numberInput.clear()
                                      }}"
                                      .querySuggestions="${DeviceTypeService.search}"
-                                     .iconProvider="${DeviceTypeService.deviceTypeToIcon}"
+                                     .iconProvider="${data => {DeviceTypeService.deviceTypeToIcon(data.variant)}}"
                                      .contentProvider="${(data: DeviceTypeSource) => {return data.name}}"
                                      allowNoSelection="true"
                     ></cc-autocomplete>

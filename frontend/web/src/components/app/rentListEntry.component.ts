@@ -156,7 +156,7 @@ export class RentListEntryComponent extends LitElement {
                                          numberInput.clear()
                                      }}"
                                      .querySuggestions="${DeviceTypeService.search}"
-                                     .iconProvider="${DeviceTypeService.deviceTypeToIcon}"
+                                     .iconProvider="${data => {DeviceTypeService.deviceTypeToIcon(data.variant)}}"
                                      .contentProvider="${(data: DeviceType) => {return data.name}}"
                                      allowNoSelection="true"
                             ></cc-autocomplete>

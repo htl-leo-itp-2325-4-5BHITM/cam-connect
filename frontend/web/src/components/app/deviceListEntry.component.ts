@@ -4,16 +4,17 @@ import styles from '../../../styles/components/app/deviceListEntry.styles.scss'
 import {ButtonType} from "../basic/button.component"
 import {ColorEnum} from "../../base"
 import {DeviceListComponent} from "./deviceList.component";
-import {
+import DeviceTypeService, {
     MicrophoneType,
     CameraType,
     DeviceTypeFullDTO,
     DeviceTypeVariantEnum,
-    DroneType, LensType, LightType, StabilizerType, TripodType, SimpleType, AudioType
+    DroneType, LensType, LightType, StabilizerType, TripodType, SimpleType, AudioType, DeviceTypeSource
 } from "../../service/deviceType.service"
 import {ObservedProperty} from "../../model"
 import {AppState} from "../../AppState"
 import {model} from "../../index"
+import de from "air-datepicker/locale/de"
 
 @customElement('cc-device-list-entry')
 export class DeviceListEntryComponent extends LitElement {
@@ -98,11 +99,7 @@ export class DeviceListEntryComponent extends LitElement {
                                        value="${camera.autofocus ? 'Ja' : 'Nein'}"></cc-property-value>
                 </div>
                 <div class="image">
-                    ${
-                        camera.image_blob == "" || camera.image_blob == null ? 
-                                html`<img src="../../../assets/icon/tempCamera.png" alt="">` : 
-                                html``
-                    }
+                    ${this.renderDeviceTypeIcon(this.deviceTypeFull.deviceType)}
                 </div>
             </section>
         `
@@ -117,7 +114,7 @@ export class DeviceListEntryComponent extends LitElement {
                                        value="${audio.connector?.name}"></cc-property-value>
                 </div>
                 <div class="image">
-                    <img src="../../../assets/icon/tempCamera.png" alt="">
+                    ${this.renderDeviceTypeIcon(this.deviceTypeFull.deviceType)}
                 </div>
             </section>
         `
@@ -136,7 +133,7 @@ export class DeviceListEntryComponent extends LitElement {
                                        value="${audio.needs_recorder}"></cc-property-value>
                 </div>
                 <div class="image">
-                    <img src="../../../assets/icon/tempCamera.png" alt="">
+                    ${this.renderDeviceTypeIcon(this.deviceTypeFull.deviceType)}
                 </div>
             </section>
         `
@@ -155,7 +152,7 @@ export class DeviceListEntryComponent extends LitElement {
                                        value="${drone.requires_license ? 'Ja' : 'Nein'}"></cc-property-value>
                 </div>
                 <div class="image">
-                    <img src="../../../assets/icon/tempCamera.png" alt="">
+                    ${this.renderDeviceTypeIcon(this.deviceTypeFull.deviceType)}
                 </div>
             </section>
         `
@@ -171,7 +168,7 @@ export class DeviceListEntryComponent extends LitElement {
                     <cc-property-value size="small" property="Brennweite" value="${lens.focal_length}"></cc-property-value>
                 </div>
                 <div class="image">
-                    <img src="../../../assets/icon/tempCamera.png" alt="">
+                    ${this.renderDeviceTypeIcon(this.deviceTypeFull.deviceType)}
                 </div>
             </section>
         `
@@ -188,7 +185,7 @@ export class DeviceListEntryComponent extends LitElement {
                                        value="${light.variable_temperature}"></cc-property-value>
                 </div>
                 <div class="image">
-                    <img src="../../../assets/icon/tempCamera.png" alt="">
+                    ${this.renderDeviceTypeIcon(this.deviceTypeFull.deviceType)}
                 </div>
             </section>
         `
@@ -205,7 +202,7 @@ export class DeviceListEntryComponent extends LitElement {
                                        value="${stabilizer.number_of_axis}"></cc-property-value>
                 </div>
                 <div class="image">
-                    <img src="../../../assets/icon/tempCamera.png" alt="">
+                    ${this.renderDeviceTypeIcon(this.deviceTypeFull.deviceType)}
                 </div>
             </section>
         `
@@ -221,7 +218,7 @@ export class DeviceListEntryComponent extends LitElement {
                                        value="${tripod.height_centimeters}"></cc-property-value>
                 </div>
                 <div class="image">
-                    <img src="../../../assets/icon/tempCamera.png" alt="">
+                    ${this.renderDeviceTypeIcon(this.deviceTypeFull.deviceType)}
                 </div>
             </section>
         `
@@ -236,9 +233,21 @@ export class DeviceListEntryComponent extends LitElement {
                                        value="${simple.description}"></cc-property-value>
                 </div>
                 <div class="image">
-                    <img src="../../../assets/icon/tempCamera.png" alt="">
+                    ${this.renderDeviceTypeIcon(this.deviceTypeFull.deviceType)}
                 </div>
             </section>
+        `
+    }
+
+    renderDeviceTypeIcon(deviceType: DeviceTypeSource){
+        return html`
+            <div class="image">
+                ${
+                    deviceType.image_blob == "" || deviceType.image_blob == null ?
+                        html`<img src="../../../assets/icon/tempCamera.png" alt="">` :
+                        DeviceTypeService.deviceTypeToIcon(deviceType.variant)
+                }
+            </div>
         `
     }
 

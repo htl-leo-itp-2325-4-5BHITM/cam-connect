@@ -19,11 +19,15 @@ export class DropdownComponent extends LitElement {
     isOpen: boolean = false
 
     @property()
-    onSelect: (option: SimpleOption<string | number, string>) => void
+    onSelect: (option: SimpleOption<string | number, string>) => void = () => {}
 
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
-        this.selected = this.options[0]
+        if(this.selected == undefined && this.options && this.options.length > 0) {
+            console.log("defaulting to first option")
+            this.selected = this.options[0]
+        }
+        console.log(this.selected)
     }
 
     render() {

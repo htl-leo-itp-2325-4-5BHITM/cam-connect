@@ -15,7 +15,8 @@ import {faCamera, faHelicopter, faLightbulb, faMicrophone, faHeadphones, faGears
 import stabilizerIcon from "../../assets/icon/noun-gimbal-5345717.svg"
 import droneIcon from "../../assets/icon/noun-drone-6707036.svg"
 import lensIcon from "../../assets/icon/noun-lens-6134156.svg"
-import tripodIcon from "../../assets/icon/noun-tripod-6660204.svg"
+import tripodIcon from "../../assets/icon/noun-tripod-6392787.svg"
+
 import {Api} from "../util/Api"
 
 //region devicetype interfaces
@@ -149,15 +150,15 @@ export default class DeviceTypeService {
         }
     }
 
-    static deviceTypeToIcon(data: DeviceTypeSource): TemplateResult {
-        switch (data.variant){
+    static deviceTypeToIcon(varient: DeviceTypeVariantEnum): TemplateResult {
+        switch (varient){
             case DeviceTypeVariantEnum.camera: return html`${unsafeSVG(icon(faCamera).html[0])}`
             case DeviceTypeVariantEnum.microphone: return html`${unsafeSVG(icon(faMicrophone).html[0])}`
             case DeviceTypeVariantEnum.drone: return html`<img src="${droneIcon}" alt="D">`
             case DeviceTypeVariantEnum.lens: return html`<img src="${lensIcon}" alt="L">`
             case DeviceTypeVariantEnum.light: return html`${unsafeSVG(icon(faLightbulb).html[0])}`
             case DeviceTypeVariantEnum.stabilizer: return html`<img src="${stabilizerIcon}" alt="S">`
-            case DeviceTypeVariantEnum.tripod: return html`<img src="${tripodIcon}" alt="T">`
+            case DeviceTypeVariantEnum.tripod: return html`${unsafeSVG(tripodIcon)}`
             case DeviceTypeVariantEnum.audio: return html`${unsafeSVG(icon(faHeadphones).html[0])}`
             default: return html`${unsafeSVG(icon(faGears).html[0])}`
         }
