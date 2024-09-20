@@ -2,10 +2,9 @@ import {ccResponse, SimpleOption} from '../base'
 import {model} from "../index"
 import {
     AudioConnector,
-    CameraResolution,
     CameraSensor,
     CameraSystem,
-    LensMount,
+    LensMount, CameraResolution,
     TripodHead
 } from "./deviceTypeAttribute.service"
 import {html, TemplateResult} from "lit"

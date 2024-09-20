@@ -35,7 +35,7 @@ export default class Model{
     readonly devices = new BehaviorSubject<Device[]>([])
     readonly deviceTypes = new BehaviorSubject<DeviceTypeVariantCollection>({audioTypes: [], microphoneTypes: [], cameraTypes: [], droneTypes: [], lensTypes: [], lightTypes: [], stabilizerTypes: [], tripodHeads: []})
     readonly deviceTypesFull = new BehaviorSubject<DeviceTypeFullDTO[]>([])
-    readonly deviceTypeAttributes = new BehaviorSubject<DeviceTypeAttributeCollection>({cameraResolutions: [], cameraSensors: [], cameraSystems: [], lensMounts: [], tripodHeads: []})
+    readonly deviceTypeAttributes = new BehaviorSubject<DeviceTypeAttributeCollection>({photoResolution: [], cameraSensors: [], cameraSystems: [], lensMounts: [], tripodHeads: []})
     /**
      * This is a representation of all the deviceTypeAttributes split up and transformed into FilterOptions that can be
      * used by the filter-block-component.
@@ -48,7 +48,7 @@ export default class Model{
      */
     readonly deviceTypeAttributesAsFilterOptions = {
         cameraResolutions: this.deviceTypeAttributes.pipe(
-            map(deviceTypeAttributes => deviceTypeAttributes.cameraResolutions.map(Util.deviceTypeAttributeToFilterOption))
+            map(deviceTypeAttributes => deviceTypeAttributes.photoResolution.map(Util.deviceTypeAttributeToFilterOption))
         ),
         cameraSensors: this.deviceTypeAttributes.pipe(
             map(deviceTypeAttributes => deviceTypeAttributes.cameraSensors.map(Util.deviceTypeAttributeToFilterOption))
@@ -70,6 +70,7 @@ export default class Model{
         {name: "Drone", id: "drone", details: "Drone halt"},
         {name: "Objektiv", id: "lens", details: "Objektiv halt"},
         {name: "Licht", id: "light", details: "Objektiv halt"},
+        {name: "Audio", id: "audio", details: "Audio halt"},
         {name: "Mikrofon", id: "microphone", details: "Mikro halt"},
         {name: "Stabilisator", id: "stabilizer", details: "Stablisationsysteme"},
         {name: "Stativ", id: "tripod", details: "dings"},
@@ -126,7 +127,7 @@ export default class Model{
         this.deviceTypesFull.next(deviceTypesFull)
     }
 
-    loadDeviceTypeAttributes(deviceTypeAttributes: DeviceTypeAttributeCollection = {cameraResolutions: [], cameraSensors: [], cameraSystems: [], lensMounts: [], tripodHeads: []}){
+    loadDeviceTypeAttributes(deviceTypeAttributes: DeviceTypeAttributeCollection = {photoResolution: [], cameraSensors: [], cameraSystems: [], lensMounts: [], tripodHeads: []}){
         this.deviceTypeAttributes.next(deviceTypeAttributes)
     }
 

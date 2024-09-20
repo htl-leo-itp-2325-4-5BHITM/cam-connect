@@ -66,6 +66,16 @@ export default class DeviceService{
             })
     }
 
+    static remove(device: Device) {
+        Api.fetchData(`/device/getbyid/${device.device_id}/remove`)
+            .then(() => {
+                DeviceService.fetchAll()
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
+
     static async search(searchDTO: SearchDTO): Promise<SimpleOption<number, Device>[]> {
         try {
             const result: ccResponse<SimpleOption<number, Device>[]> = await Api.postData<unknown, Device>(

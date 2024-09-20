@@ -27,7 +27,7 @@ export interface TripodHead extends DeviceTypeAttributeSource{}
 
 export type DeviceTypeAttribute = (CameraResolution | CameraSensor | CameraSystem | LensMount | TripodHead)
 export interface DeviceTypeAttributeCollection{
-    cameraResolutions: CameraResolution[]
+    photoResolution: CameraResolution[]
     cameraSensors: CameraSensor[]
     cameraSystems: CameraSystem[]
     lensMounts: LensMount[]

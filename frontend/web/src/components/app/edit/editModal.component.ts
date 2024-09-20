@@ -2,7 +2,12 @@ import {html, LitElement, PropertyValues, render} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 import PopupEngine from "../../../util/PopupEngine";
 import {EditPageEnum, ObservedProperty} from "../../../model"
-import DeviceTypeService, {DeviceTypeFullDTO, DeviceTypeVariantEnum, Tag} from "../../../service/deviceType.service"
+import DeviceTypeService, {
+    CameraType,
+    DeviceTypeFullDTO,
+    DeviceTypeVariantEnum,
+    Tag
+} from "../../../service/deviceType.service"
 import {model} from "../../../index"
 import styles from '../../../../styles/components/app/edit/editModal.styles.scss'
 import {AppState} from "../../../AppState"
@@ -52,29 +57,14 @@ export class EditModalComponent extends LitElement {
             this.element = this.element as DeviceTypeFullDTO
             this.tags = this.element.deviceTags
 
+            this.currentEditType = this.element.deviceType.variant
+
             return html`
                 <h1>Gerätetyp Erstellen</h1>
                 <cc-input placeholder="Name" text="${this.element.deviceType.name}"></cc-input>
                 <cc-input placeholder="Bild" type="${InputType.UPLOAD}"></cc-input>
                 
                 <div class="separator">
-                    <cc-line></cc-line>
-                    <cc-dropdown
-                    .options="${model.deviceTypeNameFilterOptions.value.map(option => ({ id: option.id, data: option.name }))}"
-                    .onSelect="${(option) => {
-                        if(!this.isSelectAlreadyUsed) {
-                            this.shadowRoot.querySelector(".contentByDeviceType").innerHTML = ""
-                            this.isSelectAlreadyUsed = true
-                        }
-        
-                        this.currentEditType = option.id
-                        render(
-                            this.getModalContentByDeviceType(),
-                            this.shadowRoot.querySelector(".contentByDeviceType") as HTMLElement
-                        )
-                    }}"
-                    .selected="${{id: this.element.deviceType.variant, data: this.element.deviceType.variant}}"
-                    ></cc-dropdown>
                     <cc-line></cc-line>
                 </div>
                 
@@ -125,27 +115,16 @@ export class EditModalComponent extends LitElement {
     }
 
     getModalContentByDeviceType(){
+        let deviceType = this.element as DeviceTypeFullDTO
         switch(this.currentEditType){
             case DeviceTypeVariantEnum.camera:
+                let cameraType = deviceType.deviceType as CameraType
                 return html`
-                <div>
-                    <p>Sensor</p>
-                    <cc-dropdown
-                            .options="${model.deviceTypeAttributes.value.cameraSensors.map(option => ({ id: option.attribute_id, data: option.name }))}"
-                    ></cc-dropdown>
-                </div>
-
-                <div>
-                    <p>Resolution</p>
-                    <cc-dropdown
-                            .options="${model.deviceTypeAttributes.value.cameraResolutions.map(option => ({ id: option.attribute_id, data: option.name }))}"
-                    ></cc-dropdown>
-                </div>
-                
                 <div>
                     <p>Mount</p>
                     <cc-dropdown
                             .options="${model.deviceTypeAttributes.value.lensMounts.map(option => ({ id: option.attribute_id, data: option.name }))}"
+                            .selected="${{id: cameraType?.mount.attribute_id, data: cameraType?.mount.name}}"
                     ></cc-dropdown>
                 </div>
                 
@@ -153,11 +132,19 @@ export class EditModalComponent extends LitElement {
                     <p>System</p>
                     <cc-dropdown
                             .options="${model.deviceTypeAttributes.value.cameraSystems.map(option => ({ id: option.attribute_id, data: option.name }))}"
+                            .selected="${{id: cameraType?.system.attribute_id, data: cameraType?.system.name}}"
+                    ></cc-dropdown>
+                </div>
+
+                <div>
+                    <p>Photo Resolution</p>
+                    <cc-dropdown
+                            .options="${model.deviceTypeAttributes.value.photoResolution.map(option => ({ id: option.attribute_id, data: option.name }))}"
+                            .selected="${{id: cameraType?.photoResolution.attribute_id, data: cameraType?.photoResolution.name}}"
                     ></cc-dropdown>
                 </div>
                 
-                <cc-toggle>Autofokus</cc-toggle>
-                <cc-input placeholder="Maximale Bildrate (FPS)"></cc-input>
+                <cc-toggle .toggled="${cameraType.autofocus}">Autofokus</cc-toggle>
             `
             case DeviceTypeVariantEnum.drone:
                 return html`
@@ -171,7 +158,7 @@ export class EditModalComponent extends LitElement {
                     <div>
                         <p>Resolution</p>
                         <cc-dropdown
-                                .options="${model.deviceTypeAttributes.value.cameraResolutions.map(option => ({ id: option.attribute_id, data: option.name }))}"
+                                .options="${model.deviceTypeAttributes.value.photoResolution.map(option => ({ id: option.attribute_id, data: option.name }))}"
                         ></cc-dropdown>
                     </div>
                 

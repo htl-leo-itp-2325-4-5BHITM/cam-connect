@@ -26,7 +26,7 @@ public abstract class DeviceType{
     @Enumerated(EnumType.STRING)
     private DeviceTypeStatusEnum status;
 
-    @Column(length = 20, unique = true)
+    @Column(length = 50)
     private String name;
 
     private String image_blob_url;

@@ -34,6 +34,24 @@ VALUES
  * everything above this line are inserts that we probably want to keep permanently as default values
  * everything below here are inserts that we throw away when going into production since they are purely for testing purposes
 */
+-- Camera devices
+INSERT INTO devicetype (name, image_blob_url, variant, dtype, mount_id, system_id, photoresolution_id, autofocus, status)
+VALUES
+    ('Canon EOS R5', 'url1', 'camera', 'CameraType', 6, 1, 3, true, 'active'),
+    ('Nikon Z6', 'url2', 'camera', 'CameraType', 7, 2, 4, true, 'active'),
+    ('Sony A7 III', 'url3', 'camera', 'CameraType', 6, 1, 3, true, 'active'),
+    ('Fujifilm X-T4', 'url4', 'camera', 'CameraType', 8, 2, 5, true, 'active'),
+    ('Panasonic Lumix GH5', 'url5', 'camera', 'CameraType', 9, 1, 5, true, 'active');
+
+-- Drone devices
+INSERT INTO devicetype (name, image_blob_url, variant, dtype, flight_time_minutes, max_range_kilometers, requires_license, status)
+VALUES
+    ('DJI Mavic Air 2', 'url1', 'drone', 'DroneType', 34, 10, false, 'active'),
+    ('Parrot Anafi', 'url2', 'drone', 'DroneType', 25, 4,true, 'active'),
+    ('Autel Robotics EVO II', 'url3', 'drone', 'DroneType', 40, 9, false, 'active'),
+    ('Skydio 2', 'url4', 'drone', 'DroneType', 23, 3.5,true, 'active'),
+    ('DJI Phantom 4 Pro', 'url5', 'drone', 'DroneType', 30, 7,false, 'active');
+
 -- Audio devices
 INSERT INTO devicetype (name, image_blob_url, variant, dtype, connector_id, status)
 VALUES
