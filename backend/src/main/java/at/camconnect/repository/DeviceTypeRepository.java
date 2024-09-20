@@ -161,6 +161,7 @@ public class DeviceTypeRepository {
                 em.find(TripodHead.class, data.head_id()),
                 em.find(LensMount.class, data.mount_id()),
                 em.find(CameraSystem.class, data.system_id()),
+                em.find(CameraResolution.class, data.photo_resolution_id()),
                 data.description()
         );
 

@@ -25,13 +25,14 @@ export interface LensMount extends DeviceTypeAttributeSource{}
 export interface TripodHead extends DeviceTypeAttributeSource{}
 //endregion
 
-export type DeviceTypeAttribute = (CameraResolution | CameraSensor | CameraSystem | LensMount | TripodHead)
+export type DeviceTypeAttribute = (CameraResolution | CameraSensor | CameraSystem | LensMount | TripodHead | AudioConnector)
 export interface DeviceTypeAttributeCollection{
-    photoResolution: CameraResolution[]
+    cameraResolution: CameraResolution[]
     cameraSensors: CameraSensor[]
     cameraSystems: CameraSystem[]
     lensMounts: LensMount[]
     tripodHeads: TripodHead[]
+    audioConnectors: AudioConnector[]
 }
 
 export default class DeviceTypeAttributeService{

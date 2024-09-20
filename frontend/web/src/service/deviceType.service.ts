@@ -37,7 +37,7 @@ export interface AudioType extends DeviceTypeSource {
 export interface CameraType extends DeviceTypeSource{
     mount: LensMount
     system: CameraSystem
-    photoResolution: CameraResolution
+    photo_resolution: CameraResolution
     autofocus: boolean
 }
 

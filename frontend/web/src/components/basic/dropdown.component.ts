@@ -23,7 +23,9 @@ export class DropdownComponent extends LitElement {
 
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
-        this.selected = this.options[0]
+        if(this.selected == undefined && this.options && this.options.length > 0){
+            this.selected = this.options[0]
+        }
     }
 
     render() {
@@ -36,7 +38,7 @@ export class DropdownComponent extends LitElement {
                 ${unsafeSVG(icon(faCaretDown).html[0])}
             </div>
             <div class="dropdownOptions">
-                ${this.options.map(option => {
+                ${this.options?.map(option => {
                   return html`<p class="option" @click="${() => this.selectOption(option)}">${option.data}</p>`  
                 })}
             </div>

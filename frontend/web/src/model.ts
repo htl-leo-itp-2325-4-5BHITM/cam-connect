@@ -35,7 +35,7 @@ export default class Model{
     readonly devices = new BehaviorSubject<Device[]>([])
     readonly deviceTypes = new BehaviorSubject<DeviceTypeVariantCollection>({audioTypes: [], microphoneTypes: [], cameraTypes: [], droneTypes: [], lensTypes: [], lightTypes: [], stabilizerTypes: [], tripodHeads: []})
     readonly deviceTypesFull = new BehaviorSubject<DeviceTypeFullDTO[]>([])
-    readonly deviceTypeAttributes = new BehaviorSubject<DeviceTypeAttributeCollection>({photoResolution: [], cameraSensors: [], cameraSystems: [], lensMounts: [], tripodHeads: []})
+    readonly deviceTypeAttributes = new BehaviorSubject<DeviceTypeAttributeCollection>({cameraResolution: [], cameraSensors: [], cameraSystems: [], lensMounts: [], tripodHeads: [], audioConnectors: []})
     /**
      * This is a representation of all the deviceTypeAttributes split up and transformed into FilterOptions that can be
      * used by the filter-block-component.
@@ -48,7 +48,7 @@ export default class Model{
      */
     readonly deviceTypeAttributesAsFilterOptions = {
         cameraResolutions: this.deviceTypeAttributes.pipe(
-            map(deviceTypeAttributes => deviceTypeAttributes.photoResolution.map(Util.deviceTypeAttributeToFilterOption))
+            map(deviceTypeAttributes => deviceTypeAttributes.cameraResolution.map(Util.deviceTypeAttributeToFilterOption))
         ),
         cameraSensors: this.deviceTypeAttributes.pipe(
             map(deviceTypeAttributes => deviceTypeAttributes.cameraSensors.map(Util.deviceTypeAttributeToFilterOption))
@@ -128,7 +128,7 @@ export default class Model{
         this.deviceTypesFull.next(deviceTypesFull)
     }
 
-    loadDeviceTypeAttributes(deviceTypeAttributes: DeviceTypeAttributeCollection = {photoResolution: [], cameraSensors: [], cameraSystems: [], lensMounts: [], tripodHeads: []}){
+    loadDeviceTypeAttributes(deviceTypeAttributes: DeviceTypeAttributeCollection = {cameraResolution: [], cameraSensors: [], cameraSystems: [], lensMounts: [], tripodHeads: [], audioConnectors: []}){
         this.deviceTypeAttributes.next(deviceTypeAttributes)
     }
 

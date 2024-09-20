@@ -1,5 +1,12 @@
 @import "../../base";
 
+:host{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
 input{
   width: 100%;
   padding: 0.625rem 1rem;
