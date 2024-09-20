@@ -88,17 +88,21 @@ export class DeviceListEntryComponent extends LitElement {
         return html`
             <section>
                 <div class="details">
-                    <cc-property-value size="small" property="Mount" value="${camera.mount.name}"
+                    <cc-property-value size="small" property="Mount" value="${camera.mount?.name}"
                                        isLink></cc-property-value>
-                    <cc-property-value size="small" property="System" value="${camera.system.name}"
+                    <cc-property-value size="small" property="System" value="${camera.system?.name}"
                                        isLink></cc-property-value>
-                    <cc-property-value size="small" property="Foto Resolution" value="${camera.photoResolution.name}"
+                    <cc-property-value size="small" property="Foto Resolution" value="${camera.photoResolution?.name}"
                                        isLink></cc-property-value>
                     <cc-property-value size="small" property="Autofokus"
                                        value="${camera.autofocus ? 'Ja' : 'Nein'}"></cc-property-value>
                 </div>
                 <div class="image">
-                    <img src="../../../assets/icon/tempCamera.png" alt="">
+                    ${
+                        camera.image_blob == "" || camera.image_blob == null ? 
+                                html`<img src="../../../assets/icon/tempCamera.png" alt="">` : 
+                                html``
+                    }
                 </div>
             </section>
         `
@@ -162,11 +166,9 @@ export class DeviceListEntryComponent extends LitElement {
         return html`
             <section>
                 <div class="details">
-                    <cc-property-value size="small" property="Lensmount"
-                                       value="${lens.lens_mount.name}"></cc-property-value>
+                    <cc-property-value size="small" property="Lensmount" value="${lens.lens_mount.name}"></cc-property-value>
                     <cc-property-value size="small" property="Blende" value="${lens.f_stop}"></cc-property-value>
-                    <cc-property-value size="small" property="Brennweite"
-                                       value="${lens.focal_length}"></cc-property-value>
+                    <cc-property-value size="small" property="Brennweite" value="${lens.focal_length}"></cc-property-value>
                 </div>
                 <div class="image">
                     <img src="../../../assets/icon/tempCamera.png" alt="">

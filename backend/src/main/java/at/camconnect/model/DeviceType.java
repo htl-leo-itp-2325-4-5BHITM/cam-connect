@@ -26,20 +26,20 @@ public abstract class DeviceType{
     @Enumerated(EnumType.STRING)
     private DeviceTypeStatusEnum status;
 
-    @Column(length = 20, unique = true)
+    @Column(length = 50)
     private String name;
 
-    private String image_blob_url;
+    private String image_blob;
 
     private final LocalDateTime creation_date;
     private LocalDateTime change_date;
 
-    public DeviceType(String name, String image_blob_url, DeviceTypeVariantEnum variant) {
+    public DeviceType(String name, String image_blob, DeviceTypeVariantEnum variant) {
         this();
         this.variant = variant;
         this.status = DeviceTypeStatusEnum.active;
         this.name = name;
-        this.image_blob_url = image_blob_url;
+        this.image_blob = image_blob;
     }
 
     public DeviceType(String name) {
@@ -81,12 +81,12 @@ public abstract class DeviceType{
         this.updateChangeDate();
     }
 
-    public String getImage_blob_url() {
-        return image_blob_url;
+    public String getImage_blob() {
+        return image_blob;
     }
 
-    public void setImage_blob_url(String image) {
-        this.image_blob_url = image;
+    public void setImage_blob(String image) {
+        this.image_blob = image;
         this.updateChangeDate();
     }
 

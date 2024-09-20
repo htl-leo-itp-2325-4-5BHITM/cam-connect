@@ -18,7 +18,7 @@ insert into devicetypeattribute(dtype, name, details) values ('TripodHead', '2 a
 insert into devicetypeattribute(dtype, name, details) values ('TripodHead', '3 axis', '3 achsen ajustierbar');
 insert into devicetypeattribute(dtype, name, details) values ('TripodHead', 'Ballhead', 'In alle richtungen adjustierbarer Kugelkopf');
 
--- Tripod Heads
+-- Audio Connectors
 insert into devicetypeattribute(dtype, name, details) values ('AudioConnector', 'wireless', 'verbindet sich via bluetooth oder einem eigenen sender');
 insert into devicetypeattribute(dtype, name, details) values ('AudioConnector', 'aux', '3.5mm aux');
 insert into devicetypeattribute(dtype, name, details) values ('AudioConnector', 'XLR', '3 pin XLR connector');
@@ -34,26 +34,26 @@ VALUES
  * everything above this line are inserts that we probably want to keep permanently as default values
  * everything below here are inserts that we throw away when going into production since they are purely for testing purposes
 */
--- Audio devices
-INSERT INTO devicetype (name, image_blob_url, variant, dtype, connector_id, status)
+-- Audio
+INSERT INTO devicetype (name, image_blob, variant, dtype, connector_id, status)
 VALUES
-    ('Sennheiser HD 600', 'url1', 'audio', 'AudioType', 1, 'active'),
-    ('Bose QuietComfort 35', 'url2', 'audio', 'AudioType', 2, 'active'),
-    ('Sony WH-1000XM4', 'url3', 'audio', 'AudioType', 3, 'active'),
-    ('Audio-Technica ATH-M50X', 'url4', 'audio', 'AudioType', 1, 'active'),
-    ('AKG K702', 'url5', 'audio', 'AudioType', 2, 'active');
+    ('Sennheiser HD 600', 'url1', 'audio', 'AudioType', 13, 'active'),
+    ('Bose QuietComfort 35', 'url2', 'audio', 'AudioType', 14, 'active'),
+    ('Sony WH-1000XM4', 'url3', 'audio', 'AudioType', 15, 'active'),
+    ('Audio-Technica ATH-M50X', 'url4', 'audio', 'AudioType', 14, 'active'),
+    ('AKG K702', 'url5', 'audio', 'AudioType', 13, 'active');
 
--- Lens devices
-INSERT INTO devicetype (name, image_blob_url, variant, dtype, f_stop, focal_length, mount_id, status)
+-- Lenses
+INSERT INTO devicetype (name, image_blob, variant, dtype, f_stop, focal_length, mount_id, status)
 VALUES
-    ( 'Canon EF 50mm f/1.8 STM', 'url1', 'lens', 'LensType', 'f1.8', '50mm', 1, 'active'),
-    ( 'Nikon Z 35mm f/1.8 S', 'url2', 'lens', 'LensType', 'f2.8', '35mm', 2, 'active'),
-    ( 'Sony FE 85mm f/1.4 GM', 'url3', 'lens', 'LensType', 'f1.4', '85mm', 3, 'active'),
-    ( 'Fujifilm XF 24mm f/2.0 R', 'url4', 'lens', 'LensType', 'f2.0', '24mm', 1, 'active'),
-    ( 'Sigma 70-200mm f/2.8 DG OS HSM', 'url5', 'lens', 'LensType', 'f2.8', '70-200mm', 2, 'active');
+    ( 'Canon EF 50mm f/1.8 STM', 'url1', 'lens', 'LensType', 'f1.8', '50mm', 6, 'active'),
+    ( 'Nikon Z 35mm f/1.8 S', 'url2', 'lens', 'LensType', 'f2.8', '35mm', 7, 'active'),
+    ( 'Sony FE 85mm f/1.4 GM', 'url3', 'lens', 'LensType', 'f1.4', '85mm', 8, 'active'),
+    ( 'Fujifilm XF 24mm f/2.0 R', 'url4', 'lens', 'LensType', 'f2.0', '24mm', 6, 'active'),
+    ( 'Sigma 70-200mm f/2.8 DG OS HSM', 'url5', 'lens', 'LensType', 'f2.8', '70-200mm', 7, 'active');
 
--- Light devices
-INSERT INTO devicetype (name, image_blob_url, variant, dtype, watts, rgb, variable_temperature, status)
+-- Lights
+INSERT INTO devicetype (name, image_blob, variant, dtype, watts, rgb, variable_temperature, status)
 VALUES
     ( 'Aputure LS C300d II', 'url1', 'light', 'LightType', 100, true, false, 'active'),
     ( 'Godox SL-200W II', 'url2', 'light', 'LightType', 200, false, true, 'active'),
@@ -61,17 +61,17 @@ VALUES
     ( 'Neewer 400W LED', 'url4', 'light', 'LightType', 400, false, false, 'active'),
     ( 'Yongnuo YN360 III Pro', 'url5', 'light', 'LightType', 500, true, false, 'active');
 
--- Microphone devices
-INSERT INTO devicetype (name, image_blob_url, variant, dtype, needs_recorder, connector_id, needs_power, status)
+-- Microphones
+INSERT INTO devicetype (name, image_blob, variant, dtype, needs_recorder, connector_id, needs_power, status)
 VALUES
-    ( 'Shure SM7B', 'url1', 'microphone', 'MicrophoneType', true, 1, false, 'active'),
-    ( 'Rode NT1-A', 'url2', 'microphone', 'MicrophoneType', false, 2, true, 'active'),
-    ( 'Audio-Technica AT2020', 'url3', 'microphone', 'MicrophoneType', true, 3, false, 'active'),
-    ( 'Blue Yeti X', 'url4', 'microphone', 'MicrophoneType', false, 1, true, 'active'),
-    ( 'AKG C414 XLII', 'url5', 'microphone', 'MicrophoneType', true, 2, false, 'active');
+    ( 'Shure SM7B', 'url1', 'microphone', 'MicrophoneType', true, 13, false, 'active'),
+    ( 'Rode NT1-A', 'url2', 'microphone', 'MicrophoneType', false, 13, true, 'active'),
+    ( 'Audio-Technica AT2020', 'url3', 'microphone', 'MicrophoneType', true, 14, false, 'active'),
+    ( 'Blue Yeti X', 'url4', 'microphone', 'MicrophoneType', false, 14, true, 'active'),
+    ( 'AKG C414 XLII', 'url5', 'microphone', 'MicrophoneType', true, 15, false, 'active');
 
--- Simple devices
-INSERT INTO devicetype (name, image_blob_url, variant, dtype, description, status)
+-- Simple
+INSERT INTO devicetype (name, image_blob, variant, dtype, description, status)
 VALUES
     ( 'Samsung Galaxy Buds', 'url1', 'simple', 'SimpleType', 'Wireless earbuds', 'active'),
     ( 'Apple AirPods Pro', 'url2', 'simple', 'SimpleType', 'Noise-canceling earbuds', 'active'),
@@ -79,8 +79,8 @@ VALUES
     ( 'Jabra Elite 75t', 'url4', 'simple', 'SimpleType', 'Bluetooth earbuds', 'active'),
     ( 'Sony WF-1000XM3', 'url5', 'simple', 'SimpleType', 'True wireless noise-canceling earbuds', 'active');
 
--- Stabilizer devices
-INSERT INTO devicetype (name, image_blob_url, variant, dtype, max_weight_kilograms, number_of_axis, status)
+-- Stabilizers
+INSERT INTO devicetype (name, image_blob, variant, dtype, max_weight_kilograms, number_of_axis, status)
 VALUES
     ( 'DJI Ronin-S', 'url1', 'stabilizer', 'StabilizerType', 2.5, 3, 'active'),
     ( 'Zhiyun Crane 2', 'url2', 'stabilizer', 'StabilizerType', 3.0, 2, 'active'),
@@ -88,15 +88,33 @@ VALUES
     ( 'Moza Air 2', 'url4', 'stabilizer', 'StabilizerType', 2.0, 2, 'active'),
     ( 'Gudsen Moza Mini-P', 'url5', 'stabilizer', 'StabilizerType', 2.5, 3, 'active');
 
--- Tripod devices
-INSERT INTO devicetype (name, image_blob_url, variant, dtype, height_centimeters, head_id, status)
+-- Tripods
+INSERT INTO devicetype (name, image_blob, variant, dtype, height_centimeters, head_id, status)
 VALUES
-    ( 'Manfrotto MT190XPRO3', 'url1', 'tripod', 'TripodType', 150, 1, 'active'),
-    ( 'Benro A2573F', 'url2', 'tripod', 'TripodType', 180, 2, 'active'),
-    ( 'Gitzo GT3543LS', 'url3', 'tripod', 'TripodType', 200, 3, 'active'),
-    ( 'Vanguard Alta Pro 2', 'url4', 'tripod', 'TripodType', 170, 1, 'active'),
-    ( 'Slik Pro 700DX', 'url5', 'tripod', 'TripodType', 160, 2, 'active');
+    ( 'Manfrotto MT190XPRO3', 'url1', 'tripod', 'TripodType', 150, 10, 'active'),
+    ( 'Benro A2573F', 'url2', 'tripod', 'TripodType', 180, 11, 'active'),
+    ( 'Gitzo GT3543LS', 'url3', 'tripod', 'TripodType', 200, 12, 'active'),
+    ( 'Vanguard Alta Pro 2', 'url4', 'tripod', 'TripodType', 170, 11, 'active'),
+    ( 'Slik Pro 700DX', 'url5', 'tripod', 'TripodType', 160, 10, 'active');
 
+-- Drones
+INSERT INTO devicetype (name, image_blob, variant, dtype, max_range_kilometers, flight_time_minutes, requires_license, status)
+VALUES
+    ('DJI Mavic Pro', 'url1', 'drone', 'DroneType', 7, 27, true, 'active'),
+    ('Parrot Anafi', 'url2', 'drone', 'DroneType', 4, 25, false, 'active'),
+    ('Autel Evo II', 'url3', 'drone', 'DroneType', 9, 40, true, 'active'),
+    ('DJI Phantom 4', 'url4', 'drone', 'DroneType', 5, 28, true, 'active'),
+    ('Yuneec Typhoon H Pro', 'url5', 'drone', 'DroneType', 1, 25, false, 'active');
+
+-- Cameras
+
+INSERT INTO devicetype (name, image_blob, variant, dtype, mount_id, system_id, autofocus, status)
+VALUES
+    ('Canon EOS 5D Mark IV', 'url1', 'camera', 'CameraType', 6, 1, true, 'active'),
+    ('Nikon D850', 'url2', 'camera', 'CameraType', 6, 2, true, 'active'),
+    ('Sony Alpha a7 III', 'url3', 'camera', 'CameraType', 7, 1, true, 'active'),
+    ('Fujifilm X-T3', 'url4', 'camera', 'CameraType', 7, 1, false, 'active'),
+    ('Olympus OM-D E-M10 Mark III', 'url5', 'camera', 'CameraType', 8, 2, true, 'active');
 
 -- assigning tags to devicetypes
 INSERT INTO tag_devicetype (tag_tag_id, types_type_id)

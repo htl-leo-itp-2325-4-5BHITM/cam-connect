@@ -79,7 +79,7 @@ public class DeviceTypeRepository {
         List<DeviceTypeMinimalDTO> deviceTypes = new LinkedList<DeviceTypeMinimalDTO>();
 
         deviceTypes = em.createQuery(
-                        "SELECT new at.camconnect.dtos.deviceType.DeviceTypeMinimalDTO(d.id, d.variant, d.name, d.image_blob_url) FROM DeviceType d " +
+                        "SELECT new at.camconnect.dtos.deviceType.DeviceTypeMinimalDTO(d.id, d.variant, d.name, d.image_blob) FROM DeviceType d " +
                                 "WHERE UPPER(d.name) LIKE :searchTerm " +
                                 "order by name",
                         DeviceTypeMinimalDTO.class)
@@ -136,7 +136,7 @@ public class DeviceTypeRepository {
         DeviceType deviceType = getById(id); //should result in a child of DeviceType like CameraType
 
         deviceType.setName(data.name());
-        deviceType.setImage_blob_url(data.image());
+        deviceType.setImage_blob(data.image());
 
         //The DeviceTypeDTO is converted into a DeviceType global which contains objects instead of ids
         DeviceTypeGlobalObjectsDTO dataWithObjects = new DeviceTypeGlobalObjectsDTO(

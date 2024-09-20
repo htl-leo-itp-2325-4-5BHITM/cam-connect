@@ -2,14 +2,11 @@ package at.camconnect.model.DeviceTypeVariants;
 
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalIdDTO;
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
-import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.responseSystem.CCException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-
-import java.time.LocalDateTime;
 
 @Entity
 public class SimpleType extends DeviceType {
@@ -42,7 +39,7 @@ public class SimpleType extends DeviceType {
 
     @Override
     public DeviceTypeGlobalIdDTO toGlobalDTO() {
-        return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getDescription(), getImage_blob_url());
+        return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getDescription(), getImage_blob());
     }
 
     public String getDescription() {

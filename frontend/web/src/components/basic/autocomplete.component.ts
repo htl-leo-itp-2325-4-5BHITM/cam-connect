@@ -142,7 +142,6 @@ export class AutocompleteComponent<T> extends LitElement {
      * displays the suggestion container
      */
     showSuggestions(){
-        console.log("showing autocomplete suggestions")
         this.logger.log("----SHOWING SUGGESTIONS----", this.placeholder, this.selected)
         AutocompleteComponent.suggestionsVisible = this
 

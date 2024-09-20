@@ -32,7 +32,7 @@ public class DroneType extends DeviceType {
     public void update(DeviceTypeGlobalObjectsDTO data) {
         try{
             setName(data.name());
-            setImage_blob_url(data.image());
+            setImage_blob(data.image());
             setMax_range_kilometers(data.max_range());
             setFlight_time_minutes(data.flight_time_minutes());
             setRequires_license(data.requires_license());
