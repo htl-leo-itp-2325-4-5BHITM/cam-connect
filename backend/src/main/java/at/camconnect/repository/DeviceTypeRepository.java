@@ -63,6 +63,7 @@ public class DeviceTypeRepository {
     }
 
     public DeviceTypeCollection getAll(){
+        List<AudioType> audioTypes = em.createQuery("SELECT d FROM AudioType d where d.status != :status", AudioType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
         List<CameraType> cameraTypes = em.createQuery("SELECT d FROM CameraType d WHERE d.status != :status", CameraType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
         List<DroneType> droneTypes = em.createQuery("SELECT d FROM DroneType d where d.status != :status", DroneType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
         List<LensType> lensTypes = em.createQuery("SELECT d FROM LensType d where d.status != :status", LensType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
@@ -71,7 +72,7 @@ public class DeviceTypeRepository {
         List<StabilizerType> stabilizerTypes = em.createQuery("SELECT d FROM StabilizerType d where d.status != :status", StabilizerType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
         List<TripodType> tripodTypes = em.createQuery("SELECT d FROM TripodType d where d.status != :status", TripodType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
 
-        return new DeviceTypeCollection(cameraTypes, droneTypes, lensTypes, lightTypes, microphoneTypes, stabilizerTypes, tripodTypes);
+        return new DeviceTypeCollection(cameraTypes, droneTypes, lensTypes, lightTypes, microphoneTypes, stabilizerTypes, tripodTypes, audioTypes);
     }
 
     public List<AutocompleteOptionDTO<DeviceTypeMinimalDTO>> search(String searchTerm){
@@ -172,6 +173,8 @@ public class DeviceTypeRepository {
     private Class<? extends DeviceType> enumToClass(DeviceTypeVariantEnum typeEnum) {
         //yes there are breaks missing, but they are unnecessary because of the returns
         switch (typeEnum) {
+            case audio:
+                return AudioType.class;
             case microphone:
                 return MicrophoneType.class;
             case camera:
@@ -249,6 +252,7 @@ public class DeviceTypeRepository {
     private String getCSVHeader(String type) {
         String base = "type_id;creation_date;name;image;status;variant;";
         return base + switch(type){
+            case "audio" -> "connector_id;\n";
             case "camera" -> "sensor_id;resolution_id;mount_id;system;autofocus;\n";
             case "drone" -> "sensor_id;resolution_id;max_range;\n";
             case "lens" -> "f_stop;mount_id;focal_length;\n";
@@ -270,7 +274,7 @@ public class DeviceTypeRepository {
             put(12, new LinkedList<>(List.of("camera")));
             put(9, new LinkedList<>(List.of("drone", "lens", "light", "microphone")));
             put(8, new LinkedList<>(List.of("stabilizer", "tripod")));
-            put(7, new LinkedList<>(List.of("simple")));
+            put(7, new LinkedList<>(List.of("simple", "audio")));
         }};
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -298,6 +302,7 @@ public class DeviceTypeRepository {
                         currType = lineArray[5];
 
                         switch(currType){
+                            case "audio": lineArray[6] = lineArray[10]; break; //todo hmm weiß nicht ob das stimmt
                             case "simple": lineArray[6] = lineArray[25]; break;
                             case "drone": lineArray[8] = lineArray[12]; break;
                             case "lens": lineArray[6] = lineArray[8]; lineArray[7] = lineArray[13]; lineArray[8] = lineArray[14]; break;

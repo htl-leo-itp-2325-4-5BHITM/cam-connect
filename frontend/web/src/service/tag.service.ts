@@ -21,7 +21,7 @@ export default class TagService {
             })
     }
 
-    static async search(searchTerm: string): Promise<SimpleOption<number, DeviceType>[]> {
+    static async search(searchTerm: string, tags: Tag[]): Promise<SimpleOption<number, DeviceType>[]> {
         try {
             const result: ccResponse<SimpleOption<number, DeviceType>[]> = await Api.postData(
                 "/tag/search",

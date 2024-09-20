@@ -2,6 +2,7 @@ import {html, LitElement} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../../styles/components/app/edit/deviceTypeEditEntry.styles.scss'
 import {
+    AudioType,
     CameraType,
     DeviceTypeFullDTO,
     DroneType,
@@ -81,7 +82,9 @@ export class DeviceTypeEditEntryComponent extends LitElement {
                 </cc-button>
             </div>
             
-            <cc-circle-select></cc-circle-select>
+            <cc-circle-select .checked="${this.appState.value.selectedDeviceTypeEditEntries.has(this)}" 
+                              @click="${() => {model.appState.value.toggleSelectedDeviceTypeEditEntry(this)}}">
+            </cc-circle-select>
         `
     }
 
@@ -91,20 +94,18 @@ export class DeviceTypeEditEntryComponent extends LitElement {
 
     renderCamera(cameraType : CameraType){
         return html`
-            ${this.getPropertyValue("Sensor", cameraType.sensor?.name)}
-            ${this.getPropertyValue("Auflösung", cameraType.resolution?.name)}
-            ${this.getPropertyValue("Autofokus", cameraType.autofocus)}
-            ${this.getPropertyValue("Maximale Framerate", cameraType.framerate)}
             ${this.getPropertyValue("Mount", cameraType.mount?.name)}
             ${this.getPropertyValue("System", cameraType.system?.name)}
+            ${this.getPropertyValue("Foto Resolution", cameraType.photoResolution?.name)}
+            ${this.getPropertyValue("Autofokus", cameraType.autofocus)}
         `
     }
 
     renderDrone(droneType : DroneType) {
         return html`
-            ${this.getPropertyValue("Sensor", droneType.sensor?.name)}
-            ${this.getPropertyValue("Auflösung", droneType.resolution?.name)}
-            ${this.getPropertyValue("Maximale Reichweite", droneType.max_range)}
+            ${this.getPropertyValue("Maximale Reichweite (km)", droneType.max_range_kilometers)}
+            ${this.getPropertyValue("Flugzeit (min)", droneType.flight_time_minutes)}
+            ${this.getPropertyValue("Benötigt Lizenz", droneType.requires_license)}
         `
     }
 
@@ -126,9 +127,15 @@ export class DeviceTypeEditEntryComponent extends LitElement {
 
     renderMicrophone(microphoneType : MicrophoneType){
         return html`
-            ${this.getPropertyValue("Needs Recorder", microphoneType.needsRecorder)}
-            ${this.getPropertyValue("Wireless", microphoneType.wireless)}
-            ${this.getPropertyValue("Windblocker", microphoneType.windblocker)}
+            ${this.getPropertyValue("Connector", microphoneType.connector?.name)}
+            ${this.getPropertyValue("Benötigt Strom", microphoneType.needs_power)}
+            ${this.getPropertyValue("Benötigt Recorder", microphoneType.needs_recorder)}
+        `
+    }
+
+    renderAudio(audioType : AudioType){
+        return html`
+            ${this.getPropertyValue("Connector", audioType.connector?.name)}
         `
     }
 

@@ -36,61 +36,61 @@ VALUES
  * TODO take a look at the default values again, there has to be a better way to do this then through sql (could result in duplicates, is not very readable)
 */
 
-INSERT INTO devicetype (type_id, name, image_blob_url, variant, dtype, connector_id)
+INSERT INTO devicetype (name, image_blob_url, variant, dtype, connector_id)
 VALUES
-    (1, 'Audio Type 1', 'url1', 'audio', 'AudioType', 1),
-    (2, 'Audio Type 2', 'url2', 'audio', 'AudioType', 2),
-    (3, 'Audio Type 3', 'url3', 'audio', 'AudioType', 3),
-    (4, 'Audio Type 4', 'url4', 'audio', 'AudioType', 1),
-    (5, 'Audio Type 5', 'url5', 'audio', 'AudioType', 2);
+    ('Audio Type 1', 'url1', 'audio', 'AudioType', 1),
+    ('Audio Type 2', 'url2', 'audio', 'AudioType', 2),
+    ('Audio Type 3', 'url3', 'audio', 'AudioType', 3),
+    ('Audio Type 4', 'url4', 'audio', 'AudioType', 1),
+    ('Audio Type 5', 'url5', 'audio', 'AudioType', 2);
 
-INSERT INTO devicetype (type_id, name, image_blob_url, variant, dtype, f_stop, focal_length, mount_id)
+INSERT INTO devicetype (name, image_blob_url, variant, dtype, f_stop, focal_length, mount_id)
 VALUES
-    (1, 'Lens Type 1', 'url1', 'lens', 'LensType', 'f1.8', '50mm', 1),
-    (2, 'Lens Type 2', 'url2', 'lens', 'LensType', 'f2.8', '35mm', 2),
-    (3, 'Lens Type 3', 'url3', 'lens', 'LensType', 'f1.4', '85mm', 3),
-    (4, 'Lens Type 4', 'url4', 'lens', 'LensType', 'f2.0', '24mm', 1),
-    (5, 'Lens Type 5', 'url5', 'lens', 'LensType', 'f2.8', '70-200mm', 2);
+    ( 'Lens Type 1', 'url1', 'lens', 'LensType', 'f1.8', '50mm', 1),
+    ( 'Lens Type 2', 'url2', 'lens', 'LensType', 'f2.8', '35mm', 2),
+    ( 'Lens Type 3', 'url3', 'lens', 'LensType', 'f1.4', '85mm', 3),
+    ( 'Lens Type 4', 'url4', 'lens', 'LensType', 'f2.0', '24mm', 1),
+    ( 'Lens Type 5', 'url5', 'lens', 'LensType', 'f2.8', '70-200mm', 2);
 
-INSERT INTO devicetype (type_id, name, image_blob_url, variant, dtype, watts, rgb, variable_temperature)
+INSERT INTO devicetype (name, image_blob_url, variant, dtype, watts, rgb, variable_temperature)
 VALUES
-    (1, 'Light Type 1', 'url1', 'light', 'LightType', 100, true, false),
-    (2, 'Light Type 2', 'url2', 'light', 'LightType', 200, false, true),
-    (3, 'Light Type 3', 'url3', 'light', 'LightType', 300, true, true),
-    (4, 'Light Type 4', 'url4', 'light', 'LightType', 400, false, false),
-    (5, 'Light Type 5', 'url5', 'light', 'LightType', 500, true, false);
+    ( 'Light Type 1', 'url1', 'light', 'LightType', 100, true, false),
+    ( 'Light Type 2', 'url2', 'light', 'LightType', 200, false, true),
+    ( 'Light Type 3', 'url3', 'light', 'LightType', 300, true, true),
+    ( 'Light Type 4', 'url4', 'light', 'LightType', 400, false, false),
+    ( 'Light Type 5', 'url5', 'light', 'LightType', 500, true, false);
 
-INSERT INTO devicetype (type_id, name, image_blob_url, variant, dtype, needs_recorder, connector_id, needs_power)
+INSERT INTO devicetype (name, image_blob_url, variant, dtype, needs_recorder, connector_id, needs_power)
 VALUES
-(1, 'Microphone Type 1', 'url1', 'microphone', 'MicrophoneType', true, 1, false),
-(2, 'Microphone Type 2', 'url2', 'microphone', 'MicrophoneType', false, 2, true),
-(3, 'Microphone Type 3', 'url3', 'microphone', 'MicrophoneType', true, 3, false),
-(4, 'Microphone Type 4', 'url4', 'microphone', 'MicrophoneType', false, 1, true),
-(5, 'Microphone Type 5', 'url5', 'microphone', 'MicrophoneType', true, 2, false);
+( 'Microphone Type 1', 'url1', 'microphone', 'MicrophoneType', true, 1, false),
+( 'Microphone Type 2', 'url2', 'microphone', 'MicrophoneType', false, 2, true),
+( 'Microphone Type 3', 'url3', 'microphone', 'MicrophoneType', true, 3, false),
+( 'Microphone Type 4', 'url4', 'microphone', 'MicrophoneType', false, 1, true),
+( 'Microphone Type 5', 'url5', 'microphone', 'MicrophoneType', true, 2, false);
 
-INSERT INTO devicetype (type_id, name, image_blob_url, variant, dtype, description)
+INSERT INTO devicetype (name, image_blob_url, variant, dtype, description)
 VALUES
-(1, 'Simple Type 1', 'url1', 'simple', 'SimpleType', 'Description 1'),
-(2, 'Simple Type 2', 'url2', 'simple', 'SimpleType', 'Description 2'),
-(3, 'Simple Type 3', 'url3', 'simple', 'SimpleType', 'Description 3'),
-(4, 'Simple Type 4', 'url4', 'simple', 'SimpleType', 'Description 4'),
-(5, 'Simple Type 5', 'url5', 'simple', 'SimpleType', 'Description 5');
+( 'Simple Type 1', 'url1', 'simple', 'SimpleType', 'Description 1'),
+( 'Simple Type 2', 'url2', 'simple', 'SimpleType', 'Description 2'),
+( 'Simple Type 3', 'url3', 'simple', 'SimpleType', 'Description 3'),
+( 'Simple Type 4', 'url4', 'simple', 'SimpleType', 'Description 4'),
+( 'Simple Type 5', 'url5', 'simple', 'SimpleType', 'Description 5');
 
-INSERT INTO devicetype (type_id, name, image_blob_url, variant, dtype, max_weight_kilograms, number_of_axis)
+INSERT INTO devicetype (name, image_blob_url, variant, dtype, max_weight_kilograms, number_of_axis)
 VALUES
-(1, 'Stabilizer Type 1', 'url1', 'stabilizer', 'StabilizerType', 2.5, 3),
-(2, 'Stabilizer Type 2', 'url2', 'stabilizer', 'StabilizerType', 3.0, 2),
-(3, 'Stabilizer Type 3', 'url3', 'stabilizer', 'StabilizerType', 1.5, 3),
-(4, 'Stabilizer Type 4', 'url4', 'stabilizer', 'StabilizerType', 2.0, 2),
-(5, 'Stabilizer Type 5', 'url5', 'stabilizer', 'StabilizerType', 2.5, 3);
+( 'Stabilizer Type 1', 'url1', 'stabilizer', 'StabilizerType', 2.5, 3),
+( 'Stabilizer Type 2', 'url2', 'stabilizer', 'StabilizerType', 3.0, 2),
+( 'Stabilizer Type 3', 'url3', 'stabilizer', 'StabilizerType', 1.5, 3),
+( 'Stabilizer Type 4', 'url4', 'stabilizer', 'StabilizerType', 2.0, 2),
+( 'Stabilizer Type 5', 'url5', 'stabilizer', 'StabilizerType', 2.5, 3);
 
-INSERT INTO devicetype (type_id, name, image_blob_url, variant, dtype, height_centimeters, head_id)
+INSERT INTO devicetype (name, image_blob_url, variant, dtype, height_centimeters, head_id)
 VALUES
-(1, 'Tripod Type 1', 'url1', 'tripod', 'TripodType', 150, 1),
-(2, 'Tripod Type 2', 'url2', 'tripod', 'TripodType', 180, 2),
-(3, 'Tripod Type 3', 'url3', 'tripod', 'TripodType', 200, 3),
-(4, 'Tripod Type 4', 'url4', 'tripod', 'TripodType', 170, 1),
-(5, 'Tripod Type 5', 'url5', 'tripod', 'TripodType', 160, 2);
+( 'Tripod Type 1', 'url1', 'tripod', 'TripodType', 150, 1),
+( 'Tripod Type 2', 'url2', 'tripod', 'TripodType', 180, 2),
+( 'Tripod Type 3', 'url3', 'tripod', 'TripodType', 200, 3),
+( 'Tripod Type 4', 'url4', 'tripod', 'TripodType', 170, 1),
+( 'Tripod Type 5', 'url5', 'tripod', 'TripodType', 160, 2);
 
 -- assigning tags to devicetypes
 INSERT INTO tag_devicetype (tag_tag_id, types_type_id)

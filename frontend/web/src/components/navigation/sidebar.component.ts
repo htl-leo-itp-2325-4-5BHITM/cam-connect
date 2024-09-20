@@ -99,6 +99,8 @@ export class SidebarComponent extends LitElement {
                                 return html`
                                     <p class="${value.id as DeviceTypeVariantEnum == this.appState.value.editPageType ? 'selected' : ''}"
                                        @click="${() => {
+                                           UrlHandler.updateUrl('/app/edit')
+                                           UrlHandler.clearParams()
                                            UrlHandler.setParam("type", value.id as string)
                                            this.appState.value.editPageType = value.id as DeviceTypeVariantEnum
                                        }}"

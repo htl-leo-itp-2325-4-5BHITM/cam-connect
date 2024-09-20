@@ -12,7 +12,8 @@ import {html, render, TemplateResult} from "lit"
 import UrlHandler from "./util/UrlHandler"
 import {BehaviorSubject} from "rxjs"
 import {KeyBoardShortCut} from "./util/KeyboardShortcut"
-import {EditComponent} from "./components/app/edit/edit.component"
+import {DeviceTypeEditEntryComponent} from "./components/app/edit/deviceTypeEditEntry.component"
+import {DeviceEditEntryComponent} from "./components/app/edit/deviceEditEntry"
 
 interface ActionCancellation {
     identifier: string,
@@ -47,6 +48,8 @@ export class AppState{
     private _createMultiRentModalOpen: boolean = false
     private _selectedRentEntries: Set<RentListEntryComponent> = new Set<RentListEntryComponent>()
     private _selectedDeviceEntries: Set<DeviceListEntryComponent> = new Set<DeviceListEntryComponent>()
+    private _selectedDeviceTypeEditEntries: Set<DeviceTypeEditEntryComponent> = new Set<DeviceTypeEditEntryComponent>()
+    private _selectedDeviceEditEntries: Set<DeviceEditEntryComponent> = new Set<DeviceEditEntryComponent>()
     private _cancelCurrentAction: ActionCancellation[] = []
     private _createRentElement: CreateRentComponent
     private _appElement: HTMLElement
@@ -205,6 +208,14 @@ export class AppState{
         return this._selectedDeviceEntries
     }
 
+    get selectedDeviceTypeEditEntries(): Set<DeviceTypeEditEntryComponent> {
+        return this._selectedDeviceTypeEditEntries
+    }
+
+    get selectedDeviceEditEntries(): Set<DeviceEditEntryComponent> {
+        return this._selectedDeviceEditEntries
+    }
+
     addSelectedRentEntry(rentEntry: RentListEntryComponent){
         this.selectedRentEntries.add(rentEntry)
         this.update()
@@ -222,6 +233,35 @@ export class AppState{
 
     removeSelectedDeviceEntry(deviceEntry: DeviceListEntryComponent){
         this.selectedDeviceEntries.delete(deviceEntry)
+        this.update()
+    }
+
+    toggleSelectedDeviceEditEntry(deviceEditEntry: DeviceEditEntryComponent){
+        console.log(deviceEditEntry, this.selectedDeviceEditEntries)
+        if(this.selectedDeviceEditEntries.has(deviceEditEntry)){
+            this.selectedDeviceEditEntries.delete(deviceEditEntry)
+        }else{
+            this.selectedDeviceEditEntries.add(deviceEditEntry)
+        }
+        this.update()
+    }
+
+    clearSelectedDeviceEditEntries(){
+        this.selectedDeviceEditEntries.clear()
+        this.update()
+    }
+
+    toggleSelectedDeviceTypeEditEntry(deviceTypeEditEntry: DeviceTypeEditEntryComponent){
+        if(this.selectedDeviceTypeEditEntries.has(deviceTypeEditEntry)){
+            this.selectedDeviceTypeEditEntries.delete(deviceTypeEditEntry)
+        }else{
+            this.selectedDeviceTypeEditEntries.add(deviceTypeEditEntry)
+        }
+        this.update()
+    }
+
+    clearSelectedDeviceTypeEditEntries(){
+        this.selectedDeviceTypeEditEntries.clear()
         this.update()
     }
 

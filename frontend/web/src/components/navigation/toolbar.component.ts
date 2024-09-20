@@ -126,8 +126,10 @@ export class ToolbarComponent extends LitElement {
 
     renderEditBar(){
         let isButtonDisabled = {
-            uncheckAll: this.appState.value.selectedDeviceEntries.size == 0,
-            remove: this.appState.value.selectedDeviceEntries.size == 0,
+            uncheckAll: this.appState.value.selectedDeviceTypeEditEntries.size == 0 &&
+                this.appState.value.selectedDeviceEditEntries.size == 0,
+            remove: this.appState.value.selectedDeviceEntries.size == 0 &&
+                this.appState.value.selectedDeviceTypeEditEntries.size == 0,
         }
 
         return html`
@@ -144,8 +146,8 @@ export class ToolbarComponent extends LitElement {
                 </div>
                 
                 <div>
-                    <cc-button @click=${() => {this.uncheckAll("device")}}
-                               size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.uncheckAll}">
+                    <cc-button @click=${() => {this.uncheckAll("edit")}} size="${SizeEnum.SMALL}" 
+                               color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.uncheckAll}">
                         <div slot="left" class="icon accent">
                             <img slot="left" src="../../../assets/icon/select_circle.svg" alt="+">
                         </div>
@@ -185,6 +187,9 @@ export class ToolbarComponent extends LitElement {
                 console.log(entry)
                 entry.toggleDeviceCheck()
             })
+        } else if(type === "edit"){
+            this.appState.value.clearSelectedDeviceEditEntries()
+            this.appState.value.clearSelectedDeviceTypeEditEntries()
         }
     }
 

@@ -9,7 +9,7 @@ import {
     CameraType,
     DeviceTypeFullDTO,
     DeviceTypeVariantEnum,
-    DroneType, LensType, LightType, StabilizerType, TripodType, SimpleType
+    DroneType, LensType, LightType, StabilizerType, TripodType, SimpleType, AudioType
 } from "../../service/deviceType.service"
 import {ObservedProperty} from "../../model"
 import {AppState} from "../../AppState"
@@ -45,7 +45,8 @@ export class DeviceListEntryComponent extends LitElement {
         let details;
         switch(this.deviceTypeFull.deviceType.variant){
             case DeviceTypeVariantEnum.camera: details = this.renderCamera(); break;
-            case DeviceTypeVariantEnum.microphone: details = this.renderAudio(); break;
+            case DeviceTypeVariantEnum.audio: details = this.renderAudio(); break;
+            case DeviceTypeVariantEnum.microphone: details = this.renderMicrophone(); break;
             case DeviceTypeVariantEnum.drone: details = this.renderDrone(); break;
             case DeviceTypeVariantEnum.lens: details = this.renderLens(); break;
             case DeviceTypeVariantEnum.light: details = this.renderLight(); break;
@@ -87,15 +88,11 @@ export class DeviceListEntryComponent extends LitElement {
         return html`
             <section>
                 <div class="details">
+                    <cc-property-value size="small" property="Mount" value="${camera.mount.name}"
+                                       isLink></cc-property-value>
                     <cc-property-value size="small" property="System" value="${camera.system.name}"
                                        isLink></cc-property-value>
-                    <cc-property-value size="small" property="Sensor" value="${camera.sensor?.name}"
-                                       isLink></cc-property-value>
-                    <cc-property-value size="small" property="Auflösung"
-                                       value="${camera.resolution.name}"></cc-property-value>
-                    <cc-property-value size="small" property="Maximale-Framerate"
-                                       value="${camera.framerate}fps"></cc-property-value>
-                    <cc-property-value size="small" property="Mount" value="${camera.mount?.name}"
+                    <cc-property-value size="small" property="Foto Resolution" value="${camera.photoResolution.name}"
                                        isLink></cc-property-value>
                     <cc-property-value size="small" property="Autofokus"
                                        value="${camera.autofocus ? 'Ja' : 'Nein'}"></cc-property-value>
@@ -108,15 +105,31 @@ export class DeviceListEntryComponent extends LitElement {
     }
 
     renderAudio() {
+        let audio = this.deviceTypeFull.deviceType as AudioType
+        return html`
+            <section>
+                <div class="details">
+                    <cc-property-value size="small" property="Audio Connector"
+                                       value="${audio.connector?.name}"></cc-property-value>
+                </div>
+                <div class="image">
+                    <img src="../../../assets/icon/tempCamera.png" alt="">
+                </div>
+            </section>
+        `
+    }
+
+    renderMicrophone() {
         let audio = this.deviceTypeFull.deviceType as MicrophoneType
         return html`
             <section>
                 <div class="details">
+                    <cc-property-value size="small" property="Audio Connector"
+                                       value="${audio.connector?.name}"></cc-property-value>
                     <cc-property-value size="small" property="Needs Recorder"
-                                       value="${audio.needsRecorder}"></cc-property-value>
-                    <cc-property-value size="small" property="Windblocker"
-                                       value="${audio.windblocker}"></cc-property-value>
-                    <cc-property-value size="small" property="Wireless" value="${audio.wireless}"></cc-property-value>
+                                       value="${audio.needs_power}"></cc-property-value>
+                    <cc-property-value size="small" property="Needs Recorder"
+                                       value="${audio.needs_recorder}"></cc-property-value>
                 </div>
                 <div class="image">
                     <img src="../../../assets/icon/tempCamera.png" alt="">
@@ -130,12 +143,12 @@ export class DeviceListEntryComponent extends LitElement {
         return html`
             <section>
                 <div class="details">
-                    <cc-property-value size="small" property="Sensor" value="${drone.sensor?.name}"
+                    <cc-property-value size="small" property="Maximale Reichweite (km)" value="${drone.max_range_kilometers}"
                                        isLink></cc-property-value>
-                    <cc-property-value size="small" property="Auflösung"
-                                       value="${drone.resolution.resolution}"></cc-property-value>
-                    <cc-property-value size="small" property="Maximale Reichweite"
-                                       value="${drone.max_range}"></cc-property-value>
+                    <cc-property-value size="small" property="Flugzeit (min)"
+                                       value="${drone.flight_time_minutes}"></cc-property-value>
+                    <cc-property-value size="small" property="Benötigt Lizenz"
+                                       value="${drone.requires_license ? 'Ja' : 'Nein'}"></cc-property-value>
                 </div>
                 <div class="image">
                     <img src="../../../assets/icon/tempCamera.png" alt="">

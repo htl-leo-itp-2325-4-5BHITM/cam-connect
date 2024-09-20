@@ -8,6 +8,8 @@ export interface DeviceTypeAttributeSource {
     details: string
 }
 
+export interface AudioConnector extends DeviceTypeAttributeSource{}
+
 export interface CameraResolution extends DeviceTypeAttributeSource{
     resolution: string
 }

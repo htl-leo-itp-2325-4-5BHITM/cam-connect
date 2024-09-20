@@ -1,6 +1,13 @@
 import {ccResponse, SimpleOption} from '../base'
 import {model} from "../index"
-import {CameraResolution, CameraSensor, CameraSystem, LensMount, TripodHead} from "./deviceTypeAttribute.service"
+import {
+    AudioConnector,
+    CameraResolution,
+    CameraSensor,
+    CameraSystem,
+    LensMount,
+    TripodHead
+} from "./deviceTypeAttribute.service"
 import {html, TemplateResult} from "lit"
 import {unsafeSVG} from 'lit/directives/unsafe-svg.js';
 import {icon} from "@fortawesome/fontawesome-svg-core"
@@ -20,53 +27,30 @@ export interface DeviceTypeSource {
 }
 
 export enum DeviceTypeVariantEnum {
-    microphone="microphone", camera="camera", drone="drone", lens="lens", light="light", stabilizer="stabilizer", tripod="tripod", simple="simple"
+    audio="audio", microphone="microphone", camera="camera", drone="drone", lens="lens", light="light", stabilizer="stabilizer", tripod="tripod", simple="simple"
 }
 
-export interface MicrophoneType extends DeviceTypeSource{
-    windblocker: boolean
-    wireless: boolean
-    needsRecorder: boolean
+export interface AudioType extends DeviceTypeSource {
+    connector: AudioConnector
 }
-
-export interface MicrophoneTypeDTO extends MicrophoneType{}
 
 export interface CameraType extends DeviceTypeSource{
-    sensor: CameraSensor
-    resolution: CameraResolution
     mount: LensMount
     system: CameraSystem
+    photoResolution: CameraResolution
     autofocus: boolean
-    framerate: number
-}
-export interface CameraTypeDTO extends DeviceTypeSource{
-    sensor_id: number
-    resolution_id: number
-    mount_id: number
 }
 
 export interface DroneType extends DeviceTypeSource{
-    sensor: CameraSensor
-    resolution: CameraResolution
-    max_range: number
-}
-
-export interface DroneTypeDTO extends DeviceTypeSource{
-    sensor_id: number
-    resolution_id: number
-    max_range: number
+    max_range_kilometers: number
+    flight_time_minutes: number
+    requires_license: boolean
 }
 
 export interface LensType extends DeviceTypeSource{
-    f_stop: number
-    focal_length: number
     lens_mount: LensMount
-}
-
-export interface LensTypeDTO extends DeviceTypeSource{
-    f_stop: number
+    f_stop: string
     focal_length: string
-    mount_id: number
 }
 
 export interface LightType extends DeviceTypeSource{
@@ -75,39 +59,32 @@ export interface LightType extends DeviceTypeSource{
     variable_temperature: boolean
 }
 
-export interface LightTypeDTO extends LightType{}
+export interface MicrophoneType extends DeviceTypeSource{
+    connector: AudioConnector
+    needs_power: boolean
+    needs_recorder: boolean
+}
 
 export interface StabilizerType extends DeviceTypeSource{
     max_weight_kilograms: number
     number_of_axis: number
 }
 
-export interface StabilizerTypeDTO extends StabilizerType{}
-
 export interface TripodType extends DeviceTypeSource{
     height_centimeters: number
     head: TripodHead
-}
-
-export interface TripodTypeDTO extends DeviceTypeSource{
-    height_centimeters: number
-    head_id: number
 }
 
 export interface SimpleType extends DeviceTypeSource{
     description: string
 }
 
-export interface SimpleTypeDTO extends DeviceTypeSource{
-    description: string
-}
-
-
-export type DeviceType = (CameraType | MicrophoneType | DroneType | LensType | LightType | StabilizerType | TripodType | SimpleType)
+export type DeviceType = (AudioType | CameraType | MicrophoneType | DroneType | LensType | LightType | StabilizerType | TripodType | SimpleType)
 //endregion interfaces
 
 export interface DeviceTypeVariantCollection {
-    audioTypes: MicrophoneType[]
+    audioTypes: AudioType[]
+    microphoneTypes: MicrophoneType[]
     cameraTypes: CameraType[]
     droneTypes: DroneType[]
     lensTypes: LensType[]
@@ -183,5 +160,15 @@ export default class DeviceTypeService {
             case DeviceTypeVariantEnum.tripod: return html`<img src="${tripodIcon}" alt="T">`
             default: return html`${unsafeSVG(icon(faGears).html[0])}`
         }
+    }
+
+    static update(device: DeviceType){
+        Api.postData(`/devicetype/getbyid/${device.type_id}/update`, device)
+            .then(() => {
+                DeviceTypeService.fetchAllFull()
+            })
+            .catch(error => {
+                console.error(error)
+            })
     }
 }

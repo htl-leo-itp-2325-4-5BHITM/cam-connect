@@ -4,10 +4,14 @@ import styles from '../../../../styles/components/app/edit/deviceTypeEdit.styles
 import {
     DeviceTypeFullDTO, DeviceTypeVariantEnum,
 } from "../../../service/deviceType.service"
-import {ObservedProperty} from "../../../model"
+import {EditPageEnum, ObservedProperty} from "../../../model"
 import UrlHandler from "../../../util/UrlHandler"
 import {model} from "../../../index"
 import {AppState} from "../../../AppState"
+import {InputType} from "../../basic/input.component"
+import {ColorEnum, SizeEnum} from "../../../base"
+import TagService, {Tag} from "../../../service/tag.service"
+import {ChipType} from "../../basic/chip.component"
 
 @customElement('cc-device-type-edit')
 export class DeviceTypeEditComponent extends LitElement {
