@@ -14,6 +14,7 @@ import {AppState} from "../../AppState"
 import DeviceTypeService from "../../service/deviceType.service"
 import {RentStatus} from "../basic/rentStatus.component"
 import UrlHandler from "../../util/UrlHandler";
+import DeviceService from "../../service/device.service"
 
 @customElement('cc-toolbar')
 export class ToolbarComponent extends LitElement {
@@ -154,7 +155,7 @@ export class ToolbarComponent extends LitElement {
                         Auswahl aufheben
                     </cc-button>
 
-                    <cc-button @click="${() => {this.removeSelection()}}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.remove}">
+                    <cc-button @click="${() => {this.removeSelection(UrlHandler.getUrl().includes("children") ? "editDevice" : "editDeviceType")}}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.remove}">
                         <div slot="left" class="icon accent">
                             ${unsafeSVG(icon(faTrash).html[0])}
                         </div>
@@ -184,7 +185,6 @@ export class ToolbarComponent extends LitElement {
             })
         } else if(type === "device"){
             this.appState.value.selectedDeviceEntries.forEach((entry) => {
-                console.log(entry)
                 entry.toggleDeviceCheck()
             })
         } else if(type === "edit"){
@@ -197,17 +197,35 @@ export class ToolbarComponent extends LitElement {
         model.appState.value.openCreateRentModalWithDevices(this.appState.value.selectedDeviceEntries)
     }
 
-    removeSelection() {
+    removeSelection(type : "rent" | "editDevice" | "editDeviceType" = "rent") {
         PopupEngine.createModal({
-            text: `Willst du wirklich diese Verleihe löschen?`,
+            text: `${type === "rent" ? "Willst du wirklich diese Verleihe löschen?" 
+                : type === "editDevice" ? "Willst du wirklich diese Geräte löschen?"
+                : "Willst du wirklich diese Gerätetypen löschen?"}`,
             buttons: [
                 {
                     text: "Ja",
                     action: (data) => {
-                        this.appState.value.selectedRentEntries.forEach((entry) => {
-                            RentService.remove(entry.rent)
-                        })
-                        this.uncheckAll("rent")
+                        switch(type){
+                            case "rent":
+                                this.appState.value.selectedRentEntries.forEach((entry) => {
+                                    RentService.remove(entry.rent)
+                                })
+                                this.uncheckAll("rent")
+                                break;
+                            case "editDevice":
+                                this.appState.value.selectedDeviceEditEntries.forEach((entry) => {
+                                    DeviceService.remove(entry.device)
+                                })
+                                this.uncheckAll("edit")
+                                break;
+                            case "editDeviceType":
+                                this.appState.value.selectedDeviceTypeEditEntries.forEach((entry) => {
+                                    DeviceTypeService.remove(entry.deviceType.deviceType)
+                                })
+                                this.uncheckAll("edit")
+                                break;
+                        }
                     },
                     closePopup: true
                 },

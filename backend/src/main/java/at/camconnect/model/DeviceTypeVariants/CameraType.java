@@ -23,8 +23,8 @@ public class CameraType extends DeviceType {
     @JoinColumn(name = "system_id")
     private CameraSystem system;
     @ManyToOne
-    @JoinColumn(name = "photoresolution_id")
-    private CameraResolution photoresolution;
+    @JoinColumn(name = "photo_resolution_id")
+    private CameraResolution photo_resolution;
     private boolean autofocus;
 
     @Override
@@ -33,6 +33,7 @@ public class CameraType extends DeviceType {
             setAutofocus(data.autofocus());
             setMount(data.mount());
             setSystem(data.system());
+            setPhoto_resolution(data.photo_resolution());
         }catch (Exception ex){
             throw new CCException(1106);
         }
@@ -81,5 +82,13 @@ public class CameraType extends DeviceType {
 
     public void setSystem(CameraSystem system) {
         this.system = system;
+    }
+
+    public CameraResolution getPhoto_resolution() {
+        return photo_resolution;
+    }
+
+    public void setPhoto_resolution(CameraResolution photo_resolution) {
+        this.photo_resolution = photo_resolution;
     }
 }

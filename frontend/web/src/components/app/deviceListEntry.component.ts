@@ -93,7 +93,7 @@ export class DeviceListEntryComponent extends LitElement {
                                        isLink></cc-property-value>
                     <cc-property-value size="small" property="System" value="${camera.system?.name}"
                                        isLink></cc-property-value>
-                    <cc-property-value size="small" property="Foto Resolution" value="${camera.photoResolution?.name}"
+                    <cc-property-value size="small" property="Foto Resolution" value="${camera.photo_resolution?.name}"
                                        isLink></cc-property-value>
                     <cc-property-value size="small" property="Autofokus"
                                        value="${camera.autofocus ? 'Ja' : 'Nein'}"></cc-property-value>

@@ -28,6 +28,9 @@ export class InputComponent extends LitElement {
     @property()
     tooltip: string = ""
 
+    @property()
+    label: string = ""
+
     @queryAssignedElements()
     private detailElement!: Array<HTMLElement>;
 
@@ -38,7 +41,8 @@ export class InputComponent extends LitElement {
     render() {
         return html`
             <style>${styles}</style>
-            <input type="text" placeholder="${this.placeholder}" value="${this.text}">
+            <label for="inputField">${this.label}</label>
+            <input id="inputField" type="text" placeholder="${this.placeholder}" value="${this.text}">
         `
     }
 }

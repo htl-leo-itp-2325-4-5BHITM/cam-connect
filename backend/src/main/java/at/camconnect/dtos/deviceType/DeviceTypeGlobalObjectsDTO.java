@@ -24,5 +24,6 @@ public record DeviceTypeGlobalObjectsDTO(
     TripodHead head,
     LensMount mount,
     CameraSystem system,
+    CameraResolution photo_resolution,
     String description
 ) { }

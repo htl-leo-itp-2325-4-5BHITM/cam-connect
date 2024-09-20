@@ -34,6 +34,16 @@ VALUES
  * everything above this line are inserts that we probably want to keep permanently as default values
  * everything below here are inserts that we throw away when going into production since they are purely for testing purposes
 */
+-- Cameras
+
+INSERT INTO devicetype (name, image_blob, variant, dtype, mount_id, photo_resolution_id, system_id, autofocus, status)
+VALUES
+    ('Canon EOS 5D Mark IV', 'url1', 'camera', 'CameraType', 6, 3, 1, true, 'active'),
+    ('Nikon D850', 'url2', 'camera', 'CameraType', 6, 3, 2, true, 'active'),
+    ('Sony Alpha a7 III', 'url3', 'camera', 'CameraType', 7, 4, 1, true, 'active'),
+    ('Fujifilm X-T3', 'url4', 'camera', 'CameraType', 7, 5, 1, false, 'active'),
+    ('Olympus OM-D E-M10 Mark III', 'url5', 'camera', 'CameraType', 8,4, 2, true, 'active');
+
 -- Audio
 INSERT INTO devicetype (name, image_blob, variant, dtype, connector_id, status)
 VALUES
@@ -105,16 +115,6 @@ VALUES
     ('Autel Evo II', 'url3', 'drone', 'DroneType', 9, 40, true, 'active'),
     ('DJI Phantom 4', 'url4', 'drone', 'DroneType', 5, 28, true, 'active'),
     ('Yuneec Typhoon H Pro', 'url5', 'drone', 'DroneType', 1, 25, false, 'active');
-
--- Cameras
-
-INSERT INTO devicetype (name, image_blob, variant, dtype, mount_id, system_id, autofocus, status)
-VALUES
-    ('Canon EOS 5D Mark IV', 'url1', 'camera', 'CameraType', 6, 1, true, 'active'),
-    ('Nikon D850', 'url2', 'camera', 'CameraType', 6, 2, true, 'active'),
-    ('Sony Alpha a7 III', 'url3', 'camera', 'CameraType', 7, 1, true, 'active'),
-    ('Fujifilm X-T3', 'url4', 'camera', 'CameraType', 7, 1, false, 'active'),
-    ('Olympus OM-D E-M10 Mark III', 'url5', 'camera', 'CameraType', 8, 2, true, 'active');
 
 -- assigning tags to devicetypes
 INSERT INTO tag_devicetype (tag_tag_id, types_type_id)

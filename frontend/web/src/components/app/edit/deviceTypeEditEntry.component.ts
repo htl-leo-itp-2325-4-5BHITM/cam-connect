@@ -89,14 +89,14 @@ export class DeviceTypeEditEntryComponent extends LitElement {
     }
 
     getPropertyValue(property: string, value: any){
-        return html`${value ? html`<cc-property-value property="${property}" value="${value}" size="${SizeEnum.SMALL}"></cc-property-value>` : ''}`
+        return html`${value != undefined ? html`<cc-property-value property="${property}" value="${value}" size="${SizeEnum.SMALL}"></cc-property-value>` : ''}`
     }
 
     renderCamera(cameraType : CameraType){
         return html`
             ${this.getPropertyValue("Mount", cameraType.mount?.name)}
             ${this.getPropertyValue("System", cameraType.system?.name)}
-            ${this.getPropertyValue("Foto Resolution", cameraType.photoResolution?.name)}
+            ${this.getPropertyValue("Foto Resolution", cameraType.photo_resolution?.name)}
             ${this.getPropertyValue("Autofokus", cameraType.autofocus)}
         `
     }

@@ -31,6 +31,8 @@ export class DropdownComponent extends LitElement {
     }
 
     render() {
+        console.log(this.options)
+
         return html`
             <style>${styles}</style>
             <div class="dropdown" @mouseup="${this.toggleOpenClose}">
@@ -38,7 +40,7 @@ export class DropdownComponent extends LitElement {
                 ${unsafeSVG(icon(faCaretDown).html[0])}
             </div>
             <div class="dropdownOptions">
-                ${this.options.map(option => {
+                ${this.options?.map(option => {
                   return html`<p class="option" @click="${() => this.selectOption(option)}">${option.data}</p>`  
                 })}
             </div>
