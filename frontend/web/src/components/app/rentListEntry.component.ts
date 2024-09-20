@@ -223,7 +223,10 @@ export class RentListEntryComponent extends LitElement {
                 <cc-line color=${LineColor.LIGHTER} type="${Orientation.VERTICAL}"></cc-line>
                 
                 <cc-property-value size="${SizeEnum.SMALL}" property="Erstellt von"
-                                   value="${this.rent.teacher_start.firstname.charAt(0)}. ${this.rent.teacher_start.lastname}">
+                                   value="${this.rent.teacher_start ? 
+                                           this.rent.teacher_start.firstname.charAt(0) + ". " + this.rent.teacher_start.lastname
+                                           : "unbekannt"
+                                   }">
                 </cc-property-value>`
         }
     }

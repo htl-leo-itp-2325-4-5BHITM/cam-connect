@@ -2,14 +2,11 @@ package at.camconnect.model.DeviceTypeVariants;
 
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalIdDTO;
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
-import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.responseSystem.CCException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-
-import java.time.LocalDateTime;
 
 @Entity
 public class LightType extends DeviceType {
@@ -35,7 +32,7 @@ public class LightType extends DeviceType {
     public void update(DeviceTypeGlobalObjectsDTO data) {
         try{
             setName(data.name());
-            setImage_blob_url(data.image());
+            setImage_blob(data.image());
             setRgb(data.rgb());
             setWatts(data.watts());
             setVariable_temperature(data.variable_temperature());
@@ -51,7 +48,7 @@ public class LightType extends DeviceType {
 
     @Override
     public DeviceTypeGlobalIdDTO toGlobalDTO() {
-        return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getImage_blob_url(), isRgb(), isVariable_temperature(), getWatts());
+        return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getImage_blob(), isRgb(), isVariable_temperature(), getWatts());
     }
 
     public int getWatts() {

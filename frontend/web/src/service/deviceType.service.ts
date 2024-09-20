@@ -4,13 +4,14 @@ import {
     AudioConnector,
     CameraSensor,
     CameraSystem,
-    LensMount, CameraResolution,
+    LensMount,
+    CameraResolution,
     TripodHead
 } from "./deviceTypeAttribute.service"
 import {html, TemplateResult} from "lit"
 import {unsafeSVG} from 'lit/directives/unsafe-svg.js';
 import {icon} from "@fortawesome/fontawesome-svg-core"
-import {faCamera, faHelicopter, faLightbulb, faMicrophone, faGears} from "@fortawesome/free-solid-svg-icons"
+import {faCamera, faHelicopter, faLightbulb, faMicrophone, faHeadphones, faGears} from "@fortawesome/free-solid-svg-icons"
 import stabilizerIcon from "../../assets/icon/noun-gimbal-5345717.svg"
 import droneIcon from "../../assets/icon/noun-drone-6707036.svg"
 import lensIcon from "../../assets/icon/noun-lens-6134156.svg"
@@ -22,7 +23,7 @@ export interface DeviceTypeSource {
     type_id: number
     variant: DeviceTypeVariantEnum
     name: string
-    image: string
+    image_blob: string
 }
 
 export enum DeviceTypeVariantEnum {
@@ -157,6 +158,7 @@ export default class DeviceTypeService {
             case DeviceTypeVariantEnum.light: return html`${unsafeSVG(icon(faLightbulb).html[0])}`
             case DeviceTypeVariantEnum.stabilizer: return html`<img src="${stabilizerIcon}" alt="S">`
             case DeviceTypeVariantEnum.tripod: return html`<img src="${tripodIcon}" alt="T">`
+            case DeviceTypeVariantEnum.audio: return html`${unsafeSVG(icon(faHeadphones).html[0])}`
             default: return html`${unsafeSVG(icon(faGears).html[0])}`
         }
     }

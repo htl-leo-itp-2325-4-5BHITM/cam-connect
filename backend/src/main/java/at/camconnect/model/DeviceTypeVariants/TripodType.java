@@ -2,7 +2,6 @@ package at.camconnect.model.DeviceTypeVariants;
 
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalIdDTO;
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
-import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.DeviceTypeAttributes.TripodHead;
@@ -11,8 +10,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-
-import java.time.LocalDateTime;
 
 @Entity
 public class TripodType extends DeviceType {
@@ -39,7 +36,7 @@ public class TripodType extends DeviceType {
 
     @Override
     public DeviceTypeGlobalIdDTO toGlobalDTO() {
-        return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getImage_blob_url(), getHeight_centimeters(), getHead().getAttribute_id());
+        return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getImage_blob(), getHeight_centimeters(), getHead().getAttribute_id());
     }
 
     public TripodType() {

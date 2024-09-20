@@ -32,7 +32,7 @@ public class MicrophoneType extends DeviceType {
     public void update(DeviceTypeGlobalObjectsDTO data) {
         try{
             setName(data.name());
-            setImage_blob_url(data.image());
+            setImage_blob(data.image());
             setNeeds_recorder(data.needs_recorder());
             setConnector(data.connector());
             setNeeds_power(data.needs_power());

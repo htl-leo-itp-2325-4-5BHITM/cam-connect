@@ -124,6 +124,7 @@ export default class Model{
         this.deviceTypes.next(deviceTypes)
     }
     loadDeviceTypesFull(deviceTypesFull: DeviceTypeFullDTO[]){
+        console.log(deviceTypesFull)
         this.deviceTypesFull.next(deviceTypesFull)
     }
 

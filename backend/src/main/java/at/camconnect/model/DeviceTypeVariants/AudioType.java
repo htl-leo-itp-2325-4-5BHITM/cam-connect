@@ -36,7 +36,7 @@ public class AudioType extends DeviceType {
     @Override
     public void update(DeviceTypeGlobalObjectsDTO data) {
         setName(data.name());
-        setImage_blob_url(data.image());
+        setImage_blob(data.image());
         setConnector(data.connector());
     }
 
