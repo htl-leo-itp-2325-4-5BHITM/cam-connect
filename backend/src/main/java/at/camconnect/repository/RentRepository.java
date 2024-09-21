@@ -133,9 +133,6 @@ public class RentRepository {
     }
 
     public List<RentByStudentDTO> getAll(RentFilters filters){
-
-        System.out.println(filters);
-
         String orderByString = "";
         switch (filters.orderBy()) {
             case ALPHABETICAL_ASC: orderByString = "order by s.firstname asc, s.lastname asc"; break;

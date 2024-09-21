@@ -4,12 +4,15 @@ import at.camconnect.dtos.deviceType.DeviceTypeGlobalIdDTO;
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
+import at.camconnect.model.DeviceTypeAttribute;
 import at.camconnect.model.DeviceTypeAttributes.LensMount;
 import at.camconnect.responseSystem.CCException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+
+import java.util.List;
 
 @Entity
 public class LensType extends DeviceType {
@@ -54,6 +57,11 @@ public class LensType extends DeviceType {
     @Override
     public DeviceTypeGlobalIdDTO toGlobalDTO() {
         return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getImage_blob(), getF_stop(), getFocal_length(), getLens_mount().getAttribute_id());
+    }
+
+    @Override
+    public List<DeviceTypeAttribute> getAttributes() {
+        return List.of(lens_mount);
     }
 
     //region getter setter

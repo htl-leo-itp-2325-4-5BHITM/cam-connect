@@ -5,11 +5,11 @@ import {AnimationHelper} from "../../util/Util"
 
 @customElement('icon-cta')
 export class iconCTAComponent extends LitElement {
-    @queryAssignedElements()
-    slottedChildren!: Array<HTMLElement>;
+    @queryAssignedElements() slottedChildren!: Array<HTMLElement>;
 
-    @property()
-    clickAction: () => void = () => {}
+    @property() clickAction: () => void = () => {}
+
+    @property() size: string = "1.5rem"
 
     render() {
         return html`
@@ -31,16 +31,18 @@ export class iconCTAComponent extends LitElement {
 
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
+
         this.setAttribute("tabindex", "0")
+
+        this.style.height = this.size
+        this.style.width = this.size
     }
 
     handleSlotchange() {
-        super.connectedCallback();
-
-        let childHeight = this.slottedChildren[0].clientHeight
+        /*let childHeight = this.slottedChildren[0].clientHeight
 
         this.style.height = childHeight + "px"
-        this.style.width = childHeight + "px"
+        this.style.width = childHeight + "px"*/
     }
 
     playClickAnimation() {

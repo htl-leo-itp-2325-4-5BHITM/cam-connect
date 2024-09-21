@@ -12,6 +12,8 @@
   border: 1px solid $gray300;
   background-color: $gray150;
   position: relative;
+
+  overflow: hidden;
 }
 
 h3{
@@ -59,11 +61,11 @@ section {
   }
 
   svg{
-    width: 4rem;
-    height: 4rem;
+    width: 5rem;
+    height: 5rem;
 
-    path{
-      fill: $gray500;
+    path, polygon, rect, circle, ellipse, line, polyline {
+      fill: $gray600;
     }
   }
 

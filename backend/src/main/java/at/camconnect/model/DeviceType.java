@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -60,6 +61,8 @@ public abstract class DeviceType{
     abstract public void update(DeviceTypeGlobalObjectsDTO data);
 
     public abstract DeviceTypeGlobalIdDTO toGlobalDTO();
+
+    public abstract List<DeviceTypeAttribute> getAttributes();
 
     //getter setter
 

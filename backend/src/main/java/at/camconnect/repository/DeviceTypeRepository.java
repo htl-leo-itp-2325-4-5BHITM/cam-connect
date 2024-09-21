@@ -2,6 +2,7 @@ package at.camconnect.repository;
 
 import at.camconnect.dtos.*;
 import at.camconnect.dtos.deviceType.*;
+import at.camconnect.dtos.filters.DeviceTypeFilters;
 import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.model.DeviceTypeAttributes.*;
 import at.camconnect.model.Tag;
@@ -95,8 +96,16 @@ public class DeviceTypeRepository {
         return result;
     }
 
-    public List<DeviceTypeFullDTO> getAllFull() {
-        List<DeviceType> deviceTypeList = em.createQuery("select dt from DeviceType dt where dt.status = 'active'", DeviceType.class).getResultList();
+    public List<DeviceTypeFullDTO> getAllFull(DeviceTypeFilters filters) {
+        System.out.println("started getAlLFull at " + LocalDateTime.now());
+        List<DeviceType> deviceTypeList = em.createQuery("" +
+                "select dt from DeviceType dt " +
+                "where dt.status = 'active' " +
+                "and (dt.variant in :variants OR :variantsEmpty = true)"
+            , DeviceType.class)
+            .setParameter("variants", filters.variants())
+            .setParameter("variantsEmpty", filters.variants().isEmpty())
+            .getResultList();
 
         List<DeviceTypeFullDTO> list = new LinkedList<>();
         for(DeviceType deviceType : deviceTypeList){
@@ -115,8 +124,17 @@ public class DeviceTypeRepository {
                     .setParameter("deviceType", deviceType)
                     .getResultList();
 
+            if(!filters.attributes().isEmpty()){
+                if(deviceType.getAttributes().stream().noneMatch(attribute -> filters.attributes().contains(attribute.getAttribute_id()))) continue;
+            }
+
+            if(filters.onlyAvailable() && availableDevices <= 0) continue;
+
+            if(!filters.tags().isEmpty() && tagList.stream().noneMatch(tag -> filters.tags().contains(tag.getTag_id()))) continue;
+
             list.add(new DeviceTypeFullDTO(deviceType, availableDevices.intValue(), tagList));
         }
+        System.out.println("endet getAllFull at " + LocalDateTime.now());
         return list;
     }
 
@@ -208,7 +226,7 @@ public class DeviceTypeRepository {
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(os))) {
                 writer.write("type_id; name; image; autofocus; f_stop; focal_length; height_centimeters; max_range; max_weight_kilograms; needs_recorder; number_of_axis; rgb; variable_temperature; watts; needs_power; wireless; head_id; mount_id; resolution_id; sensor_id; system; flight_time_minutes; description\n");
 
-                List<DeviceTypeFullDTO> deviceTypeList = getAllFull();
+                List<DeviceTypeFullDTO> deviceTypeList = getAllFull(new DeviceTypeFilters(false, null, null, null));
                 for (DeviceTypeFullDTO deviceType : deviceTypeList) {
                     try {
                         writer.write(deviceType.deviceType().toGlobalDTO().toCsvString());
@@ -234,7 +252,7 @@ public class DeviceTypeRepository {
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(os))) {
                 writer.write("type_id; name; image; autofocus; f_stop; focal_length; height_centimeters; max_range; max_weight_kilograms; needs_recorder; number_of_axis; rgb; variable_temperature; watts; needs_power; wireless; head_id; mount_id; resolution_id; sensor_id; system; flight_time_minutes; description");
 
-                List<DeviceTypeFullDTO> deviceTypeList = getAllFull();
+                List<DeviceTypeFullDTO> deviceTypeList = getAllFull(new DeviceTypeFilters(false,null, null, null));
                 for (DeviceTypeFullDTO deviceType : deviceTypeList) {
                     writer.write(deviceType.deviceType().toGlobalDTO().toCsvString());
                 }

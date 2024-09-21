@@ -63,8 +63,8 @@ h2{
   svg{
     height: 1.3rem;
 
-    path{
-      color: $gray700;
+    *{
+      fill: $gray700;
     }
   }
 }

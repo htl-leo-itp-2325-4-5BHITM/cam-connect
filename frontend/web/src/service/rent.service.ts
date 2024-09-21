@@ -54,13 +54,6 @@ export interface CreateRentDTO {
     note: string
 }
 
-export interface RentFilters {
-    orderBy: OrderByFilterRent
-    statuses?: RentStatusEnum[]
-    schoolClasses?: Set<string>
-    studentIds?: number[]
-}
-
 export interface RentFilterDTO {
     orderBy?: OrderByFilterRent
     statuses?: RentStatusEnum[]

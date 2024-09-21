@@ -27,8 +27,7 @@ export interface TripodHead extends DeviceTypeAttributeSource{}
 
 export type DeviceTypeAttribute = (CameraResolution | CameraSensor | CameraSystem | LensMount | TripodHead | AudioConnector)
 export interface DeviceTypeAttributeCollection{
-    cameraResolution: CameraResolution[]
-    cameraSensors: CameraSensor[]
+    cameraResolutions: CameraResolution[]
     cameraSystems: CameraSystem[]
     lensMounts: LensMount[]
     tripodHeads: TripodHead[]
@@ -39,6 +38,7 @@ export default class DeviceTypeAttributeService{
     static fetchAll(){
         Api.fetchData<DeviceTypeAttributeCollection>("/devicetype/attribute/getall")
             .then(result => {
+                console.log(result)
                 model.loadDeviceTypeAttributes(result.data)
             })
             .catch(error => {

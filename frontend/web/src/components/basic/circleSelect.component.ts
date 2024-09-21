@@ -2,10 +2,11 @@ import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/circleSelect.styles.scss'
 
-import singleChecked from '../../../assets/icon/checked_single.svg'
-import singleUnchecked from '../../../assets/icon/unchecked_single.svg'
-import multipleChecked from '../../../assets/icon/checked_multiple.svg'
-import multipleUnchecked from '../../../assets/icon/unchecked_multiple.svg'
+import singleChecked from '../../../assets/icon/custom/checked_single.svg'
+import singleUnchecked from '../../../assets/icon/custom/unchecked_single.svg'
+import multipleChecked from '../../../assets/icon/custom/checked_multiple.svg'
+import multipleUnchecked from '../../../assets/icon/custom/unchecked_multiple.svg'
+import Util from "../../util/Util"
 
 export enum CircleSelectColor {ACCENT="accent", GRAY="gray"}
 export enum CircleSelectType {SINGLE="single", MULTIPLE="multiple"}
@@ -43,10 +44,6 @@ export class CircleSelectComponent extends LitElement {
                 unchecked: multipleUnchecked
             }
         }
-    }
-
-    connectedCallback() {
-        super.connectedCallback();
     }
 
     render() {

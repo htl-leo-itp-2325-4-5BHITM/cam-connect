@@ -4,10 +4,10 @@ import {model} from "./index"
 import {CreateRentComponent} from "./components/app/createRent.component"
 import {AutocompleteComponent} from "./components/basic/autocomplete.component"
 import {Student} from "./service/student.service"
-import {DeviceType, DeviceTypeVariantEnum} from "./service/deviceType.service"
+import DeviceTypeService, {DeviceType, DeviceTypeVariantEnum} from "./service/deviceType.service"
 import {DeviceListEntryComponent} from "./components/app/deviceListEntry.component"
 import DeviceService from "./service/device.service"
-import RentService, {OrderByFilterRent, RentFilters, RentStatusEnum} from "./service/rent.service"
+import RentService, {OrderByFilterRent, RentStatusEnum} from "./service/rent.service"
 import {html, render, TemplateResult} from "lit"
 import UrlHandler from "./util/UrlHandler"
 import {BehaviorSubject} from "rxjs"
@@ -40,6 +40,21 @@ interface UserSettings {
     }
 }
 
+export interface RentFilters {
+    orderBy: OrderByFilterRent
+    statuses?: RentStatusEnum[]
+    schoolClasses?: Set<string>
+    studentIds?: number[]
+}
+
+export interface DeviceFilters {
+    displayMode: "grid" | "list"
+    onlyAvailable: boolean
+    variants: Set<string>
+    attributes: Set<number>
+    tags: Set<number>
+}
+
 export class AppState{
     private _page: PageEnum = PageEnum.RENTS
     private _editPage: EditPageEnum = EditPageEnum.OVERVIEW;
@@ -55,6 +70,7 @@ export class AppState{
     private _appElement: HTMLElement
     private _originElement: HTMLElement
     private _rentFilters: RentFilters = {orderBy: OrderByFilterRent.ALPHABETICAL_ASC, statuses: [RentStatusEnum.CONFIRMED, RentStatusEnum.DECLINED, RentStatusEnum.WAITING], schoolClasses: new Set<string>()}
+    private _deviceFilters: DeviceFilters = {displayMode: "grid", onlyAvailable: false, variants: new Set<string>, attributes: new Set<number>, tags: new Set<number>}
     private _overlayElement: HTMLElement
     private _backUrl: string
     private _originElementLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
@@ -400,5 +416,17 @@ export class AppState{
         this.update()
         if(this._page == PageEnum.RENTS) RentService.fetchAll()
         if(this._page == PageEnum.EQUIPMENT) DeviceService.fetchAll()
+    }
+
+
+    get deviceFilters(): DeviceFilters {
+        return this._deviceFilters
+    }
+
+    set deviceFilters(value: DeviceFilters) {
+        this._deviceFilters = value
+        this.update()
+        console.log(this._deviceFilters)
+        DeviceTypeService.fetchAllFull()
     }
 }

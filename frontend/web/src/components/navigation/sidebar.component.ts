@@ -69,8 +69,8 @@ export class SidebarComponent extends LitElement {
                 </div>
     
                 <div class="user" @click="${() => {
-                UrlHandler.goToPage('/app/user')
-            }}">
+                    UrlHandler.goToPage('/app/user')
+                }}">
                     <img src="../../../assets/icon/user-icon-default.svg" alt="user">
                     <p>${(this.accountname)}</p>
                 </div>
@@ -136,6 +136,7 @@ export class SidebarComponent extends LitElement {
             }
             else {
                 filter.style.display = "none"
+                filter.clearSelection()
             }
         })
     }

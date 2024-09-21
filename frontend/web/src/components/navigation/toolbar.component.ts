@@ -50,8 +50,10 @@ export class ToolbarComponent extends LitElement {
             <style>${styles}</style>
             <div class="main rentlist">
                 <div>
-                    <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" 
-                               @click="${() => {UrlHandler.goToPage("/app/edit?type=camera")}}">
+                    <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}"
+                               @click="${() => {
+                                   UrlHandler.goToPage("/app/edit?type=camera")
+                               }}">
                         <div slot="left" class="icon accent">
                             ${unsafeSVG(icon(faCamera).html[0])}
                         </div>
@@ -60,24 +62,30 @@ export class ToolbarComponent extends LitElement {
                 </div>
 
                 <div>
-                    <cc-button @click="${() => {this.uncheckAll('rent')}}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" 
+                    <cc-button @click="${() => {
+                        this.uncheckAll('rent')
+                    }}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}"
                                type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.uncheckAll}">
                         <div slot="left" class="icon accent">
-                            <img slot="left" src="../../../assets/icon/select_circle.svg" alt="+">
+                            <img slot="left" src="../../../assets/icon/custom/select_circle.svg" alt="+">
                         </div>
                         Auswahl aufheben
                     </cc-button>
-                    
-                    <cc-button @click="${() => {this.removeSelection()}}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.remove}">
+
+                    <cc-button @click="${() => {
+                        this.removeSelection()
+                    }}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}"
+                               .disabled="${isButtonDisabled.remove}">
                         <div slot="left" class="icon accent">
                             ${unsafeSVG(icon(faTrash).html[0])}
                         </div>
                         Löschen
                     </cc-button>
-        
-                    <cc-button @click="${this.returnSelection}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.return}">
+
+                    <cc-button @click="${this.returnSelection}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}"
+                               type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.return}">
                         <div slot="left" class="icon accent">
-                            <img slot="left" src="../../../assets/icon/return.svg" alt="<-">                    
+                            <img slot="left" src="../../../assets/icon/custom/return.svg" alt="<-">
                         </div>
                         Zurückgeben
                     </cc-button>
@@ -97,26 +105,34 @@ export class ToolbarComponent extends LitElement {
             <div class="main equipment">
                 <div>
                     <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}"
-                               @click="${() => {UrlHandler.goToPage("/app/edit")}}">
+                               @click="${() => {
+                                   UrlHandler.goToPage("/app/edit")
+                               }}">
                         <div slot="left" class="icon accent">
                             ${unsafeSVG(icon(faCamera).html[0])}
                         </div>
                         Geräte bearbeiten
                     </cc-button>
                 </div>
-                
+
                 <div>
-                    <cc-button @click=${() => {this.uncheckAll("device")}}
-                               size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.uncheckAll}">
+                    <cc-button @click=${() => {
+                        this.uncheckAll("device")
+                    }}
+                               size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}"
+                               .disabled="${isButtonDisabled.uncheckAll}">
                         <div slot="left" class="icon accent">
-                            <img slot="left" src="../../../assets/icon/select_circle.svg" alt="+">
+                            <img slot="left" src="../../../assets/icon/custom/select_circle.svg" alt="+">
                         </div>
                         Auswahl aufheben
                     </cc-button>
-    
-                    <cc-button @click="${() => {this.rentSelection()}}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.remove}">
+
+                    <cc-button @click="${() => {
+                        this.rentSelection()
+                    }}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}"
+                               .disabled="${isButtonDisabled.remove}">
                         <div slot="left" class="icon accent">
-                            <img slot="left" src="../../../assets/icon/return.svg" alt="<-">
+                            <img slot="left" src="../../../assets/icon/custom/return.svg" alt="<-">
                         </div>
                         Gerät(e) verleihen
                     </cc-button>
@@ -137,25 +153,33 @@ export class ToolbarComponent extends LitElement {
             <style>${styles}</style>
             <div class="main equipment">
                 <div>
-                    <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" 
-                               @click="${() => {UrlHandler.goToPage("/app/edit")}}">
+                    <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}"
+                               @click="${() => {
+                                   UrlHandler.goToPage("/app/edit")
+                               }}">
                         <div slot="left" class="icon accent">
                             ${unsafeSVG(icon(faUpload).html[0])}
                         </div>
                         Importieren / Exportieren
                     </cc-button>
                 </div>
-                
+
                 <div>
-                    <cc-button @click=${() => {this.uncheckAll("edit")}} size="${SizeEnum.SMALL}" 
-                               color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.uncheckAll}">
+                    <cc-button @click=${() => {
+                        this.uncheckAll("edit")
+                    }} size="${SizeEnum.SMALL}"
+                               color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}"
+                               .disabled="${isButtonDisabled.uncheckAll}">
                         <div slot="left" class="icon accent">
-                            <img slot="left" src="../../../assets/icon/select_circle.svg" alt="+">
+                            <img slot="left" src="../../../assets/icon/custom/select_circle.svg" alt="+">
                         </div>
                         Auswahl aufheben
                     </cc-button>
 
-                    <cc-button @click="${() => {this.removeSelection(UrlHandler.getUrl().includes("children") ? "editDevice" : "editDeviceType")}}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.remove}">
+                    <cc-button @click="${() => {
+                        this.removeSelection(UrlHandler.getUrl().includes("children") ? "editDevice" : "editDeviceType")
+                    }}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}"
+                               .disabled="${isButtonDisabled.remove}">
                         <div slot="left" class="icon accent">
                             ${unsafeSVG(icon(faTrash).html[0])}
                         </div>

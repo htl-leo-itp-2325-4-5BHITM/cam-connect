@@ -1,4 +1,4 @@
-import {LitElement, css, html} from 'lit'
+import {LitElement, css, html, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/app/deviceList.styles.scss'
 import {model} from "../../index";
@@ -8,6 +8,7 @@ import {Device} from "../../service/device.service"
 import {RentByStudentDTO} from "../../service/rent.service"
 import {DeviceType, DeviceTypeFullDTO, DeviceTypeVariantCollection} from "../../service/deviceType.service"
 import {AppState} from "../../AppState"
+import Util from "../../util/Util"
 
 @customElement('cc-device-list')
 export class DeviceListComponent extends LitElement {
@@ -17,7 +18,9 @@ export class DeviceListComponent extends LitElement {
 
     constructor() {
         super()
+
         this.deviceTypesFull = new ObservedProperty<DeviceTypeFullDTO[]>(this, model.deviceTypesFull)
+
         this.appState = new ObservedProperty<AppState>(this, model.appState)
     }
     render() {
@@ -25,12 +28,14 @@ export class DeviceListComponent extends LitElement {
             <style>${styles}</style>
 
             <div class="content">
-                ${Object.values(this.deviceTypesFull.value)?.flat().map(deviceType => {
-                    return html`<cc-device-list-entry .deviceTypeFull="${deviceType}" 
+                ${Object.values(this.deviceTypesFull.value)?.flat().sort((a, b)=>  (a.deviceType.name).localeCompare(b.deviceType.name)).map(deviceType => {
+                    return html`<cc-device-list-entry .deviceTypeFull="${deviceType}"
                                                       class="${this.appState.value && this.appState.value.selectedDeviceEntries.size > 0 && deviceType.available > 0 ? 'selection' : ''}"
                                                       .simpleSelectionIsOn="${this.appState.value && this.appState.value.selectedDeviceEntries.size > 0}"
                     ></cc-device-list-entry>`
                 })}
+
+                ${this.deviceTypesFull.value.length == 0 ? html`<p class="noResults">Keine Ergebnisse gefunden</p>` : ""}
             </div>
         `
     }

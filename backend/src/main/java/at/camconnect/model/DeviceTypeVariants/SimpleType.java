@@ -4,9 +4,12 @@ import at.camconnect.dtos.deviceType.DeviceTypeGlobalIdDTO;
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
+import at.camconnect.model.DeviceTypeAttribute;
 import at.camconnect.responseSystem.CCException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+
+import java.util.List;
 
 @Entity
 public class SimpleType extends DeviceType {
@@ -40,6 +43,11 @@ public class SimpleType extends DeviceType {
     @Override
     public DeviceTypeGlobalIdDTO toGlobalDTO() {
         return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getDescription(), getImage_blob());
+    }
+
+    @Override
+    public List<DeviceTypeAttribute> getAttributes() {
+        return List.of();
     }
 
     public String getDescription() {

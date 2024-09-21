@@ -34,6 +34,10 @@ cc-device-list-entry.selection{
   cursor: pointer;
 }
 
+.content{
+  position: relative;
+}
+
 .content > *{
   break-inside: avoid;
   margin-bottom: $gap;
@@ -41,4 +45,13 @@ cc-device-list-entry.selection{
 
 p{
   height: 10rem;
+}
+
+.noResults{
+  position: absolute;
+  left: 50%;
+  translate: -50% 0;
+  margin-top: 4rem;
+  text-align: center;
+  color: $gray800;
 }

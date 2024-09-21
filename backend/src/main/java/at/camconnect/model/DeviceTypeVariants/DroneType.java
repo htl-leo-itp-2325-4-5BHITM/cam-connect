@@ -4,9 +4,12 @@ import at.camconnect.dtos.deviceType.DeviceTypeGlobalIdDTO;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
 import at.camconnect.model.DeviceType;
+import at.camconnect.model.DeviceTypeAttribute;
 import at.camconnect.responseSystem.CCException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+
+import java.util.List;
 
 @Entity
 public class DroneType extends DeviceType {
@@ -49,6 +52,11 @@ public class DroneType extends DeviceType {
     @Override
     public DeviceTypeGlobalIdDTO toGlobalDTO() {
         return null;
+    }
+
+    @Override
+    public List<DeviceTypeAttribute> getAttributes() {
+        return List.of();
     }
 
     public boolean isRequires_license() {

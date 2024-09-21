@@ -4,10 +4,13 @@ import at.camconnect.dtos.deviceType.DeviceTypeGlobalIdDTO;
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
+import at.camconnect.model.DeviceTypeAttribute;
 import at.camconnect.model.DeviceTypeAttributes.AudioConnector;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+
+import java.util.List;
 
 @Entity
 public class AudioType extends DeviceType {
@@ -43,5 +46,10 @@ public class AudioType extends DeviceType {
     @Override
     public DeviceTypeGlobalIdDTO toGlobalDTO() {
         return null;
+    }
+
+    @Override
+    public List<DeviceTypeAttribute> getAttributes() {
+        return List.of(connector);
     }
 }

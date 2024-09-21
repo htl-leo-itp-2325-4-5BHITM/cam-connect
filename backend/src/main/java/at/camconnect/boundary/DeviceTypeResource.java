@@ -5,6 +5,7 @@ import at.camconnect.dtos.deviceType.DeviceTypeCollection;
 import at.camconnect.dtos.deviceType.DeviceTypeFullDTO;
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalIdDTO;
 import at.camconnect.dtos.deviceType.DeviceTypeMinimalDTO;
+import at.camconnect.dtos.filters.DeviceTypeFilters;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.enums.DeviceTypeVariantEnum;
@@ -19,6 +20,7 @@ import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.RestForm;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Path("/devicetype")
@@ -56,17 +58,19 @@ public class DeviceTypeResource {
         return CCResponse.ok(result);
     }
 
-    @GET
+    @POST
     @Path("/getallfull")
     @Transactional
-    public Response getAllFull(){
+    public Response getAllFull(DeviceTypeFilters deviceTypeFilters){
+        System.out.println("Reached getAllFull Endpoint at " + LocalDateTime.now());
         List<DeviceTypeFullDTO> result;
         try{
-            result = deviceTypeRepository.getAllFull();
+            result = deviceTypeRepository.getAllFull(deviceTypeFilters);
         }catch (CCException ex){
             return CCResponse.error(ex);
         }
 
+        System.out.println("Sending data from getAllFull Endpoint at " + LocalDateTime.now());
         return CCResponse.ok(result);
     }
 

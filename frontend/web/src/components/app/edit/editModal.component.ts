@@ -139,7 +139,7 @@ export class EditModalComponent extends LitElement {
                 <div>
                     <p>Photo Resolution</p>
                     <cc-dropdown
-                            .options="${model.deviceTypeAttributes.value.cameraResolution?.map(option => ({ id: option.attribute_id, data: option.name }))}"
+                            .options="${model.deviceTypeAttributes.value.cameraResolutions?.map(option => ({ id: option.attribute_id, data: option.name }))}"
                             .selected="${{id: cameraType?.photo_resolution?.attribute_id, data: cameraType?.photo_resolution?.name}}"
                     ></cc-dropdown>
                 </div>

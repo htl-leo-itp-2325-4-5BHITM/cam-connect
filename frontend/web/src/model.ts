@@ -35,7 +35,8 @@ export default class Model{
     readonly devices = new BehaviorSubject<Device[]>([])
     readonly deviceTypes = new BehaviorSubject<DeviceTypeVariantCollection>({audioTypes: [], microphoneTypes: [], cameraTypes: [], droneTypes: [], lensTypes: [], lightTypes: [], stabilizerTypes: [], tripodHeads: []})
     readonly deviceTypesFull = new BehaviorSubject<DeviceTypeFullDTO[]>([])
-    readonly deviceTypeAttributes = new BehaviorSubject<DeviceTypeAttributeCollection>({cameraResolution: [], cameraSensors: [], cameraSystems: [], lensMounts: [], tripodHeads: [], audioConnectors: []})
+    readonly deviceTypeAttributes = new BehaviorSubject<DeviceTypeAttributeCollection>({cameraResolutions: [], cameraSystems: [], lensMounts: [], tripodHeads: [], audioConnectors: []})
+
     /**
      * This is a representation of all the deviceTypeAttributes split up and transformed into FilterOptions that can be
      * used by the filter-block-component.
@@ -48,10 +49,7 @@ export default class Model{
      */
     readonly deviceTypeAttributesAsFilterOptions = {
         cameraResolutions: this.deviceTypeAttributes.pipe(
-            map(deviceTypeAttributes => deviceTypeAttributes.cameraResolution.map(Util.deviceTypeAttributeToFilterOption))
-        ),
-        cameraSensors: this.deviceTypeAttributes.pipe(
-            map(deviceTypeAttributes => deviceTypeAttributes.cameraSensors.map(Util.deviceTypeAttributeToFilterOption))
+            map(deviceTypeAttributes => deviceTypeAttributes.cameraResolutions.map(Util.deviceTypeAttributeToFilterOption))
         ),
         cameraSystems: this.deviceTypeAttributes.pipe(
             map(deviceTypeAttributes => deviceTypeAttributes.cameraSystems.map(Util.deviceTypeAttributeToFilterOption))
@@ -61,6 +59,9 @@ export default class Model{
         ),
         tripodHeads: this.deviceTypeAttributes.pipe(
             map(deviceTypeAttributes => deviceTypeAttributes.tripodHeads.map(Util.deviceTypeAttributeToFilterOption))
+        ),
+        audioConnectors: this.deviceTypeAttributes.pipe(
+            map(deviceTypeAttributes => deviceTypeAttributes.audioConnectors.map(Util.deviceTypeAttributeToFilterOption))
         )
     }
 
@@ -124,11 +125,10 @@ export default class Model{
         this.deviceTypes.next(deviceTypes)
     }
     loadDeviceTypesFull(deviceTypesFull: DeviceTypeFullDTO[]){
-        console.log(deviceTypesFull)
         this.deviceTypesFull.next(deviceTypesFull)
     }
 
-    loadDeviceTypeAttributes(deviceTypeAttributes: DeviceTypeAttributeCollection = {cameraResolution: [], cameraSensors: [], cameraSystems: [], lensMounts: [], tripodHeads: [], audioConnectors: []}){
+    loadDeviceTypeAttributes(deviceTypeAttributes: DeviceTypeAttributeCollection = {cameraResolutions: [], cameraSystems: [], lensMounts: [], tripodHeads: [], audioConnectors: []}){
         this.deviceTypeAttributes.next(deviceTypeAttributes)
     }
 

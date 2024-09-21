@@ -27,9 +27,7 @@ export class AppComponent extends LitElement {
     render() {
         return html`
             <style>${styles}</style>
-
-            <div id="autocompleteSuggestions"></div>
-
+            
             <div id="tooltip"></div>
             <div id="autocompleteSuggestions"></div>
             <div id="overlay" @click="${this.autoCloseOverlay}">

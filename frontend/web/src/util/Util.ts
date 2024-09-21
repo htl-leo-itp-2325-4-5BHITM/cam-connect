@@ -12,6 +12,7 @@ import {icon} from "@fortawesome/fontawesome-svg-core"
 import {faCheck, faXmark, faQuestion} from "@fortawesome/free-solid-svg-icons"
 import {html} from "lit"
 import {Device, DeviceDTO} from "../service/device.service"
+import {unsafeHTML} from "lit/directives/unsafe-html.js"
 export default class Util{
     //TODO this typing does not seem right
     static deviceTypeToFilterOption(deviceTypes: DeviceTypeSource): FilterOption{
@@ -155,7 +156,7 @@ export default class Util{
             case RentStatusEnum.CONFIRMED:
                 return html`${unsafeSVG(icon(faCheck).html[0])}`
             case RentStatusEnum.RETURNED:
-                return html`<img src="../../assets/icon/return.svg" alt="<-">`
+                return html`<img src="../../assets/icon/custom/return.svg" alt="<-">`
             case RentStatusEnum.DECLINED:
                 return html`${unsafeSVG(icon(faXmark).html[0])}`
             case RentStatusEnum.WAITING:

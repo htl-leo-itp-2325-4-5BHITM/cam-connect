@@ -58,12 +58,12 @@ public class DeviceTypeAttributeRepository {
 
     public DeviceTypeAttributeCollection getAll(){
         List<CameraResolution> cameraResolutions = em.createQuery("SELECT d FROM CameraResolution d", CameraResolution.class).getResultList();
-        List<CameraSensor> cameraSensors = em.createQuery("SELECT d FROM CameraSensor d", CameraSensor.class).getResultList();
         List<CameraSystem> cameraSystems = em.createQuery("SELECT d FROM CameraSystem d", CameraSystem.class).getResultList();
         List<LensMount> lensMounts = em.createQuery("SELECT d FROM LensMount d", LensMount.class).getResultList();
         List<TripodHead> tripodHeads = em.createQuery("SELECT d FROM TripodHead d", TripodHead.class).getResultList();
+        List<AudioConnector> audioConnectors = em.createQuery("SELECT d FROM AudioConnector d", AudioConnector.class).getResultList();
 
-        return new DeviceTypeAttributeCollection(cameraResolutions, cameraSensors, cameraSystems, lensMounts, tripodHeads);
+        return new DeviceTypeAttributeCollection(cameraResolutions, cameraSystems, lensMounts, tripodHeads, audioConnectors);
     }
 
     //region utility functions

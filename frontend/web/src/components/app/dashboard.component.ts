@@ -72,22 +72,47 @@ export class DashboardComponent extends LitElement {
                         <p>liste</p>
                     </cc-select>
                     <cc-toggle slot="sorts" .onToggle="${(toggled:boolean)=>{
-                        if(toggled){
-                            
-                        }
+                        let newFilters = model.appState.value.deviceFilters
+                        newFilters.onlyAvailable = toggled
+                        model.appState.value.deviceFilters = newFilters
                     }}">Nur verfügbare anzeigen</cc-toggle>
-                    <cc-button slot="sorts" size="${SizeEnum.MEDIUM}" type="${ButtonType.UNDERLINED}" color="${SimpleColorEnum.GRAY}" @click="">
+                    <cc-button slot="sorts" size="${SizeEnum.MEDIUM}" type="${ButtonType.UNDERLINED}" color="${SimpleColorEnum.GRAY}" @click="${this.clearFilters}">
                         Filter zurücksetzten
                     </cc-button>
                     
-                    <cc-filter-container slot="primaryFilters" .options="${model.deviceTypeNameFilterOptions}" affectSecondaryFilters>Gerätetyp</cc-filter-container>
-                    <cc-filter-container slot="primaryFilters" .options="${model.tagFilterOptions}">Tags</cc-filter-container>
+                    <cc-filter-container slot="primaryFilters" .options="${model.deviceTypeNameFilterOptions}" affectSecondaryFilters .onUpdate="${this.handleDeviceTypeVariantFilterUpdate}">Gerätetyp</cc-filter-container>
+                    <cc-filter-container slot="primaryFilters" .options="${model.tagFilterOptions}" .onUpdate="${this.handleDeviceTypeTagFilterUpdate}">Tags</cc-filter-container>
                     
-                    <cc-filter-container slot="secondaryFilters" .options="${model.deviceTypeAttributesAsFilterOptions.cameraResolutions}" .visibility="${["camera", "drone"]}">Auflösungen</cc-filter-container>
-                    <cc-filter-container slot="secondaryFilters" .options="${model.deviceTypeAttributesAsFilterOptions.cameraSensors}" .visibility="${["camera"]}">Sensoren</cc-filter-container>
-                    <cc-filter-container slot="secondaryFilters" .options="${model.deviceTypeAttributesAsFilterOptions.cameraSystems}" .visibility="${["camera"]}">Kameratypen</cc-filter-container>
-                    <cc-filter-container slot="secondaryFilters" .options="${model.deviceTypeAttributesAsFilterOptions.lensMounts}" .visibility="${["camera", "lens"]}">Objektiv Anschlüsse</cc-filter-container>
-                    <cc-filter-container slot="secondaryFilters" .options="${model.deviceTypeAttributesAsFilterOptions.tripodHeads}" .visibility="${["tripod"]}">Stativköpfe</cc-filter-container>
+                    <cc-filter-container 
+                            slot="secondaryFilters" 
+                            .options="${model.deviceTypeAttributesAsFilterOptions.cameraResolutions}" 
+                            .visibility="${["camera", "drone"]}"  
+                            .onUpdate="${this.handleDeviceTypeAttributeFilterUpdate}"
+                    >Auflösungen</cc-filter-container>
+                    <cc-filter-container 
+                            slot="secondaryFilters" 
+                            .options="${model.deviceTypeAttributesAsFilterOptions.cameraSystems}" 
+                            .visibility="${["camera"]}" 
+                            .onUpdate="${this.handleDeviceTypeAttributeFilterUpdate}"
+                    >Kameratypen</cc-filter-container>
+                    <cc-filter-container 
+                            slot="secondaryFilters" 
+                            .options="${model.deviceTypeAttributesAsFilterOptions.lensMounts}" 
+                            .visibility="${["camera", "lens"]}" 
+                            .onUpdate="${this.handleDeviceTypeAttributeFilterUpdate}"
+                    >Objektiv Anschlüsse</cc-filter-container>
+                    <cc-filter-container 
+                            slot="secondaryFilters" 
+                            .options="${model.deviceTypeAttributesAsFilterOptions.tripodHeads}" 
+                            .visibility="${["tripod"]}" 
+                            .onUpdate="${this.handleDeviceTypeAttributeFilterUpdate}"
+                    >Stativköpfe</cc-filter-container>
+                    <cc-filter-container 
+                            slot="secondaryFilters" 
+                            .options="${model.deviceTypeAttributesAsFilterOptions.audioConnectors}" 
+                            .visibility="${["audio", "microphone"]}" 
+                            .onUpdate="${this.handleDeviceTypeAttributeFilterUpdate}"
+                    >Audio Stecker</cc-filter-container>
                 </cc-sidebar>
                 `
                 page = html`<cc-device-list class="content"></cc-device-list>`
@@ -169,6 +194,45 @@ export class DashboardComponent extends LitElement {
             }
         })
         model.appState.value.rentFilters = newRentFilters
+    }
+
+    handleDeviceTypeVariantFilterUpdate(options: FilterOption[]){
+        let newDeviceFilters = model.appState.value.deviceFilters
+        options.forEach(option => {
+            if(option.selected){
+                newDeviceFilters.variants.add(option.id as string)
+            }
+            else{
+                newDeviceFilters.variants.delete(option.id as string)
+            }
+        })
+        model.appState.value.deviceFilters = newDeviceFilters
+    }
+
+    handleDeviceTypeTagFilterUpdate(options: FilterOption[]){
+        let newDeviceFilters = model.appState.value.deviceFilters
+        options.forEach(option => {
+            if(option.selected){
+                newDeviceFilters.tags.add(option.id as number)
+            }
+            else{
+                newDeviceFilters.tags.delete(option.id as number)
+            }
+        })
+        model.appState.value.deviceFilters = newDeviceFilters
+    }
+
+    handleDeviceTypeAttributeFilterUpdate(options: FilterOption[]){
+        let newDeviceFilters = model.appState.value.deviceFilters
+        options.forEach(option => {
+            if(option.selected){
+                newDeviceFilters.attributes.add(option.id as number)
+            }
+            else{
+                newDeviceFilters.attributes.delete(option.id as number)
+            }
+        })
+        model.appState.value.deviceFilters = newDeviceFilters
     }
 
     autoCloseOverlay(event: MouseEvent){

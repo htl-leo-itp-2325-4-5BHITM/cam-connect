@@ -1,4 +1,4 @@
-import {html, LitElement} from 'lit'
+import {html, LitElement, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/app/deviceListEntry.styles.scss'
 import {ButtonType} from "../basic/button.component"
@@ -15,6 +15,7 @@ import {ObservedProperty} from "../../model"
 import {AppState} from "../../AppState"
 import {model} from "../../index"
 import de from "air-datepicker/locale/de"
+import Util from "../../util/Util"
 
 @customElement('cc-device-list-entry')
 export class DeviceListEntryComponent extends LitElement {
@@ -80,7 +81,8 @@ export class DeviceListEntryComponent extends LitElement {
             </div>
             <cc-circle-select .checked="${this.appState.value.selectedDeviceEntries.has(this)}"
                               .disabled="${this.deviceTypeFull.available == 0}"
-                              @click="${() => {if(this.deviceTypeFull.available > 0)this.toggleDeviceCheck();}}"></cc-circle-select>
+                              @click="${() => { if(this.deviceTypeFull.available > 0) this.toggleDeviceCheck() }}"
+            ></cc-circle-select>
         `
     }
 
@@ -213,7 +215,7 @@ export class DeviceListEntryComponent extends LitElement {
         return html`
             <section>
                 <div class="details">
-                    <cc-property-value size="small" property="Head" value="${tripod.head}"></cc-property-value>
+                    <cc-property-value size="small" property="Head" value="${tripod.head?.name}"></cc-property-value>
                     <cc-property-value size="small" property="Höhe"
                                        value="${tripod.height_centimeters}"></cc-property-value>
                 </div>
@@ -229,8 +231,7 @@ export class DeviceListEntryComponent extends LitElement {
         return html`
             <section>
                 <div class="details">
-                    <cc-property-value size="small" property="Beschreibung"
-                                       value="${simple.description}"></cc-property-value>
+                    <p>${simple.description}</p>
                 </div>
                 <div class="image">
                     ${this.renderDeviceTypeIcon(this.deviceTypeFull.deviceType)}
@@ -244,7 +245,7 @@ export class DeviceListEntryComponent extends LitElement {
             <div class="image">
                 ${
                     deviceType.image_blob == "" || deviceType.image_blob == null ?
-                        html`<img src="../../../assets/icon/tempCamera.png" alt="">` :
+                        html`<img src="../../../assets/tempCamera.png" alt="">` :
                         DeviceTypeService.deviceTypeToIcon(deviceType.variant)
                 }
             </div>

@@ -27,7 +27,8 @@ INSERT INTO tag (name, description)
 VALUES
     ('Foto', 'Dieses Gerät ist am besten für Fotografie geeignet'),
     ('Video', 'Dieses Gerät ist am besten fürs filmen von Videos geeignet'),
-    ('Makro', 'Dieses Gerät ist spezifisch für Makrofotografie gedacht');
+    ('Makro', 'Dieses Gerät ist spezifisch für Makrofotografie gedacht'),
+    ('Slow Motion', 'Dieses Gerät ist in der Lage hohe FPS zahlen für slow motion zu erreichen');
 
 /*
  * DEMO CONTENT STARTS HERE
@@ -117,10 +118,41 @@ VALUES
     ('Yuneec Typhoon H Pro', 'url5', 'drone', 'DroneType', 1, 25, false, 'active');
 
 -- assigning tags to devicetypes
+-- assigning tags to devicetypes
 INSERT INTO tag_devicetype (tag_tag_id, types_type_id)
 VALUES
-    (1, 1),  -- Tag 'Foto' associated with DeviceType 1
-    (2, 2);  -- Tag 'Video' associated with DeviceType 2
+    (1, 1),  -- Foto tag for Canon EOS 5D Mark IV
+    (2, 2),  -- Video tag for Nikon D850
+    (1, 3),  -- Foto tag for Sony Alpha a7 III
+    (1, 4),  -- Foto tag for Fujifilm X-T3
+    (1, 5),  -- Foto tag for Olympus OM-D E-M10 Mark III
+    (2, 3),  -- Video tag for Sony Alpha a7 III
+    (2, 4),  -- Video tag for Fujifilm X-T3
+    (2, 5),  -- Video tag for Olympus OM-D E-M10 Mark III
+    (1, 6),  -- Foto tag for Sennheiser HD 600
+    (2, 7),  -- Video tag for Bose QuietComfort 35
+    (1, 8),  -- Foto tag for Sony WH-1000XM4
+    (2, 9),  -- Video tag for Audio-Technica ATH-M50X
+    (1, 10), -- Foto tag for AKG K702
+    (1, 11), -- Foto tag for Canon EF 50mm f/1.8 STM
+    (1, 12), -- Foto tag for Nikon Z 35mm f/1.8 S
+    (1, 13), -- Foto tag for Sony FE 85mm f/1.4 GM
+    (1, 14), -- Foto tag for Fujifilm XF 24mm f/2.0 R
+    (1, 15), -- Foto tag for Sigma 70-200mm f/2.8 DG OS HSM
+    (2, 16), -- Video tag for Aputure LS C300d II
+    (2, 17), -- Video tag for Godox SL-200W II
+    (2, 18), -- Video tag for Nanlite Forza 300B
+    (2, 19), -- Video tag for Neewer 400W LED
+    (2, 20), -- Video tag for Yongnuo YN360 III Pro
+    (2, 21), -- Video tag for Shure SM7B
+    (2, 22), -- Video tag for Rode NT1-A
+    (2, 23), -- Video tag for Audio-Technica AT2020
+    (2, 24), -- Video tag for Blue Yeti X
+    (2, 25), -- Video tag for AKG C414 XLII
+    (1, 26), -- Foto tag for Samsung Galaxy Buds
+    (2, 27), -- Video tag for Apple AirPods Pro
+    (1, 28), -- Foto tag for Beats Powerbeats Pro
+    (2, 29); -- Video tag for Jabra Elite 75t
 
 -- Devices
 insert into device (type_id, note, number, serial) values
