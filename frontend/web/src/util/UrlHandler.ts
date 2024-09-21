@@ -188,10 +188,15 @@ export default class UrlHandler {
     static updateUrl(url: string, mode: "add" | "replace" = "replace"){
         let params = window.location.href.split("?")[1]
 
-        if(mode == "add")
+        if(mode == "add") {
             url = UrlHandler.getUrl() + url
+        }
 
-        window.history.pushState({}, "", url + (params != undefined ? "?" + params : ""))
+        let splitChar = "?"
+        if(url.includes("?"))
+            splitChar = "&"
+        
+        window.history.pushState({}, "", url + (params != undefined ? splitChar + params : ""))
     }
 
     /**
