@@ -1,9 +1,9 @@
 import {html, LitElement} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../../styles/components/app/edit/deviceTypeEditEntry.styles.scss'
-import {
+import DeviceTypeService, {
     AudioType,
-    CameraType,
+    CameraType, DeviceType,
     DeviceTypeFullDTO,
     DroneType,
     LensType,
@@ -21,6 +21,9 @@ import {EditPageEnum, ObservedProperty} from "../../../model"
 import {AppState} from "../../../AppState"
 import {model} from "../../../index"
 import {EditComponent} from "./edit.component"
+import PopupEngine from "../../../util/PopupEngine"
+import RentService from "../../../service/rent.service"
+import DeviceService from "../../../service/device.service"
 
 @customElement('cc-device-type-edit-entry')
 export class DeviceTypeEditEntryComponent extends LitElement {
@@ -51,6 +54,7 @@ export class DeviceTypeEditEntryComponent extends LitElement {
                 ${this.deviceType.deviceType.variant == "drone" ? this.renderDrone(this.deviceType.deviceType as DroneType) : ''}
                 ${this.deviceType.deviceType.variant == "lens" ? this.renderLens(this.deviceType.deviceType as LensType) : ''}
                 ${this.deviceType.deviceType.variant == "light" ? this.renderLight(this.deviceType.deviceType as LightType) : ''}
+                ${this.deviceType.deviceType.variant == "audio" ? this.renderAudio(this.deviceType.deviceType as AudioType) : ''}
                 ${this.deviceType.deviceType.variant == "microphone" ? this.renderMicrophone(this.deviceType.deviceType as MicrophoneType) : ''}
                 ${this.deviceType.deviceType.variant == "stabilizer" ? this.renderStabilizer(this.deviceType.deviceType as StabilizerType) : ''}
                 ${this.deviceType.deviceType.variant == "tripod" ? this.renderTripod(this.deviceType.deviceType as TripodType) : ''}
@@ -66,7 +70,7 @@ export class DeviceTypeEditEntryComponent extends LitElement {
 
                 <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}"  @click="${() => {
                     //UrlHandler.updateUrl('/app/edit/devicetype?gid=' + this.deviceType.deviceType.type_id)
-                    (model.appState.value.originElement as EditComponent).showModal(this.deviceType, "update", EditPageEnum.DEVICETYPE)
+                    (model.appState.value.originElement as EditComponent).showModal(this.deviceType, false, EditPageEnum.DEVICETYPE)
                 }}">
                     <div slot="left" class="icon accent">
                         ${unsafeSVG(icon(faPen).html[0])}
@@ -74,7 +78,7 @@ export class DeviceTypeEditEntryComponent extends LitElement {
                     <p>Bearbeiten</p>
                 </cc-button>
 
-                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}">
+                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}" @click="${() => {this.removeDeviceType(this.deviceType.deviceType)}}">
                     <div slot="left" class="icon accent">
                         ${unsafeSVG(icon(faTrash).html[0])}
                     </div>
@@ -151,6 +155,26 @@ export class DeviceTypeEditEntryComponent extends LitElement {
             ${this.getPropertyValue("Head", tripodType.head?.name)}
             ${this.getPropertyValue("Höhe in Zentimeter", tripodType.height_centimeters)}
         `
+    }
+
+    removeDeviceType(deviceType: DeviceType){
+        PopupEngine.createModal({
+            text: `Möchten Sie den Gerätetyp ${deviceType.name} wirklich löschen?`,
+            buttons: [
+                {
+                    text: "Ja",
+                    action: (data) => {
+                        DeviceTypeService.remove(deviceType)
+                        this.appState.value.clearSelectedDeviceTypeEditEntries()
+                        this.appState.value.clearSelectedDeviceEditEntries()
+                   },
+                    closePopup: true
+                },
+                {
+                    text: "Nein",
+                },
+            ]
+        })
     }
 }
 

@@ -75,6 +75,7 @@ export default class Model{
         {name: "Mikrofon", id: "microphone", details: "Mikro halt"},
         {name: "Stabilisator", id: "stabilizer", details: "Stablisationsysteme"},
         {name: "Stativ", id: "tripod", details: "dings"},
+        {name: "Simpel", id: "simple", details: "dings"}
     ] as const)
 
     readonly tagFilterOptions = this.tags.pipe(

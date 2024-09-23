@@ -65,12 +65,12 @@ export class EditComponent extends LitElement {
         }
     }
 
-    showModal(element: Device | DeviceTypeFullDTO, type: "create" | "update", editPageType : EditPageEnum){
-        model.appState.value.openOverlay(this.getModalContent(editPageType, element), () => {})
+    showModal(element: Device | DeviceTypeFullDTO, isEditMode : boolean, editPageType : EditPageEnum){
+        model.appState.value.openOverlay(this.getModalContent(editPageType, element, isEditMode), () => {})
     }
 
-    getModalContent(editPageType: EditPageEnum, element: Device | DeviceTypeFullDTO){
-        return html`<cc-edit-modal .editPageType="${editPageType}" .element="${element}"></cc-edit-modal>`
+    getModalContent(editPageType: EditPageEnum, element: Device | DeviceTypeFullDTO, isEditMode: boolean){
+        return html`<cc-edit-modal .editPageType="${editPageType}" .element="${element}" .isEditMode="${isEditMode}"></cc-edit-modal>`
     }
 
     importDataFromCsv(event: Event, importType: string, deviceType: string) {
