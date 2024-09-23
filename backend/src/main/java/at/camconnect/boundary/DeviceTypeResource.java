@@ -1,10 +1,7 @@
 package at.camconnect.boundary;
 
 import at.camconnect.dtos.*;
-import at.camconnect.dtos.deviceType.DeviceTypeCollection;
-import at.camconnect.dtos.deviceType.DeviceTypeFullDTO;
-import at.camconnect.dtos.deviceType.DeviceTypeGlobalIdDTO;
-import at.camconnect.dtos.deviceType.DeviceTypeMinimalDTO;
+import at.camconnect.dtos.deviceType.*;
 import at.camconnect.dtos.filters.DeviceTypeFilters;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
@@ -89,10 +86,10 @@ public class DeviceTypeResource {
     }
 
     @POST
-    @Path("/getbyid/{id: [0-9]+}/update")
+    @Path("/getbyid/{id: [0-9]+}/update/")
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("id") Long id, DeviceTypeGlobalIdDTO data){
+    public Response update(@PathParam("id") Long id, DeviceTypeGlobalObjectsDTO data){//leave as JsonObject NOT DTO
         DeviceType result;
         try{
             result = deviceTypeRepository.update(id, data);

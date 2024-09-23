@@ -32,6 +32,7 @@ public class CameraType extends DeviceType {
 
     @Override
     public void update(DeviceTypeGlobalObjectsDTO data) {
+        super.update(data);
         try {
             setAutofocus(data.autofocus());
             setMount(data.mount());
@@ -51,11 +52,6 @@ public class CameraType extends DeviceType {
         this.mount = mount;
         this.system = system;
         this.autofocus = autofocus;
-    }
-
-    @Override
-    public String toString() {
-        return "todo";
     }
 
     @Override

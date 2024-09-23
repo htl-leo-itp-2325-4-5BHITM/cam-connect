@@ -109,13 +109,17 @@ export class EditModalComponent extends LitElement {
     getModalContent(editPageType: EditPageEnum){
         if(editPageType == EditPageEnum.DEVICETYPE){
             this.element = this.element as DeviceTypeFullDTO
-            this.tags = this.element.deviceTags
 
             this.currentEditType = this.element.deviceType.variant
 
+            let deviceType = this.element.deviceType
+            let tags = this.element.deviceTags
+
             return html`
                 <h1>Gerätetyp ${this.isEditMode ? 'Bearbeiten' : 'Erstellen'}</h1>
-                <cc-input label="Name" text="${this.element.deviceType.name}"></cc-input>
+                <cc-input label="Name" text="${deviceType.name}" .onInput="${(value) => {
+                    deviceType.name = value
+                }}"></cc-input>
                 <cc-input label="Bild" type="${InputType.UPLOAD}"></cc-input>
                 
                 <div class="separator">
@@ -133,7 +137,7 @@ export class EditModalComponent extends LitElement {
                 <div class="tags">
                     <cc-autocomplete label="Tags" class="tagSelector" color="${ColorEnum.GRAY}" size="${SizeEnum.MEDIUM}"
                                      .onSelect="${(option: Tag) => {
-                                            this.tags.push(option)
+                                            tags.push(option)
                                         }}"
                                      .querySuggestions="${TagService.search}"
                                      .contentProvider="${(data: Tag) => {return `${data.name}`}}"
@@ -142,7 +146,7 @@ export class EditModalComponent extends LitElement {
                     
                     <div>
                         ${
-                            this.tags.map(elem => {
+                            tags.map(elem => {
                                 return html`<cc-chip text="${elem.name}" color="${ColorEnum.GRAY}" type="${ChipType.REMOVABLE}"></cc-chip>`
                             })
                         }
@@ -155,14 +159,7 @@ export class EditModalComponent extends LitElement {
             this.element = this.element as Device
             return html`
                 <h1>Gerät Erstellen</h1>
-                                    <cc-autocomplete label="Tags" class="tagSelector" color="${ColorEnum.GRAY}" size="${SizeEnum.MEDIUM}"
-                                     .selected="${{id: this.tags[0]?.tag_id, data: this.tags[0]?.name}}"
-                                     .onSelect="${(option: Tag) => {
-                                            this.tags.push(option)
-                                        }}"
-                                     .querySuggestions="${TagService.search}"
-                                     .contentProvider="${(data: Tag) => {return `${data.name}`}}"
-                    ></cc-autocomplete>
+                                    
                 <cc-input label="Gerätenummer"></cc-input>
                 <cc-input label="Seriennummer"></cc-input>
             `
@@ -297,8 +294,7 @@ export class EditModalComponent extends LitElement {
                 let tripodType = deviceType.deviceType as TripodType
                 return html`
                     <cc-input label="Höhe (cm)" text="${tripodType.height_centimeters}" .onInput="${text => {
-                        console.log(text)
-                        tripodType.height_centimeters = text
+                            tripodType.height_centimeters = text
                     }}"></cc-input>
                     <div>
                         <p>Head</p>

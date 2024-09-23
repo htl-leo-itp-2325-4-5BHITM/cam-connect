@@ -181,8 +181,8 @@ export default class DeviceTypeService {
         }
     }
 
-    static update(device: DeviceType){
-        Api.postData(`/devicetype/getbyid/${device.type_id}/update`, device)
+    static update(deviceType: DeviceType){
+        Api.postData(`/devicetype/getbyid/${deviceType.type_id}/update`, deviceType)
             .then(() => {
                 DeviceTypeService.fetchAllFull()
             })
