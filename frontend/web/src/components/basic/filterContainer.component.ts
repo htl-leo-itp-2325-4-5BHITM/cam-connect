@@ -45,7 +45,7 @@ export class FilterContainerComponent extends LitElement {
                     if(option.details)
                         return html`<p class="option ${option.selected ? 'selected' : ''}" 
                             @click="${(e: Event) => {
-                                this.selectOption(e, option)
+                                this.toggleOption(e, option)
                                 Tooltip.hide(0, true)
                             }}"
                             @mouseenter="${(e: Event) => {
@@ -58,7 +58,7 @@ export class FilterContainerComponent extends LitElement {
                     else
                         return html`<p class="option ${option.selected ? 'selected' : ''}" 
                             @click="${(e: Event) => {
-                                this.selectOption(e, option)
+                                this.toggleOption(e, option)
                             }
                         }"
                         >${option.name}</p>`
@@ -72,11 +72,22 @@ export class FilterContainerComponent extends LitElement {
      * @param e
      * @param option
      */
-    selectOption(e:Event, option:FilterOption){
+    toggleOption(e:Event, option:FilterOption){
+        if(!this.theOptions.value.includes(option)) return
         option.selected = !option.selected
         this.onUpdate(this.theOptions.value)
         this.filterChange()
         this.requestUpdate()
+    }
+
+    selectOptionById(id: string | number){
+        let option = this.theOptions.value.find(option => option.id == id)
+        if(option) {
+            option.selected = true
+            this.onUpdate(this.theOptions.value)
+            this.filterChange()
+            this.requestUpdate()
+        }
     }
 
     getSelectedOptionsAsIdArray():(string | number)[] {

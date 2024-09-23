@@ -4,6 +4,7 @@ import at.camconnect.dtos.*;
 import at.camconnect.dtos.deviceType.*;
 import at.camconnect.dtos.filters.DeviceTypeFilters;
 import at.camconnect.enums.DeviceTypeStatusEnum;
+import at.camconnect.model.DeviceTypeAttribute;
 import at.camconnect.model.DeviceTypeAttributes.*;
 import at.camconnect.model.Tag;
 import at.camconnect.responseSystem.CCException;
@@ -128,9 +129,26 @@ public class DeviceTypeRepository {
                     .setParameter("deviceType", deviceType)
                     .getResultList();
 
+            boolean includeInList = true;
             if(!filters.attributes().isEmpty()){
-                if(deviceType.getAttributes().stream().noneMatch(attribute -> filters.attributes().contains(attribute.getAttribute_id()))) continue;
+                Map<String, List<Long>> assignedIds = new HashMap<>();
+
+                for (Long attributeId : filters.attributes()) {
+                    DeviceTypeAttribute attributeObject = em.find(DeviceTypeAttribute.class, attributeId);
+                    List<Long> idList = assignedIds.get(attributeObject.getClass());
+                    if(idList == null) idList = new LinkedList<>();
+                    idList.add(attributeId);
+                    assignedIds.put(attributeObject.getClass().getSimpleName(), idList);
+                }
+
+                for (Map.Entry<String, List<Long>> entry : assignedIds.entrySet()) {
+                    if(deviceType.getAttributes().stream().noneMatch(attribute -> entry.getValue().contains((attribute.getAttribute_id())))){
+                        includeInList = false;
+                        continue;
+                    }
+                }
             }
+            if(!includeInList) continue;
 
             if(filters.onlyAvailable() && availableDevices <= 0) continue;
 

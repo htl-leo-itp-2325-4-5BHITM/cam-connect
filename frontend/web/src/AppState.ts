@@ -14,6 +14,7 @@ import {BehaviorSubject} from "rxjs"
 import {KeyBoardShortCut} from "./util/KeyboardShortcut"
 import {DeviceTypeEditEntryComponent} from "./components/app/edit/deviceTypeEditEntry.component"
 import {DeviceEditEntryComponent} from "./components/app/edit/deviceEditEntry"
+import {SidebarComponent} from "./components/navigation/sidebar.component"
 
 interface ActionCancellation {
     identifier: string,
@@ -74,6 +75,7 @@ export class AppState{
     private _overlayElement: HTMLElement
     private _backUrl: string
     private _originElementLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
+    private _sidebarElement: SidebarComponent
     private _userSettings: UserSettings = {
         isDarkmode: true,
         prefersEnglish: false,
@@ -428,5 +430,15 @@ export class AppState{
         this.update()
         console.log(this._deviceFilters)
         DeviceTypeService.fetchAllFull()
+    }
+
+
+    get sidebarElement(): SidebarComponent {
+        return this._sidebarElement
+    }
+
+    set sidebarElement(value: SidebarComponent) {
+        this._sidebarElement = value
+        this.update()
     }
 }

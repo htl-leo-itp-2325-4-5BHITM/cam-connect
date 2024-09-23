@@ -34,6 +34,7 @@ export class SidebarComponent extends LitElement {
         super()
         this.appState = new ObservedProperty<AppState>(this, model.appState)
         this.accountname = username
+        model.appState.value.sidebarElement = this
     }
 
     render() {
@@ -147,6 +148,12 @@ export class SidebarComponent extends LitElement {
     handlePrimaryFilterChange(){
         this.controlFilters.forEach((filter: FilterContainerComponent) => {
             filter.filterChange = () => {this.setSecondaryFilterVisibility()}
+        })
+    }
+
+    selectSecondaryFilterById(id: string | number){
+        this.secondaryFilters.forEach((secondaryFilter: FilterContainerComponent) => {
+            secondaryFilter.selectOptionById(id)
         })
     }
 }

@@ -49,17 +49,15 @@ export class CircleSelectComponent extends LitElement {
     render() {
         return html`
             <style>${styles}</style>
-            <icon-cta .clickAction="${()=>{this.toggleSelect();this.onToggle(this.checked)}}">
-                <div class="${this.type == CircleSelectType.MULTIPLE ? 'multiple' : ''} ${this.color} ${this.disabled == true ? 'disabled' : ''}">
+            <icon-cta .clickAction="${()=>{this.toggleSelect();this.onToggle(this.checked)}}" .disabled="${this.disabled}">
+                <div class="${this.type == CircleSelectType.MULTIPLE ? 'multiple' : ''} ${this.color}">
                     <img src="${this.icon[this.type][this.checked ? "checked" : "unchecked"]}" alt="${this.checked ? "x" : "o"}">
                 </div>
             </icon-cta>`
     }
 
     toggleSelect() {
-        if(this.disabled == false){
-            this.checked = !this.checked;
-        }
+        this.checked = !this.checked;
     }
 }
 
