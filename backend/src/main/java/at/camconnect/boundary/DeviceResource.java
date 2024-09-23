@@ -7,6 +7,7 @@ import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.model.Device;
 import at.camconnect.repository.DeviceRepository;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
@@ -173,6 +174,7 @@ public class DeviceResource {
     }
 
     @POST
+    //@RolesAllowed({"admin", "da"})
     @Path("/import")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response uploadCsvFile(@RestForm File file) {

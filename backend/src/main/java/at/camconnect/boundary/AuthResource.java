@@ -4,6 +4,7 @@ import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.responseSystem.CCStatus;
 import at.camconnect.services.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -18,6 +19,9 @@ public class AuthResource {
 
     @Inject
     JsonWebToken jwt;
+
+    @Inject
+    SecurityIdentity securityIdentity;
 
     @Inject
     AuthService authService;
@@ -52,6 +56,17 @@ public class AuthResource {
             }
         }
         return Response.status(Response.Status.UNAUTHORIZED).build();
+    }
+
+    @GET
+    @Path("/medt")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response medt() {
+        if(securityIdentity.hasRole("medt-teacher")) {
+            return Response.ok().build();
+        } else {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
     }
 
     public record LoginRequest(String username, String password) implements Serializable {
