@@ -4,11 +4,8 @@ import styles from '../../../styles/components/app/deviceList.styles.scss'
 import {model} from "../../index";
 import {WidthResizeObserver} from "../../base"
 import {ObservedProperty} from "../../model"
-import {Device} from "../../service/device.service"
-import {RentByStudentDTO} from "../../service/rent.service"
 import {DeviceType, DeviceTypeFullDTO, DeviceTypeVariantCollection} from "../../service/deviceType.service"
 import {AppState} from "../../AppState"
-import Util from "../../util/Util"
 
 @customElement('cc-device-list')
 export class DeviceListComponent extends LitElement {
@@ -27,12 +24,15 @@ export class DeviceListComponent extends LitElement {
         return html`
             <style>${styles}</style>
 
-            <div class="content">
+            <div class="content ${model.appState.value.equipmentDisplayMode}">
                 ${Object.values(this.deviceTypesFull.value)?.flat().sort((a, b)=>  (a.deviceType.name).localeCompare(b.deviceType.name)).map(deviceType => {
-                    return html`<cc-device-list-entry .deviceTypeFull="${deviceType}"
-                                                      class="${this.appState.value && this.appState.value.selectedDeviceEntries.size > 0 && deviceType.available > 0 ? 'selection' : ''}"
-                                                      .simpleSelectionIsOn="${this.appState.value && this.appState.value.selectedDeviceEntries.size > 0}"
-                    ></cc-device-list-entry>`
+                    return html`
+                        <cc-device-list-entry 
+                            .deviceTypeFull="${deviceType}"
+                            .isSelectable="${this.appState.value.selectedDeviceEntries.size > 0 && deviceType.available > 0}"
+                            .isListMode="${this.appState.value.equipmentDisplayMode == 'list'}"
+                        ></cc-device-list-entry>
+                    `
                 })}
 
                 ${this.deviceTypesFull.value.length == 0 ? html`<p class="noResults">Keine Ergebnisse gefunden</p>` : ""}
@@ -43,6 +43,12 @@ export class DeviceListComponent extends LitElement {
     connectedCallback() {
         super.connectedCallback();
         new WidthResizeObserver(this, [{size: 0, key: "small"}, {size: 600, key: "medium"}, {size: 1000, key: "large"}, {size: 1600, key: "xLarge"}])
+    }
+
+    updated(changedProperties: PropertyValues) {
+        this.shadowRoot.querySelectorAll("cc-device-list-entry[isselectable]").forEach((entry: any) => {
+            entry.refreshSelectionState()
+        })
     }
 }
 

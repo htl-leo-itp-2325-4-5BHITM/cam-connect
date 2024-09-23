@@ -9,17 +9,8 @@ import {
     TripodHead
 } from "./deviceTypeAttribute.service"
 import {html, TemplateResult} from "lit"
-import {unsafeSVG} from 'lit/directives/unsafe-svg.js';
-import {icon} from "@fortawesome/fontawesome-svg-core"
-import {faCamera, faHelicopter, faLightbulb, faMicrophone, faHeadphones, faGears} from "@fortawesome/free-solid-svg-icons"
-import stabilizerIcon from "../../assets/icon/noun-gimbal-5345717.svg"
-import droneIcon from "../../assets/icon/noun-drone-6707036.svg"
-import lensIcon from "../../assets/icon/noun-lens-6134156.svg"
-import tripodIcon from "../../assets/icon/noun-tripod-6392787.svg"
 
 import {Api} from "../util/Api"
-import Util from "../util/Util"
-import de from "air-datepicker/locale/de"
 
 //region devicetype interfaces
 export interface DeviceTypeSource {
@@ -51,7 +42,7 @@ export interface DroneType extends DeviceTypeSource{
 }
 
 export interface LensType extends DeviceTypeSource{
-    lens_mount: LensMount
+    mount: LensMount
     f_stop: string
     focal_length: string
 }

@@ -31,7 +31,7 @@
 }
 
 :host(:focus-visible){
-    outline: 2px solid $accentLight;
+    outline: 2px solid $accent700;
 }
 
 :host([disabled]){

@@ -30,7 +30,7 @@ label{
   z-index: 1;
 
   &.on{
-    background-color: $accent;
+    background-color: $accent500;
 
     .knob{
       margin-left: calc(var(--knob-size) * 0.75);

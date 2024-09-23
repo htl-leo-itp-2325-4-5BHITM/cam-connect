@@ -14,7 +14,6 @@ import DeviceTypeService, {
 import {ObservedProperty} from "../../model"
 import {AppState} from "../../AppState"
 import {model} from "../../index"
-import de from "air-datepicker/locale/de"
 import Util from "../../util/Util"
 
 @customElement('cc-device-list-entry')
@@ -25,6 +24,14 @@ export class DeviceListEntryComponent extends LitElement {
     @property()
     private appState: ObservedProperty<AppState>
 
+    @property({type: Boolean, reflect: true})
+    isSelected: boolean = false
+
+    @property({type: Boolean, reflect: true})
+    isSelectable: boolean = false
+
+    @property({type: Boolean, reflect: true})
+    isListMode: boolean = false
 
     constructor() {
         super()
@@ -34,12 +41,18 @@ export class DeviceListEntryComponent extends LitElement {
     connectedCallback() {
         super.connectedCallback();
 
+        console.log("connectedCallback")
+
         this.addEventListener('click', (e) => {
             let target = e.composedPath()[0] as HTMLElement
 
             if(target.closest("icon-cta")?.tagName != "ICON-CTA" && target.closest("button")?.tagName != "BUTTON" && this.deviceTypeFull.available > 0){
                 this.toggleDeviceCheck(true)
             }
+        })
+
+        model.appState.subscribe(() => {
+            this.isSelected = this.isChecked()
         })
     }
 
@@ -59,6 +72,8 @@ export class DeviceListEntryComponent extends LitElement {
 
         return html`
             <style>${styles}</style>
+
+            ${ this.isListMode ? this.renderDeviceTypeIcon(this.deviceTypeFull.deviceType) : ''}
             
             <h3>${this.deviceTypeFull.deviceType.name}</h3>
             ${this.deviceTypeFull.deviceTags.length != 0 ? 
@@ -70,30 +85,45 @@ export class DeviceListEntryComponent extends LitElement {
                     }
                 </div>` : ''
             }
-            ${details}
+            ${ this.isListMode ? '' : html`<cc-line></cc-line>` }
+            <section>
+                ${details}
+                ${ this.isListMode ? '' : html`
+                    <div class="image">
+                        ${this.renderDeviceTypeIcon(this.deviceTypeFull.deviceType)}
+                    </div>`
+                }
+            </section>
+            ${ this.isListMode ? '' : html`<cc-line></cc-line>` }
             <div class="bottom">
-                <cc-chip color="${this.deviceTypeFull.available ? ColorEnum.GOOD : ColorEnum.BAD}" 
-                         text="${this.deviceTypeFull.available ? (this.deviceTypeFull.available + ' Verfügbar') : 'Vergeben'}"
+                <cc-chip 
+                    color="${this.deviceTypeFull.available ? ColorEnum.GOOD : ColorEnum.BAD}" 
+                    text="${this.deviceTypeFull.available ? (this.deviceTypeFull.available + ' Verfügbar') : 'Vergeben'}"
                 ></cc-chip>
                 <cc-button type="${ButtonType.OUTLINED}" .disabled="${this.deviceTypeFull.available == 0}"
                            @click="${() => model.appState.value.openCreateRentModal(this.deviceTypeFull.deviceType.type_id, "deviceType")}"
                 >Verleihen</cc-button>
             </div>
-            <cc-circle-select .checked="${this.appState.value.selectedDeviceEntries.has(this)}"
-                              .disabled="${this.deviceTypeFull.available == 0}"
-                              @click="${() => { if(this.deviceTypeFull.available > 0) this.toggleDeviceCheck() }}"
+            <cc-circle-select 
+                .checked="${this.appState.value.selectedDeviceEntries.has(this)}"
+                .disabled="${this.deviceTypeFull.available == 0}"
+                @click="${() => { if(this.deviceTypeFull.available > 0) this.toggleDeviceCheck() }}"
             ></cc-circle-select>
         `
+    }
+
+    refreshSelectionState(){
+        this.isSelected = this.isChecked()
+        this.isSelectable = this.appState.value.selectedDeviceEntries.size > 0 && this.deviceTypeFull.available > 0
     }
 
     renderCamera() {
         let camera = this.deviceTypeFull.deviceType as CameraType
         return html`
-            <section>
                 <div class="details">
                     <cc-property-value 
                             size="small" 
-                            property="Mount" 
+                            property="Objektiv Anschluss" 
                             value="${camera.mount?.name}"
                            .clickAction="${()=> {model.appState.value.sidebarElement.selectSecondaryFilterById(camera.mount.attribute_id)}}"
                     ></cc-property-value>
@@ -105,153 +135,170 @@ export class DeviceListEntryComponent extends LitElement {
                     ></cc-property-value>
                     <cc-property-value 
                             size="small" 
-                            property="Foto Resolution" 
+                            property="Foto Auflösung" 
                             value="${camera.photo_resolution?.name}"
                             .clickAction="${()=> {model.appState.value.sidebarElement.selectSecondaryFilterById(camera.photo_resolution.attribute_id)}}"
                     ></cc-property-value>
                     <cc-property-value 
                             size="small" 
                             property="Autofokus"
-                            value="${camera.autofocus ? 'Ja' : 'Nein'}"
+                            value="${Util.boolToYesNo(camera.autofocus)}"
                     ></cc-property-value>
                 </div>
-                <div class="image">
-                    ${this.renderDeviceTypeIcon(this.deviceTypeFull.deviceType)}
-                </div>
-            </section>
         `
     }
 
     renderAudio() {
         let audio = this.deviceTypeFull.deviceType as AudioType
         return html`
-            <section>
                 <div class="details">
-                    <cc-property-value size="small" property="Audio Connector"
-                                       value="${audio.connector?.name}"></cc-property-value>
+                    <cc-property-value 
+                            size="small" 
+                            property="Stecker"
+                            value="${audio.connector?.name}"
+                            .clickAction="${()=> {model.appState.value.sidebarElement.selectSecondaryFilterById(audio.connector.attribute_id)}}"
+                    ></cc-property-value>
                 </div>
-                <div class="image">
-                    ${this.renderDeviceTypeIcon(this.deviceTypeFull.deviceType)}
-                </div>
-            </section>
         `
     }
 
     renderMicrophone() {
         let audio = this.deviceTypeFull.deviceType as MicrophoneType
         return html`
-            <section>
                 <div class="details">
-                    <cc-property-value size="small" property="Audio Connector"
-                                       value="${audio.connector?.name}"></cc-property-value>
-                    <cc-property-value size="small" property="Needs Recorder"
-                                       value="${audio.needs_power}"></cc-property-value>
-                    <cc-property-value size="small" property="Needs Recorder"
-                                       value="${audio.needs_recorder}"></cc-property-value>
+                    <cc-property-value 
+                            size="small" 
+                            property="Audio Connector"
+                            value="${audio.connector?.name}"
+                            .clickAction="${()=> {model.appState.value.sidebarElement.selectSecondaryFilterById(audio.connector.attribute_id)}}"
+                    ></cc-property-value>
+                    <cc-property-value 
+                            size="small" 
+                            property="Braucht Stromversorgung"
+                            value="${Util.boolToYesNo(audio.needs_power)}"
+                    ></cc-property-value>
+                    <cc-property-value 
+                            size="small" 
+                            property="Braucht externes Aufnahmegerät"
+                            value="${Util.boolToYesNo(audio.needs_recorder)}"
+                    ></cc-property-value>
                 </div>
-                <div class="image">
-                    ${this.renderDeviceTypeIcon(this.deviceTypeFull.deviceType)}
-                </div>
-            </section>
         `
     }
 
     renderDrone() {
         let drone = this.deviceTypeFull.deviceType as DroneType
         return html`
-            <section>
                 <div class="details">
-                    <cc-property-value size="small" property="Maximale Reichweite (km)" value="${drone.max_range_kilometers}"
-                                       isLink></cc-property-value>
-                    <cc-property-value size="small" property="Flugzeit (min)"
-                                       value="${drone.flight_time_minutes}"></cc-property-value>
-                    <cc-property-value size="small" property="Benötigt Lizenz"
-                                       value="${drone.requires_license ? 'Ja' : 'Nein'}"></cc-property-value>
+                    <cc-property-value 
+                            size="small" 
+                            property="Maximale Reichweite (km)" 
+                            value="${drone.max_range_kilometers}"
+                    ></cc-property-value>
+                    <cc-property-value 
+                            size="small" 
+                            property="Maximale Flugzeit (min)"
+                            value="${drone.flight_time_minutes}"
+                    ></cc-property-value>
+                    <cc-property-value 
+                            size="small" 
+                            property="Benötigt Lizenz"
+                            value="${Util.boolToYesNo(drone.requires_license)}"
+                    ></cc-property-value>
                 </div>
-                <div class="image">
-                    ${this.renderDeviceTypeIcon(this.deviceTypeFull.deviceType)}
-                </div>
-            </section>
         `
     }
 
     renderLens() {
         let lens = this.deviceTypeFull.deviceType as LensType
         return html`
-            <section>
                 <div class="details">
-                    <cc-property-value size="small" property="Lensmount" value="${lens.lens_mount.name}"></cc-property-value>
-                    <cc-property-value size="small" property="Blende" value="${lens.f_stop}"></cc-property-value>
-                    <cc-property-value size="small" property="Brennweite" value="${lens.focal_length}"></cc-property-value>
+                    <cc-property-value 
+                            size="small" 
+                            property="Anschluss" 
+                            value="${lens.mount.name}"
+                            .clickAction="${()=> {model.appState.value.sidebarElement.selectSecondaryFilterById(lens.mount.attribute_id)}}"
+                    ></cc-property-value>
+                    <cc-property-value 
+                            size="small" 
+                            property="Maximale Blende" 
+                            value="${lens.f_stop}"
+                    ></cc-property-value>
+                    <cc-property-value 
+                            size="small" 
+                            property="Brennweite" 
+                            value="${lens.focal_length}"
+                    ></cc-property-value>
                 </div>
-                <div class="image">
-                    ${this.renderDeviceTypeIcon(this.deviceTypeFull.deviceType)}
-                </div>
-            </section>
         `
     }
 
     renderLight() {
         let light = this.deviceTypeFull.deviceType as LightType
         return html`
-            <section>
                 <div class="details">
-                    <cc-property-value size="small" property="RGB" value="${light.rgb}"></cc-property-value>
-                    <cc-property-value size="small" property="Watts" value="${light.watts}"></cc-property-value>
-                    <cc-property-value size="small" property="Temperatur"
-                                       value="${light.variable_temperature}"></cc-property-value>
+                    <cc-property-value 
+                            size="small" 
+                            property="RGB Farben" 
+                            value="${Util.boolToYesNo(light.rgb)}"
+                    ></cc-property-value>
+                    <cc-property-value 
+                            size="small" 
+                            property="Stärke (Watt)" 
+                            value="${light.watts}"
+                    ></cc-property-value>
+                    <cc-property-value 
+                            size="small" 
+                            property="Farbtemperatur verstellbar" 
+                            value="${Util.boolToYesNo(light.variable_temperature)}"
+                    ></cc-property-value>
                 </div>
-                <div class="image">
-                    ${this.renderDeviceTypeIcon(this.deviceTypeFull.deviceType)}
-                </div>
-            </section>
         `
     }
 
     renderStabilizer() {
         let stabilizer = this.deviceTypeFull.deviceType as StabilizerType
         return html`
-            <section>
                 <div class="details">
-                    <cc-property-value size="small" property="Maximales Gewicht"
-                                       value="${stabilizer.max_weight_kilograms}"></cc-property-value>
-                    <cc-property-value size="small" property="Achsen Anzahl"
-                                       value="${stabilizer.number_of_axis}"></cc-property-value>
+                    <cc-property-value 
+                            size="small" 
+                            property="Maximales Gewicht" 
+                            value="${stabilizer.max_weight_kilograms}"
+                    ></cc-property-value>
+                    <cc-property-value 
+                            size="small" 
+                            property="Anzahl stabilisierter Achsen" 
+                            value="${stabilizer.number_of_axis}"
+                    ></cc-property-value>
                 </div>
-                <div class="image">
-                    ${this.renderDeviceTypeIcon(this.deviceTypeFull.deviceType)}
-                </div>
-            </section>
         `
     }
 
     renderTripod() {
         let tripod = this.deviceTypeFull.deviceType as TripodType
         return html`
-            <section>
                 <div class="details">
-                    <cc-property-value size="small" property="Head" value="${tripod.head?.name}"></cc-property-value>
-                    <cc-property-value size="small" property="Höhe"
-                                       value="${tripod.height_centimeters}"></cc-property-value>
+                    <cc-property-value 
+                            size="small" 
+                            property="Head" 
+                            value="${tripod.head?.name}"
+                            .clickAction="${()=> {model.appState.value.sidebarElement.selectSecondaryFilterById(tripod.head.attribute_id)}}"
+                    ></cc-property-value>
+                    <cc-property-value 
+                            size="small" 
+                            property="Höhe" 
+                            value="${tripod.height_centimeters}"
+                    ></cc-property-value>
                 </div>
-                <div class="image">
-                    ${this.renderDeviceTypeIcon(this.deviceTypeFull.deviceType)}
-                </div>
-            </section>
         `
     }
 
     renderSimple() {
         let simple = this.deviceTypeFull.deviceType as SimpleType
         return html`
-            <section>
                 <div class="details">
                     <p>${simple.description}</p>
                 </div>
-                <div class="image">
-                    ${this.renderDeviceTypeIcon(this.deviceTypeFull.deviceType)}
-                </div>
-            </section>
         `
     }
 
@@ -278,7 +325,7 @@ export class DeviceListEntryComponent extends LitElement {
     }
 
     isChecked(){
-        return this.appState.value.selectedDeviceEntries.has(this)
+        return this.appState.value?.selectedDeviceEntries?.has(this)
     }
 }
 

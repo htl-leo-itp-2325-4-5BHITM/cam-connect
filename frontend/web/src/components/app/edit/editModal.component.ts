@@ -251,9 +251,9 @@ export class EditModalComponent extends LitElement {
                         <p>Lens Mount</p>
                         <cc-dropdown
                                 .options="${model.deviceTypeAttributes.value.lensMounts.map(option => ({ id: option.attribute_id, data: option.name }))}"
-                                .selected="${{id: lensType?.lens_mount?.attribute_id, data: lensType?.lens_mount?.name}}"
+                                .selected="${{id: lensType?.mount?.attribute_id, data: lensType?.mount?.name}}"
                                 .onSelect="${(option: {id: number, data: string}) => {
-                                    lensType.lens_mount = model.deviceTypeAttributes.value.lensMounts.find(elem => elem.attribute_id == option.id)
+                                    lensType.mount = model.deviceTypeAttributes.value.lensMounts.find(elem => elem.attribute_id == option.id)
                                 }}"
                         ></cc-dropdown>
                     </div>                

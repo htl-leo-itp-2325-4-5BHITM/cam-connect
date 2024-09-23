@@ -126,26 +126,27 @@ function checkLogin(){
   - since these dont target specific containers but any item of that type they can easily lead to unexpected results
 
 For those that don't know scss this will seem weird, it's actually pretty easy
+
 ```SCSS
 $accent: #4095BF; //defines a variable
 
-.equipmentItem{
-  &:hover{ //compiles to .equipmentItem:hover{}
-    color: $accent;
+.equipmentItem {
+  &:hover { //compiles to .equipmentItem:hover{}
+    color: $accent500;
   }
-  
-  h2{ //compiles to .equipmentItem h2
+
+  h2 { //compiles to .equipmentItem h2
     font-family: quicksand, sans-serif;
   }
 }
 
-.equipmentItem .tags{
-  &::before{
+.equipmentItem .tags {
+  &::before {
     content: 'hey';
     background-color: white;
   }
-  
-  &.marked{ //compiles to .equipmentItem .tags.marked
+
+  &.marked { //compiles to .equipmentItem .tags.marked
     color: black;
   }
 }

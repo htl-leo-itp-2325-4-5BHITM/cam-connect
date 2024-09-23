@@ -76,6 +76,7 @@ export class AppState{
     private _backUrl: string
     private _originElementLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
     private _sidebarElement: SidebarComponent
+    private _equipmentDisplayMode: "grid" | "list" = "grid"
     private _userSettings: UserSettings = {
         isDarkmode: true,
         prefersEnglish: false,
@@ -428,7 +429,7 @@ export class AppState{
     set deviceFilters(value: DeviceFilters) {
         this._deviceFilters = value
         this.update()
-        console.log(this._deviceFilters)
+        this.selectedDeviceEntries.clear()
         DeviceTypeService.fetchAllFull()
     }
 
@@ -439,6 +440,16 @@ export class AppState{
 
     set sidebarElement(value: SidebarComponent) {
         this._sidebarElement = value
+        this.update()
+    }
+
+
+    get equipmentDisplayMode(): "grid" | "list" {
+        return this._equipmentDisplayMode
+    }
+
+    set equipmentDisplayMode(value: "grid" | "list") {
+        this._equipmentDisplayMode = value
         this.update()
     }
 }

@@ -18,16 +18,16 @@ import java.util.List;
 public class LensType extends DeviceType {
     @ManyToOne
     @JoinColumn(name = "mount_id")
-    private LensMount lens_mount;
+    private LensMount mount;
     @Column(length = 15)
     private String f_stop;
     @Column(length = 15)
     private String focal_length;
 
-    public LensType(String name, String image, LensMount lens_mount, String f_stop, String focal_length) {
+    public LensType(String name, String image, LensMount mount, String f_stop, String focal_length) {
         super(name, image, DeviceTypeVariantEnum.lens);
         this.f_stop = f_stop;
-        this.lens_mount = lens_mount;
+        this.mount = mount;
         this.focal_length = focal_length;
     }
 
@@ -43,7 +43,7 @@ public class LensType extends DeviceType {
             setImage_blob(data.image());
             setF_stop(data.f_stop());
             setFocal_length(data.focal_length());
-            setLens_mount(data.mount());
+            setMount(data.mount());
         }catch (Exception ex){
             throw new CCException(1106);
         }
@@ -56,12 +56,12 @@ public class LensType extends DeviceType {
 
     @Override
     public DeviceTypeGlobalIdDTO toGlobalDTO() {
-        return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getImage_blob(), getF_stop(), getFocal_length(), getLens_mount().getAttribute_id());
+        return new DeviceTypeGlobalIdDTO(getType_id(), getName(), getImage_blob(), getF_stop(), getFocal_length(), getMount().getAttribute_id());
     }
 
     @Override
     public List<DeviceTypeAttribute> getAttributes() {
-        return List.of(lens_mount);
+        return List.of(mount);
     }
 
     //region getter setter
@@ -81,12 +81,12 @@ public class LensType extends DeviceType {
         this.focal_length = focal_length;
     }
 
-    public LensMount getLens_mount() {
-        return lens_mount;
+    public LensMount getMount() {
+        return mount;
     }
 
-    public void setLens_mount(LensMount lens_mount) {
-        this.lens_mount = lens_mount;
+    public void setMount(LensMount lens_mount) {
+        this.mount = lens_mount;
     }
 
     //endregion

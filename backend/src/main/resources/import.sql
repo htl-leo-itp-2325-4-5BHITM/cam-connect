@@ -19,7 +19,7 @@ insert into devicetypeattribute(dtype, name, details) values ('TripodHead', '3 a
 insert into devicetypeattribute(dtype, name, details) values ('TripodHead', 'Ballhead', 'In alle richtungen adjustierbarer Kugelkopf');
 
 -- Audio Connectors
-insert into devicetypeattribute(dtype, name, details) values ('AudioConnector', 'wireless', 'verbindet sich via bluetooth oder einem eigenen sender');
+insert into devicetypeattribute(dtype, name, details) values ('AudioConnector', 'kabellos', 'verbindet sich via bluetooth oder einem eigenen sender');
 insert into devicetypeattribute(dtype, name, details) values ('AudioConnector', 'aux', '3.5mm aux');
 insert into devicetypeattribute(dtype, name, details) values ('AudioConnector', 'XLR', '3 pin XLR connector');
 

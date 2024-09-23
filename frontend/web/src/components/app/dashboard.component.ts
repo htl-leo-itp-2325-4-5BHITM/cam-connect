@@ -67,9 +67,9 @@ export class DashboardComponent extends LitElement {
             case PageEnum.EQUIPMENT:
                 sidebar = html`
                 <cc-sidebar accountname="Martin Huemer">
-                    <cc-select slot="sorts" size="${SizeEnum.MEDIUM}">
-                        <p class="selected">raster</p>
-                        <p>liste</p>
+                    <cc-select slot="sorts" size="${SizeEnum.MEDIUM}" .onSelect="${(elem) => {model.appState.value.equipmentDisplayMode = elem.dataset['name']}}">
+                        <p class="selected" data-name="grid">raster</p>
+                        <p data-name="list">liste</p>
                     </cc-select>
                     <cc-toggle slot="sorts" .onToggle="${(toggled:boolean)=>{
                         let newFilters = model.appState.value.deviceFilters
@@ -85,12 +85,6 @@ export class DashboardComponent extends LitElement {
                     
                     <cc-filter-container 
                             slot="secondaryFilters" 
-                            .options="${model.deviceTypeAttributesAsFilterOptions.cameraResolutions}" 
-                            .visibility="${["camera", "drone"]}"  
-                            .onUpdate="${this.handleDeviceTypeAttributeFilterUpdate}"
-                    >Auflösungen</cc-filter-container>
-                    <cc-filter-container 
-                            slot="secondaryFilters" 
                             .options="${model.deviceTypeAttributesAsFilterOptions.cameraSystems}" 
                             .visibility="${["camera"]}" 
                             .onUpdate="${this.handleDeviceTypeAttributeFilterUpdate}"
@@ -101,6 +95,12 @@ export class DashboardComponent extends LitElement {
                             .visibility="${["camera", "lens"]}" 
                             .onUpdate="${this.handleDeviceTypeAttributeFilterUpdate}"
                     >Objektiv Anschlüsse</cc-filter-container>
+                    <cc-filter-container 
+                            slot="secondaryFilters" 
+                            .options="${model.deviceTypeAttributesAsFilterOptions.cameraResolutions}" 
+                            .visibility="${["camera", "drone"]}"  
+                            .onUpdate="${this.handleDeviceTypeAttributeFilterUpdate}"
+                    >Foto-Auflösungen</cc-filter-container>
                     <cc-filter-container 
                             slot="secondaryFilters" 
                             .options="${model.deviceTypeAttributesAsFilterOptions.tripodHeads}" 

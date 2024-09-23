@@ -102,7 +102,6 @@ public class DeviceTypeRepository {
     }
 
     public List<DeviceTypeFullDTO> getAllFull(DeviceTypeFilters filters) {
-        System.out.println("started getAlLFull at " + LocalDateTime.now());
         List<DeviceType> deviceTypeList = em.createQuery("" +
                 "select dt from DeviceType dt " +
                 "where dt.status = 'active' " +
@@ -135,7 +134,7 @@ public class DeviceTypeRepository {
 
                 for (Long attributeId : filters.attributes()) {
                     DeviceTypeAttribute attributeObject = em.find(DeviceTypeAttribute.class, attributeId);
-                    List<Long> idList = assignedIds.get(attributeObject.getClass());
+                    List<Long> idList = assignedIds.get(attributeObject.getClass().getSimpleName());
                     if(idList == null) idList = new LinkedList<>();
                     idList.add(attributeId);
                     assignedIds.put(attributeObject.getClass().getSimpleName(), idList);
@@ -144,7 +143,6 @@ public class DeviceTypeRepository {
                 for (Map.Entry<String, List<Long>> entry : assignedIds.entrySet()) {
                     if(deviceType.getAttributes().stream().noneMatch(attribute -> entry.getValue().contains((attribute.getAttribute_id())))){
                         includeInList = false;
-                        continue;
                     }
                 }
             }
@@ -156,7 +154,6 @@ public class DeviceTypeRepository {
 
             list.add(new DeviceTypeFullDTO(deviceType, availableDevices.intValue(), tagList));
         }
-        System.out.println("endet getAllFull at " + LocalDateTime.now());
         return list;
     }
 

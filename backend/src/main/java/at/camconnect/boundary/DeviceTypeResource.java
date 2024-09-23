@@ -59,7 +59,6 @@ public class DeviceTypeResource {
     @Path("/getallfull")
     @Transactional
     public Response getAllFull(DeviceTypeFilters deviceTypeFilters){
-        System.out.println("Reached getAllFull Endpoint at " + LocalDateTime.now());
         List<DeviceTypeFullDTO> result;
         try{
             result = deviceTypeRepository.getAllFull(deviceTypeFilters);
@@ -67,7 +66,6 @@ public class DeviceTypeResource {
             return CCResponse.error(ex);
         }
 
-        System.out.println("Sending data from getAllFull Endpoint at " + LocalDateTime.now());
         return CCResponse.ok(result);
     }
 

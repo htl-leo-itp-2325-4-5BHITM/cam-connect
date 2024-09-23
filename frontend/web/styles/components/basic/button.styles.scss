@@ -29,13 +29,13 @@ button{
   user-select: none;
 
   &:focus-visible{
-    outline: 2px solid $accentLight;
+    outline: 2px solid $accent700;
     outline-offset: .2rem;
   }
 
   &[color = "accent"]{
-    --color-main: #{$accentDark};
-    --color-light: #{$accentLight};
+    --color-main: #{$accent300};
+    --color-light: #{$accent700};
     --color-text: #{$gray1000};
   }
   &[color = "gray"] {
@@ -76,7 +76,7 @@ button{
 
     &:not([disabled]):hover, &:not([disabled]):focus-visible {
       &[color = "accent"]{
-        background-color: $accent;
+        background-color: $accent500;
       }
     }
   }

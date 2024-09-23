@@ -38,18 +38,18 @@
 
   .popupEngineModalButton{
     margin-top: 1rem;
-    background-color: $accent;
+    background-color: $accent500;
     padding: .2rem .5rem;
     border-radius: .5rem;
     transition: background-color $transitionTimeShort;
 
     &:hover{
-      background-color: $accentDark;
+      background-color: $accent300;
     }
 
     &.cancel{
       background-color: transparent;
-      outline: 2px solid $accent;
+      outline: 2px solid $accent500;
     }
   }
 
@@ -89,8 +89,8 @@
     --adp-background-color-hover: #{$gray400};
     --adp-color-other-month: #{$gray600};
     --adp-color: #{$gray800};
-    --adp-cell-background-color-selected: #{$accent};
-    --adp-background-color-selected-other-month: #{$accentLight};
+    --adp-cell-background-color-selected: #{$accent500};
+    --adp-background-color-selected-other-month: #{$accent700};
   }
 
   .air-datepicker--pointer::after{
@@ -98,6 +98,6 @@
   }
 
   .air-datepicker-body--day-name{
-    color: #{$accentLight};
+    color: #{$accent700};
   }
 }

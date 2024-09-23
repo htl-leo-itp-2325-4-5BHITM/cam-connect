@@ -116,7 +116,7 @@ export class DeviceTypeEditEntryComponent extends LitElement {
     renderLens(lensType : LensType){
         return html`
             ${this.getPropertyValue("F-Stop", lensType.f_stop)}
-            ${this.getPropertyValue("Lens Mount", lensType.lens_mount?.name)}
+            ${this.getPropertyValue("Lens Mount", lensType.mount?.name)}
             ${this.getPropertyValue("Focal Length", lensType.focal_length)}
         `
     }
