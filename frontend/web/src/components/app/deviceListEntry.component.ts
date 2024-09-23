@@ -126,23 +126,27 @@ export class DeviceListEntryComponent extends LitElement {
                             property="Objektiv Anschluss" 
                             value="${camera.mount?.name}"
                            .clickAction="${()=> {model.appState.value.sidebarElement.selectSecondaryFilterById(camera.mount.attribute_id)}}"
+                            nowrap
                     ></cc-property-value>
                     <cc-property-value 
                             size="small" 
                             property="System" 
                             value="${camera.system?.name}"
                             .clickAction="${()=> {model.appState.value.sidebarElement.selectSecondaryFilterById(camera.system.attribute_id)}}"
+                            nowrap
                     ></cc-property-value>
                     <cc-property-value 
                             size="small" 
                             property="Foto Auflösung" 
                             value="${camera.photo_resolution?.name}"
                             .clickAction="${()=> {model.appState.value.sidebarElement.selectSecondaryFilterById(camera.photo_resolution.attribute_id)}}"
+                            nowrap
                     ></cc-property-value>
                     <cc-property-value 
                             size="small" 
                             property="Autofokus"
                             value="${Util.boolToYesNo(camera.autofocus)}"
+                            nowrap
                     ></cc-property-value>
                 </div>
         `
@@ -157,6 +161,7 @@ export class DeviceListEntryComponent extends LitElement {
                             property="Stecker"
                             value="${audio.connector?.name}"
                             .clickAction="${()=> {model.appState.value.sidebarElement.selectSecondaryFilterById(audio.connector.attribute_id)}}"
+                            nowrap
                     ></cc-property-value>
                 </div>
         `
@@ -171,16 +176,19 @@ export class DeviceListEntryComponent extends LitElement {
                             property="Audio Connector"
                             value="${audio.connector?.name}"
                             .clickAction="${()=> {model.appState.value.sidebarElement.selectSecondaryFilterById(audio.connector.attribute_id)}}"
+                            nowrap
                     ></cc-property-value>
                     <cc-property-value 
                             size="small" 
                             property="Braucht Stromversorgung"
                             value="${Util.boolToYesNo(audio.needs_power)}"
+                            nowrap
                     ></cc-property-value>
                     <cc-property-value 
                             size="small" 
                             property="Braucht externes Aufnahmegerät"
                             value="${Util.boolToYesNo(audio.needs_recorder)}"
+                            nowrap
                     ></cc-property-value>
                 </div>
         `
@@ -194,16 +202,19 @@ export class DeviceListEntryComponent extends LitElement {
                             size="small" 
                             property="Maximale Reichweite (km)" 
                             value="${drone.max_range_kilometers}"
+                            nowrap
                     ></cc-property-value>
                     <cc-property-value 
                             size="small" 
                             property="Maximale Flugzeit (min)"
                             value="${drone.flight_time_minutes}"
+                            nowrap
                     ></cc-property-value>
                     <cc-property-value 
                             size="small" 
                             property="Benötigt Lizenz"
                             value="${Util.boolToYesNo(drone.requires_license)}"
+                            nowrap
                     ></cc-property-value>
                 </div>
         `
@@ -218,16 +229,19 @@ export class DeviceListEntryComponent extends LitElement {
                             property="Anschluss" 
                             value="${lens.mount.name}"
                             .clickAction="${()=> {model.appState.value.sidebarElement.selectSecondaryFilterById(lens.mount.attribute_id)}}"
+                            nowrap
                     ></cc-property-value>
                     <cc-property-value 
                             size="small" 
                             property="Maximale Blende" 
                             value="${lens.f_stop}"
+                            nowrap
                     ></cc-property-value>
                     <cc-property-value 
                             size="small" 
                             property="Brennweite" 
                             value="${lens.focal_length}"
+                            nowrap
                     ></cc-property-value>
                 </div>
         `
@@ -241,16 +255,19 @@ export class DeviceListEntryComponent extends LitElement {
                             size="small" 
                             property="RGB Farben" 
                             value="${Util.boolToYesNo(light.rgb)}"
+                            nowrap
                     ></cc-property-value>
                     <cc-property-value 
                             size="small" 
                             property="Stärke (Watt)" 
                             value="${light.watts}"
+                            nowrap
                     ></cc-property-value>
                     <cc-property-value 
                             size="small" 
                             property="Farbtemperatur verstellbar" 
                             value="${Util.boolToYesNo(light.variable_temperature)}"
+                            nowrap
                     ></cc-property-value>
                 </div>
         `
@@ -264,11 +281,13 @@ export class DeviceListEntryComponent extends LitElement {
                             size="small" 
                             property="Maximales Gewicht" 
                             value="${stabilizer.max_weight_kilograms}"
+                            nowrap
                     ></cc-property-value>
                     <cc-property-value 
                             size="small" 
                             property="Anzahl stabilisierter Achsen" 
                             value="${stabilizer.number_of_axis}"
+                            nowrap
                     ></cc-property-value>
                 </div>
         `
@@ -283,11 +302,13 @@ export class DeviceListEntryComponent extends LitElement {
                             property="Head" 
                             value="${tripod.head?.name}"
                             .clickAction="${()=> {model.appState.value.sidebarElement.selectSecondaryFilterById(tripod.head.attribute_id)}}"
+                            nowrap
                     ></cc-property-value>
                     <cc-property-value 
                             size="small" 
                             property="Höhe" 
                             value="${tripod.height_centimeters}"
+                            nowrap
                     ></cc-property-value>
                 </div>
         `

@@ -84,7 +84,7 @@ VALUES
 -- Simple
 INSERT INTO devicetype (name, image_blob, variant, dtype, description, status)
 VALUES
-    ( 'Samsung Galaxy Buds', 'url1', 'simple', 'SimpleType', 'Wireless earbuds', 'active'),
+    ( 'So ein Kabel vom Erich Baar', 'url1', 'simple', 'SimpleType', 'Also dit kann aux zu XLR mache, dadurch kannste dann det PROOFI mikrofön von de Baar an jedö Kamera drannstecke, dat is ne gaanz tolle Sache', 'active'),
     ( 'Apple AirPods Pro', 'url2', 'simple', 'SimpleType', 'Noise-canceling earbuds', 'active'),
     ( 'Beats Powerbeats Pro', 'url3', 'simple', 'SimpleType', 'Sport wireless earbuds', 'active'),
     ( 'Jabra Elite 75t', 'url4', 'simple', 'SimpleType', 'Bluetooth earbuds', 'active'),

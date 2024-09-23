@@ -18,6 +18,8 @@ export class PropertyValueComponent extends LitElement {
     @property()
     clickAction: () => void
 
+    @property({type: Boolean, reflect: true}) noWrap: boolean = false
+
     render() {
         return html`
             <style>${styles}</style>

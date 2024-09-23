@@ -44,7 +44,9 @@ export class SidebarComponent extends LitElement {
                 <div class="buttons">
                     <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.FILLED}"
                        @click="${() => {
-                           (model.appState.value.originElement as EditComponent).showModal(null, false, EditPageEnum.DEVICETYPE)
+                           model.appState.value.openCreateRentModal()
+                           //TODO michi warum war ds hier so
+                           //(model.appState.value.originElement as EditComponent).showModal(null, false, EditPageEnum.DEVICETYPE)
                        }}"
                        @mouseenter="${(e) => {
                            Tooltip.show(e.target, 'shift+n oder <', 500)
