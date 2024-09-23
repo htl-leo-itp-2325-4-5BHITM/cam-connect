@@ -8,7 +8,6 @@ import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.model.Device;
 import at.camconnect.repository.DeviceRepository;
 import jakarta.inject.Inject;
-import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;

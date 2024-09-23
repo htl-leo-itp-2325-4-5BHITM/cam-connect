@@ -9,7 +9,7 @@
 :host([color="ACCENT"]){
   --background: #{$accent};
   --hover-background: #{$accentLight};
-  --expanded-background: #{darken($accent, 80%)};
+  --expanded-background: adjust-color($color, $lightness: -80%)
 }
 :host([color="GOOD"]){
   --background: #{$good};
@@ -22,7 +22,7 @@
 :host([color="BAD"]){
   --background: #{$bad};
   --hover-background: #{$badLight};
-  --expanded-background: #{darken($bad, 30%)};
+  --expanded-background: adjust-color($bad, $lightness: -30%);
 }
 :host([color="GRAY"]){
   --background: #{$gray500};

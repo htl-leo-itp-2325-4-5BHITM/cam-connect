@@ -2,11 +2,12 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "module": "esnext",
-    "target": "es2018",
+    "target": "es2023",
     "outDir": "dist",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
+    "useDefineForClassFields": false,
     "importHelpers": true,
     "sourceMap": true,
     "inlineSources": true,

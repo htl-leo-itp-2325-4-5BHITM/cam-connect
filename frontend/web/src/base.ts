@@ -1,4 +1,3 @@
-import * as trace_events from "trace_events"
 import Util from "./util/Util"
 import {model} from "./index"
 import AirDatepicker from "air-datepicker"
