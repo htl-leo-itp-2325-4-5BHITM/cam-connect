@@ -6,11 +6,12 @@ import {FilterContainerComponent} from "../basic/filterContainer.component"
 import {filter} from "rxjs"
 import {Orientation, SimpleColorEnum, SizeEnum} from "../../base"
 import {model} from "../../index"
-import {ObservedProperty} from "../../model"
+import {EditPageEnum, ObservedProperty} from "../../model"
 import {AppState} from "../../AppState"
 import UrlHandler from "../../util/UrlHandler"
 import {DeviceTypeVariantEnum} from "../../service/deviceType.service"
 import {Tooltip} from "../../util/Tooltip"
+import {EditComponent} from "../app/edit/edit.component"
 
 @customElement('cc-sidebar')
 export class SidebarComponent extends LitElement {
@@ -41,7 +42,9 @@ export class SidebarComponent extends LitElement {
                 <style>${styles}</style>
                 <div class="buttons">
                     <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.FILLED}"
-                       @click="${this.openCreateRentMenu}"
+                       @click="${() => {
+                           (model.appState.value.originElement as EditComponent).showModal(null, false, EditPageEnum.DEVICETYPE)
+                       }}"
                        @mouseenter="${(e) => {
                            Tooltip.show(e.target, 'shift+n oder <', 500)
                        }}"
@@ -81,7 +84,9 @@ export class SidebarComponent extends LitElement {
                 <style>${styles}</style>
                 <div class="buttons">
                     <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.FILLED}"
-                               @click="${this.openCreateRentMenu}"
+                               @click="${() => {
+                                   (model.appState.value.originElement as EditComponent).showModal(null, false, EditPageEnum.DEVICETYPE)
+                               }}"
                                @mouseenter="${(e) => {
                                    Tooltip.show(e.target, 'shift+n oder <', 500)
                                }}"
@@ -102,6 +107,8 @@ export class SidebarComponent extends LitElement {
                                            UrlHandler.updateUrl('/app/edit')
                                            UrlHandler.clearParams()
                                            UrlHandler.setParam("type", value.id as string)
+                                           this.appState.value.clearSelectedDeviceEditEntries()
+                                           this.appState.value.clearSelectedDeviceTypeEditEntries()
                                            this.appState.value.editPageType = value.id as DeviceTypeVariantEnum
                                        }}"
                                     >${value.name}</p>
@@ -118,10 +125,6 @@ export class SidebarComponent extends LitElement {
                 </div>
             `
         }
-    }
-
-    openCreateRentMenu(){
-        this.appState.value.openCreateRentModal()
     }
 
     setSecondaryFilterVisibility(){

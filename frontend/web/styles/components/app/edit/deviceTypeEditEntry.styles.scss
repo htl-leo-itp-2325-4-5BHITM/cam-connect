@@ -48,6 +48,7 @@ h3{
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  margin-right: 1rem;
 
   &.children{
     width: 4ch;
@@ -59,6 +60,7 @@ div{
 
   &.tags{
     width: 9vw;
+    gap: .5rem;
   }
 
   cc-property-value{

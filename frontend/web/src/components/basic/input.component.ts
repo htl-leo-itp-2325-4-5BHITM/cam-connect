@@ -31,6 +31,9 @@ export class InputComponent extends LitElement {
     @property()
     label: string = ""
 
+    @property()
+    onInput: (text: String) => void = () => {}
+
     @queryAssignedElements()
     private detailElement!: Array<HTMLElement>;
 
@@ -42,7 +45,7 @@ export class InputComponent extends LitElement {
         return html`
             <style>${styles}</style>
             <label for="inputField">${this.label}</label>
-            <input id="inputField" type="text" placeholder="${this.placeholder}" value="${this.text}">
+            <input id="inputField" type="text" placeholder="${this.placeholder}" value="${this.text}" @input="${(e) => {this.onInput(e.target.value)}}">
         `
     }
 }

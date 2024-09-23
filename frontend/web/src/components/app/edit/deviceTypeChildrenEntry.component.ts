@@ -39,7 +39,7 @@ export class DeviceTypeChildrenEntryComponent extends LitElement {
             <div class="edit">
                 <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}"  @click="${() => {
                     //UrlHandler.updateUrl('/app/edit/device?did=' + this.device.device_id)
-                    (model.appState.value.originElement as EditComponent).showModal(this.device, "update", EditPageEnum.DEVICE)
+                    (model.appState.value.originElement as EditComponent).showModal(this.device, false, EditPageEnum.DEVICE)
                 }}">
                     <div slot="left" class="icon accent">
                         ${unsafeSVG(icon(faPen).html[0])}
