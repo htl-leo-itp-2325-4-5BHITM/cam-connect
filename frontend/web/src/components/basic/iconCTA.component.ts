@@ -11,6 +11,9 @@ export class iconCTAComponent extends LitElement {
 
     @property() size: string = "1.5rem"
 
+    @property({ type: Boolean, reflect: true })
+    disabled?: boolean = false
+
     render() {
         return html`
             <style>${styles}</style>
@@ -20,11 +23,10 @@ export class iconCTAComponent extends LitElement {
 
     connectedCallback() {
         super.connectedCallback();
-        this.addEventListener("click", (e) => {this.playClickAnimation(); this.clickAction()})
+        this.addEventListener("click", this.executeClickAction)
         this.addEventListener("keydown", (event: KeyboardEvent) => {
             if(event.key == " " || event.key == "Enter") {
-                this.playClickAnimation()
-                this.clickAction()
+                this.executeClickAction()
             }
         })
     }
@@ -47,6 +49,13 @@ export class iconCTAComponent extends LitElement {
 
     playClickAnimation() {
         AnimationHelper.pop(this.slottedChildren[0], 200, 1.1)
+    }
+
+    executeClickAction(){
+        if(this.disabled) return
+
+        this.playClickAnimation()
+        this.clickAction()
     }
 }
 

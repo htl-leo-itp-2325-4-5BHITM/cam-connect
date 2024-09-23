@@ -8,15 +8,14 @@ import {unsafeHTML} from 'lit/directives/unsafe-html.js';
 
 @customElement('cc-app')
 export class AppComponent extends LitElement {
-    @property()
-    private appState: ObservedProperty<AppState>
-
     constructor() {
         super();
 
-        this.appState = new ObservedProperty<AppState>(this, model.appState)
-
         model.appState.value.appElement = this
+
+        model.appState.value.originElementLoaded.subscribe(() => {
+            this.requestUpdate()
+        })
     }
 
     protected firstUpdated(_changedProperties: PropertyValues) {

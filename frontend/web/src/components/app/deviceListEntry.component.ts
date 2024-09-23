@@ -91,14 +91,29 @@ export class DeviceListEntryComponent extends LitElement {
         return html`
             <section>
                 <div class="details">
-                    <cc-property-value size="small" property="Mount" value="${camera.mount?.name}"
-                                       isLink></cc-property-value>
-                    <cc-property-value size="small" property="System" value="${camera.system?.name}"
-                                       isLink></cc-property-value>
-                    <cc-property-value size="small" property="Foto Resolution" value="${camera.photo_resolution?.name}"
-                                       isLink></cc-property-value>
-                    <cc-property-value size="small" property="Autofokus"
-                                       value="${camera.autofocus ? 'Ja' : 'Nein'}"></cc-property-value>
+                    <cc-property-value 
+                            size="small" 
+                            property="Mount" 
+                            value="${camera.mount?.name}"
+                           .clickAction="${()=> {model.appState.value.sidebarElement.selectSecondaryFilterById(camera.mount.attribute_id)}}"
+                    ></cc-property-value>
+                    <cc-property-value 
+                            size="small" 
+                            property="System" 
+                            value="${camera.system?.name}"
+                            .clickAction="${()=> {model.appState.value.sidebarElement.selectSecondaryFilterById(camera.system.attribute_id)}}"
+                    ></cc-property-value>
+                    <cc-property-value 
+                            size="small" 
+                            property="Foto Resolution" 
+                            value="${camera.photo_resolution?.name}"
+                            .clickAction="${()=> {model.appState.value.sidebarElement.selectSecondaryFilterById(camera.photo_resolution.attribute_id)}}"
+                    ></cc-property-value>
+                    <cc-property-value 
+                            size="small" 
+                            property="Autofokus"
+                            value="${camera.autofocus ? 'Ja' : 'Nein'}"
+                    ></cc-property-value>
                 </div>
                 <div class="image">
                     ${this.renderDeviceTypeIcon(this.deviceTypeFull.deviceType)}
