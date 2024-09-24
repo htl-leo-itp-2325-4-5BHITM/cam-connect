@@ -172,8 +172,33 @@ export default class DeviceTypeService {
         }
     }
 
+    static create(deviceType: DeviceType, tags: Tag[]){
+        Api.postData(`/devicetype/create/${deviceType.variant}`, deviceType)
+            .then((deviceType) => {
+                DeviceTypeService.fetchAllFull()
+
+                tags.forEach(tag => {
+                    DeviceTypeService.toggleTag(tag, deviceType.data)
+                })
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
+
     static update(deviceType: DeviceType){
         Api.postData(`/devicetype/getbyid/${deviceType.type_id}/update`, deviceType)
+            .then(() => {
+                DeviceTypeService.fetchAllFull()
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
+
+    static toggleTag(tag: Tag, deviceType: DeviceType){
+        console.log(tag, deviceType)
+        Api.postData(`/devicetype/getbyid/${deviceType.type_id}/tag/${tag.tag_id}/toggle`, tag)
             .then(() => {
                 DeviceTypeService.fetchAllFull()
             })

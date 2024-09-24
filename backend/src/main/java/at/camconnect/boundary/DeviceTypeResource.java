@@ -33,6 +33,7 @@ public class DeviceTypeResource {
     public Response create(@PathParam("type") DeviceTypeVariantEnum type, JsonObject data){//leave as JsonObject NOT DTO
         DeviceType result;
         try{
+            System.out.println(data);
             result = deviceTypeRepository.create(type, data);
         }catch (CCException ex){
             return CCResponse.error(ex);
@@ -157,6 +158,21 @@ public class DeviceTypeResource {
         }catch (CCException ex){
             return CCResponse.error(ex);
         }
+        return CCResponse.ok();
+    }
+
+    @POST
+    @Path("getbyid/{id: [0-9]+}/tag/{tagId: [0-9]+}/toggle")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response addTag(@PathParam("id") Long id, @PathParam("tagId") Long tagId){
+        DeviceType result;
+        try{
+            deviceTypeRepository.toggleTag(id, tagId);
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
         return CCResponse.ok();
     }
 }

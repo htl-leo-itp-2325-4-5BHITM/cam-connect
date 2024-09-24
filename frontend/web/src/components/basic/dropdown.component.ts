@@ -26,16 +26,15 @@ export class DropdownComponent extends LitElement {
 
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
-        if(this.selected == undefined && this.options && this.options.length > 0) {
-            console.log("defaulting to first option")
+        if(this.selected?.id == undefined && this.options && this.options.length > 0){
+            console.log("setting selected")
             this.selected = this.options[0]
+
+            this.onSelect(this.selected)
         }
-        console.log(this.selected)
     }
 
     render() {
-        console.log(this.options)
-
         return html`
             <style>${styles}</style>
             <div class="dropdown" @mouseup="${this.toggleOpenClose}">

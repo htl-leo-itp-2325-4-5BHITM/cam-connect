@@ -56,6 +56,16 @@ export default class DeviceService{
         }
     }*/
 
+    static create(device: Device) {
+        Api.postData("/device/create", device)
+            .then(result => {
+                console.log("created", result)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
+
     static update(device: Device){
         Api.postData(`/device/getbyid/${device.device_id}/update`, device)
             .then(data => {
