@@ -99,12 +99,18 @@ export class FilterContainerComponent extends LitElement {
     }
 
     clearSelection(){
+        this.clearVisibleSelection()
+        this.onUpdate(this.theOptions.value)
+    }
+
+    clearVisibleSelection(){
         this.theOptions.value.forEach(option => {
             option.selected = false
         })
-        this.onUpdate(this.theOptions.value)
-        this.filterChange()
+
         this.requestUpdate()
+
+        this.filterChange()
     }
 }
 

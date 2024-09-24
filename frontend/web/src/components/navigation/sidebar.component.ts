@@ -45,8 +45,6 @@ export class SidebarComponent extends LitElement {
                     <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.FILLED}"
                        @click="${() => {
                            model.appState.value.openCreateRentModal()
-                           //TODO michi warum war ds hier so
-                           //(model.appState.value.originElement as EditComponent).showModal(null, false, EditPageEnum.DEVICETYPE)
                        }}"
                        @mouseenter="${(e) => {
                            Tooltip.show(e.target, 'shift+n oder <', 500)
@@ -66,12 +64,14 @@ export class SidebarComponent extends LitElement {
                     <slot name="sorts"></slot>
                 </div>
                 <cc-line></cc-line>
-                <div class="primaryFilters">
-                    <slot name="primaryFilters" @slotchange=${this.handlePrimaryFilterChange}></slot>
-                </div>
-                <cc-line></cc-line>
-                <div class="secondaryFilters">
-                    <slot name="secondaryFilters"></slot>
+                <div class="filters">
+                    <div class="primaryFilters">
+                        <slot name="primaryFilters" @slotchange=${this.handlePrimaryFilterChange}></slot>
+                    </div>
+                    <cc-line></cc-line>
+                    <div class="secondaryFilters">
+                        <slot name="secondaryFilters"></slot>
+                    </div>
                 </div>
     
                 <div class="user" @click="${() => {
