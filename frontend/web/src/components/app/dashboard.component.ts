@@ -76,9 +76,13 @@ export class DashboardComponent extends LitElement {
                         newFilters.onlyAvailable = toggled
                         model.appState.value.deviceFilters = newFilters
                     }}">Nur verfügbare anzeigen</cc-toggle>
-                    <cc-button slot="sorts" size="${SizeEnum.MEDIUM}" type="${ButtonType.UNDERLINED}" color="${SimpleColorEnum.GRAY}" @click="${this.clearFilters}">
-                        Filter zurücksetzten
-                    </cc-button>
+                    <cc-button 
+                        slot="sorts" 
+                        size="${SizeEnum.MEDIUM}" 
+                        type="${ButtonType.UNDERLINED}" 
+                        color="${SimpleColorEnum.GRAY}" 
+                        @click="${this.clearFilters}"
+                    >Filter zurücksetzten</cc-button>
                     
                     <cc-filter-container slot="primaryFilters" .options="${model.deviceTypeNameFilterOptions}" affectSecondaryFilters .onUpdate="${this.handleDeviceTypeVariantFilterUpdate}">Gerätetyp</cc-filter-container>
                     <cc-filter-container slot="primaryFilters" .options="${model.tagFilterOptions}" .onUpdate="${this.handleDeviceTypeTagFilterUpdate}">Tags</cc-filter-container>
@@ -179,8 +183,13 @@ export class DashboardComponent extends LitElement {
 
     clearFilters(){
         this.shadowRoot.querySelectorAll("cc-filter-container").forEach(filterContainer => {
-            filterContainer.clearSelection()
+            filterContainer.clearVisibleSelection()
         })
+        let newDeviceFilters = model.appState.value.deviceFilters
+        newDeviceFilters.attributes = new Set()
+        newDeviceFilters.tags = new Set()
+        newDeviceFilters.variants = new Set()
+        model.appState.value.deviceFilters = newDeviceFilters
     }
 
     handleStudentFilterUpdate(options: FilterOption[]){

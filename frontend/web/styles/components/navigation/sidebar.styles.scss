@@ -40,15 +40,7 @@ cc-line{
   margin-block: .5rem;
 }
 
-.secondaryFilters, .primaryFilters{
-  padding-block: .5rem;
-  display: flex;
-  flex-direction: column;
-  gap: .3rem;
-  position: relative;
-
-
-  &.secondaryFilters{
+ .filters{
     padding-bottom: 1.5rem;
     overflow-y: auto;
 
@@ -59,6 +51,12 @@ cc-line{
     scrollbar-width: none;
   }
 
+.secondaryFilters, .primaryFilters{
+  padding-block: .5rem;
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+  position: relative;
 }
 
 .user{

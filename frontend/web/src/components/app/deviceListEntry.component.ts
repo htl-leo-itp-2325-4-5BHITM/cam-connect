@@ -41,8 +41,6 @@ export class DeviceListEntryComponent extends LitElement {
     connectedCallback() {
         super.connectedCallback();
 
-        console.log("connectedCallback")
-
         this.addEventListener('click', (e) => {
             let target = e.composedPath()[0] as HTMLElement
 
@@ -227,7 +225,7 @@ export class DeviceListEntryComponent extends LitElement {
                     <cc-property-value 
                             size="small" 
                             property="Anschluss" 
-                            value="${lens.mount.name}"
+                            value="${lens.mount?.name}"
                             .clickAction="${()=> {model.appState.value.sidebarElement.selectSecondaryFilterById(lens.mount.attribute_id)}}"
                             nowrap
                     ></cc-property-value>

@@ -41,7 +41,6 @@
 
   .tags{
     flex-wrap: nowrap;
-    overflow: hidden;
   }
 
   section{
@@ -51,10 +50,12 @@
       flex-direction: row;
       width: 100%;
       gap: .5rem;
+      z-index: 10;
 
-      cc-property-value{
-        flex-wrap: nowrap;
-        text-wrap: nowrap;
+      p{
+        overflow: hidden;
+        text-wrap: avoid;
+        white-space: nowrap;
       }
     }
   }
@@ -147,6 +148,7 @@ cc-line:first-of-type{
     background-color: $gray500;
     filter: blur(35px);
     grid-area: 1 / 1 / 2 / 2;
+    z-index: -1;
   }
 }
 
