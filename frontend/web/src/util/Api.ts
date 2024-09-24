@@ -7,7 +7,9 @@ export class Api {
      * @param url
      */
     static fetchData<Out>(url: string): Promise<ccResponse<Out>> {
-        return fetch(config.api_url + url)
+        return fetch(config.api_url + url, {
+
+        })
             .then(response => {
                 this.handleHttpError(response.status, response.url)
                 return response.json() as Promise<ccResponse<Out>>

@@ -4,6 +4,7 @@ import styles from '../../styles/components/login.styles.scss'
 import UserService from "../service/user.service"
 import {SizeEnum} from "../base"
 import {ButtonType} from "./basic/button.component"
+import AuthService from "../service/auth.service"
 @customElement('cc-login')
 export class LoginComponent extends LitElement {
     render() {
@@ -30,9 +31,8 @@ export class LoginComponent extends LitElement {
         let usernameInput = this.shadowRoot.querySelector("input[type='text']") as HTMLInputElement
         let passwordInput = this.shadowRoot.querySelector("input[type='password']") as HTMLInputElement
 
-        let loginResponse = await UserService.login(usernameInput, passwordInput)
-
-        console.log(loginResponse)
+        let jwt = await AuthService.login(usernameInput.value, passwordInput.value)
+        localStorage["cc-jwt"] = jwt
     }
 }
 

@@ -1,5 +1,6 @@
 package at.camconnect.boundary;
 
+import at.camconnect.dtos.LoginRequest;
 import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.responseSystem.CCStatus;
 import at.camconnect.services.AuthService;
@@ -67,8 +68,5 @@ public class AuthResource {
         } else {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
-    }
-
-    public record LoginRequest(String username, String password) implements Serializable {
     }
 }
