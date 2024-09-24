@@ -21,6 +21,9 @@ export class DropdownComponent extends LitElement {
     @property()
     onSelect: (option: SimpleOption<string | number, string>) => void = () => {}
 
+    @property()
+    align: "left" | "right" = "left"
+
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
         if(this.selected == undefined && this.options && this.options.length > 0) {
@@ -39,7 +42,7 @@ export class DropdownComponent extends LitElement {
                 <p>${this.selected?.data}</p>
                 ${unsafeSVG(icon(faCaretDown).html[0])}
             </div>
-            <div class="dropdownOptions">
+            <div class="dropdownOptions ${this.align}">
                 ${this.options?.map(option => {
                   return html`<p class="option" @click="${() => this.selectOption(option)}">${option.data}</p>`  
                 })}

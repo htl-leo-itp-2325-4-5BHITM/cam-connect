@@ -9,6 +9,7 @@ import {ButtonType} from "../basic/button.component"
 import {BehaviorSubject} from "rxjs"
 import {FilterOption} from "../basic/filterContainer.component"
 import {OrderByFilterRent, RentStatusEnum} from "../../service/rent.service"
+import {KeyBoardShortCut} from "../../util/KeyboardShortcut"
 
 @customElement('cc-dashboard')
 export class DashboardComponent extends LitElement {
@@ -56,6 +57,8 @@ export class DashboardComponent extends LitElement {
     }
 
     protected firstUpdated(_changedProperties: PropertyValues) {
+        KeyBoardShortCut.register(model.appState.value.userSettings.keybinds.newRent, () => {model.appState.value.openCreateRentModal()})
+
         super.firstUpdated(_changedProperties);
     }
 
@@ -156,10 +159,6 @@ export class DashboardComponent extends LitElement {
                         <cc-filter-container slot="secondaryFilters" .options="${this.fourthGraders}" .onUpdate="${this.handleStudentFilterUpdate}">Vierte Klassen</cc-filter-container>
                         <cc-filter-container slot="secondaryFilters" .options="${this.fithGraders}" .onUpdate="${this.handleStudentFilterUpdate}">Fünfte Klassen</cc-filter-container>
                     </cc-sidebar>`
-                break
-            case PageEnum.CALENDAR:
-                page = html`<cc-calendar class="content"></cc-calendar>`
-                sidebar = html`<cc-sidebar accountname="Martin Huemer"></cc-sidebar>`
                 break
         }
 

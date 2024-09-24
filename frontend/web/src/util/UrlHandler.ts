@@ -27,9 +27,6 @@ let pages = {
             equipment: {
                 handler: () => { model.appState.value.page = PageEnum.EQUIPMENT },
             },
-            calendar: {
-                handler: () => { model.appState.value.page = PageEnum.CALENDAR },
-            },
             user: {
                 handler: () => { UrlHandler.changeOrigin("cc-user-settings") }
             },

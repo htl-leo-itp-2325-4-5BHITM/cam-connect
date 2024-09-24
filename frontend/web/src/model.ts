@@ -14,7 +14,7 @@ import {Student} from "./service/student.service";
 import {AppState} from "./AppState"
 import TagService, {Tag} from "./service/tag.service"
 
-export enum PageEnum { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar" }
+export enum PageEnum { EQUIPMENT="equipment", RENTS="rents"}
 export enum EditPageEnum { OVERVIEW="overview", CHILDREN="children", DEVICE="device", DEVICETYPE="devicetype" }
 
 /**

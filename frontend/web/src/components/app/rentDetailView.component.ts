@@ -80,7 +80,7 @@ export class RentDetailViewComponent extends LitElement {
                         </div>
                         <h4>Ausleihung</h4>
                         <div class="row">
-                            <cc-property-value property="Erstellt von" value="${rent.teacher_start.firstname} ${rent.teacher_start.lastname}"></cc-property-value>
+                            <cc-property-value property="Erstellt von" value="${rent.teacher_start?.firstname} ${rent.teacher_start?.lastname}"></cc-property-value>
                             <cc-property-value property="Datum" value="${Util.formatDateForHuman(rent.rent_start)}"></cc-property-value>
                         </div>
                         <h4>Rückgabe</h4>

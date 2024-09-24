@@ -82,7 +82,6 @@ window.addEventListener("DOMContentLoaded", () => {
     console.log(data)
 })*/
 
-KeyBoardShortCut.register(model.appState.value.userSettings.keybinds.newRent, () => {model.appState.value.openCreateRentModal()})
 KeyBoardShortCut.register(["escape"], () => {model.appState.value.cancelCurrentAction()}, "cancelCurrentAction", true)
 
 //Api.getbyid("/rent",  1, "/remove").then(data => console.log(data))

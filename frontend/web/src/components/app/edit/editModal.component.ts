@@ -180,6 +180,7 @@ export class EditModalComponent extends LitElement {
                             .onSelect="${(option: {id: number, data: string}) => {
                                 cameraType.mount = model.deviceTypeAttributes.value.lensMounts.find(elem => elem.attribute_id == option.id)
                             }}"
+                            align="right"
                     ></cc-dropdown>
                 </div>
                 
