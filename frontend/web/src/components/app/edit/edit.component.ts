@@ -9,9 +9,6 @@ import UrlHandler from "../../../util/UrlHandler"
 import {AppState} from "../../../AppState"
 import {Api} from "../../../util/Api"
 import {Device} from "../../../service/device.service"
-import {InputType} from "../../basic/input.component"
-import {ColorEnum, SizeEnum} from "../../../base"
-import {ChipType} from "../../basic/chip.component"
 import TagService, {Tag} from "../../../service/tag.service"
 
 @customElement('cc-edit')
@@ -58,10 +55,6 @@ export class EditComponent extends LitElement {
                     return html`<cc-device-type-children .deviceType="${elem}"></cc-device-type-children>`
                 }
             })}`
-
-            /*let type = this.deviceTypesFull.value.filter(type=> type.deviceType.type_id == parseInt(UrlHandler.getParam("gid")))
-
-            return html`<cc-device-type-children .deviceType="${type}"></cc-device-type-children>`*/
         }
     }
 

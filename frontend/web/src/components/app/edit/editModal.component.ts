@@ -77,9 +77,28 @@ export class EditModalComponent extends LitElement {
 
             <div class="navigation">
                 <cc-button color="${ColorEnum.GRAY}" @click="${() => {model.appState.value.closeOverlay()}}">Abbrechen</cc-button>
-                <cc-button @click="${() => {this.updateElement(this.editPageType, this.element)}}">Speichern</cc-button>
+                
+                ${
+                    !this.isEditMode ?  html`<cc-button @click="${() => {
+                        this.createElement(this.editPageType, this.element)
+                    }}">Erstellen</cc-button>` : ''
+                }
             </div>
         `
+    }
+
+    createElement(editPageType: EditPageEnum, element: Device | DeviceTypeFullDTO) {
+        if (editPageType == EditPageEnum.DEVICETYPE) {
+            DeviceTypeService.create((element as DeviceTypeFullDTO).deviceType, this.tags)
+        } else {
+            DeviceService.create(element as Device)
+        }
+
+        model.appState.value.closeOverlay()
+    }
+
+    updateDeviceType(type: DeviceType){
+        if(this.isEditMode) DeviceTypeService.update(type)
     }
 
     setType(type: DeviceTypeVariantEnum){
@@ -102,8 +121,6 @@ export class EditModalComponent extends LitElement {
             case DeviceTypeVariantEnum.tripod: this.element.deviceType = {variant: DeviceTypeVariantEnum.tripod} as TripodType; break;
             case DeviceTypeVariantEnum.simple: this.element.deviceType = {variant: DeviceTypeVariantEnum.simple} as SimpleType; break;
         }
-
-        console.log(this.element.deviceType)
     }
 
     getModalContent(editPageType: EditPageEnum){
@@ -137,8 +154,12 @@ export class EditModalComponent extends LitElement {
                 <div class="tags">
                     <cc-autocomplete label="Tags" class="tagSelector" color="${ColorEnum.GRAY}" size="${SizeEnum.MEDIUM}"
                                      .onSelect="${(option: Tag) => {
-                                            tags.push(option)
-                                        }}"
+                                         this.tags.push(option)
+                                         
+                                         if(this.isEditMode){
+                                                DeviceTypeService.toggleTag(option, (this.element as DeviceTypeFullDTO).deviceType)
+                                            }
+                                     }}"
                                      .querySuggestions="${TagService.search}"
                                      .contentProvider="${(data: Tag) => {return `${data.name}`}}"
                                      .iconProvider="${()=>{return html`${unsafeSVG(icon(faTag).html[0])}`}}"
@@ -146,8 +167,15 @@ export class EditModalComponent extends LitElement {
                     
                     <div>
                         ${
-                            tags.map(elem => {
-                                return html`<cc-chip text="${elem.name}" color="${ColorEnum.GRAY}" type="${ChipType.REMOVABLE}"></cc-chip>`
+                            this.tags.map(elem => {
+                                return html`<cc-chip text="${elem.name}" color="${ColorEnum.GRAY}" type="${ChipType.REMOVABLE}" 
+                                                     @click="${() => {
+                                                         this.tags.slice(tags.indexOf(elem), 1)
+                                                         
+                                                         if(this.isEditMode) {
+                                                             DeviceTypeService.toggleTag(elem, (this.element as DeviceTypeFullDTO).deviceType)
+                                                         } 
+                                 }}"></cc-chip>`
                             })
                         }
                     </div>
@@ -179,6 +207,7 @@ export class EditModalComponent extends LitElement {
                             .selected="${{id: cameraType?.mount?.attribute_id, data: cameraType?.mount?.name}}"
                             .onSelect="${(option: {id: number, data: string}) => {
                                 cameraType.mount = model.deviceTypeAttributes.value.lensMounts.find(elem => elem.attribute_id == option.id)
+                                this.updateDeviceType(cameraType)
                             }}"
                     ></cc-dropdown>
                 </div>
@@ -190,6 +219,7 @@ export class EditModalComponent extends LitElement {
                             .selected="${{id: cameraType?.system?.attribute_id, data: cameraType?.system?.name}}"
                             .onSelect="${(option: {id: number, data: string}) => {
                                 cameraType.system = model.deviceTypeAttributes.value.cameraSystems.find(elem => elem.attribute_id == option.id)
+                                this.updateDeviceType(cameraType)
                             }}"
                     ></cc-dropdown>
                 </div>
@@ -201,12 +231,14 @@ export class EditModalComponent extends LitElement {
                             .selected="${{id: cameraType?.photo_resolution?.attribute_id, data: cameraType?.photo_resolution?.name}}"
                             .onSelect="${(option: {id: number, data: string}) => {
                                 cameraType.photo_resolution = model.deviceTypeAttributes.value.cameraResolutions.find(elem => elem.attribute_id == option.id)
+                                this.updateDeviceType(cameraType)
                             }}"
                     ></cc-dropdown>
                 </div>
                 
                 <cc-toggle .toggled="${cameraType.autofocus}" .onToggle="${(option => {
                     cameraType.autofocus = option
+                    this.updateDeviceType(cameraType)
                 })}">Autofokus</cc-toggle>
             `
             case DeviceTypeVariantEnum.drone:
@@ -214,12 +246,15 @@ export class EditModalComponent extends LitElement {
                 return html`
                 <cc-input label="Maximale Reichweite (km)" text="${droneType.max_range_kilometers}" .onInput="${text => {
                     droneType.max_range_kilometers = text
+                    this.updateDeviceType(droneType)
                 }}"></cc-input>
                 <cc-input label="Flugzeit (min)" text="${droneType.flight_time_minutes}" .onInput="${text => {
                     droneType.flight_time_minutes = text
+                    this.updateDeviceType(droneType)
                 }}"></cc-input>
                 <cc-toggle .toggled="${droneType.requires_license}" .onToggle="${(option => {
                     droneType.requires_license = option
+                    this.updateDeviceType(droneType)
                 })}">Benötigt Lizenz</cc-toggle>
                 `
             case DeviceTypeVariantEnum.microphone:
@@ -232,20 +267,29 @@ export class EditModalComponent extends LitElement {
                                 .selected="${{id: microphoneType?.connector?.attribute_id, data: microphoneType?.connector?.name}}"
                                 .onSelect="${(option: {id: number, data: string}) => {
                                     microphoneType.connector = model.deviceTypeAttributes.value.audioConnectors.find(elem => elem.attribute_id == option.id)
+                                    this.updateDeviceType(microphoneType)
                                 }}"
                         ></cc-dropdown>
                     </div>
-                    <cc-toggle .toggled="${microphoneType.needs_power}" .onToggle="${value => {microphoneType.needs_power = value}}">Benötigt Strom</cc-toggle>
-                    <cc-toggle .toggled="${microphoneType.needs_recorder}" .onToggle="${value => {microphoneType.needs_recorder = value}}">Needs Recorder</cc-toggle>
+                    <cc-toggle .toggled="${microphoneType.needs_power}" .onToggle="${value => {
+                        microphoneType.needs_power = value
+                        this.updateDeviceType(microphoneType)
+                    }}">Benötigt Strom</cc-toggle>
+                    <cc-toggle .toggled="${microphoneType.needs_recorder}" .onToggle="${value => {
+                        microphoneType.needs_recorder = value
+                        this.updateDeviceType(microphoneType)
+                    }}">Needs Recorder</cc-toggle>
                 `
             case DeviceTypeVariantEnum.lens:
                 let lensType = deviceType.deviceType as LensType
                 return html`
                     <cc-input label="Lichtstärke" text="${lensType.f_stop}" .onInput="${text => {
                         lensType.f_stop = text
+                        DeviceTypeService.update(lensType)
                     }}"></cc-input>
                     <cc-input label="Brennweite" text="${lensType.focal_length}" .onInput="${text => {
                         lensType.focal_length = text
+                        DeviceTypeService.update(lensType)
                     }}"></cc-input>
                     <div>
                         <p>Lens Mount</p>
@@ -254,6 +298,7 @@ export class EditModalComponent extends LitElement {
                                 .selected="${{id: lensType?.mount?.attribute_id, data: lensType?.mount?.name}}"
                                 .onSelect="${(option: {id: number, data: string}) => {
                                     lensType.mount = model.deviceTypeAttributes.value.lensMounts.find(elem => elem.attribute_id == option.id)
+                                    DeviceTypeService.update(lensType)
                                 }}"
                         ></cc-dropdown>
                     </div>                
@@ -263,9 +308,16 @@ export class EditModalComponent extends LitElement {
                 return html`
                     <cc-input label="Watts" text="${lightType.watts}" .onInput="${text => {
                         lightType.watts = text
+                        DeviceTypeService.update(lightType)
                     }}"></cc-input>
-                    <cc-toggle .toggled="${lightType.rgb}" .onToggle="${value => {lightType.rgb = value}}">RGB</cc-toggle>
-                    <cc-toggle .toggled="${lightType.variable_temperature}" .onToggle="${value => {lightType.variable_temperature = value}}">Variable Temperaturen</cc-toggle>
+                    <cc-toggle .toggled="${lightType.rgb}" .onToggle="${value => {
+                        lightType.rgb = value
+                        DeviceTypeService.update(lightType)
+                    }}">RGB</cc-toggle>
+                    <cc-toggle .toggled="${lightType.variable_temperature}" .onToggle="${value => {
+                        lightType.variable_temperature = value
+                        DeviceTypeService.update(lightType)
+                    }}">Variable Temperaturen</cc-toggle>
                 `
             case DeviceTypeVariantEnum.audio:
                 let audioType = deviceType.deviceType as AudioType
@@ -277,6 +329,7 @@ export class EditModalComponent extends LitElement {
                                 .selected="${{id: audioType?.connector?.attribute_id, data: audioType?.connector?.name}}"
                                 .onSelect="${(option: {id: number, data: string}) => {
                                     audioType.connector = model.deviceTypeAttributes.value.audioConnectors.find(elem => elem.attribute_id == option.id)
+                                    DeviceTypeService.update(audioType)
                                 }}"
                         ></cc-dropdown>
                     </div>`
@@ -285,9 +338,11 @@ export class EditModalComponent extends LitElement {
                 return html`
                     <cc-input label="Maximales Gewicht (kg)" text="${stabilizerType.max_weight_kilograms}" .onInput="${text => {
                         stabilizerType.max_weight_kilograms = text
+                        DeviceTypeService.update(stabilizerType)
                     }}"></cc-input>
                     <cc-input label="Anzahl an Achsen" text="${stabilizerType.number_of_axis}" .onInput="${text => {
                         stabilizerType.number_of_axis = text
+                        DeviceTypeService.update(stabilizerType)
                     }}"></cc-input>
                 `
             case DeviceTypeVariantEnum.tripod:
@@ -295,6 +350,7 @@ export class EditModalComponent extends LitElement {
                 return html`
                     <cc-input label="Höhe (cm)" text="${tripodType.height_centimeters}" .onInput="${text => {
                             tripodType.height_centimeters = text
+                            DeviceTypeService.update(tripodType)
                     }}"></cc-input>
                     <div>
                         <p>Head</p>
@@ -303,6 +359,7 @@ export class EditModalComponent extends LitElement {
                                 .selected="${{id: tripodType?.head?.attribute_id, data: tripodType?.head?.name}}"
                                 .onSelect="${(option: {id: number, data: string}) => {
                                     tripodType.head = model.deviceTypeAttributes.value.tripodHeads.find(elem => elem.attribute_id == option.id)
+                                    DeviceTypeService.update(tripodType)
                                 }}"
                     ></cc-dropdown>
                     </div>                   
@@ -312,20 +369,10 @@ export class EditModalComponent extends LitElement {
                 return html`
                     <cc-input label="Beschreibung" text="${simpleType.description}" .onInput="${text => {
                         simpleType.description = text
+                        DeviceTypeService.update(simpleType)
                     }}"></cc-input>
                 `
         }
-    }
-
-    private updateElement(editPageType: EditPageEnum, element: Device | DeviceTypeFullDTO) {
-        console.log(element)
-        if(editPageType == EditPageEnum.DEVICETYPE){
-            DeviceTypeService.update((element as DeviceTypeFullDTO).deviceType)
-        } else {
-            DeviceService.update(element as Device)
-        }
-
-        model.appState.value.closeOverlay()
     }
 }
 

@@ -53,6 +53,7 @@ public class DeviceTypeRepository {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             deviceType = objectMapper.readValue(dataString, enumToClass(typeEnum));
+            deviceType.setStatus(DeviceTypeStatusEnum.active);
         } catch (JsonProcessingException e) {
             throw new CCException(1106, e.getMessage());
         }
@@ -134,6 +135,8 @@ public class DeviceTypeRepository {
 
                 for (Long attributeId : filters.attributes()) {
                     DeviceTypeAttribute attributeObject = em.find(DeviceTypeAttribute.class, attributeId);
+
+                    if(attributeObject == null) continue;
                     List<Long> idList = assignedIds.get(attributeObject.getClass().getSimpleName());
                     if(idList == null) idList = new LinkedList<>();
                     idList.add(attributeId);
@@ -425,4 +428,12 @@ public class DeviceTypeRepository {
         return Double.parseDouble(value.replaceAll(",", "."));
     }
 
+    public void toggleTag(Long id, Long tagId) {
+        DeviceType deviceType = getById(id);
+        Tag tag = em.find(Tag.class, tagId);
+
+        tag.toggleType(deviceType);
+
+        em.merge(tag);
+    }
 }
