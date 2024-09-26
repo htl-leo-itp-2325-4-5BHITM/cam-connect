@@ -4,13 +4,14 @@ import styles from '../../../../styles/components/app/edit/deviceTypeEdit.styles
 import {
     DeviceTypeFullDTO,
 } from "../../../service/deviceType.service"
-import {ObservedProperty} from "../../../model"
+import {EditPageEnum, ObservedProperty} from "../../../model"
 import {AppState} from "../../../AppState"
 import {model} from "../../../index"
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
+import {faArrowLeft, faEdit, faPlus} from "@fortawesome/free-solid-svg-icons"
 import {unsafeSVG} from "lit/directives/unsafe-svg.js"
 import {icon} from "@fortawesome/fontawesome-svg-core"
 import UrlHandler from "../../../util/UrlHandler"
+import {Device} from "../../../service/device.service"
 
 @customElement('cc-device-type-children')
 export class DeviceTypeChildrenComponent extends LitElement {
@@ -18,8 +19,11 @@ export class DeviceTypeChildrenComponent extends LitElement {
 
     @property() private appState: ObservedProperty<AppState>
 
+    @property() private devices: ObservedProperty<Device[]>
+
     constructor(){
         super()
+        this.devices = new ObservedProperty<Device[]>(this, model.devices)
         this.appState = new ObservedProperty<AppState>(this, model.appState)
     }
 
@@ -31,18 +35,31 @@ export class DeviceTypeChildrenComponent extends LitElement {
                 <cc-toolbar type="edit"></cc-toolbar>
 
                 <main>
-                    <div>
-                        <icon-cta @click="${() => {
-                            UrlHandler.setUrl('/app/edit?type=camera')}}">${unsafeSVG(icon(faArrowLeft).html[0])}
-                        </icon-cta>
+                    <div class="header">
+                        <div class="left">
+                            <icon-cta size="3rem" @click="${() => {
+                                UrlHandler.setUrl('/app/edit?type=camera')}}">${unsafeSVG(icon(faArrowLeft).html[0])}
+                            </icon-cta>
+
+                            <div>
+                                <div class="deviceTypeName">
+                                    <h1>${this.deviceType.deviceType.name}</h1>
+                                    ${unsafeSVG(icon(faEdit).html[0])}</icon-cta>
+                                </div>
+                                <p>Zugehörige Geräte</p>
+                            </div>
+                        </div>
                         
-                        <div>
-                            <h1>${this.deviceType.deviceType.name}</h1>
-                            <p>Zugehörige Geräte</p>
+                        <div class="right">
+                            <icon-cta size="3rem" @click="${() => {
+                                model.appState.value.openOverlay(html`<cc-edit-device-modal .deviceType="${this.deviceType}" .isEditMode="${false}"></cc-edit-device-modal>`, () => {})}}">
+
+                                ${unsafeSVG(icon(faPlus).html[0])}
+                            </icon-cta>
                         </div>
                     </div>
                     
-                    ${model.devices.value.map(device => {
+                    ${this.devices.value.map(device => {
                         if(device.type.type_id == this.deviceType.deviceType.type_id){
                             return html`
                                 <cc-device-type-children-entry .device="${device}"></cc-device-type-children-entry>

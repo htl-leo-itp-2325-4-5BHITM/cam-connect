@@ -63,7 +63,11 @@ export class EditComponent extends LitElement {
     }
 
     getModalContent(editPageType: EditPageEnum, element: Device | DeviceTypeFullDTO, isEditMode: boolean){
-        return html`<cc-edit-modal .editPageType="${editPageType}" .element="${element}" .isEditMode="${isEditMode}"></cc-edit-modal>`
+        if(editPageType == EditPageEnum.DEVICE){
+            return html`<cc-edit-device-modal .element="${element}" .isEditMode="${isEditMode}"></cc-edit-device-modal>`
+        } else if(editPageType == EditPageEnum.DEVICETYPE){
+            return html`<cc-edit-device-type-modal .element="${element}" .isEditMode="${isEditMode}"></cc-edit-device-type-modal>`
+        }
     }
 
     importDataFromCsv(event: Event, importType: string, deviceType: string) {

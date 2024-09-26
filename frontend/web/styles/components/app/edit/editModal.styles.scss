@@ -9,16 +9,12 @@
   padding: 2rem !important;
   gap: .5rem;
 
-  p{
-    color: $gray800;
-  }
-
   h1{
     font-size: 2rem;
     margin-bottom: 1rem;
   }
 
-  cc-input, div{
+  cc-input, cc-toggle, div{
     width: 30vw;
   }
 

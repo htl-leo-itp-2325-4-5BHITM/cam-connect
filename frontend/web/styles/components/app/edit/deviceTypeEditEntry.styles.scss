@@ -3,11 +3,11 @@
 :host{
   position: relative;
   display: flex;
+  align-items: center;
   padding: .375rem .5rem !important;
   margin-block: .5rem !important;
   border-radius: .5rem;
   background-color: $gray200;
-  cursor: pointer;
   transition: background-color $transitionTimeShort;
 }
 
@@ -38,20 +38,16 @@ div.edit{
   }
 }
 
-.deviceInfos{
-  border-left: #595959 2px solid;
-}
-
 h3{
   font-size: 1rem;
-  width: 15ch;
+  min-width: 20ch;
+  max-width: 20ch;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin-right: 1rem;
 
   &.children{
-    width: 4ch;
+    min-width: 4ch;
   }
 }
 
@@ -59,6 +55,7 @@ div{
   display: flex;
 
   &.tags{
+    margin-left: 1rem;
     width: 9vw;
     gap: .5rem;
   }

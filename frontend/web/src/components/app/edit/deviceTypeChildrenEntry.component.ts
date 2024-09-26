@@ -1,16 +1,18 @@
 import {html, LitElement, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../../styles/components/app/edit/deviceTypeEditEntry.styles.scss'
-import {Device} from "../../../service/device.service"
-import {ColorEnum, SizeEnum} from "../../../base"
+import DeviceService, {Device} from "../../../service/device.service"
+import {ColorEnum, Orientation, SizeEnum} from "../../../base"
 import {unsafeSVG} from "lit/directives/unsafe-svg.js"
 import {icon} from "@fortawesome/fontawesome-svg-core"
-import {faPen} from "@fortawesome/free-solid-svg-icons"
+import {faPen, faTrash} from "@fortawesome/free-solid-svg-icons"
 import {EditPageEnum, ObservedProperty} from "../../../model"
 import {AppState} from "../../../AppState"
 import {model} from "../../../index"
 import UrlHandler from "../../../util/UrlHandler"
 import {EditComponent} from "./edit.component"
+import PopupEngine from "../../../util/PopupEngine"
+import DeviceTypeService from "../../../service/deviceType.service"
 
 @customElement('cc-device-type-children-entry')
 export class DeviceTypeChildrenEntryComponent extends LitElement {
@@ -28,6 +30,8 @@ export class DeviceTypeChildrenEntryComponent extends LitElement {
             <style>${styles}</style>
             
             <h3 class="children">${this.device.number}</h3>
+            
+            <!-- todo für yanik <cc-line type="${Orientation.VERTICAL}"></cc-line>-->
 
             <div class="deviceInfos">
                 ${this.getPropertyValue("Seriennummer", this.device.serial)}
@@ -39,21 +43,50 @@ export class DeviceTypeChildrenEntryComponent extends LitElement {
             <div class="edit">
                 <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}"  @click="${() => {
                     //UrlHandler.updateUrl('/app/edit/device?did=' + this.device.device_id)
-                    (model.appState.value.originElement as EditComponent).showModal(this.device, false, EditPageEnum.DEVICE)
+                    (model.appState.value.originElement as EditComponent).showModal(this.device, true, EditPageEnum.DEVICE)
                 }}">
                     <div slot="left" class="icon accent">
                         ${unsafeSVG(icon(faPen).html[0])}
                     </div>
                     <p>Bearbeiten</p>
                 </cc-button>
+
+                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}" @click="${() => {this.removeDevice(this.device)}}">
+                    <div slot="left" class="icon accent">
+                        ${unsafeSVG(icon(faTrash).html[0])}
+                    </div>
+                    <p>Löschen</p>
+                </cc-button>
             </div>
             
-            <cc-circle-select></cc-circle-select>
+            <cc-circle-select .checked="${this.appState.value.selectedDeviceEditEntries.has(this)}"
+                              @click="${() => {model.appState.value.toggleSelectedDeviceEditEntry(this)}}">
+            </cc-circle-select>
         `
     }
 
     getPropertyValue(property: string, value: any){
         return html`${value ? html`<cc-property-value property="${property}" value="${value}" size="${SizeEnum.SMALL}"></cc-property-value>` : ''}`
+    }
+
+    private removeDevice(device: Device) {
+        PopupEngine.createModal({
+            text: `Möchten Sie das Gerät ${device.number} wirklich löschen?`,
+            buttons: [
+                {
+                    text: "Ja",
+                    action: (data) => {
+                        DeviceService.remove(device)
+                        this.appState.value.clearSelectedDeviceTypeEditEntries()
+                        this.appState.value.clearSelectedDeviceEditEntries()
+                    },
+                    closePopup: true
+                },
+                {
+                    text: "Nein",
+                },
+            ]
+        })
     }
 }
 

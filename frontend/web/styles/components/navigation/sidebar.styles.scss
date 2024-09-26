@@ -28,8 +28,16 @@
   }
 }
 
-.buttons cc-button{
+.buttons{
   width: 100%;
+  box-sizing: border-box;
+
+  cc-button {
+    width: 100%;
+    &::part(button) {
+      width: 100%;
+    }
+  }
 }
 
 .nav{

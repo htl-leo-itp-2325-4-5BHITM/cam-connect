@@ -25,7 +25,7 @@ export class DeviceListComponent extends LitElement {
             <style>${styles}</style>
 
             <div class="content ${model.appState.value.equipmentDisplayMode}">
-                ${Object.values(this.deviceTypesFull.value)?.flat().sort((a, b)=>  (a.deviceType.name).localeCompare(b.deviceType.name))?.map(deviceType => {
+                ${Object.values(this.deviceTypesFull.value)?.flat().sort((a, b)=>  (a.deviceType.name)?.localeCompare(b.deviceType.name))?.map(deviceType => {
                     return html`
                         <cc-device-list-entry 
                             .deviceTypeFull="${deviceType}"

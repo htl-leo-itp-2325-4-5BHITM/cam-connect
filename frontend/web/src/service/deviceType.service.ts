@@ -172,18 +172,21 @@ export default class DeviceTypeService {
         }
     }
 
-    static create(deviceType: DeviceType, tags: Tag[]){
-        Api.postData(`/devicetype/create/${deviceType.variant}`, deviceType)
-            .then((deviceType) => {
-                DeviceTypeService.fetchAllFull()
+    static async create(deviceType: DeviceType, tags: Tag[]): Promise<void> {
+        console.log("Creating device type:", deviceType, tags);
+        try {
+            const result: ccResponse<DeviceType> = await Api.postData(`/devicetype/create/${deviceType.variant}`, deviceType );
+            DeviceTypeService.fetchAllFull()
+            
+            tags.forEach(tags => this.toggleTag(tags, result.data))
 
-                tags.forEach(tag => {
-                    DeviceTypeService.toggleTag(tag, deviceType.data)
-                })
-            })
-            .catch(error => {
-                console.error(error)
-            })
+            if (result.ccStatus.statusCode !== 1000) {
+                throw new Error(`Error creating device type: ${result.ccStatus.message}`);
+            }
+        } catch (error) {
+            console.error("Error creating device type:", error);
+            return Promise.reject(error);
+        }
     }
 
     static update(deviceType: DeviceType){

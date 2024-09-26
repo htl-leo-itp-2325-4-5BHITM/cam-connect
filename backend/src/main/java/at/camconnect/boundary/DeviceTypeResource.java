@@ -33,9 +33,9 @@ public class DeviceTypeResource {
     public Response create(@PathParam("type") DeviceTypeVariantEnum type, JsonObject data){//leave as JsonObject NOT DTO
         DeviceType result;
         try{
-            System.out.println(data);
             result = deviceTypeRepository.create(type, data);
         }catch (CCException ex){
+            ex.printStackTrace();
             return CCResponse.error(ex);
         }
 

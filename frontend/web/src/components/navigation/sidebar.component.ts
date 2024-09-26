@@ -55,9 +55,6 @@ export class SidebarComponent extends LitElement {
                     >
                         Neuer Verleih
                     </cc-button>
-                    <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.OUTLINED}" disabled>
-                        Multi Verleih
-                    </cc-button>
                 </div>
                 <cc-line></cc-line>
                 <div class="sorts">
@@ -107,9 +104,14 @@ export class SidebarComponent extends LitElement {
                                 return html`
                                     <p class="${value.id as DeviceTypeVariantEnum == this.appState.value.editPageType ? 'selected' : ''}"
                                        @click="${() => {
-                                           UrlHandler.updateUrl('/app/edit')
-                                           UrlHandler.clearParams()
-                                           UrlHandler.setParam("type", value.id as string)
+                                           if(this.appState.value.editPageType == null){
+                                               UrlHandler.setUrl('/app/edit?type=' + value.id as string)
+                                           } else{
+                                               UrlHandler.updateUrl('/app/edit')
+                                               UrlHandler.clearParams()
+                                               UrlHandler.setParam("type", value.id as string)
+                                           }
+                                           
                                            this.appState.value.clearSelectedDeviceEditEntries()
                                            this.appState.value.clearSelectedDeviceTypeEditEntries()
                                            this.appState.value.editPageType = value.id as DeviceTypeVariantEnum

@@ -22,19 +22,21 @@ public class Device {
     private DeviceType type;
     private LocalDateTime creation_date;
     private LocalDateTime change_date;
+
+    @Enumerated(EnumType.STRING)
     private DeviceStatus status;
 
     public Device() {
         this.creation_date = LocalDateTime.now();
     }
 
-    public Device(String serial, String number, String note, DeviceType type) {
+    public Device(String serial, String number, String note, DeviceType type, DeviceStatus status) {
         this.serial = serial;
         this.number = number;
         this.note = note;
         this.type = type;
         this.creation_date = LocalDateTime.now();
-        this.status = DeviceStatus.ACTIVE;
+        this.status = status;
     }
 
     @Override
