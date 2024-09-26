@@ -25,11 +25,11 @@ import PopupEngine from "../../util/PopupEngine"
 import RentService, {CreateRentDTO} from "../../service/rent.service"
 import {AppState} from "../../AppState"
 import {AutocompleteComponent} from "../basic/autocomplete.component"
-import {Student} from "../../service/student.service"
 import Util, {AnimationHelper} from "../../util/Util"
 import {DeviceType} from "../../service/deviceType.service"
 import {Tooltip} from "../../util/Tooltip"
 import {Api} from "../../util/Api"
+import { Student } from 'src/service/user.service'
 
 @customElement('cc-create-rent')
 export class CreateRentComponent extends LitElement {
@@ -232,7 +232,7 @@ export class CreateRentComponent extends LitElement {
 
     async searchForStudent(searchTerm: string): Promise<SimpleOption<number, Student>[]> {
         try {
-            const result: ccResponse<SimpleOption<number, Student>[]> = await Api.postData("/student/search", {searchTerm: searchTerm})
+            const result: ccResponse<SimpleOption<number, Student>[]> = await Api.postData("/user/searchforstudent", {searchTerm: searchTerm})
             return result.data
         } catch (e) {
             console.error(e)

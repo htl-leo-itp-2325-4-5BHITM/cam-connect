@@ -76,7 +76,7 @@ public class DeviceTypeRepository {
         return new DeviceTypeCollection(cameraTypes, droneTypes, lensTypes, lightTypes, microphoneTypes, stabilizerTypes, tripodTypes, audioTypes);
     }
 
-    public List<AutocompleteOptionDTO<DeviceTypeMinimalDTO>> search(String searchTerm){
+    public List<AutocompleteNumberOptionDTO<DeviceTypeMinimalDTO>> search(String searchTerm){
         List<DeviceTypeMinimalDTO> deviceTypes = new LinkedList<DeviceTypeMinimalDTO>();
 
         deviceTypes = em.createQuery(
@@ -87,10 +87,10 @@ public class DeviceTypeRepository {
                 .setParameter("searchTerm", "%" + searchTerm.toUpperCase() + "%")
                 .getResultList();
 
-        List<AutocompleteOptionDTO<DeviceTypeMinimalDTO>> result = new LinkedList<>();
+        List<AutocompleteNumberOptionDTO<DeviceTypeMinimalDTO>> result = new LinkedList<>();
 
         for (DeviceTypeMinimalDTO deviceType : deviceTypes) {
-            result.add(new AutocompleteOptionDTO<>(deviceType, deviceType.type_id()));
+            result.add(new AutocompleteNumberOptionDTO<>(deviceType, deviceType.type_id()));
         }
 
         return result;

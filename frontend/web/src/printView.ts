@@ -78,7 +78,7 @@ function generatePrintLayout() {
                     </td>
                     <td>${rent.student.firstname} ${rent.student.lastname} • ${rent.student.school_class}</td>
                     <td>${rent.rent_start}</td>
-                    <td>${rent.teacher_start.firstname.charAt(0)}. ${rent.teacher_start.lastname}</td>
+                    <td>${rent.teacher_start?.firstname.charAt(0)}. ${rent.teacher_start?.lastname}</td>
                     <td>${rent.rent_end_planned || ""}</td>
                     <td>${rent.rent_end_actual || ""}</td>
                     <td>

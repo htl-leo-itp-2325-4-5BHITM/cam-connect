@@ -1,9 +1,8 @@
 package at.camconnect.repository;
 
-import at.camconnect.dtos.AutocompleteOptionDTO;
+import at.camconnect.dtos.AutocompleteNumberOptionDTO;
 import at.camconnect.dtos.DeviceDTO;
 import at.camconnect.dtos.DeviceSearchDTO;
-import at.camconnect.dtos.rent.RentDTO;
 import at.camconnect.enums.RentStatusEnum;
 import at.camconnect.model.Rent;
 import at.camconnect.responseSystem.CCException;
@@ -105,7 +104,7 @@ public class DeviceRepository {
         return count > 0;
     }
 
-    public List<AutocompleteOptionDTO<Device>> search(DeviceSearchDTO data){
+    public List<AutocompleteNumberOptionDTO<Device>> search(DeviceSearchDTO data){
 
         Query query;
         if(data.typeId() > 0) {
@@ -121,12 +120,12 @@ public class DeviceRepository {
         }
 
         List<Device> devices = query.getResultList();
-        List<AutocompleteOptionDTO<Device>> result = new LinkedList<>();
+        List<AutocompleteNumberOptionDTO<Device>> result = new LinkedList<>();
         for (Device device : devices) {
             if(data.onlyAvailable() && isDeviceAlreadyInUse(device.getDevice_id())){
                 continue;
             }
-            result.add(new AutocompleteOptionDTO<>(device, device.getDevice_id()));
+            result.add(new AutocompleteNumberOptionDTO<>(device, device.getDevice_id()));
         }
 
         return result;

@@ -1,9 +1,83 @@
 import {Api} from "../util/Api"
 import {OrderByFilterRent, RentByStudentDTO, RentFilterDTO} from "./rent.service"
 
-interface LoginRequest{
+export interface LoginRequest{
     username: string
     password: string
+}
+
+export interface TokenResponse {
+    access_token: string;
+    expires_in: number;
+    refresh_expires_in: number;
+    refresh_token: string;
+    token_type: string;
+    id_token: string;
+    not_before_policy: number;
+    session_state: string;
+    scope: string;
+}
+
+export interface AccessTokenPayload {
+    exp: number;
+    iat: number;
+    jti: string;
+    iss: string;
+    aud: string;
+    sub: string;
+    typ: string;
+    azp: string;
+    sid: string;
+    acr: string;
+    allowed_origins: string[];
+    realm_access: {
+        roles: string[];
+    };
+    resource_access: {
+        account: {
+            roles: string[];
+        };
+    };
+    scope: string;
+    email_verified: boolean;
+    name: string;
+    preferred_username: string;
+    given_name: string;
+    family_name: string;
+    email: string;
+}
+
+export interface RefreshTokenPayload {
+    exp: number;
+    iat: number;
+    jti: string;
+    iss: string;
+    aud: string;
+    sub: string;
+    typ: string;
+    azp: string;
+    sid: string;
+    scope: string;
+}
+
+export interface IdTokenPayload {
+    exp: number;
+    iat: number;
+    jti: string;
+    iss: string;
+    aud: string;
+    sub: string;
+    typ: string;
+    azp: string;
+    sid: string;
+    at_hash: string;
+    acr: string;
+    email_verified: boolean;
+    name: string;
+    preferred_username: string;
+    given_name: string;
+    family_name: string;
+    email: string;
 }
 
 export default class AuthService {
@@ -18,7 +92,7 @@ export default class AuthService {
             {username: username, password: password}
         )
             .then(result => {
-                return result.data
+                return JSON.parse(result.data)
             })
             .catch(error => {
                 console.error(error)

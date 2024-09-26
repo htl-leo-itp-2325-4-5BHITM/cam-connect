@@ -1,7 +1,6 @@
 import {Api} from "../util/Api"
 import {model} from "../index"
-import {Teacher} from "./teacher.service"
-import UrlHandler from "../util/UrlHandler"
+import {DeviceType} from "./deviceType.service"
 
 export interface User {
     user_id: number
@@ -14,7 +13,29 @@ export interface User {
     lastPWCheck: Date
 }
 
+export interface Teacher extends User {}
+
+export interface Student extends User {
+    school_class: string
+    favourites: DeviceType[]
+}
+
 export default class UserService {
-    static async login(username, password) {
+    static fetchAll(){
+        Api.fetchData<Student[]>("/user/getallstudents")
+            .then(response => {
+                model.loadStudents(response.data)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+
+        Api.fetchData<Teacher[]>("/user/getallteachers")
+            .then(response => {
+                model.loadTeachers(response.data)
+            })
+            .catch(error => {
+                console.error(error)
+            })
     }
 }

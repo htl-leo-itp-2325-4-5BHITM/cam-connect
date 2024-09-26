@@ -3,7 +3,6 @@ import {EditPageEnum, PageEnum} from "./model"
 import {model} from "./index"
 import {CreateRentComponent} from "./components/app/createRent.component"
 import {AutocompleteComponent} from "./components/basic/autocomplete.component"
-import {Student} from "./service/student.service"
 import DeviceTypeService, {DeviceType, DeviceTypeVariantEnum} from "./service/deviceType.service"
 import {DeviceListEntryComponent} from "./components/app/deviceListEntry.component"
 import DeviceService from "./service/device.service"
@@ -14,6 +13,7 @@ import {BehaviorSubject} from "rxjs"
 import {KeyBoardShortCut} from "./util/KeyboardShortcut"
 import {DeviceTypeEditEntryComponent} from "./components/app/edit/deviceTypeEditEntry.component"
 import {DeviceEditEntryComponent} from "./components/app/edit/deviceEditEntry"
+import { Student } from "./service/user.service"
 
 interface ActionCancellation {
     identifier: string,
@@ -150,7 +150,7 @@ export class AppState{
         })
     }
 
-    openCreateRentModal(withId?: number, idType: "student" | "deviceType" = "student"){
+    openCreateRentModal(withId?: string | number, idType: "student" | "deviceType" = "student"){
         let selector = this._createRentElement.shadowRoot.querySelector("cc-autocomplete.studentSelector") as AutocompleteComponent<Student>
         
         if(withId){

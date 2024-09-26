@@ -1,13 +1,12 @@
 package at.camconnect.boundary;
 
-import at.camconnect.dtos.AutocompleteOptionDTO;
+import at.camconnect.dtos.AutocompleteNumberOptionDTO;
 import at.camconnect.dtos.DeviceDTO;
 import at.camconnect.dtos.DeviceSearchDTO;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.model.Device;
 import at.camconnect.repository.DeviceRepository;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
@@ -79,7 +78,7 @@ public class DeviceResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response search(DeviceSearchDTO data){
-        List<AutocompleteOptionDTO<Device>> result;
+        List<AutocompleteNumberOptionDTO<Device>> result;
         try{
             result = deviceRepository.search(data);
         }catch (CCException ex){

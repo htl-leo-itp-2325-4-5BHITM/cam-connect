@@ -169,36 +169,3 @@ insert into device (type_id, note, number, serial) values
     (2, 'Secondary camera', 'B04', '582097494459230'),
     (3, 'Studio setup', 'C03', '781640628620899'),
     (4, 'Wildlife photography', 'D03', '862803482534211');
-
--- User inserts will break when moving to different user system
--- Students
-INSERT INTO app_user (dtype, email, firstname, lastname, password, school_class, username)
-VALUES
-    ('Student', 'm.leisch@students.htl-leonding.ac.at', 'Michael', 'Leisch', 'michiiii', '4BHITM', 'michiii'),
-    ('Student', 'y.kendler@students.htl-leonding.ac.at', 'Yanik', 'Kendler', 'yanuki', '4BHITM', 'yanuki'),
-    ('Student', 'j.jaklitsch@students.htl-leonding.ac.at', 'Julian', 'Jaklitsch', 'jj', '4BHITM', 'jj'),
-    ('Student', 'l.steinhuber@students.htl-leonding.ac.at', 'Leon', 'Steinhuber', 'stoni', '4BHITM', 'stoni');
-
--- Inserting data into teacher table
-INSERT INTO app_user (dtype, email, firstname, lastname, password, username)
-VALUES
-    ('Teacher', 'm.huemer@htl-leonding.ac.at', 'Martin', 'Huemer', 'dff', 'mh'),
-    ('Teacher', 'p.engleitner@htl-leonding.ac.at', 'Particia', 'Engleitner', 'ff', 'pe');
-
--- favourites
-INSERT INTO app_user_devicetype (student_user_id, favourites_type_id)
-VALUES
-    (1, 1),  -- Student 1 likes DeviceType 1
-    (1, 2),  -- Student 1 likes DeviceType 2
-    (2, 3);  -- Student 2 likes DeviceType 3
-
--- Inserting data into rent table
-INSERT INTO rent (type, rent_end_planned, rent_start, status, creation_date, device_id, student_id, teacher_id_start)
-VALUES
-    ('DEFAULT', '2024-02-01', '2024-01-15', 'DECLINED', CURRENT_TIMESTAMP, 1, 1, 6),
-    ('DEFAULT', '2024-03-01', '2024-02-15', 'WAITING', CURRENT_TIMESTAMP, 2, 2, 5),
-    ('DEFAULT', '2024-04-01', '2024-03-15', 'CONFIRMED', CURRENT_TIMESTAMP, 3, 3, 6),
-    ('DEFAULT', '2024-05-01', '2024-04-15', 'WAITING', CURRENT_TIMESTAMP, 4, 4,5),
-    ('DEFAULT', '2024-05-01', '2024-04-15', 'CONFIRMED', CURRENT_TIMESTAMP, 5, 1, 5),
-    ('DEFAULT', '2024-06-01', '2024-05-15', 'WAITING', CURRENT_TIMESTAMP, 6, 2, 6);
-

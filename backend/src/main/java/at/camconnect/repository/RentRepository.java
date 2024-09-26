@@ -55,18 +55,18 @@ public class RentRepository {
             Rent rent;
             if(rentDTO.type() == RentTypeEnum.DEFAULT){
                 rent = new Rent(
-                        em.find(Student.class, rentDTO.student_id()),
+                        em.find(User.class, rentDTO.student_id()),
                         deviceRepository.getById(rentDTO.device_id()),
-                        em.find(Teacher.class, rentDTO.teacher_start_id()),
+                        em.find(User.class, rentDTO.teacher_start_id()),
                         rentDTO.rent_start(),
                         rentDTO.rent_end_planned(),
                         rentDTO.note()
                 );
             } else if (rentDTO.type() == RentTypeEnum.STRING){
                 rent = new Rent(
-                        em.find(Student.class, rentDTO.student_id()),
+                        em.find(User.class, rentDTO.student_id()),
                         rentDTO.device_string(),
-                        em.find(Teacher.class, rentDTO.teacher_start_id()),
+                        em.find(User.class, rentDTO.teacher_start_id()),
                         rentDTO.rent_start(),
                         rentDTO.rent_end_planned(),
                         rentDTO.note()
@@ -141,9 +141,9 @@ public class RentRepository {
             case DATE_DESC: orderByString = "order by MAX(r.change_date) desc"; break;
         }
 
-        List<Student> students = em.createQuery(
+        List<User> students = em.createQuery(
                 "SELECT s FROM Rent r " +
-                        "join Student s on r.student.user_id = s.user_id " +
+                        "join User s on r.student.user_id = s.user_id " +
                         "where (s.school_class IN :schoolClasses OR :schoolClassesEmpty = true) " +
                         "and (s.user_id IN :studentIds OR :studentIdsEmpty = true) " +
                         "and (" +
@@ -156,7 +156,7 @@ public class RentRepository {
                         "OR :searchTermEmpty = true) " +
                         "group by s.user_id " +
                         orderByString
-                ,Student.class)
+                ,User.class)
                 .setParameter("schoolClasses", filters.schoolClasses())
                 .setParameter("schoolClassesEmpty", filters.schoolClasses().isEmpty())
                 .setParameter("studentIds", filters.studentIds())
@@ -170,7 +170,7 @@ public class RentRepository {
         //INFO
         //this is currently just joining to half the db and not using a proper DTO,
         // this might cause performance problems in the future but is fine for now
-        for (Student student : students) {
+        for (User student : students) {
             List<RentDTO> rents = em.createQuery(
                     "SELECT r FROM Rent r " +
                             "where r.student.user_id = :studentId " +
@@ -448,7 +448,7 @@ public class RentRepository {
 
         switch (property){
             case "student":
-                Student student = em.find(Student.class, data.getInt("value"));
+                User student = em.find(User.class, data.getInt("value"));
                 rent.setStudent(student);
                 break;
             case "device":
@@ -456,11 +456,11 @@ public class RentRepository {
                 rent.setDevice(device);
                 break;
             case "teacher_start":
-                Teacher teacherStart = em.find(Teacher.class, data.getInt("value"));
+                User teacherStart = em.find(User.class, data.getInt("value"));
                 rent.setTeacher_start(teacherStart);
                 break;
             case "teacher_end":
-                Teacher teacherEnd = em.find(Teacher.class, data.getInt("value"));
+                User teacherEnd = em.find(User.class, data.getInt("value"));
                 rent.setTeacher_end(teacherEnd);
                 break;
             case "rent_start":
@@ -495,19 +495,19 @@ public class RentRepository {
 
     //region setter
     public void setStudent(Long rentId, long studentId) {
-        Student student = em.find(Student.class, studentId);
+        User student = em.find(User.class, studentId);
         Rent rent = getById(rentId);
         rent.setStudent(student);
     }
 
     public void setTeacherStart(Long rentId, long teacherId) {
-        Teacher teacher = em.find(Teacher.class, teacherId);
+        User teacher = em.find(User.class, teacherId);
         Rent rent = getById(rentId);
         rent.setTeacher_start(teacher);
     }
 
     public void setTeacherEnd(Long rentId, long teacherId) {
-        Teacher teacher = em.find(Teacher.class, teacherId);
+        User teacher = em.find(User.class, teacherId);
         Rent rent = getById(rentId);
         rent.setTeacher_end(teacher);
     }
@@ -599,7 +599,7 @@ public class RentRepository {
                 .append(rent.device().getDevice_id()).append(';')
                 .append(rent.device_string()).append(';');
 
-        Long teacherEndId = rent.teacher_end() != null ? rent.teacher_end().getUser_id() : null;
+        String teacherEndId = rent.teacher_end() != null ? rent.teacher_end().getUser_id() : null;
         String teacherEndName = rent.teacher_end() != null
                 ? rent.teacher_end().getFirstname() + " " + rent.teacher_end().getLastname()
                 : null;
@@ -653,9 +653,9 @@ public class RentRepository {
                 lineArray = line.split(";");
                 if(lineArray.length != 16) break;
 
-                Teacher teacherEnd = null;
+                User teacherEnd = null;
                 if(!lineArray[7].equals("null")){
-                    teacherEnd = em.find(Teacher.class, lineArray[7]);
+                    teacherEnd = em.find(User.class, lineArray[7]);
                 }
 
                 LocalDate rent_end_planned = null;
@@ -675,9 +675,9 @@ public class RentRepository {
                 Rent rent = new Rent(Long.valueOf(lineArray[0]),
                 RentStatusEnum.valueOf(lineArray[1]), RentTypeEnum.valueOf(lineArray[2]),
                 em.find(Device.class, lineArray[3]), lineArray[4],
-                em.find(Teacher.class, lineArray[5]), teacherEnd,
+                em.find(User.class, lineArray[5]), teacherEnd,
                 LocalDate.parse(lineArray[9]), rent_end_planned, rent_end_actual,
-                em.find(Student.class, lineArray[12]),
+                em.find(User.class, lineArray[12]),
                 lineArray[14], lineArray[15]);
 
                 em.persist(rent);

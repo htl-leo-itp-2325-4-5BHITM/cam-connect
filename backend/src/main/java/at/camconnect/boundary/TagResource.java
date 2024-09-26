@@ -1,7 +1,6 @@
 package at.camconnect.boundary;
 
-import at.camconnect.dtos.AutocompleteOptionDTO;
-import at.camconnect.dtos.deviceType.DeviceTypeMinimalDTO;
+import at.camconnect.dtos.AutocompleteNumberOptionDTO;
 import at.camconnect.model.Tag;
 import at.camconnect.repository.TagRepository;
 import at.camconnect.responseSystem.CCException;
@@ -89,7 +88,7 @@ public class TagResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response search(JsonObject data){
-        List<AutocompleteOptionDTO<Tag>> result;
+        List<AutocompleteNumberOptionDTO<Tag>> result;
         try{
             result = tagRepository.search(data.getString("searchTerm"));;
         }catch (CCException ex){

@@ -1,10 +1,10 @@
-import {LitElement, html} from 'lit'
+import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../styles/components/login.styles.scss'
 import UserService from "../service/user.service"
 import {SizeEnum} from "../base"
 import {ButtonType} from "./basic/button.component"
-import AuthService from "../service/auth.service"
+import AuthService, {TokenResponse} from "../service/auth.service"
 @customElement('cc-login')
 export class LoginComponent extends LitElement {
     render() {
@@ -27,12 +27,25 @@ export class LoginComponent extends LitElement {
         `
     }
 
+    protected firstUpdated(_changedProperties: PropertyValues) {
+        super.firstUpdated(_changedProperties);
+        this.shadowRoot.querySelectorAll("input").forEach((input: HTMLInputElement) => {
+            input.addEventListener("keydown", (event: KeyboardEvent) => {
+                if (event.key === "Enter") {
+                  this.login()
+                }
+            })
+        })
+    }
+
     async login() {
         let usernameInput = this.shadowRoot.querySelector("input[type='text']") as HTMLInputElement
         let passwordInput = this.shadowRoot.querySelector("input[type='password']") as HTMLInputElement
 
-        let jwt = await AuthService.login(usernameInput.value, passwordInput.value)
-        localStorage["cc-jwt"] = jwt
+        let tokenResponse = await AuthService.login(usernameInput.value, passwordInput.value)
+        localStorage["cc-jwt"] = tokenResponse.access_token
+
+        console.log(tokenResponse.access_token)
     }
 }
 

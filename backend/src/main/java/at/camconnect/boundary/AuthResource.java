@@ -46,6 +46,7 @@ public class AuthResource {
         }
     }
 
+
     @GET
     @Path("/validate")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -55,6 +56,7 @@ public class AuthResource {
             if (LocalDate.parse(String.valueOf(jwt.getExpirationTime())).isBefore(LocalDate.now())) {
                 return Response.status(Response.Status.UNAUTHORIZED).build();
             }
+            return Response.ok().build();
         }
         return Response.status(Response.Status.UNAUTHORIZED).build();
     }
