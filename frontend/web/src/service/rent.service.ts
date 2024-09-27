@@ -41,10 +41,10 @@ export enum RentTypeEnum { DEFAULT="DEFAULT", STRING="STRING" }
 
 export interface CreateRentDTO {
     type: RentTypeEnum
-    student_id: number
+    student_id: string
     device_id?: number
     device_string?: string
-    teacher_start_id: number
+    teacher_start_id: string
     rent_start: string //should be date but couldnt get that to work
     rent_end_planned: string //should be date but couldnt get that to work
     note: string
@@ -54,7 +54,7 @@ export interface RentFilterDTO {
     orderBy?: OrderByFilterRent
     statuses?: RentStatusEnum[]
     schoolClasses?: string[]
-    studentIds?: number[]
+    studentIds?: string[]
     searchTerm?: string
 }
 
@@ -84,7 +84,7 @@ export default class RentService {
             })
     }
 
-    static allRentsByStudent(studentId: number) {
+    static allRentsByStudent(studentId: string) {
         return Api.postData<RentFilterDTO, RentByStudentDTO[]>("/rent/getall",
             {orderBy: OrderByFilterRent.ALPHABETICAL_ASC, studentIds: [studentId]}
         )
@@ -147,7 +147,7 @@ export default class RentService {
     }
 
     static requestConfirmation(rent: Rent) {
-        Api.fetchData(`/rent/getbyid/${rent.rent_id}/sendconfirmation`)
+        Api.getData(`/rent/getbyid/${rent.rent_id}/sendconfirmation`)
             .then(() => {
                 RentService.fetchAll()
             })

@@ -5,6 +5,8 @@ import UserService from "../service/user.service"
 import {SizeEnum} from "../base"
 import {ButtonType} from "./basic/button.component"
 import AuthService, {TokenResponse} from "../service/auth.service"
+import {model} from "../index"
+import UrlHandler from "../util/UrlHandler"
 @customElement('cc-login')
 export class LoginComponent extends LitElement {
     render() {
@@ -43,9 +45,9 @@ export class LoginComponent extends LitElement {
         let passwordInput = this.shadowRoot.querySelector("input[type='password']") as HTMLInputElement
 
         let tokenResponse = await AuthService.login(usernameInput.value, passwordInput.value)
-        localStorage["cc-jwt"] = tokenResponse.access_token
+        model.appState.value.access_token = tokenResponse.access_token
 
-        console.log(tokenResponse.access_token)
+        UrlHandler.goToPage("/app/rents")
     }
 }
 

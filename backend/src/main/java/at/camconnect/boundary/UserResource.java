@@ -8,10 +8,7 @@ import at.camconnect.responseSystem.CCResponse;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -21,6 +18,18 @@ import java.util.List;
 public class UserResource {
     @Inject
     UserRepository userRepository;
+
+    @GET
+    @Path("/getbyid/{id}")
+    public Response getById(@PathParam("id") String id) {
+        User user;
+        try{
+            user = userRepository.getById(id);
+        } catch(CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok(user);
+    }
 
     @POST
     @Path("/searchforstudent")

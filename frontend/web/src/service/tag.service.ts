@@ -12,7 +12,7 @@ export interface Tag{
 
 export default class TagService {
     static fetchAll(){
-        Api.fetchData<Tag[]>("/tag/getall")
+        Api.getData<Tag[]>("/tag/getall")
             .then(response => {
                 model.loadTags(response.data)
             })

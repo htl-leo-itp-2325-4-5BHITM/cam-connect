@@ -16,6 +16,11 @@ public class UserRepository {
     @Inject
     EntityManager em;
 
+    public User getById(String id){
+        User user = em.find(User.class, id);
+        return user;
+    }
+
     public List<User> getAllStudents(){
         List<User> students = em.createQuery("SELECT s FROM User s", User.class).getResultList();
         return students;

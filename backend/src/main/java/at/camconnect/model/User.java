@@ -68,4 +68,20 @@ public class User {
     public void setUsername(String userId) {
         this.username = userId;
     }
+
+    public UserRoleEnum getRole() {
+        return role;
+    }
+
+    public void setRole(UserRoleEnum role) {
+        this.role = role;
+    }
+
+    public String getSchool_class() {
+        return school_class;
+    }
+
+    public void setSchool_class(String school_class) {
+        this.school_class = school_class;
+    }
 }

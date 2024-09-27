@@ -3,14 +3,13 @@ import {model} from "../index"
 import {DeviceType} from "./deviceType.service"
 
 export interface User {
-    user_id: number
+    user_id: string
     firstname: string
     lastname: string
     email: string
     username: string
-    password: string
-    creationDate: Date
-    lastPWCheck: Date
+    school_class: string
+    role: 'STUDENT' | 'TEACHER' | 'ADMIN'
 }
 
 export interface Teacher extends User {}
@@ -22,7 +21,7 @@ export interface Student extends User {
 
 export default class UserService {
     static fetchAll(){
-        Api.fetchData<Student[]>("/user/getallstudents")
+        Api.getData<Student[]>("/user/getallstudents")
             .then(response => {
                 model.loadStudents(response.data)
             })
@@ -30,12 +29,19 @@ export default class UserService {
                 console.error(error)
             })
 
-        Api.fetchData<Teacher[]>("/user/getallteachers")
+        Api.getData<Teacher[]>("/user/getallteachers")
             .then(response => {
                 model.loadTeachers(response.data)
             })
             .catch(error => {
                 console.error(error)
+            })
+    }
+
+    static getById(id: string){
+        return Api.getData<User>(`/user/getbyid/${id}`)
+            .then(response => {
+                return response.data
             })
     }
 }

@@ -12,6 +12,7 @@ import {FilterOption} from "./components/basic/filterContainer.component"
 import {AppState} from "./AppState"
 import TagService, {Tag} from "./service/tag.service"
 import UserService, {Student, Teacher } from "./service/user.service";
+import AuthService from "./service/auth.service"
 
 export enum PageEnum { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar" }
 export enum EditPageEnum { OVERVIEW="overview", CHILDREN="children", DEVICE="device", DEVICETYPE="devicetype" }
@@ -102,6 +103,9 @@ export default class Model{
         DeviceTypeAttributeService.fetchAll()
         TagService.fetchAll()
         UserService.fetchAll()
+
+        this.appState.value.access_token = localStorage["cc-access_token"]
+        AuthService.validateAccessToken()
     }
 
     //region load functions: used by the service classes to set the data in the model to whatever the api returned

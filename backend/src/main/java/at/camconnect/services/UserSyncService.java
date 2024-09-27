@@ -1,12 +1,10 @@
-package at.camconnect;
+package at.camconnect.services;
 
-import at.camconnect.services.AuthService;
 import io.quarkus.runtime.Startup;
 import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.util.concurrent.CompletableFuture;
 

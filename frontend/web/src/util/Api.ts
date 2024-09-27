@@ -1,14 +1,17 @@
 import PopupEngine from "./PopupEngine"
 import {ccResponse, ccStatus, config} from "../base"
+import {model} from "../index"
 
 export class Api {
     /**
      * querys the backend and returns the resulting data
      * @param url
      */
-    static fetchData<Out>(url: string): Promise<ccResponse<Out>> {
+    static getData<Out>(url: string): Promise<ccResponse<Out>> {
         return fetch(config.api_url + url, {
-
+            headers: {
+                "Authorization": `Bearer ${model.appState.value.access_token}`
+            }
         })
             .then(response => {
                 this.handleHttpError(response.status, response.url)
@@ -25,6 +28,7 @@ export class Api {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": `Bearer ${model.appState.value.access_token}`
             },
             body: JSON.stringify(data),
         })
@@ -46,6 +50,7 @@ export class Api {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": `${model.appState.value.access_token}`
                 },
                 body: JSON.stringify(data),
             })

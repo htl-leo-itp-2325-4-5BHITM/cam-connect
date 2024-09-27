@@ -6,12 +6,16 @@ import at.camconnect.model.Rent;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.repository.RentRepository;
+import io.quarkus.security.Authenticated;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.common.annotation.Blocking;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.reactive.RestForm;
 
 import java.io.*;
@@ -24,10 +28,20 @@ public class RentResource {
     @Inject
     RentRepository rentRepository;
 
+    @Inject
+    JsonWebToken jwt;
+
+    @Inject
+    SecurityIdentity securityIdentity;
+
     @POST
     @Path("/create")
+    @RolesAllowed({"admin", "teacher"})
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createRent(List<CreateRentDTO> rents) {
+        if(!securityIdentity.hasRole("medt-teacher") && !securityIdentity.hasRole("admin"))
+            return Response.status(Response.Status.FORBIDDEN).build();
+
         try{
             rentRepository.create(rents);
         } catch(CCException ex){
@@ -36,6 +50,7 @@ public class RentResource {
         return CCResponse.ok();
     }
 
+    @Deprecated
     @POST
     @Path("/createempty")
     @Consumes(MediaType.APPLICATION_JSON)

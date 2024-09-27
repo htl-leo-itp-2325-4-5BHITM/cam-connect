@@ -5,7 +5,7 @@ import at.camconnect.enums.filters.OrderByFilterRent;
 
 import java.util.List;
 
-public record RentFilters(OrderByFilterRent orderBy, List<RentStatusEnum> statuses, List<String> schoolClasses, List<Long> studentIds, String searchTerm) {
+public record RentFilters(OrderByFilterRent orderBy, List<RentStatusEnum> statuses, List<String> schoolClasses, List<String> studentIds, String searchTerm) {
     public RentFilters {
         if(orderBy == null) {
             orderBy = OrderByFilterRent.ALPHABETICAL_ASC;

@@ -118,7 +118,7 @@ export interface DeviceFilterDTO{
 export default class DeviceTypeService {
     static fetchAll(){
 
-        Api.fetchData<DeviceTypeVariantCollection>("/devicetype/getall")
+        Api.getData<DeviceTypeVariantCollection>("/devicetype/getall")
             .then(result => {
                 model.loadDeviceTypes(result.data)
             })
@@ -145,7 +145,7 @@ export default class DeviceTypeService {
     }
 
     static remove(device: DeviceType) {
-        Api.fetchData(`/devicetype/getbyid/${device.type_id}/remove`)
+        Api.getData(`/devicetype/getbyid/${device.type_id}/remove`)
             .then(() => {
                 DeviceTypeService.fetchAllFull()
             })

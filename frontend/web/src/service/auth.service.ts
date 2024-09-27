@@ -1,5 +1,7 @@
 import {Api} from "../util/Api"
 import {OrderByFilterRent, RentByStudentDTO, RentFilterDTO} from "./rent.service"
+import {config} from "../base"
+import {model} from "../index"
 
 export interface LoginRequest{
     username: string
@@ -96,6 +98,26 @@ export default class AuthService {
             })
             .catch(error => {
                 console.error(error)
+            })
+    }
+
+    static validateAccessToken() {
+        return fetch(config.api_url + "/auth/validate", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${model.appState.value.access_token}`
+            },
+            body: model.appState.value.access_token,
+        })
+            .then(response => {
+                if(response.status == 200){
+                    console.log("access token valid")
+                    return true
+                } else {
+                    /*model.appState.value.access_token = null*/
+                    console.log("invalid access token")
+                    return false
+                }
             })
     }
 }

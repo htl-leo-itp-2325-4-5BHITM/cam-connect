@@ -13,7 +13,8 @@ import {BehaviorSubject} from "rxjs"
 import {KeyBoardShortCut} from "./util/KeyboardShortcut"
 import {DeviceTypeEditEntryComponent} from "./components/app/edit/deviceTypeEditEntry.component"
 import {DeviceEditEntryComponent} from "./components/app/edit/deviceEditEntry"
-import { Student } from "./service/user.service"
+import UserService, {Student, User} from "./service/user.service"
+import Util from "./util/Util"
 
 interface ActionCancellation {
     identifier: string,
@@ -74,6 +75,7 @@ export class AppState{
     private _overlayElement: HTMLElement
     private _backUrl: string
     private _originElementLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
+    //TODO should be moved to the model itself
     private _userSettings: UserSettings = {
         isDarkmode: true,
         prefersEnglish: false,
@@ -94,6 +96,8 @@ export class AppState{
         },
     }
     private _searchTerm: string = ""
+    private _access_token: string = ""
+    private _currentUser: User = null
 
     /**
      * there is a really small chance here that this possibly falls victim to a race condition
@@ -428,5 +432,28 @@ export class AppState{
         this.update()
         console.log(this._deviceFilters)
         DeviceTypeService.fetchAllFull()
+    }
+
+
+    get access_token(): string {
+        return this._access_token
+    }
+
+    set access_token(value: string) {
+        this._access_token = value
+        localStorage["cc-access_token"] = value
+        UserService.getById(Util.parseJwt(value).sub).then(user => {
+            this.currentUser = user
+        })
+        this.update()
+    }
+
+    get currentUser(): User {
+        return this._currentUser
+    }
+
+    set currentUser(value: User) {
+        this._currentUser = value
+        this.update()
     }
 }

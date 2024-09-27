@@ -17,16 +17,12 @@ import {model} from "../../index"
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import {faXmark, faCircleArrowDown, faUser} from "@fortawesome/free-solid-svg-icons"
-
-import AirDatepicker from 'air-datepicker';
-import localeDe from 'air-datepicker/locale/de';
 import {CreateRentDeviceEntryComponent, RentDeviceEntryComponentType} from "./createRent-DeviceEntry.component"
 import PopupEngine from "../../util/PopupEngine"
 import RentService, {CreateRentDTO} from "../../service/rent.service"
 import {AppState} from "../../AppState"
 import {AutocompleteComponent} from "../basic/autocomplete.component"
 import Util, {AnimationHelper} from "../../util/Util"
-import {DeviceType} from "../../service/deviceType.service"
 import {Tooltip} from "../../util/Tooltip"
 import {Api} from "../../util/Api"
 import { Student } from 'src/service/user.service'
@@ -34,7 +30,7 @@ import { Student } from 'src/service/user.service'
 @customElement('cc-create-rent')
 export class CreateRentComponent extends LitElement {
     @property()
-    student_id: number = -1
+    student_id: string = null
 
     devices: Set<CreateRentDeviceEntryComponent> = new Set()
 
@@ -167,7 +163,7 @@ export class CreateRentComponent extends LitElement {
         let data: CreateRentDTO[] = []
         let valid = true
 
-        if(this.student_id < 0) {
+        if(this.student_id == null) {
             this.highlightError(this.shadowRoot.querySelector(".studentSelector"))
             valid = false
         }
@@ -224,7 +220,7 @@ export class CreateRentComponent extends LitElement {
         this.devices.clear()
         let studentSelector = this.shadowRoot.querySelector("cc-autocomplete.studentSelector") as AutocompleteComponent<Student>
         studentSelector.clear(false)
-        this.student_id = -1
+        this.student_id = null
         this.shadowRoot.querySelector(".studentSelector")?.classList.remove("error")
 
         Util.deepEventFocusedElement()?.blur() //removes focus on possible input thats still targeted and preventing the user from using keyboard shortcuts

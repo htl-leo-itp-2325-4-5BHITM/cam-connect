@@ -8,6 +8,7 @@ import at.camconnect.model.*;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.socket.RentSocket;
 import at.camconnect.responseSystem.CCResponse;
+import io.quarkus.security.Authenticated;
 import io.vertx.ext.mail.MailClient;
 import io.vertx.ext.mail.MailMessage;
 import jakarta.enterprise.context.ApplicationScoped;
