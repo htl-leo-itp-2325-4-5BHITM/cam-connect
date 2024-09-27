@@ -41,7 +41,9 @@ export class DeviceTypeEditComponent extends LitElement {
                     
                     ${Object.values(this.deviceTypesFull.value)?.flat().map(deviceType => {
                         if(deviceType.deviceType.variant == this.appState.value.editPageType){
-                            return html`<cc-device-type-edit-entry .deviceType="${deviceType}"></cc-device-type-edit-entry>`
+                            return html`<cc-device-type-edit-entry .deviceType="${deviceType}" @click="${() => {
+                                model.appState.value.openOverlay(html`<cc-edit-device-type-modal .element="${deviceType}" .isEditMode="${true}"></cc-edit-device-type-modal>`, () => {})}}">
+                            }}"></cc-device-type-edit-entry>`
                         }
                     })}
                 </main>

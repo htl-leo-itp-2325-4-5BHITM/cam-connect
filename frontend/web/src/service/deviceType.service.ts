@@ -11,6 +11,7 @@ import {
 import {html, TemplateResult} from "lit"
 
 import {Api} from "../util/Api"
+import {Tag} from "./tag.service"
 
 //region devicetype interfaces
 export interface DeviceTypeSource {
@@ -93,12 +94,6 @@ export interface DeviceTypeFullDTO {
     deviceTags: Tag[]
 }
 
-export interface Tag {
-    tag_id: number
-    name: string
-    description: string
-}
-
 export interface DeviceFilterDTO{
     onlyAvailable: boolean
     variants: string[]
@@ -177,7 +172,7 @@ export default class DeviceTypeService {
         try {
             const result: ccResponse<DeviceType> = await Api.postData(`/devicetype/create/${deviceType.variant}`, deviceType );
             DeviceTypeService.fetchAllFull()
-            
+
             tags.forEach(tags => this.toggleTag(tags, result.data))
 
             if (result.ccStatus.statusCode !== 1000) {

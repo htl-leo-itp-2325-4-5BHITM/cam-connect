@@ -212,11 +212,11 @@ export class RentListEntryComponent extends LitElement {
                 
                 <div class="time">
                     <span>
-                        ${Util.formatDateForHuman(this.rent.rent_start)}
+                        ${Util.formatShortDateForHuman(this.rent.rent_start)}
                     </span>
                     <span>-</span>
                     <span>
-                        ${Util.formatDateForHuman(this.rent.rent_end_planned)}
+                        ${Util.formatShortDateForHuman(this.rent.rent_end_planned)}
                     </span>
                 </div>
                 

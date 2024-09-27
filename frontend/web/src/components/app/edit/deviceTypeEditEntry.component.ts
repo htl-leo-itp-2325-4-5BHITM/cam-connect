@@ -62,16 +62,20 @@ export class DeviceTypeEditEntryComponent extends LitElement {
             </div>
 
             <div class="edit">
-                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}" @click="${() => {UrlHandler.setUrl('/app/edit/children?gid=' + this.deviceType.deviceType.type_id)}}">
+                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}" @click="${(event) => {
+                    UrlHandler.setUrl('/app/edit/children?gid=' + this.deviceType.deviceType.type_id)
+                    event.stopPropagation()
+                }}">
                     <div slot="left" class="icon accent">
                         ${unsafeSVG(icon(faListUl).html[0])}
                     </div>
                     <p>Zugehörige Geräte</p>    
                 </cc-button>
 
-                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}"  @click="${() => {
+                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}"  @click="${(event) => {
                     //UrlHandler.updateUrl('/app/edit/devicetype?gid=' + this.deviceType.deviceType.type_id)
                     (model.appState.value.originElement as EditComponent).showModal(this.deviceType, true, EditPageEnum.DEVICETYPE)
+                    event.stopPropagation()
                 }}">
                     <div slot="left" class="icon accent">
                         ${unsafeSVG(icon(faPen).html[0])}
@@ -79,7 +83,10 @@ export class DeviceTypeEditEntryComponent extends LitElement {
                     <p>Bearbeiten</p>
                 </cc-button>
 
-                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}" @click="${() => {this.removeDeviceType(this.deviceType.deviceType)}}">
+                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}" @click="${(event) => {
+                    this.removeDeviceType(this.deviceType.deviceType)
+                    event.stopPropagation()
+                }}">
                     <div slot="left" class="icon accent">
                         ${unsafeSVG(icon(faTrash).html[0])}
                     </div>
@@ -88,7 +95,9 @@ export class DeviceTypeEditEntryComponent extends LitElement {
             </div>
             
             <cc-circle-select .checked="${this.appState.value.selectedDeviceTypeEditEntries.has(this)}" 
-                              @click="${() => {model.appState.value.toggleSelectedDeviceTypeEditEntry(this)}}">
+                              @click="${(event) => {model.appState.value.toggleSelectedDeviceTypeEditEntry(this)
+                                event.stopPropagation()
+                              }}">
             </cc-circle-select>
         `
     }

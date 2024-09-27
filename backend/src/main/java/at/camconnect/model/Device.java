@@ -11,7 +11,7 @@ public class Device {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(length = 4)
     private Long device_id;
-    @Column(length = 15, unique = true)
+    @Column(length = 30, unique = true)
     private String serial;
     @Column(length = 15)
     private String number;
@@ -46,6 +46,10 @@ public class Device {
                 ", serial='" + serial + '\'' +
                 ", note='" + note + '\'' +
                 '}';
+    }
+
+    public void setChange_date(LocalDateTime change_date) {
+        this.change_date = change_date;
     }
 
     public long getDevice_id() {
@@ -90,5 +94,13 @@ public class Device {
 
     public void setStatus(DeviceStatus status) {
         this.status = status;
+    }
+
+    public LocalDateTime getCreation_date() {
+        return creation_date;
+    }
+
+    public LocalDateTime getChange_date() {
+        return change_date;
     }
 }

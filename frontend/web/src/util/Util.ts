@@ -86,7 +86,7 @@ export default class Util{
         return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`
     }
 
-    static formatDateForHuman(input: Date | string){
+    static formatShortDateForHuman(input: Date | string){
         if(input == undefined) return "unbekannt"
 
         let date: Date
@@ -98,6 +98,20 @@ export default class Util{
         }
 
         return date.toLocaleDateString("at-DE", {day: "2-digit", month: "2-digit", year: "2-digit"})
+    }
+
+    static formatLongDateForHuman(input: Date | string){
+        if(input == undefined) return null
+
+        let date: Date
+        if(typeof input == "string"){
+            date = new Date(input)
+        }
+        else{
+            date = input
+        }
+
+        return date.toLocaleDateString("at-DE", {day: "2-digit", month: "2-digit", year: "numeric"})
     }
 
     static formatDateTimeForHuman(input: Date | string){

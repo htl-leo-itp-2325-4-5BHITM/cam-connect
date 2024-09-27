@@ -13,13 +13,12 @@ import DeviceTypeService, {
     MicrophoneType,
     SimpleType,
     StabilizerType,
-    Tag,
     TripodType
 } from "../../../service/deviceType.service";
 import {model} from "../../../index";
 import styles from '../../../../styles/components/app/edit/editModal.styles.scss';
 import {AppState} from "../../../AppState";
-import TagService from "../../../service/tag.service";
+import TagService, {Tag} from "../../../service/tag.service";
 import {InputType} from "../../basic/input.component";
 import {ColorEnum, SizeEnum} from "../../../base";
 import {ChipType} from "../../basic/chip.component";
@@ -28,6 +27,7 @@ import {unsafeSVG} from "lit/directives/unsafe-svg.js";
 import {icon} from "@fortawesome/fontawesome-svg-core";
 import {faTag} from "@fortawesome/free-solid-svg-icons";
 import PopupEngine from "../../../util/PopupEngine"
+import UrlHandler from "../../../util/UrlHandler"
 
 @customElement('cc-edit-device-modal')
 export class EditDeviceModalComponent extends LitElement {
@@ -37,6 +37,7 @@ export class EditDeviceModalComponent extends LitElement {
 
     @property() private deviceType: DeviceTypeFullDTO
 
+    startElement: Device | null = null;
     currentEditType: DeviceTypeVariantEnum = DeviceTypeVariantEnum.camera;
     tags: Tag[] = [];
 
@@ -51,7 +52,6 @@ export class EditDeviceModalComponent extends LitElement {
         super.connectedCallback();
 
         if (!this.isEditMode) {
-            console.log("new")
             this.element = {
                 device_id: 0,
                 serial: "",
@@ -62,6 +62,8 @@ export class EditDeviceModalComponent extends LitElement {
                 change_date: "",
                 status: DeviceStatus.ACTIVE
             } as Device;
+
+            this.startElement = this.element;
         }
     }
 
@@ -76,13 +78,13 @@ export class EditDeviceModalComponent extends LitElement {
             <div class="navigation">
                 <cc-button color="${ColorEnum.GRAY}" @click="${() => {
                     model.appState.value.closeOverlay()
-                }}">Abbrechen
+                }}">Schließen
                 </cc-button>
                 ${!this.isEditMode ? html`
                     <cc-button .disabled="${this.element.serial.length < 2 || this.element.number.length < 2}" @click="${() => {
                         this.createElement(this.element)
                     }}">Erstellen
-                    </cc-button>` : ''}
+                    </cc-button>` : ``}
             </div>
         `;
     }
@@ -101,14 +103,14 @@ export class EditDeviceModalComponent extends LitElement {
     }
 
     private updateDevice(element: Device) {
-        console.log(element)
         this.requestUpdate()
-        if (this.isEditMode) DeviceService.update(element);
+        if (this.isEditMode){
+            element.change_date = new Date(Date.now()).toISOString();
+            DeviceService.update(element);
+        }
     }
 
     getModalContent() {
-            console.log(this.element)
-
             return html`
                 <h1>Gerät Erstellen</h1>
                 <div class="contentByDeviceType">
@@ -116,7 +118,7 @@ export class EditDeviceModalComponent extends LitElement {
                         <p>Gerätetyp</p>
                         <p>${this.element.type.name}</p>
                     </div>
-                    <cc-input label="Gerätenummer" text="${this.element.number}" .onInput="${text => {
+                    <cc-input label="Gerätenummer" text="${this.element.number}" maxLength="15" .onInput="${text => {
                         this.element.number = text;
                         this.updateDevice(this.element);
                     }}"></cc-input>
@@ -124,7 +126,7 @@ export class EditDeviceModalComponent extends LitElement {
                               .onInput="${text => {
                                   this.element.serial = text;
                                   this.updateDevice(this.element);
-                              }}"></cc-input>
+                              }}" maxLength="30"></cc-input>
                 </div>
                 <div class="separator">
                     <cc-line></cc-line>
@@ -134,7 +136,7 @@ export class EditDeviceModalComponent extends LitElement {
                     this.updateDevice(this.element);
                 })}">Gerät ist aktiv
                 </cc-toggle>
-                <cc-input label="Notiz" text="${this.element.note}" type="${InputType.TEXTAREA}" .onInput="${text => {
+                <cc-input label="Notiz" text="${this.element.note}" type="${InputType.TEXTAREA}" maxLength="150" .onInput="${text => {
                     this.element.note = text;
                     this.updateDevice(this.element);
                 }}"></cc-input>

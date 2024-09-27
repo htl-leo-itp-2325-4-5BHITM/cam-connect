@@ -155,20 +155,20 @@ VALUES
     (2, 29); -- Video tag for Jabra Elite 75t
 
 -- Devices
-insert into device (type_id, note, number, serial, status) values
-    (1, '', 'A01', '141592653589793', 'ACTIVE'),
-    (1, '', 'A02', '238462643383279', 'ACTIVE'),
-    (2, '', 'B01', '419715028869399', 'ACTIVE'),
-    (3, '', 'C01', '314159265358979', 'ACTIVE'),
-    (4, '', 'D01', '271828182845904', 'ACTIVE'),
-    (2, '', 'B02', '323846264338327', 'ACTIVE'),
-    (1, '', 'A03', '589793238462643', 'ACTIVE'),
-    (2, 'Backup camera', 'B03', '846264338327950', 'ACTIVE'),
-    (3, 'Professional use', 'C02', '643383279502884', 'ACTIVE'),
-    (4, 'Travel photography', 'D02', '795028841971520', 'ACTIVE'),
-    (2, 'Secondary camera', 'B04', '582097494459230', 'ACTIVE'),
-    (3, 'Studio setup', 'C03', '781640628620899', 'ACTIVE'),
-    (4, 'Wildlife photography', 'D03', '862803482534211', 'ACTIVE'  );
+insert into device (type_id, note, number, serial, status, creation_date) values
+(1, '', 'A01', '141592653589793', 'ACTIVE', CURRENT_TIMESTAMP),
+(1, '', 'A02', '238462643383279', 'ACTIVE', CURRENT_TIMESTAMP),
+(2, '', 'B01', '419715028869399', 'ACTIVE', CURRENT_TIMESTAMP),
+(3, '', 'C01', '314159265358979', 'ACTIVE', CURRENT_TIMESTAMP),
+(4, '', 'D01', '271828182845904', 'ACTIVE', CURRENT_TIMESTAMP),
+(2, '', 'B02', '323846264338327', 'ACTIVE', CURRENT_TIMESTAMP),
+(1, '', 'A03', '589793238462643', 'ACTIVE', CURRENT_TIMESTAMP),
+(2, 'Backup camera', 'B03', '846264338327950', 'ACTIVE', CURRENT_TIMESTAMP),
+(3, 'Professional use', 'C02', '643383279502884', 'ACTIVE', CURRENT_TIMESTAMP),
+(4, 'Travel photography', 'D02', '795028841971520', 'ACTIVE', CURRENT_TIMESTAMP),
+(2, 'Secondary camera', 'B04', '582097494459230', 'ACTIVE', CURRENT_TIMESTAMP),
+(3, 'Studio setup', 'C03', '781640628620899', 'ACTIVE', CURRENT_TIMESTAMP),
+(4, 'Wildlife photography', 'D03', '862803482534211', 'ACTIVE', CURRENT_TIMESTAMP);
 
 -- User inserts will break when moving to different user system
 -- Students

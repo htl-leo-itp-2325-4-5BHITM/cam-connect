@@ -13,6 +13,7 @@ import UrlHandler from "../../../util/UrlHandler"
 import {EditComponent} from "./edit.component"
 import PopupEngine from "../../../util/PopupEngine"
 import DeviceTypeService from "../../../service/deviceType.service"
+import Util from "../../../util/Util"
 
 @customElement('cc-device-type-children-entry')
 export class DeviceTypeChildrenEntryComponent extends LitElement {
@@ -26,6 +27,7 @@ export class DeviceTypeChildrenEntryComponent extends LitElement {
     }
 
     render() {
+        console.log(this.device)
         return html`
             <style>${styles}</style>
             
@@ -35,15 +37,16 @@ export class DeviceTypeChildrenEntryComponent extends LitElement {
 
             <div class="deviceInfos">
                 ${this.getPropertyValue("Seriennummer", this.device.serial)}
-                ${this.getPropertyValue("Erstellt am", this.device.creation_date)}
-                ${this.getPropertyValue("Bearbeitet am", this.device.change_date)}
+                ${this.getPropertyValue("Erstellt am", Util.formatLongDateForHuman(this.device.creation_date) || '-')}
+                ${this.getPropertyValue("Bearbeitet am", Util.formatLongDateForHuman(this.device.change_date) || '-')}
                 ${this.getPropertyValue("Notiz", this.device.note)}
             </div>
             
             <div class="edit">
-                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}"  @click="${() => {
+                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}"  @click="${(event) => {
                     //UrlHandler.updateUrl('/app/edit/device?did=' + this.device.device_id)
                     (model.appState.value.originElement as EditComponent).showModal(this.device, true, EditPageEnum.DEVICE)
+                    event.stopPropagation()
                 }}">
                     <div slot="left" class="icon accent">
                         ${unsafeSVG(icon(faPen).html[0])}
@@ -51,7 +54,10 @@ export class DeviceTypeChildrenEntryComponent extends LitElement {
                     <p>Bearbeiten</p>
                 </cc-button>
 
-                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}" @click="${() => {this.removeDevice(this.device)}}">
+                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}" @click="${(event) => {
+                    this.removeDevice(this.device)
+                    event.stopPropagation()
+                }}">
                     <div slot="left" class="icon accent">
                         ${unsafeSVG(icon(faTrash).html[0])}
                     </div>
@@ -60,7 +66,7 @@ export class DeviceTypeChildrenEntryComponent extends LitElement {
             </div>
             
             <cc-circle-select .checked="${this.appState.value.selectedDeviceEditEntries.has(this)}"
-                              @click="${() => {model.appState.value.toggleSelectedDeviceEditEntry(this)}}">
+                              @click="${(event) => {model.appState.value.toggleSelectedDeviceEditEntry(this); event.stopPropagation()}}">
             </cc-circle-select>
         `
     }

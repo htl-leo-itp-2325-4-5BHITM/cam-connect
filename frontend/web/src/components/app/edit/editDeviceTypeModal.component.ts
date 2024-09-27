@@ -13,13 +13,12 @@ import DeviceTypeService, {
     MicrophoneType,
     SimpleType,
     StabilizerType,
-    Tag,
     TripodType
 } from "../../../service/deviceType.service";
 import {model} from "../../../index";
 import styles from '../../../../styles/components/app/edit/editModal.styles.scss';
 import {AppState} from "../../../AppState";
-import TagService from "../../../service/tag.service";
+import TagService, {Tag} from "../../../service/tag.service";
 import {InputType} from "../../basic/input.component";
 import {ColorEnum, SizeEnum} from "../../../base";
 import {ChipType} from "../../basic/chip.component";
@@ -28,6 +27,8 @@ import {unsafeSVG} from "lit/directives/unsafe-svg.js";
 import {icon} from "@fortawesome/fontawesome-svg-core";
 import {faTag} from "@fortawesome/free-solid-svg-icons";
 import PopupEngine from "../../../util/PopupEngine"
+import UrlHandler from "../../../util/UrlHandler"
+import {ButtonType} from "../../basic/button.component"
 
 @customElement('cc-edit-device-type-modal')
 export class EditDeviceTypeModalComponent extends LitElement {
@@ -68,21 +69,41 @@ export class EditDeviceTypeModalComponent extends LitElement {
             `;
         }
 
-        return html`
-            <style>${styles}</style>
-            ${this.getModalContent()}
-            <div class="navigation">
-                <cc-button color="${ColorEnum.GRAY}" @click="${() => {
-                    model.appState.value.closeOverlay()
-                }}">Abbrechen
-                </cc-button>
-                ${!this.isEditMode ? html`
-                    <cc-button .disabled="${!this.isFinishable}" @click="${() => {
-                        this.createElement(this.element)
-                    }}">Erstellen
-                    </cc-button>` : ''}
-            </div>
-        `;
+
+        if (this.isEditMode) {
+            return html`
+                <style>${styles}</style>
+                ${this.getModalContent()}
+                <div class="navigation">
+                    <cc-button color="${ColorEnum.GRAY}" type="${ButtonType.UNDERLINED}" @click="${() => {
+                        UrlHandler.setUrl('/app/edit/children?gid=' + this.element.deviceType.type_id)
+                    }}">
+                        Zugehörige Geräte
+                    </cc-button>
+                    <cc-button @click="${() => {
+                        model.appState.value.closeOverlay()
+                    }}">Fertig
+                    </cc-button>
+                </div>
+            `
+        } else {
+            return html`
+                <style>${styles}</style>
+                ${this.getModalContent()}
+                <div class="navigation">
+                    <cc-button color="${ColorEnum.GRAY}" @click="${() => {
+                        model.appState.value.closeOverlay()
+                    }}">Abbrechen
+                    </cc-button>
+                    ${!this.isEditMode ? html`
+                        <cc-button .disabled="${!this.isFinishable}" @click="${() => {
+                            this.createElement(this.element)
+                        }}">Erstellen
+                        </cc-button>` : html`
+                    `}
+                </div>
+            `
+        }
     }
 
     createElement(element: DeviceTypeFullDTO) {
@@ -165,7 +186,7 @@ export class EditDeviceTypeModalComponent extends LitElement {
             <div class="separator">
                 <cc-line></cc-line>
             </div>
-            <div class="tags">
+            <div class="tags">  
                 <cc-autocomplete label="Tags" class="tagSelector" color="${ColorEnum.GRAY}"
                                  size="${SizeEnum.MEDIUM}"
                                  .onSelect="${(option: Tag) => {
@@ -174,7 +195,7 @@ export class EditDeviceTypeModalComponent extends LitElement {
                                          DeviceTypeService.toggleTag(option, (this.element as DeviceTypeFullDTO).deviceType);
                                      }
                                  }}"
-                                 .querySuggestions="${TagService.search}"
+                                 .querySuggestions="${TagService.search}"}"
                                  .contentProvider="${(data: Tag) => {
                                      return `${data.name}`
                                  }}"
@@ -191,7 +212,7 @@ export class EditDeviceTypeModalComponent extends LitElement {
                                          if (this.isEditMode) {
                                              DeviceTypeService.toggleTag(elem, (this.element as DeviceTypeFullDTO).deviceType);
                                          }
-                                     }}"></cc-chip>`;
+                             }}"></cc-chip>`;
                     })}
                 </div>
             </div>
@@ -388,10 +409,11 @@ export class EditDeviceTypeModalComponent extends LitElement {
                                   stabilizerType.max_weight_kilograms = text
                                   DeviceTypeService.update(stabilizerType)
                               }}"></cc-input>
-                    <cc-input label="Anzahl stabilisierter Achsen" text="${stabilizerType.number_of_axis}" .onInput="${text => {
-                        stabilizerType.number_of_axis = text
-                        DeviceTypeService.update(stabilizerType)
-                    }}"></cc-input>
+                    <cc-input label="Anzahl stabilisierter Achsen" text="${stabilizerType.number_of_axis}"
+                              .onInput="${text => {
+                                  stabilizerType.number_of_axis = text
+                                  DeviceTypeService.update(stabilizerType)
+                              }}"></cc-input>
                 `
             case DeviceTypeVariantEnum.tripod:
                 let tripodType = deviceType.deviceType as TripodType

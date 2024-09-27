@@ -54,12 +54,19 @@ export class InputComponent extends LitElement {
             
             ${this.type == InputType.TEXTAREA ? 
                     html`
-                        <textarea id="inputField" rows="2" placeholder="${this.placeholder}" maxlength="${this.maxLength}" @input="${(e) => {this.onInput(e.target.value)}}">${this.text}</textarea>` :
+                        <textarea id="inputField" rows="2" placeholder="${this.placeholder}" minlength="2" maxlength="${this.maxLength}" @input="${(e) => {this.onInput(e.target.value)}}" required>${this.text}</textarea>` :
                     html`
-                        <input id="inputField" type="${this.type == InputType.NUMBER ? 'number' :
-                                this.type == InputType.UPLOAD ? 'upload' : 'text'}" placeholder="${this.placeholder}" value="${this.text}"
-                               @input="${(e) => {this.onInput(e.target.value)}}" maxlength="${this.maxLength}">
+                        <input id="inputField" type="text" placeholder="${this.placeholder}" value="${this.text}"
+                               @input="${(e) => {this.onInput(e.target.value)}}" minlength="2" maxlength="${this.maxLength}" required>
                     `
+            }
+
+            ${
+                this.maxLength * 0.9 < this.text?.length || 0 ? html`
+                    <p class="warning">
+                        ${this.text?.length || 0}/${this.maxLength}
+                    </p>
+                ` : ''
             }
         `
     }

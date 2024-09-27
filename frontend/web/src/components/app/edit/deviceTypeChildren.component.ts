@@ -38,10 +38,15 @@ export class DeviceTypeChildrenComponent extends LitElement {
                     <div class="header">
                         <div class="left">
                             <icon-cta size="3rem" @click="${() => {
-                                UrlHandler.setUrl('/app/edit?type=camera')}}">${unsafeSVG(icon(faArrowLeft).html[0])}
+                                UrlHandler.setUrl(`/app/edit?type=${this.deviceType.deviceType.variant}`)}}">${unsafeSVG(icon(faArrowLeft).html[0])}
                             </icon-cta>
 
-                            <div>
+                            <div @click="${() => {
+                                model.appState.value.openOverlay(
+                                        html`<cc-edit-device-type-modal .element="${this.deviceType}" .isEditMode="${true}"></cc-edit-device-type-modal>`,
+                                        () => {}
+                                )
+                            }}" class="deviceTypeHeading">
                                 <div class="deviceTypeName">
                                     <h1>${this.deviceType.deviceType.name}</h1>
                                     ${unsafeSVG(icon(faEdit).html[0])}</icon-cta>
@@ -62,7 +67,9 @@ export class DeviceTypeChildrenComponent extends LitElement {
                     ${this.devices.value.map(device => {
                         if(device.type.type_id == this.deviceType.deviceType.type_id){
                             return html`
-                                <cc-device-type-children-entry .device="${device}"></cc-device-type-children-entry>
+                                <cc-device-type-children-entry @click="${() => {
+                                    model.appState.value.openOverlay(html`<cc-edit-device-modal .element="${device}" .deviceType="${this.deviceType}" .isEditMode="${true}"></cc-edit-device-modal>`, () => {})}
+                                }" .device="${device}"></cc-device-type-children-entry>
                             `
                         }
                     })}

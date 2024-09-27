@@ -23,6 +23,7 @@ import org.hibernate.exception.ConstraintViolationException;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -162,24 +163,28 @@ public class DeviceRepository {
 
     public void setNumber(Long rentId, String number) {
         Device device = getById(rentId);
+        device.setChange_date(LocalDateTime.now());
         device.setNumber(number);
         deviceSocket.broadcast();
     }
 
     public void setSerial(Long rentId, String serial) {
         Device device = getById(rentId);
+        device.setChange_date(LocalDateTime.now());
         device.setSerial(serial);
         deviceSocket.broadcast();
     }
 
     public void setNote(Long rentId, String serial) {
         Device device = getById(rentId);
+        device.setChange_date(LocalDateTime.now());
         device.setNote(serial);
         deviceSocket.broadcast();
     }
 
     public void setType(Long rentId, Long type) {
         Device device = getById(rentId);
+        device.setChange_date(LocalDateTime.now());
         DeviceType deviceType = em.find(DeviceType.class, type);
         device.setType(deviceType);
         deviceSocket.broadcast();

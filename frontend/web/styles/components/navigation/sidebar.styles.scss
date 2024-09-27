@@ -40,8 +40,25 @@
   }
 }
 
+.point{
+  width: .75rem;
+  height: .75rem;
+  border-radius: 100%;
+  background-color: $gray300;
+}
+
 .nav{
   padding-inline: .5rem;
+
+  div{
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+
+    &.selected div.point{
+      background-color: $accent700;
+    }
+  }
 }
 
 cc-line{

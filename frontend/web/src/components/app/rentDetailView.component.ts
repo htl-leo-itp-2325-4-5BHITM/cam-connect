@@ -81,13 +81,13 @@ export class RentDetailViewComponent extends LitElement {
                         <h4>Ausleihung</h4>
                         <div class="row">
                             <cc-property-value property="Erstellt von" value="${rent.teacher_start?.firstname} ${rent.teacher_start?.lastname}"></cc-property-value>
-                            <cc-property-value property="Datum" value="${Util.formatDateForHuman(rent.rent_start)}"></cc-property-value>
+                            <cc-property-value property="Datum" value="${Util.formatShortDateForHuman(rent.rent_start)}"></cc-property-value>
                         </div>
                         <h4>Rückgabe</h4>
                         <div class="row">
-                            <cc-property-value property="Geplant" value="${Util.formatDateForHuman(rent.rent_end_planned)}"></cc-property-value>
+                            <cc-property-value property="Geplant" value="${Util.formatShortDateForHuman(rent.rent_end_planned)}"></cc-property-value>
                             ${ rent.status == RentStatusEnum.RETURNED ? html`
-                                <cc-property-value property="Tatsächlich" value="${Util.formatDateForHuman(rent.rent_end_actual)}"></cc-property-value>
+                                <cc-property-value property="Tatsächlich" value="${Util.formatShortDateForHuman(rent.rent_end_actual)}"></cc-property-value>
                                 <cc-property-value property="Zurückgegeben von" value="${rent.teacher_end ? rent.teacher_end.firstname + ' ' + rent.teacher_end.lastname : 'unbekannt'}"></cc-property-value>
                             ` : html``}
                         </div>

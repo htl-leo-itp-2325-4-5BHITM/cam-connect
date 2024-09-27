@@ -76,10 +76,15 @@ public abstract class DeviceType{
         try{
             setName(data.name());
             setImage_blob(data.image());
+            setChange_date(LocalDateTime.now());
         }catch (Exception ex){
             throw new CCException(1106);
         }
     };
+
+    public void setChange_date(LocalDateTime change_date) {
+        this.change_date = change_date;
+    }
 
     public abstract DeviceTypeGlobalIdDTO toGlobalDTO();
 

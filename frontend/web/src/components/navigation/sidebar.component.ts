@@ -102,21 +102,23 @@ export class SidebarComponent extends LitElement {
                     ${
                             model.deviceTypeNameFilterOptions.value.map(value => {
                                 return html`
-                                    <p class="${value.id as DeviceTypeVariantEnum == this.appState.value.editPageType ? 'selected' : ''}"
-                                       @click="${() => {
-                                           if(this.appState.value.editPageType == null){
-                                               UrlHandler.setUrl('/app/edit?type=' + value.id as string)
-                                           } else{
-                                               UrlHandler.updateUrl('/app/edit')
-                                               UrlHandler.clearParams()
-                                               UrlHandler.setParam("type", value.id as string)
-                                           }
-                                           
-                                           this.appState.value.clearSelectedDeviceEditEntries()
-                                           this.appState.value.clearSelectedDeviceTypeEditEntries()
-                                           this.appState.value.editPageType = value.id as DeviceTypeVariantEnum
-                                       }}"
-                                    >${value.name}</p>
+                                    <div class="${value.id as DeviceTypeVariantEnum == this.appState.value.editPageType ? 'selected' : ''}"
+                                         @click="${() => {
+                                             if(this.appState.value.editPageType == null){
+                                                 UrlHandler.setUrl('/app/edit?type=' + value.id as string)
+                                             } else{
+                                                 UrlHandler.updateUrl('/app/edit')
+                                                 UrlHandler.clearParams()
+                                                 UrlHandler.setParam("type", value.id as string)
+                                             }
+
+                                             this.appState.value.clearSelectedDeviceEditEntries()
+                                             this.appState.value.clearSelectedDeviceTypeEditEntries()
+                                             this.appState.value.editPageType = value.id as DeviceTypeVariantEnum
+                                         }}">
+                                        <div class="point"></div>
+                                        <p>${value.name}</>
+                                    </div>
                                 `
                             })
                     }
