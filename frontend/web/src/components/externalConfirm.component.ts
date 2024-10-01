@@ -59,7 +59,7 @@ export class ExternalConfirmComponent extends LitElement {
                                                 text="Bestätigen"
                                                 type="underlined"
                                                 @click=${() => {
-                                                    RentService.updateStatus(rent.rent_id, this.rentConfirmationCodes[i], RentStatusEnum.CONFIRMED, "")
+                                                    RentService.confirmOrDecline(rent.rent_id, this.rentConfirmationCodes[i], RentStatusEnum.CONFIRMED, "")
                                                             .then((success) => {
                                                                 if(success){
                                                                     rent.status = RentStatusEnum.CONFIRMED
@@ -92,7 +92,7 @@ export class ExternalConfirmComponent extends LitElement {
                                                                 text: "Ablehnen",
                                                                 role: "confirm",
                                                                 action: (data) => {
-                                                                    RentService.updateStatus(
+                                                                    RentService.confirmOrDecline(
                                                                             rent.rent_id, this.rentConfirmationCodes[i],
                                                                             RentStatusEnum.DECLINED,
                                                                             data.inputValues[0] as string
@@ -131,7 +131,7 @@ export class ExternalConfirmComponent extends LitElement {
                 </ul>
                 <div class="button-container">
                     <cc-button @click="${() => {UrlHandler.setUrl("/app/rents")}}">
-                        Zurück zur Verleihliste
+                        Zur Verleihliste
                     </cc-button>
                 </div>
             </main>

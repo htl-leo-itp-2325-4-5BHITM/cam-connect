@@ -5,7 +5,9 @@ import at.camconnect.model.User;
 import at.camconnect.repository.UserRepository;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
+import io.quarkus.security.Authenticated;
 import io.quarkus.security.identity.SecurityIdentity;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
@@ -23,6 +25,7 @@ public class UserResource {
 
     @GET
     @Path("/getbyid/{id}")
+    @Authenticated
     public Response getById(@PathParam("id") String id) {
         User user;
         try{
@@ -36,7 +39,7 @@ public class UserResource {
     @POST
     @Path("/searchforstudent")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Transactional
+    @Authenticated
     public Response searchForStudent(JsonObject data){
         List<AutocompleteNumberOptionDTO> result;
         try{
@@ -50,6 +53,7 @@ public class UserResource {
 
     @GET
     @Path("/getallstudents")
+    @Authenticated
     public Response getAllStudents() {
         List<User> studentList;
         try{
@@ -63,7 +67,7 @@ public class UserResource {
     @POST
     @Path("/searchforteacher")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Transactional
+    @Authenticated
     public Response searchForTeacher(JsonObject data){
         List<User> result;
         try{
@@ -77,6 +81,7 @@ public class UserResource {
 
     @GET
     @Path("/getallteachers")
+    @Authenticated
     public Response getAllTeachers() {
         List<User> studentList;
         try{

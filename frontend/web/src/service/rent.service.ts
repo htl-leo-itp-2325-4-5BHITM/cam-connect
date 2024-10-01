@@ -165,9 +165,9 @@ export default class RentService {
      * @param message
      */
 
-    static async updateStatus(rentId: number, code: string, status: RentStatusEnum, message: string) {
+    static async confirmOrDecline(rentId: number, code: string, status: RentStatusEnum, message: string) {
         return new Promise((resolve, reject) => {
-            Api.postData(`/rent/getbyid/${rentId}/updatestatus`, {verification_code: code, status: status, verification_message: message})
+            Api.postData(`/rent/getbyid/${rentId}/confirmordecline`, {verification_code: code, status: status, verification_message: message})
                 .then((result) => {
                     if(result.ccStatus.statusCode == 1000){
                         PopupEngine.createNotification({ heading: "Verleih erfolgreich " + Util.rentStatusToHuman(status), CSSClass: "good" })

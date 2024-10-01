@@ -9,7 +9,6 @@ import at.camconnect.repository.RentRepository;
 import io.quarkus.security.Authenticated;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.common.annotation.Blocking;
-import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
@@ -104,9 +103,11 @@ public class RentResource {
         return CCResponse.ok(rent);
     }
 
+    /**
+     * For external confirmation
+     */
     @GET
     @Path("/getbyidlist/{ids}")
-    @Authenticated
     public Response getByIdList(@PathParam("ids") String ids) {
         List<RentDTO> rents;
         try {
@@ -146,11 +147,10 @@ public class RentResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/getbyid/{id: [0-9]+}/updatestatus")
-    @RolesAllowed({"camconnect-admin", "medt-teacher"})
-    public Response confirm(@PathParam("id") Long id, RentIdsDTO rentIdsDTO) {
+    @Path("/getbyid/{id: [0-9]+}/confirmordecline")
+    public Response confirmOrDeclineRent(@PathParam("id") Long id, RentIdsDTO data) {
         try {
-            rentRepository.updateStatus(id, rentIdsDTO);
+            rentRepository.confirmOrDeclineRent(id, data);
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }
@@ -181,7 +181,7 @@ public class RentResource {
         return CCResponse.ok();
     }
 
-    //TODO check if both updates
+    //TODO check if both updates are needed
 
     @PUT
     @Path("/getbyid/{id: [0-9]+}/update/")

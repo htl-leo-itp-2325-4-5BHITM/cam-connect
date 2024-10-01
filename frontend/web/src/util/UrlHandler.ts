@@ -79,8 +79,6 @@ let pages = {
 
 export default class UrlHandler {
     static parseCurrentURL () {
-        console.log("parsing url")
-
         let urlSplit = window.location.href.split("?")[0]?.split("/")
         urlSplit.splice(0, 3) //might break if basic url structure changes
         console.log(urlSplit)
@@ -122,7 +120,6 @@ export default class UrlHandler {
         }
 
         if(nextPage.waitForDom == true) {
-            console.log("waiting")
             model.appState.value.originElementLoaded.subscribe((status) => {
                 if(status == true){
                     nextPage.handler()
@@ -132,7 +129,6 @@ export default class UrlHandler {
             })
         }
         else {
-            console.log("not waiting")
             nextPage.handler()
             this.handlePage(pageIndex + 1, nextPage.children, currentPath)
         }

@@ -8,7 +8,6 @@ import at.camconnect.model.*;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.socket.RentSocket;
 import at.camconnect.responseSystem.CCResponse;
-import io.quarkus.security.Authenticated;
 import io.vertx.ext.mail.MailClient;
 import io.vertx.ext.mail.MailMessage;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -320,7 +319,7 @@ public class RentRepository {
     }
 
     @Transactional
-    public void updateStatus(Long rentId, RentIdsDTO rentIdsDTO) {
+    public void confirmOrDeclineRent(Long rentId, RentIdsDTO data) {
         Rent rent = getById(rentId);
 
         if(!rent.getStatus().equals(RentStatusEnum.WAITING)){
@@ -332,9 +331,9 @@ public class RentRepository {
         RentStatusEnum verificationStatus;
 
         try{
-            verificationCode = rentIdsDTO.verification_code();
-            verificationStatus = rentIdsDTO.status();
-            verificationMessage = rentIdsDTO.verification_message();
+            verificationCode = data.verification_code();
+            verificationStatus = data.status();
+            verificationMessage = data.verification_message();
         } catch (IllegalArgumentException e) {
             throw new CCException(1106);
         }
@@ -427,7 +426,7 @@ public class RentRepository {
             catch(Exception ex){ throw new CCException(1105, "cannot update rent_end_actual " + ex.getMessage()); }
 
         if(validateJsonKey(rentJson,"status"))
-            try{ updateStatus(id, rentJson.getString("status")); }
+            try{ confirmOrDeclineRent(id, rentJson.getString("status")); }
             catch (CCException ccex){ throw ccex; }
             catch(Exception ex){ throw new CCException(1105, "cannot update status " + ex.getMessage()); }
 
@@ -535,7 +534,7 @@ public class RentRepository {
         rent.setRent_end_actual(LocalDate.parse(date));
     }
 
-    public void updateStatus(Long rentId, String status) {
+    public void confirmOrDeclineRent(Long rentId, String status) {
         Rent rent = getById(rentId);
         rent.setStatus(RentStatusEnum.valueOf(status));
     }
@@ -549,7 +548,7 @@ public class RentRepository {
         Rent rent = getById(rentId);
         rent.setDevice_string(device_string);
     }
-    public void updateStatus(Long rentId, RentStatusEnum verificationStatus){
+    public void confirmOrDeclineRent(Long rentId, RentStatusEnum verificationStatus){
         Rent rent = getById(rentId);
 
         if(rent.getStatus() == verificationStatus){
