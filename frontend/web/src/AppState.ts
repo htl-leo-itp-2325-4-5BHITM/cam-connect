@@ -440,6 +440,8 @@ export class AppState{
     }
 
     set access_token(value: string) {
+        if(!value || value == "undefined" || value == "") return
+
         this._access_token = value
         localStorage["cc-access_token"] = value
         UserService.getById(Util.parseJwt(value).sub).then(user => {

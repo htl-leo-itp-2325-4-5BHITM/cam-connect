@@ -17,9 +17,6 @@ export class SidebarComponent extends LitElement {
     @property({reflect: true})
     type: "default" | "edit" = "default"
 
-    @property({type:String})
-    accountname?: string = 'No username provided'
-
     @queryAssignedElements({slot: "primaryFilters", selector: "[affectSecondaryFilters]"})
     private controlFilters!: Array<HTMLElement>;
 
@@ -32,7 +29,6 @@ export class SidebarComponent extends LitElement {
     constructor(username: string) {
         super()
         this.appState = new ObservedProperty<AppState>(this, model.appState)
-        this.accountname = username
     }
 
     render() {
@@ -72,7 +68,7 @@ export class SidebarComponent extends LitElement {
                     UrlHandler.goToPage('/app/user')
                 }}">
                     <img src="../../../assets/icon/user-icon-default.svg" alt="user">
-                    <p>${(this.accountname)}</p>
+                    <p>${this.appState.value.currentUser?.firstname} ${this.appState.value.currentUser?.lastname}</p>
                 </div>
             `
         }
@@ -114,7 +110,7 @@ export class SidebarComponent extends LitElement {
                     UrlHandler.goToPage('/app/user')
                 }}">
                     <img src="../../../assets/icon/user-icon-default.svg" alt="user">
-                    <p>${(this.accountname)}</p>
+                    <p>icon</p>
                 </div>
             `
         }

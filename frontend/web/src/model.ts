@@ -87,15 +87,11 @@ export default class Model{
         map(tags => tags.map(tag => ({name: tag.name, details: tag.description, id: tag.tag_id} as FilterOption)))
     )
 
-    /**
-     * When its created, a new instance gathers all the data from the API endpoints
-     */
-    constructor() {
+    createSocketConnection(){
         RentService.createSocketConnection()
     }
 
     queryData(){
-        console.log("querying data")
         RentService.fetchAll()
         DeviceService.fetchAll()
         DeviceTypeService.fetchAll()
@@ -103,9 +99,6 @@ export default class Model{
         DeviceTypeAttributeService.fetchAll()
         TagService.fetchAll()
         UserService.fetchAll()
-
-        this.appState.value.access_token = localStorage["cc-access_token"]
-        AuthService.validateAccessToken()
     }
 
     //region load functions: used by the service classes to set the data in the model to whatever the api returned

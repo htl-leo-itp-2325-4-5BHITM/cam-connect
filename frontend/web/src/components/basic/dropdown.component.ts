@@ -31,8 +31,6 @@ export class DropdownComponent extends LitElement {
     }
 
     render() {
-        console.log(this.options)
-
         return html`
             <style>${styles}</style>
             <div class="dropdown" @mouseup="${this.toggleOpenClose}">

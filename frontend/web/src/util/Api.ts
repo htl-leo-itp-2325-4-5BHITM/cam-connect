@@ -50,7 +50,7 @@ export class Api {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `${model.appState.value.access_token}`
+                    "Authorization": `Bearer ${model.appState.value.access_token}`
                 },
                 body: JSON.stringify(data),
             })
@@ -58,6 +58,9 @@ export class Api {
         if(type == "upload") {
             response = await fetch(`${config.api_url}${path}`, {
                 method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${model.appState.value.access_token}`
+                },
                 body: data as any,
             })
         }

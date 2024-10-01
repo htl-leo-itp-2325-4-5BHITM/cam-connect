@@ -21,7 +21,7 @@ public class UserSyncService {
 
     private void syncUsers() {
         try {
-            /*authService.syncUsersWithDatabase(authService.getToken());*/
+            authService.syncUsersWithDatabase(authService.getToken());
         } catch (Exception e) {
             // Log the error or handle it appropriately
             System.err.println("Error during user synchronization: " + e.getMessage());

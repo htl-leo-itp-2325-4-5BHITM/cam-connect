@@ -2,6 +2,7 @@ import {Api} from "../util/Api"
 import {OrderByFilterRent, RentByStudentDTO, RentFilterDTO} from "./rent.service"
 import {config} from "../base"
 import {model} from "../index"
+import UrlHandler from "../util/UrlHandler"
 
 export interface LoginRequest{
     username: string
@@ -92,7 +93,7 @@ export default class AuthService {
     static async login(username, password) {
         return Api.postData<LoginRequest, string>("/auth/login",
             {username: username, password: password}
-        )
+            )
             .then(result => {
                 return JSON.parse(result.data)
             })
@@ -114,10 +115,14 @@ export default class AuthService {
                     console.log("access token valid")
                     return true
                 } else {
-                    /*model.appState.value.access_token = null*/
-                    console.log("invalid access token")
+                   this.logOut()
                     return false
                 }
             })
+    }
+
+    static logOut(){
+        model.appState.value.access_token = null
+        UrlHandler.setUrl("/login")
     }
 }

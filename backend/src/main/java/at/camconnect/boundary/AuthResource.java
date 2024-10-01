@@ -81,15 +81,4 @@ public class AuthResource {
         }
         return Response.status(Response.Status.UNAUTHORIZED).build();
     }
-
-    @GET
-    @Path("/medt")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response medt() {
-        if(securityIdentity.hasRole("medt-teacher")) {
-            return Response.ok().build();
-        } else {
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
-    }
 }

@@ -314,6 +314,7 @@ public class RentRepository {
 
     public boolean verifyConfirmationCode(Long id, String code){
         Rent rent = getById(id);
+        //TODO review this code i do not understand why we seemingly regenerate the code here and why this system works at all
         if(rent.generateVerification_code() == null) return false;
         return rent.getVerification_code().equals(code);
     }

@@ -9,6 +9,7 @@ import at.camconnect.repository.RentRepository;
 import io.quarkus.security.Authenticated;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.common.annotation.Blocking;
+import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
@@ -36,12 +37,9 @@ public class RentResource {
 
     @POST
     @Path("/create")
-    @RolesAllowed({"admin", "teacher"})
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createRent(List<CreateRentDTO> rents) {
-        if(!securityIdentity.hasRole("medt-teacher") && !securityIdentity.hasRole("admin"))
-            return Response.status(Response.Status.FORBIDDEN).build();
-
         try{
             rentRepository.create(rents);
         } catch(CCException ex){
@@ -53,6 +51,7 @@ public class RentResource {
     @Deprecated
     @POST
     @Path("/createempty")
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createRentEmpty() {
         try{
@@ -65,6 +64,7 @@ public class RentResource {
 
     @GET
     @Path("/getallsinglelist")
+    @Authenticated
     public Response getAllSingleList(){
         List<RentDTO> result;
         try{
@@ -78,6 +78,7 @@ public class RentResource {
 
     @POST
     @Path("/getall")
+    @Authenticated
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getAll(RentFilters filters){
         List<RentByStudentDTO> result;
@@ -92,6 +93,7 @@ public class RentResource {
 
     @GET
     @Path("/getbyid/{id: [0-9]+}")
+    @Authenticated
     public Response getById(@PathParam("id") Long id) {
         RentDTO rent;
         try {
@@ -104,6 +106,7 @@ public class RentResource {
 
     @GET
     @Path("/getbyidlist/{ids}")
+    @Authenticated
     public Response getByIdList(@PathParam("ids") String ids) {
         List<RentDTO> rents;
         try {
@@ -117,6 +120,7 @@ public class RentResource {
 
     @GET
     @Path("/getbyid/{id: [0-9]+}/sendconfirmation")
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response sendConfirmation(@PathParam("id") Long id) {
         try {
             List<Rent> rentList = new LinkedList<>();
@@ -143,6 +147,7 @@ public class RentResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/getbyid/{id: [0-9]+}/updatestatus")
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response confirm(@PathParam("id") Long id, RentIdsDTO rentIdsDTO) {
         try {
             rentRepository.updateStatus(id, rentIdsDTO);
@@ -154,6 +159,7 @@ public class RentResource {
 
     @PUT
     @Path("/getbyid/{id: [0-9]+}/return")
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response returnRent(@PathParam("id") Long id) {
         try {
             rentRepository.returnRent(id);
@@ -165,6 +171,7 @@ public class RentResource {
 
     @PUT
     @Path("/getbyid/{id: [0-9]+}/remove")
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response remove(@PathParam("id") Long id) {
         try{
             rentRepository.remove(id);
@@ -174,9 +181,12 @@ public class RentResource {
         return CCResponse.ok();
     }
 
+    //TODO check if both updates
+
     @PUT
     @Path("/getbyid/{id: [0-9]+}/update/")
     @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response update(@PathParam("id") Long id, JsonObject rent) {
         try {
             rentRepository.update(id, rent);
@@ -190,6 +200,7 @@ public class RentResource {
     @Path("/getbyid/{id: [0-9]+}/update/{property}")
     @Blocking
     @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response update(@PathParam("id") Long id, @PathParam("property") String property, JsonObject rent) {
         try {
             rentRepository.updateProperty(property, id, rent);
@@ -202,6 +213,7 @@ public class RentResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/getcsv")
+    @Authenticated
     public Response exportAllRents() {
         try {
             return rentRepository.exportAllRents();
@@ -213,6 +225,7 @@ public class RentResource {
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Path("/import")
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response importCSV(@RestForm File file){
         try{
             rentRepository.importRents(file);

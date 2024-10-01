@@ -97,7 +97,6 @@ public class DeviceTypeRepository {
     }
 
     public List<DeviceTypeFullDTO> getAllFull(DeviceTypeFilters filters) {
-        System.out.println("started getAlLFull at " + LocalDateTime.now());
         List<DeviceType> deviceTypeList = em.createQuery("" +
                 "select dt from DeviceType dt " +
                 "where dt.status = 'active' " +
@@ -134,7 +133,6 @@ public class DeviceTypeRepository {
 
             list.add(new DeviceTypeFullDTO(deviceType, availableDevices.intValue(), tagList));
         }
-        System.out.println("endet getAllFull at " + LocalDateTime.now());
         return list;
     }
 

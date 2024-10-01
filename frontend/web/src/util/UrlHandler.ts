@@ -2,10 +2,17 @@ import {model} from "../index"
 import {EditPageEnum, PageEnum} from "../model"
 import {html, render} from "lit"
 import {DeviceTypeVariantEnum} from "../service/deviceType.service"
+import AuthService from "../service/auth.service"
 
 let pages = {
     app: {
-        handler: () => { UrlHandler.changeOrigin("cc-dashboard") },
+        handler: () => {
+            model.appState.value.access_token = localStorage["cc-access_token"]
+            AuthService.validateAccessToken()
+            model.queryData()
+            model.createSocketConnection()
+            UrlHandler.changeOrigin("cc-dashboard")
+        },
         children: {
             rents: {
                 handler: () => { model.appState.value.page = PageEnum.RENTS },

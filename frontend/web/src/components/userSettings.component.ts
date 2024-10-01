@@ -1,5 +1,5 @@
 import {LitElement, html} from 'lit'
-import {customElement} from 'lit/decorators.js'
+import {customElement, property} from 'lit/decorators.js'
 import styles from '../../styles/components/userSettings.styles.scss'
 import PopupEngine from "../util/PopupEngine"
 import {config, SimpleColorEnum, SizeEnum} from "../base"
@@ -7,21 +7,28 @@ import Util from "../util/Util"
 import {ButtonType} from "./basic/button.component"
 import {model} from "../index"
 import {Api} from "../util/Api"
+import {ObservedProperty} from "../model"
+import {AppState} from "../AppState"
+import AuthService from "../service/auth.service"
 
 @customElement('cc-user-settings')
 export class UserSettingsComponent extends LitElement {
+    @property() private appState: ObservedProperty<AppState>
+
+    constructor() {
+        super()
+        this.appState = new ObservedProperty<AppState>(this, model.appState)
+    }
+
     render() {
         return html`
             <style>${styles}</style>
             <cc-navbar type="back"></cc-navbar>
             
             <main>
-                <section>
-                    <h1>Account</h1>
-                    ${this.generateInputField("Name", "text")}
-                    ${this.generateInputField("Email", "email")}
-                    ${this.generateInputField("Password", "password")}
-                </section>
+                <h1>Hallo ${this.appState.value.currentUser?.firstname}</h1>
+                
+                <cc-button @click="${AuthService.logOut}">Ausloggen</cc-button>
                 
                 <section>
                     <h1>Notifications</h1>

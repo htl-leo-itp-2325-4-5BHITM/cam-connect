@@ -19,6 +19,7 @@ import org.jose4j.json.internal.json_simple.JSONObject;
 import org.jose4j.json.internal.json_simple.parser.JSONParser;
 
 import java.util.List;
+import java.util.Objects;
 
 @ApplicationScoped
 @Transactional
@@ -33,7 +34,7 @@ public class AuthService {
     @ConfigProperty(name = "quarkus.oidc.client-id")
     String AUTH_CLIENT_ID;
 
-    @ConfigProperty(name = "quarkus.oidc.client-secret")
+    @ConfigProperty(name = "quarkus.oidc.credentials.secret")
     String AUTH_CLIENT_SECRET;
 
     @Inject
@@ -138,10 +139,7 @@ public class AuthService {
             }catch (org.jose4j.json.internal.json_simple.parser.ParseException e) {
                 e.printStackTrace();
             }
-
-            System.out.println((String) keycloakResponse.get("access_token"));
-
-            return (String) keycloakResponse.get("access_token");
+                        return (String) keycloakResponse.get("access_token");
         } catch (Exception e) {
             System.err.println("Error obtaining token: " + e.getMessage());
             return null;
