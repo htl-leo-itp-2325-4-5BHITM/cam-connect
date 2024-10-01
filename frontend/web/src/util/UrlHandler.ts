@@ -1,6 +1,6 @@
 import {model} from "../index"
 import {EditPageEnum, PageEnum} from "../model"
-import {html, render} from "lit"
+import {html} from "lit"
 import {DeviceTypeVariantEnum} from "../service/deviceType.service"
 
 let pages = {
@@ -34,7 +34,13 @@ let pages = {
                 handler: () => {
                     UrlHandler.changeOrigin("cc-edit")
                     model.appState.value.editPage = EditPageEnum.OVERVIEW
-                    model.appState.value.editPageType = UrlHandler.getParam("type") as DeviceTypeVariantEnum/* || DeviceTypeVariantEnum.camera*/
+
+                    if(UrlHandler.getParam("type") == "set"){
+                        model.appState.value.editPage = EditPageEnum.DEVICESET
+                        model.appState.value.editPageType = "set"
+                    } else{
+                        model.appState.value.editPageType = UrlHandler.getParam("type") as DeviceTypeVariantEnum/* || DeviceTypeVariantEnum.camera*/
+                    }
                 },
                 children: {
                     children: {
@@ -45,6 +51,9 @@ let pages = {
                     },
                     devicetype: {
                         handler: () => { model.appState.value.editPage = EditPageEnum.DEVICETYPE }
+                    },
+                    set: {
+                        handler: () => { model.appState.value.editPage = EditPageEnum.DEVICESET }
                     }
                 }
             }

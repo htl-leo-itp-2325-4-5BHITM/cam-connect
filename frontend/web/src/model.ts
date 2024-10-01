@@ -13,9 +13,10 @@ import {Teacher} from "./service/teacher.service";
 import {Student} from "./service/student.service";
 import {AppState} from "./AppState"
 import TagService, {Tag} from "./service/tag.service"
+import DeviceSetService, {DeviceSet} from "./service/deviceSet.service"
 
 export enum PageEnum { EQUIPMENT="equipment", RENTS="rents"}
-export enum EditPageEnum { OVERVIEW="overview", CHILDREN="children", DEVICE="device", DEVICETYPE="devicetype" }
+export enum EditPageEnum { OVERVIEW="overview", CHILDREN="children", DEVICE="device", DEVICETYPE="devicetype", DEVICESET="deviceset" }
 
 /**
  * An instance of this class is our singular data provider. It interfaces between the individual service classes which
@@ -36,6 +37,7 @@ export default class Model{
     readonly deviceTypes = new BehaviorSubject<DeviceTypeVariantCollection>({audioTypes: [], microphoneTypes: [], cameraTypes: [], droneTypes: [], lensTypes: [], lightTypes: [], stabilizerTypes: [], tripodHeads: []})
     readonly deviceTypesFull = new BehaviorSubject<DeviceTypeFullDTO[]>([])
     readonly deviceTypeAttributes = new BehaviorSubject<DeviceTypeAttributeCollection>({cameraResolutions: [], cameraSystems: [], lensMounts: [], tripodHeads: [], audioConnectors: []})
+    readonly deviceSets = new BehaviorSubject<DeviceSet[]>([])
 
     /**
      * This is a representation of all the deviceTypeAttributes split up and transformed into FilterOptions that can be
@@ -96,6 +98,7 @@ export default class Model{
         console.log("querying data")
         RentService.fetchAll()
         DeviceService.fetchAll()
+        DeviceSetService.fetchAll()
         DeviceTypeService.fetchAll()
         DeviceTypeService.fetchAllFull()
         DeviceTypeAttributeService.fetchAll()
@@ -131,6 +134,10 @@ export default class Model{
 
     loadDeviceTypeAttributes(deviceTypeAttributes: DeviceTypeAttributeCollection = {cameraResolutions: [], cameraSystems: [], lensMounts: [], tripodHeads: [], audioConnectors: []}){
         this.deviceTypeAttributes.next(deviceTypeAttributes)
+    }
+
+    loadDeviceSets(deviceSets: DeviceSet[]){
+        this.deviceSets.next(deviceSets)
     }
 
     //endregion

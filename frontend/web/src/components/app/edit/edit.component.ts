@@ -1,4 +1,4 @@
-import {html, LitElement, PropertyValues, render} from 'lit';
+import {html, LitElement, PropertyValues} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 import PopupEngine from "../../../util/PopupEngine";
 import {EditPageEnum, ObservedProperty} from "../../../model"
@@ -9,7 +9,9 @@ import UrlHandler from "../../../util/UrlHandler"
 import {AppState} from "../../../AppState"
 import {Api} from "../../../util/Api"
 import {Device} from "../../../service/device.service"
-import TagService, {Tag} from "../../../service/tag.service"
+import {Tag} from "../../../service/tag.service"
+
+export type EditType = DeviceTypeVariantEnum | "set"
 
 @customElement('cc-edit')
 export class EditComponent extends LitElement {
@@ -17,7 +19,7 @@ export class EditComponent extends LitElement {
 
     @property() private appState: ObservedProperty<AppState>
 
-    currentEditType : DeviceTypeVariantEnum = DeviceTypeVariantEnum.camera
+    currentEditType : EditType = DeviceTypeVariantEnum.camera
 
     isSelectAlreadyUsed : boolean = false
 
@@ -45,8 +47,13 @@ export class EditComponent extends LitElement {
     }
 
     getComponent(){
+        console.log(model.appState.value.editPage)
         if(model.appState.value.editPage == EditPageEnum.OVERVIEW){
             return html`<cc-device-type-edit></cc-device-type-edit>`
+        }
+
+        if(model.appState.value.editPage == EditPageEnum.DEVICESET){
+            return html`<cc-device-set-edit></cc-device-set-edit>`
         }
 
         if(model.appState.value.editPage == EditPageEnum.CHILDREN){

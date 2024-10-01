@@ -117,7 +117,30 @@ VALUES
     ('DJI Phantom 4', 'url4', 'drone', 'DroneType', 5, 28, true, 'active'),
     ('Yuneec Typhoon H Pro', 'url5', 'drone', 'DroneType', 1, 25, false, 'active');
 
--- assigning tags to devicetypes
+-- Device Set
+INSERT INTO deviceset (name, description, status)
+VALUES
+    ('Foto Set', 'Ein Set für Fotografen', 'ACTIVE'),
+    ('Video Set', 'Ein Set für Videografen', 'ACTIVE'),
+    ('Audio Set', 'Ein Set für Tontechniker', 'ACTIVE'),
+    ('Light Set', 'Ein Set für Beleuchter', 'ACTIVE'),
+    ('Simple Set', 'Ein Set für einfache Geräte', 'ACTIVE'),
+    ('Stabilizer Set', 'Ein Set für Stabilizer', 'ACTIVE'),
+    ('Tripod Set', 'Ein Set für Stative', 'ACTIVE'),
+    ('Drone Set', 'Ein Set für Drohnen', 'ACTIVE');
+
+-- Assigning devices to device sets
+INSERT INTO deviceset_devicetype (deviceset_id, device_types_type_id)
+VALUES
+    (1, 1),  -- Foto Set with Canon EOS 5D Mark IV
+    (1, 2),  -- Foto Set with Nikon D850
+    (1, 3),  -- Foto Set with Sony Alpha a7 III
+    (1, 4),  -- Foto Set with Fujifilm X-T3
+    (1, 5),  -- Foto Set with Olympus OM-D E-M10 Mark III
+    (2, 1),  -- Video Set with Canon EOS 5D Mark IV
+    (2, 2),  -- Video Set with Nikon D850
+    (3, 3);  -- Audio Set with Sony Alpha a7 III
+
 -- assigning tags to devicetypes
 INSERT INTO tag_devicetype (tag_tag_id, types_type_id)
 VALUES

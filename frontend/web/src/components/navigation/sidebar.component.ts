@@ -1,9 +1,8 @@
-import {LitElement, css, html} from 'lit'
+import {html, LitElement} from 'lit'
 import {customElement, property, queryAssignedElements} from 'lit/decorators.js'
 import styles from '../../../styles/components/navigation/sidebar.styles.scss'
-import { ButtonComponent, ButtonType} from '../basic/button.component'
+import {ButtonType} from '../basic/button.component'
 import {FilterContainerComponent} from "../basic/filterContainer.component"
-import {filter} from "rxjs"
 import {Orientation, SimpleColorEnum, SizeEnum} from "../../base"
 import {model} from "../../index"
 import {EditPageEnum, ObservedProperty} from "../../model"
@@ -114,7 +113,9 @@ export class SidebarComponent extends LitElement {
 
                                              this.appState.value.clearSelectedDeviceEditEntries()
                                              this.appState.value.clearSelectedDeviceTypeEditEntries()
+                                             this.appState.value.clearSelectedDeviceSetEditEntries()
                                              this.appState.value.editPageType = value.id as DeviceTypeVariantEnum
+                                             model.appState.value.editPage = EditPageEnum.OVERVIEW
                                          }}">
                                         <div class="point"></div>
                                         <p>${value.name}</>
@@ -122,6 +123,25 @@ export class SidebarComponent extends LitElement {
                                 `
                             })
                     }
+                    
+                    <div class="${model.appState.value.editPage == EditPageEnum.DEVICESET ? 'selected' : ''} deviceSet" @click="${() => {
+                        if(this.appState.value.editPageType == null){
+                            UrlHandler.setUrl('/app/edit?type=set')
+                        } else{
+                            UrlHandler.updateUrl('/app/edit')
+                            UrlHandler.clearParams()
+                            UrlHandler.setParam("type", "set")
+                        }
+
+                        this.appState.value.clearSelectedDeviceEditEntries()
+                        this.appState.value.clearSelectedDeviceTypeEditEntries()
+                        this.appState.value.clearSelectedDeviceSetEditEntries()
+                        this.appState.value.editPageType = "set"
+                        model.appState.value.editPage = EditPageEnum.DEVICESET
+                    }}">
+                        <div class="point"></div>
+                        <p>Geräte-Set</p>
+                    </div>
                 </cc-select>
 
                 <div class="user" @click="${() => {

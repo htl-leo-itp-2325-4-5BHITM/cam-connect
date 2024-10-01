@@ -69,3 +69,11 @@ cc-circle-select{
   margin-left: auto;
   z-index: 10;
 }
+
+.deviceSetInfo{
+  gap: .5rem;
+
+  span{
+    color: $gray800;
+  }
+}
