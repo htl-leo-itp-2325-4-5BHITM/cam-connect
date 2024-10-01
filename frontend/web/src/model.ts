@@ -9,14 +9,20 @@ import Util from "./util/Util"
 import DeviceService, {Device} from "./service/device.service"
 import RentService, {Rent, RentByStudentDTO} from "./service/rent.service"
 import {FilterOption} from "./components/basic/filterContainer.component"
-import {Teacher} from "./service/teacher.service";
-import {Student} from "./service/student.service";
 import {AppState} from "./AppState"
 import TagService, {Tag} from "./service/tag.service"
+import UserService, {Student, Teacher } from "./service/user.service";
+import AuthService from "./service/auth.service"
 import DeviceSetService, {DeviceSet} from "./service/deviceSet.service"
 
 export enum PageEnum { EQUIPMENT="equipment", RENTS="rents"}
 export enum EditPageEnum { OVERVIEW="overview", CHILDREN="children", DEVICE="device", DEVICETYPE="devicetype", DEVICESET="deviceset" }
+
+/**
+ * A message to all future students working on this project: we were forced to use no proper library like react or
+ * a framework like angular by a-burger. Therefore we had to write SO MANY SYSTEMS ourselfs that would have been included
+ * in a framework. As well as this abomination.. sorry guys
+ */
 
 /**
  * An instance of this class is our singular data provider. It interfaces between the individual service classes which
@@ -84,18 +90,11 @@ export default class Model{
         map(tags => tags.map(tag => ({name: tag.name, details: tag.description, id: tag.tag_id} as FilterOption)))
     )
 
-    /**
-     * When its created, a new instance gathers all the data from the API endpoints
-     */
-    constructor() {
-/*
-        DeviceService.createSocketConnection()
-*/
+    createSocketConnection(){
         RentService.createSocketConnection()
     }
 
     queryData(){
-        console.log("querying data")
         RentService.fetchAll()
         DeviceService.fetchAll()
         DeviceSetService.fetchAll()
@@ -103,6 +102,7 @@ export default class Model{
         DeviceTypeService.fetchAllFull()
         DeviceTypeAttributeService.fetchAll()
         TagService.fetchAll()
+        UserService.fetchAll()
     }
 
     //region load functions: used by the service classes to set the data in the model to whatever the api returned

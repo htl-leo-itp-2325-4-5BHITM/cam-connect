@@ -10,8 +10,8 @@ import {ButtonType} from "../basic/button.component"
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons"
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
-import {Student} from "../../service/student.service"
 import UrlHandler from "../../util/UrlHandler"
+import { Student } from 'src/service/user.service'
 
 @customElement('cc-rent-list-student')
 export class RentListStudentComponent extends LitElement {

@@ -8,13 +8,13 @@ import {unsafeHTML} from 'lit/directives/unsafe-html.js';
 
 @customElement('cc-app')
 export class AppComponent extends LitElement {
+
     constructor() {
         super();
 
         model.appState.value.appElement = this
-
         model.appState.value.originElementLoaded.subscribe(() => {
-            this.requestUpdate()
+          this.requestUpdate()
         })
     }
 

@@ -1,10 +1,10 @@
 // @ts-ignore
 let APPLICATION_URL: string = "http://localhost:8080/api"
 
-// Check if the protocol is either "http:" or "https:"
 if(window.location.hostname !== "localhost"){
     APPLICATION_URL = "http://144.24.171.164/api"
 }
+
 // @ts-ignore
 PopupEngine.init({textColor:"black", backgroundColor: "white", elemBackground: "#EEE"})
 
@@ -14,7 +14,7 @@ let code = urlParams.get("vcode")
 
 if (urlParams.get("isAccepted")){
     document.querySelector(".accepted").setAttribute("active", "true");
-    confirmRent("confirmed")
+    confirmOrDeclineRent("confirmed")
 } else{
     document.querySelector(".verification").setAttribute("active", "true");
 }
@@ -35,10 +35,13 @@ fetch(APPLICATION_URL + `/rent/getbyid/${rentId}`)
     .catch(error => console.error(error))
 
 
-function confirmRent(verificationStatus: string){
+/**
+ * A-burger heahdfhaah
+ */
+function confirmOrDeclineRent(verificationStatus: string){
     let verificationMessage = (document.querySelector("#rejectionReason") as HTMLInputElement).value
 
-    fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/confirm`, {
+    fetch(APPLICATION_URL + `/rent/getbyid/${rentId}/confirmordecline`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

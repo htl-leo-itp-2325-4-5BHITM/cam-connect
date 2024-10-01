@@ -1,6 +1,9 @@
 import {DeviceTypeSource} from "../service/deviceType.service"
 import {FilterOption} from "../components/basic/filterContainer.component"
 import {DeviceTypeAttribute} from "../service/deviceTypeAttribute.service"
+import AirDatepicker from "air-datepicker"
+import localeDe from "air-datepicker/locale/de"
+import {model} from "../index"
 import {config} from "../base"
 import {RentStatusEnum} from "../service/rent.service"
 import {unsafeSVG} from 'lit/directives/unsafe-svg.js'
@@ -186,6 +189,17 @@ export default class Util{
 
     static boolToYesNo(bool: boolean){
         return bool ? "Ja" : "Nein"
+    }
+
+    static parseJwt (token: string) {
+        let base64Url = token.split('.')[1];
+        if(!base64Url) return {}
+        let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        let jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+
+        return JSON.parse(jsonPayload);
     }
 }
 

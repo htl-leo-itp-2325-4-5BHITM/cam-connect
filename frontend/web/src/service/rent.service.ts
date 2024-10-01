@@ -1,14 +1,10 @@
 import {model} from "../index"
 import {config} from "../base"
 import {Device} from "./device.service"
-import {Teacher} from "./teacher.service";
-import {Student} from "./student.service";
 import PopupEngine from "../util/PopupEngine"
 import Util from "../util/Util"
-import {DeviceTypeVariantEnum} from "./deviceType.service"
-import {AppState} from "../AppState"
-import Model from "../model"
 import {Api} from "../util/Api"
+import { Student, Teacher } from "./user.service"
 
 export enum RentStatusEnum {
     CREATED="CREATED",
@@ -45,10 +41,10 @@ export enum RentTypeEnum { DEFAULT="DEFAULT", STRING="STRING" }
 
 export interface CreateRentDTO {
     type: RentTypeEnum
-    student_id: number
+    student_id: string
     device_id?: number
     device_string?: string
-    teacher_start_id: number
+    teacher_start_id: string
     rent_start: string //should be date but couldnt get that to work
     rent_end_planned: string //should be date but couldnt get that to work
     note: string
@@ -58,7 +54,7 @@ export interface RentFilterDTO {
     orderBy?: OrderByFilterRent
     statuses?: RentStatusEnum[]
     schoolClasses?: string[]
-    studentIds?: number[]
+    studentIds?: string[]
     searchTerm?: string
 }
 
@@ -88,7 +84,7 @@ export default class RentService {
             })
     }
 
-    static allRentsByStudent(studentId: number) {
+    static allRentsByStudent(studentId: string) {
         return Api.postData<RentFilterDTO, RentByStudentDTO[]>("/rent/getall",
             {orderBy: OrderByFilterRent.ALPHABETICAL_ASC, studentIds: [studentId]}
         )
@@ -151,7 +147,7 @@ export default class RentService {
     }
 
     static requestConfirmation(rent: Rent) {
-        Api.fetchData(`/rent/getbyid/${rent.rent_id}/sendconfirmation`)
+        Api.getData(`/rent/getbyid/${rent.rent_id}/sendconfirmation`)
             .then(() => {
                 RentService.fetchAll()
             })
@@ -169,9 +165,9 @@ export default class RentService {
      * @param message
      */
 
-    static async updateStatus(rentId: number, code: string, status: RentStatusEnum, message: string) {
+    static async confirmOrDecline(rentId: number, code: string, status: RentStatusEnum, message: string) {
         return new Promise((resolve, reject) => {
-            Api.postData(`/rent/getbyid/${rentId}/updatestatus`, {verification_code: code, status: status, verification_message: message})
+            Api.postData(`/rent/getbyid/${rentId}/confirmordecline`, {verification_code: code, status: status, verification_message: message})
                 .then((result) => {
                     if(result.ccStatus.statusCode == 1000){
                         PopupEngine.createNotification({ heading: "Verleih erfolgreich " + Util.rentStatusToHuman(status), CSSClass: "good" })

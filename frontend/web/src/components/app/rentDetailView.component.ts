@@ -2,7 +2,6 @@ import {html, LitElement} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/app/rentDetailView.styles.scss'
 import RentService, {Rent, RentStatusEnum} from "../../service/rent.service"
-import {Student} from "../../service/student.service"
 import {ColorEnum, SimpleColorEnum} from "../../base"
 import Util from "../../util/Util"
 import {ButtonType} from "../basic/button.component"
@@ -12,6 +11,7 @@ import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import {model} from "../../index"
 import DeviceService from "../../service/device.service"
 import DeviceTypeService from "../../service/deviceType.service"
+import { Student } from 'src/service/user.service'
 
 interface chipProperty {
     color: ColorEnum
@@ -21,7 +21,7 @@ interface chipProperty {
 @customElement('cc-rent-detail-view')
 export class RentDetailViewComponent extends LitElement {
     @property()
-    private studentId: number = -1
+    private studentId: string = null
 
     @property() private student: Student
 

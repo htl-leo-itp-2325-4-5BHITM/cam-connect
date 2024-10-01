@@ -1,11 +1,12 @@
 package at.camconnect.boundary;
 
-import at.camconnect.dtos.AutocompleteOptionDTO;
-import at.camconnect.dtos.deviceType.DeviceTypeMinimalDTO;
+import at.camconnect.dtos.AutocompleteNumberOptionDTO;
 import at.camconnect.model.Tag;
 import at.camconnect.repository.TagRepository;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
+import io.quarkus.security.Authenticated;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
@@ -25,7 +26,7 @@ public class TagResource {
     @POST
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Transactional
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response createTag(Tag t){
         try{
             tagRepository.addTag(t);
@@ -38,7 +39,7 @@ public class TagResource {
     @POST
     @Path("/delete")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Transactional
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response removeTag(Tag t){
         try{
             tagRepository.deleteTag(t);
@@ -50,10 +51,10 @@ public class TagResource {
 
     //TODO this is definitely not correct..
     @POST
-    @Path("/update{id: [0-9]+}")
+    @Path("/update/{id: [0-9]+}")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Transactional
-    public Response upateTag(Tag t){
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
+    public Response updateTag(Tag t){
         try{
             tagRepository.updateTag(t);
         }catch (CCException ex){
@@ -61,8 +62,10 @@ public class TagResource {
         }
         return CCResponse.ok();
     }
+
     @GET
     @Path("/getbyid/{id: [0-9]+}")
+    @Authenticated
     public Response getById(@PathParam("id")long id){
         Tag tag;
         try{
@@ -72,8 +75,10 @@ public class TagResource {
         }
         return CCResponse.ok(tag);
     }
+
     @GET
     @Path("/getall")
+    @Authenticated
     public Response getAllTags(){
         List<Tag> tagList;
         try{
@@ -87,9 +92,9 @@ public class TagResource {
     @POST
     @Path("/search")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Transactional
+    @Authenticated
     public Response search(JsonObject data){
-        List<AutocompleteOptionDTO<Tag>> result;
+        List<AutocompleteNumberOptionDTO<Tag>> result;
         try{
             result = tagRepository.search(data.getString("searchTerm"));;
         }catch (CCException ex){

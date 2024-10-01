@@ -22,7 +22,7 @@
 :host([color="BAD"]){
   --background: #{$bad};
   --hover-background: #{$badLight};
-  --expanded-background: #{darken($bad, 30%)};
+  --expanded-background: adjust-color($bad, $lightness: -30%);
 }
 :host([color="GRAY"]){
   --background: #{$gray500};
