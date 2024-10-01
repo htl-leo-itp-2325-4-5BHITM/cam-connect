@@ -1,9 +1,12 @@
-import {LitElement, html} from 'lit'
+import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../styles/components/login.styles.scss'
 import UserService from "../service/user.service"
 import {SizeEnum} from "../base"
 import {ButtonType} from "./basic/button.component"
+import AuthService, {TokenResponse} from "../service/auth.service"
+import {model} from "../index"
+import UrlHandler from "../util/UrlHandler"
 @customElement('cc-login')
 export class LoginComponent extends LitElement {
     render() {
@@ -26,13 +29,25 @@ export class LoginComponent extends LitElement {
         `
     }
 
+    protected firstUpdated(_changedProperties: PropertyValues) {
+        super.firstUpdated(_changedProperties);
+        this.shadowRoot.querySelectorAll("input").forEach((input: HTMLInputElement) => {
+            input.addEventListener("keydown", (event: KeyboardEvent) => {
+                if (event.key === "Enter") {
+                  this.login()
+                }
+            })
+        })
+    }
+
     async login() {
         let usernameInput = this.shadowRoot.querySelector("input[type='text']") as HTMLInputElement
         let passwordInput = this.shadowRoot.querySelector("input[type='password']") as HTMLInputElement
 
-        let loginResponse = await UserService.login(usernameInput, passwordInput)
+        let tokenResponse = await AuthService.login(usernameInput.value, passwordInput.value)
+        model.appState.value.access_token = tokenResponse.access_token
 
-        console.log(loginResponse)
+        UrlHandler.goToPage("/app/rents")
     }
 }
 

@@ -1,7 +1,6 @@
 package at.camconnect;
 
 import at.camconnect.model.Rent;
-import at.camconnect.repository.StudentRepository;
 import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.MockMailbox;
 import io.vertx.ext.mail.MailMessage;

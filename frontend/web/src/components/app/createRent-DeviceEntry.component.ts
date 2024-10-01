@@ -193,7 +193,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
         return html`${unsafeSVG(icon(faHashtag).html[0])}`
     }
 
-    toRentObject(studentId: number): CreateRentDTO {
+    toRentObject(studentId: string): CreateRentDTO {
         //TODO add support for notes
         //TODO get teacher id from user system
 
@@ -201,7 +201,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
             return {
                 type: RentTypeEnum.DEFAULT,
                 student_id: studentId,
-                teacher_start_id: 1,
+                teacher_start_id: model.appState.value.currentUser.user_id,
                 device_id: this.data.device_id,
                 note: "",
                 rent_start: Util.formatDateForDb(this.datePicker.instance.selectedDates[0]),
@@ -212,7 +212,7 @@ export class CreateRentDeviceEntryComponent extends LitElement {
             return {
                 type: RentTypeEnum.STRING,
                 student_id: studentId,
-                teacher_start_id: 1,
+                teacher_start_id: model.appState.value.currentUser.user_id,
                 device_string: this.data.device_string,
                 note: "",
                 rent_start: Util.formatDateForDb(this.datePicker.instance.selectedDates[0]),

@@ -8,6 +8,8 @@ import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
 import at.camconnect.repository.DeviceTypeRepository;
+import io.quarkus.security.Authenticated;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
@@ -28,8 +30,8 @@ public class DeviceTypeResource {
 
     @POST
     @Path("/create/{type: [A-z]+}")
-    @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response create(@PathParam("type") DeviceTypeVariantEnum type, JsonObject data){//leave as JsonObject NOT DTO
         DeviceType result;
         try{
@@ -44,7 +46,7 @@ public class DeviceTypeResource {
 
     @GET
     @Path("/getall")
-    @Transactional
+    @Authenticated
     public Response getAll(){
         DeviceTypeCollection result;
         try{
@@ -58,7 +60,7 @@ public class DeviceTypeResource {
 
     @POST
     @Path("/getallfull")
-    @Transactional
+    @Authenticated
     public Response getAllFull(DeviceTypeFilters deviceTypeFilters){
         List<DeviceTypeFullDTO> result;
         try{
@@ -72,7 +74,7 @@ public class DeviceTypeResource {
 
     @GET
     @Path("/getbyid/{id: [0-9]+}")
-    @Transactional
+    @Authenticated
     public Response getById(@PathParam("id") Long id){
         DeviceType result;
         try{
@@ -85,10 +87,10 @@ public class DeviceTypeResource {
     }
 
     @POST
-    @Path("/getbyid/{id: [0-9]+}/update/")
-    @Transactional
+    @Path("/getbyid/{id: [0-9]+}/update")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("id") Long id, DeviceTypeGlobalObjectsDTO data){//leave as JsonObject NOT DTO
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
+    public Response update(@PathParam("id") Long id, DeviceTypeGlobalObjectsDTO data){
         DeviceType result;
         try{
             result = deviceTypeRepository.update(id, data);
@@ -101,7 +103,6 @@ public class DeviceTypeResource {
 
     @GET
     @Path("/getbyid/{id: [0-9]+}/remove")
-    @Transactional
     public Response remove(@PathParam("id") Long id){
         try{
             deviceTypeRepository.remove(id);
@@ -115,9 +116,9 @@ public class DeviceTypeResource {
     @POST
     @Path("/search")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Transactional
+    @Authenticated
     public Response search(JsonObject data){
-        List<AutocompleteOptionDTO<DeviceTypeMinimalDTO>> result;
+        List<AutocompleteNumberOptionDTO<DeviceTypeMinimalDTO>> result;
         try{
             result = deviceTypeRepository.search(data.getString("searchTerm"));;
         }catch (CCException ex){
@@ -130,6 +131,7 @@ public class DeviceTypeResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/getcsv")
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response exportAllDeviceVariants() {
         try {
             return deviceTypeRepository.exportAllDeviceTypeVariants();
@@ -141,6 +143,7 @@ public class DeviceTypeResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/getcsv/{type}")
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response exportDeviceTypeVariant(@PathParam("type")DeviceTypeVariantEnum variant) {
         try {
             return deviceTypeRepository.exportDeviceTypeVariant(variant);
@@ -152,6 +155,7 @@ public class DeviceTypeResource {
     @POST
     @Path("/import/{type}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response uploadCsvFile(@RestForm File file, @PathParam("type")String type) {
         try{
             deviceTypeRepository.importDeviceTypes(file, type);

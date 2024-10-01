@@ -1,27 +1,47 @@
 import {Api} from "../util/Api"
 import {model} from "../index"
-import {Teacher} from "./teacher.service"
-import UrlHandler from "../util/UrlHandler"
+import {DeviceType} from "./deviceType.service"
 
 export interface User {
-    user_id: number
+    user_id: string
     firstname: string
     lastname: string
     email: string
     username: string
-    password: string
-    creationDate: Date
-    lastPWCheck: Date
+    school_class: string
+    role: 'STUDENT' | 'TEACHER' | 'ADMIN'
+}
+
+export interface Teacher extends User {}
+
+export interface Student extends User {
+    school_class: string
+    favourites: DeviceType[]
 }
 
 export default class UserService {
-    static async login(username, password) {
-        let response = await Api.postData("/user/login", {username: username, password: password})
-        if(true){
-            UrlHandler.updateUrl("/app/rents")
-        }
-        else{
-            return response
-        }
+    static fetchAll(){
+        Api.getData<Student[]>("/user/getallstudents")
+            .then(response => {
+                model.loadStudents(response.data)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+
+        Api.getData<Teacher[]>("/user/getallteachers")
+            .then(response => {
+                model.loadTeachers(response.data)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
+
+    static getById(id: string){
+        return Api.getData<User>(`/user/getbyid/${id}`)
+            .then(response => {
+                return response.data
+            })
     }
 }

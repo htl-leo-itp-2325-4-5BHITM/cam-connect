@@ -59,7 +59,7 @@ export class ExternalConfirmComponent extends LitElement {
                                                 text="Bestätigen"
                                                 type="underlined"
                                                 @click=${() => {
-                                                    RentService.updateStatus(rent.rent_id, this.rentConfirmationCodes[i], RentStatusEnum.CONFIRMED, "")
+                                                    RentService.confirmOrDecline(rent.rent_id, this.rentConfirmationCodes[i], RentStatusEnum.CONFIRMED, "")
                                                             .then((success) => {
                                                                 if(success){
                                                                     rent.status = RentStatusEnum.CONFIRMED
@@ -92,7 +92,7 @@ export class ExternalConfirmComponent extends LitElement {
                                                                 text: "Ablehnen",
                                                                 role: "confirm",
                                                                 action: (data) => {
-                                                                    RentService.updateStatus(
+                                                                    RentService.confirmOrDecline(
                                                                             rent.rent_id, this.rentConfirmationCodes[i],
                                                                             RentStatusEnum.DECLINED,
                                                                             data.inputValues[0] as string
@@ -131,7 +131,7 @@ export class ExternalConfirmComponent extends LitElement {
                 </ul>
                 <div class="button-container">
                     <cc-button @click="${() => {UrlHandler.setUrl("/app/rents")}}">
-                        Zurück zur Verleihliste
+                        Zur Verleihliste
                     </cc-button>
                 </div>
             </main>
@@ -144,7 +144,7 @@ export class ExternalConfirmComponent extends LitElement {
 
         if(!rentIds || rentIds.length == 0) return
 
-        this.rents = (await Api.fetchData<Rent[]>(`/rent/getbyidlist/${rentIds.join(",")}`)).data || []
+        this.rents = (await Api.getData<Rent[]>(`/rent/getbyidlist/${rentIds.join(",")}`)).data || []
 
         let invalidCodes = await this.validateConfirmationCodes()
 
@@ -185,7 +185,7 @@ export class ExternalConfirmComponent extends LitElement {
         let flaggedRents = []
 
         for (let i = 0; i < this.rents.length; i++) {
-            let valid = await Api.fetchData<boolean>(`/rent/getbyid/${this.rents[i].rent_id}/verifyconfirmationcode/${this.rentConfirmationCodes[i]}`)
+            let valid = await Api.getData<boolean>(`/rent/getbyid/${this.rents[i].rent_id}/verifyconfirmationcode/${this.rentConfirmationCodes[i]}`)
             if(!valid) {
                 flaggedRents.push(i)
             }

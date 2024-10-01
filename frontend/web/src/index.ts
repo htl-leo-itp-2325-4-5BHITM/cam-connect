@@ -55,10 +55,10 @@ import UrlHandler from "./util/UrlHandler"
 import favicon from "../assets/logo/cc-logomark-accent.svg"
 import {KeyBoardShortCut} from "./util/KeyboardShortcut"
 import {AppComponent} from "./components/app/app.component"
+import AuthService from "./service/auth.service"
 
 //OMG its our single swouce of THWQUUUCE
 export let model = new Model()
-model.queryData()
 
 window.addEventListener("DOMContentLoaded", () => {
     UrlHandler.parseCurrentURL()

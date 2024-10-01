@@ -38,7 +38,7 @@ export interface SearchDTO{
 
 export default class DeviceService{
     static fetchAll(){
-        Api.fetchData<Device[]>("/device/getall")
+        Api.getData<Device[]>("/device/getall")
             .then(result => {
                 model.loadDevices(result.data)
             })
@@ -96,7 +96,7 @@ export default class DeviceService{
     }
 
     static remove(device: Device) {
-        Api.fetchData(`/device/getbyid/${device.device_id}/remove`)
+        Api.getData(`/device/getbyid/${device.device_id}/remove`)
             .then(() => {
                 DeviceService.fetchAll()
             })

@@ -28,7 +28,7 @@ public class Rent {
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
-    private Student student;
+    private User student;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -38,12 +38,12 @@ public class Rent {
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id_start")
-    private Teacher teacher_start;
+    private User teacher_start;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id_end")
-    private Teacher teacher_end;
+    private User teacher_end;
 
     @Temporal(TemporalType.DATE)
     private LocalDate rent_start;
@@ -79,7 +79,7 @@ public class Rent {
     /**
      * Rent with device as object
      */
-    public Rent(Student student, Device device, Teacher teacher_start, LocalDate rent_start, LocalDate rent_end_planned, String note) {
+    public Rent(User student, Device device, User teacher_start, LocalDate rent_start, LocalDate rent_end_planned, String note) {
         this();
 
         this.type = RentTypeEnum.DEFAULT;
@@ -94,7 +94,7 @@ public class Rent {
     /**
      * Rent with device as string
      */
-    public Rent(Student student, String device_string, Teacher teacher_start, LocalDate rent_start, LocalDate rent_end_planned, String note) {
+    public Rent(User student, String device_string, User teacher_start, LocalDate rent_start, LocalDate rent_end_planned, String note) {
         this();
 
         this.type = RentTypeEnum.STRING;
@@ -106,7 +106,7 @@ public class Rent {
         this.note = note;
     }
 
-    public Rent(Long rent_id, RentStatusEnum status, RentTypeEnum type, Device device, String device_string, Teacher teacher_start, Teacher teacher_end, LocalDate rent_start, LocalDate rent_end_planned, LocalDate rent_end_actual, Student student, String note, String verification_message){
+    public Rent(Long rent_id, RentStatusEnum status, RentTypeEnum type, Device device, String device_string, User teacher_start, User teacher_end, LocalDate rent_start, LocalDate rent_end_planned, LocalDate rent_end_actual, User student, String note, String verification_message){
         this();
 
         this.status = status;
@@ -171,11 +171,11 @@ public class Rent {
         return rent_id;
     }
 
-    public Student getStudent() {
+    public User getStudent() {
         return student;
     }
 
-    public void setStudent(Student student) {
+    public void setStudent(User student) {
         this.student = student;
         this.updateChangeDate();
     }
@@ -189,20 +189,20 @@ public class Rent {
         this.updateChangeDate();
     }
 
-    public Teacher getTeacher_start() {
+    public User getTeacher_start() {
         return teacher_start;
     }
 
-    public void setTeacher_start(Teacher teacherStart) {
+    public void setTeacher_start(User teacherStart) {
         this.teacher_start = teacherStart;
         this.updateChangeDate();
     }
 
-    public Teacher getTeacher_end() {
+    public User getTeacher_end() {
         return teacher_end;
     }
 
-    public void setTeacher_end(Teacher teacherEnd) {
+    public void setTeacher_end(User teacherEnd) {
         this.teacher_end = teacherEnd;
         this.updateChangeDate();
     }
