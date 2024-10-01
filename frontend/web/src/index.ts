@@ -23,12 +23,17 @@ import "./components/app/rentListStudent.component"
 import "./components/app/rentListEntry.component"
 import "./components/app/deviceList.component"
 import "./components/app/deviceListEntry.component"
+import "./components/app/rentDetailView.component"
+
 import "./components/app/edit/deviceTypeEdit.component"
 import "./components/app/edit/deviceTypeEditEntry.component"
 import "./components/app/edit/deviceTypeChildren.component"
 import "./components/app/edit/deviceTypeChildrenEntry.component"
-import "./components/app/edit/editModal.component"
-import "./components/app/rentDetailView.component"
+import "./components/app/edit/editDeviceTypeModal.component"
+import "./components/app/edit/editDeviceModal.component"
+import "./components/app/edit/deviceSetEdit.component"
+import "./components/app/edit/deviceSetEditEntry.component"
+import "./components/app/edit/editDeviceSetModal.component"
 
 import "./components/app/app.component"
 import "./components/app/dashboard.component"
@@ -82,7 +87,6 @@ window.addEventListener("DOMContentLoaded", () => {
     console.log(data)
 })*/
 
-KeyBoardShortCut.register(model.appState.value.userSettings.keybinds.newRent, () => {model.appState.value.openCreateRentModal()})
 KeyBoardShortCut.register(["escape"], () => {model.appState.value.cancelCurrentAction()}, "cancelCurrentAction", true)
 
 //Api.getbyid("/rent",  1, "/remove").then(data => console.log(data))

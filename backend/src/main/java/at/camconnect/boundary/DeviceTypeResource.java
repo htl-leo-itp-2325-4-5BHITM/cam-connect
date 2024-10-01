@@ -1,10 +1,7 @@
 package at.camconnect.boundary;
 
 import at.camconnect.dtos.*;
-import at.camconnect.dtos.deviceType.DeviceTypeCollection;
-import at.camconnect.dtos.deviceType.DeviceTypeFullDTO;
-import at.camconnect.dtos.deviceType.DeviceTypeGlobalIdDTO;
-import at.camconnect.dtos.deviceType.DeviceTypeMinimalDTO;
+import at.camconnect.dtos.deviceType.*;
 import at.camconnect.dtos.filters.DeviceTypeFilters;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
@@ -40,6 +37,7 @@ public class DeviceTypeResource {
         try{
             result = deviceTypeRepository.create(type, data);
         }catch (CCException ex){
+            ex.printStackTrace();
             return CCResponse.error(ex);
         }
 
@@ -92,7 +90,7 @@ public class DeviceTypeResource {
     @Path("/getbyid/{id: [0-9]+}/update")
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed({"camconnect-admin", "medt-teacher"})
-    public Response update(@PathParam("id") Long id, DeviceTypeGlobalIdDTO data){
+    public Response update(@PathParam("id") Long id, DeviceTypeGlobalObjectsDTO data){
         DeviceType result;
         try{
             result = deviceTypeRepository.update(id, data);
@@ -105,7 +103,6 @@ public class DeviceTypeResource {
 
     @GET
     @Path("/getbyid/{id: [0-9]+}/remove")
-    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response remove(@PathParam("id") Long id){
         try{
             deviceTypeRepository.remove(id);
@@ -165,6 +162,21 @@ public class DeviceTypeResource {
         }catch (CCException ex){
             return CCResponse.error(ex);
         }
+        return CCResponse.ok();
+    }
+
+    @POST
+    @Path("getbyid/{id: [0-9]+}/tag/{tagId: [0-9]+}/toggle")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response addTag(@PathParam("id") Long id, @PathParam("tagId") Long tagId){
+        DeviceType result;
+        try{
+            deviceTypeRepository.toggleTag(id, tagId);
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
         return CCResponse.ok();
     }
 }

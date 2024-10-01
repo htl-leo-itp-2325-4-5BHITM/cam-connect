@@ -1,14 +1,14 @@
 import {html, LitElement} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../../styles/components/app/edit/deviceTypeEditEntry.styles.scss'
-import {
+import DeviceTypeService, {
     AudioType,
-    CameraType,
+    CameraType, DeviceType,
     DeviceTypeFullDTO,
     DroneType,
     LensType,
     LightType,
-    MicrophoneType,
+    MicrophoneType, SimpleType,
     StabilizerType,
     TripodType
 } from "../../../service/deviceType.service"
@@ -21,6 +21,9 @@ import {EditPageEnum, ObservedProperty} from "../../../model"
 import {AppState} from "../../../AppState"
 import {model} from "../../../index"
 import {EditComponent} from "./edit.component"
+import PopupEngine from "../../../util/PopupEngine"
+import RentService from "../../../service/rent.service"
+import DeviceService from "../../../service/device.service"
 
 @customElement('cc-device-type-edit-entry')
 export class DeviceTypeEditEntryComponent extends LitElement {
@@ -51,22 +54,28 @@ export class DeviceTypeEditEntryComponent extends LitElement {
                 ${this.deviceType.deviceType.variant == "drone" ? this.renderDrone(this.deviceType.deviceType as DroneType) : ''}
                 ${this.deviceType.deviceType.variant == "lens" ? this.renderLens(this.deviceType.deviceType as LensType) : ''}
                 ${this.deviceType.deviceType.variant == "light" ? this.renderLight(this.deviceType.deviceType as LightType) : ''}
+                ${this.deviceType.deviceType.variant == "audio" ? this.renderAudio(this.deviceType.deviceType as AudioType) : ''}
                 ${this.deviceType.deviceType.variant == "microphone" ? this.renderMicrophone(this.deviceType.deviceType as MicrophoneType) : ''}
                 ${this.deviceType.deviceType.variant == "stabilizer" ? this.renderStabilizer(this.deviceType.deviceType as StabilizerType) : ''}
                 ${this.deviceType.deviceType.variant == "tripod" ? this.renderTripod(this.deviceType.deviceType as TripodType) : ''}
+                ${this.deviceType.deviceType.variant == "simple" ? this.renderSimple(this.deviceType.deviceType as SimpleType) : ''}
             </div>
 
             <div class="edit">
-                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}" @click="${() => {UrlHandler.setUrl('/app/edit/children?gid=' + this.deviceType.deviceType.type_id)}}">
+                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}" @click="${(event) => {
+                    UrlHandler.setUrl('/app/edit/children?gid=' + this.deviceType.deviceType.type_id)
+                    event.stopPropagation()
+                }}">
                     <div slot="left" class="icon accent">
                         ${unsafeSVG(icon(faListUl).html[0])}
                     </div>
                     <p>Zugehörige Geräte</p>    
                 </cc-button>
 
-                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}"  @click="${() => {
+                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}"  @click="${(event) => {
                     //UrlHandler.updateUrl('/app/edit/devicetype?gid=' + this.deviceType.deviceType.type_id)
-                    (model.appState.value.originElement as EditComponent).showModal(this.deviceType, "update", EditPageEnum.DEVICETYPE)
+                    (model.appState.value.originElement as EditComponent).showModal(this.deviceType, true, EditPageEnum.DEVICETYPE)
+                    event.stopPropagation()
                 }}">
                     <div slot="left" class="icon accent">
                         ${unsafeSVG(icon(faPen).html[0])}
@@ -74,7 +83,10 @@ export class DeviceTypeEditEntryComponent extends LitElement {
                     <p>Bearbeiten</p>
                 </cc-button>
 
-                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}">
+                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}" @click="${(event) => {
+                    this.removeDeviceType(this.deviceType.deviceType)
+                    event.stopPropagation()
+                }}">
                     <div slot="left" class="icon accent">
                         ${unsafeSVG(icon(faTrash).html[0])}
                     </div>
@@ -83,7 +95,9 @@ export class DeviceTypeEditEntryComponent extends LitElement {
             </div>
             
             <cc-circle-select .checked="${this.appState.value.selectedDeviceTypeEditEntries.has(this)}" 
-                              @click="${() => {model.appState.value.toggleSelectedDeviceTypeEditEntry(this)}}">
+                              @click="${(event) => {model.appState.value.toggleSelectedDeviceTypeEditEntry(this)
+                                event.stopPropagation()
+                              }}">
             </cc-circle-select>
         `
     }
@@ -94,9 +108,9 @@ export class DeviceTypeEditEntryComponent extends LitElement {
 
     renderCamera(cameraType : CameraType){
         return html`
-            ${this.getPropertyValue("Mount", cameraType.mount?.name)}
+            ${this.getPropertyValue("Objektiv Anschluss", cameraType.mount?.name)}
             ${this.getPropertyValue("System", cameraType.system?.name)}
-            ${this.getPropertyValue("Foto Resolution", cameraType.photo_resolution?.name)}
+            ${this.getPropertyValue("Foto Auflösung", cameraType.photo_resolution?.name)}
             ${this.getPropertyValue("Autofokus", cameraType.autofocus)}
         `
     }
@@ -104,53 +118,79 @@ export class DeviceTypeEditEntryComponent extends LitElement {
     renderDrone(droneType : DroneType) {
         return html`
             ${this.getPropertyValue("Maximale Reichweite (km)", droneType.max_range_kilometers)}
-            ${this.getPropertyValue("Flugzeit (min)", droneType.flight_time_minutes)}
+            ${this.getPropertyValue("Maximale Flugzeit (min)", droneType.flight_time_minutes)}
             ${this.getPropertyValue("Benötigt Lizenz", droneType.requires_license)}
         `
     }
 
     renderLens(lensType : LensType){
         return html`
-            ${this.getPropertyValue("F-Stop", lensType.f_stop)}
-            ${this.getPropertyValue("Lens Mount", lensType.lens_mount?.name)}
-            ${this.getPropertyValue("Focal Length", lensType.focal_length)}
+            ${this.getPropertyValue("Anschluss", lensType.mount?.name)}
+            ${this.getPropertyValue("Maximale Blende", lensType.f_stop)}
+            ${this.getPropertyValue("Brennweite", lensType.focal_length)}
         `
     }
 
     renderLight(lightType : LightType){
         return html`
-            ${this.getPropertyValue("RGB", lightType.rgb)}
-            ${this.getPropertyValue("Variable Temperatur", lightType.variable_temperature)}
-            ${this.getPropertyValue("Watt", lightType.watts)}
+            ${this.getPropertyValue("RGB Farben", lightType.rgb)}
+            ${this.getPropertyValue("Stärke (Watt)", lightType.watts)}
+            ${this.getPropertyValue("Farbtemperatur verstellbar", lightType.variable_temperature)}
         `
     }
 
     renderMicrophone(microphoneType : MicrophoneType){
         return html`
-            ${this.getPropertyValue("Connector", microphoneType.connector?.name)}
-            ${this.getPropertyValue("Benötigt Strom", microphoneType.needs_power)}
-            ${this.getPropertyValue("Benötigt Recorder", microphoneType.needs_recorder)}
+            ${this.getPropertyValue("Audio Connector", microphoneType.connector?.name)}
+            ${this.getPropertyValue("Benötigt Stromversorgung", microphoneType.needs_power)}
+            ${this.getPropertyValue("Benötigt externes Aufnahmegerät", microphoneType.needs_recorder)}
         `
     }
 
     renderAudio(audioType : AudioType){
         return html`
-            ${this.getPropertyValue("Connector", audioType.connector?.name)}
+            ${this.getPropertyValue("Stecker", audioType.connector?.name)}
         `
     }
 
     renderStabilizer(stabilizerType : StabilizerType){
         return html`
-            ${this.getPropertyValue("Number of axis", stabilizerType.number_of_axis)}
-            ${this.getPropertyValue("Max weight kilograms", stabilizerType.max_weight_kilograms)}
+            ${this.getPropertyValue("Maximales Gewicht", stabilizerType.max_weight_kilograms)}
+            ${this.getPropertyValue("Anzahl stabilisierter Achsen", stabilizerType.number_of_axis)}
         `
     }
 
     renderTripod(tripodType : TripodType){
         return html`
             ${this.getPropertyValue("Head", tripodType.head?.name)}
-            ${this.getPropertyValue("Höhe in Zentimeter", tripodType.height_centimeters)}
+            ${this.getPropertyValue("Höhe (cm)", tripodType.height_centimeters)}
         `
+    }
+
+    renderSimple(simpleType: SimpleType){
+        return html`
+            ${this.getPropertyValue("Beschreibung", simpleType.description)}
+        `
+    }
+
+    removeDeviceType(deviceType: DeviceType){
+        PopupEngine.createModal({
+            text: `Möchten Sie den Gerätetyp ${deviceType.name} wirklich löschen?`,
+            buttons: [
+                {
+                    text: "Ja",
+                    action: (data) => {
+                        DeviceTypeService.remove(deviceType)
+                        this.appState.value.clearSelectedDeviceTypeEditEntries()
+                        this.appState.value.clearSelectedDeviceEditEntries()
+                   },
+                    closePopup: true
+                },
+                {
+                    text: "Nein",
+                },
+            ]
+        })
     }
 }
 

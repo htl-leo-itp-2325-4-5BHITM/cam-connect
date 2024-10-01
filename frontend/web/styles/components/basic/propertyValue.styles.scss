@@ -1,5 +1,15 @@
 @import "../../base";
 
+:host([nowrap]){
+  flex-wrap: nowrap;
+  text-wrap: nowrap;
+
+  *{
+    flex-wrap: nowrap;
+    text-wrap: nowrap;
+  }
+}
+
 p{
   gap: 1px;
   color: $gray800;

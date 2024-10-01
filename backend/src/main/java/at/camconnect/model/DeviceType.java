@@ -4,6 +4,7 @@ import at.camconnect.dtos.deviceType.DeviceTypeGlobalIdDTO;
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
 import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.enums.DeviceTypeVariantEnum;
+import at.camconnect.responseSystem.CCException;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
@@ -54,11 +55,36 @@ public abstract class DeviceType{
         this.creation_date = LocalDateTime.now();
     }
 
+    @Override
+    public String toString() {
+        return "DeviceType{" +
+                "type_id=" + type_id +
+                ", variant=" + variant +
+                ", status=" + status +
+                ", name='" + name + '\'' +
+                ", image_blob='" + image_blob + '\'' +
+                ", creation_date=" + creation_date +
+                ", change_date=" + change_date +
+                '}';
+    }
+
     public void updateChangeDate(){
         this.change_date = LocalDateTime.now();
     }
 
-    abstract public void update(DeviceTypeGlobalObjectsDTO data);
+    public void update(DeviceTypeGlobalObjectsDTO data){
+        try{
+            setName(data.name());
+            setImage_blob(data.image());
+            setChange_date(LocalDateTime.now());
+        }catch (Exception ex){
+            throw new CCException(1106);
+        }
+    };
+
+    public void setChange_date(LocalDateTime change_date) {
+        this.change_date = change_date;
+    }
 
     public abstract DeviceTypeGlobalIdDTO toGlobalDTO();
 

@@ -13,9 +13,10 @@ import {AppState} from "./AppState"
 import TagService, {Tag} from "./service/tag.service"
 import UserService, {Student, Teacher } from "./service/user.service";
 import AuthService from "./service/auth.service"
+import DeviceSetService, {DeviceSet} from "./service/deviceSet.service"
 
-export enum PageEnum { EQUIPMENT="equipment", RENTS="rents", CALENDAR="calendar" }
-export enum EditPageEnum { OVERVIEW="overview", CHILDREN="children", DEVICE="device", DEVICETYPE="devicetype" }
+export enum PageEnum { EQUIPMENT="equipment", RENTS="rents"}
+export enum EditPageEnum { OVERVIEW="overview", CHILDREN="children", DEVICE="device", DEVICETYPE="devicetype", DEVICESET="deviceset" }
 
 /**
  * A message to all future students working on this project: we were forced to use no proper library like react or
@@ -42,6 +43,7 @@ export default class Model{
     readonly deviceTypes = new BehaviorSubject<DeviceTypeVariantCollection>({audioTypes: [], microphoneTypes: [], cameraTypes: [], droneTypes: [], lensTypes: [], lightTypes: [], stabilizerTypes: [], tripodHeads: []})
     readonly deviceTypesFull = new BehaviorSubject<DeviceTypeFullDTO[]>([])
     readonly deviceTypeAttributes = new BehaviorSubject<DeviceTypeAttributeCollection>({cameraResolutions: [], cameraSystems: [], lensMounts: [], tripodHeads: [], audioConnectors: []})
+    readonly deviceSets = new BehaviorSubject<DeviceSet[]>([])
 
     /**
      * This is a representation of all the deviceTypeAttributes split up and transformed into FilterOptions that can be
@@ -81,6 +83,7 @@ export default class Model{
         {name: "Mikrofon", id: "microphone", details: "Mikro halt"},
         {name: "Stabilisator", id: "stabilizer", details: "Stablisationsysteme"},
         {name: "Stativ", id: "tripod", details: "dings"},
+        {name: "Simpel", id: "simple", details: "dings"}
     ] as const)
 
     readonly tagFilterOptions = this.tags.pipe(
@@ -94,6 +97,7 @@ export default class Model{
     queryData(){
         RentService.fetchAll()
         DeviceService.fetchAll()
+        DeviceSetService.fetchAll()
         DeviceTypeService.fetchAll()
         DeviceTypeService.fetchAllFull()
         DeviceTypeAttributeService.fetchAll()
@@ -130,6 +134,10 @@ export default class Model{
 
     loadDeviceTypeAttributes(deviceTypeAttributes: DeviceTypeAttributeCollection = {cameraResolutions: [], cameraSystems: [], lensMounts: [], tripodHeads: [], audioConnectors: []}){
         this.deviceTypeAttributes.next(deviceTypeAttributes)
+    }
+
+    loadDeviceSets(deviceSets: DeviceSet[]){
+        this.deviceSets.next(deviceSets)
     }
 
     //endregion

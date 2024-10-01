@@ -11,7 +11,7 @@ import {icon} from "@fortawesome/fontawesome-svg-core"
 import {faCheck, faXmark, faQuestion} from "@fortawesome/free-solid-svg-icons"
 import {html} from "lit"
 import {Device, DeviceDTO} from "../service/device.service"
-import {unsafeHTML} from "lit/directives/unsafe-html.js"
+
 export default class Util{
     //TODO this typing does not seem right
     static deviceTypeToFilterOption(deviceTypes: DeviceTypeSource): FilterOption{
@@ -89,7 +89,7 @@ export default class Util{
         return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`
     }
 
-    static formatDateForHuman(input: Date | string){
+    static formatShortDateForHuman(input: Date | string){
         if(input == undefined) return "unbekannt"
 
         let date: Date
@@ -101,6 +101,20 @@ export default class Util{
         }
 
         return date.toLocaleDateString("at-DE", {day: "2-digit", month: "2-digit", year: "2-digit"})
+    }
+
+    static formatLongDateForHuman(input: Date | string){
+        if(input == undefined) return null
+
+        let date: Date
+        if(typeof input == "string"){
+            date = new Date(input)
+        }
+        else{
+            date = input
+        }
+
+        return date.toLocaleDateString("at-DE", {day: "2-digit", month: "2-digit", year: "numeric"})
     }
 
     static formatDateTimeForHuman(input: Date | string){
@@ -171,6 +185,10 @@ export default class Util{
             clearTimeout(timer);
             timer = setTimeout(() => { func.apply(this, args); }, timeout);
         };
+    }
+
+    static boolToYesNo(bool: boolean){
+        return bool ? "Ja" : "Nein"
     }
 
     static parseJwt (token: string) {

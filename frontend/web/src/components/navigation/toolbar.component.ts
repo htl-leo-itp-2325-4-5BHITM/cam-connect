@@ -145,7 +145,7 @@ export class ToolbarComponent extends LitElement {
         let isButtonDisabled = {
             uncheckAll: this.appState.value.selectedDeviceTypeEditEntries.size == 0 &&
                 this.appState.value.selectedDeviceEditEntries.size == 0,
-            remove: this.appState.value.selectedDeviceEntries.size == 0 &&
+            remove: this.appState.value.selectedDeviceEditEntries.size == 0 &&
                 this.appState.value.selectedDeviceTypeEditEntries.size == 0,
         }
 

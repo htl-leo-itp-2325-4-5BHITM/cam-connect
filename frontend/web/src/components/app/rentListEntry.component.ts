@@ -191,7 +191,7 @@ export class RentListEntryComponent extends LitElement {
                 <cc-line color=${LineColor.DEFAULT} type="${Orientation.VERTICAL}"></cc-line>
                 
                 <cc-property-value size="${SizeEnum.SMALL}" property="Erstellt von" 
-                                   value="${this.rent.teacher_start.firstname.charAt(0)}. ${this.rent.teacher_start.lastname}">
+                                   value="${this.rent.teacher_start?.firstname.charAt(0)}. ${this.rent.teacher_start?.lastname}">
                 </cc-property-value>`
         } else { //static rent
             return html`
@@ -212,11 +212,11 @@ export class RentListEntryComponent extends LitElement {
                 
                 <div class="time">
                     <span>
-                        ${Util.formatDateForHuman(this.rent.rent_start)}
+                        ${Util.formatShortDateForHuman(this.rent.rent_start)}
                     </span>
                     <span>-</span>
                     <span>
-                        ${Util.formatDateForHuman(this.rent.rent_end_planned)}
+                        ${Util.formatShortDateForHuman(this.rent.rent_end_planned)}
                     </span>
                 </div>
                 

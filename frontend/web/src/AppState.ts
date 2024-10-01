@@ -15,6 +15,9 @@ import {DeviceTypeEditEntryComponent} from "./components/app/edit/deviceTypeEdit
 import {DeviceEditEntryComponent} from "./components/app/edit/deviceEditEntry"
 import UserService, {Student, User} from "./service/user.service"
 import Util from "./util/Util"
+import {SidebarComponent} from "./components/navigation/sidebar.component"
+import {EditType} from "./components/app/edit/edit.component"
+import {DeviceSetEditEntryComponent} from "./components/app/edit/deviceSetEditEntry.component"
 
 interface ActionCancellation {
     identifier: string,
@@ -59,13 +62,14 @@ export interface DeviceFilters {
 export class AppState{
     private _page: PageEnum = PageEnum.RENTS
     private _editPage: EditPageEnum = EditPageEnum.OVERVIEW;
-    private _editPageType: DeviceTypeVariantEnum = DeviceTypeVariantEnum.camera;
+    private _editPageType: EditType = DeviceTypeVariantEnum.camera;
     private _createRentModalOpen: boolean = false
     private _createMultiRentModalOpen: boolean = false
     private _selectedRentEntries: Set<RentListEntryComponent> = new Set<RentListEntryComponent>()
     private _selectedDeviceEntries: Set<DeviceListEntryComponent> = new Set<DeviceListEntryComponent>()
     private _selectedDeviceTypeEditEntries: Set<DeviceTypeEditEntryComponent> = new Set<DeviceTypeEditEntryComponent>()
     private _selectedDeviceEditEntries: Set<DeviceEditEntryComponent> = new Set<DeviceEditEntryComponent>()
+    private _selectedDeviceSetEditEntries: Set<DeviceSetEditEntryComponent> = new Set<DeviceSetEditEntryComponent>()
     private _cancelCurrentAction: ActionCancellation[] = []
     private _createRentElement: CreateRentComponent
     private _appElement: HTMLElement
@@ -75,6 +79,8 @@ export class AppState{
     private _overlayElement: HTMLElement
     private _backUrl: string
     private _originElementLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
+    private _sidebarElement: SidebarComponent
+    private _equipmentDisplayMode: "grid" | "list" = "grid"
     //TODO should be moved to the model itself
     private _userSettings: UserSettings = {
         isDarkmode: true,
@@ -126,11 +132,11 @@ export class AppState{
         this.update()
     }
 
-    get editPageType(): DeviceTypeVariantEnum {
+    get editPageType(): EditType {
         return this._editPageType
     }
 
-    set editPageType(value: DeviceTypeVariantEnum) {
+    set editPageType(value: EditType) {
         this._editPageType = value
         this.update()
     }
@@ -236,6 +242,10 @@ export class AppState{
         return this._selectedDeviceEditEntries
     }
 
+    get selectedDeviceSetEditEntries(): Set<DeviceSetEditEntryComponent> {
+        return this._selectedDeviceSetEditEntries
+    }
+
     addSelectedRentEntry(rentEntry: RentListEntryComponent){
         this.selectedRentEntries.add(rentEntry)
         this.update()
@@ -282,6 +292,20 @@ export class AppState{
 
     clearSelectedDeviceTypeEditEntries(){
         this.selectedDeviceTypeEditEntries.clear()
+        this.update()
+    }
+
+    toggleSelectedDeviceSetEditEntry(deviceSetEditEntry: DeviceSetEditEntryComponent){
+        if(this.selectedDeviceSetEditEntries.has(deviceSetEditEntry)){
+            this.selectedDeviceSetEditEntries.delete(deviceSetEditEntry)
+        }else{
+            this.selectedDeviceSetEditEntries.add(deviceSetEditEntry)
+        }
+        this.update()
+    }
+
+    clearSelectedDeviceSetEditEntries(){
+        this.selectedDeviceSetEditEntries.clear()
         this.update()
     }
 
@@ -430,10 +454,29 @@ export class AppState{
     set deviceFilters(value: DeviceFilters) {
         this._deviceFilters = value
         this.update()
-        console.log(this._deviceFilters)
+        this.selectedDeviceEntries.clear()
         DeviceTypeService.fetchAllFull()
     }
 
+
+    get sidebarElement(): SidebarComponent {
+        return this._sidebarElement
+    }
+
+    set sidebarElement(value: SidebarComponent) {
+        this._sidebarElement = value
+        this.update()
+    }
+
+
+    get equipmentDisplayMode(): "grid" | "list" {
+        return this._equipmentDisplayMode
+    }
+
+    set equipmentDisplayMode(value: "grid" | "list") {
+        this._equipmentDisplayMode = value
+        this.update()
+    }
 
     get access_token(): string {
         return this._access_token

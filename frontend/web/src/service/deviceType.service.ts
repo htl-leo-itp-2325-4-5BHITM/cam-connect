@@ -9,17 +9,9 @@ import {
     TripodHead
 } from "./deviceTypeAttribute.service"
 import {html, TemplateResult} from "lit"
-import {unsafeSVG} from 'lit/directives/unsafe-svg.js';
-import {icon} from "@fortawesome/fontawesome-svg-core"
-import {faCamera, faHelicopter, faLightbulb, faMicrophone, faHeadphones, faGears} from "@fortawesome/free-solid-svg-icons"
-import stabilizerIcon from "../../assets/icon/noun-gimbal-5345717.svg"
-import droneIcon from "../../assets/icon/noun-drone-6707036.svg"
-import lensIcon from "../../assets/icon/noun-lens-6134156.svg"
-import tripodIcon from "../../assets/icon/noun-tripod-6392787.svg"
 
 import {Api} from "../util/Api"
-import Util from "../util/Util"
-import de from "air-datepicker/locale/de"
+import {Tag} from "./tag.service"
 
 //region devicetype interfaces
 export interface DeviceTypeSource {
@@ -51,7 +43,7 @@ export interface DroneType extends DeviceTypeSource{
 }
 
 export interface LensType extends DeviceTypeSource{
-    lens_mount: LensMount
+    mount: LensMount
     f_stop: string
     focal_length: string
 }
@@ -100,12 +92,6 @@ export interface DeviceTypeFullDTO {
     deviceType: DeviceType
     available: number
     deviceTags: Tag[]
-}
-
-export interface Tag {
-    tag_id: number
-    name: string
-    description: string
 }
 
 export interface DeviceFilterDTO{
@@ -181,8 +167,36 @@ export default class DeviceTypeService {
         }
     }
 
-    static update(device: DeviceType){
-        Api.postData(`/devicetype/getbyid/${device.type_id}/update`, device)
+    static async create(deviceType: DeviceType, tags: Tag[]): Promise<void> {
+        console.log("Creating device type:", deviceType, tags);
+        try {
+            const result: ccResponse<DeviceType> = await Api.postData(`/devicetype/create/${deviceType.variant}`, deviceType );
+            DeviceTypeService.fetchAllFull()
+
+            tags.forEach(tags => this.toggleTag(tags, result.data))
+
+            if (result.ccStatus.statusCode !== 1000) {
+                throw new Error(`Error creating device type: ${result.ccStatus.message}`);
+            }
+        } catch (error) {
+            console.error("Error creating device type:", error);
+            return Promise.reject(error);
+        }
+    }
+
+    static update(deviceType: DeviceType){
+        Api.postData(`/devicetype/getbyid/${deviceType.type_id}/update`, deviceType)
+            .then(() => {
+                DeviceTypeService.fetchAllFull()
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
+
+    static toggleTag(tag: Tag, deviceType: DeviceType){
+        console.log(tag, deviceType)
+        Api.postData(`/devicetype/getbyid/${deviceType.type_id}/tag/${tag.tag_id}/toggle`, tag)
             .then(() => {
                 DeviceTypeService.fetchAllFull()
             })

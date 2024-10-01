@@ -1,4 +1,4 @@
-import {html, LitElement, PropertyValues, render} from 'lit';
+import {html, LitElement, PropertyValues} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 import PopupEngine from "../../../util/PopupEngine";
 import {EditPageEnum, ObservedProperty} from "../../../model"
@@ -9,10 +9,9 @@ import UrlHandler from "../../../util/UrlHandler"
 import {AppState} from "../../../AppState"
 import {Api} from "../../../util/Api"
 import {Device} from "../../../service/device.service"
-import {InputType} from "../../basic/input.component"
-import {ColorEnum, SizeEnum} from "../../../base"
-import {ChipType} from "../../basic/chip.component"
-import TagService, {Tag} from "../../../service/tag.service"
+import {Tag} from "../../../service/tag.service"
+
+export type EditType = DeviceTypeVariantEnum | "set"
 
 @customElement('cc-edit')
 export class EditComponent extends LitElement {
@@ -20,7 +19,7 @@ export class EditComponent extends LitElement {
 
     @property() private appState: ObservedProperty<AppState>
 
-    currentEditType : DeviceTypeVariantEnum = DeviceTypeVariantEnum.camera
+    currentEditType : EditType = DeviceTypeVariantEnum.camera
 
     isSelectAlreadyUsed : boolean = false
 
@@ -48,8 +47,13 @@ export class EditComponent extends LitElement {
     }
 
     getComponent(){
+        console.log(model.appState.value.editPage)
         if(model.appState.value.editPage == EditPageEnum.OVERVIEW){
             return html`<cc-device-type-edit></cc-device-type-edit>`
+        }
+
+        if(model.appState.value.editPage == EditPageEnum.DEVICESET){
+            return html`<cc-device-set-edit></cc-device-set-edit>`
         }
 
         if(model.appState.value.editPage == EditPageEnum.CHILDREN){
@@ -58,19 +62,19 @@ export class EditComponent extends LitElement {
                     return html`<cc-device-type-children .deviceType="${elem}"></cc-device-type-children>`
                 }
             })}`
-
-            /*let type = this.deviceTypesFull.value.filter(type=> type.deviceType.type_id == parseInt(UrlHandler.getParam("gid")))
-
-            return html`<cc-device-type-children .deviceType="${type}"></cc-device-type-children>`*/
         }
     }
 
-    showModal(element: Device | DeviceTypeFullDTO, type: "create" | "update", editPageType : EditPageEnum){
-        model.appState.value.openOverlay(this.getModalContent(editPageType, element), () => {})
+    showModal(element: Device | DeviceTypeFullDTO, isEditMode : boolean, editPageType : EditPageEnum){
+        model.appState.value.openOverlay(this.getModalContent(editPageType, element, isEditMode), () => {})
     }
 
-    getModalContent(editPageType: EditPageEnum, element: Device | DeviceTypeFullDTO){
-        return html`<cc-edit-modal .editPageType="${editPageType}" .element="${element}"></cc-edit-modal>`
+    getModalContent(editPageType: EditPageEnum, element: Device | DeviceTypeFullDTO, isEditMode: boolean){
+        if(editPageType == EditPageEnum.DEVICE){
+            return html`<cc-edit-device-modal .element="${element}" .isEditMode="${isEditMode}"></cc-edit-device-modal>`
+        } else if(editPageType == EditPageEnum.DEVICETYPE){
+            return html`<cc-edit-device-type-modal .element="${element}" .isEditMode="${isEditMode}"></cc-edit-device-type-modal>`
+        }
     }
 
     importDataFromCsv(event: Event, importType: string, deviceType: string) {

@@ -9,6 +9,7 @@ import {ButtonType} from "../basic/button.component"
 import {BehaviorSubject} from "rxjs"
 import {FilterOption} from "../basic/filterContainer.component"
 import {OrderByFilterRent, RentStatusEnum} from "../../service/rent.service"
+import {KeyBoardShortCut} from "../../util/KeyboardShortcut"
 
 @customElement('cc-dashboard')
 export class DashboardComponent extends LitElement {
@@ -56,6 +57,8 @@ export class DashboardComponent extends LitElement {
     }
 
     protected firstUpdated(_changedProperties: PropertyValues) {
+        KeyBoardShortCut.register(model.appState.value.userSettings.keybinds.newRent, () => {model.appState.value.openCreateRentModal()})
+
         super.firstUpdated(_changedProperties);
     }
 
@@ -67,28 +70,26 @@ export class DashboardComponent extends LitElement {
             case PageEnum.EQUIPMENT:
                 sidebar = html`
                 <cc-sidebar accountname="Martin Huemer">
-                    <cc-select slot="sorts" size="${SizeEnum.MEDIUM}">
-                        <p class="selected">raster</p>
-                        <p>liste</p>
+                    <cc-select slot="sorts" size="${SizeEnum.MEDIUM}" .onSelect="${(elem) => {model.appState.value.equipmentDisplayMode = elem.dataset['name']}}">
+                        <p class="selected" data-name="grid">raster</p>
+                        <p data-name="list">liste</p>
                     </cc-select>
                     <cc-toggle slot="sorts" .onToggle="${(toggled:boolean)=>{
                         let newFilters = model.appState.value.deviceFilters
                         newFilters.onlyAvailable = toggled
                         model.appState.value.deviceFilters = newFilters
                     }}">Nur verfügbare anzeigen</cc-toggle>
-                    <cc-button slot="sorts" size="${SizeEnum.MEDIUM}" type="${ButtonType.UNDERLINED}" color="${SimpleColorEnum.GRAY}" @click="${this.clearFilters}">
-                        Filter zurücksetzten
-                    </cc-button>
+                    <cc-button 
+                        slot="sorts" 
+                        size="${SizeEnum.MEDIUM}" 
+                        type="${ButtonType.UNDERLINED}" 
+                        color="${SimpleColorEnum.GRAY}" 
+                        @click="${this.clearFilters}"
+                    >Filter zurücksetzten</cc-button>
                     
                     <cc-filter-container slot="primaryFilters" .options="${model.deviceTypeNameFilterOptions}" affectSecondaryFilters .onUpdate="${this.handleDeviceTypeVariantFilterUpdate}">Gerätetyp</cc-filter-container>
                     <cc-filter-container slot="primaryFilters" .options="${model.tagFilterOptions}" .onUpdate="${this.handleDeviceTypeTagFilterUpdate}">Tags</cc-filter-container>
                     
-                    <cc-filter-container 
-                            slot="secondaryFilters" 
-                            .options="${model.deviceTypeAttributesAsFilterOptions.cameraResolutions}" 
-                            .visibility="${["camera", "drone"]}"  
-                            .onUpdate="${this.handleDeviceTypeAttributeFilterUpdate}"
-                    >Auflösungen</cc-filter-container>
                     <cc-filter-container 
                             slot="secondaryFilters" 
                             .options="${model.deviceTypeAttributesAsFilterOptions.cameraSystems}" 
@@ -101,6 +102,12 @@ export class DashboardComponent extends LitElement {
                             .visibility="${["camera", "lens"]}" 
                             .onUpdate="${this.handleDeviceTypeAttributeFilterUpdate}"
                     >Objektiv Anschlüsse</cc-filter-container>
+                    <cc-filter-container 
+                            slot="secondaryFilters" 
+                            .options="${model.deviceTypeAttributesAsFilterOptions.cameraResolutions}" 
+                            .visibility="${["camera", "drone"]}"  
+                            .onUpdate="${this.handleDeviceTypeAttributeFilterUpdate}"
+                    >Foto-Auflösungen</cc-filter-container>
                     <cc-filter-container 
                             slot="secondaryFilters" 
                             .options="${model.deviceTypeAttributesAsFilterOptions.tripodHeads}" 
@@ -153,10 +160,6 @@ export class DashboardComponent extends LitElement {
                         <cc-filter-container slot="secondaryFilters" .options="${this.fithGraders}" .onUpdate="${this.handleStudentFilterUpdate}">Fünfte Klassen</cc-filter-container>
                     </cc-sidebar>`
                 break
-            case PageEnum.CALENDAR:
-                page = html`<cc-calendar class="content"></cc-calendar>`
-                sidebar = html`<cc-sidebar accountname="Martin Huemer"></cc-sidebar>`
-                break
         }
 
         return html`
@@ -179,8 +182,13 @@ export class DashboardComponent extends LitElement {
 
     clearFilters(){
         this.shadowRoot.querySelectorAll("cc-filter-container").forEach(filterContainer => {
-            filterContainer.clearSelection()
+            filterContainer.clearVisibleSelection()
         })
+        let newDeviceFilters = model.appState.value.deviceFilters
+        newDeviceFilters.attributes = new Set()
+        newDeviceFilters.tags = new Set()
+        newDeviceFilters.variants = new Set()
+        model.appState.value.deviceFilters = newDeviceFilters
     }
 
     handleStudentFilterUpdate(options: FilterOption[]){

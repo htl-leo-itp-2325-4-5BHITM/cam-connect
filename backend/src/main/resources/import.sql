@@ -19,7 +19,7 @@ insert into devicetypeattribute(dtype, name, details) values ('TripodHead', '3 a
 insert into devicetypeattribute(dtype, name, details) values ('TripodHead', 'Ballhead', 'In alle richtungen adjustierbarer Kugelkopf');
 
 -- Audio Connectors
-insert into devicetypeattribute(dtype, name, details) values ('AudioConnector', 'wireless', 'verbindet sich via bluetooth oder einem eigenen sender');
+insert into devicetypeattribute(dtype, name, details) values ('AudioConnector', 'kabellos', 'verbindet sich via bluetooth oder einem eigenen sender');
 insert into devicetypeattribute(dtype, name, details) values ('AudioConnector', 'aux', '3.5mm aux');
 insert into devicetypeattribute(dtype, name, details) values ('AudioConnector', 'XLR', '3 pin XLR connector');
 
@@ -84,7 +84,7 @@ VALUES
 -- Simple
 INSERT INTO devicetype (name, image_blob, variant, dtype, description, status)
 VALUES
-    ( 'Samsung Galaxy Buds', 'url1', 'simple', 'SimpleType', 'Wireless earbuds', 'active'),
+    ( 'So ein Kabel vom Erich Baar', 'url1', 'simple', 'SimpleType', 'Also dit kann aux zu XLR mache, dadurch kannste dann det PROOFI mikrofön von de Baar an jedö Kamera drannstecke, dat is ne gaanz tolle Sache', 'active'),
     ( 'Apple AirPods Pro', 'url2', 'simple', 'SimpleType', 'Noise-canceling earbuds', 'active'),
     ( 'Beats Powerbeats Pro', 'url3', 'simple', 'SimpleType', 'Sport wireless earbuds', 'active'),
     ( 'Jabra Elite 75t', 'url4', 'simple', 'SimpleType', 'Bluetooth earbuds', 'active'),
@@ -117,7 +117,30 @@ VALUES
     ('DJI Phantom 4', 'url4', 'drone', 'DroneType', 5, 28, true, 'active'),
     ('Yuneec Typhoon H Pro', 'url5', 'drone', 'DroneType', 1, 25, false, 'active');
 
--- assigning tags to devicetypes
+-- Device Set
+INSERT INTO deviceset (name, description, status)
+VALUES
+    ('Foto Set', 'Ein Set für Fotografen', 'ACTIVE'),
+    ('Video Set', 'Ein Set für Videografen', 'ACTIVE'),
+    ('Audio Set', 'Ein Set für Tontechniker', 'ACTIVE'),
+    ('Light Set', 'Ein Set für Beleuchter', 'ACTIVE'),
+    ('Simple Set', 'Ein Set für einfache Geräte', 'ACTIVE'),
+    ('Stabilizer Set', 'Ein Set für Stabilizer', 'ACTIVE'),
+    ('Tripod Set', 'Ein Set für Stative', 'ACTIVE'),
+    ('Drone Set', 'Ein Set für Drohnen', 'ACTIVE');
+
+-- Assigning devices to device sets
+INSERT INTO deviceset_devicetype (deviceset_id, device_types_type_id)
+VALUES
+    (1, 1),  -- Foto Set with Canon EOS 5D Mark IV
+    (1, 2),  -- Foto Set with Nikon D850
+    (1, 3),  -- Foto Set with Sony Alpha a7 III
+    (1, 4),  -- Foto Set with Fujifilm X-T3
+    (1, 5),  -- Foto Set with Olympus OM-D E-M10 Mark III
+    (2, 1),  -- Video Set with Canon EOS 5D Mark IV
+    (2, 2),  -- Video Set with Nikon D850
+    (3, 3);  -- Audio Set with Sony Alpha a7 III
+
 -- assigning tags to devicetypes
 INSERT INTO tag_devicetype (tag_tag_id, types_type_id)
 VALUES
@@ -155,17 +178,17 @@ VALUES
     (2, 29); -- Video tag for Jabra Elite 75t
 
 -- Devices
-insert into device (type_id, note, number, serial) values
-    (1, '', 'A01', '141592653589793'),
-    (1, '', 'A02', '238462643383279'),
-    (2, '', 'B01', '419715028869399'),
-    (3, '', 'C01', '314159265358979'),
-    (4, '', 'D01', '271828182845904'),
-    (2, '', 'B02', '323846264338327'),
-    (1, '', 'A03', '589793238462643'),
-    (2, 'Backup camera', 'B03', '846264338327950'),
-    (3, 'Professional use', 'C02', '643383279502884'),
-    (4, 'Travel photography', 'D02', '795028841971520'),
-    (2, 'Secondary camera', 'B04', '582097494459230'),
-    (3, 'Studio setup', 'C03', '781640628620899'),
-    (4, 'Wildlife photography', 'D03', '862803482534211');
+insert into device (type_id, note, number, serial, status, creation_date) values
+(1, '', 'A01', '141592653589793', 'ACTIVE', CURRENT_TIMESTAMP),
+(1, '', 'A02', '238462643383279', 'ACTIVE', CURRENT_TIMESTAMP),
+(2, '', 'B01', '419715028869399', 'ACTIVE', CURRENT_TIMESTAMP),
+(3, '', 'C01', '314159265358979', 'ACTIVE', CURRENT_TIMESTAMP),
+(4, '', 'D01', '271828182845904', 'ACTIVE', CURRENT_TIMESTAMP),
+(2, '', 'B02', '323846264338327', 'ACTIVE', CURRENT_TIMESTAMP),
+(1, '', 'A03', '589793238462643', 'ACTIVE', CURRENT_TIMESTAMP),
+(2, 'Backup camera', 'B03', '846264338327950', 'ACTIVE', CURRENT_TIMESTAMP),
+(3, 'Professional use', 'C02', '643383279502884', 'ACTIVE', CURRENT_TIMESTAMP),
+(4, 'Travel photography', 'D02', '795028841971520', 'ACTIVE', CURRENT_TIMESTAMP),
+(2, 'Secondary camera', 'B04', '582097494459230', 'ACTIVE', CURRENT_TIMESTAMP),
+(3, 'Studio setup', 'C03', '781640628620899', 'ACTIVE', CURRENT_TIMESTAMP),
+(4, 'Wildlife photography', 'D03', '862803482534211', 'ACTIVE', CURRENT_TIMESTAMP);

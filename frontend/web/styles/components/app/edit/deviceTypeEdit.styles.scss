@@ -14,16 +14,34 @@ main{
   grid-column: 2 / 3;
   overflow: auto;
 
-  div{
+  div.header{
     display: flex;
+    overflow: hidden;
+    flex-direction: row;
     align-items: center;
+    justify-content: space-between;
 
-    div{
+    .left{
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
     }
 
-    margin-left: 1rem;
+    .right{
+      margin-right: 1rem;
+    }
+
+    .deviceTypeHeading{
+      cursor: pointer;
+    }
+
+    .deviceTypeName{
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+    }
+
+    margin-bottom: 1rem;
   }
 }
 h1{

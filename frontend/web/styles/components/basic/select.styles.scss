@@ -24,14 +24,14 @@
     --spacerColor: #{$gray800};
   }
   &[spacerColor="accent"]{
-    --spacerColor: #{$accent};
+    --spacerColor: #{$accent500};
   }
 
   &[color="gray"]{
     --selected-color: #{$gray1000};
   }
   &[color="accent"]{
-    --selected-color: #{$accentLight};
+    --selected-color: #{$accent700};
   }
 
   &[heavy="true"] ::slotted(*.selected){

@@ -1,7 +1,6 @@
 import {html, LitElement, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../../styles/components/app/edit/deviceTypeEditEntry.styles.scss'
-import DeviceService, {Device} from "../../../service/device.service"
 import {ColorEnum, Orientation, SizeEnum} from "../../../base"
 import {unsafeSVG} from "lit/directives/unsafe-svg.js"
 import {icon} from "@fortawesome/fontawesome-svg-core"
@@ -9,15 +8,12 @@ import {faPen, faTrash} from "@fortawesome/free-solid-svg-icons"
 import {EditPageEnum, ObservedProperty} from "../../../model"
 import {AppState} from "../../../AppState"
 import {model} from "../../../index"
-import UrlHandler from "../../../util/UrlHandler"
-import {EditComponent} from "./edit.component"
 import PopupEngine from "../../../util/PopupEngine"
-import DeviceTypeService from "../../../service/deviceType.service"
-import Util from "../../../util/Util"
+import DeviceSetService, {DeviceSet} from "../../../service/deviceSet.service"
 
-@customElement('cc-device-type-children-entry')
-export class DeviceTypeChildrenEntryComponent extends LitElement {
-    @property() device: Device
+@customElement('cc-device-set-edit-entry')
+export class DeviceSetEditEntryComponent extends LitElement {
+    @property() deviceSet: DeviceSet
 
     @property() private appState: ObservedProperty<AppState>
 
@@ -27,25 +23,29 @@ export class DeviceTypeChildrenEntryComponent extends LitElement {
     }
 
     render() {
-        console.log(this.device)
         return html`
             <style>${styles}</style>
             
-            <h3 class="children">${this.device.number}</h3>
+            <h3 class="children">${this.deviceSet.name}</h3>
             
             <!-- todo für yanik <cc-line type="${Orientation.VERTICAL}"></cc-line>-->
 
-            <div class="deviceInfos">
-                ${this.getPropertyValue("Seriennummer", this.device.serial)}
-                ${this.getPropertyValue("Erstellt am", Util.formatLongDateForHuman(this.device.creation_date) || '-')}
-                ${this.getPropertyValue("Bearbeitet am", Util.formatLongDateForHuman(this.device.change_date) || '-')}
-                ${this.getPropertyValue("Notiz", this.device.note)}
+            <div class="tags">
+                
+            </div>
+
+            <div class="deviceSetInfo">
+                ${
+                    this.deviceSet.device_types?.map((deviceType, index) => {
+                        return html`<span>${deviceType.name} ${this.deviceSet.device_types.length - 1 <= index ? '' : ','}</span>`
+                    })
+                }
             </div>
             
             <div class="edit">
                 <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}"  @click="${(event) => {
                     //UrlHandler.updateUrl('/app/edit/device?did=' + this.device.device_id)
-                    (model.appState.value.originElement as EditComponent).showModal(this.device, true, EditPageEnum.DEVICE)
+                    model.appState.value.openOverlay(html`<cc-edit-device-set-modal .element="${this.deviceSet}" .isEditMode="${true}"></cc-edit-device-set-modal>`, () => {})
                     event.stopPropagation()
                 }}">
                     <div slot="left" class="icon accent">
@@ -55,7 +55,7 @@ export class DeviceTypeChildrenEntryComponent extends LitElement {
                 </cc-button>
 
                 <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}" @click="${(event) => {
-                    this.removeDevice(this.device)
+                    this.removeDevice(this.deviceSet)
                     event.stopPropagation()
                 }}">
                     <div slot="left" class="icon accent">
@@ -64,9 +64,12 @@ export class DeviceTypeChildrenEntryComponent extends LitElement {
                     <p>Löschen</p>
                 </cc-button>
             </div>
-            
-            <cc-circle-select .checked="${this.appState.value.selectedDeviceEditEntries.has(this)}"
-                              @click="${(event) => {model.appState.value.toggleSelectedDeviceEditEntry(this); event.stopPropagation()}}">
+
+            <cc-circle-select .checked="${this.appState.value.selectedDeviceSetEditEntries.has(this)}"
+                              @click="${(event) => {
+                                  model.appState.value.toggleSelectedDeviceSetEditEntry(this);
+                                  event.stopPropagation();
+                              }}">
             </cc-circle-select>
         `
     }
@@ -75,16 +78,17 @@ export class DeviceTypeChildrenEntryComponent extends LitElement {
         return html`${value ? html`<cc-property-value property="${property}" value="${value}" size="${SizeEnum.SMALL}"></cc-property-value>` : ''}`
     }
 
-    private removeDevice(device: Device) {
+    private removeDevice(device: DeviceSet) {
         PopupEngine.createModal({
-            text: `Möchten Sie das Gerät ${device.number} wirklich löschen?`,
+            text: `Möchten Sie das Geräte-Set ${device.name} wirklich löschen?`,
             buttons: [
                 {
                     text: "Ja",
                     action: (data) => {
-                        DeviceService.remove(device)
+                        DeviceSetService.remove(device)
                         this.appState.value.clearSelectedDeviceTypeEditEntries()
                         this.appState.value.clearSelectedDeviceEditEntries()
+                        this.appState.value.clearSelectedDeviceSetEditEntries()
                     },
                     closePopup: true
                 },
@@ -98,6 +102,6 @@ export class DeviceTypeChildrenEntryComponent extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "cc-device-type-children-entry": DeviceTypeChildrenEntryComponent
+        "cc-device-set-edit-entry": DeviceSetEditEntryComponent
     }
 }

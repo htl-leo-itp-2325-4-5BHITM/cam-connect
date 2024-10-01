@@ -28,6 +28,18 @@ public class Tag {
     public Tag() {
     }
 
+    public List<DeviceType> getTypes() {
+        return types;
+    }
+
+    public void toggleType(DeviceType type) {
+        if (types.contains(type)) {
+            types.remove(type);
+        } else {
+            types.add(type);
+        }
+    }
+
     public Long getTag_id() {
         return tag_id;
     }

@@ -3,6 +3,9 @@ package at.camconnect.repository;
 import at.camconnect.dtos.AutocompleteNumberOptionDTO;
 import at.camconnect.dtos.DeviceDTO;
 import at.camconnect.dtos.DeviceSearchDTO;
+import at.camconnect.dtos.rent.RentDTO;
+import at.camconnect.enums.DeviceStatus;
+import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.enums.RentStatusEnum;
 import at.camconnect.model.Rent;
 import at.camconnect.responseSystem.CCException;
@@ -20,6 +23,7 @@ import org.hibernate.exception.ConstraintViolationException;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,8 +43,18 @@ public class DeviceRepository {
     }
 
     @Transactional
+    public void createByDTO(DeviceDTO d) {
+        try{
+            Device device = new Device(d.serial(), d.number(), d.note(), em.find(DeviceType.class, d.type_id()), d.status());
+            create(device);
+        } catch(Exception ex){
+            throw new CCException(1106);
+        }
+    }
+
+    @Transactional
     public void remove(Long id){
-        em.remove(getById(id));
+        getById(id).setStatus(DeviceStatus.DELETED);
         deviceSocket.broadcast();
     }
 
@@ -143,30 +157,34 @@ public class DeviceRepository {
     }
 
     public List<Device> getAll(){
-        List<Device> devices = em.createQuery("SELECT d FROM Device d", Device.class).getResultList();
+        List<Device> devices = em.createQuery("SELECT d FROM Device d where d.status != 'DELETED' order by d.id", Device.class).getResultList();
         return devices;
     }
 
     public void setNumber(Long rentId, String number) {
         Device device = getById(rentId);
+        device.setChange_date(LocalDateTime.now());
         device.setNumber(number);
         deviceSocket.broadcast();
     }
 
     public void setSerial(Long rentId, String serial) {
         Device device = getById(rentId);
+        device.setChange_date(LocalDateTime.now());
         device.setSerial(serial);
         deviceSocket.broadcast();
     }
 
     public void setNote(Long rentId, String serial) {
         Device device = getById(rentId);
+        device.setChange_date(LocalDateTime.now());
         device.setNote(serial);
         deviceSocket.broadcast();
     }
 
     public void setType(Long rentId, Long type) {
         Device device = getById(rentId);
+        device.setChange_date(LocalDateTime.now());
         DeviceType deviceType = em.find(DeviceType.class, type);
         device.setType(deviceType);
         deviceSocket.broadcast();
@@ -185,7 +203,7 @@ public class DeviceRepository {
                 }
 
                 //TODO there was a error in the device class the number attribute was missing
-                Device device = new Device(values[0].trim(), "TODO", values[1].trim(),deviceType);
+                Device device = new Device(values[0].trim(), "TODO", values[1].trim(),deviceType, DeviceStatus.ACTIVE);
                 em.persist(device);
             }
             return true;
@@ -244,7 +262,7 @@ public class DeviceRepository {
                 lineArray = line.split(";");
                 if(lineArray.length != 4) break;
                 create(new Device(lineArray[0], lineArray[1], lineArray[2],
-                        em.find(DeviceType.class, lineArray[3])));
+                        em.find(DeviceType.class, lineArray[3]), DeviceStatus.ACTIVE));
             }
         } catch (IOException e) {
             throw new CCException(1204, "File could not be read");

@@ -29,13 +29,14 @@ public class DeviceResource {
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed({"camconnect-admin", "medt-teacher"})
-    public Response createDevice(Device d){
+    public Response createDevice(DeviceDTO d){
         try {
-            deviceRepository.create(d);
+            deviceRepository.createByDTO(d);
+            return CCResponse.ok();
         } catch (CCException ex) {
+            ex.printStackTrace();
             return CCResponse.error(ex);
         }
-        return CCResponse.ok();
     }
 
     @GET
@@ -94,7 +95,7 @@ public class DeviceResource {
         return CCResponse.ok(result);
     }
 
-    @POST
+    @GET
     @Path("/getbyid/{id: [0-9]+}/remove")
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed({"camconnect-admin", "medt-teacher"})

@@ -5,7 +5,7 @@ import {Rent, RentByStudentDTO} from "./rent.service"
 import {Api} from "../util/Api"
 
 export enum DeviceStatus{
-    ACTIVE="active", DELETED="deleted", UNAVAILABLE="unavailable"
+    ACTIVE="ACTIVE", DELETED="DELETED", UNAVAILABLE="UNAVAILABLE"
 }
 
 export interface Device{
@@ -56,8 +56,37 @@ export default class DeviceService{
         }
     }*/
 
+    static create(device: Device): Promise<void> {
+        return Api.postData("/device/create", {
+            serial: device.serial,
+            number: device.number,
+            note: device.note,
+            type_id: device.type.type_id,
+            status: device.status
+        })
+            .then(result => {
+                if (result.ccStatus.statusCode == 1000) {
+                    console.log("created", result);
+                    DeviceService.fetchAll();
+                } else {
+                    return Promise.reject("Serial number has to be unique");
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                return Promise.reject(error);
+            });
+    }
+
     static update(device: Device){
-        Api.postData(`/device/getbyid/${device.device_id}/update`, device)
+        Api.postData(`/device/getbyid/${device.device_id}/update`, {
+            device_id: device.device_id,
+            serial: device.serial,
+            number: device.number,
+            note: device.note,
+            type_id: device.type.type_id,
+            status: device.status
+        })
             .then(data => {
                 console.log("updated", data)
             })

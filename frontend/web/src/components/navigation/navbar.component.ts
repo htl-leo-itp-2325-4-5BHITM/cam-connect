@@ -84,10 +84,6 @@ export class NavbarComponent extends LitElement {
                    @mouseenter="${(e) => {Tooltip.show(e.target, 'shift+v oder 2', 1500)}}"
                    @mouseleave="${()=>{Tooltip.hide(0)}}"
                 >Verleihliste</p>
-                <p data-page="calendar" class="${this.appState.value.page == PageEnum.CALENDAR ? 'selected' : ''}"
-                   @mouseenter="${(e) => {Tooltip.show(e.target, 'shift+c oder 3', 1500)}}"
-                   @mouseleave="${()=>{Tooltip.hide(0)}}"
-                >Kalender</p>
             </cc-select>
 
             <div class="tools">

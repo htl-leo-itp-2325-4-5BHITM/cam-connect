@@ -15,15 +15,17 @@ export class PropertyValueComponent extends LitElement {
     @property({type: SizeEnum})
     size?: SizeEnum = SizeEnum.MEDIUM
 
-    @property({type: Boolean})
-    isLink?: Boolean = false
+    @property()
+    clickAction: () => void
+
+    @property({type: Boolean, reflect: true}) noWrap: boolean = false
 
     render() {
         return html`
             <style>${styles}</style>
-            <p size="${this.size}" isLink="${this.isLink}">
+            <p size="${this.size}" isLink="${this.clickAction != undefined}">
                 <span class="property">${this.property}:</span>
-                <span class="value">${this.value}</span>
+                <span class="value" @click="${this.clickAction}">${this.value}</span>
             </p>`
     }
 }

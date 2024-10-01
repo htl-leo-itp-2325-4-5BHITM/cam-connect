@@ -29,13 +29,12 @@ $gap: 1rem;
   columns: 4;
 }
 
-cc-device-list-entry.selection{
-  border: 1px solid $accent;
-  cursor: pointer;
-}
-
 .content{
   position: relative;
+
+  &.list{
+    columns: 1 !important;
+  }
 }
 
 .content > *{

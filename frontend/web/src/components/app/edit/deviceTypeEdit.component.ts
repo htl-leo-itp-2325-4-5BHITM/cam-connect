@@ -33,13 +33,17 @@ export class DeviceTypeEditComponent extends LitElement {
                 <cc-toolbar type="edit"></cc-toolbar>
 
                 <main>
-                    <h1>
-                        ${model.deviceTypeNameFilterOptions.getValue().find(value => value.id == this.appState.value.editPageType)?.name}-Gerätetypen
-                    </h1>
-
+                    <div class="header">
+                        <h1>
+                            ${model.deviceTypeNameFilterOptions.getValue().find(value => value.id == this.appState.value.editPageType)?.name}-Gerätetypen
+                        </h1>
+                    </div>
+                    
                     ${Object.values(this.deviceTypesFull.value)?.flat().map(deviceType => {
                         if(deviceType.deviceType.variant == this.appState.value.editPageType){
-                            return html`<cc-device-type-edit-entry .deviceType="${deviceType}"></cc-device-type-edit-entry>`
+                            return html`<cc-device-type-edit-entry .deviceType="${deviceType}" @click="${() => {
+                                model.appState.value.openOverlay(html`<cc-edit-device-type-modal .element="${deviceType}" .isEditMode="${true}"></cc-edit-device-type-modal>`, () => {})}}">
+                            }}"></cc-device-type-edit-entry>`
                         }
                     })}
                 </main>
