@@ -52,7 +52,7 @@ export class DeviceSetEditComponent extends LitElement {
                                 status: deviceSet.status
                             } as DeviceSetCreateDTO
                             
-                            model.appState.value.openOverlay(html`<cc-edit-device-set-modal .element="${deviceSet}" .isEditMode="${true}"></cc-edit-device-set-modal>`, () => {})}}">
+                            model.appState.value.openOverlay(html`<cc-edit-device-set-modal .element="${convertedDeviceSet}" .isEditMode="${true}"></cc-edit-device-set-modal>`, () => {})}}">
                         }}"></cc-device-set-edit-entry>`
                     })}
                 </main>

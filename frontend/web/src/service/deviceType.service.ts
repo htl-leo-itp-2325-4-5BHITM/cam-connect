@@ -204,4 +204,15 @@ export default class DeviceTypeService {
                 console.error(error)
             })
     }
+
+    static getDeviceTypeById(id: number) {
+        return Api.fetchData<DeviceType>(`/devicetype/getbyid/${id}`)
+            .then(result => {
+                return result.data;
+            })
+            .catch(error => {
+                console.error(error);
+                return Promise.reject(error);
+            });
+    }
 }

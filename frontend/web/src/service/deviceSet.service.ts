@@ -31,7 +31,16 @@ export default class DeviceSetService{
     }
 
     static remove(device: DeviceSet) {
-
+        Api.putData("/deviceset/delete?id=" + device.id)
+            .then(result => {
+                if (result.ccStatus.statusCode == 1000) {
+                    DeviceSetService.fetchAll();
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                return Promise.reject(error);
+            });
     }
 
     static create(element: DeviceSetCreateDTO) {
@@ -48,6 +57,26 @@ export default class DeviceSetService{
     }
 
     static update(element: DeviceSetCreateDTO) {
+        Api.putData("/deviceset/update", element)
+            .then(result => {
+                if (result.ccStatus.statusCode == 1000) {
+                    DeviceSetService.fetchAll();
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                return Promise.reject(error);
+            });
+    }
 
+    static getDeviceSetById(id: number) {
+        return Api.fetchData<DeviceSet>("/deviceset/getbyid?id=" + id)
+            .then(result => {
+                return result.data;
+            })
+            .catch(error => {
+                console.error(error);
+                return Promise.reject(error);
+            });
     }
 }

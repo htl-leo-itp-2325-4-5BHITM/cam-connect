@@ -5,7 +5,7 @@ import DeviceTypeService, {
     AudioType,
     CameraType,
     DeviceType,
-    DeviceTypeFullDTO,
+    DeviceTypeFullDTO, DeviceTypeSource,
     DeviceTypeVariantEnum,
     DroneType,
     LensType,
@@ -35,8 +35,7 @@ export class EditDeviceSetModalComponent extends LitElement {
     @property() private element: DeviceSetCreateDTO | null;
     @property() private appState: ObservedProperty<AppState>;
     @property() private isEditMode: boolean = true;
-
-    @property() private deviceType: DeviceTypeFullDTO
+    private deviceTypes: DeviceType[] = [];
 
     startElement: DeviceSetCreateDTO | null = null;
     tags: Tag[] = [];
@@ -59,6 +58,17 @@ export class EditDeviceSetModalComponent extends LitElement {
             } as DeviceSetCreateDTO;
 
             this.startElement = this.element;
+        }
+
+        if (this.element) {
+            Promise.all(this.element.deviceTypeIds.map(id => DeviceTypeService.getDeviceTypeById(id)))
+                .then(deviceTypes => {
+                    this.deviceTypes = deviceTypes;
+                    this.requestUpdate();
+                })
+                .catch(error => {
+                    console.error("Error fetching device types:", error);
+                });
         }
     }
 
@@ -105,6 +115,7 @@ export class EditDeviceSetModalComponent extends LitElement {
     }
 
     getModalContent() {
+        console.log(this.element)
             return html`
                 <h1>Gerät-Set Erstellen</h1>
                 <div class="contentByDeviceType">
@@ -126,7 +137,38 @@ export class EditDeviceSetModalComponent extends LitElement {
                     this.updateDeviceSet(this.element);
                 })}">Gerät ist aktiv
                 </cc-toggle>
-                `;
+                
+                <div class="separator">
+                    <cc-line></cc-line>
+                </div>
+
+                <div class="deviceTypes">
+                    <cc-autocomplete placeholder="Name" class="name"
+                                     .onSelect="${(option: DeviceTypeSource) => {
+                                         if(option == null) return;
+                                         
+                                         if(this.element.deviceTypeIds.includes(option.type_id)) return;
+                                        DeviceTypeService.getDeviceTypeById(option.type_id).then(deviceType => {
+                                            this.deviceTypes.push(deviceType);
+                                            this.requestUpdate();
+                                        });
+                                        this.element.deviceTypeIds.push(option.type_id);
+                                        this.updateDeviceSet(this.element);
+                                     }}"
+                                     .querySuggestions="${DeviceTypeService.search}"
+                                     .iconProvider="${data => {DeviceTypeService.deviceTypeToIcon(data.variant)}}"
+                                     .contentProvider="${(data: DeviceTypeSource) => {return data.name}}"
+                                     allowNoSelection="true"
+                    ></cc-autocomplete>
+
+                    <div class="entries">
+                        <div class="entry">
+                            <p>${this.deviceTypes.map(deviceType => html`${deviceType.name}`)}</p>
+
+                        </div>
+                    </div>
+                </div>
+            `;
     }
 }
 

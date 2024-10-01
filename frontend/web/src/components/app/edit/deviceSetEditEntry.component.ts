@@ -74,10 +74,6 @@ export class DeviceSetEditEntryComponent extends LitElement {
         `
     }
 
-    getPropertyValue(property: string, value: any){
-        return html`${value ? html`<cc-property-value property="${property}" value="${value}" size="${SizeEnum.SMALL}"></cc-property-value>` : ''}`
-    }
-
     private removeDevice(device: DeviceSet) {
         PopupEngine.createModal({
             text: `Möchten Sie das Geräte-Set ${device.name} wirklich löschen?`,
