@@ -170,7 +170,9 @@ export class EditDeviceTypeModalComponent extends LitElement {
         this.element = this.element as DeviceTypeFullDTO;
         this.currentEditType = this.element.deviceType.variant;
         let deviceType = this.element.deviceType;
-        let tags = this.element.deviceTags;
+        this.tags = this.element.deviceTags;
+
+        console.log(this.element)
 
         return html`
             <h1>Gerätetyp ${this.isEditMode ? 'Bearbeiten' : 'Erstellen'}</h1>
@@ -195,7 +197,7 @@ export class EditDeviceTypeModalComponent extends LitElement {
                                          DeviceTypeService.toggleTag(option, (this.element as DeviceTypeFullDTO).deviceType);
                                      }
                                  }}"
-                                 .querySuggestions="${TagService.search}"}"
+                                 .querySuggestions="${TagService.search}"
                                  .contentProvider="${(data: Tag) => {
                                      return `${data.name}`
                                  }}"
@@ -208,7 +210,7 @@ export class EditDeviceTypeModalComponent extends LitElement {
                         return html`
                             <cc-chip text="${elem.name}" color="${ColorEnum.GRAY}" type="${ChipType.REMOVABLE}"
                                      @click="${() => {
-                                         this.tags.slice(tags.indexOf(elem), 1);
+                                         this.tags.slice(this.tags.indexOf(elem), 1);
                                          if (this.isEditMode) {
                                              DeviceTypeService.toggleTag(elem, (this.element as DeviceTypeFullDTO).deviceType);
                                          }

@@ -3,6 +3,7 @@ package at.camconnect.repository;
 import at.camconnect.dtos.deviceSet.DeviceSetCreateDTO;
 import at.camconnect.model.DeviceSet;
 import at.camconnect.model.DeviceType;
+import at.camconnect.model.Tag;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -25,13 +26,20 @@ public class DeviceSetRepository {
         em.persist(deviceSet);
         em.flush();
 
-        if(dto.deviceTypeIds() == null) {
-            return;
+        if(dto.deviceTypeIds() != null) {
+            for (Long deviceTypeId : dto.deviceTypeIds()) {
+                DeviceType deviceType = em.find(DeviceType.class, deviceTypeId);
+                deviceSet.getDevice_types().add(deviceType);
+            }
         }
-        for (Long deviceTypeId : dto.deviceTypeIds()) {
-            DeviceType deviceType = em.find(DeviceType.class, deviceTypeId);
-            deviceSet.getDevice_types().add(deviceType);
+
+        if(dto.tagIds() != null) {
+            for (Long tagId : dto.tagIds()) {
+                Tag tag = em.find(Tag.class, tagId);
+                deviceSet.getTags().add(tag);
+            }
         }
+
         em.merge(deviceSet);
     }
 
@@ -58,5 +66,14 @@ public class DeviceSetRepository {
     public void delete(Long id) {
         DeviceSet deviceSet = em.find(DeviceSet.class, id);
         em.remove(deviceSet);
+    }
+
+    public void toggleTag(Long id, Long tagId) {
+        DeviceSet deviceSet = em.find(DeviceSet.class, id);
+        Tag tag = em.find(Tag.class, tagId);
+
+        deviceSet.toggleTag(tag);
+
+        em.merge(deviceSet);
     }
 }

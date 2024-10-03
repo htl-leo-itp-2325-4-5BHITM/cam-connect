@@ -2,19 +2,20 @@ package at.camconnect.boundary;
 
 import at.camconnect.dtos.deviceSet.DeviceSetCreateDTO;
 import at.camconnect.model.Device;
+import at.camconnect.model.DeviceType;
 import at.camconnect.repository.DeviceSetRepository;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.util.List;
 
 @Path("deviceset")
 public class DeviceSetResource {
-    //TODO this and the repo
-
     @Inject
     DeviceSetRepository deviceSetRepository;
 
@@ -60,5 +61,20 @@ public class DeviceSetResource {
         }catch (CCException ex){
             return CCResponse.error(ex);
         }
+    }
+
+    @POST
+    @Path("getbyid/{id: [0-9]+}/tag/{tagId: [0-9]+}/toggle")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response addTag(@PathParam("id") Long id, @PathParam("tagId") Long tagId){
+        DeviceType result;
+        try{
+            deviceSetRepository.toggleTag(id, tagId);
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok();
     }
 }

@@ -123,10 +123,10 @@ public class DeviceTypeRepository {
                     .getResultStream().findFirst().orElse(0L);
 
             List<Tag> tagList = em.createQuery(
-                     "SELECT t FROM Tag t " +
-                        "JOIN FETCH t.types dt " +
-                        "WHERE dt = :deviceType", Tag.class)
-                    .setParameter("deviceType", deviceType)
+                     "SELECT t FROM DeviceType dt " +
+                        "JOIN dt.tags t " +
+                        "WHERE dt.type_id = :type_id", Tag.class)
+                    .setParameter("type_id", deviceType.getType_id())
                     .getResultList();
 
             boolean includeInList = true;
@@ -432,8 +432,8 @@ public class DeviceTypeRepository {
         DeviceType deviceType = getById(id);
         Tag tag = em.find(Tag.class, tagId);
 
-        tag.toggleType(deviceType);
+        deviceType.toggleTag(tag);
 
-        em.merge(tag);
+        em.merge(deviceType);
     }
 }

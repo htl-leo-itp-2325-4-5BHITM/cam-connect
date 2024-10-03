@@ -10,6 +10,7 @@ import {AppState} from "../../../AppState"
 import {model} from "../../../index"
 import PopupEngine from "../../../util/PopupEngine"
 import DeviceSetService, {DeviceSet, DeviceSetCreateDTO} from "../../../service/deviceSet.service"
+import {ChipType} from "../../basic/chip.component"
 
 @customElement('cc-device-set-edit-entry')
 export class DeviceSetEditEntryComponent extends LitElement {
@@ -31,7 +32,11 @@ export class DeviceSetEditEntryComponent extends LitElement {
             <!-- todo für yanik <cc-line type="${Orientation.VERTICAL}"></cc-line>-->
 
             <div class="tags">
-                
+                ${
+                    this.deviceSet.tags?.map(tag => {
+                        return html`<cc-chip type="${ChipType.DEFAULT}" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}" text="${tag.name}"></cc-chip>`
+                    })
+                }
             </div>
 
             <div class="deviceSetInfo">
@@ -49,12 +54,13 @@ export class DeviceSetEditEntryComponent extends LitElement {
                         name: this.deviceSet.name,
                         description: this.deviceSet.description,
                         deviceTypeIds: this.deviceSet.device_types.map(deviceType => deviceType.type_id) || [],
-                        status: this.deviceSet.status
+                        status: this.deviceSet.status,
+                        tags: this.deviceSet.tags
                     } as DeviceSetCreateDTO
                     
                     
                     //UrlHandler.updateUrl('/app/edit/device?did=' + this.device.device_id)
-                    model.appState.value.openOverlay(html`<cc-edit-device-set-modal .element="${convertedDeviceSet}" .isEditMode="${true}"></cc-edit-device-set-modal>`, () => {})
+                    model.appState.value.openOverlay(html`<cc-edit-device-set-modal .element="${convertedDeviceSet}" .isEditMode="${true}" .elementId="${this.deviceSet.id}"></cc-edit-device-set-modal>`, () => {})
                     event.stopPropagation()
                 }}">
                     <div slot="left" class="icon accent">

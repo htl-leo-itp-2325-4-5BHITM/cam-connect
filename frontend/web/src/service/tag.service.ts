@@ -30,7 +30,7 @@ export default class TagService {
             console.log(result)
 
             return result.data.filter(tag =>
-                !excluded.some(excludedTag => excludedTag.tag_id === tag.id)
+                !excluded?.some(excludedTag => excludedTag.tag_id === tag.id)
             );
         } catch (e) {
             console.error(e)

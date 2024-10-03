@@ -15,6 +15,7 @@ import DeviceTypeService from "../../service/deviceType.service"
 import {RentStatus} from "../basic/rentStatus.component"
 import UrlHandler from "../../util/UrlHandler";
 import DeviceService from "../../service/device.service"
+import DeviceSetService from "../../service/deviceSet.service"
 
 @customElement('cc-toolbar')
 export class ToolbarComponent extends LitElement {
@@ -142,11 +143,15 @@ export class ToolbarComponent extends LitElement {
     }
 
     renderEditBar(){
-        let isButtonDisabled = {
-            uncheckAll: this.appState.value.selectedDeviceTypeEditEntries.size == 0 &&
-                this.appState.value.selectedDeviceEditEntries.size == 0,
-            remove: this.appState.value.selectedDeviceEditEntries.size == 0 &&
-                this.appState.value.selectedDeviceTypeEditEntries.size == 0,
+        let isButtonDisabled = this.appState.value.selectedDeviceTypeEditEntries.size == 0 &&
+            this.appState.value.selectedDeviceEditEntries.size == 0 &&
+            this.appState.value.selectedDeviceSetEditEntries.size == 0
+
+        let type : "editDevice" | "editDeviceType" | "editDeviceSet"
+            = UrlHandler.getUrl().includes("children") ? "editDevice" : "editDeviceType"
+
+        if(UrlHandler.getParam("type") == "set"){
+            type = "editDeviceSet"
         }
 
         return html`
@@ -169,7 +174,7 @@ export class ToolbarComponent extends LitElement {
                         this.uncheckAll("edit")
                     }} size="${SizeEnum.SMALL}"
                                color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}"
-                               .disabled="${isButtonDisabled.uncheckAll}">
+                               .disabled="${isButtonDisabled}">
                         <div slot="left" class="icon accent">
                             <img slot="left" src="../../../assets/icon/custom/select_circle.svg" alt="+">
                         </div>
@@ -177,9 +182,9 @@ export class ToolbarComponent extends LitElement {
                     </cc-button>
 
                     <cc-button @click="${() => {
-                        this.removeSelection(UrlHandler.getUrl().includes("children") ? "editDevice" : "editDeviceType")
+                        this.removeSelection(type)
                     }}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}"
-                               .disabled="${isButtonDisabled.remove}">
+                               .disabled="${isButtonDisabled}">
                         <div slot="left" class="icon accent">
                             ${unsafeSVG(icon(faTrash).html[0])}
                         </div>
@@ -214,6 +219,7 @@ export class ToolbarComponent extends LitElement {
         } else if(type === "edit"){
             this.appState.value.clearSelectedDeviceEditEntries()
             this.appState.value.clearSelectedDeviceTypeEditEntries()
+            this.appState.value.clearSelectedDeviceSetEditEntries()
         }
     }
 
@@ -221,11 +227,12 @@ export class ToolbarComponent extends LitElement {
         model.appState.value.openCreateRentModalWithDevices(this.appState.value.selectedDeviceEntries)
     }
 
-    removeSelection(type : "rent" | "editDevice" | "editDeviceType" = "rent") {
+    removeSelection(type : "rent" | "editDevice" | "editDeviceType" | "editDeviceSet" = "rent") {
         PopupEngine.createModal({
             text: `${type === "rent" ? "Willst du wirklich diese Verleihe löschen?" 
                 : type === "editDevice" ? "Willst du wirklich diese Geräte löschen?"
-                : "Willst du wirklich diese Gerätetypen löschen?"}`,
+                : type === "editDeviceType" ? "Willst du wirklich diese Gerätetypen löschen?"
+                : "Willst du wirklich diese Geräte-Sets löschen?"}`,
             buttons: [
                 {
                     text: "Ja",
@@ -246,6 +253,12 @@ export class ToolbarComponent extends LitElement {
                             case "editDeviceType":
                                 this.appState.value.selectedDeviceTypeEditEntries.forEach((entry) => {
                                     DeviceTypeService.remove(entry.deviceType.deviceType)
+                                })
+                                this.uncheckAll("edit")
+                                break;
+                            case "editDeviceSet":
+                                this.appState.value.selectedDeviceSetEditEntries.forEach((entry) => {
+                                    DeviceSetService.remove(entry.deviceSet)
                                 })
                                 this.uncheckAll("edit")
                                 break;

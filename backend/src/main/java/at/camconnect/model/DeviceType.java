@@ -33,6 +33,9 @@ public abstract class DeviceType{
 
     private String image_blob;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Tag> tags;
+
     private final LocalDateTime creation_date;
     private LocalDateTime change_date;
 
@@ -91,6 +94,18 @@ public abstract class DeviceType{
     public abstract List<DeviceTypeAttribute> getAttributes();
 
     //getter setter
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void toggleTag(Tag tag) {
+        if (tags.contains(tag)) {
+            tags.remove(tag);
+        } else {
+            tags.add(tag);
+        }
+    }
+
 
     public DeviceTypeStatusEnum getStatus() {
         return status;

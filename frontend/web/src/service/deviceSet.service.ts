@@ -2,12 +2,14 @@ import {DeviceStatus} from "./device.service"
 import {Api} from "../util/Api"
 import {model} from "../index"
 import {DeviceType} from "./deviceType.service"
+import {Tag} from "./tag.service"
 
 export interface DeviceSetCreateDTO{
     id: number,
     name: string,
     description: string,
     deviceTypeIds: number[],
+    tags: Tag[],
     status: DeviceStatus
 }
 
@@ -16,6 +18,7 @@ export interface DeviceSet {
     name: string,
     description: string,
     device_types: DeviceType[],
+    tags: Tag[],
     status: DeviceStatus
 }
 
@@ -69,14 +72,13 @@ export default class DeviceSetService{
             });
     }
 
-    static getDeviceSetById(id: number) {
-        return Api.getData<DeviceSet>("/deviceset/getbyid?id=" + id)
-            .then(result => {
-                return result.data;
+    static toggleTag(tag: Tag, deviceSetId: number) {
+        Api.postData(`/deviceset/getbyid/${deviceSetId}/tag/${tag.tag_id}/toggle`, tag)
+            .then(() => {
+                DeviceSetService.fetchAll()
             })
             .catch(error => {
-                console.error(error);
-                return Promise.reject(error);
-            });
+                console.error(error)
+            })
     }
 }

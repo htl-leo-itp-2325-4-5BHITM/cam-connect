@@ -24,6 +24,9 @@ public class DeviceSet {
     @Enumerated(EnumType.STRING)
     private DeviceStatus status;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Tag> tags;
+
     private String image_blob;
 
     private LocalDateTime creation_date;
@@ -39,6 +42,17 @@ public class DeviceSet {
     }
 
     //region Getter and Setter
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void toggleTag(Tag tag) {
+        if (tags.contains(tag)) {
+            tags.remove(tag);
+        } else {
+            tags.add(tag);
+        }
+    }
 
     public String getDescription() {
         return description;

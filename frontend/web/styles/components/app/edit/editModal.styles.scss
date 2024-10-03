@@ -92,6 +92,10 @@ div.entries{
     border-bottom: 1px solid $gray500;
     padding: .5rem;
 
+    icon-cta svg{
+      width: 1rem;
+    }
+
     icon-cta svg *{
       fill: $gray700;
     }
