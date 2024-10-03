@@ -25,7 +25,7 @@ import {ChipType} from "../../basic/chip.component";
 import DeviceService, {Device, DeviceStatus} from "../../../service/device.service";
 import {unsafeSVG} from "lit/directives/unsafe-svg.js";
 import {icon} from "@fortawesome/fontawesome-svg-core";
-import {faTag} from "@fortawesome/free-solid-svg-icons";
+import {faTag, faTrash} from "@fortawesome/free-solid-svg-icons";
 import PopupEngine from "../../../util/PopupEngine"
 import UrlHandler from "../../../util/UrlHandler"
 import DeviceSetService, {DeviceSetCreateDTO, DeviceSet} from "../../../service/deviceSet.service"
@@ -127,7 +127,7 @@ export class EditDeviceSetModalComponent extends LitElement {
                                       .onInput="${text => {
                         this.element.description = text;
                         this.updateDeviceSet(this.element);
-                    }}" maxLength="30"></cc-input>
+                    }}"></cc-input>
                 </div>
                 <div class="separator">
                     <cc-line></cc-line>
@@ -162,10 +162,17 @@ export class EditDeviceSetModalComponent extends LitElement {
                     ></cc-autocomplete>
 
                     <div class="entries">
-                        <div class="entry">
-                            <p>${this.deviceTypes.map(deviceType => html`${deviceType.name}`)}</p>
-
-                        </div>
+                        ${this.deviceTypes.map(deviceType => html`
+                            <div>
+                                <p>${deviceType.name}</p>
+                                <icon-cta @click="${() => {
+                                        this.deviceTypes = this.deviceTypes.filter(dt => dt.type_id !== deviceType.type_id);
+                                        this.element.deviceTypeIds = this.element.deviceTypeIds.filter(id => id !== deviceType.type_id);
+                                        this.updateDeviceSet(this.element);
+                                }}">
+                                    ${unsafeSVG(icon(faTrash).html[0])}</icon-cta>
+                            </div>`
+                        )}
                     </div>
                 </div>
             `;

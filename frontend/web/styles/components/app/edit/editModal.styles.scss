@@ -81,3 +81,19 @@ div.selectType{
     }
   }
 }
+
+div.entries{
+  display: flex;
+  flex-direction: column;
+
+  div{
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid $gray500;
+    padding: .5rem;
+
+    icon-cta svg *{
+      fill: $gray700;
+    }
+  }
+}
