@@ -44,4 +44,14 @@ export default class UserService {
                 return response.data
             })
     }
+
+    static loadFromLDAP(){
+        return Api.putData("/user/loadfromldap")
+            .then(response => {
+                console.log(response)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
 }

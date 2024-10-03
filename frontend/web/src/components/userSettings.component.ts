@@ -2,7 +2,7 @@ import {LitElement, html} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../styles/components/userSettings.styles.scss'
 import PopupEngine from "../util/PopupEngine"
-import {config, SimpleColorEnum, SizeEnum} from "../base"
+import {ColorEnum, config, SimpleColorEnum, SizeEnum} from "../base"
 import Util from "../util/Util"
 import {ButtonType} from "./basic/button.component"
 import {model} from "../index"
@@ -10,6 +10,7 @@ import {Api} from "../util/Api"
 import {ObservedProperty} from "../model"
 import {AppState} from "../AppState"
 import AuthService from "../service/auth.service"
+import UserService from "../service/user.service"
 
 @customElement('cc-user-settings')
 export class UserSettingsComponent extends LitElement {
@@ -26,12 +27,8 @@ export class UserSettingsComponent extends LitElement {
             <cc-navbar type="back"></cc-navbar>
             
             <main>
-                <h1>Hallo ${this.appState.value.currentUser?.firstname}</h1>
-                
-                <cc-button @click="${AuthService.logOut}">Ausloggen</cc-button>
-                
                 <section>
-                    <h1>Notifications</h1>
+                    <h1>Beneachrichtigungen</h1>
                     <cc-toggle>Send emails</cc-toggle>
                     <cc-toggle>Show push notifications</cc-toggle>
                 </section>
@@ -66,21 +63,34 @@ export class UserSettingsComponent extends LitElement {
                 </section>
                 
                 <section>
-                    <h1>Data</h1>
+                    <h1>Verwalten</h1>
                     <div class="line">
                         <p>Alle Verleiheinträge exportieren</p>
                         <a href="${config.api_url}/rent/getcsv" download>
                             <cc-button type="${ButtonType.OUTLINED}">Exportieren</cc-button>
                         </a>
-                        
+                    </div>
+                    
+                    <div class="line">
+                        <p>Alle Gerätetypen exportieren</p>
                         <a href="${config.api_url}/devicetype/getcsv" download>
-                            alle gerätetypen exportieren
+                            <cc-button type="${ButtonType.OUTLINED}">Exportieren</cc-button>
                         </a>
                     </div>
                     
-                    <div class="inputField">
-                        <label for="importRents">Import rents:</label>
+                    <div class="inputField line">
+                        <label for="importRents">Import rents</label>
                         <input id="importRents" type="file" @change="${(event) => {this.importDataFromCsv(event)}}" accept=".csv"/>
+                    </div>
+                    
+                    <div class="line">
+                        <p>Nutzer vom LDAP Server synchronisieren</p>
+                        <cc-button type="${ButtonType.OUTLINED}" color="${ColorEnum.ACCENT}" @click="${UserService.loadFromLDAP}">Laden</cc-button>
+                    </div>
+                    
+                    <div class="line">
+                        <p>Einen anderen Account verwenden</p>
+                        <cc-button type="${ButtonType.OUTLINED}" color="${ColorEnum.ACCENT}" @click="${AuthService.logOut}">Ausloggen</cc-button>
                     </div>
                 </section>
             </main>

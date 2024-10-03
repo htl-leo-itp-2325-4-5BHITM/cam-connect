@@ -21,7 +21,7 @@ export interface DeviceSet {
 
 export default class DeviceSetService{
     static fetchAll(){
-        Api.fetchData<DeviceSet[]>("/deviceset/getall")
+        Api.getData<DeviceSet[]>("/deviceset/getall")
             .then(result => {
                 model.loadDeviceSets(result.data)
             })
@@ -70,7 +70,7 @@ export default class DeviceSetService{
     }
 
     static getDeviceSetById(id: number) {
-        return Api.fetchData<DeviceSet>("/deviceset/getbyid?id=" + id)
+        return Api.getData<DeviceSet>("/deviceset/getbyid?id=" + id)
             .then(result => {
                 return result.data;
             })

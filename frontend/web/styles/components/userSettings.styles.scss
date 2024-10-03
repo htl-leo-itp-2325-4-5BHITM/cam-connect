@@ -11,7 +11,7 @@
 main{
   width: 40%;
   margin-inline: auto;
-  padding-block: 8rem;
+  padding-block: 4rem;
 }
 
 h1{
@@ -24,10 +24,16 @@ h1{
 .line{
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 cc-toggle, .inputField, .line{
   margin-block: .25rem;
   padding-block: .25rem;
   border-bottom: 1px solid $gray200;
+}
+
+div.buttons{
+  display: flex;
+  gap: 1rem;
 }

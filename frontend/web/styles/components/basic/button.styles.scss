@@ -3,7 +3,6 @@
 :host{
   all: initial;
   height: fit-content;
-  min-width: 10ch;
   width: fit-content;
   -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;
 }
@@ -16,6 +15,7 @@ button{
   cursor: pointer;
   transition: background-color $transitionTimeShort, color $transitionTimeShort, border ease $transitionTimeShort, box-shadow $transitionTimeShort;
   white-space: nowrap;
+  min-width: 10ch;
 
   -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;
 

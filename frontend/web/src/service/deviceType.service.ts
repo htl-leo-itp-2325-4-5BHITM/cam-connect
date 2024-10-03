@@ -206,7 +206,7 @@ export default class DeviceTypeService {
     }
 
     static getDeviceTypeById(id: number) {
-        return Api.fetchData<DeviceType>(`/devicetype/getbyid/${id}`)
+        return Api.getData<DeviceType>(`/devicetype/getbyid/${id}`)
             .then(result => {
                 return result.data;
             })

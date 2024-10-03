@@ -1,27 +1,54 @@
 package at.camconnect.boundary;
 
 import at.camconnect.dtos.AutocompleteNumberOptionDTO;
+import at.camconnect.dtos.KeycloakUser;
 import at.camconnect.model.User;
 import at.camconnect.repository.UserRepository;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
+import at.camconnect.services.UserSyncService;
 import io.quarkus.security.Authenticated;
 import io.quarkus.security.identity.SecurityIdentity;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Path("user")
 public class UserResource {
     @Inject
     UserRepository userRepository;
+
+    @Inject
+    UserSyncService userSyncService;
+
+    AtomicBoolean isRunning = new AtomicBoolean(false);
+
+    @PUT
+    @Path("loadfromldap")
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
+    public Response loadFromLDAP(){
+        if (isRunning.compareAndSet(false, true)) {
+            List<KeycloakUser> users;
+            try{
+                users = userSyncService.syncUsersWithLDAP();
+            }catch (CCException ex){
+                return CCResponse.error(ex);
+            }
+
+            isRunning.set(false);
+
+            return CCResponse.ok(users);
+        } else {
+            return CCResponse.error(new CCException(1201, "users are already being loaded"));
+        }
+    }
 
     @GET
     @Path("/getbyid/{id}")
