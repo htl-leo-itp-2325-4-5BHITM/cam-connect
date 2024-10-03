@@ -14,12 +14,8 @@ public class User {
     private String username;
     private String school_class;
 
-    @Enumerated(EnumType.STRING)
-    private UserRoleEnum role;
-
-    public User(String user_id, UserRoleEnum role, String firstname, String lastname, String email, String username, String school_class) {
+    public User(String user_id, String firstname, String lastname, String email, String username, String school_class) {
         this.user_id = user_id;
-        this.role = role;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
@@ -67,14 +63,6 @@ public class User {
 
     public void setUsername(String userId) {
         this.username = userId;
-    }
-
-    public UserRoleEnum getRole() {
-        return role;
-    }
-
-    public void setRole(UserRoleEnum role) {
-        this.role = role;
     }
 
     public String getSchool_class() {

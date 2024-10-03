@@ -119,9 +119,6 @@ export class NavbarComponent extends LitElement {
             KeyBoardShortCut.register(model.appState.value.userSettings.keybinds.rentPage, () => {
                 this.selectNavItem(1)
             })
-            KeyBoardShortCut.register(model.appState.value.userSettings.keybinds.calendarPage, () => {
-                this.selectNavItem(2)
-            })
             KeyBoardShortCut.register(model.appState.value.userSettings.keybinds.search, () => {
                 this.openSearch()
             })

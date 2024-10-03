@@ -30,13 +30,14 @@ export class KeyBoardShortCut {
         window.addEventListener("keydown", (event: KeyboardEvent) => {
             //check if an input is currently in focus
             let focusOnInput = false
-            let focusedElem = Util.deepEventFocusedElement()
+            let focusedElem = event.composedPath()[0]
             if(focusedElem instanceof HTMLInputElement) focusOnInput = true
 
             this.pressedKeys.add(event.key.toLowerCase()) //add the pressed key to set
             this.shortCuts.forEach(shortCut => { //check for every shortcut if all keys are currently pressed
-                if(focusOnInput && shortCut.worksInInput == false) return
-                //if more or less option keys are pressed then required dont execute the action
+                if(focusOnInput == true && shortCut.worksInInput == false) return
+
+                //if more or less option keys are pressed then required - dont execute the action
                 if(shortCut.keys.length != this.pressedKeys.size) return
                 if(shortCut.keys.every(key => this.pressedKeys.has(key.toLowerCase()))){
                     event.preventDefault()

@@ -1,6 +1,7 @@
 package at.camconnect.boundary;
 
 import at.camconnect.dtos.LoginRequest;
+import at.camconnect.enums.UserRoleEnum;
 import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.responseSystem.CCStatus;
 import at.camconnect.services.AuthService;
@@ -9,6 +10,8 @@ import io.quarkus.security.Authenticated;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.jwt.JsonWebToken;
@@ -18,6 +21,7 @@ import org.jose4j.json.internal.json_simple.parser.JSONParser;
 import java.io.Serializable;
 import java.time.*;
 import java.util.Base64;
+import java.util.List;
 
 @Path("/auth")
 public class AuthResource {
@@ -80,5 +84,26 @@ public class AuthResource {
             return Response.ok().build();
         }
         return Response.status(Response.Status.UNAUTHORIZED).build();
+    }
+
+    @GET
+    @Path("/role")
+    @Authenticated
+    public Response getUserRole() {
+        UserRoleEnum role = UserRoleEnum.STUDENT;
+
+        if(securityIdentity.hasRole("camconnect-admin"))
+            role = UserRoleEnum.ADMIN;
+
+        if(securityIdentity.hasRole("medt-teacher")){
+            role = UserRoleEnum.MEDT_TEACHER;
+        }
+
+        //TODO THIS DOES NOR WORK YET - i dont know how to check for a teacher other then their email
+        if(securityIdentity.hasRole("teacher")){
+            role = UserRoleEnum.TEACHER;
+        }
+
+        return CCResponse.ok(role);
     }
 }

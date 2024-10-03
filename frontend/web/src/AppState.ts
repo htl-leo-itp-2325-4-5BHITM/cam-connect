@@ -13,11 +13,12 @@ import {BehaviorSubject} from "rxjs"
 import {KeyBoardShortCut} from "./util/KeyboardShortcut"
 import {DeviceTypeEditEntryComponent} from "./components/app/edit/deviceTypeEditEntry.component"
 import {DeviceEditEntryComponent} from "./components/app/edit/deviceEditEntry"
-import UserService, {Student, User} from "./service/user.service"
+import UserService, {Student, User, UserRoleEnum} from "./service/user.service"
 import Util from "./util/Util"
 import {SidebarComponent} from "./components/navigation/sidebar.component"
 import {EditType} from "./components/app/edit/edit.component"
 import {DeviceSetEditEntryComponent} from "./components/app/edit/deviceSetEditEntry.component"
+import AuthService from "./service/auth.service"
 
 interface ActionCancellation {
     identifier: string,
@@ -39,7 +40,6 @@ interface UserSettings {
         newRentAddDevice: string[] | string[][]
         equipmentPage: string[] | string[][]
         rentPage: string[] | string[][]
-        calendarPage: string[] | string[][]
         search: string[] | string[][]
     }
 }
@@ -95,7 +95,6 @@ export class AppState{
         keybinds: {
             equipmentPage: [["shift", "e"], ["1"]],
             rentPage: [["shift", "v"], ["2"]],
-            calendarPage: [["shift", "c"], ["3"]],
             newRent: [["shift", "n"], ["<"]],
             newRentAddDevice: ["shift", "g"],
             search: ["shift", "s"]
@@ -487,9 +486,20 @@ export class AppState{
 
         this._access_token = value
         localStorage["cc-access_token"] = value
-        UserService.getById(Util.parseJwt(value).sub).then(user => {
+        UserService.getById(Util.parseJwt(value).sub).then(async user => {
+            user.role = await AuthService.getRole()
+
+            if (UrlHandler.getParam("simulateTeacher") == "true") {
+                if (user.role == UserRoleEnum.ADMIN) {
+                    user.role = UserRoleEnum.MEDT_TEACHER
+                }
+            }
+
             this.currentUser = user
+
+            console.log(user)
         })
+
         this.update()
     }
 

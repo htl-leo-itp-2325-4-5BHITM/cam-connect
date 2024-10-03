@@ -57,6 +57,11 @@ export default class Util{
         }
     }*/
 
+    /**
+     * should not be used in favour of event.composedPath()
+     * @deprecated
+     * @param startpoint
+     */
     static deepEventFocusedElement(startpoint: HTMLElement = document.querySelector("cc-dashboard") as HTMLElement): HTMLElement{
         let focusedElem:HTMLElement = startpoint
         while (focusedElem != undefined) {

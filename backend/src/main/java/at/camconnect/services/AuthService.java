@@ -1,6 +1,7 @@
 package at.camconnect.services;
 
 import at.camconnect.dtos.KeycloakUser;
+import at.camconnect.enums.UserRoleEnum;
 import at.camconnect.model.User;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
