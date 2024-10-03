@@ -25,7 +25,7 @@ import {ChipType} from "../../basic/chip.component";
 import DeviceService, {Device, DeviceStatus} from "../../../service/device.service";
 import {unsafeSVG} from "lit/directives/unsafe-svg.js";
 import {icon} from "@fortawesome/fontawesome-svg-core";
-import {faTag} from "@fortawesome/free-solid-svg-icons";
+import {faTag, faTrash, faXmark} from "@fortawesome/free-solid-svg-icons";
 import PopupEngine from "../../../util/PopupEngine"
 import UrlHandler from "../../../util/UrlHandler"
 import DeviceSetService, {DeviceSetCreateDTO, DeviceSet} from "../../../service/deviceSet.service"
@@ -33,6 +33,7 @@ import DeviceSetService, {DeviceSetCreateDTO, DeviceSet} from "../../../service/
 @customElement('cc-edit-device-set-modal')
 export class EditDeviceSetModalComponent extends LitElement {
     @property() private element: DeviceSetCreateDTO | null;
+    @property() private elementId: number | null = null;
     @property() private appState: ObservedProperty<AppState>;
     @property() private isEditMode: boolean = true;
     private deviceTypes: DeviceType[] = [];
@@ -115,6 +116,7 @@ export class EditDeviceSetModalComponent extends LitElement {
     }
 
     getModalContent() {
+        this.tags = this.element.tags;
         console.log(this.element)
             return html`
                 <h1>Gerät-Set Erstellen</h1>
@@ -127,7 +129,7 @@ export class EditDeviceSetModalComponent extends LitElement {
                                       .onInput="${text => {
                         this.element.description = text;
                         this.updateDeviceSet(this.element);
-                    }}" maxLength="30"></cc-input>
+                    }}"></cc-input>
                 </div>
                 <div class="separator">
                     <cc-line></cc-line>
@@ -162,10 +164,56 @@ export class EditDeviceSetModalComponent extends LitElement {
                     ></cc-autocomplete>
 
                     <div class="entries">
-                        <div class="entry">
-                            <p>${this.deviceTypes.map(deviceType => html`${deviceType.name}`)}</p>
-
-                        </div>
+                        ${this.deviceTypes.map(deviceType => html`
+                            <div>
+                                <p>${deviceType.name}</p>
+                                <icon-cta @click="${() => {
+                                        this.deviceTypes = this.deviceTypes.filter(dt => dt.type_id !== deviceType.type_id);
+                                        this.element.deviceTypeIds = this.element.deviceTypeIds.filter(id => id !== deviceType.type_id);
+                                        this.updateDeviceSet(this.element);
+                                }}">
+                                    ${unsafeSVG(icon(faXmark).html[0])}</icon-cta>
+                            </div>`
+                        )}
+                    </div>
+                </div>
+                
+                <div class="separator">
+                    <cc-line></cc-line>
+                </div>
+                
+                <div class="tags">  
+                <cc-autocomplete label="Tags" class="tagSelector" color="${ColorEnum.GRAY}"
+                     size="${SizeEnum.MEDIUM}"
+                     .onSelect="${(option: Tag) => {
+                            this.tags.push(option);
+                            if (this.isEditMode) {
+                                DeviceSetService.toggleTag(option, this.elementId)
+                            } else {
+                                this.element.tags.push(option);
+                            }
+                        }}"
+                            .querySuggestions="${TagService.search}"
+                            .contentProvider="${(data: Tag) => {
+                            return `${data.name}`
+                        }}"
+                             .iconProvider="${() => {
+                            return html`${unsafeSVG(icon(faTag).html[0])}`
+                        }}">
+                            </cc-autocomplete>
+                            <div>
+                                ${this.tags.map(elem => {
+                                    return html`
+                                        <cc-chip text="${elem.name}" color="${ColorEnum.GRAY}" type="${ChipType.REMOVABLE}"
+                                                 @click="${() => {
+                                this.tags.slice(this.tags.indexOf(elem), 1);
+                                if (this.isEditMode) {
+                                    DeviceSetService.toggleTag(elem, this.elementId)
+                                } else{
+                                    this.element.tags.slice(this.element.tags.indexOf(elem), 1);
+                                }
+                            }}"></cc-chip>`;
+                        })}
                     </div>
                 </div>
             `;

@@ -49,10 +49,11 @@ export class DeviceSetEditComponent extends LitElement {
                                 name: deviceSet.name,
                                 description: deviceSet.description,
                                 deviceTypeIds: deviceSet.device_types.map(deviceType => deviceType.type_id) || [],
-                                status: deviceSet.status
+                                status: deviceSet.status,
+                                tags: deviceSet.tags
                             } as DeviceSetCreateDTO
                             
-                            model.appState.value.openOverlay(html`<cc-edit-device-set-modal .element="${convertedDeviceSet}" .isEditMode="${true}"></cc-edit-device-set-modal>`, () => {})}}">
+                            model.appState.value.openOverlay(html`<cc-edit-device-set-modal .element="${convertedDeviceSet}" .isEditMode="${true}" .elementId="${deviceSet.id}"></cc-edit-device-set-modal>`, () => {})}}">
                         }}"></cc-device-set-edit-entry>`
                     })}
                 </main>
