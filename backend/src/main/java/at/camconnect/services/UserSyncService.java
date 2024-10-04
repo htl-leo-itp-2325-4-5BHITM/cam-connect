@@ -79,7 +79,6 @@ public class UserSyncService {
         try{
             em.persist(new User(
                     user.id(),
-                    user.getUserRole(),
                     user.firstName(),
                     user.lastName(),
                     user.email(),

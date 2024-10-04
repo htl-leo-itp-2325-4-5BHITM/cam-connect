@@ -1,20 +1,28 @@
-import {html, LitElement, PropertyValues} from 'lit'
+import {html, LitElement} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/app/deviceListEntry.styles.scss'
 import {ButtonType} from "../basic/button.component"
 import {ColorEnum} from "../../base"
 import {DeviceListComponent} from "./deviceList.component";
 import DeviceTypeService, {
-    MicrophoneType,
+    AudioType,
     CameraType,
     DeviceTypeFullDTO,
+    DeviceTypeSource,
     DeviceTypeVariantEnum,
-    DroneType, LensType, LightType, StabilizerType, TripodType, SimpleType, AudioType, DeviceTypeSource
+    DroneType,
+    LensType,
+    LightType,
+    MicrophoneType,
+    SimpleType,
+    StabilizerType,
+    TripodType
 } from "../../service/deviceType.service"
 import {ObservedProperty} from "../../model"
 import {AppState} from "../../AppState"
 import {model} from "../../index"
 import Util from "../../util/Util"
+import {UserRoleEnum} from "../../service/user.service"
 
 @customElement('cc-device-list-entry')
 export class DeviceListEntryComponent extends LitElement {
@@ -104,12 +112,24 @@ export class DeviceListEntryComponent extends LitElement {
                                model.appState.value.openCreateRentModalWithDevices(this.appState.value.selectedDeviceEntries, "type")
                             }}"
                 >Verleihen</cc-button>
+                ${model.appState.value.currentUser.role == UserRoleEnum.MEDT_TEACHER ?
+                    html`
+                        <cc-button type="${ButtonType.OUTLINED}" .disabled="${this.deviceTypeFull.available == 0}"
+                                   @click="${() => model.appState.value.openCreateRentModal(this.deviceTypeFull.deviceType.type_id, "deviceType")}"
+                        >Verleihen</cc-button>
+                    ` : ""
+                }
             </div>
-            <cc-circle-select 
-                .checked="${this.appState.value.selectedDeviceEntries.has(this)}"
-                .disabled="${this.deviceTypeFull.available == 0}"
-                @click="${() => { if(this.deviceTypeFull.available > 0) this.toggleDeviceCheck() }}"
-            ></cc-circle-select>
+            
+            ${model.appState.value.currentUser.role == UserRoleEnum.MEDT_TEACHER ?
+                html`
+                    <cc-circle-select 
+                        .checked="${this.appState.value.selectedDeviceEntries.has(this)}"
+                        .disabled="${this.deviceTypeFull.available == 0}"
+                        @click="${() => { if(this.deviceTypeFull.available > 0) this.toggleDeviceCheck() }}"
+                    ></cc-circle-select>
+                ` : ""
+            }
         `
     }
 

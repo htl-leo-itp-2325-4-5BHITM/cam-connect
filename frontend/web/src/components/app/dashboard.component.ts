@@ -1,4 +1,4 @@
-import {LitElement, html, PropertyValues} from 'lit'
+import {html, LitElement, PropertyValues} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/app/dashboard.styles.scss'
 import {model} from "../../index"
@@ -10,6 +10,7 @@ import {BehaviorSubject} from "rxjs"
 import {FilterOption} from "../basic/filterContainer.component"
 import {OrderByFilterRent, RentStatusEnum} from "../../service/rent.service"
 import {KeyBoardShortCut} from "../../util/KeyboardShortcut"
+import {UserRoleEnum} from "../../service/user.service"
 
 @customElement('cc-dashboard')
 export class DashboardComponent extends LitElement {
@@ -166,16 +167,16 @@ export class DashboardComponent extends LitElement {
             <style>${styles}</style>
             <cc-navbar></cc-navbar>
             ${sidebar}
-            <div class="toolbar-container">
-                <cc-toolbar></cc-toolbar>
-                <cc-create-rent></cc-create-rent>
-                ${page}
-            </div>
             
-            <div id="tooltip"></div>
-            <div id="autocompleteSuggestions"></div>
-            <div id="overlay" @click="${this.autoCloseOverlay}">
-                <div class="content"></div>
+            <div class="toolbar-container">
+                ${ model.appState.value.currentUser?.role == UserRoleEnum.MEDT_TEACHER ?
+                    html`
+                            <cc-toolbar></cc-toolbar>
+                            <cc-create-rent></cc-create-rent>
+                    ` : ""
+                }
+                
+                ${page}
             </div>
         `
     }

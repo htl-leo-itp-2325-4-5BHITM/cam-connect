@@ -85,7 +85,7 @@ export class UserSettingsComponent extends LitElement {
                     
                     <div class="line">
                         <p>Nutzer vom LDAP Server synchronisieren</p>
-                        <cc-button type="${ButtonType.OUTLINED}" color="${ColorEnum.ACCENT}" @click="${UserService.loadFromLDAP}">Laden</cc-button>
+                        <cc-button type="${ButtonType.OUTLINED}" color="${ColorEnum.ACCENT}" @click="${this.loadUsersFromLDAP}">Laden</cc-button>
                     </div>
                     
                     <div class="line">
@@ -95,6 +95,28 @@ export class UserSettingsComponent extends LitElement {
                 </section>
             </main>
         `
+    }
+
+    loadUsersFromLDAP(){
+        PopupEngine.createModal({
+            heading: "Alle Nutzer neu laden?",
+            text: "Falls sich die Schüler oder Lehrer der Medientechnik verändert haben werden sie hierdurch vom Schul-LDAP neu geladen und können in neuen Verleihen verwendet werden. Dieser Vorgang löscht keine existierenden Verleihe und hat keinen Einfluss auf login-daten.",
+            buttons: [
+                {text: "Abbrechen", role: "cancel"},
+                {text: "Laden", role: "confirm", action: () => {
+                        PopupEngine.createNotification({text: `Nutzer werden geladen, dieser Vorgang kann einige Minuten dauern...`, lifetime: 10000})
+
+                        UserService.loadFromLDAP()
+                            .then(() => {
+                                PopupEngine.createNotification({text: `Nutzer wurden erfolgreich geladen`, CSSClass: "good"})
+                            })
+                            .catch(e => {
+                                PopupEngine.createNotification({text: `Nutzer konnten nicht geladen werden ${e}`, CSSClass: "bad"})
+                            })
+                    }
+                }
+            ]
+        })
     }
 
     updateSetting(name:string, elem:HTMLElement, getValue: (prop) => any){

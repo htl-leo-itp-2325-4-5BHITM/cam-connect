@@ -11,6 +11,7 @@ import UrlHandler from "../../util/UrlHandler"
 import {DeviceTypeVariantEnum} from "../../service/deviceType.service"
 import {Tooltip} from "../../util/Tooltip"
 import {EditComponent} from "../app/edit/edit.component"
+import {UserRoleEnum} from "../../service/user.service"
 
 @customElement('cc-sidebar')
 export class SidebarComponent extends LitElement {
@@ -36,22 +37,26 @@ export class SidebarComponent extends LitElement {
         if(this.type == "default") {
             return html`
                 <style>${styles}</style>
-                <div class="buttons">
+                ${ model.appState.value.currentUser?.role == UserRoleEnum.MEDT_TEACHER ? html`
+                    <div class="buttons">
                     <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.FILLED}"
-                       @click="${() => {
-                           model.appState.value.openCreateRentModal()
-                       }}"
-                       @mouseenter="${(e) => {
-                           Tooltip.show(e.target, 'shift+n oder <', 500)
-                       }}"
-                                          @mouseleave="${() => {
-                           Tooltip.hide(0)
-                       }}"
-                    >
-                        Neuer Verleih
-                    </cc-button>
-                </div>
-                <cc-line></cc-line>
+                        @click="${() => {
+                             model.appState.value.openCreateRentModal()
+                        }}"
+                        @mouseenter="${(e) => {
+                             Tooltip.show(e.target, 'shift+n oder <', 500)
+                        }}"
+                        @mouseleave="${() => {
+                             Tooltip.hide(0)
+                        }}"
+                        >
+                             Neuer Verleih
+                        </cc-button>
+                    </div>
+                    <cc-line></cc-line>
+                    ` : ""
+                }
+                
                 <div class="sorts">
                     <slot name="sorts"></slot>
                 </div>
@@ -95,29 +100,29 @@ export class SidebarComponent extends LitElement {
                 <cc-line></cc-line>
                 <cc-select class="nav" size="${SizeEnum.MEDIUM}" type="${Orientation.VERTICAL}">
                     ${
-                            model.deviceTypeNameFilterOptions.value.map(value => {
-                                return html`
-                                    <div class="${value.id as DeviceTypeVariantEnum == this.appState.value.editPageType ? 'selected' : ''}"
-                                         @click="${() => {
-                                             if(this.appState.value.editPageType == null){
-                                                 UrlHandler.setUrl('/app/edit?type=' + value.id as string)
-                                             } else{
-                                                 UrlHandler.updateUrl('/app/edit')
-                                                 UrlHandler.clearParams()
-                                                 UrlHandler.setParam("type", value.id as string)
-                                             }
+                        model.deviceTypeNameFilterOptions.value.map(value => {
+                            return html`
+                                <div class="${value.id as DeviceTypeVariantEnum == this.appState.value.editPageType ? 'selected' : ''}"
+                                     @click="${() => {
+                                         if(this.appState.value.editPageType == null){
+                                             UrlHandler.setUrl('/app/edit?type=' + value.id as string)
+                                         } else{
+                                             UrlHandler.updateUrl('/app/edit')
+                                             UrlHandler.clearParams()
+                                             UrlHandler.setParam("type", value.id as string)
+                                         }
 
-                                             this.appState.value.clearSelectedDeviceEditEntries()
-                                             this.appState.value.clearSelectedDeviceTypeEditEntries()
-                                             this.appState.value.clearSelectedDeviceSetEditEntries()
-                                             this.appState.value.editPageType = value.id as DeviceTypeVariantEnum
-                                             model.appState.value.editPage = EditPageEnum.OVERVIEW
-                                         }}">
-                                        <div class="point"></div>
-                                        <p>${value.name}</>
-                                    </div>
-                                `
-                            })
+                                         this.appState.value.clearSelectedDeviceEditEntries()
+                                         this.appState.value.clearSelectedDeviceTypeEditEntries()
+                                         this.appState.value.clearSelectedDeviceSetEditEntries()
+                                         this.appState.value.editPageType = value.id as DeviceTypeVariantEnum
+                                         model.appState.value.editPage = EditPageEnum.OVERVIEW
+                                     }}">
+                                    <div class="point"></div>
+                                    <p>${value.name}</>
+                                </div>
+                            `
+                        })
                     }
                     
                     <div class="${model.appState.value.editPage == EditPageEnum.DEVICESET ? 'selected' : ''} deviceSet" @click="${() => {

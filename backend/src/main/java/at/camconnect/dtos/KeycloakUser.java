@@ -34,23 +34,4 @@ public record KeycloakUser (
             @JsonProperty("impersonate") boolean impersonate,
             @JsonProperty("manage") boolean manage
     ) {}
-
-    public UserRoleEnum getUserRole() {
-        if(this.email() != "" && this.email != null){
-            if(this.email.contains("student")){
-                return UserRoleEnum.STUDENT;
-            } else {
-                return UserRoleEnum.TEACHER;
-            }
-        }
-
-        for (String part : this.attributes.ldapEntryDn()) {
-            if (part.equals("OU=Teachers")) {
-                return UserRoleEnum.TEACHER;
-            } else if (part.equals("OU=Students")) {
-                return UserRoleEnum.STUDENT;
-            }
-        }
-        return UserRoleEnum.STUDENT;
-    }
 }

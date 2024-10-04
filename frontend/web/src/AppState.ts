@@ -13,11 +13,12 @@ import {BehaviorSubject} from "rxjs"
 import {KeyBoardShortCut} from "./util/KeyboardShortcut"
 import {DeviceTypeEditEntryComponent} from "./components/app/edit/deviceTypeEditEntry.component"
 import {DeviceEditEntryComponent} from "./components/app/edit/deviceEditEntry"
-import UserService, {Student, User} from "./service/user.service"
+import UserService, {Student, User, UserRoleEnum} from "./service/user.service"
 import Util from "./util/Util"
 import {SidebarComponent} from "./components/navigation/sidebar.component"
 import {EditType} from "./components/app/edit/edit.component"
 import {DeviceSetEditEntryComponent} from "./components/app/edit/deviceSetEditEntry.component"
+import AuthService from "./service/auth.service"
 import {DeviceSetListEntryComponent} from "./components/app/deviceSetListEntry.component"
 import DeviceSetService from "./service/deviceSet.service"
 
@@ -41,7 +42,6 @@ interface UserSettings {
         newRentAddDevice: string[] | string[][]
         equipmentPage: string[] | string[][]
         rentPage: string[] | string[][]
-        calendarPage: string[] | string[][]
         search: string[] | string[][]
     }
 }
@@ -69,7 +69,6 @@ export class AppState{
     private _createMultiRentModalOpen: boolean = false
     private _selectedRentEntries: Set<RentListEntryComponent> = new Set<RentListEntryComponent>()
     private _selectedDeviceEntries: Set<DeviceListEntryComponent> = new Set<DeviceListEntryComponent>()
-    private _selectedSetEntries: Set<DeviceSetListEntryComponent> = new Set<DeviceSetListEntryComponent>()
     private _selectedDeviceTypeEditEntries: Set<DeviceTypeEditEntryComponent> = new Set<DeviceTypeEditEntryComponent>()
     private _selectedDeviceEditEntries: Set<DeviceEditEntryComponent> = new Set<DeviceEditEntryComponent>()
     private _selectedDeviceSetEditEntries: Set<DeviceSetEditEntryComponent> = new Set<DeviceSetEditEntryComponent>()
@@ -98,7 +97,6 @@ export class AppState{
         keybinds: {
             equipmentPage: [["shift", "e"], ["1"]],
             rentPage: [["shift", "v"], ["2"]],
-            calendarPage: [["shift", "c"], ["3"]],
             newRent: [["shift", "n"], ["<"]],
             newRentAddDevice: ["shift", "g"],
             search: ["shift", "s"]
@@ -143,7 +141,6 @@ export class AppState{
         this._editPageType = value
         this.update()
     }
-
 
     closeCreateRentModal(){
         this._createRentModalOpen = false
@@ -526,9 +523,20 @@ export class AppState{
 
         this._access_token = value
         localStorage["cc-access_token"] = value
-        UserService.getById(Util.parseJwt(value).sub).then(user => {
+        UserService.getById(Util.parseJwt(value).sub).then(async user => {
+            user.role = await AuthService.getRole()
+
+            if (UrlHandler.getParam("simulateTeacher") == "true") {
+                if (user.role == UserRoleEnum.ADMIN) {
+                    user.role = UserRoleEnum.MEDT_TEACHER
+                }
+            }
+
             this.currentUser = user
+
+            console.log(user)
         })
+
         this.update()
     }
 

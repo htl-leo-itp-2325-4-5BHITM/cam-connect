@@ -2,6 +2,13 @@ import {Api} from "../util/Api"
 import {model} from "../index"
 import {DeviceType} from "./deviceType.service"
 
+export enum UserRoleEnum {
+    STUDENT = "STUDENT",
+    TEACHER = "TEACHER",
+    MEDT_TEACHER = "MEDT-TEACHER",
+    ADMIN = "ADMIN"
+}
+
 export interface User {
     user_id: string
     firstname: string
@@ -9,7 +16,7 @@ export interface User {
     email: string
     username: string
     school_class: string
-    role: 'STUDENT' | 'TEACHER' | 'ADMIN'
+    role?: UserRoleEnum
 }
 
 export interface Teacher extends User {}

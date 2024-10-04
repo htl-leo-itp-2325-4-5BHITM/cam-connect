@@ -3,6 +3,7 @@ import {OrderByFilterRent, RentByStudentDTO, RentFilterDTO} from "./rent.service
 import {config} from "../base"
 import {model} from "../index"
 import UrlHandler from "../util/UrlHandler"
+import {UserRoleEnum} from "./user.service"
 
 export interface LoginRequest{
     username: string
@@ -112,7 +113,6 @@ export default class AuthService {
         })
             .then(response => {
                 if(response.status == 200){
-                    console.log("access token valid")
                     return true
                 } else {
                    this.logOut()
@@ -124,5 +124,12 @@ export default class AuthService {
     static logOut(){
         model.appState.value.access_token = null
         UrlHandler.setUrl("/login")
+    }
+
+    static getRole(){
+        return Api.getData<UserRoleEnum>("/auth/role")
+            .then(response => {
+                return UserRoleEnum[response.data]
+            })
     }
 }
