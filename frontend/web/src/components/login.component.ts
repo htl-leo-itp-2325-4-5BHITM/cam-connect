@@ -45,7 +45,7 @@ export class LoginComponent extends LitElement {
         let passwordInput = this.shadowRoot.querySelector("input[type='password']") as HTMLInputElement
 
         let tokenResponse = await AuthService.login(usernameInput.value, passwordInput.value)
-        model.appState.value.access_token = tokenResponse.access_token
+        model.appState.value.setAccessToken(tokenResponse.access_token)
 
         UrlHandler.goToPage("/app/rents")
     }

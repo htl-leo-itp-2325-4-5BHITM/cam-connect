@@ -14,8 +14,10 @@ export class Api {
             }
         })
             .then(response => {
-                this.handleHttpError(response.status, response.url)
-                return response.json() as Promise<ccResponse<Out>>
+                if(this.handleHttpError(response.status, response.url)) {
+                    return response.json() as Promise<ccResponse<Out>>
+                }
+                return {} as Promise<ccResponse<Out>>
             })
             .then((result: ccResponse<Out>) => {
                 this.handleCCError(result.ccStatus, url)

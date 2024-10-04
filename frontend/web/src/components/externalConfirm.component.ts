@@ -13,6 +13,7 @@ import UrlHandler from "../util/UrlHandler"
 import PopupEngine from "../util/PopupEngine"
 import Util from "../util/Util"
 import {Api} from "../util/Api"
+import {ButtonComponent} from "./basic/button.component"
 
 @customElement('cc-external-confirm')
 export class ExternalConfirmComponent extends LitElement {
@@ -106,7 +107,12 @@ export class ExternalConfirmComponent extends LitElement {
                                                             },
                                                             {
                                                                 text: "Abbrechen",
-                                                                role: "cancel"
+                                                                role: "cancel",
+                                                                action: () => {
+                                                                    this.shadowRoot.querySelectorAll("cc-button").forEach((button: ButtonComponent) => {
+                                                                        button.loadingState = false
+                                                                    })
+                                                                }
                                                             }
                                                         ]
                                                     })

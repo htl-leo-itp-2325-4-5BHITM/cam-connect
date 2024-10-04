@@ -4,7 +4,7 @@ import {Device} from "./device.service"
 import PopupEngine from "../util/PopupEngine"
 import Util from "../util/Util"
 import {Api} from "../util/Api"
-import { Student, Teacher } from "./user.service"
+import {Student, Teacher, UserRoleEnum} from "./user.service"
 
 export enum RentStatusEnum {
     CREATED="CREATED",
@@ -56,7 +56,6 @@ export interface RentFilterDTO {
     schoolClasses?: string[]
     studentIds?: string[]
     searchTerm?: string
-    userId: string
 }
 
 export enum OrderByFilterRent {
@@ -73,8 +72,10 @@ export default class RentService {
             statuses: model.appState.value.rentFilters.statuses,
             schoolClasses: Array.from(model.appState.value.rentFilters.schoolClasses),
             searchTerm: model.appState.value.searchTerm,
-            userId: model.appState.value.currentUser?.user_id
         }
+
+        if(model.appState.value.currentUser?.role == UserRoleEnum.STUDENT)
+            rentFiltersForBackend.studentIds = [model.appState.value.currentUser?.user_id]
 
         Api.postData<RentFilterDTO, RentByStudentDTO[]>("/rent/getall", rentFiltersForBackend)
             .then(result => {
@@ -88,7 +89,7 @@ export default class RentService {
 
     static allRentsByStudent(studentId: string) {
         return Api.postData<RentFilterDTO, RentByStudentDTO[]>("/rent/getall",
-            {orderBy: OrderByFilterRent.ALPHABETICAL_ASC, studentIds: [studentId], userId: model.appState.value.currentUser?.user_id}
+            {orderBy: OrderByFilterRent.ALPHABETICAL_ASC, studentIds: [studentId]}
         )
             .then(result => {
                 return result.data

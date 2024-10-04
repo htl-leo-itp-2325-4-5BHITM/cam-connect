@@ -122,7 +122,7 @@ export default class AuthService {
     }
 
     static logOut(){
-        model.appState.value.access_token = null
+        model.appState.value.setAccessToken(null)
         UrlHandler.setUrl("/login")
     }
 
@@ -130,6 +130,9 @@ export default class AuthService {
         return Api.getData<UserRoleEnum>("/auth/role")
             .then(response => {
                 return UserRoleEnum[response.data]
+            })
+            .catch(error => {
+
             })
     }
 }

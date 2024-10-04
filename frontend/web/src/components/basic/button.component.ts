@@ -34,14 +34,15 @@ export class ButtonComponent extends LitElement {
     @property({type: Boolean})
     loading?: boolean = false
 
-    private storedText: string | TemplateStringsArray = "smoothy went wrong"
+    @property()
+    loadingState: boolean = false
 
     render() {
         return html`
             <style>${styles}</style>
             <button part="button" color="${this.color}" type="${this.type}" size="${this.size}" .disabled="${this.disabled}" noPadding="${this.noPadding}">
                 <slot name="left"></slot>
-                ${this.text}
+                ${this.loadingState ? "loading..." : this.text}
                 <slot name="right"></slot>
             </button>`
     }
@@ -50,13 +51,8 @@ export class ButtonComponent extends LitElement {
         super.firstUpdated(_changedProperties);
         if(this.loading)
         this.addEventListener("click", () => {
-            this.storedText = this.text
-            this.text = "loading.."
+            this.loadingState = true
         })
-    }
-
-    loadingFinished(){
-        this.text = this.storedText
     }
 }
 

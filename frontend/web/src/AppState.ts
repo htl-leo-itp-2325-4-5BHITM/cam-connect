@@ -481,26 +481,40 @@ export class AppState{
         return this._access_token
     }
 
-    set access_token(value: string) {
-        if(!value || value == "undefined" || value == "") return
+    setAccessToken(value: string){
+        return new Promise((resolve, reject) => {
+            if(!value || value == "undefined" || value == "") return
 
-        this._access_token = value
-        localStorage["cc-access_token"] = value
-        UserService.getById(Util.parseJwt(value).sub).then(async user => {
-            user.role = await AuthService.getRole()
-
-            if (UrlHandler.getParam("simulateTeacher") == "true") {
-                if (user.role == UserRoleEnum.ADMIN) {
-                    user.role = UserRoleEnum.MEDT_TEACHER
+            this._access_token = value
+            localStorage["cc-access_token"] = value
+            UserService.getById(Util.parseJwt(value).sub).then(async user => {
+                try {
+                    user.role = await AuthService.getRole()
+                }catch (e){
+                    AuthService.logOut()
                 }
-            }
 
-            this.currentUser = user
+                if (UrlHandler.getParam("simulate") == "teacher") {
+                    if (user.role == UserRoleEnum.ADMIN) {
+                        user.role = UserRoleEnum.MEDT_TEACHER
+                    }
+                }
 
-            console.log(user)
+                if (UrlHandler.getParam("simulate") == "student") {
+                    if (user.role == UserRoleEnum.ADMIN) {
+                        user.role = UserRoleEnum.STUDENT
+                    }
+                }
+
+                this.currentUser = user
+
+                resolve(user)
+
+                console.log(user)
+            })
+
+            this.update()
         })
-
-        this.update()
     }
 
     get currentUser(): User {

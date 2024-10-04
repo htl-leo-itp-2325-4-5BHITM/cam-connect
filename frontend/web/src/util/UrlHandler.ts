@@ -7,11 +7,14 @@ import AuthService from "../service/auth.service"
 let pages = {
     app: {
         handler: () => {
-            model.appState.value.access_token = localStorage["cc-access_token"]
-            AuthService.validateAccessToken()
-            model.queryData()
-            model.createSocketConnection()
-            UrlHandler.changeOrigin("cc-dashboard")
+            model.appState.value.setAccessToken(localStorage["cc-access_token"])
+                .then(user => {
+                    console.log(user)
+                    AuthService.validateAccessToken()
+                    model.queryData()
+                    model.createSocketConnection()
+                    UrlHandler.changeOrigin("cc-dashboard")
+                })
         },
         children: {
             rents: {
