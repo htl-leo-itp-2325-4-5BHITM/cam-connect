@@ -6,43 +6,79 @@ import {WidthResizeObserver} from "../../base"
 import {ObservedProperty} from "../../model"
 import {DeviceType, DeviceTypeFullDTO, DeviceTypeVariantCollection} from "../../service/deviceType.service"
 import {AppState} from "../../AppState"
+import {DeviceSetFullDTO} from "../../service/deviceSet.service"
+
+export interface MergedEquipment {
+    deviceTypeFull: DeviceTypeFullDTO
+    deviceSetFull: DeviceSetFullDTO
+    variant: "deviceType" | "deviceSet"
+}
 
 @customElement('cc-device-list')
 export class DeviceListComponent extends LitElement {
-    @property() private deviceTypesFull: ObservedProperty<DeviceTypeFullDTO[]>
+    @property() private mergedDeviceTypes: MergedEquipment[] = []
 
     @property() private appState: ObservedProperty<AppState>
 
     constructor() {
         super()
 
-        this.deviceTypesFull = new ObservedProperty<DeviceTypeFullDTO[]>(this, model.deviceTypesFull)
-
         this.appState = new ObservedProperty<AppState>(this, model.appState)
+
+        model.deviceTypesFull.subscribe(types => {this.processEquipment()})
+
+        model.deviceSetsFull.subscribe(sets => {this.processEquipment()})
     }
+
+    processEquipment(){
+        this.mergedDeviceTypes = []
+        model.deviceTypesFull.value?.forEach(types =>{
+            this.mergedDeviceTypes.push({deviceTypeFull: types, deviceSetFull: null, variant: "deviceType"} as MergedEquipment)
+        })
+
+        model.deviceSetsFull.value?.forEach(set =>{
+            this.mergedDeviceTypes.push({deviceTypeFull: null, deviceSetFull: set, variant: "deviceSet"} as MergedEquipment)
+        })
+    }
+
     render() {
+        // des sollte ned da sein :c
+
+        console.log("reset")
+
         return html`
             <style>${styles}</style>
 
             <div class="content ${model.appState.value.equipmentDisplayMode}">
-                ${Object.values(this.deviceTypesFull.value)?.flat().sort((a, b)=>  (a.deviceType.name)?.localeCompare(b.deviceType.name))?.map(deviceType => {
-                    return html`
-                        <cc-device-list-entry 
-                            .deviceTypeFull="${deviceType}"
-                            .isSelectable="${this.appState.value.selectedDeviceEntries.size > 0 && deviceType.available > 0}"
+                ${Object.values(this.mergedDeviceTypes)?.flat().map(elem => {
+                    if(elem.variant == "deviceType") {
+                        return html`
+                            <cc-device-list-entry
+                                .deviceTypeFull="${elem.deviceTypeFull}"
+                                .isSelectable="${this.appState.value.selectedDeviceEntries.size + this.appState.value.selectedSetEntries.size > 0 && elem.deviceTypeFull.available > 0}"
+                                .isListMode="${this.appState.value.equipmentDisplayMode == 'list'}"
+                            ></cc-device-list-entry>
+                        `
+                    } else{
+                        return html`
+                        <cc-device-set-list-entry
+                            .deviceSet="${elem.deviceSetFull}"
+                            .isSelectable="${this.appState.value.selectedSetEntries.size + this.appState.value.selectedDeviceEntries.size > 0 && elem.deviceSetFull.available > 0}"
                             .isListMode="${this.appState.value.equipmentDisplayMode == 'list'}"
-                        ></cc-device-list-entry>
+                        ></cc-device-set-list-entry>
                     `
+                    }
+
                 })}
 
-                ${this.deviceTypesFull.value.length == 0 ? html`<p class="noResults">Keine Ergebnisse gefunden</p>` : ""}
+                ${this.mergedDeviceTypes.length == 0 ? html`<p class="noResults">Keine Ergebnisse gefunden</p>` : ""}
             </div>
         `
     }
 
     connectedCallback() {
         super.connectedCallback();
-        new WidthResizeObserver(this, [{size: 0, key: "small"}, {size: 600, key: "medium"}, {size: 1000, key: "large"}, {size: 1600, key: "xLarge"}])
+        new WidthResizeObserver(this, [{size: 0, key: "small"}, {size: 600, key: "medium"}, {size: 1000, key: "large"}, {size: 1600, key: "xLarge"}]);
     }
 
     updated(changedProperties: PropertyValues) {

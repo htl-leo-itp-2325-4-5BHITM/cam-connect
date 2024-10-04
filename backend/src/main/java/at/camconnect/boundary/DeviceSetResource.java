@@ -20,13 +20,23 @@ public class DeviceSetResource {
     @Inject
     DeviceSetRepository deviceSetRepository;
 
-    @POST
+    @GET
     @Path("/getall")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response getAll(DeviceTypeFilters filters){
-        List<Device> devices;
+    public Response getAll(){
         try{
-            return CCResponse.ok(deviceSetRepository.getAll(filters));
+            return CCResponse.ok(deviceSetRepository.getAll());
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+    }
+
+    @POST
+    @Path("/getallfull")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getAll(DeviceTypeFilters filters){
+        try{
+            return CCResponse.ok(deviceSetRepository.getAllFull(filters));
         }catch (CCException ex){
             return CCResponse.error(ex);
         }

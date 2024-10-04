@@ -4,13 +4,18 @@ import {model} from "../index"
 import {DeviceFilterDTO, DeviceType, DeviceTypeFullDTO, DeviceTypeVariantEnum} from "./deviceType.service"
 import {Tag} from "./tag.service"
 
+export enum DeviceTypeStatusEnum {
+    ACTIVE = "active",
+    DISABLED = "disabled"
+}
+
 export interface DeviceSetCreateDTO{
     id: number,
     name: string,
     description: string,
     deviceTypeIds: number[],
     tags: Tag[],
-    status: DeviceTypeVariantEnum
+    status: DeviceTypeStatusEnum
 }
 
 export interface DeviceSet {
@@ -19,11 +24,26 @@ export interface DeviceSet {
     description: string,
     device_types: DeviceType[],
     tags: Tag[],
-    status: DeviceTypeVariantEnum
+    status: DeviceTypeStatusEnum
+}
+
+export interface DeviceSetFullDTO {
+    deviceSet: DeviceSet,
+    available: number
 }
 
 export default class DeviceSetService{
     static fetchAll(){
+        Api.getData<DeviceSet[]>("/deviceset/getall")
+            .then(result => {
+                model.loadDeviceSets(result.data)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
+
+    static fetchAllFull(){
         let deviceFiltersForBackend: DeviceFilterDTO = {
             onlyAvailable: model.appState.value.deviceFilters.onlyAvailable,
             variants: Array.from(model.appState.value.deviceFilters.variants),
@@ -32,9 +52,10 @@ export default class DeviceSetService{
             searchTerm: model.appState.value.searchTerm
         }
 
-        Api.postData<DeviceFilterDTO, DeviceSet[]>("/deviceset/getall", deviceFiltersForBackend)
+        Api.postData<DeviceFilterDTO, DeviceSetFullDTO[]>("/deviceset/getallfull", deviceFiltersForBackend)
             .then(result => {
-                model.loadDeviceSets(result.data)
+                console.log(result.data)
+                model.loadDeviceSetsFull(result.data)
             })
             .catch(error => {
                 console.error(error)

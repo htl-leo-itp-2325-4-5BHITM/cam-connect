@@ -18,6 +18,8 @@ import Util from "./util/Util"
 import {SidebarComponent} from "./components/navigation/sidebar.component"
 import {EditType} from "./components/app/edit/edit.component"
 import {DeviceSetEditEntryComponent} from "./components/app/edit/deviceSetEditEntry.component"
+import {DeviceSetListEntryComponent} from "./components/app/deviceSetListEntry.component"
+import DeviceSetService from "./service/deviceSet.service"
 
 interface ActionCancellation {
     identifier: string,
@@ -67,6 +69,7 @@ export class AppState{
     private _createMultiRentModalOpen: boolean = false
     private _selectedRentEntries: Set<RentListEntryComponent> = new Set<RentListEntryComponent>()
     private _selectedDeviceEntries: Set<DeviceListEntryComponent> = new Set<DeviceListEntryComponent>()
+    private _selectedSetEntries: Set<DeviceSetListEntryComponent> = new Set<DeviceSetListEntryComponent>()
     private _selectedDeviceTypeEditEntries: Set<DeviceTypeEditEntryComponent> = new Set<DeviceTypeEditEntryComponent>()
     private _selectedDeviceEditEntries: Set<DeviceEditEntryComponent> = new Set<DeviceEditEntryComponent>()
     private _selectedDeviceSetEditEntries: Set<DeviceSetEditEntryComponent> = new Set<DeviceSetEditEntryComponent>()
@@ -141,6 +144,7 @@ export class AppState{
         this.update()
     }
 
+
     closeCreateRentModal(){
         this._createRentModalOpen = false
         KeyBoardShortCut.remove("addDevice")
@@ -148,16 +152,30 @@ export class AppState{
         this.update()
     }
 
-    openCreateRentModalWithDevices(devices?: Set<DeviceListEntryComponent>){
+    openCreateRentModalWithDevices(devices?: Set<DeviceListEntryComponent> | Set<DeviceSetListEntryComponent>, variant: "type" | "set" = "type"){
         let i = 0;
 
-        devices.forEach(device => {
-            if(i++ <= 0){
-                this.openCreateRentModal(device.deviceTypeFull.deviceType.type_id, "deviceType")
-            } else{
-                this._createRentElement.addDevice("default", true, device.deviceTypeFull.deviceType.type_id)
-            }
-        })
+        if(variant == "type"){
+            devices = devices as Set<DeviceListEntryComponent>
+            devices.forEach(device => {
+                if(i++ <= 0){
+                    this.openCreateRentModal(device.deviceTypeFull.deviceType.type_id, "deviceType")
+                } else{
+                    this._createRentElement.addDevice("default", true, device.deviceTypeFull.deviceType.type_id)
+                }
+            })
+        } else{
+            devices = devices as Set<DeviceSetListEntryComponent>
+            devices.forEach(device => {
+                device.deviceSet.deviceSet.device_types.forEach(deviceType => {
+                    if(i++ <= 0){
+                        this.openCreateRentModal(deviceType.type_id, "deviceType")
+                    } else{
+                        this._createRentElement.addDevice("default", true, deviceType.type_id)
+                    }
+                })
+            })
+        }
     }
 
     openCreateRentModal(withId?: string | number, idType: "student" | "deviceType" = "student"){
@@ -246,6 +264,25 @@ export class AppState{
         return this._selectedDeviceSetEditEntries
     }
 
+    get selectedSetEntries(): Set<DeviceSetListEntryComponent> {
+        return this._selectedSetEntries
+    }
+
+    set selectedSetEntries(value: Set<DeviceSetListEntryComponent>) {
+        this._selectedSetEntries = value
+        this.update()
+    }
+
+    addSelectedSetEntry(deviceSetEntry: DeviceSetListEntryComponent){
+        this.selectedSetEntries.add(deviceSetEntry)
+        this.update()
+    }
+
+    removeSelectedSetEntry(deviceSetEntry: DeviceSetListEntryComponent){
+        this.selectedSetEntries.delete(deviceSetEntry)
+        this.update()
+    }
+
     addSelectedRentEntry(rentEntry: RentListEntryComponent){
         this.selectedRentEntries.add(rentEntry)
         this.update()
@@ -256,7 +293,7 @@ export class AppState{
         this.update()
     }
 
-    addSelectedDeviceEntry (deviceEntry: DeviceListEntryComponent ){
+    addSelectedDeviceEntry (deviceEntry: DeviceListEntryComponent){
         this.selectedDeviceEntries.add(deviceEntry)
         this.update()
     }
@@ -265,6 +302,7 @@ export class AppState{
         this.selectedDeviceEntries.delete(deviceEntry)
         this.update()
     }
+
 
     toggleSelectedDeviceEditEntry(deviceEditEntry: DeviceEditEntryComponent){
         console.log(deviceEditEntry, this.selectedDeviceEditEntries)
@@ -456,6 +494,7 @@ export class AppState{
         this.update()
         this.selectedDeviceEntries.clear()
         DeviceTypeService.fetchAllFull()
+        DeviceSetService.fetchAllFull()
     }
 
 

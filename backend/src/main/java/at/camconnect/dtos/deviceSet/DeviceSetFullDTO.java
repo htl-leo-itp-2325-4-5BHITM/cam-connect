@@ -1,4 +1,6 @@
 package at.camconnect.dtos.deviceSet;
 
-public record DeviceSetFullDTO() {
+import at.camconnect.model.DeviceSet;
+
+public record DeviceSetFullDTO(DeviceSet deviceSet, int available) {
 }
