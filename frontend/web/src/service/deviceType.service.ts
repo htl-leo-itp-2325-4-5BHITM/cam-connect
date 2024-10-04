@@ -99,11 +99,11 @@ export interface DeviceFilterDTO{
     variants: string[]
     attributes: number[]
     tags: number[]
+    searchTerm: string
 }
 
 export default class DeviceTypeService {
     static fetchAll(){
-
         Api.getData<DeviceTypeVariantCollection>("/devicetype/getall")
             .then(result => {
                 model.loadDeviceTypes(result.data)
@@ -118,8 +118,10 @@ export default class DeviceTypeService {
             onlyAvailable: model.appState.value.deviceFilters.onlyAvailable,
             variants: Array.from(model.appState.value.deviceFilters.variants),
             attributes: Array.from(model.appState.value.deviceFilters.attributes),
-            tags: Array.from(model.appState.value.deviceFilters.tags)
+            tags: Array.from(model.appState.value.deviceFilters.tags),
+            searchTerm: model.appState.value.searchTerm
         }
+
 
         Api.postData<DeviceFilterDTO, DeviceTypeFullDTO[]>("/devicetype/getallfull", deviceFiltersForBackend)
             .then(result => {

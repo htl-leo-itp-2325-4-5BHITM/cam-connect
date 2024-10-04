@@ -120,14 +120,14 @@ VALUES
 -- Device Set
 INSERT INTO deviceset (name, description, status)
 VALUES
-    ('Foto Set', 'Ein Set für Fotografen', 'ACTIVE'),
-    ('Video Set', 'Ein Set für Videografen', 'ACTIVE'),
-    ('Audio Set', 'Ein Set für Tontechniker', 'ACTIVE'),
-    ('Light Set', 'Ein Set für Beleuchter', 'ACTIVE'),
-    ('Simple Set', 'Ein Set für einfache Geräte', 'ACTIVE'),
-    ('Stabilizer Set', 'Ein Set für Stabilizer', 'ACTIVE'),
-    ('Tripod Set', 'Ein Set für Stative', 'ACTIVE'),
-    ('Drone Set', 'Ein Set für Drohnen', 'ACTIVE');
+    ('Foto Set', 'Ein Set für Fotografen', 'active'),
+    ('Video Set', 'Ein Set für Videografen', 'active'),
+    ('Audio Set', 'Ein Set für Tontechniker', 'active'),
+    ('Light Set', 'Ein Set für Beleuchter', 'active'),
+    ('Simple Set', 'Ein Set für einfache Geräte', 'active'),
+    ('Stabilizer Set', 'Ein Set für Stabilizer', 'active'),
+    ('Tripod Set', 'Ein Set für Stative', 'active'),
+    ('Drone Set', 'Ein Set für Drohnen', 'active');
 
 -- Assigning devices to device sets
 INSERT INTO deviceset_devicetype (deviceset_id, device_types_type_id)

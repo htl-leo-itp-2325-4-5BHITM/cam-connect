@@ -13,7 +13,8 @@ import {AppState} from "./AppState"
 import TagService, {Tag} from "./service/tag.service"
 import UserService, {Student, Teacher } from "./service/user.service";
 import AuthService from "./service/auth.service"
-import DeviceSetService, {DeviceSet} from "./service/deviceSet.service"
+import DeviceSetService, {DeviceSet, DeviceSetFullDTO} from "./service/deviceSet.service"
+import {MergedEquipment} from "./components/app/deviceList.component"
 
 export enum PageEnum { EQUIPMENT="equipment", RENTS="rents"}
 export enum EditPageEnum { OVERVIEW="overview", CHILDREN="children", DEVICE="device", DEVICETYPE="devicetype", DEVICESET="deviceset" }
@@ -44,6 +45,7 @@ export default class Model{
     readonly deviceTypesFull = new BehaviorSubject<DeviceTypeFullDTO[]>([])
     readonly deviceTypeAttributes = new BehaviorSubject<DeviceTypeAttributeCollection>({cameraResolutions: [], cameraSystems: [], lensMounts: [], tripodHeads: [], audioConnectors: []})
     readonly deviceSets = new BehaviorSubject<DeviceSet[]>([])
+    readonly deviceSetsFull = new BehaviorSubject<DeviceSetFullDTO[]>([])
 
     /**
      * This is a representation of all the deviceTypeAttributes split up and transformed into FilterOptions that can be
@@ -97,7 +99,8 @@ export default class Model{
     queryData(){
         RentService.fetchAll()
         DeviceService.fetchAll()
-        DeviceSetService.fetchAll()
+        DeviceSetService.fetchAll();
+        DeviceSetService.fetchAllFull()
         DeviceTypeService.fetchAll()
         DeviceTypeService.fetchAllFull()
         DeviceTypeAttributeService.fetchAll()
@@ -138,6 +141,10 @@ export default class Model{
 
     loadDeviceSets(deviceSets: DeviceSet[]){
         this.deviceSets.next(deviceSets)
+    }
+
+    loadDeviceSetsFull(deviceSetsFull: DeviceSetFullDTO[]){
+        this.deviceSetsFull.next(deviceSetsFull)
     }
 
     //endregion

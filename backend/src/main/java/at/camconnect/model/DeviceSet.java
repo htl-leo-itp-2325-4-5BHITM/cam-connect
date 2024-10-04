@@ -1,9 +1,11 @@
 package at.camconnect.model;
 
 import at.camconnect.enums.DeviceStatus;
+import at.camconnect.enums.DeviceTypeStatusEnum;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -22,7 +24,7 @@ public class DeviceSet {
     private List<DeviceType> device_types;
 
     @Enumerated(EnumType.STRING)
-    private DeviceStatus status;
+    private DeviceTypeStatusEnum status;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Tag> tags;
@@ -32,10 +34,12 @@ public class DeviceSet {
     private LocalDateTime creation_date;
     private LocalDateTime change_date;
 
-    public DeviceSet(String name, String description, DeviceStatus status) {
+    public DeviceSet(String name, String description, DeviceTypeStatusEnum status) {
         this.name = name;
         this.description = description;
         this.status = status;
+        this.device_types = new LinkedList<>();
+        this.tags = new LinkedList<>();
     }
 
     public DeviceSet() {
@@ -94,11 +98,11 @@ public class DeviceSet {
         this.device_types = device_types;
     }
 
-    public DeviceStatus getStatus() {
+    public DeviceTypeStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(DeviceStatus status) {
+    public void setStatus(DeviceTypeStatusEnum status) {
         this.status = status;
     }
 

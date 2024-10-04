@@ -9,5 +9,6 @@ public record DeviceTypeFilters(
         boolean onlyAvailable,
         List<DeviceTypeVariantEnum> variants,
         List<Long> attributes,
-        List<Long> tags
+        List<Long> tags,
+        String searchTerm
 ) { }

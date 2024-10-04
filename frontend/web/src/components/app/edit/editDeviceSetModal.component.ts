@@ -1,20 +1,7 @@
 import {html, LitElement, PropertyValues} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
-import {EditPageEnum, ObservedProperty} from "../../../model";
-import DeviceTypeService, {
-    AudioType,
-    CameraType,
-    DeviceType,
-    DeviceTypeFullDTO, DeviceTypeSource,
-    DeviceTypeVariantEnum,
-    DroneType,
-    LensType,
-    LightType,
-    MicrophoneType,
-    SimpleType,
-    StabilizerType,
-    TripodType
-} from "../../../service/deviceType.service";
+import {ObservedProperty} from "../../../model";
+import DeviceTypeService, {DeviceType, DeviceTypeSource} from "../../../service/deviceType.service";
 import {model} from "../../../index";
 import styles from '../../../../styles/components/app/edit/editModal.styles.scss';
 import {AppState} from "../../../AppState";
@@ -22,13 +9,12 @@ import TagService, {Tag} from "../../../service/tag.service";
 import {InputType} from "../../basic/input.component";
 import {ColorEnum, SizeEnum} from "../../../base";
 import {ChipType} from "../../basic/chip.component";
-import DeviceService, {Device, DeviceStatus} from "../../../service/device.service";
+import {DeviceStatus} from "../../../service/device.service";
 import {unsafeSVG} from "lit/directives/unsafe-svg.js";
 import {icon} from "@fortawesome/fontawesome-svg-core";
-import {faTag, faTrash, faXmark} from "@fortawesome/free-solid-svg-icons";
+import {faTag, faXmark} from "@fortawesome/free-solid-svg-icons";
 import PopupEngine from "../../../util/PopupEngine"
-import UrlHandler from "../../../util/UrlHandler"
-import DeviceSetService, {DeviceSetCreateDTO, DeviceSet} from "../../../service/deviceSet.service"
+import DeviceSetService, {DeviceSetCreateDTO, DeviceTypeStatusEnum} from "../../../service/deviceSet.service"
 
 @customElement('cc-edit-device-set-modal')
 export class EditDeviceSetModalComponent extends LitElement {
@@ -40,6 +26,8 @@ export class EditDeviceSetModalComponent extends LitElement {
 
     startElement: DeviceSetCreateDTO | null = null;
     tags: Tag[] = [];
+
+    // todo if the device is in create mode it should get a warning before tabing out of the model
 
     constructor() {
         super();
@@ -55,7 +43,8 @@ export class EditDeviceSetModalComponent extends LitElement {
                 name: "",
                 description: "",
                 deviceTypeIds: [],
-                status: DeviceStatus.ACTIVE
+                status: DeviceTypeStatusEnum.ACTIVE,
+                tags: []
             } as DeviceSetCreateDTO;
 
             this.startElement = this.element;
@@ -117,7 +106,6 @@ export class EditDeviceSetModalComponent extends LitElement {
 
     getModalContent() {
         this.tags = this.element.tags;
-        console.log(this.element)
             return html`
                 <h1>Gerät-Set Erstellen</h1>
                 <div class="contentByDeviceType">
@@ -134,8 +122,8 @@ export class EditDeviceSetModalComponent extends LitElement {
                 <div class="separator">
                     <cc-line></cc-line>
                 </div>
-                <cc-toggle .toggled="${this.element.status == DeviceStatus.ACTIVE}" .onToggle="${(option => {
-                    this.element.status = option ? DeviceStatus.ACTIVE : DeviceStatus.UNAVAILABLE;
+                <cc-toggle .toggled="${this.element.status == DeviceTypeStatusEnum.ACTIVE}" .onToggle="${(option => {
+                    this.element.status = option ? DeviceTypeStatusEnum.ACTIVE : DeviceTypeStatusEnum.DISABLED;
                     this.updateDeviceSet(this.element);
                 })}">Gerät ist aktiv
                 </cc-toggle>
@@ -186,29 +174,29 @@ export class EditDeviceSetModalComponent extends LitElement {
                 <cc-autocomplete label="Tags" class="tagSelector" color="${ColorEnum.GRAY}"
                      size="${SizeEnum.MEDIUM}"
                      .onSelect="${(option: Tag) => {
-                            this.tags.push(option);
-                            if (this.isEditMode) {
-                                DeviceSetService.toggleTag(option, this.elementId)
-                            } else {
-                                this.element.tags.push(option);
-                            }
-                        }}"
+                                if (this.isEditMode) {
+                                    DeviceSetService.toggleTag(option, this.elementId)
+                                    this.tags.push(option);
+                                } else {
+                                    this.element.tags.push(option);
+                                }
+                            }}"
                             .querySuggestions="${TagService.search}"
                             .contentProvider="${(data: Tag) => {
-                            return `${data.name}`
-                        }}"
+                                return `${data.name}`
+                            }}"
                              .iconProvider="${() => {
-                            return html`${unsafeSVG(icon(faTag).html[0])}`
-                        }}">
+                                return html`${unsafeSVG(icon(faTag).html[0])}`
+                            }}">
                             </cc-autocomplete>
                             <div>
                                 ${this.tags.map(elem => {
                                     return html`
                                         <cc-chip text="${elem.name}" color="${ColorEnum.GRAY}" type="${ChipType.REMOVABLE}"
                                                  @click="${() => {
-                                this.tags.slice(this.tags.indexOf(elem), 1);
                                 if (this.isEditMode) {
                                     DeviceSetService.toggleTag(elem, this.elementId)
+                                    this.tags.slice(this.tags.indexOf(elem), 1);
                                 } else{
                                     this.element.tags.slice(this.element.tags.indexOf(elem), 1);
                                 }

@@ -1,8 +1,13 @@
 import {DeviceStatus} from "./device.service"
 import {Api} from "../util/Api"
 import {model} from "../index"
-import {DeviceType} from "./deviceType.service"
+import {DeviceFilterDTO, DeviceType, DeviceTypeFullDTO, DeviceTypeVariantEnum} from "./deviceType.service"
 import {Tag} from "./tag.service"
+
+export enum DeviceTypeStatusEnum {
+    ACTIVE = "active",
+    DISABLED = "disabled"
+}
 
 export interface DeviceSetCreateDTO{
     id: number,
@@ -10,7 +15,7 @@ export interface DeviceSetCreateDTO{
     description: string,
     deviceTypeIds: number[],
     tags: Tag[],
-    status: DeviceStatus
+    status: DeviceTypeStatusEnum
 }
 
 export interface DeviceSet {
@@ -19,7 +24,12 @@ export interface DeviceSet {
     description: string,
     device_types: DeviceType[],
     tags: Tag[],
-    status: DeviceStatus
+    status: DeviceTypeStatusEnum
+}
+
+export interface DeviceSetFullDTO {
+    deviceSet: DeviceSet,
+    available: number
 }
 
 export default class DeviceSetService{
@@ -27,6 +37,25 @@ export default class DeviceSetService{
         Api.getData<DeviceSet[]>("/deviceset/getall")
             .then(result => {
                 model.loadDeviceSets(result.data)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
+
+    static fetchAllFull(){
+        let deviceFiltersForBackend: DeviceFilterDTO = {
+            onlyAvailable: model.appState.value.deviceFilters.onlyAvailable,
+            variants: Array.from(model.appState.value.deviceFilters.variants),
+            attributes: Array.from(model.appState.value.deviceFilters.attributes),
+            tags: Array.from(model.appState.value.deviceFilters.tags),
+            searchTerm: model.appState.value.searchTerm
+        }
+
+        Api.postData<DeviceFilterDTO, DeviceSetFullDTO[]>("/deviceset/getallfull", deviceFiltersForBackend)
+            .then(result => {
+                console.log(result.data)
+                model.loadDeviceSetsFull(result.data)
             })
             .catch(error => {
                 console.error(error)
@@ -47,6 +76,7 @@ export default class DeviceSetService{
     }
 
     static create(element: DeviceSetCreateDTO) {
+        console.log(element)
         return Api.postData("/deviceset/create", element)
             .then(result => {
                 if (result.ccStatus.statusCode == 1000) {

@@ -159,7 +159,6 @@ export class NavbarComponent extends LitElement {
     handleSearchInput = Util.debounce(() => {
         let input = this.shadowRoot.querySelector(".search input") as HTMLInputElement
         model.appState.value.searchTerm = input.value
-        console.log("adsfaf")
     })
 
     closeSearch(){

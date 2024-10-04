@@ -97,8 +97,8 @@ export class ToolbarComponent extends LitElement {
 
     renderEquipmentBar() {
         let isButtonDisabled = {
-            uncheckAll: this.appState.value.selectedDeviceEntries.size == 0,
-            remove: this.appState.value.selectedDeviceEntries.size == 0,
+            uncheckAll: this.appState.value.selectedDeviceEntries.size + this.appState.value.selectedSetEntries.size == 0,
+            remove: this.appState.value.selectedDeviceEntries.size + this.appState.value.selectedSetEntries.size == 0,
         }
 
         return html`
@@ -216,6 +216,9 @@ export class ToolbarComponent extends LitElement {
             this.appState.value.selectedDeviceEntries.forEach((entry) => {
                 entry.toggleDeviceCheck()
             })
+            this.appState.value.selectedSetEntries.forEach((entry) => {
+                entry.toggleDeviceCheck()
+            })
         } else if(type === "edit"){
             this.appState.value.clearSelectedDeviceEditEntries()
             this.appState.value.clearSelectedDeviceTypeEditEntries()
@@ -225,6 +228,7 @@ export class ToolbarComponent extends LitElement {
 
     rentSelection() {
         model.appState.value.openCreateRentModalWithDevices(this.appState.value.selectedDeviceEntries)
+        model.appState.value.openCreateRentModalWithDevices(this.appState.value.selectedSetEntries, "set")
     }
 
     removeSelection(type : "rent" | "editDevice" | "editDeviceType" | "editDeviceSet" = "rent") {

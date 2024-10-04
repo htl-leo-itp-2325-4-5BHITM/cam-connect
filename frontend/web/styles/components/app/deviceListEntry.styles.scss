@@ -98,6 +98,10 @@ section {
   display: flex;
   gap: .5rem;
 
+  &.set{
+    flex-direction: column;
+  }
+
   div{
     display: flex;
   }

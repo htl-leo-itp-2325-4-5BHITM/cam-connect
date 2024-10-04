@@ -103,9 +103,15 @@ export class DeviceListEntryComponent extends LitElement {
             ${ this.isListMode ? '' : html`<cc-line></cc-line>` }
             <div class="bottom">
                 <cc-chip 
-                    color="${this.deviceTypeFull.available ? ColorEnum.GOOD : ColorEnum.BAD}" 
-                    text="${this.deviceTypeFull.available ? (this.deviceTypeFull.available + ' Verfügbar') : 'Alle Vergeben'}"
+                    color="${this.deviceTypeFull.available > 0 ? ColorEnum.GOOD : ColorEnum.BAD}" 
+                    text="${this.deviceTypeFull.available > 0 ? (this.deviceTypeFull.available + ' Verfügbar') : 'Vergeben'}"
                 ></cc-chip>
+                <cc-button type="${ButtonType.OUTLINED}" .disabled="${this.deviceTypeFull.available == 0}"
+                           @click="${() => {
+                               this.toggleDeviceCheck();
+                               model.appState.value.openCreateRentModalWithDevices(this.appState.value.selectedDeviceEntries, "type")
+                            }}"
+                >Verleihen</cc-button>
                 ${model.appState.value.currentUser.role == UserRoleEnum.MEDT_TEACHER ?
                     html`
                         <cc-button type="${ButtonType.OUTLINED}" .disabled="${this.deviceTypeFull.available == 0}"

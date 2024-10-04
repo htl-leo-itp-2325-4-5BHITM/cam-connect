@@ -27,7 +27,7 @@ export class DeviceSetEditEntryComponent extends LitElement {
         return html`
             <style>${styles}</style>
             
-            <h3 class="children">${this.deviceSet.name}</h3>
+            <h3>${this.deviceSet.name}</h3>
             
             <!-- todo für yanik <cc-line type="${Orientation.VERTICAL}"></cc-line>-->
 
