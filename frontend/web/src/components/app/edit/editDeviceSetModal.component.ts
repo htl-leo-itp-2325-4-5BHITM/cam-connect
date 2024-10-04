@@ -41,6 +41,8 @@ export class EditDeviceSetModalComponent extends LitElement {
     startElement: DeviceSetCreateDTO | null = null;
     tags: Tag[] = [];
 
+    // todo if the device is in create mode it should get a warning before tabing out of the model
+
     constructor() {
         super();
         this.appState = new ObservedProperty<AppState>(this, model.appState);
@@ -55,7 +57,8 @@ export class EditDeviceSetModalComponent extends LitElement {
                 name: "",
                 description: "",
                 deviceTypeIds: [],
-                status: DeviceStatus.ACTIVE
+                status: DeviceStatus.ACTIVE,
+                tags: []
             } as DeviceSetCreateDTO;
 
             this.startElement = this.element;
@@ -117,7 +120,6 @@ export class EditDeviceSetModalComponent extends LitElement {
 
     getModalContent() {
         this.tags = this.element.tags;
-        console.log(this.element)
             return html`
                 <h1>Gerät-Set Erstellen</h1>
                 <div class="contentByDeviceType">
@@ -186,29 +188,29 @@ export class EditDeviceSetModalComponent extends LitElement {
                 <cc-autocomplete label="Tags" class="tagSelector" color="${ColorEnum.GRAY}"
                      size="${SizeEnum.MEDIUM}"
                      .onSelect="${(option: Tag) => {
-                            this.tags.push(option);
-                            if (this.isEditMode) {
-                                DeviceSetService.toggleTag(option, this.elementId)
-                            } else {
-                                this.element.tags.push(option);
-                            }
-                        }}"
+                                if (this.isEditMode) {
+                                    DeviceSetService.toggleTag(option, this.elementId)
+                                    this.tags.push(option);
+                                } else {
+                                    this.element.tags.push(option);
+                                }
+                            }}"
                             .querySuggestions="${TagService.search}"
                             .contentProvider="${(data: Tag) => {
-                            return `${data.name}`
-                        }}"
+                                return `${data.name}`
+                            }}"
                              .iconProvider="${() => {
-                            return html`${unsafeSVG(icon(faTag).html[0])}`
-                        }}">
+                                return html`${unsafeSVG(icon(faTag).html[0])}`
+                            }}">
                             </cc-autocomplete>
                             <div>
                                 ${this.tags.map(elem => {
                                     return html`
                                         <cc-chip text="${elem.name}" color="${ColorEnum.GRAY}" type="${ChipType.REMOVABLE}"
                                                  @click="${() => {
-                                this.tags.slice(this.tags.indexOf(elem), 1);
                                 if (this.isEditMode) {
                                     DeviceSetService.toggleTag(elem, this.elementId)
+                                    this.tags.slice(this.tags.indexOf(elem), 1);
                                 } else{
                                     this.element.tags.slice(this.element.tags.indexOf(elem), 1);
                                 }

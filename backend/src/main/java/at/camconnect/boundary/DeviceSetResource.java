@@ -1,6 +1,7 @@
 package at.camconnect.boundary;
 
 import at.camconnect.dtos.deviceSet.DeviceSetCreateDTO;
+import at.camconnect.dtos.filters.DeviceTypeFilters;
 import at.camconnect.model.Device;
 import at.camconnect.model.DeviceType;
 import at.camconnect.repository.DeviceSetRepository;
@@ -19,12 +20,13 @@ public class DeviceSetResource {
     @Inject
     DeviceSetRepository deviceSetRepository;
 
-    @GET
+    @POST
     @Path("/getall")
-    public Response getAll() {
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getAll(DeviceTypeFilters filters){
         List<Device> devices;
         try{
-            return CCResponse.ok(deviceSetRepository.getAll());
+            return CCResponse.ok(deviceSetRepository.getAll(filters));
         }catch (CCException ex){
             return CCResponse.error(ex);
         }

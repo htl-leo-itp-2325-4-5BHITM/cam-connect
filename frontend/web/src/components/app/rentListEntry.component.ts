@@ -59,7 +59,7 @@ export class RentListEntryComponent extends LitElement {
         if(!this.datePicker || this.lastStatus != this.rent.status) {
             this.lastStatus = this.rent.status
             this.datePicker = new DatePickerWrapper(input, [new Date(startDate), new Date(endDate)],
-        async (dates) => {
+            async (dates) => {
                     await RentService.updateProperty(this.rent.rent_id, 'rent_start', Util.formatDateForDb(dates[0]))
                     RentService.updateProperty(this.rent.rent_id, 'rent_end_planned', Util.formatDateForDb(dates[1]))
                 }

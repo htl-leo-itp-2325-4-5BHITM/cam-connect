@@ -103,13 +103,15 @@ public class DeviceTypeRepository {
     }
 
     public List<DeviceTypeFullDTO> getAllFull(DeviceTypeFilters filters) {
-        List<DeviceType> deviceTypeList = em.createQuery("" +
+        List<DeviceType> deviceTypeList = em.createQuery(
                 "select dt from DeviceType dt " +
                 "where dt.status = 'active' " +
-                "and (dt.variant in :variants OR :variantsEmpty = true)"
+                "and (dt.variant in :variants OR :variantsEmpty = true) " +
+                "and upper(dt.name) like :name"
             , DeviceType.class)
             .setParameter("variants", filters.variants())
             .setParameter("variantsEmpty", filters.variants().isEmpty())
+            .setParameter("name", "%" + filters.searchTerm().toUpperCase() + "%")
             .getResultList();
 
         List<DeviceTypeFullDTO> list = new LinkedList<>();
@@ -212,7 +214,7 @@ public class DeviceTypeRepository {
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(os))) {
                 writer.write("type_id; name; image; autofocus; f_stop; focal_length; height_centimeters; max_range; max_weight_kilograms; needs_recorder; number_of_axis; rgb; variable_temperature; watts; needs_power; wireless; head_id; mount_id; resolution_id; sensor_id; system; flight_time_minutes; description\n");
 
-                List<DeviceTypeFullDTO> deviceTypeList = getAllFull(new DeviceTypeFilters(false, null, null, null));
+                List<DeviceTypeFullDTO> deviceTypeList = getAllFull(new DeviceTypeFilters(false, null, null, null, null));
                 for (DeviceTypeFullDTO deviceType : deviceTypeList) {
                     try {
                         writer.write(deviceType.deviceType().toGlobalDTO().toCsvString());
@@ -238,7 +240,7 @@ public class DeviceTypeRepository {
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(os))) {
                 writer.write("type_id; name; image; autofocus; f_stop; focal_length; height_centimeters; max_range; max_weight_kilograms; needs_recorder; number_of_axis; rgb; variable_temperature; watts; needs_power; wireless; head_id; mount_id; resolution_id; sensor_id; system; flight_time_minutes; description");
 
-                List<DeviceTypeFullDTO> deviceTypeList = getAllFull(new DeviceTypeFilters(false,null, null, null));
+                List<DeviceTypeFullDTO> deviceTypeList = getAllFull(new DeviceTypeFilters(false,null, null, null, null));
                 for (DeviceTypeFullDTO deviceType : deviceTypeList) {
                     writer.write(deviceType.deviceType().toGlobalDTO().toCsvString());
                 }

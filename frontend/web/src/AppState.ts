@@ -443,7 +443,7 @@ export class AppState{
         UrlHandler.setParam("searchTerm", value)
         this.update()
         if(this._page == PageEnum.RENTS) RentService.fetchAll()
-        if(this._page == PageEnum.EQUIPMENT) DeviceService.fetchAll()
+        if(this._page == PageEnum.EQUIPMENT) DeviceTypeService.fetchAllFull()
     }
 
 

@@ -54,7 +54,10 @@ export class EditDeviceTypeModalComponent extends LitElement {
         if (this.element == null) {
             return html`
                 <style>${styles}</style>
-                <h1>Gerätetyp Erstellen</h1>
+                
+                <h1>Model erstellen</h1>
+                
+                <h2>Gerätetyp</h2>
                 <div class="selectType">
                     ${model.deviceTypeNameFilterOptions.value.map(option => {
                         return html`
@@ -65,6 +68,17 @@ export class EditDeviceTypeModalComponent extends LitElement {
                                 ${option.name}
                             </div>`;
                     })}
+                </div>
+                
+                
+                <h2>Geräte-Set</h2>
+                <div class="selectType">
+                    <div @click="${() => {
+                            model.appState.value.openOverlay(html`<cc-edit-device-set-modal .isEditMode="${false}"></cc-edit-device-set-modal>`, () => {})
+                        }}">
+                        ${DeviceTypeService.deviceTypeToIcon(DeviceTypeVariantEnum.simple)}
+                        Geräte-Set
+                    </div>
                 </div>
             `;
         }

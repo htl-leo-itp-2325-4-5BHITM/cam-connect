@@ -1,7 +1,7 @@
 import {DeviceStatus} from "./device.service"
 import {Api} from "../util/Api"
 import {model} from "../index"
-import {DeviceType} from "./deviceType.service"
+import {DeviceFilterDTO, DeviceType, DeviceTypeFullDTO, DeviceTypeVariantEnum} from "./deviceType.service"
 import {Tag} from "./tag.service"
 
 export interface DeviceSetCreateDTO{
@@ -10,7 +10,7 @@ export interface DeviceSetCreateDTO{
     description: string,
     deviceTypeIds: number[],
     tags: Tag[],
-    status: DeviceStatus
+    status: DeviceTypeVariantEnum
 }
 
 export interface DeviceSet {
@@ -19,12 +19,20 @@ export interface DeviceSet {
     description: string,
     device_types: DeviceType[],
     tags: Tag[],
-    status: DeviceStatus
+    status: DeviceTypeVariantEnum
 }
 
 export default class DeviceSetService{
     static fetchAll(){
-        Api.getData<DeviceSet[]>("/deviceset/getall")
+        let deviceFiltersForBackend: DeviceFilterDTO = {
+            onlyAvailable: model.appState.value.deviceFilters.onlyAvailable,
+            variants: Array.from(model.appState.value.deviceFilters.variants),
+            attributes: Array.from(model.appState.value.deviceFilters.attributes),
+            tags: Array.from(model.appState.value.deviceFilters.tags),
+            searchTerm: model.appState.value.searchTerm
+        }
+
+        Api.postData<DeviceFilterDTO, DeviceSet[]>("/deviceset/getall", deviceFiltersForBackend)
             .then(result => {
                 model.loadDeviceSets(result.data)
             })
@@ -47,6 +55,7 @@ export default class DeviceSetService{
     }
 
     static create(element: DeviceSetCreateDTO) {
+        console.log(element)
         return Api.postData("/deviceset/create", element)
             .then(result => {
                 if (result.ccStatus.statusCode == 1000) {
