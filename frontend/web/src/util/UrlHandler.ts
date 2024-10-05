@@ -7,6 +7,7 @@ import AuthService from "../service/auth.service"
 let pages = {
     app: {
         handler: () => {
+            console.log("app page")
             model.appState.value.setAccessToken(localStorage["cc-access_token"])
                 .then(user => {
                     console.log(user)
@@ -14,6 +15,9 @@ let pages = {
                     model.queryData()
                     model.createSocketConnection()
                     UrlHandler.changeOrigin("cc-dashboard")
+                })
+                .catch(() => {
+                    AuthService.logOut()
                 })
         },
         children: {

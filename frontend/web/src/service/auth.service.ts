@@ -115,13 +115,15 @@ export default class AuthService {
                 if(response.status == 200){
                     return true
                 } else {
-                   this.logOut()
+                    console.log("Access token invalid")
+                    this.logOut()
                     return false
                 }
             })
     }
 
     static logOut(){
+        console.log("Logging out")
         model.appState.value.setAccessToken(null)
         UrlHandler.setUrl("/login")
     }

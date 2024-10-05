@@ -69,6 +69,8 @@ export class AppState{
     private _createMultiRentModalOpen: boolean = false
     private _selectedRentEntries: Set<RentListEntryComponent> = new Set<RentListEntryComponent>()
     private _selectedDeviceEntries: Set<DeviceListEntryComponent> = new Set<DeviceListEntryComponent>()
+    //TODO @michi i added this because the setter threw an error IDK man take a look pls
+    private _selectedSetEntries: Set<DeviceSetListEntryComponent> = new Set<DeviceSetListEntryComponent>()
     private _selectedDeviceTypeEditEntries: Set<DeviceTypeEditEntryComponent> = new Set<DeviceTypeEditEntryComponent>()
     private _selectedDeviceEditEntries: Set<DeviceEditEntryComponent> = new Set<DeviceEditEntryComponent>()
     private _selectedDeviceSetEditEntries: Set<DeviceSetEditEntryComponent> = new Set<DeviceSetEditEntryComponent>()
@@ -520,7 +522,7 @@ export class AppState{
 
     setAccessToken(value: string){
         return new Promise((resolve, reject) => {
-            if(!value || value == "undefined" || value == "") return
+            if(!value || value == "undefined" || value == "") reject("no access token provided")
 
             this._access_token = value
             localStorage["cc-access_token"] = value
