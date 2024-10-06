@@ -3,6 +3,7 @@ package at.camconnect.repository;
 import at.camconnect.dtos.AutocompleteNumberOptionDTO;
 import at.camconnect.dtos.KeycloakUser;
 import at.camconnect.model.User;
+import at.camconnect.responseSystem.CCException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -25,8 +26,11 @@ public class UserRepository {
     EntityManager em;
 
     public User getById(String id){
-        User user = em.find(User.class, id);
-        return user;
+        try {
+            return em.find(User.class, id);
+        } catch (Exception e){
+            throw new CCException(1101);
+        }
     }
 
     public List<User> getAllStudents(){

@@ -93,10 +93,13 @@ export default class Model{
     )
 
     createSocketConnection(){
+        console.log("creating socket connection")
         RentService.createSocketConnection()
     }
 
-    queryData(){
+    fetchAll(){
+        console.log("fetching all data")
+
         RentService.fetchAll()
         DeviceService.fetchAll()
         DeviceSetService.fetchAll();

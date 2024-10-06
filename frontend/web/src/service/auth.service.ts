@@ -96,6 +96,7 @@ export default class AuthService {
             {username: username, password: password}
             )
             .then(result => {
+                console.log(result)
                 return JSON.parse(result.data)
             })
             .catch(error => {
@@ -113,6 +114,7 @@ export default class AuthService {
         })
             .then(response => {
                 if(response.status == 200){
+                    console.log("Access token valid")
                     return true
                 } else {
                     console.log("Access token invalid")

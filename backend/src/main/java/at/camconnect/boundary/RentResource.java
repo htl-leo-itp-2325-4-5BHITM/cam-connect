@@ -2,6 +2,7 @@ package at.camconnect.boundary;
 
 import at.camconnect.dtos.filters.RentFilters;
 import at.camconnect.dtos.rent.*;
+import at.camconnect.enums.RentStatusEnum;
 import at.camconnect.model.Rent;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
@@ -84,6 +85,7 @@ public class RentResource {
         try{
             result = rentRepository.getAll(filters);
         }catch (CCException ex){
+            ex.printStackTrace();
             return CCResponse.error(ex);
         }
 
@@ -147,10 +149,36 @@ public class RentResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/getbyid/{id: [0-9]+}/confirmordecline")
-    public Response confirmOrDeclineRent(@PathParam("id") Long id, RentIdsDTO data) {
+    @Path("/getbyid/{id: [0-9]+}/externalconfirmordecline")
+    public Response externalConfirmOrDeclineRent(@PathParam("id") Long id, RentIdsDTO data) {
         try {
-            rentRepository.confirmOrDeclineRent(id, data);
+            rentRepository.externalConfirmOrDeclineRent(id, data);
+        } catch (CCException ex) {
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/getbyid/{id: [0-9]+}/confirm")
+    @Authenticated
+    public Response confirm(@PathParam("id") Long id) {
+        try {
+            rentRepository.confirmRent(id, securityIdentity);
+        } catch (CCException ex) {
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/getbyid/{id: [0-9]+}/decline")
+    @Authenticated
+    public Response decline(@PathParam("id") Long id, JsonObject data) {
+        try {
+            rentRepository.declineRent(id, data.getString("message"), securityIdentity);
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }

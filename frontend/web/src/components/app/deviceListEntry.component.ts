@@ -112,7 +112,7 @@ export class DeviceListEntryComponent extends LitElement {
                                model.appState.value.openCreateRentModalWithDevices(this.appState.value.selectedDeviceEntries, "type")
                             }}"
                 >Verleihen</cc-button>
-                ${model.appState.value.currentUser.role == UserRoleEnum.MEDT_TEACHER ?
+                ${model.appState.value.currentUser?.role == UserRoleEnum.MEDT_TEACHER ?
                     html`
                         <cc-button type="${ButtonType.OUTLINED}" .disabled="${this.deviceTypeFull.available == 0}"
                                    @click="${() => model.appState.value.openCreateRentModal(this.deviceTypeFull.deviceType.type_id, "deviceType")}"
@@ -121,7 +121,7 @@ export class DeviceListEntryComponent extends LitElement {
                 }
             </div>
             
-            ${model.appState.value.currentUser.role == UserRoleEnum.MEDT_TEACHER ?
+            ${model.appState.value.currentUser?.role == UserRoleEnum.MEDT_TEACHER ?
                 html`
                     <cc-circle-select 
                         .checked="${this.appState.value.selectedDeviceEntries.has(this)}"

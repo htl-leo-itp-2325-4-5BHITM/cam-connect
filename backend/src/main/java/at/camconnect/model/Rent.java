@@ -31,7 +31,7 @@ public class Rent {
     private User student;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "device_id")
     private Device device;
 

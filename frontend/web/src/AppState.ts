@@ -231,8 +231,6 @@ export class AppState{
         this._createRentElement.addDevice("default", false)
 
         this.update()
-
-        console.table(this._cancelCurrentAction)
     }
 
     get createRentModalOpen(): boolean {
@@ -526,11 +524,19 @@ export class AppState{
 
             this._access_token = value
             localStorage["cc-access_token"] = value
+
             UserService.getById(Util.parseJwt(value).sub).then(async user => {
+                if(!user){
+                    console.error("user was not found in cam-connect database")
+                    resolve(null)
+                    return
+                }
+
                 try {
                     user.role = await AuthService.getRole()
                 }catch (e){
-                    AuthService.logOut()
+                    console.log("could not get role, defaulting to student")
+                    user.role = UserRoleEnum.STUDENT
                 }
 
                 if (UrlHandler.getParam("simulate") == "teacher") {
@@ -548,8 +554,6 @@ export class AppState{
                 this.currentUser = user
 
                 resolve(user)
-
-                console.log(user)
             })
 
             this.update()

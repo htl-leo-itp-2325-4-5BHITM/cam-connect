@@ -77,10 +77,12 @@ export default class RentService {
         if(model.appState.value.currentUser?.role == UserRoleEnum.STUDENT)
             rentFiltersForBackend.studentIds = [model.appState.value.currentUser?.user_id]
 
+        console.log(rentFiltersForBackend)
+
         Api.postData<RentFilterDTO, RentByStudentDTO[]>("/rent/getall", rentFiltersForBackend)
             .then(result => {
-                model.loadRents(result.data || [])
                 console.log(result)
+                model.loadRents(result.data || [])
             })
             .catch(error => {
                 console.error(error)
@@ -170,7 +172,7 @@ export default class RentService {
 
     static async confirmOrDecline(rentId: number, code: string, status: RentStatusEnum, message: string) {
         return new Promise((resolve, reject) => {
-            Api.postData(`/rent/getbyid/${rentId}/confirmordecline`, {verification_code: code, status: status, verification_message: message})
+            Api.postData(`/rent/getbyid/${rentId}/externalconfirmordecline`, {verification_code: code, status: status, verification_message: message})
                 .then((result) => {
                     if(result.ccStatus.statusCode == 1000){
                         PopupEngine.createNotification({ heading: "Verleih erfolgreich " + Util.rentStatusToHuman(status), CSSClass: "good" })
@@ -197,5 +199,25 @@ export default class RentService {
                     console.error(error)
                 })
         })
+    }
+
+    static confirm(rentId: number){
+        return Api.putData(`/rent/getbyid/${rentId}/confirm`)
+            .then(() => {
+                RentService.fetchAll()
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
+
+    static decline(rentId: number, message: string){
+        return Api.postData(`/rent/getbyid/${rentId}/confirm`, {message: message})
+            .then(() => {
+                RentService.fetchAll()
+            })
+            .catch(error => {
+                console.error(error)
+            })
     }
 }

@@ -24,10 +24,14 @@ export class DeviceListComponent extends LitElement {
         super()
 
         this.appState = new ObservedProperty<AppState>(this, model.appState)
+    }
 
+    protected firstUpdated(_changedProperties: PropertyValues) {
         model.deviceTypesFull.subscribe(types => {this.processEquipment()})
 
         model.deviceSetsFull.subscribe(sets => {this.processEquipment()})
+
+        super.firstUpdated(_changedProperties);
     }
 
     processEquipment(){

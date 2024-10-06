@@ -36,13 +36,10 @@ public class DeviceSetRepository {
                 .setParameter("name", "%" + filters.searchTerm().toUpperCase() + "%")
                 .getResultList();
 
-        System.out.println(sets.size());
-
         List<DeviceSetFullDTO> dtos = new LinkedList<>();
         sets.forEach(set -> {
             int availabilities = getAvailabilities(set);
 
-            System.out.println(filters.onlyAvailable());
             if(filters.onlyAvailable() && availabilities > 0) {
                 dtos.add(new DeviceSetFullDTO(set, availabilities));
             } else if(!filters.onlyAvailable()){
@@ -77,12 +74,9 @@ public class DeviceSetRepository {
 
     @Transactional
     public void create(DeviceSetCreateDTO dto){
-        System.out.println(dto);
         DeviceSet deviceSet = new DeviceSet(dto.name(), dto.description(), dto.status());
         em.persist(deviceSet);
         em.flush();
-
-        System.out.println(deviceSet);
 
         if(dto.deviceTypeIds() != null) {
             for (Long deviceTypeId : dto.deviceTypeIds()) {

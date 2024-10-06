@@ -19,46 +19,8 @@
   color: $gray800;
 }
 
-.rentsForStudent{
-  li{
-    display: flex;
-    gap: .5rem;
-    align-items: center;
-    padding-block: .5rem;
-    padding-inline: 1rem .5rem;
-    border-radius: .3rem;
-    background-color: $gray250;
-    margin-block: .3rem;
-    font-size: $fSizeDesktopSmall;
-
-    div{
-      display: flex;
-      gap: 1rem;
-      margin-right: auto;
-    }
-
-    .date{
-      color: $gray700;
-    }
-
-    cc-button{
-      margin-left: .5rem;
-    }
-
-    p.done{
-      color: $gray700
-    }
-
-    svg, img{
-      height: 1rem;
-      path{
-        color: $gray700;
-      }
-    }
-  }
-}
-
 .showHistory{
   margin-inline: auto;
   margin-top: 2rem;
+  display: block;
 }

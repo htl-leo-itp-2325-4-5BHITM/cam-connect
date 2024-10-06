@@ -8,6 +8,7 @@ import at.camconnect.model.*;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.socket.RentSocket;
 import at.camconnect.responseSystem.CCResponse;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.vertx.ext.mail.MailClient;
 import io.vertx.ext.mail.MailMessage;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,13 +24,11 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
+@Transactional
 public class RentRepository {
     @Inject
     EntityManager em;
@@ -43,7 +42,6 @@ public class RentRepository {
     @Inject
     DeviceRepository deviceRepository;
 
-    @Transactional
     public void create(List<CreateRentDTO> rentDTOs){
         List<Rent> rents = new LinkedList<>();
 
@@ -85,13 +83,12 @@ public class RentRepository {
     }
 
     //TODO remove when abandoning old web
-    @Transactional
+    @Deprecated
     public void createEmpty(){
-        /*em.persist(new Rent());
-        rentSocket.broadcast();*/
+        em.persist(new Rent());
+        rentSocket.broadcast();
     }
 
-    @Transactional
     public Response remove(Long id){
         getById(id).setStatus(RentStatusEnum.DELETED);
         rentSocket.broadcast();
@@ -133,6 +130,8 @@ public class RentRepository {
     }
 
     public List<RentByStudentDTO> getAll(RentFilters filters){
+        System.out.println("getting all rents");
+
         String orderByString = "";
         switch (filters.orderBy()) {
             case ALPHABETICAL_ASC: orderByString = "order by s.firstname asc, s.lastname asc"; break;
@@ -240,7 +239,6 @@ public class RentRepository {
         return result;
     }
 
-    @Transactional
     public void sendConfirmationEmail(List<Rent> rentList){
         for (Rent rent : rentList) {
             rent.setStatus(RentStatusEnum.WAITING);
@@ -260,7 +258,6 @@ public class RentRepository {
         });
     }
 
-    @Transactional
     public MailMessage generateConfirmationMailMessage(List<Rent> rents) {
         //TODO do this with env variables
         String FRONTEND_URL = "http://144.24.171.164/public/";
@@ -318,8 +315,7 @@ public class RentRepository {
         return rent.getVerification_code().equals(code);
     }
 
-    @Transactional
-    public void confirmOrDeclineRent(Long rentId, RentIdsDTO data) {
+    public void externalConfirmOrDeclineRent(Long rentId, RentIdsDTO data) {
         Rent rent = getById(rentId);
 
         if(!rent.getStatus().equals(RentStatusEnum.WAITING)){
@@ -351,7 +347,34 @@ public class RentRepository {
         rentSocket.broadcast();
     }
 
-    @Transactional
+    public void confirmRent(Long rentId, SecurityIdentity securityIdentity) {
+        Rent rent = getById(rentId);
+
+        String currentUserId = securityIdentity.getAttribute("sub");
+
+        System.out.println(currentUserId);
+
+        if(!Objects.equals(rent.getStudent().getUser_id(), currentUserId)) return;
+
+        rent.setStatus(RentStatusEnum.CONFIRMED);
+        em.merge(rent);
+
+        rentSocket.broadcast();
+    }
+
+    public void declineRent(Long rentId, String message, SecurityIdentity securityIdentity) {
+        Rent rent = getById(rentId);
+
+        String currentUserId = securityIdentity.getAttribute("sub");
+
+        if(!Objects.equals(rent.getStudent().getUser_id(), currentUserId)) return;
+
+        rent.setStatus(RentStatusEnum.DECLINED);
+        em.merge(rent);
+
+        rentSocket.broadcast();
+    }
+
     public void returnRent(Long rentId){
         Rent rent = getById(rentId);
 
@@ -386,7 +409,6 @@ public class RentRepository {
         rentSocket.broadcast();
     }
 
-    @Transactional
     public void update(Long id, JsonObject rentJson){
         if(rentJson == null) throw new CCException(1105);
 
@@ -426,7 +448,7 @@ public class RentRepository {
             catch(Exception ex){ throw new CCException(1105, "cannot update rent_end_actual " + ex.getMessage()); }
 
         if(validateJsonKey(rentJson,"status"))
-            try{ confirmOrDeclineRent(id, rentJson.getString("status")); }
+            try{ externalConfirmOrDeclineRent(id, rentJson.getString("status")); }
             catch (CCException ccex){ throw ccex; }
             catch(Exception ex){ throw new CCException(1105, "cannot update status " + ex.getMessage()); }
 
@@ -443,7 +465,6 @@ public class RentRepository {
         rentSocket.broadcast();
     }
 
-    @Transactional
     public void updateProperty(String property, Long rentId, JsonObject data){
         Rent rent = getById(rentId);
 
@@ -465,12 +486,10 @@ public class RentRepository {
                 rent.setTeacher_end(teacherEnd);
                 break;
             case "rent_start":
-                System.out.println("updating rentstart " + data.getString("value"));
                 LocalDate rentStart = LocalDate.parse(data.getString("value"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 rent.setRent_start(rentStart);
                 break;
             case "rent_end_planned":
-                System.out.println("updating rentendplanned " + data.getString("value"));
                 LocalDate rentEndPlanned = LocalDate.parse(data.getString("value"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 rent.setRent_end_planned(rentEndPlanned);
                 break;
@@ -534,7 +553,7 @@ public class RentRepository {
         rent.setRent_end_actual(LocalDate.parse(date));
     }
 
-    public void confirmOrDeclineRent(Long rentId, String status) {
+    public void externalConfirmOrDeclineRent(Long rentId, String status) {
         Rent rent = getById(rentId);
         rent.setStatus(RentStatusEnum.valueOf(status));
     }
@@ -548,7 +567,7 @@ public class RentRepository {
         Rent rent = getById(rentId);
         rent.setDevice_string(device_string);
     }
-    public void confirmOrDeclineRent(Long rentId, RentStatusEnum verificationStatus){
+    public void externalConfirmOrDeclineRent(Long rentId, RentStatusEnum verificationStatus){
         Rent rent = getById(rentId);
 
         if(rent.getStatus() == verificationStatus){
@@ -620,7 +639,6 @@ public class RentRepository {
         return line.toString();
     }
 
-    @Transactional
     public void importRents(File file){
         Long highestId = 0L;
 
@@ -630,7 +648,7 @@ public class RentRepository {
                 highestId = latestRent.getRent_id();
             }
         } catch(Exception ex){
-            System.out.println(ex.getMessage());
+            throw new CCException(1200, "could not find the latest rent");
         }
 
 
