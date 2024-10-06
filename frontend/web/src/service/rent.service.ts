@@ -55,7 +55,8 @@ export interface RentFilterDTO {
     statuses?: RentStatusEnum[]
     schoolClasses?: string[]
     studentIds?: string[]
-    searchTerm?: string
+    studentSearchTerm?: string
+    deviceTypeSearchTerm?: string
 }
 
 export enum OrderByFilterRent {
@@ -71,11 +72,15 @@ export default class RentService {
             orderBy: model.appState.value.rentFilters.orderBy,
             statuses: model.appState.value.rentFilters.statuses,
             schoolClasses: Array.from(model.appState.value.rentFilters.schoolClasses),
-            searchTerm: model.appState.value.searchTerm,
         }
 
-        if(model.appState.value.currentUser?.role == UserRoleEnum.STUDENT)
+        if(model.appState.value.currentUser?.role != UserRoleEnum.MEDT_TEACHER) {
             rentFiltersForBackend.studentIds = [model.appState.value.currentUser?.user_id]
+            rentFiltersForBackend.deviceTypeSearchTerm = model.appState.value.searchTerm
+        }
+        else{
+            rentFiltersForBackend.studentSearchTerm = model.appState.value.searchTerm
+        }
 
         Api.postData<RentFilterDTO, RentByStudentDTO[]>("/rent/getall", rentFiltersForBackend)
             .then(result => {

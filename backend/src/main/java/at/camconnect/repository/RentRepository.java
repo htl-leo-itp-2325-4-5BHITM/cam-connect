@@ -8,7 +8,6 @@ import at.camconnect.model.*;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.socket.RentSocket;
 import at.camconnect.responseSystem.CCResponse;
-import io.quarkus.security.identity.SecurityIdentity;
 import io.vertx.ext.mail.MailClient;
 import io.vertx.ext.mail.MailMessage;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,7 +18,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.StreamingOutput;
-import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -150,13 +148,13 @@ public class RentRepository {
                         "where (s.school_class IN :schoolClasses OR :schoolClassesEmpty = true) " +
                         "and (s.user_id IN :studentIds OR :studentIdsEmpty = true) " +
                         "and (" +
-                        "       upper(s.firstname) like '%' || :searchTerm || '%' " +
-                        "       OR :searchTerm like '%' || upper(s.firstname) || '%' " +
-                        "       OR upper(s.lastname) like '%' || :searchTerm || '%' " +
-                        "       OR :searchTerm like '%' || upper(s.lastname) || '%' " +
-                        "       OR :searchTerm like '%' || upper(s.firstname) || '%' || upper(s.lastname) || '%' " +
-                        "       OR upper(s.firstname) || '%' || upper(s.lastname) like '%' || :searchTerm || '%' " +
-                        "OR :searchTermEmpty = true) " +
+                        "       upper(s.firstname) like '%' || :studentSearchTerm || '%' " +
+                        "       OR :studentSearchTerm like '%' || upper(s.firstname) || '%' " +
+                        "       OR upper(s.lastname) like '%' || :studentSearchTerm || '%' " +
+                        "       OR :studentSearchTerm like '%' || upper(s.lastname) || '%' " +
+                        "       OR :studentSearchTerm like '%' || upper(s.firstname) || '%' || upper(s.lastname) || '%' " +
+                        "       OR upper(s.firstname) || '%' || upper(s.lastname) like '%' || :studentSearchTerm || '%' " +
+                        "OR :studentSearchTermEmpty = true) " +
                         "group by s.user_id " +
                         orderByString
                 ,User.class)
@@ -164,8 +162,8 @@ public class RentRepository {
                 .setParameter("schoolClassesEmpty", filters.schoolClasses().isEmpty())
                 .setParameter("studentIds", filters.studentIds())
                 .setParameter("studentIdsEmpty", filters.studentIds().isEmpty())
-                .setParameter("searchTerm", filters.searchTerm().toUpperCase())
-                .setParameter("searchTermEmpty", filters.searchTerm().isEmpty())
+                .setParameter("studentSearchTerm", filters.studentSearchTerm().toUpperCase())
+                .setParameter("studentSearchTermEmpty", filters.studentSearchTerm().isEmpty())
                 .getResultList();
 
         List<RentByStudentDTO> result = new LinkedList<>();
@@ -178,11 +176,19 @@ public class RentRepository {
                     "SELECT r FROM Rent r " +
                             "where r.student.user_id = :studentId " +
                             "and (r.status IN :statuses OR :statusesEmpty = true) " +
+                            "and (" +
+                            "       upper(r.device.type.name) like '%' || :deviceTypeSearchTerm || '%' " +
+                            "       OR :deviceTypeSearchTerm like '%' || upper(r.device.type.name) || '%' " +
+                            "       OR upper(r.device_string) like '%' || :deviceTypeSearchTerm || '%' " +
+                            "       OR :deviceTypeSearchTerm like '%' || upper(r.device_string) || '%' " +
+                            "OR :deviceTypeSearchTermEmpty = true) " +
                             "order by r.id"
                     , Rent.class)
                     .setParameter("studentId", student.getUser_id())
                     .setParameter("statuses", filters.statuses())
                     .setParameter("statusesEmpty", filters.statuses().isEmpty())
+                    .setParameter("deviceTypeSearchTerm", filters.deviceTypeSearchTerm().toUpperCase())
+                    .setParameter("deviceTypeSearchTermEmpty", filters.deviceTypeSearchTerm().isEmpty())
                     .getResultStream()
                     .map(rent -> new RentDTO(
                             rent.getRent_id(),

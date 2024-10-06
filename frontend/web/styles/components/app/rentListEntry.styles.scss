@@ -25,7 +25,9 @@
   padding-block: .3rem !important;
 
   input{
-    background-color: #663D3D;
+    background-color: hsl(0, 20%, 30%);
+    /*border-color: $gray500;*/
+    padding-block: .25rem;
     border-color: transparent;
 
     &.date{
@@ -38,8 +40,9 @@
     border-color: transparent;
 
     &::part(input){
+      background-color: hsl(0, 20%, 30%);
+      padding-block: .25rem;
       border-color: transparent;
-      background-color: #663D3D;
     }
 
     &::part(icon){
@@ -51,7 +54,7 @@
     }
 
     &.name{
-      width: 12ch;
+      width: 15ch;
     }
   }
 

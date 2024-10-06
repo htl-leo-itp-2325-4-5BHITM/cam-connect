@@ -5,13 +5,23 @@ import at.camconnect.enums.filters.OrderByFilterRent;
 
 import java.util.List;
 
-public record RentFilters(OrderByFilterRent orderBy, List<RentStatusEnum> statuses, List<String> schoolClasses, List<String> studentIds, String searchTerm) {
+public record RentFilters(
+        OrderByFilterRent orderBy,
+        List<RentStatusEnum> statuses,
+        List<String> schoolClasses,
+        List<String> studentIds,
+        String studentSearchTerm,
+        String deviceTypeSearchTerm
+) {
     public RentFilters {
         if(orderBy == null) {
             orderBy = OrderByFilterRent.ALPHABETICAL_ASC;
         }
-        if(searchTerm == null) {
-            searchTerm = "";
+        if(studentSearchTerm == null) {
+            studentSearchTerm = "";
+        }
+        if(deviceTypeSearchTerm == null) {
+            deviceTypeSearchTerm = "";
         }
         if(statuses == null) {
             statuses = List.of();

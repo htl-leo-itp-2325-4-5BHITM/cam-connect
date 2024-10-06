@@ -3,6 +3,7 @@ import {EditPageEnum, PageEnum} from "../model"
 import {html} from "lit"
 import {DeviceTypeVariantEnum} from "../service/deviceType.service"
 import AuthService from "../service/auth.service"
+import {UserRoleEnum} from "../service/user.service"
 
 let pages = {
     app: {
@@ -54,6 +55,7 @@ let pages = {
                         model.appState.value.editPageType = UrlHandler.getParam("type") as DeviceTypeVariantEnum/* || DeviceTypeVariantEnum.camera*/
                     }
                 },
+                permit: [UserRoleEnum.MEDT_TEACHER],
                 children: {
                     children: {
                         handler: () => { model.appState.value.editPage = EditPageEnum.CHILDREN }
@@ -83,6 +85,9 @@ let pages = {
     notFound: {
         handler: () => { UrlHandler.changeOrigin("cc-not-found") }
     },
+    notAllowed: {
+        handler: () => { UrlHandler.changeOrigin("cc-not-allowed") }
+    },
     login: {
         handler: () => { UrlHandler.changeOrigin("cc-login") }
     }
@@ -92,7 +97,6 @@ export default class UrlHandler {
     static parseCurrentURL () {
         let urlSplit = window.location.href.split("?")[0]?.split("/")
         urlSplit.splice(0, 3) //might break if basic url structure changes
-        console.log(urlSplit)
 
         if(urlSplit[0] === "") {
             pages.default.handler()
@@ -120,13 +124,18 @@ export default class UrlHandler {
      * @param options
      * @param currentPath
      */
-    static handlePage(pageIndex, options, currentPath){
+    private static handlePage(pageIndex, options, currentPath){
         if(pageIndex+1 > currentPath.length) return
 
         let nextPage = options[currentPath[pageIndex]]
 
         if(!nextPage) {
             pages.notFound.handler();
+            return
+        }
+
+        if(nextPage.permit && !nextPage.permit.includes(model.appState.value.currentUser?.role)){
+            pages.notAllowed.handler()
             return
         }
 

@@ -106,19 +106,17 @@ export class DeviceListEntryComponent extends LitElement {
                     color="${this.deviceTypeFull.available > 0 ? ColorEnum.GOOD : ColorEnum.BAD}" 
                     text="${this.deviceTypeFull.available > 0 ? (this.deviceTypeFull.available + ' Verfügbar') : 'Vergeben'}"
                 ></cc-chip>
-                <cc-button type="${ButtonType.OUTLINED}" .disabled="${this.deviceTypeFull.available == 0}"
-                           @click="${() => {
-                               this.toggleDeviceCheck();
-                               model.appState.value.openCreateRentModalWithDevices(this.appState.value.selectedDeviceEntries, "type")
-                            }}"
-                >Verleihen</cc-button>
                 ${model.appState.value.currentUser?.role == UserRoleEnum.MEDT_TEACHER ?
                     html`
                         <cc-button type="${ButtonType.OUTLINED}" .disabled="${this.deviceTypeFull.available == 0}"
-                                   @click="${() => model.appState.value.openCreateRentModal(this.deviceTypeFull.deviceType.type_id, "deviceType")}"
+                                   @click="${() => {
+                                       this.toggleDeviceCheck();
+                                       model.appState.value.openCreateRentModalWithDevices(this.appState.value.selectedDeviceEntries, "type")
+                                    }}"
                         >Verleihen</cc-button>
                     ` : ""
                 }
+                   
             </div>
             
             ${model.appState.value.currentUser?.role == UserRoleEnum.MEDT_TEACHER ?

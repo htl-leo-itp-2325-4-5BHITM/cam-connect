@@ -100,7 +100,7 @@ export class NavbarComponent extends LitElement {
                         }
                     </div>
                 </div>
-                <icon-cta @click="${this.reload}" class="reload">${unsafeSVG(icon(faArrowRotateRight).html[0])}</icon-cta>
+                <!-- <icon-cta @click="${this.reload}" class="reload">${unsafeSVG(icon(faArrowRotateRight).html[0])}</icon-cta> -->
                 <icon-cta>${unsafeSVG(icon(faCircleQuestion).html[0])}</icon-cta>
             </div>
         `
