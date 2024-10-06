@@ -12,15 +12,11 @@ import PopupEngine from "../../util/PopupEngine"
 import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons"
 
 import styles from '../../../styles/components/app/rentListEntryForStudentview.styles.scss'
-import {ChipType} from "../basic/chip.component"
-
 
 @customElement('cc-rent-list-entry-for-student')
 export class RentListEntryForStudentviewComponent extends LitElement {
     @property()
     rent: Rent
-
-    private lastStatus = RentStatusEnum.WAITING
 
     @property()
     private appState: ObservedProperty<AppState>
@@ -75,6 +71,9 @@ export class RentListEntryForStudentviewComponent extends LitElement {
             <div>
                 <p>${name}</p>
                 <p class="date">${this.rent.rent_start} - ${this.rent.rent_end_planned}</p>
+                <cc-property-value size="${SizeEnum.SMALL}" property="Erstellt von"
+                                   value="${this.rent.teacher_start?.firstname.charAt(0)}. ${this.rent.teacher_start?.lastname}">
+                </cc-property-value>
             </div>
             ${this.rent.status == RentStatusEnum.WAITING ?
                     html`
@@ -92,7 +91,7 @@ export class RentListEntryForStudentviewComponent extends LitElement {
                         <cc-button color="${ColorEnum.BAD}"
                                    text="Ablehnen"
                                    type="underlined"
-                                   @click="${this.declineRent}"
+                                   @click="${() => this.declineRent(name)}"
                                    noPadding
                                    loading
                         >
@@ -103,7 +102,7 @@ export class RentListEntryForStudentviewComponent extends LitElement {
                     ` :
                     html`
                         <cc-chip color="${chipColor}" 
-                                 size="${SizeEnum.SMALL}"
+                                 size="${SizeEnum.BIG}"
                                  text="${chipText}">
                         </cc-chip>
                     `
@@ -112,9 +111,10 @@ export class RentListEntryForStudentviewComponent extends LitElement {
     }
 
     acceptRent(){
+        RentService.confirm(this.rent.rent_id)
     }
 
-    declineRent(){
+    declineRent(name){
         PopupEngine.createModal({
             heading: "Verleih ablehnen",
             text: `Warum möchtest du den Verleih von: ${name} ablehnen?`,
@@ -129,7 +129,8 @@ export class RentListEntryForStudentviewComponent extends LitElement {
                     text: "Ablehnen",
                     role: "confirm",
                     action: (data) => {
-
+                        console.log(data)
+                        RentService.decline(this.rent.rent_id, data.inputValues[0] as string)
                     }
                 },
                 {

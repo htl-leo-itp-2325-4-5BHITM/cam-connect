@@ -77,11 +77,8 @@ export default class RentService {
         if(model.appState.value.currentUser?.role == UserRoleEnum.STUDENT)
             rentFiltersForBackend.studentIds = [model.appState.value.currentUser?.user_id]
 
-        console.log(rentFiltersForBackend)
-
         Api.postData<RentFilterDTO, RentByStudentDTO[]>("/rent/getall", rentFiltersForBackend)
             .then(result => {
-                console.log(result)
                 model.loadRents(result.data || [])
             })
             .catch(error => {
@@ -203,7 +200,7 @@ export default class RentService {
 
     static confirm(rentId: number){
         return Api.putData(`/rent/getbyid/${rentId}/confirm`)
-            .then(() => {
+            .then(result => {
                 RentService.fetchAll()
             })
             .catch(error => {
@@ -212,7 +209,7 @@ export default class RentService {
     }
 
     static decline(rentId: number, message: string){
-        return Api.postData(`/rent/getbyid/${rentId}/confirm`, {message: message})
+        return Api.postData(`/rent/getbyid/${rentId}/decline`, {message: message})
             .then(() => {
                 RentService.fetchAll()
             })

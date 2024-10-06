@@ -19,6 +19,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.StreamingOutput;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -41,6 +42,9 @@ public class RentRepository {
 
     @Inject
     DeviceRepository deviceRepository;
+
+    @Inject
+    UserRepository userRepository;
 
     public void create(List<CreateRentDTO> rentDTOs){
         List<Rent> rents = new LinkedList<>();
@@ -347,14 +351,12 @@ public class RentRepository {
         rentSocket.broadcast();
     }
 
-    public void confirmRent(Long rentId, SecurityIdentity securityIdentity) {
+    public void confirmRent(Long rentId, String currentUserId) {
         Rent rent = getById(rentId);
-
-        String currentUserId = securityIdentity.getAttribute("sub");
 
         System.out.println(currentUserId);
 
-        if(!Objects.equals(rent.getStudent().getUser_id(), currentUserId)) return;
+        if(!Objects.equals(rent.getStudent().getUser_id(), currentUserId)) throw new CCException(1205);
 
         rent.setStatus(RentStatusEnum.CONFIRMED);
         em.merge(rent);
@@ -362,28 +364,34 @@ public class RentRepository {
         rentSocket.broadcast();
     }
 
-    public void declineRent(Long rentId, String message, SecurityIdentity securityIdentity) {
+    public void declineRent(Long rentId, String message, String currentUserId) {
         Rent rent = getById(rentId);
 
-        String currentUserId = securityIdentity.getAttribute("sub");
-
-        if(!Objects.equals(rent.getStudent().getUser_id(), currentUserId)) return;
+        if(!Objects.equals(rent.getStudent().getUser_id(), currentUserId)) throw new CCException(1205);
 
         rent.setStatus(RentStatusEnum.DECLINED);
+        rent.setVerification_message(message);
         em.merge(rent);
 
         rentSocket.broadcast();
     }
 
-    public void returnRent(Long rentId){
+    public void returnRent(Long rentId, String currentUserId) {
         Rent rent = getById(rentId);
 
         //instant return if already confirmed
         if(!rent.getStatus().equals(RentStatusEnum.CONFIRMED)){
-            throw new CCException(1205);
+            throw new CCException(1205, "rent is not yet confirmed");
         }
 
         rent.setStatus(RentStatusEnum.RETURNED);
+        rent.setRent_end_actual(LocalDate.now());
+        try{
+            rent.setTeacher_end(userRepository.getById(currentUserId));
+        }catch (Exception ex){
+            throw new CCException(1101, "cannot update teacher_end_id " + ex.getMessage());
+        }
+
         em.merge(rent);
 
         MailMessage message = new MailMessage();

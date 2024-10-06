@@ -165,7 +165,7 @@ public class RentResource {
     @Authenticated
     public Response confirm(@PathParam("id") Long id) {
         try {
-            rentRepository.confirmRent(id, securityIdentity);
+            rentRepository.confirmRent(id, jwt.getSubject());
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }
@@ -178,7 +178,7 @@ public class RentResource {
     @Authenticated
     public Response decline(@PathParam("id") Long id, JsonObject data) {
         try {
-            rentRepository.declineRent(id, data.getString("message"), securityIdentity);
+            rentRepository.declineRent(id, data.getString("message"), jwt.getSubject());
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }
@@ -190,7 +190,7 @@ public class RentResource {
     @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response returnRent(@PathParam("id") Long id) {
         try {
-            rentRepository.returnRent(id);
+            rentRepository.returnRent(id, jwt.getSubject());
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }
