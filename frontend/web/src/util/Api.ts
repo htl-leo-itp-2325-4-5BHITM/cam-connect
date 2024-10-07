@@ -91,7 +91,7 @@ export class Api {
                 text: "Die angeforderten Daten konnten nicht geladen werden - ccStatus: 1101",
             })
         }
-        console.error("something went wrong in the backend trying to reach endpoint: ", url, "statusCode: ", status.statusCode + ". Details:", status.details, "Message:", status.message)
+        console.error("something went wrong in the backend trying to reach endpoint: ", url, "statusCode: ", status.statusCode + ". Details:", status.details, ". Message:", status.message)
         return false
     }
 

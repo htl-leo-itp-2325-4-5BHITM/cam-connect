@@ -47,10 +47,19 @@ public class AuthResource {
                 return CCResponse.error(new CCStatus(1206, "Invalid login credentials"));
             }
 
-            String responseBody = keycloakResponse.readEntity(String.class);
-            return CCResponse.ok(responseBody);
+            String responseString = keycloakResponse.readEntity(String.class);
+
+            JSONParser parser = new JSONParser();
+            JSONObject responseJson = new JSONObject();
+            try{
+                responseJson = (JSONObject) parser.parse(responseString);
+            }catch (org.jose4j.json.internal.json_simple.parser.ParseException e) {
+                return CCResponse.error(new CCStatus(1207, "The login did not return a valid response"));
+            }
+
+            return CCResponse.ok(responseJson);
         } catch (Exception e) {
-            return CCResponse.error(new CCStatus(1206, "Something went wrong during the login process"));
+            return CCResponse.error(new CCStatus(1205, "Something went wrong during the login process"));
         }
     }
 

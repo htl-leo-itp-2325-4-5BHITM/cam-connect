@@ -61,3 +61,8 @@ input{
   margin-bottom: .5rem;
   width: 100%;
 }
+
+p.error{
+  text-align: left;
+  color: $bad;
+}

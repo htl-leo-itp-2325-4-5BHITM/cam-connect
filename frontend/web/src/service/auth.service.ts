@@ -1,6 +1,6 @@
 import {Api} from "../util/Api"
 import {OrderByFilterRent, RentByStudentDTO, RentFilterDTO} from "./rent.service"
-import {config} from "../base"
+import {ccResponse, config} from "../base"
 import {model} from "../index"
 import UrlHandler from "../util/UrlHandler"
 import {UserRoleEnum} from "./user.service"
@@ -91,17 +91,10 @@ export default class AuthService {
      * @param password
      * @returns jsonWebToken
      */
-    static async login(username, password) {
-        return Api.postData<LoginRequest, string>("/auth/login",
+    static async login(username, password):Promise<ccResponse<TokenResponse>> {
+        return Api.postData<LoginRequest, TokenResponse>("/auth/login",
             {username: username, password: password}
             )
-            .then(result => {
-                console.log(result)
-                return JSON.parse(result.data)
-            })
-            .catch(error => {
-                console.error(error)
-            })
     }
 
     static validateAccessToken() {

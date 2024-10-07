@@ -27,7 +27,13 @@ public class UserRepository {
 
     public User getById(String id){
         try {
-            return em.find(User.class, id);
+            User user = em.find(User.class, id);
+
+            if(user == null){
+                throw new CCException(1101);
+            }
+
+            return user;
         } catch (Exception e){
             throw new CCException(1101);
         }
