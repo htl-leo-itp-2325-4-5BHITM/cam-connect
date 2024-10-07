@@ -70,10 +70,14 @@ export class DashboardComponent extends LitElement {
         switch (this.appState.value.page) {
             case PageEnum.EQUIPMENT:
                 sidebar = html`
-                <cc-sidebar accountname="Martin Huemer">
+                <cc-sidebar>
                     <cc-select slot="sorts" size="${SizeEnum.MEDIUM}" .onSelect="${(elem) => {model.appState.value.equipmentDisplayMode = elem.dataset['name']}}">
                         <p class="selected" data-name="grid">raster</p>
                         <p data-name="list">liste</p>
+                    </cc-select>
+                    <cc-select slot="sorts" size="${SizeEnum.MEDIUM}" .onSelect="${(elem) => {model.appState.value.deviceTypeOrSet = elem.dataset['name']}}">
+                        <p class="selected" data-name="type">geräte-typen</p>
+                        <p data-name="set">geräte-sets</p>
                     </cc-select>
                     <cc-toggle slot="sorts" .onToggle="${(toggled:boolean)=>{
                         let newFilters = model.appState.value.deviceFilters
@@ -128,7 +132,7 @@ export class DashboardComponent extends LitElement {
             case PageEnum.RENTS:
                 page = html`<cc-rent-list class="content"></cc-rent-list>`
                 sidebar = html`
-                    <cc-sidebar accountname="Martin Huemer">
+                    <cc-sidebar>
                         <cc-dropdown slot="sorts" .options="${[
                             {id: OrderByFilterRent.ALPHABETICAL_ASC, data: 'alphabetisch (aufst.)'},
                             {id: OrderByFilterRent.ALPHABETICAL_DESC, data: 'alphabetisch (abst.)'},

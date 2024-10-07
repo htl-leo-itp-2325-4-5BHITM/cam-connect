@@ -85,6 +85,8 @@ export class AppState{
     private _backUrl: string
     private _sidebarElement: SidebarComponent
     private _equipmentDisplayMode: "grid" | "list" = "grid"
+    private _deviceTypeOrSet: "type" | "set" = "type"
+
     //TODO should be moved to the model itself
     private _userSettings: UserSettings = {
         isDarkmode: true,
@@ -512,6 +514,15 @@ export class AppState{
 
     set equipmentDisplayMode(value: "grid" | "list") {
         this._equipmentDisplayMode = value
+        this.update()
+    }
+
+    get deviceTypeOrSet(): "type" | "set" {
+        return this._deviceTypeOrSet
+    }
+
+    set deviceTypeOrSet(value: "type" | "set") {
+        this._deviceTypeOrSet = value
         this.update()
     }
 

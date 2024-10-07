@@ -116,50 +116,84 @@ public class DeviceTypeRepository {
 
         List<DeviceTypeFullDTO> list = new LinkedList<>();
         for(DeviceType deviceType : deviceTypeList){
-            Long availableDevices = em.createQuery(
-                     "select coalesce(count(d), 0) from Device d " +
+            if (isMatchingWithFilters(deviceType, filters)) {
+                Long availableDevices = em.createQuery(
+                                "select coalesce(count(d), 0) from Device d " +
+                                        "where d.device_id not in (select r.device.device_id from Rent r where r.status != 'CREATED' and r.status != 'RETURNED')" +
+                                        "group by d.type.type_id " +
+                                        "having d.type.type_id = :type_id", Long.class)
+                        .setParameter("type_id", deviceType.getType_id())
+                        .getResultStream().findFirst().orElse(0L);
+
+                List<Tag> tagList = em.createQuery(
+                                "SELECT t FROM DeviceType dt " +
+                                        "JOIN dt.tags t " +
+                                        "WHERE dt.type_id = :type_id", Tag.class)
+                        .setParameter("type_id", deviceType.getType_id())
+                        .getResultList();
+
+                list.add(new DeviceTypeFullDTO(deviceType, availableDevices.intValue(), tagList));
+            }
+        }
+        return list;
+    }
+
+    public boolean isMatchingWithFilters(DeviceType deviceType, DeviceTypeFilters filters){
+        List<DeviceType> deviceTypeList = em.createQuery(
+                        "select dt from DeviceType dt " +
+                                "where dt.status = 'active' " +
+                                "and (dt.variant in :variants OR :variantsEmpty = true) " +
+                                "and upper(dt.name) like :name"
+                        , DeviceType.class)
+                .setParameter("variants", filters.variants())
+                .setParameter("variantsEmpty", filters.variants().isEmpty())
+                .setParameter("name", "%" + filters.searchTerm().toUpperCase() + "%")
+                .getResultList();
+
+        if(!deviceTypeList.contains(deviceType)) return false;
+
+        Long availableDevices = em.createQuery(
+                "select coalesce(count(d), 0) from Device d " +
                         "where d.device_id not in (select r.device.device_id from Rent r where r.status != 'CREATED' and r.status != 'RETURNED')" +
                         "group by d.type.type_id " +
                         "having d.type.type_id = :type_id", Long.class)
-                    .setParameter("type_id", deviceType.getType_id())
-                    .getResultStream().findFirst().orElse(0L);
+                .setParameter("type_id", deviceType.getType_id())
+                .getResultStream().findFirst().orElse(0L);
 
-            List<Tag> tagList = em.createQuery(
-                     "SELECT t FROM DeviceType dt " +
+        List<Tag> tagList = em.createQuery(
+                "SELECT t FROM DeviceType dt " +
                         "JOIN dt.tags t " +
                         "WHERE dt.type_id = :type_id", Tag.class)
-                    .setParameter("type_id", deviceType.getType_id())
-                    .getResultList();
+                .setParameter("type_id", deviceType.getType_id())
+                .getResultList();
 
-            boolean includeInList = true;
-            if(!filters.attributes().isEmpty()){
-                Map<String, List<Long>> assignedIds = new HashMap<>();
+        boolean includeInList = true;
+        if(!filters.attributes().isEmpty()){
+            Map<String, List<Long>> assignedIds = new HashMap<>();
 
-                for (Long attributeId : filters.attributes()) {
-                    DeviceTypeAttribute attributeObject = em.find(DeviceTypeAttribute.class, attributeId);
+            for (Long attributeId : filters.attributes()) {
+                DeviceTypeAttribute attributeObject = em.find(DeviceTypeAttribute.class, attributeId);
 
-                    if(attributeObject == null) continue;
-                    List<Long> idList = assignedIds.get(attributeObject.getClass().getSimpleName());
-                    if(idList == null) idList = new LinkedList<>();
-                    idList.add(attributeId);
-                    assignedIds.put(attributeObject.getClass().getSimpleName(), idList);
-                }
+                if(attributeObject == null) continue;
+                List<Long> idList = assignedIds.get(attributeObject.getClass().getSimpleName());
+                if(idList == null) idList = new LinkedList<>();
+                idList.add(attributeId);
+                assignedIds.put(attributeObject.getClass().getSimpleName(), idList);
+            }
 
-                for (Map.Entry<String, List<Long>> entry : assignedIds.entrySet()) {
-                    if(deviceType.getAttributes().stream().noneMatch(attribute -> entry.getValue().contains((attribute.getAttribute_id())))){
-                        includeInList = false;
-                    }
+            for (Map.Entry<String, List<Long>> entry : assignedIds.entrySet()) {
+                if(deviceType.getAttributes().stream().noneMatch(attribute -> entry.getValue().contains((attribute.getAttribute_id())))){
+                    includeInList = false;
                 }
             }
-            if(!includeInList) continue;
-
-            if(filters.onlyAvailable() && availableDevices <= 0) continue;
-
-            if(!filters.tags().isEmpty() && tagList.stream().noneMatch(tag -> filters.tags().contains(tag.getTag_id()))) continue;
-
-            list.add(new DeviceTypeFullDTO(deviceType, availableDevices.intValue(), tagList));
         }
-        return list;
+        if(!includeInList) return false;
+
+        if(filters.onlyAvailable() && availableDevices <= 0) return false;
+
+        if(!filters.tags().isEmpty() && tagList.stream().noneMatch(tag -> filters.tags().contains(tag.getTag_id()))) return false;
+
+        return true;
     }
 
     public void remove(Long id){

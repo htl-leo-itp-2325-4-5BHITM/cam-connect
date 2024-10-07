@@ -46,16 +46,12 @@ export class DeviceListComponent extends LitElement {
     }
 
     render() {
-        // des sollte ned da sein :c
-
-        console.log("reset")
-
         return html`
             <style>${styles}</style>
 
             <div class="content ${model.appState.value.equipmentDisplayMode}">
                 ${Object.values(this.mergedDeviceTypes)?.flat().map(elem => {
-                    if(elem.variant == "deviceType") {
+                    if(elem.variant == "deviceType" && this.appState.value.deviceTypeOrSet == "type") {
                         return html`
                             <cc-device-list-entry
                                 .deviceTypeFull="${elem.deviceTypeFull}"
@@ -63,7 +59,7 @@ export class DeviceListComponent extends LitElement {
                                 .isListMode="${this.appState.value.equipmentDisplayMode == 'list'}"
                             ></cc-device-list-entry>
                         `
-                    } else{
+                    } else if(elem.variant == "deviceSet" && this.appState.value.deviceTypeOrSet == "set"){
                         return html`
                         <cc-device-set-list-entry
                             .deviceSet="${elem.deviceSetFull}"
