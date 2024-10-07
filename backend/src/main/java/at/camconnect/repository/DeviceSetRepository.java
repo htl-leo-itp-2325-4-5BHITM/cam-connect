@@ -20,6 +20,9 @@ public class DeviceSetRepository {
     @Inject
     EntityManager em;
 
+    @Inject
+    DeviceTypeRepository deviceTypeRepository;
+
     public List<DeviceSet> getAll(){
         return em.createQuery(
                         "select ds from DeviceSet ds"
@@ -28,6 +31,7 @@ public class DeviceSetRepository {
     }
 
     public List<DeviceSetFullDTO> getAllFull(DeviceTypeFilters filters){
+        System.out.println("\nstarting getter");
         List<DeviceSet> sets = em.createQuery(
                         "select ds from DeviceSet ds " +
                                 "where ds.status = 'active' " +
@@ -37,15 +41,28 @@ public class DeviceSetRepository {
                 .getResultList();
 
         List<DeviceSetFullDTO> dtos = new LinkedList<>();
-        sets.forEach(set -> {
-            int availabilities = getAvailabilities(set);
 
-            if(filters.onlyAvailable() && availabilities > 0) {
-                dtos.add(new DeviceSetFullDTO(set, availabilities));
-            } else if(!filters.onlyAvailable()){
-                dtos.add(new DeviceSetFullDTO(set, availabilities));
+        System.out.println(deviceTypeRepository.isMatchingWithFilters(em.find(DeviceType.class, 1L), filters));
+
+        for(DeviceSet set : sets) {
+            boolean isTypeMatchingWithFilter = false;
+            for(DeviceType type : set.getDevice_types()){
+                if(deviceTypeRepository.isMatchingWithFilters(type, filters)){
+                    isTypeMatchingWithFilter = true;
+                    break;
+                }
             }
-        });
+
+            int availabilities = getAvailabilities(set);
+            if(isTypeMatchingWithFilter){
+                if(filters.onlyAvailable() && availabilities > 0) {
+                    dtos.add(new DeviceSetFullDTO(set, availabilities));
+                } else if(!filters.onlyAvailable()) {
+                    dtos.add(new DeviceSetFullDTO(set, availabilities));
+                }
+            }
+
+        }
         return dtos;
     }
 

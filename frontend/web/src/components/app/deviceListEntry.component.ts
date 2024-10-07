@@ -92,6 +92,7 @@ export class DeviceListEntryComponent extends LitElement {
                 </div>` : ''
             }
             ${ this.isListMode ? '' : html`<cc-line></cc-line>` }
+            
             <section>
                 ${details}
                 ${ this.isListMode ? '' : html`
@@ -116,7 +117,6 @@ export class DeviceListEntryComponent extends LitElement {
                         >Verleihen</cc-button>
                     ` : ""
                 }
-                   
             </div>
             
             ${model.appState.value.currentUser?.role == UserRoleEnum.MEDT_TEACHER ?

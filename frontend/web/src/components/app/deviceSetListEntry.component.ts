@@ -8,6 +8,7 @@ import {ObservedProperty} from "../../model"
 import {AppState} from "../../AppState"
 import {model} from "../../index"
 import {DeviceSetFullDTO} from "../../service/deviceSet.service"
+import {UserRoleEnum} from "../../service/user.service"
 
 @customElement('cc-device-set-list-entry')
 export class DeviceSetListEntryComponent extends LitElement {
@@ -69,6 +70,10 @@ export class DeviceSetListEntryComponent extends LitElement {
             ${this.isListMode ? '' : html`
                 <cc-line></cc-line>`}
             
+            <div>
+                <p>${this.deviceSet.deviceSet.description}</p>
+            </div>
+            
             <section>
                 <div class="details">
                     ${
@@ -90,21 +95,30 @@ export class DeviceSetListEntryComponent extends LitElement {
                         color="${this.deviceSet.available > 0 ? ColorEnum.GOOD : ColorEnum.BAD}"
                         text="${this.deviceSet.available > 0 ? (this.deviceSet.available + ' Verfügbar') : 'Vergeben'}"
                 ></cc-chip>
-                <cc-button type="${ButtonType.OUTLINED}" .disabled="${this.deviceSet.available == 0}"
-                           @click="${() => {
-                               this.toggleDeviceCheck()
-                               model.appState.value.openCreateRentModalWithDevices(this.appState.value.selectedSetEntries, "set")
-                           }}"
-                >Verleihen
-                </cc-button>
+                ${model.appState.value.currentUser?.role == UserRoleEnum.MEDT_TEACHER ?
+                        html`
+                            <cc-button type="${ButtonType.OUTLINED}" .disabled="${this.deviceSet.available == 0}"
+                                       @click="${() => {
+                                           this.toggleDeviceCheck()
+                                           model.appState.value.openCreateRentModalWithDevices(this.appState.value.selectedSetEntries, "set")
+                                       }}"
+                            >Verleihen
+                            </cc-button>
+                    ` : ""
+                }
             </div>
-            <cc-circle-select
-                    .checked="${this.appState.value.selectedSetEntries.has(this)}"
-                    .disabled="${this.deviceSet.available == 0}"
-                    @click="${() => {
-                        if (this.deviceSet.available > 0) this.toggleDeviceCheck()
-                    }}"
-            ></cc-circle-select>
+
+            ${model.appState.value.currentUser?.role == UserRoleEnum.MEDT_TEACHER ?
+                    html`
+                        <cc-circle-select
+                                .checked="${this.appState.value.selectedSetEntries.has(this)}"
+                                .disabled="${this.deviceSet.available == 0}"
+                                @click="${() => {
+                                    if (this.deviceSet.available > 0) this.toggleDeviceCheck()
+                                }}"
+                        ></cc-circle-select>
+                ` : ""
+            }
         `
     }
 
