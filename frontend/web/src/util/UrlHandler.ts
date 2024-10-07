@@ -4,11 +4,13 @@ import {html} from "lit"
 import {DeviceTypeVariantEnum} from "../service/deviceType.service"
 import AuthService from "../service/auth.service"
 import {UserRoleEnum} from "../service/user.service"
+import {takeWhile} from "rxjs"
 
 let pages = {
     app: {
         handler: () => {
             UrlHandler.changeOrigin("cc-dashboard")
+
             model.appState.value.setAccessToken(localStorage["cc-access_token"])
                 .then(user => {
                     model.fetchAll()
@@ -134,11 +136,26 @@ export default class UrlHandler {
             return
         }
 
-        if(nextPage.permit && !nextPage.permit.includes(model.appState.value.currentUser?.role)){
-            pages.notAllowed.handler()
-            return
-        }
+        if(nextPage.permit && nextPage.permit.length > 0) {
+            model.appState.value.currentUserLoaded.subscribe((status) => {
+                if (status == false) return
 
+                if (nextPage.permit && !nextPage.permit.includes(model.appState.value.currentUser?.role)) {
+                    pages.notAllowed.handler()
+                    return
+                }
+
+                this.loadPage(nextPage, pageIndex, currentPath)
+
+                model.appState.value.currentUserLoaded.unsubscribe()
+            })
+        }
+        else {
+            this.loadPage(nextPage, pageIndex, currentPath)
+        }
+    }
+
+    private static loadPage(nextPage, pageIndex, currentPath){
         if(nextPage.waitForDom == true) {
             model.appState.value.originElementLoaded.subscribe((status) => {
                 if(status == true){

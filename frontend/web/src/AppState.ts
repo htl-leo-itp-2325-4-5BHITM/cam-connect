@@ -78,11 +78,11 @@ export class AppState{
     private _createRentElement: CreateRentComponent
     private _appElement: HTMLElement
     private _originElement: HTMLElement
+    private _originElementLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
     private _rentFilters: RentFilters = {orderBy: OrderByFilterRent.ALPHABETICAL_ASC, statuses: [RentStatusEnum.CONFIRMED, RentStatusEnum.DECLINED, RentStatusEnum.WAITING], schoolClasses: new Set<string>()}
     private _deviceFilters: DeviceFilters = {displayMode: "grid", onlyAvailable: false, variants: new Set<string>, attributes: new Set<number>, tags: new Set<number>}
     private _overlayElement: HTMLElement
     private _backUrl: string
-    private _originElementLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
     private _sidebarElement: SidebarComponent
     private _equipmentDisplayMode: "grid" | "list" = "grid"
     //TODO should be moved to the model itself
@@ -107,6 +107,7 @@ export class AppState{
     private _searchTerm: string = ""
     private _access_token: string = ""
     private _currentUser: User = null
+    private _currentUserLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
 
     /**
      * there is a really small chance here that this possibly falls victim to a race condition
@@ -554,6 +555,8 @@ export class AppState{
                 this.currentUser = user
 
                 resolve(user)
+            }).catch(e => {
+                console.error(e)
             })
 
             this.update()
@@ -566,6 +569,11 @@ export class AppState{
 
     set currentUser(value: User) {
         this._currentUser = value
+        this._currentUserLoaded.next(true)
         this.update()
+    }
+
+    get currentUserLoaded(): BehaviorSubject<boolean> {
+        return this._currentUserLoaded
     }
 }

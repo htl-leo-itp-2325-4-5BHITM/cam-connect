@@ -143,7 +143,9 @@ public class DeviceRepository {
         return result;
     }
 
-    public boolean isDeviceAlreadyInUse(long device_id) {
+    public boolean isDeviceAlreadyInUse(Long device_id) {
+        if(device_id == null) return false;
+
         return !em.createQuery("SELECT r FROM Rent r " +
                                   "where r.device.id = :deviceId and r.status != :status ",
                 Rent.class)
