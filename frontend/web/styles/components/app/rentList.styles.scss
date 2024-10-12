@@ -1,0 +1,30 @@
+@import "../../base";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  all: initial;
+  flex-grow: 1;
+  padding-inline: 1rem !important;
+  overflow-y: auto;
+
+  cc-rent-list-entry {
+    margin: 1rem !important;
+  }
+}
+
+.noResults{
+  margin-top: 4rem;
+  text-align: center;
+  color: $gray800;
+}
+
+.showHistory{
+  margin-inline: auto;
+  margin-top: 2rem;
+  display: block;
+
+  &::part(button){
+    color: $gray700;
+  }
+}

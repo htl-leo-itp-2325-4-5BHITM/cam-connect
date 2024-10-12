@@ -3,38 +3,43 @@
 :host{
   all: initial;
   height: fit-content;
+  width: fit-content;
+  -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;
 }
 
-.cc-button{
+button{
   font-size: $fSizeDesktopLarge;
-  min-width: 10ch;
+  /*width: 100%;*/ /*TODO check if this broke anything*/
   height: fit-content;
   border-radius: .3rem;
   cursor: pointer;
   transition: background-color $transitionTimeShort, color $transitionTimeShort, border ease $transitionTimeShort, box-shadow $transitionTimeShort;
   white-space: nowrap;
+  min-width: 10ch;
+
+  -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;
 
   display: flex;
   justify-content: center;
   align-items: center;
   gap: .5rem;
 
-  padding-inline: 1rem !important;
+  padding-inline: 1rem;
 
   user-select: none;
 
   &:focus-visible{
-    outline: 2px solid $accentLight;
+    outline: 2px solid $accent700;
     outline-offset: .2rem;
   }
 
   &[color = "accent"]{
-    --color-main: #{$accentDark};
-    --color-light: #{$accentLight};
+    --color-main: #{$accent300};
+    --color-light: #{$accent700};
     --color-text: #{$gray1000};
   }
   &[color = "gray"] {
-    --color-main: #{$gray400};
+    --color-main: #{$gray500};
     --color-light: #{$gray600};
     --color-text: #{$gray1000};
   }
@@ -52,17 +57,17 @@
   &[size = "big"]{
     font-size: $fSizeDesktopLarge;
     min-width: 8ch;
-    padding-block: .2rem !important;
+    padding-block: .2rem;
   }
   &[size = "medium"]{
     font-size: $fSizeDesktopDefault;
     min-width: 8ch;
-    padding-block: .1rem !important;
+    padding-block: .1rem;
   }
   &[size = "small"]{
     font-size: $fSizeDesktopSmall;
     min-width: 6ch;
-    padding-block: .1rem !important;
+    padding-block: .1rem;
   }
 
   &[type = "filled"]{
@@ -71,7 +76,7 @@
 
     &:not([disabled]):hover, &:not([disabled]):focus-visible {
       &[color = "accent"]{
-        background-color: $accent;
+        background-color: $accent500;
       }
     }
   }
@@ -96,7 +101,8 @@
     color: var(--color-text);
 
     min-width: 0;
-    padding-inline: .3rem !important;
+    padding-inline: .3rem;
+    margin-inline: 0;
 
     &[color = "accent"], &[color = "good"], &[color = "bad"]{
       color: var(--color-light);
@@ -131,7 +137,7 @@
   &[type = "text"], &[type="underlined"], &[type="outlined"] {
     &[color="accent"] {
       ::slotted(*) {
-        color: var(--color-light) !important;
+        color: var(--color-light);
         margin: 0;
       }
 
@@ -145,7 +151,7 @@
 
     &[color="gray"] {
       ::slotted(*) {
-        color: var(--color-text) !important;
+        color: var(--color-text);
       }
     }
   }
@@ -156,13 +162,13 @@
   }
 
   &[noPadding="true"]{
-    padding-inline: .2rem !important;
+    padding-inline: .5rem;
     min-width: 0;
   }
 
   ::slotted(*:not(.icon, svg, img)){
     opacity: 80%;
-    font-weight: 400 !important;
+    font-weight: 400;
   }
 
   ::slotted(svg){
@@ -178,7 +184,7 @@
     height: 1rem;
     aspect-ratio: 1;
     /*
-    margin-top: -3px !important;
+    margin-top: -3px;
     */
     vertical-align: center;
   }

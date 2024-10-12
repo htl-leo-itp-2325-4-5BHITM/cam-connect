@@ -1,0 +1,49 @@
+@import "../../../base";
+
+:host{
+  overflow: auto;
+}
+
+svg{
+  height: 32px;
+  @include imgIconColorGray800;
+}
+
+main{
+  margin: 1rem;
+  grid-column: 2 / 3;
+  overflow: auto;
+
+  div.header{
+    display: flex;
+    overflow: hidden;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    .left{
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .right{
+      margin-right: 1rem;
+    }
+
+    .deviceTypeHeading{
+      cursor: pointer;
+    }
+
+    .deviceTypeName{
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+    }
+
+    margin-bottom: 1rem;
+  }
+}
+h1{
+  font-size: 2rem;
+}

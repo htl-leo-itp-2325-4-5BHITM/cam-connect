@@ -5,7 +5,7 @@ import {SimpleOption} from "../../base"
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons"
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
-import Util, {AnimationHelper} from "../../util"
+import Util, {AnimationHelper} from "../../util/Util"
 
 @customElement('cc-dropdown')
 export class DropdownComponent extends LitElement {
@@ -19,11 +19,19 @@ export class DropdownComponent extends LitElement {
     isOpen: boolean = false
 
     @property()
-    onSelect: (option: SimpleOption<string | number, string>) => void
+    onSelect: (option: SimpleOption<string | number, string>) => void = () => {}
+
+    @property()
+    align: "left" | "right" = "left"
 
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
-        this.selected = this.options[0]
+        if(this.selected?.id == undefined && this.options && this.options.length > 0){
+            console.log("setting selected")
+            this.selected = this.options[0]
+
+            this.onSelect(this.selected)
+        }
     }
 
     render() {
@@ -33,8 +41,8 @@ export class DropdownComponent extends LitElement {
                 <p>${this.selected?.data}</p>
                 ${unsafeSVG(icon(faCaretDown).html[0])}
             </div>
-            <div class="dropdownOptions">
-                ${this.options.map(option => {
+            <div class="dropdownOptions ${this.align}">
+                ${this.options?.map(option => {
                   return html`<p class="option" @click="${() => this.selectOption(option)}">${option.data}</p>`  
                 })}
             </div>

@@ -91,7 +91,7 @@ INSERT INTO LensType (type_id, f_stop, mount_id, focal_length) VALUES
 -- Add more LensType records as needed
 
 -- Insert sample data for AudioType
-INSERT INTO AudioType (type_id, windblocker, wireless, needs_recorder) VALUES
+INSERT INTO AudioType (type_id, needs_power, wireless, needs_recorder) VALUES
                                                                            (3, true, false, true),
                                                                            (4, false, true, false);
 -- Add more AudioType records as needed
@@ -300,11 +300,11 @@ VALUES (3, 2, 3, 35);
 
 
 -- Test Inserts for AudioType
-INSERT INTO AudioType (type_id, windblocker, wireless, needsrecorder)
+INSERT INTO AudioType (type_id, needs_power, wireless, needs_recorder)
 VALUES (1, true, false, true);
-INSERT INTO AudioType (type_id, windblocker, wireless, needsrecorder)
+INSERT INTO AudioType (type_id, needs_power, wireless, needs_recorder)
 VALUES (2, false, true, false);
-INSERT INTO AudioType (type_id, windblocker, wireless, needsrecorder)
+INSERT INTO AudioType (type_id, needs_power, wireless, needs_recorder)
 VALUES (3, true, true, true);
 
 

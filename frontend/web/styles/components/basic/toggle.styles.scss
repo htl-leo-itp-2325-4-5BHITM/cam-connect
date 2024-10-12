@@ -6,6 +6,7 @@
   justify-content: space-between;
   cursor: pointer;
   user-select: none;
+  gap: .5rem;
 }
 
 label{
@@ -30,7 +31,7 @@ label{
   z-index: 1;
 
   &.on{
-    background-color: $accent;
+    background-color: $accent500;
 
     .knob{
       margin-left: calc(var(--knob-size) * 0.75);
@@ -53,7 +54,7 @@ label{
     width: var(--knob-size);
     background-color: $gray900;
     border-radius: 50%;
-    transition: margin-left .2s ease-in-out;
+    transition: margin-left .1s ease-in-out;
     position: relative;
     z-index: 2;
 

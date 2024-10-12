@@ -3,15 +3,17 @@ import {customElement, property} from 'lit/decorators.js'
 import styles from '../../styles/components/externalConfirm.styles.scss'
 import {model} from "../index"
 import {ObservedProperty} from "../model"
-import {Api, ColorEnum} from "../base"
+import {ColorEnum} from "../base"
 import {AppState} from "../AppState"
 import {icon} from '@fortawesome/fontawesome-svg-core'
 import {faCheck, faXmark} from "@fortawesome/free-solid-svg-icons"
 import {unsafeSVG} from 'lit/directives/unsafe-svg.js';
 import RentService, {Rent, RentStatusEnum, RentTypeEnum} from "../service/rent.service"
-import URLHandler from "../urlHandler"
-import PopupEngine from "../popupEngine"
-import Util from "../util"
+import UrlHandler from "../util/UrlHandler"
+import PopupEngine from "../util/PopupEngine"
+import Util from "../util/Util"
+import {Api} from "../util/Api"
+import {ButtonComponent} from "./basic/button.component"
 
 @customElement('cc-external-confirm')
 export class ExternalConfirmComponent extends LitElement {
@@ -58,7 +60,7 @@ export class ExternalConfirmComponent extends LitElement {
                                                 text="Bestätigen"
                                                 type="underlined"
                                                 @click=${() => {
-                                                    RentService.updateStatus(rent.rent_id, this.rentConfirmationCodes[i], RentStatusEnum.CONFIRMED, "")
+                                                    RentService.confirmOrDecline(rent.rent_id, this.rentConfirmationCodes[i], RentStatusEnum.CONFIRMED, "")
                                                             .then((success) => {
                                                                 if(success){
                                                                     rent.status = RentStatusEnum.CONFIRMED
@@ -91,7 +93,7 @@ export class ExternalConfirmComponent extends LitElement {
                                                                 text: "Ablehnen",
                                                                 role: "confirm",
                                                                 action: (data) => {
-                                                                    RentService.updateStatus(
+                                                                    RentService.confirmOrDecline(
                                                                             rent.rent_id, this.rentConfirmationCodes[i],
                                                                             RentStatusEnum.DECLINED,
                                                                             data.inputValues[0] as string
@@ -105,7 +107,12 @@ export class ExternalConfirmComponent extends LitElement {
                                                             },
                                                             {
                                                                 text: "Abbrechen",
-                                                                role: "cancel"
+                                                                role: "cancel",
+                                                                action: () => {
+                                                                    this.shadowRoot.querySelectorAll("cc-button").forEach((button: ButtonComponent) => {
+                                                                        button.loadingState = false
+                                                                    })
+                                                                }
                                                             }
                                                         ]
                                                     })
@@ -129,8 +136,8 @@ export class ExternalConfirmComponent extends LitElement {
                     }
                 </ul>
                 <div class="button-container">
-                    <cc-button @click="${() => {URLHandler.setUrl("/app/rents")}}">
-                        Zurück zur Verleihliste
+                    <cc-button @click="${() => {UrlHandler.setUrl("/app/rents")}}">
+                        Zur Verleihliste
                     </cc-button>
                 </div>
             </main>
@@ -138,12 +145,12 @@ export class ExternalConfirmComponent extends LitElement {
     }
 
     async queryUrlData(){
-        this.rentConfirmationCodes = URLHandler.getParam("codes")?.split(",") || []
-        let rentIds = URLHandler.getParam("ids")?.split(",") || []
+        this.rentConfirmationCodes = UrlHandler.getParam("codes")?.split(",") || []
+        let rentIds = UrlHandler.getParam("ids")?.split(",") || []
 
         if(!rentIds || rentIds.length == 0) return
 
-        this.rents = (await Api.fetchData<Rent[]>(`/rent/getbyidlist/${rentIds.join(",")}`)).data || []
+        this.rents = (await Api.getData<Rent[]>(`/rent/getbyidlist/${rentIds.join(",")}`)).data || []
 
         let invalidCodes = await this.validateConfirmationCodes()
 
@@ -157,7 +164,7 @@ export class ExternalConfirmComponent extends LitElement {
                         {
                             text: "Zurück zum Dashboard",
                             role: "confirm",
-                            action: () => { URLHandler.setUrl("/app/rents") }
+                            action: () => { UrlHandler.setUrl("/app/rents") }
                         }
                     ]
                 })
@@ -171,7 +178,7 @@ export class ExternalConfirmComponent extends LitElement {
                             text: "Zurück zum Dashboard",
                             role: "confirm",
                             action: () => {
-                                URLHandler.setUrl("/app/rents")
+                                UrlHandler.setUrl("/app/rents")
                             }
                         }
                     ]
@@ -184,7 +191,7 @@ export class ExternalConfirmComponent extends LitElement {
         let flaggedRents = []
 
         for (let i = 0; i < this.rents.length; i++) {
-            let valid = await Api.fetchData<boolean>(`/rent/getbyid/${this.rents[i].rent_id}/verifyconfirmationcode/${this.rentConfirmationCodes[i]}`)
+            let valid = await Api.getData<boolean>(`/rent/getbyid/${this.rents[i].rent_id}/verifyconfirmationcode/${this.rentConfirmationCodes[i]}`)
             if(!valid) {
                 flaggedRents.push(i)
             }

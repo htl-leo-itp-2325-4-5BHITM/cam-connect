@@ -1,70 +1,85 @@
 package at.camconnect.model.DeviceTypeVariants;
 
+import at.camconnect.dtos.deviceType.DeviceTypeGlobalIdDTO;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
 import at.camconnect.model.DeviceType;
-import at.camconnect.model.DeviceTypeAttributes.CameraResolution;
-import at.camconnect.model.DeviceTypeAttributes.CameraSensor;
+import at.camconnect.model.DeviceTypeAttribute;
 import at.camconnect.responseSystem.CCException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+
+import java.util.List;
 
 @Entity
 public class DroneType extends DeviceType {
-    @ManyToOne
-    @JoinColumn(name = "sensor_id")
-    private CameraSensor sensor;
-    @ManyToOne
-    @JoinColumn(name = "resolution_id")
-    private CameraResolution resolution;
     @Column(length = 5)
-    private int max_range;
+    private int max_range_kilometers;
+    private int flight_time_minutes;
+    boolean requires_license;
 
-    public DroneType() {
-        setVariant(DeviceTypeVariantEnum.drone);
+
+    public DroneType(String name, String image, int max_range_kilometers, int flight_time_minutes, boolean requires_license) {
+        super(name, image, DeviceTypeVariantEnum.drone);
+        this.max_range_kilometers = max_range_kilometers;
+        this.flight_time_minutes = flight_time_minutes;
+        this.requires_license = requires_license;
     }
 
-    public DroneType(String typeName, CameraSensor sensor, CameraResolution resolution, int max_range) {
-        super(typeName);
-        this.sensor = sensor;
-        this.resolution = resolution;
-        this.max_range = max_range;
+    public DroneType() {
+        super();
+        setVariant(DeviceTypeVariantEnum.drone);
     }
 
     @Override
     public void update(DeviceTypeGlobalObjectsDTO data) {
         try{
-            setMax_range(data.max_range());
-            setSensor(data.sensor());
-            setResolution(data.resolution());
+            setName(data.name());
+            setImage_blob(data.image());
+            setMax_range_kilometers(data.max_range());
+            setFlight_time_minutes(data.flight_time_minutes());
+            setRequires_license(data.requires_license());
         }catch (Exception ex){
             throw new CCException(1106);
         }
     }
 
-    public CameraSensor getSensor() {
-        return sensor;
+    @Override
+    public String toString() {
+        return "todo";
     }
 
-    public void setSensor(CameraSensor sensor) {
-        this.sensor = sensor;
+    @Override
+    public DeviceTypeGlobalIdDTO toGlobalDTO() {
+        return null;
     }
 
-    public CameraResolution getResolution() {
-        return resolution;
+    @Override
+    public List<DeviceTypeAttribute> getAttributes() {
+        return List.of();
     }
 
-    public void setResolution(CameraResolution resolution) {
-        this.resolution = resolution;
+    public boolean isRequires_license() {
+        return requires_license;
     }
 
-    public int getMax_range() {
-        return max_range;
+    public void setRequires_license(boolean requiresLicense) {
+        this.requires_license = requiresLicense;
     }
 
-    public void setMax_range(int maxRange) {
-        this.max_range = maxRange;
+    public int getMax_range_kilometers() {
+        return max_range_kilometers;
+    }
+
+    public void setMax_range_kilometers(int maxRange) {
+        this.max_range_kilometers = maxRange;
+    }
+
+    public int getFlight_time_minutes() {
+        return flight_time_minutes;
+    }
+
+    public void setFlight_time_minutes(int flight_time) {
+        this.flight_time_minutes = flight_time;
     }
 }

@@ -1,0 +1,81 @@
+@import "../../base";
+
+:host{
+  position: relative;
+  padding: {
+    top: 1rem !important;
+    left: 2rem !important;
+    right: 1rem !important;
+  };
+
+  height: 100%;
+  -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  .icon{
+    margin-top: -.2rem;
+  }
+}
+
+.rent-container{
+  height: 100%;
+  overflow-y: auto;
+  padding-bottom: 4rem;
+
+  .rent{
+    margin-block: 1rem;
+  }
+}
+
+.bottomBlur{
+  background-image: linear-gradient(0deg, $gray200 0%, hsla(0, 0%, 0%, 0) 100%);
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3rem;
+}
+
+h2{
+  font-size: 1.5rem;
+}
+
+.row{
+  display: flex;
+  gap: .6rem;
+  margin-left: 1rem;
+}
+
+.heading{
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+  margin-bottom: .2rem;
+
+  svg{
+    height: 1.3rem;
+
+    *{
+      fill: $gray700;
+    }
+  }
+}
+
+h3{
+  font-size: 1.15rem;
+}
+
+h4{
+  margin-top: .5rem;
+  margin-left: .3rem;
+  font-weight: 500;
+  font-size: 1.05rem;
+}

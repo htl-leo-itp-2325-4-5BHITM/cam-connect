@@ -2,7 +2,9 @@ package at.camconnect.repository;
 
 import at.camconnect.dtos.*;
 import at.camconnect.dtos.deviceType.*;
+import at.camconnect.dtos.filters.DeviceTypeFilters;
 import at.camconnect.enums.DeviceTypeStatusEnum;
+import at.camconnect.model.DeviceTypeAttribute;
 import at.camconnect.model.DeviceTypeAttributes.*;
 import at.camconnect.model.Tag;
 import at.camconnect.responseSystem.CCException;
@@ -16,22 +18,25 @@ import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.StreamingOutput;
 import org.hibernate.exception.ConstraintViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @ApplicationScoped
 public class DeviceTypeRepository {
+    private static final Logger log = LoggerFactory.getLogger(DeviceTypeRepository.class);
     @Inject
     EntityManager em;
 
     @Inject
     DeviceTypeAttributeRepository deviceTypeAttributeRepository;
-
 
     public DeviceType create(DeviceTypeVariantEnum typeEnum, JsonObject data){
         /* Why JsonData and not DTO
@@ -48,6 +53,7 @@ public class DeviceTypeRepository {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             deviceType = objectMapper.readValue(dataString, enumToClass(typeEnum));
+            deviceType.setStatus(DeviceTypeStatusEnum.active);
         } catch (JsonProcessingException e) {
             throw new CCException(1106, e.getMessage());
         }
@@ -63,60 +69,131 @@ public class DeviceTypeRepository {
     }
 
     public DeviceTypeCollection getAll(){
-        List<CameraType> cameraTypes = em.createQuery("SELECT d FROM CameraType d WHERE d.status != :status", CameraType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
-        List<DroneType> droneTypes = em.createQuery("SELECT d FROM DroneType d where d.status != :status", DroneType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
-        List<LensType> lensTypes = em.createQuery("SELECT d FROM LensType d where d.status != :status", LensType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
-        List<LightType> lightTypes = em.createQuery("SELECT d FROM LightType d where d.status != :status", LightType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
-        List<MicrophoneType> microphoneTypes = em.createQuery("SELECT d FROM MicrophoneType d where d.status != :status", MicrophoneType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
-        List<StabilizerType> stabilizerTypes = em.createQuery("SELECT d FROM StabilizerType d where d.status != :status", StabilizerType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
-        List<TripodType> tripodTypes = em.createQuery("SELECT d FROM TripodType d where d.status != :status", TripodType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
+        List<AudioType> audioTypes = em.createQuery("SELECT d FROM AudioType d where d.status != :status order by d.id", AudioType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
+        List<CameraType> cameraTypes = em.createQuery("SELECT d FROM CameraType d WHERE d.status != :status order by d.id", CameraType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
+        List<DroneType> droneTypes = em.createQuery("SELECT d FROM DroneType d where d.status != :status order by d.id", DroneType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
+        List<LensType> lensTypes = em.createQuery("SELECT d FROM LensType d where d.status != :status order by d.id", LensType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
+        List<LightType> lightTypes = em.createQuery("SELECT d FROM LightType d where d.status != :status order by d.id", LightType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
+        List<MicrophoneType> microphoneTypes = em.createQuery("SELECT d FROM MicrophoneType d where d.status != :status order by d.id", MicrophoneType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
+        List<StabilizerType> stabilizerTypes = em.createQuery("SELECT d FROM StabilizerType d where d.status != :status order by d.id", StabilizerType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
+        List<TripodType> tripodTypes = em.createQuery("SELECT d FROM TripodType d where d.status != :status order by d.id", TripodType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
+        List<SimpleType> simpleTypes = em.createQuery("SELECT d FROM SimpleType d where d.status != :status order by d.id", SimpleType.class).setParameter("status", DeviceTypeStatusEnum.disabled).getResultList();
 
-        return new DeviceTypeCollection(cameraTypes, droneTypes, lensTypes, lightTypes, microphoneTypes, stabilizerTypes, tripodTypes);
+        return new DeviceTypeCollection(cameraTypes, droneTypes, lensTypes, lightTypes, microphoneTypes, stabilizerTypes, tripodTypes, audioTypes, simpleTypes);
     }
 
-    public List<AutocompleteOptionDTO<DeviceTypeMinimalDTO>> search(String searchTerm){
+    public List<AutocompleteNumberOptionDTO<DeviceTypeMinimalDTO>> search(String searchTerm){
         List<DeviceTypeMinimalDTO> deviceTypes = new LinkedList<DeviceTypeMinimalDTO>();
 
         deviceTypes = em.createQuery(
-                        "SELECT new at.camconnect.dtos.deviceType.DeviceTypeMinimalDTO(d.id, d.variant, d.name, d.image) FROM DeviceType d " +
+                        "SELECT new at.camconnect.dtos.deviceType.DeviceTypeMinimalDTO(d.id, d.variant, d.name, d.image_blob) FROM DeviceType d " +
                                 "WHERE UPPER(d.name) LIKE :searchTerm " +
                                 "order by name",
                         DeviceTypeMinimalDTO.class)
                 .setParameter("searchTerm", "%" + searchTerm.toUpperCase() + "%")
                 .getResultList();
 
-        List<AutocompleteOptionDTO<DeviceTypeMinimalDTO>> result = new LinkedList<>();
+        List<AutocompleteNumberOptionDTO<DeviceTypeMinimalDTO>> result = new LinkedList<>();
 
         for (DeviceTypeMinimalDTO deviceType : deviceTypes) {
-            result.add(new AutocompleteOptionDTO<>(deviceType, deviceType.type_id()));
+            result.add(new AutocompleteNumberOptionDTO<>(deviceType, deviceType.type_id()));
         }
 
         return result;
     }
 
-    public List<DeviceTypeFullDTO> getAllFull() {
-        List<DeviceType> deviceTypeList = em.createQuery("select dt from DeviceType dt where dt.status = 'active'", DeviceType.class).getResultList();
+    public List<DeviceTypeFullDTO> getAllFull(DeviceTypeFilters filters) {
+        List<DeviceType> deviceTypeList = em.createQuery(
+                "select dt from DeviceType dt " +
+                "where dt.status = 'active' " +
+                "and (dt.variant in :variants OR :variantsEmpty = true) " +
+                "and upper(dt.name) like :name"
+            , DeviceType.class)
+            .setParameter("variants", filters.variants())
+            .setParameter("variantsEmpty", filters.variants().isEmpty())
+            .setParameter("name", "%" + filters.searchTerm().toUpperCase() + "%")
+            .getResultList();
 
         List<DeviceTypeFullDTO> list = new LinkedList<>();
         for(DeviceType deviceType : deviceTypeList){
-            Long availableDevices = em.createQuery(
-                     "select coalesce(count(d), 0) from Device d " +
+            if (isMatchingWithFilters(deviceType, filters)) {
+                Long availableDevices = em.createQuery(
+                                "select coalesce(count(d), 0) from Device d " +
+                                        "where d.device_id not in (select r.device.device_id from Rent r where r.status != 'CREATED' and r.status != 'RETURNED')" +
+                                        "group by d.type.type_id " +
+                                        "having d.type.type_id = :type_id", Long.class)
+                        .setParameter("type_id", deviceType.getType_id())
+                        .getResultStream().findFirst().orElse(0L);
+
+                List<Tag> tagList = em.createQuery(
+                                "SELECT t FROM DeviceType dt " +
+                                        "JOIN dt.tags t " +
+                                        "WHERE dt.type_id = :type_id", Tag.class)
+                        .setParameter("type_id", deviceType.getType_id())
+                        .getResultList();
+
+                list.add(new DeviceTypeFullDTO(deviceType, availableDevices.intValue(), tagList));
+            }
+        }
+        return list;
+    }
+
+    public boolean isMatchingWithFilters(DeviceType deviceType, DeviceTypeFilters filters){
+        List<DeviceType> deviceTypeList = em.createQuery(
+                        "select dt from DeviceType dt " +
+                                "where dt.status = 'active' " +
+                                "and (dt.variant in :variants OR :variantsEmpty = true) " +
+                                "and upper(dt.name) like :name"
+                        , DeviceType.class)
+                .setParameter("variants", filters.variants())
+                .setParameter("variantsEmpty", filters.variants().isEmpty())
+                .setParameter("name", "%" + filters.searchTerm().toUpperCase() + "%")
+                .getResultList();
+
+        if(!deviceTypeList.contains(deviceType)) return false;
+
+        Long availableDevices = em.createQuery(
+                "select coalesce(count(d), 0) from Device d " +
                         "where d.device_id not in (select r.device.device_id from Rent r where r.status != 'CREATED' and r.status != 'RETURNED')" +
                         "group by d.type.type_id " +
                         "having d.type.type_id = :type_id", Long.class)
-                    .setParameter("type_id", deviceType.getType_id())
-                    .getResultStream().findFirst().orElse(0L);
+                .setParameter("type_id", deviceType.getType_id())
+                .getResultStream().findFirst().orElse(0L);
 
-            List<Tag> tagList = em.createQuery(
-                     "SELECT t FROM Tag t " +
-                        "JOIN FETCH t.type dt " +
-                        "WHERE dt = :deviceType", Tag.class)
-                    .setParameter("deviceType", deviceType)
-                    .getResultList();
+        List<Tag> tagList = em.createQuery(
+                "SELECT t FROM DeviceType dt " +
+                        "JOIN dt.tags t " +
+                        "WHERE dt.type_id = :type_id", Tag.class)
+                .setParameter("type_id", deviceType.getType_id())
+                .getResultList();
 
-            list.add(new DeviceTypeFullDTO(deviceType, availableDevices.intValue(), tagList));
+        boolean includeInList = true;
+        if(!filters.attributes().isEmpty()){
+            Map<String, List<Long>> assignedIds = new HashMap<>();
+
+            for (Long attributeId : filters.attributes()) {
+                DeviceTypeAttribute attributeObject = em.find(DeviceTypeAttribute.class, attributeId);
+
+                if(attributeObject == null) continue;
+                List<Long> idList = assignedIds.get(attributeObject.getClass().getSimpleName());
+                if(idList == null) idList = new LinkedList<>();
+                idList.add(attributeId);
+                assignedIds.put(attributeObject.getClass().getSimpleName(), idList);
+            }
+
+            for (Map.Entry<String, List<Long>> entry : assignedIds.entrySet()) {
+                if(deviceType.getAttributes().stream().noneMatch(attribute -> entry.getValue().contains((attribute.getAttribute_id())))){
+                    includeInList = false;
+                }
+            }
         }
-        return list;
+        if(!includeInList) return false;
+
+        if(filters.onlyAvailable() && availableDevices <= 0) return false;
+
+        if(!filters.tags().isEmpty() && tagList.stream().noneMatch(tag -> filters.tags().contains(tag.getTag_id()))) return false;
+
+        return true;
     }
 
     public void remove(Long id){
@@ -125,20 +202,11 @@ public class DeviceTypeRepository {
         em.merge(deviceType);
     }
 
-    public DeviceType update(Long id, DeviceTypeGlobalIdDTO data){
-        DeviceType deviceType = getById(id); //should result in a child of DeviceType like CameraType
-
-        deviceType.setName(data.name());
-        deviceType.setImage(data.image());
-
-        //The DeviceTypeDTO is converted into a DeviceType global which contains objects instead of ids
-        DeviceTypeGlobalObjectsDTO dataWithObjects = new DeviceTypeGlobalObjectsDTO(
-                data.autofocus(), data.f_stop(), data.focal_length(), data.framerate(), data.height_centimeters(), data.max_range(), data.max_weight_kilograms(), data.needsrecorder(), data.number_of_axis(), data.autofocus(), data.variable_temperature(), data.watts(), data.windblocker(), data.wireless(),
-                getAttribute(TripodHead.class, data.head_id()), getAttribute(LensMount.class, data.mount_id()), getAttribute(CameraResolution.class, data.resolution_id()), getAttribute(CameraSensor.class, data.sensor_id()), getAttribute(CameraSystem.class, data.system_id()),
-                data.type_id(), data.dtype(), data.image(), data.name(), data.description());
-
+    public DeviceType update(Long id, DeviceTypeGlobalObjectsDTO data){
+        DeviceType deviceType = getById(id);
         //just call the update method on whichever child class it is
-        deviceType.update(dataWithObjects);
+        deviceType.update(data);
+        em.merge(deviceType);
         return deviceType;
     }
 
@@ -146,6 +214,8 @@ public class DeviceTypeRepository {
     private Class<? extends DeviceType> enumToClass(DeviceTypeVariantEnum typeEnum) {
         //yes there are breaks missing, but they are unnecessary because of the returns
         switch (typeEnum) {
+            case audio:
+                return AudioType.class;
             case microphone:
                 return MicrophoneType.class;
             case camera:
@@ -173,15 +243,80 @@ public class DeviceTypeRepository {
 
     //endregion
 
+    public Response exportAllDeviceTypeVariants() {
+        StreamingOutput stream = os -> {
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(os))) {
+                writer.write("type_id; name; image; autofocus; f_stop; focal_length; height_centimeters; max_range; max_weight_kilograms; needs_recorder; number_of_axis; rgb; variable_temperature; watts; needs_power; wireless; head_id; mount_id; resolution_id; sensor_id; system; flight_time_minutes; description\n");
+
+                List<DeviceTypeFullDTO> deviceTypeList = getAllFull(new DeviceTypeFilters(false, null, null, null, null));
+                for (DeviceTypeFullDTO deviceType : deviceTypeList) {
+                    try {
+                        writer.write(deviceType.deviceType().toGlobalDTO().toCsvString());
+                        System.out.println(deviceType.deviceType().toGlobalDTO().toCsvString());
+                    }catch (Exception ex){
+                        ex.printStackTrace();
+                    }
+                }
+            } catch (IOException e) {
+                throw new CCException(1200);
+            }
+        };
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm");
+
+        return Response.ok(stream)
+                .header("Content-Disposition", "attachment; filename=\"camconnect_devicetype-export_" + dateFormat.format(new Date()) + ".csv\"")
+                .build();
+    }
+
+    public Response exportDeviceTypeVariant(DeviceTypeVariantEnum variant) {
+        StreamingOutput stream = os -> {
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(os))) {
+                writer.write("type_id; name; image; autofocus; f_stop; focal_length; height_centimeters; max_range; max_weight_kilograms; needs_recorder; number_of_axis; rgb; variable_temperature; watts; needs_power; wireless; head_id; mount_id; resolution_id; sensor_id; system; flight_time_minutes; description");
+
+                List<DeviceTypeFullDTO> deviceTypeList = getAllFull(new DeviceTypeFilters(false,null, null, null, null));
+                for (DeviceTypeFullDTO deviceType : deviceTypeList) {
+                    writer.write(deviceType.deviceType().toGlobalDTO().toCsvString());
+                }
+            } catch (IOException e) {
+                throw new CCException(1200);
+            }
+        };
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm");
+
+        return Response.ok(stream)
+                .header("Content-Disposition", "attachment; filename=\"camconnect_devicetype-export_" + dateFormat.format(new Date()) + ".csv\"")
+                .build();
+    }
+
+    private String getCSVHeader(String type) {
+        String base = "type_id;creation_date;name;image;status;variant;";
+        return base + switch(type){
+            case "audio" -> "connector_id;\n";
+            case "camera" -> "sensor_id;resolution_id;mount_id;system;autofocus;\n";
+            case "drone" -> "sensor_id;resolution_id;max_range;\n";
+            case "lens" -> "f_stop;mount_id;focal_length;\n";
+            case "light" -> "watts;rgb;variable_temperature;\n";
+            case "microphone" -> "needs_power;wireless;needs_recorder;\n";
+            case "stabilizer" ->"max_weight_kilograms;number_of_axis;\n";
+            case "tripod" -> "height_centimeters;head_id;\n";
+            case "simple" -> "description;\n";
+            default -> "";
+        };
+    }
+
     @Transactional
     public void importDeviceTypes(File file, String type) {
-        HashMap<Integer, List<String>> typeMap = new HashMap<>();
-        typeMap.put(7, new LinkedList<>(){{ add("camera"); }});
-        typeMap.put(4, new LinkedList<>(){{ add("drone"); add("lens"); add("light"); add("microphone"); }});
-        typeMap.put(3, new LinkedList<>(){{ add("stabilizer"); add("tripod"); }});
-        typeMap.put(2, new LinkedList<>(){{ add("simple"); }});
-
         if (file == null) throw new CCException(1105);
+
+        HashMap<Integer, List<String>> typeMap = new HashMap<>() {{
+            put(26, new LinkedList<>(List.of("all")));
+            put(12, new LinkedList<>(List.of("camera")));
+            put(9, new LinkedList<>(List.of("drone", "lens", "light", "microphone")));
+            put(8, new LinkedList<>(List.of("stabilizer", "tripod")));
+            put(7, new LinkedList<>(List.of("simple", "audio")));
+        }};
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line = reader.readLine();
@@ -200,34 +335,30 @@ public class DeviceTypeRepository {
             while ((line = reader.readLine()) != null) {
                 lineArray = line.split(";");
 
-                if (lineArray.length != headerLength) throw new CCException(1204, lineArray[0] + " has not a valid structure");
+                if (lineArray.length != headerLength) throw new CCException(1204, lineArray[0] + " has no valid structure");
 
                 try {
-                    DeviceType deviceType = switch (type) {
-                        case "camera" -> new CameraType(lineArray[0],
-                                em.find(CameraSensor.class, lineArray[1]),
-                                em.find(CameraResolution.class, lineArray[2]),
-                                em.find(LensMount.class, lineArray[3]),
-                                em.find(CameraSystem.class, lineArray[4]),
-                                Integer.parseInt(lineArray[5]), Boolean.parseBoolean(lineArray[6]));
-                        case "drone" -> new DroneType(lineArray[0],
-                                em.find(CameraSensor.class, lineArray[1]),
-                                em.find(CameraResolution.class, lineArray[2]),
-                                Integer.parseInt(lineArray[3]));
-                        case "lens" -> new LensType(lineArray[0], lineArray[1],
-                                em.find(LensMount.class, lineArray[2]), lineArray[3]);
-                        case "light" -> new LightType(lineArray[0], Integer.parseInt(lineArray[1]),
-                                Boolean.parseBoolean(lineArray[2]), Boolean.parseBoolean(lineArray[3]));
-                        case "microphone" -> new MicrophoneType(lineArray[0], Boolean.parseBoolean(lineArray[1]),
-                                Boolean.parseBoolean(lineArray[2]), Boolean.parseBoolean(lineArray[3]));
-                        case "simple" -> new SimpleType(lineArray[0], lineArray[1]);
-                        case "stabilizer" -> new StabilizerType(lineArray[0],
-                                Double.parseDouble(lineArray[1]), Integer.parseInt(lineArray[2]));
-                        case "tripod" -> new TripodType(lineArray[0], Integer.parseInt(lineArray[1]),
-                                em.find(TripodHead.class, lineArray[2]));
-                        default -> null;
-                    };
+                    String currType = type;
+                    if(Objects.equals(type, "all")){
+                        currType = lineArray[5];
 
+                        switch(currType){
+                            case "audio": lineArray[6] = lineArray[10]; break; //todo hmm weiß nicht ob das stimmt
+                            case "simple": lineArray[6] = lineArray[25]; break;
+                            case "drone": lineArray[8] = lineArray[12]; break;
+                            case "lens": lineArray[6] = lineArray[8]; lineArray[7] = lineArray[13]; lineArray[8] = lineArray[14]; break;
+                            case "light": lineArray[6] = lineArray[15]; lineArray[7] = lineArray[16]; lineArray[8] = lineArray[17]; break;
+                            case "microphone": lineArray[6] = lineArray[18]; lineArray[7] = lineArray[19]; lineArray[8] = lineArray[20]; break;
+                            case "stabilizer":  lineArray[6] = lineArray[21]; lineArray[7] = lineArray[22]; break;
+                        }
+                    }
+
+                    System.out.println(currType);
+                    System.out.println(line);
+                    for (int i = 0; i < lineArray.length; i++) {
+                        System.out.print(lineArray[i] + "-");
+                    }
+                    DeviceType deviceType = getDeviceTypeByLineArray(lineArray, currType);
                     em.persist(deviceType);
 
                 } catch(NumberFormatException ex){
@@ -235,11 +366,110 @@ public class DeviceTypeRepository {
                 } catch(ConstraintViolationException ex){
                     throw new CCException(1201, "One device type does already exist " + ex.getMessage());
                 } catch(IllegalArgumentException | ArrayIndexOutOfBoundsException ex){
-                    throw new CCException(1204);
+                    throw new CCException(1204, ex.getMessage());
                 }
             }
         } catch (IOException e) {
             throw new CCException(1204, "File could not be read");
         }
+    }
+
+    public DeviceType getDeviceTypeByLineArray(String[] lineArray, String type) {
+        /*return switch (type) {
+            case "camera" -> new CameraType(
+                    parseLong(lineArray[0]), parseDate(lineArray[1]), lineArray[2], lineArray[3],
+                    parseEnum(DeviceTypeStatusEnum.class, lineArray[4]), parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
+                    findEntity(CameraSensor.class, lineArray[6]),
+                    findEntity(CameraResolution.class, lineArray[7]),
+                    findEntity(LensMount.class, lineArray[8]),
+                    findEntity(CameraSystem.class, lineArray[9]),
+                    parseInt(lineArray[10]),
+                    parseBoolean(lineArray[11])
+            );
+            case "drone" -> new DroneType(
+                    parseLong(lineArray[0]), parseDate(lineArray[1]), lineArray[2], lineArray[3],
+                    parseEnum(DeviceTypeStatusEnum.class, lineArray[4]), parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
+                    findEntity(CameraSensor.class, lineArray[6]),
+                    findEntity(CameraResolution.class, lineArray[7]),
+                    parseInt(lineArray[8])
+            );
+            case "lens" -> new LensType(
+                    parseLong(lineArray[0]), parseDate(lineArray[1]), lineArray[2], lineArray[3],
+                    parseEnum(DeviceTypeStatusEnum.class, lineArray[4]), parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
+                    findEntity(LensMount.class, lineArray[6]),
+                    lineArray[7],
+                    lineArray[8]
+            );
+            case "light" -> new LightType(
+                    parseLong(lineArray[0]), parseDate(lineArray[1]), lineArray[2], lineArray[3],
+                    parseEnum(DeviceTypeStatusEnum.class, lineArray[4]), parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
+                    parseInt(lineArray[6]),
+                    parseBoolean(lineArray[7]),
+                    parseBoolean(lineArray[8])
+            );
+            case "microphone" -> new MicrophoneType(
+                    parseLong(lineArray[0]), parseDate(lineArray[1]), lineArray[2], lineArray[3],
+                    parseEnum(DeviceTypeStatusEnum.class, lineArray[4]), parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
+                    parseBoolean(lineArray[6]),
+                    parseBoolean(lineArray[7]),
+                    parseBoolean(lineArray[8])
+            );
+            case "simple" -> new SimpleType(
+                    parseLong(lineArray[0]), parseDate(lineArray[1]), lineArray[2], lineArray[3],
+                    parseEnum(DeviceTypeStatusEnum.class, lineArray[4]), parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
+                    lineArray[6]
+            );
+            case "stabilizer" -> new StabilizerType(
+                    parseLong(lineArray[0]), parseDate(lineArray[1]), lineArray[2], lineArray[3],
+                    parseEnum(DeviceTypeStatusEnum.class, lineArray[4]), parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
+                    parseDouble(lineArray[6]),
+                    parseInt(lineArray[7])
+            );
+            case "tripod" -> new TripodType(
+                    parseLong(lineArray[0]), parseDate(lineArray[1]), lineArray[2], lineArray[3],
+                    parseEnum(DeviceTypeStatusEnum.class, lineArray[4]), parseEnum(DeviceTypeVariantEnum.class, lineArray[5]),
+                    parseInt(lineArray[6]),
+                    findEntity(TripodHead.class, lineArray[7])
+            );
+            default -> null;
+        };*/
+        return null;
+    }
+
+    private Long parseLong(String value) {
+        return Long.valueOf(value);
+    }
+
+    private LocalDateTime parseDate(String value) {
+        return !Objects.equals(value, "null") ? LocalDateTime.parse(value) : null;
+    }
+
+    private <T extends Enum<T>> T parseEnum(Class<T> enumType, String value) {
+        return !Objects.equals(value, "null") ? Enum.valueOf(enumType, value) : null;
+    }
+
+    private <T> T findEntity(Class<T> entityClass, String value) {
+        return !Objects.equals(value, "null") ? em.find(entityClass, value) : null;
+    }
+
+    private Integer parseInt(String value) {
+        return Integer.parseInt(value);
+    }
+
+    private Boolean parseBoolean(String value) {
+        return Boolean.parseBoolean(value);
+    }
+
+    private Double parseDouble(String value) {
+        return Double.parseDouble(value.replaceAll(",", "."));
+    }
+
+    public void toggleTag(Long id, Long tagId) {
+        DeviceType deviceType = getById(id);
+        Tag tag = em.find(Tag.class, tagId);
+
+        deviceType.toggleTag(tag);
+
+        em.merge(deviceType);
     }
 }

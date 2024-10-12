@@ -1,14 +1,15 @@
 package at.camconnect.boundary;
 
-import at.camconnect.dtos.AutocompleteOptionDTO;
+import at.camconnect.dtos.AutocompleteNumberOptionDTO;
 import at.camconnect.dtos.DeviceDTO;
 import at.camconnect.dtos.DeviceSearchDTO;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.model.Device;
 import at.camconnect.repository.DeviceRepository;
+import io.quarkus.security.Authenticated;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
-import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -27,17 +28,20 @@ public class DeviceResource {
     @POST
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createDevice(Device d){
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
+    public Response createDevice(DeviceDTO d){
         try {
-            deviceRepository.create(d);
+            deviceRepository.createByDTO(d);
+            return CCResponse.ok();
         } catch (CCException ex) {
+            ex.printStackTrace();
             return CCResponse.error(ex);
         }
-        return CCResponse.ok();
     }
 
     @GET
     @Path("/getall")
+    @Authenticated
     public Response getAll() {
         List<Device> devices;
         try{
@@ -50,6 +54,7 @@ public class DeviceResource {
 
     @GET
     @Path("/getbyid/{id: [0-9]+}")
+    @Authenticated
     public Response getById(@PathParam("id")long id) {
         Device result;
         try{
@@ -63,6 +68,7 @@ public class DeviceResource {
 
     @GET
     @Path("/getbynumberandtype/{number}/{type_id: [0-9]+}")
+    @Authenticated
     public Response getByNumberAndType(@PathParam("number") String number, @PathParam("type_id") long type_id) {
         Device result;
         try{
@@ -77,9 +83,9 @@ public class DeviceResource {
     @POST
     @Path("/search")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Transactional
+    @Authenticated
     public Response search(DeviceSearchDTO data){
-        List<AutocompleteOptionDTO<Device>> result;
+        List<AutocompleteNumberOptionDTO<Device>> result;
         try{
             result = deviceRepository.search(data);
         }catch (CCException ex){
@@ -89,9 +95,10 @@ public class DeviceResource {
         return CCResponse.ok(result);
     }
 
-    @POST
+    @GET
     @Path("/getbyid/{id: [0-9]+}/remove")
     @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response remove(@PathParam("id")long id){
         try {
             deviceRepository.remove(id);
@@ -104,6 +111,7 @@ public class DeviceResource {
     @POST
     @Path("/getbyid/{id: [0-9]+}/update")
     @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response update(@PathParam("id")Long id, DeviceDTO deviceDTO){
         try {
             deviceRepository.update(id, deviceDTO);
@@ -116,6 +124,7 @@ public class DeviceResource {
     @POST
     @Path("/getbyid/{id: [0-9]+}/update/number")
     @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response updateNumber(@PathParam("id")Long id, DeviceDTO deviceDTO){
         try {
             deviceRepository.setNumber(id, deviceDTO.number());
@@ -128,6 +137,7 @@ public class DeviceResource {
     @POST
     @Path("/getbyid/{id: [0-9]+}/update/serial")
     @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response updateSerial(@PathParam("id")Long id, DeviceDTO deviceDTO){
         try {
             deviceRepository.setSerial(id, deviceDTO.serial());
@@ -140,6 +150,7 @@ public class DeviceResource {
     @POST
     @Path("/getbyid/{id: [0-9]+}/update/note")
     @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response updateNote(@PathParam("id")Long id, DeviceDTO deviceDTO){
         try {
             deviceRepository.setNote(id, deviceDTO.note());
@@ -152,6 +163,7 @@ public class DeviceResource {
     @POST
     @Path("/getbyid/{id: [0-9]+}/update/type")
     @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response updateType(@PathParam("id")Long id, DeviceDTO deviceDTO){
         try {
             deviceRepository.setType(id, deviceDTO.type_id());
@@ -162,6 +174,7 @@ public class DeviceResource {
     }
     @GET
     @Path("/validatenumberandtype/{number}/{type_id}")
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response validateNumberAndType(@PathParam("number") String number, @PathParam("type_id") Long type_id) {
         boolean result;
         try{
@@ -176,6 +189,7 @@ public class DeviceResource {
     @POST
     @Path("/import")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response uploadCsvFile(@RestForm File file) {
         try{
             deviceRepository.importDevices(file);
@@ -183,5 +197,17 @@ public class DeviceResource {
             return CCResponse.error(ex);
         }
         return CCResponse.ok();
+    }
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/getcsv")
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
+    public Response exportAllDevices() {
+        try {
+            return deviceRepository.exportAllDevices();
+        } catch (CCException ex) {
+            return CCResponse.error(ex);
+        }
     }
 }

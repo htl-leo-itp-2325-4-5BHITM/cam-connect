@@ -1,11 +1,14 @@
 package at.camconnect.boundary;
 
-import at.camconnect.model.Student;
+import at.camconnect.dtos.AutocompleteNumberOptionDTO;
 import at.camconnect.model.Tag;
 import at.camconnect.repository.TagRepository;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
+import io.quarkus.security.Authenticated;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
+import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -23,7 +26,7 @@ public class TagResource {
     @POST
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Transactional
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response createTag(Tag t){
         try{
             tagRepository.addTag(t);
@@ -36,7 +39,7 @@ public class TagResource {
     @POST
     @Path("/delete")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Transactional
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response removeTag(Tag t){
         try{
             tagRepository.deleteTag(t);
@@ -46,12 +49,12 @@ public class TagResource {
         return CCResponse.ok();
     }
 
-    //TODO this is definitly not correct..
+    //TODO this is definitely not correct..
     @POST
-    @Path("/update{id: [0-9]+}")
+    @Path("/update/{id: [0-9]+}")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Transactional
-    public Response upateTag(Tag t){
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
+    public Response updateTag(Tag t){
         try{
             tagRepository.updateTag(t);
         }catch (CCException ex){
@@ -59,19 +62,23 @@ public class TagResource {
         }
         return CCResponse.ok();
     }
+
     @GET
     @Path("/getbyid/{id: [0-9]+}")
+    @Authenticated
     public Response getById(@PathParam("id")long id){
         Tag tag;
         try{
-            tag = tagRepository.getTagById(id);
+            tag = tagRepository.getById(id);
         } catch(CCException ex){
             return CCResponse.error(ex);
         }
         return CCResponse.ok(tag);
     }
+
     @GET
     @Path("/getall")
+    @Authenticated
     public Response getAllTags(){
         List<Tag> tagList;
         try{
@@ -80,5 +87,20 @@ public class TagResource {
             return CCResponse.error(ex);
         }
         return CCResponse.ok(tagList);
+    }
+
+    @POST
+    @Path("/search")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Authenticated
+    public Response search(JsonObject data){
+        List<AutocompleteNumberOptionDTO<Tag>> result;
+        try{
+            result = tagRepository.search(data.getString("searchTerm"));;
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok(result);
     }
 }

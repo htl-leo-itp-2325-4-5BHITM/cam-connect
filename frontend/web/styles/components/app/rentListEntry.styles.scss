@@ -1,0 +1,114 @@
+@import "../../base";
+
+:host {
+  all: initial;
+  flex-grow: 1;
+  display: flex;
+  background-color: $gray200;
+  padding: 0.5rem !important;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  transition: background-color $transitionTimeShort;
+}
+
+:host(.hoverHighlighted:hover){
+  background-color: $gray300;
+}
+
+:host(:not(:first-of-type)){
+  border-top: 1px solid $gray350;
+}
+
+:host([status="DECLINED"]){
+  background: linear-gradient(90deg, #423333 22.57%, #663D3D 99.01%);
+  padding-block: .3rem !important;
+
+  input{
+    background-color: hsl(0, 25%, 30%);
+    /*border-color: $gray500;*/
+    padding-block: .25rem;
+    border-color: transparent;
+
+    &.date{
+      width: 11ch;
+      text-align: center;
+    }
+  }
+
+  cc-autocomplete{
+    border-color: transparent;
+
+    &::part(input){
+      background-color: hsl(0, 25%, 30%);
+      padding-block: .25rem;
+      border-color: transparent;
+    }
+
+    &::part(icon){
+      --color: #{$gray800};
+    }
+
+    &.number{
+      width: 5ch;
+    }
+
+    &.name{
+      width: 15ch;
+    }
+  }
+
+  span {
+    color: $gray800;
+  }
+}
+
+
+
+//TODO format all dates with more letter spacing as they are in figma
+
+.area{//TODO cleanup this selector
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 400;
+  color: $gray800;
+  font-size: $fSizeDesktopSmall;
+
+  p:last-child{
+    color: white;
+    font-weight: 500;
+    margin-left: .2rem;
+  }
+
+  &.deviceInfos, &.time{
+    gap: 0.5rem;
+  }
+}
+
+cc-chip{
+  margin-right: 1rem;
+
+  .details{
+    h2{
+      font-weight: bold;
+      margin-bottom: .5rem;
+    }
+
+    p{
+      margin-bottom: .5rem;
+    }
+  }
+}
+
+cc-line{
+  margin-inline: .3rem;
+}
+
+.time{
+  color: $gray800;
+
+  span{
+    color: inherit;
+  }
+}

@@ -1,4 +1,8 @@
 package at.camconnect.dtos;
 
-public record DeviceDTO(Long device_id, String serial, String number, String note, Long type_id) {
+import at.camconnect.enums.DeviceStatus;
+
+import java.time.LocalDateTime;
+
+public record DeviceDTO(Long device_id, String serial, String number, String note, Long type_id, LocalDateTime creation_date, LocalDateTime change_date, DeviceStatus status) {
 }

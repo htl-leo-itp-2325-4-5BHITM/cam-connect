@@ -7,9 +7,9 @@
 }
 
 :host([color="ACCENT"]){
-  --background: #{$accent};
-  --hover-background: #{$accentLight};
-  --expanded-background: #{darken($accent, 80%)};
+  --background: #{$accent500};
+  --hover-background: #{$accent700};
+  --expanded-background: #{darken($accent500, 80%)};
 }
 :host([color="GOOD"]){
   --background: #{$good};
@@ -22,7 +22,7 @@
 :host([color="BAD"]){
   --background: #{$bad};
   --hover-background: #{$badLight};
-  --expanded-background: #{darken($bad, 30%)};
+  --expanded-background: adjust-color($bad, $lightness: -30%);
 }
 :host([color="GRAY"]){
   --background: #{$gray500};

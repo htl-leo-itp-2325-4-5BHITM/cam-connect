@@ -1,0 +1,21 @@
+@import "../../base";
+
+:host{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+input, textarea{
+  width: 100%;
+  padding: 0.625rem 1rem;
+  border-radius: .5rem;
+  background: $gray300;
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+  border: none;
+}
+
+.warning{
+  color: $bad;
+}

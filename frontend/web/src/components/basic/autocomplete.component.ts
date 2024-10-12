@@ -1,14 +1,15 @@
  import {LitElement, html, PropertyValues, TemplateResult, render} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/autocomplete.styles.scss'
-import Util, {AnimationHelper, Logger} from "../../util"
-import {SimpleOption, KeyBoardShortCut, Regex, SimpleColorEnum, SizeEnum} from "../../base"
+import Util, {AnimationHelper, Logger} from "../../util/Util"
+import {SimpleOption, Regex, SimpleColorEnum, SizeEnum} from "../../base"
 import {model} from "../../index"
 import {unsafeSVG} from 'lit/directives/unsafe-svg.js';
 import {icon} from '@fortawesome/fontawesome-svg-core'
 import {faCaretDown} from "@fortawesome/free-solid-svg-icons"
 import {ObservedProperty} from "../../model"
 import {AppState} from "../../AppState"
+ import {KeyBoardShortCut} from "../../util/KeyboardShortcut"
 
 
 //TODO check why when clicking away it
@@ -31,10 +32,13 @@ export class AutocompleteComponent<T> extends LitElement {
     allowNoSelection: boolean = false
 
     @property()
-    selected: SimpleOption<number, T> = {id: -1, data: null}
+    selected: SimpleOption<string | number, T> = {id: null, data: null}
 
     @property()
-    options: SimpleOption<number, T>[] = []
+    options: SimpleOption<string | number, T>[] = []
+
+    @property()
+    showIcon: boolean = true
 
     /**
      * a custom function that is called whenever the user selects an option
@@ -50,7 +54,7 @@ export class AutocompleteComponent<T> extends LitElement {
      * @param searchTerm string
      */
     @property()
-    querySuggestions: (searchTerm: string) => Promise<SimpleOption<number, T>[]> = (searchTerm) => {return Promise.resolve([])}
+    querySuggestions: (searchTerm: string) => Promise<SimpleOption<string, T>[]> = (searchTerm) => {return Promise.resolve([])}
 
     /**
      * should provide the icon for the suggestion that will be displayed alongside the content
@@ -65,7 +69,7 @@ export class AutocompleteComponent<T> extends LitElement {
     @property()
     contentProvider: (data: T) => string = () => {return "no content provider"}
 
-    private focusedId: number = -1 //the id of the hovered or arrow-key-selected suggestion
+    private focusedId: string | number = null //the id of the hovered or arrow-key-selected suggestion
 
     private static suggestionsVisible: AutocompleteComponent<any> = null
 
@@ -89,6 +93,7 @@ export class AutocompleteComponent<T> extends LitElement {
 
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
+
         //probably for default values
         this.selectSuggestion(this.selected)
     }
@@ -98,7 +103,7 @@ export class AutocompleteComponent<T> extends LitElement {
         //render the suggestions into the separate suggestion element
         render(
             html`${
-                this.options.length == 0 ? html`<div class="empty">Keine Ergebnisse</div>` :
+                !this.options || this.options.length == 0 ? html`<div class="empty">Keine Ergebnisse</div>` :
                 this.options.map(option => {
                     return html`
                         <div class="entry" 
@@ -116,17 +121,21 @@ export class AutocompleteComponent<T> extends LitElement {
 
         return html`
             <style>${styles}</style>
-            <input type="text" placeholder="${this.placeholder}" .disabled="${this.disabled}" data-role="autocompleteInput" value="${this.selected.id > -1 ? this.contentProvider(this.selected.data) : ""}"
-                   @mouseup="${ this.generateSuggestions }"
-                   @keyup="${ (e)=> this.generateSuggestions(e) }"
-                   @keydown="${this.handleTabOut}"
-                   @mousedown="${() => this.openedThroughClick = true}"
-                   @focus="${(e) => {
-                        if (!this.openedThroughClick) this.generateSuggestions(e)
-                   }}"
+            <input
+                type="text" placeholder="${this.placeholder}"
+                data-role="autocompleteInput" part="input"
+                .disabled="${this.disabled}"
+                value="${this.selected.id != null ? this.contentProvider(this.selected.data) : ""}"
+                @mouseup="${ this.generateSuggestions }"
+                @keyup="${ (e)=> this.generateSuggestions(e) }"
+                @keydown="${this.handleTabOut}"
+                @mousedown="${() => this.openedThroughClick = true}"
+                @focus="${(e) => {
+                if (!this.openedThroughClick) this.generateSuggestions(e)
+                }}"
             >
             <!-- display the dropdown icon if the width is enough -->
-            ${this.clientWidth > 50 || this.selected.id < 0 ? unsafeSVG(icon(faCaretDown).html[0]) : html``}
+            ${(this.clientWidth > 50 || this.selected.id == null) && this.showIcon == true ? unsafeSVG(icon(faCaretDown, {attributes: {part: "icon"}}).html[0]) : html``}
         `
     }
 
@@ -134,7 +143,6 @@ export class AutocompleteComponent<T> extends LitElement {
      * displays the suggestion container
      */
     showSuggestions(){
-        console.log("showing autocomplete suggestions")
         this.logger.log("----SHOWING SUGGESTIONS----", this.placeholder, this.selected)
         AutocompleteComponent.suggestionsVisible = this
 
@@ -222,12 +230,12 @@ export class AutocompleteComponent<T> extends LitElement {
         //  input field you want nothing to be selected)
         //and the input is empty
         if(this.allowNoSelection && afterSelection == false && Regex.empty.test(input.value)) {
-            this.selected = {id: -1, data: null}
+            this.selected = {id: null, data: null}
             this.onSelect(this.selected.data)
         }
 
         //if a valid value was selected update the text in the input
-        if(this.selected.id > -1) {
+        if(this.selected.id) {
             input.value = this.contentProvider(this.selected.data)
             this.logger.log("setting content", this.selected)
         }
@@ -250,12 +258,12 @@ export class AutocompleteComponent<T> extends LitElement {
      * @param option either a AutocompleteOption or the id of the option
      * @param isInitialCall
      */
-    selectSuggestion(option: SimpleOption<number, T> | number, isInitialCall?: boolean){
+    selectSuggestion(option: SimpleOption<string | number, T> | string | number, isInitialCall?: boolean){
         this.logger.log("selecting", this.placeholder, option)
 
-        if(typeof option == "number") option = this.options.find(item => item.id == option)
+        if(typeof option == "string" || typeof option == "number") option = this.options.find(item => item.id == option)
 
-        if(!option || option.id < 0) {
+        if(!option || option.id == null) {
             this.logger.log("selected option is invalid:", option)
             this.logger.log("available options", this.options)
             return
@@ -351,13 +359,13 @@ export class AutocompleteComponent<T> extends LitElement {
      */
     focusEntry(entry?: HTMLElement){
         if(!entry) {
-            this.focusedId = -1
+            this.focusedId = null
             return
         }
         this.appState.value.appElement.shadowRoot.querySelectorAll("#autocompleteSuggestions .entry.focused")
             .forEach(entry => entry.classList.remove("focused"))
         entry.classList.add("focused")
-        this.focusedId = Number(entry.dataset.id)
+        this.focusedId = entry.dataset.id
     }
 
     /**
@@ -387,21 +395,21 @@ export class AutocompleteComponent<T> extends LitElement {
         this.logger.log("moving focus", this.placeholder, focused, next)
 
         next.classList.add("focused")
-        this.focusedId = Number(next.dataset.id)
+        this.focusedId = next.dataset.id
     }
 
     //region outside interaction
     setFocus(){
         this.logger.log("setting focus", this.placeholder)
         this.shadowRoot.querySelector("input").focus()
-        this.generateSuggestions()
+        this.generateSuggestions(undefined, "")
     }
 
     clear(animated = true){
-        if(this.selected.id > -1 && animated) AnimationHelper.shake(this)
+        if(this.selected.id == null && animated) AnimationHelper.shake(this)
         this.logger.log("clearing", this.placeholder)
-        this.selected = {id: -1, data: null}
-        this.focusedId = -1
+        this.selected = {id: null, data: null}
+        this.focusedId = null
         if(this.shadowRoot.querySelector("input"))
             this.shadowRoot.querySelector("input").value = ""
     }

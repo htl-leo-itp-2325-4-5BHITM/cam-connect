@@ -1,11 +1,16 @@
 package at.camconnect.model.DeviceTypeVariants;
 
+import at.camconnect.dtos.deviceType.DeviceTypeGlobalIdDTO;
 import at.camconnect.dtos.deviceType.DeviceTypeGlobalObjectsDTO;
+import at.camconnect.enums.DeviceTypeStatusEnum;
 import at.camconnect.enums.DeviceTypeVariantEnum;
 import at.camconnect.model.DeviceType;
+import at.camconnect.model.DeviceTypeAttribute;
 import at.camconnect.responseSystem.CCException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+
+import java.util.List;
 
 @Entity
 public class StabilizerType extends DeviceType {
@@ -15,11 +20,12 @@ public class StabilizerType extends DeviceType {
     private int number_of_axis;
 
     public StabilizerType() {
+        super();
         setVariant(DeviceTypeVariantEnum.stabilizer);
     }
 
-    public StabilizerType(String typeName, double max_weight_kilograms, int number_of_axis) {
-        super(typeName);
+    public StabilizerType(String name, String image_blob_url, double max_weight_kilograms, int number_of_axis) {
+        super(name, image_blob_url, DeviceTypeVariantEnum.stabilizer);
         this.max_weight_kilograms = max_weight_kilograms;
         this.number_of_axis = number_of_axis;
     }
@@ -32,6 +38,21 @@ public class StabilizerType extends DeviceType {
         }catch (Exception ex){
             throw new CCException(1106);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "needs to be updated";
+    }
+
+    @Override
+    public DeviceTypeGlobalIdDTO toGlobalDTO() {
+        return null;
+    }
+
+    @Override
+    public List<DeviceTypeAttribute> getAttributes() {
+        return List.of();
     }
 
     public double getMax_weight_kilograms() {

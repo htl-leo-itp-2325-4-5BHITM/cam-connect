@@ -8,7 +8,7 @@
 div.filter-block {
   padding-inline: .75rem; /*this may cause the small lines to get fucked up*/
   .heading {
-    color: $accentLight;
+    color: $accent700;
     font-weight: 600;
 
     span.clear{
@@ -34,7 +34,7 @@ div.filter-block {
     font-weight: 400 !important;
     color: $gray800 !important;
     position: relative;
-    transition: font-weight .2s, color .2s;
+    transition: font-weight .1s, color .1s;
 
     cursor: pointer;
     user-select: none;
@@ -45,7 +45,7 @@ div.filter-block {
 
     &::before, &::after {
       content: "";
-      background-color: $accentLight;
+      background-color: $accent700;
       position: absolute;
       right: 100%;
     }

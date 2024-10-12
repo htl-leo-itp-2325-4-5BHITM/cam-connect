@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
+const svgPlugin = require('@svgr/webpack');
 const webpack = require('webpack');
 
 const baseHref = "/";

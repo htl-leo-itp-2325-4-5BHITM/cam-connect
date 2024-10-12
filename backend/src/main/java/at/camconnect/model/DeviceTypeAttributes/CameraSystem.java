@@ -14,5 +14,8 @@ public class CameraSystem extends DeviceTypeAttribute {
     }
 
     @Override
-    public void update(DeviceTypeAttributeDTO data) {}
+    public void update(DeviceTypeAttributeDTO data) {
+        setName(data.name());
+        setDetails(data.details());
+    }
 }

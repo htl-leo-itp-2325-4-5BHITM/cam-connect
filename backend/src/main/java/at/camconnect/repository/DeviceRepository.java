@@ -1,8 +1,9 @@
 package at.camconnect.repository;
 
-import at.camconnect.dtos.AutocompleteOptionDTO;
+import at.camconnect.dtos.AutocompleteNumberOptionDTO;
 import at.camconnect.dtos.DeviceDTO;
 import at.camconnect.dtos.DeviceSearchDTO;
+import at.camconnect.enums.DeviceStatus;
 import at.camconnect.enums.RentStatusEnum;
 import at.camconnect.model.Rent;
 import at.camconnect.responseSystem.CCException;
@@ -14,9 +15,14 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.StreamingOutput;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,8 +41,18 @@ public class DeviceRepository {
     }
 
     @Transactional
+    public void createByDTO(DeviceDTO d) {
+        try{
+            Device device = new Device(d.serial(), d.number(), d.note(), em.find(DeviceType.class, d.type_id()), d.status());
+            create(device);
+        } catch(Exception ex){
+            throw new CCException(1106);
+        }
+    }
+
+    @Transactional
     public void remove(Long id){
-        em.remove(getById(id));
+        getById(id).setStatus(DeviceStatus.DELETED);
         deviceSocket.broadcast();
     }
 
@@ -100,7 +116,7 @@ public class DeviceRepository {
         return count > 0;
     }
 
-    public List<AutocompleteOptionDTO<Device>> search(DeviceSearchDTO data){
+    public List<AutocompleteNumberOptionDTO<Device>> search(DeviceSearchDTO data){
 
         Query query;
         if(data.typeId() > 0) {
@@ -116,18 +132,20 @@ public class DeviceRepository {
         }
 
         List<Device> devices = query.getResultList();
-        List<AutocompleteOptionDTO<Device>> result = new LinkedList<>();
+        List<AutocompleteNumberOptionDTO<Device>> result = new LinkedList<>();
         for (Device device : devices) {
             if(data.onlyAvailable() && isDeviceAlreadyInUse(device.getDevice_id())){
                 continue;
             }
-            result.add(new AutocompleteOptionDTO<>(device, device.getDevice_id()));
+            result.add(new AutocompleteNumberOptionDTO<>(device, device.getDevice_id()));
         }
 
         return result;
     }
 
-    public boolean isDeviceAlreadyInUse(long device_id) {
+    public boolean isDeviceAlreadyInUse(Long device_id) {
+        if(device_id == null) return false;
+
         return !em.createQuery("SELECT r FROM Rent r " +
                                   "where r.device.id = :deviceId and r.status != :status ",
                 Rent.class)
@@ -139,30 +157,34 @@ public class DeviceRepository {
     }
 
     public List<Device> getAll(){
-        List<Device> devices = em.createQuery("SELECT d FROM Device d", Device.class).getResultList();
+        List<Device> devices = em.createQuery("SELECT d FROM Device d where d.status != 'DELETED' order by d.id", Device.class).getResultList();
         return devices;
     }
 
     public void setNumber(Long rentId, String number) {
         Device device = getById(rentId);
+        device.setChange_date(LocalDateTime.now());
         device.setNumber(number);
         deviceSocket.broadcast();
     }
 
     public void setSerial(Long rentId, String serial) {
         Device device = getById(rentId);
+        device.setChange_date(LocalDateTime.now());
         device.setSerial(serial);
         deviceSocket.broadcast();
     }
 
     public void setNote(Long rentId, String serial) {
         Device device = getById(rentId);
+        device.setChange_date(LocalDateTime.now());
         device.setNote(serial);
         deviceSocket.broadcast();
     }
 
     public void setType(Long rentId, Long type) {
         Device device = getById(rentId);
+        device.setChange_date(LocalDateTime.now());
         DeviceType deviceType = em.find(DeviceType.class, type);
         device.setType(deviceType);
         deviceSocket.broadcast();
@@ -181,13 +203,43 @@ public class DeviceRepository {
                 }
 
                 //TODO there was a error in the device class the number attribute was missing
-                Device device = new Device(values[0].trim(), "TODO", values[1].trim(),deviceType);
+                Device device = new Device(values[0].trim(), "TODO", values[1].trim(),deviceType, DeviceStatus.ACTIVE);
                 em.persist(device);
             }
             return true;
         } catch(Exception ex){
             return false;
         }
+    }
+
+    public Response exportAllDevices() {
+        StreamingOutput stream = os -> {
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(os))) {
+                writer.write(getCSVHeader());
+
+                List<Device> devices = getAll();
+                for (Device device : devices) {
+                    String csvLine = buildCSVLine(device);
+                    writer.write(csvLine);
+                }
+            } catch (IOException e) {
+                throw new CCException(1200, "File creation failed");
+            }
+        };
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm");
+
+        return Response.ok(stream)
+                .header("Content-Disposition", "attachment; filename=\"device-" + dateFormat.format(new Date()) + ".csv\"")
+                .build();
+    }
+
+    private String getCSVHeader() {
+        return "serial;number;note;type;\n";
+    }
+
+    private String buildCSVLine(Device device) {
+        return String.format("%s;%s;%s;%s;\n", device.getSerial(), device.getNumber(), device.getNote(), device.getType().getType_id());
     }
 
     @Transactional
@@ -210,7 +262,7 @@ public class DeviceRepository {
                 lineArray = line.split(";");
                 if(lineArray.length != 4) break;
                 create(new Device(lineArray[0], lineArray[1], lineArray[2],
-                        em.find(DeviceType.class, lineArray[3])));
+                        em.find(DeviceType.class, lineArray[3]), DeviceStatus.ACTIVE));
             }
         } catch (IOException e) {
             throw new CCException(1204, "File could not be read");

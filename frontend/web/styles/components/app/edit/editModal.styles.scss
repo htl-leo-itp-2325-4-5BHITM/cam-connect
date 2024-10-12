@@ -1,0 +1,103 @@
+@import "../../../base";
+
+:host{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: $gray350;
+  border-radius: 1rem;
+  padding: 2rem !important;
+  gap: .5rem;
+
+  h1{
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  cc-input, cc-toggle, div{
+    width: 30vw;
+  }
+
+  .contentByDeviceType{
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+
+    div{
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  .tags {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+
+    div{
+      display: flex;
+      gap: .5rem;
+    }
+  }
+
+  .separator{
+    margin-block: .5rem;
+  }
+
+  .navigation{
+    display: flex;
+    justify-content: space-evenly;
+    margin-block: 2rem .25rem;
+  }
+}
+
+div.selectType{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: .5rem;
+
+  div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    cursor: pointer;
+    width: 100%;
+    aspect-ratio: 1/1;
+    background-color: $gray400;
+    border-radius: .5rem;
+    transition: all .2s ease;
+    user-select: none;
+
+    &:hover{
+        background-color: $gray500;
+    }
+
+    svg {
+      width: 5rem;
+      * {
+        fill: $gray800;
+      }
+    }
+  }
+}
+
+div.entries{
+  display: flex;
+  flex-direction: column;
+
+  div{
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid $gray500;
+    padding: .5rem;
+
+    icon-cta svg{
+      width: 1rem;
+    }
+
+    icon-cta svg *{
+      fill: $gray700;
+    }
+  }
+}

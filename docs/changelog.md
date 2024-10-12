@@ -18,7 +18,7 @@ This file should be updated when ending a sprint and contain the same info as th
 
 ## Sprint 5
 
-- switched to LIT
+- switched to lit-html
 - implemented components from figma
 - cleanup on old web
   - delete / return button functionality
@@ -72,3 +72,20 @@ This file should be updated when ending a sprint and contain the same info as th
 - cleaned up column definition in backend
 - created print view as old excel list
 - added import functionality of all devicetypes and devices in edit page
+
+## Sprint 9
+
+- Import / Export all Rents as backup
+- Import csv files of devices
+- Updated search system
+  - filter are sent via dto
+  - no unnecessary additional getters
+- Filter and sort Rents using sidebar
+  - modified getAll to accept filter dto
+  - stored filters in frontend appstate
+- Created user settings page
+  - barebones mockup without functionality
+  - outlines planned settings
+- minimize students in rent list for better overview
+- created swift demo
+- updated remove and return functionality

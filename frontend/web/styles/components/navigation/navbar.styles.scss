@@ -1,0 +1,88 @@
+@import "../../base";
+
+:host{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: $gray800;
+  font-weight: 400;
+  background-color: $gray300;
+  padding: 0.3rem 0.75rem !important;
+  box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.15);
+  height: fit-content;
+}
+
+:host([type = "simple"]){
+  justify-content: center;
+}
+
+:host([type = "back"]){
+  .logo{
+    margin-inline: auto;
+    position: absolute;
+    left: 50%;
+    translate: -50% 0%;
+  }
+}
+
+div.logo{
+  height: 1.5rem;
+  cursor: pointer;
+
+  img{
+    height: 100%;
+  }
+}
+
+div.tools{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  svg{
+    height: 1.2rem;
+    @include imgIconColorGray800;
+  }
+}
+
+.search-container{
+  position: relative;
+  height: 1.2rem;
+}
+
+div.search{
+  border-radius: .5rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  translate: 0 -50%;
+  transition: border $transitionTimeShort, gap $transitionTimeShort, padding $transitionTimeShort, margin $transitionTimeShort;
+
+  input{
+    color: $gray800;
+    -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;
+    opacity: 0;
+    border: none;
+    background-color: $gray350;
+    width: 0;
+    padding-block: .1rem !important;
+
+    transition: width $transitionTimeShort, opacity $transitionTimeShort;
+  }
+
+  &.expanded{
+    border: 1px solid $gray500;
+    gap: .5rem;
+    padding: .2rem;
+    padding-right: .3rem;
+    margin-right: -.3rem;
+
+    input{
+      opacity: 1;
+      width: 22ch;
+    }
+  }
+}

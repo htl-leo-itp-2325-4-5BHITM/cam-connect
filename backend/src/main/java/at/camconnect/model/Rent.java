@@ -17,8 +17,10 @@ public class Rent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(length = 4)
     private Long rent_id;
+
     @Enumerated(EnumType.STRING)
     private RentStatusEnum status;
+
     @Enumerated(EnumType.STRING)
     private RentTypeEnum type;
 
@@ -26,49 +28,60 @@ public class Rent {
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
-    private Student student;
+    private User student;
+
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "device_id")
     private Device device;
+
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "teacher_id_start")
-    private Teacher teacher_start;
+    private User teacher_start;
+
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "teacher_id_end")
-    private Teacher teacher_end;
+    private User teacher_end;
+
     @Temporal(TemporalType.DATE)
     private LocalDate rent_start;
+
     @Temporal(TemporalType.DATE)
     private LocalDate rent_end_planned;
+
     @Temporal(TemporalType.DATE)
     private LocalDate rent_end_actual;
+
     private final LocalDateTime creation_date;
+
     private LocalDateTime change_date;
+
     @Column(length = 20)
     private String verification_code;
+
     @Column(length = 150)
     private String verification_message;
+
     @Column(length = 150)
     private String note;
+
     @Column(length = 100)
     private String device_string;
 
-    //TODO remove these when moving to new UI permanently - also remove them in repo resource and update functions
-    private String accessory;
-
-    public Rent() { //TODO remove when moving to new ui
-        rent_start = LocalDate.now();
-        creation_date = LocalDateTime.now();
-        status = RentStatusEnum.CREATED;
+    public Rent(){
+        this.status = RentStatusEnum.WAITING;
+        this.creation_date = LocalDateTime.now();
+        this.change_date = LocalDateTime.now();
     }
 
     /**
      * Rent with device as object
      */
-    public Rent(Student student, Device device, Teacher teacher_start, LocalDate rent_start, LocalDate rent_end_planned, String note) {
+    public Rent(User student, Device device, User teacher_start, LocalDate rent_start, LocalDate rent_end_planned, String note) {
+        this();
+
         this.type = RentTypeEnum.DEFAULT;
         this.student = student;
         this.device = device;
@@ -76,16 +89,14 @@ public class Rent {
         this.rent_start = rent_start;
         this.rent_end_planned = rent_end_planned;
         this.note = note;
-
-        this.status = RentStatusEnum.WAITING;
-        this.creation_date = LocalDateTime.now();
-        this.change_date = LocalDateTime.now();
     }
 
     /**
      * Rent with device as string
      */
-    public Rent(Student student, String device_string, Teacher teacher_start, LocalDate rent_start, LocalDate rent_end_planned, String note) {
+    public Rent(User student, String device_string, User teacher_start, LocalDate rent_start, LocalDate rent_end_planned, String note) {
+        this();
+
         this.type = RentTypeEnum.STRING;
         this.student = student;
         this.device_string = device_string;
@@ -93,14 +104,11 @@ public class Rent {
         this.rent_start = rent_start;
         this.rent_end_planned = rent_end_planned;
         this.note = note;
-
-        this.status = RentStatusEnum.WAITING;
-        this.creation_date = LocalDateTime.now();
-        this.change_date = LocalDateTime.now();
     }
 
-    public Rent(Long rent_id, RentStatusEnum status, RentTypeEnum type, Device device, String device_string, Teacher teacher_start, Teacher teacher_end, LocalDate rent_start, LocalDate rent_end_planned, LocalDate rent_end_actual, Student student, String note, String verification_message){
-        super();
+    public Rent(Long rent_id, RentStatusEnum status, RentTypeEnum type, Device device, String device_string, User teacher_start, User teacher_end, LocalDate rent_start, LocalDate rent_end_planned, LocalDate rent_end_actual, User student, String note, String verification_message){
+        this();
+
         this.status = status;
         this.type = type;
         this.device = device;
@@ -113,9 +121,6 @@ public class Rent {
         this.student = student;
         this.note = note;
         this.verification_message = verification_message;
-
-        this.creation_date = LocalDateTime.now();
-        this.change_date = LocalDateTime.now();
     }
 
     public String generateVerification_code() {
@@ -161,24 +166,16 @@ public class Rent {
     }
 
     //region getter setter
-    public String getAccessory() {
-        return accessory;
-    }
-
-    public void setAccessory(String accessory) {
-        this.accessory = accessory;
-        this.updateChangeDate();
-    }
 
     public Long getRent_id()  {
         return rent_id;
     }
 
-    public Student getStudent() {
+    public User getStudent() {
         return student;
     }
 
-    public void setStudent(Student student) {
+    public void setStudent(User student) {
         this.student = student;
         this.updateChangeDate();
     }
@@ -192,20 +189,20 @@ public class Rent {
         this.updateChangeDate();
     }
 
-    public Teacher getTeacher_start() {
+    public User getTeacher_start() {
         return teacher_start;
     }
 
-    public void setTeacher_start(Teacher teacherStart) {
+    public void setTeacher_start(User teacherStart) {
         this.teacher_start = teacherStart;
         this.updateChangeDate();
     }
 
-    public Teacher getTeacher_end() {
+    public User getTeacher_end() {
         return teacher_end;
     }
 
-    public void setTeacher_end(Teacher teacherEnd) {
+    public void setTeacher_end(User teacherEnd) {
         this.teacher_end = teacherEnd;
         this.updateChangeDate();
     }
@@ -285,5 +282,14 @@ public class Rent {
         this.type = type;
         this.updateChangeDate();
     }
+
+    public LocalDateTime getCreation_date() {
+        return creation_date;
+    }
+
+    public LocalDateTime getChange_date() {
+        return change_date;
+    }
+
     //endregion
 }

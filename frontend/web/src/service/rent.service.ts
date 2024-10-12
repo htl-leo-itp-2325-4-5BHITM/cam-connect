@@ -1,13 +1,10 @@
 import {model} from "../index"
-import {Api, ccResponse, config} from "../base"
+import {config} from "../base"
 import {Device} from "./device.service"
-import {Teacher} from "./teacher.service";
-import {Student} from "./student.service";
-import PopupEngine from "../popupEngine"
-import Util from "../util"
-import {DeviceTypeVariantEnum} from "./deviceType.service"
-import {AppState} from "../AppState"
-import Model from "../model"
+import PopupEngine from "../util/PopupEngine"
+import Util from "../util/Util"
+import {Api} from "../util/Api"
+import {Student, Teacher, UserRoleEnum} from "./user.service"
 
 export enum RentStatusEnum {
     CREATED="CREATED",
@@ -29,6 +26,7 @@ export interface Rent{
     rent_end_planned: string
     rent_end_actual: string
     creation_date: string
+    change_date: string
     verification_message: string
     status: RentStatusEnum
     note: string
@@ -43,27 +41,22 @@ export enum RentTypeEnum { DEFAULT="DEFAULT", STRING="STRING" }
 
 export interface CreateRentDTO {
     type: RentTypeEnum
-    student_id: number
+    student_id: string
     device_id?: number
     device_string?: string
-    teacher_start_id: number
+    teacher_start_id: string
     rent_start: string //should be date but couldnt get that to work
     rent_end_planned: string //should be date but couldnt get that to work
     note: string
 }
 
-export interface RentFilters {
-    orderBy: OrderByFilterRent
-    statuses?: RentStatusEnum[]
-    schoolClasses?: Set<string>
-    studentIds?: number[]
-}
-
 export interface RentFilterDTO {
-    orderBy: OrderByFilterRent
+    orderBy?: OrderByFilterRent
     statuses?: RentStatusEnum[]
     schoolClasses?: string[]
-    studentIds?: number[]
+    studentIds?: string[]
+    studentSearchTerm?: string
+    deviceTypeSearchTerm?: string
 }
 
 export enum OrderByFilterRent {
@@ -78,22 +71,32 @@ export default class RentService {
         let rentFiltersForBackend: RentFilterDTO = {
             orderBy: model.appState.value.rentFilters.orderBy,
             statuses: model.appState.value.rentFilters.statuses,
-            schoolClasses: Array.from(model.appState.value.rentFilters.schoolClasses)
+            schoolClasses: Array.from(model.appState.value.rentFilters.schoolClasses),
         }
+
+        if(model.appState.value.currentUser?.role != UserRoleEnum.MEDT_TEACHER) {
+            rentFiltersForBackend.studentIds = [model.appState.value.currentUser?.user_id]
+            rentFiltersForBackend.deviceTypeSearchTerm = model.appState.value.searchTerm
+        }
+        else{
+            rentFiltersForBackend.studentSearchTerm = model.appState.value.searchTerm
+        }
+
+        console.log(rentFiltersForBackend)
 
         Api.postData<RentFilterDTO, RentByStudentDTO[]>("/rent/getall", rentFiltersForBackend)
             .then(result => {
-                model.loadRents(result.data || [])
                 console.log(result)
+                model.loadRents(result.data || [])
             })
             .catch(error => {
                 console.error(error)
             })
     }
 
-    static allRentsByStudent(studentId: number) {
+    static allRentsByStudent(studentId: string) {
         return Api.postData<RentFilterDTO, RentByStudentDTO[]>("/rent/getall",
-            {orderBy: OrderByFilterRent.ALPHABETICAL_ASC ,studentIds: [studentId]}
+            {orderBy: OrderByFilterRent.ALPHABETICAL_ASC, studentIds: [studentId]}
         )
             .then(result => {
                 return result.data
@@ -150,17 +153,11 @@ export default class RentService {
 
     static updateProperty(id: number, property: string, data: any) {
         let theData = {value: data}
-        Api.putData<{value: string}, null>(`/rent/getbyid/${id}/update/${property}`, theData)
-            .then((data) => {
-                console.log(data)
-            })
-            .catch(error => {
-                console.error(error)
-            })
+        return Api.putData<{value: string}, null>(`/rent/getbyid/${id}/update/${property}`, theData)
     }
 
     static requestConfirmation(rent: Rent) {
-        Api.fetchData(`/rent/getbyid/${rent.rent_id}/sendconfirmation`)
+        Api.getData(`/rent/getbyid/${rent.rent_id}/sendconfirmation`)
             .then(() => {
                 RentService.fetchAll()
             })
@@ -169,9 +166,18 @@ export default class RentService {
             })
     }
 
-    static async updateStatus(rentId: number, code: string, status: RentStatusEnum, message: string) {
+    /**
+     * Updates the status of a rent
+     * Aberger heheha
+     * @param rentId
+     * @param code
+     * @param status
+     * @param message
+     */
+
+    static async confirmOrDecline(rentId: number, code: string, status: RentStatusEnum, message: string) {
         return new Promise((resolve, reject) => {
-            Api.postData(`/rent/getbyid/${rentId}/updatestatus`, {verification_code: code, status: status, verification_message: message})
+            Api.postData(`/rent/getbyid/${rentId}/externalconfirmordecline`, {verification_code: code, status: status, verification_message: message})
                 .then((result) => {
                     if(result.ccStatus.statusCode == 1000){
                         PopupEngine.createNotification({ heading: "Verleih erfolgreich " + Util.rentStatusToHuman(status), CSSClass: "good" })
@@ -198,5 +204,25 @@ export default class RentService {
                     console.error(error)
                 })
         })
+    }
+
+    static confirm(rentId: number){
+        return Api.putData(`/rent/getbyid/${rentId}/confirm`)
+            .then(result => {
+                RentService.fetchAll()
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
+
+    static decline(rentId: number, message: string){
+        return Api.postData(`/rent/getbyid/${rentId}/decline`, {message: message})
+            .then(() => {
+                RentService.fetchAll()
+            })
+            .catch(error => {
+                console.error(error)
+            })
     }
 }

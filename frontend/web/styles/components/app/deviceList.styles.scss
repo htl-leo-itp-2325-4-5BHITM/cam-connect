@@ -1,0 +1,56 @@
+@import "../../base";
+
+$gap: 1rem;
+
+:host {
+  all: initial;
+  column-gap: $gap;
+  padding: $gap !important;
+  overflow-y: scroll;
+  -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+:host([size="small"]) .content {
+  columns: 1;
+}
+:host([size="medium"]) .content{
+  columns: 2;
+}
+:host([size="large"]) .content{
+  columns: 3;
+}
+:host([size="xLarge"]) .content{
+  columns: 4;
+}
+
+.content{
+  position: relative;
+
+  &.list{
+    columns: 1 !important;
+  }
+}
+
+.content > *{
+  break-inside: avoid;
+  margin-bottom: $gap;
+}
+
+p{
+  height: 10rem;
+}
+
+.noResults{
+  position: absolute;
+  left: 50%;
+  translate: -50% 0;
+  margin-top: 4rem;
+  text-align: center;
+  color: $gray800;
+}

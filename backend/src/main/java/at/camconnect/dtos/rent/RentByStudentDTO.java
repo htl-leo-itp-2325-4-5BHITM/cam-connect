@@ -1,10 +1,10 @@
 package at.camconnect.dtos.rent;
 
-import at.camconnect.model.Student;
+import at.camconnect.model.User;
 
 import java.util.List;
 
-public record RentByStudentDTO(Student student, List<RentDTO> rentList) {
+public record RentByStudentDTO(User student, List<RentDTO> rentList) {
 
     public RentByStudentDTO {
     }

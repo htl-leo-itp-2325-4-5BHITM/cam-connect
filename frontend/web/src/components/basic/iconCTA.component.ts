@@ -1,15 +1,18 @@
 import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, property, queryAssignedElements} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/iconCTA.styles.scss'
-import {AnimationHelper} from "../../util"
+import {AnimationHelper} from "../../util/Util"
 
 @customElement('icon-cta')
 export class iconCTAComponent extends LitElement {
-    @queryAssignedElements()
-    slottedChildren!: Array<HTMLElement>;
+    @queryAssignedElements() slottedChildren!: Array<HTMLElement>;
 
-    @property()
-    clickAction: () => void = () => {}
+    @property() clickAction: () => void = () => {}
+
+    @property() size: string = "1.5rem"
+
+    @property({ type: Boolean, reflect: true })
+    disabled?: boolean = false
 
     render() {
         return html`
@@ -20,31 +23,39 @@ export class iconCTAComponent extends LitElement {
 
     connectedCallback() {
         super.connectedCallback();
-        this.addEventListener("click", (e) => {this.playClickAnimation(); this.clickAction()})
+        this.addEventListener("click", this.executeClickAction)
         this.addEventListener("keydown", (event: KeyboardEvent) => {
             if(event.key == " " || event.key == "Enter") {
-                this.playClickAnimation()
-                this.clickAction()
+                this.executeClickAction()
             }
         })
     }
 
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
+
         this.setAttribute("tabindex", "0")
+
+        this.style.height = this.size
+        this.style.width = this.size
     }
 
     handleSlotchange() {
-        super.connectedCallback();
-
-        let childHeight = this.slottedChildren[0].clientHeight
+        /*let childHeight = this.slottedChildren[0].clientHeight
 
         this.style.height = childHeight + "px"
-        this.style.width = childHeight + "px"
+        this.style.width = childHeight + "px"*/
     }
 
     playClickAnimation() {
         AnimationHelper.pop(this.slottedChildren[0], 200, 1.1)
+    }
+
+    executeClickAction(){
+        if(this.disabled) return
+
+        this.playClickAnimation()
+        this.clickAction()
     }
 }
 

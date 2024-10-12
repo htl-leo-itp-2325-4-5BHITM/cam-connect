@@ -4,6 +4,7 @@ import at.camconnect.dtos.DeviceTypeAttributeDTO;
 import at.camconnect.model.DeviceTypeAttribute;
 import jakarta.persistence.*;
 
+@Deprecated
 @Entity
 public class CameraSensor extends DeviceTypeAttribute {
     @Column(length = 50)
@@ -20,6 +21,8 @@ public class CameraSensor extends DeviceTypeAttribute {
     @Override
     public void update(DeviceTypeAttributeDTO data) {
         setSize(data.size());
+        setName(data.name());
+        setDetails(data.details());
     }
 
     public String getSize() {
