@@ -40,7 +40,7 @@ export class EditComponent extends LitElement {
             <style>${styles}</style>
             <cc-navbar type="back"></cc-navbar>
 
-            <cc-sidebar accountname="Martin Huemer" type="edit"></cc-sidebar>
+            <cc-sidebar type="edit"></cc-sidebar>
 
             ${this.getComponent()}
         `

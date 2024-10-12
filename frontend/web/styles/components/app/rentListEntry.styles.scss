@@ -25,7 +25,7 @@
   padding-block: .3rem !important;
 
   input{
-    background-color: hsl(0, 20%, 30%);
+    background-color: hsl(0, 25%, 30%);
     /*border-color: $gray500;*/
     padding-block: .25rem;
     border-color: transparent;
@@ -40,7 +40,7 @@
     border-color: transparent;
 
     &::part(input){
-      background-color: hsl(0, 20%, 30%);
+      background-color: hsl(0, 25%, 30%);
       padding-block: .25rem;
       border-color: transparent;
     }

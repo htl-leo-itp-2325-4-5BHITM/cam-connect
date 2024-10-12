@@ -149,7 +149,7 @@ export class SidebarComponent extends LitElement {
                     UrlHandler.goToPage('/app/user')
                 }}">
                     <img src="../../../assets/icon/user-icon-default.svg" alt="user">
-                    <p>icon</p>
+                    <p>${this.appState.value.currentUser?.firstname} ${this.appState.value.currentUser?.lastname}</p>
                 </div>
             `
         }
