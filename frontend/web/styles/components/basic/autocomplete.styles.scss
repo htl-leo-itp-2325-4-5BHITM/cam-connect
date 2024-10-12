@@ -36,18 +36,26 @@
 }
 
 //dropdown icon
-:host > svg{
-  display: block;
-  height: .9rem;
+:host > .dropdownIcon {
   position: absolute;
   top: 45%;
   translate: 0 -50%;
-  right: .5rem;
+  right: .1rem;
   pointer-events: none;
-  --color: #{$gray600};
+  background-color: hsl(0, 0%, 15%, 65%);
+  height: 1.2rem;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
 
-  path{
-    color: var(--color);
+  svg {
+    display: block;
+    height: .9rem;
+
+    path {
+      color: $gray1000;
+    }
   }
 }
 

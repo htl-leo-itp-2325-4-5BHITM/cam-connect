@@ -135,7 +135,10 @@ export class AutocompleteComponent<T> extends LitElement {
                 }}"
             >
             <!-- display the dropdown icon if the width is enough -->
-            ${(this.clientWidth > 50 || this.selected.id == null) && this.showIcon == true ? unsafeSVG(icon(faCaretDown, {attributes: {part: "icon"}}).html[0]) : html``}
+            ${(this.clientWidth > 50 || this.selected.id == null) && this.showIcon == true ? 
+                    html`<div class="dropdownIcon">${unsafeSVG(icon(faCaretDown, {attributes: {part: "icon"}}).html[0])}</div>` : 
+                    html``
+            }
         `
     }
 
