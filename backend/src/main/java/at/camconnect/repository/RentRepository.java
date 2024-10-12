@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+import io.quarkus.logging.Log;
 
 @ApplicationScoped
 @Transactional
@@ -318,8 +319,7 @@ public class RentRepository {
 
     public boolean verifyConfirmationCode(Long id, String code){
         Rent rent = getById(id);
-        //TODO review this code i do not understand why we seemingly regenerate the code here and why this system works at all
-        if(rent.generateVerification_code() == null) return false;
+        if(rent.getVerification_code() == null) return false;
         return rent.getVerification_code().equals(code);
     }
 
@@ -349,7 +349,8 @@ public class RentRepository {
             rent.setVerification_message(verificationMessage);
             em.merge(rent);
         } else{
-            throw new CCException(1205, "Message: " + verificationMessage + ", Status: " + verificationStatus + ", Code: " + verificationCode);
+            Log.error("External confirmation failed: verification-message: " + verificationMessage + ", Status: " + verificationStatus + ", Code: " + verificationCode + ", actual code: " + rent.getVerification_code());
+            throw new CCException(1205, "verification-message: " + verificationMessage + ", Status: " + verificationStatus + ", Code: " + verificationCode);
         }
 
         rentSocket.broadcast();
