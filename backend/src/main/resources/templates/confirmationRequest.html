@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Rechnung</title>
+    <style type="text/css">
+        /* Ihr bestehendes CSS bleibt unverändert */
+        body {
+            font-family: Arial, sans-serif;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .email-container {
+            width: 100%;
+            background-color: #f4f4f4;
+            padding: 20px 0;
+        }
+
+        .email-content {
+            max-width: 600px;
+            margin: auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border: 1px solid #dddddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .email-header {
+            text-align: center;
+            padding-bottom: 20px;
+        }
+
+        .email-header img {
+            max-width: 150px;
+        }
+
+        .email-body {
+            font-size: 16px;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .email-body p {
+            margin-bottom: 15px;
+        }
+
+        .email-footer {
+            text-align: center;
+            padding-top: 10px;
+            margin-top: 10px;
+            border-top: 1px solid #dddddd;
+        }
+
+        .email-footer img {
+            max-width: 100px;
+            margin-top: 10px;
+        }
+
+        a {
+            background-color: #4095BFFF;
+            color: white;
+            text-decoration: none;
+            border-radius: .3rem;
+            cursor: pointer;
+            padding: .5rem 1rem;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <div class="email-content">
+        <p><strong>diese email ist ein Test - bitte nicht beachten</strong></p>
+        <div class="email-header">
+            <img src="cid:camConnectLogo" alt="cam-connect logo">
+        </div>
+        <div class="email-body">
+            <h1>Hallo {name}</h1>
+            <p>Du hast folgende offene Verleihe:</p>
+
+            <ul>
+                {#for rent in rents}
+                    {#if rent.getType() == at.camconnect.enums.RentTypeEnum.DEFAULT}
+                        <li>{rent.getDevice().getType().getName()} • {rent.getDevice().getNumber()} von {rent.getRent_start()} bis {rent.getRent_end_planned()}</li>
+                    {#else}
+                        <li>{rent.getDevice_string()} von {rent.getRent_start()} bis {rent.getRent_end_planned()}</li>
+                    {/if}
+                {/for}
+            </ul>
+
+            <a href="{frontendUrl}">Zur Übersicht</a>
+        </div>
+        <div class="email-footer">
+            <p>&copy; {currentYear} HTBLA Leonding. Alle Rechte vorbehalten.</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

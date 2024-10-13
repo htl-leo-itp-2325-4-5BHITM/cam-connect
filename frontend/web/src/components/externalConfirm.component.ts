@@ -23,7 +23,7 @@ export class ExternalConfirmComponent extends LitElement {
     @property() rents: Rent[] = []
     @property() rentConfirmationCodes: string[] = []
 
-    constructor(studentId: number, ) {
+    constructor() {
         super();
 
         this.appState = new ObservedProperty<AppState>(this, model.appState)
@@ -36,7 +36,7 @@ export class ExternalConfirmComponent extends LitElement {
             <style>${styles}</style>
             <cc-navbar type="simple"></cc-navbar>
             <main>
-                <h1>Hallo ${this.rents[0] ? this.rents[0]?.student.firstname : "name not found"}</h1>
+                <h1>Hallo ${UrlHandler.getParam("name")}</h1>
                 <p class="top">Du hast folgende unbestätigte Verleihe:</p>
                 <ul>
                     ${
@@ -151,6 +151,8 @@ export class ExternalConfirmComponent extends LitElement {
         if(!rentIds || rentIds.length == 0) return
 
         this.rents = (await Api.getData<Rent[]>(`/rent/getbyidlist/${rentIds.join(",")}`)).data || []
+
+        console.log(this.rents)
 
         let invalidCodes = await this.validateConfirmationCodes()
 

@@ -58,7 +58,15 @@ export class DashboardComponent extends LitElement {
     }
 
     protected firstUpdated(_changedProperties: PropertyValues) {
-        KeyBoardShortCut.register(model.appState.value.userSettings.keybinds.newRent, () => {model.appState.value.openCreateRentModal()})
+        let keyBindsLoaded: boolean = false
+        model.appState.value.currentUserLoaded.subscribe((user) => {
+            if(model.appState.value.currentUser){
+                if(model.appState.value.currentUser.role == UserRoleEnum.MEDT_TEACHER)
+                    KeyBoardShortCut.register(model.appState.value.userSettings.keybinds.newRent, () => {model.appState.value.openCreateRentModal()})
+
+                keyBindsLoaded = true
+            }
+        })
 
         super.firstUpdated(_changedProperties);
     }

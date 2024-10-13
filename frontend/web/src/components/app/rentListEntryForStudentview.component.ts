@@ -28,8 +28,6 @@ export class RentListEntryForStudentviewComponent extends LitElement {
 
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
-
-        console.log(this.rent)
     }
 
     protected performUpdate() {

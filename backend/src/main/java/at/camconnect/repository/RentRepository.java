@@ -6,10 +6,9 @@ import at.camconnect.enums.RentStatusEnum;
 import at.camconnect.enums.RentTypeEnum;
 import at.camconnect.model.*;
 import at.camconnect.responseSystem.CCException;
+import at.camconnect.services.MailService;
 import at.camconnect.socket.RentSocket;
 import at.camconnect.responseSystem.CCResponse;
-import io.vertx.ext.mail.MailClient;
-import io.vertx.ext.mail.MailMessage;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.json.JsonObject;
@@ -34,9 +33,6 @@ public class RentRepository {
     EntityManager em;
 
     @Inject
-    MailClient client;
-
-    @Inject
     RentSocket rentSocket;
 
     @Inject
@@ -44,6 +40,9 @@ public class RentRepository {
 
     @Inject
     UserRepository userRepository;
+
+    @Inject
+    MailService mailService;
 
     public void create(List<CreateRentDTO> rentDTOs){
         List<Rent> rents = new LinkedList<>();
@@ -255,66 +254,7 @@ public class RentRepository {
             em.merge(rent);
         }
 
-        MailMessage message = generateConfirmationMailMessage(rentList);
-
-        client.sendMail(message, result -> {
-            if (result.succeeded()) {
-                System.out.println("Email sent successfully");
-            } else {
-                System.out.println("Failed to send email: " + result.cause());
-                throw new CCException(1200, "Failed to send mail");
-            }
-        });
-    }
-
-    public MailMessage generateConfirmationMailMessage(List<Rent> rents) {
-        //TODO do this with env variables
-        String FRONTEND_URL = "http://144.24.171.164/public/";
-
-        String os = System.getProperty("os.name").toLowerCase();
-
-        if (os.contains("win")) {
-            FRONTEND_URL = "http://localhost:4200";
-        }
-
-        MailMessage message = new MailMessage();
-        message.setFrom("signup.camconnect@gmail.com");
-        String email = rents.get(0).getStudent().getEmail();
-        message.setTo(email);
-        message.setSubject("Bestätigung des Geräteverleih");
-
-        StringBuilder rentListString = new StringBuilder();
-        StringBuilder verificationCodes = new StringBuilder();
-        StringBuilder rentIds = new StringBuilder();
-
-        boolean first = true;
-        for (Rent rent : rents) {
-            if(first){
-                first = false;
-            }
-            else{
-                verificationCodes.append(",");
-                rentIds.append(",");
-            }
-
-            verificationCodes.append(rent.getVerification_code());
-            rentIds.append(rent.getRent_id());
-
-            if(rent.getType() == RentTypeEnum.DEFAULT)
-                rentListString.append("<p>" + rent.getDevice().getType().getName() + " " + rent.getDevice().getNumber() + " von: " + rent.getRent_start() + " bis: " + rent.getRent_end_planned() + "</p>");
-            else
-                rentListString.append("<p>" + rent.getDevice_string() + " von: " + rent.getRent_start() + " bis: " + rent.getRent_end_planned() + "</p>");
-        }
-
-        String url = FRONTEND_URL + "/confirm?ids=" + rentIds + "&codes=" + verificationCodes;
-
-        System.out.println(url);
-
-        message.setHtml("Bitte bestätige oder lehne deinen Verleih ab:<br>" +
-                rentListString +
-                 "<div><a style='margin: 2rem; padding: .5rem 1rem; color: black;' href='" + url + "'>Zur Übersicht</a>");
-
-        return message;
+        mailService.sendConfirmEmail(rentList);
     }
 
     public boolean verifyConfirmationCode(Long id, String code){
@@ -399,25 +339,7 @@ public class RentRepository {
 
         em.merge(rent);
 
-        MailMessage message = new MailMessage();
-        message.setFrom("signup.camconnect@gmail.com");
-        String email = rent.getStudent().getEmail();
-        message.setTo(email);
-        message.setSubject("Bestätigung der Gerät Rückgabe");
-
-        if(rent.getType() == RentTypeEnum.DEFAULT)
-            message.setHtml("Ihr Verleih von " + rent.getDevice().getType().getName() + " " + rent.getDevice().getNumber() + " vom: " + rent.getRent_start() + " bis: " + rent.getRent_end_actual() + ", wurde zurückgegeben.");
-        else
-            message.setHtml("Ihr Verleih von " + rent.getDevice_string() + " vom: " + rent.getRent_start() + " bis: " + rent.getRent_end_actual() + ", wurde zurückgegeben.");
-
-        client.sendMail(message, result -> {
-            if (result.succeeded()) {
-                System.out.println("Email sent successfully");
-            } else {
-                System.out.println("Failed to send email: " + result.cause());
-                throw new CCException(1200, "Failed to send mail");
-            }
-        });
+        MailService.sendReturnEmail(rent);
 
         rentSocket.broadcast();
     }
