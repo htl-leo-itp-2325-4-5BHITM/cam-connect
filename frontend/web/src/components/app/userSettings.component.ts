@@ -1,16 +1,16 @@
 import {LitElement, html} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
-import styles from '../../styles/components/userSettings.styles.scss'
-import PopupEngine from "../util/PopupEngine"
-import {ColorEnum, config, SimpleColorEnum, SizeEnum} from "../base"
-import Util from "../util/Util"
-import {ButtonType} from "./basic/button.component"
-import {model} from "../index"
-import {Api} from "../util/Api"
-import {ObservedProperty} from "../model"
-import {AppState} from "../AppState"
-import AuthService from "../service/auth.service"
-import UserService from "../service/user.service"
+import styles from '../../../styles/components/app/userSettings.styles.scss'
+import PopupEngine from "../../util/PopupEngine"
+import {ColorEnum, config, SimpleColorEnum, SizeEnum} from "../../base"
+import Util from "../../util/Util"
+import {ButtonType} from "../basic/button.component"
+import {model} from "../../index"
+import {Api} from "../../util/Api"
+import {ObservedProperty} from "../../model"
+import {AppState} from "../../AppState"
+import AuthService from "../../service/auth.service"
+import UserService from "../../service/user.service"
 
 @customElement('cc-user-settings')
 export class UserSettingsComponent extends LitElement {
@@ -28,7 +28,7 @@ export class UserSettingsComponent extends LitElement {
             
             <main>
                 <section>
-                    <h1>Beneachrichtigungen</h1>
+                    <h1>Benachrichtigungen</h1>
                     <cc-toggle>Send emails</cc-toggle>
                     <cc-toggle>Show push notifications</cc-toggle>
                 </section>

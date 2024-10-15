@@ -43,7 +43,7 @@ import "./components/externalConfirm.component"
 import "./components/notFound.component"
 import "./components/notAllowed.component"
 import "./components/login.component"
-import "./components/userSettings.component"
+import "./components/app/userSettings.component"
 import "./components/app/edit/edit.component"
 
 import "./printView"
