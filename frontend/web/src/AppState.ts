@@ -305,7 +305,6 @@ export class AppState{
 
 
     toggleSelectedDeviceEditEntry(deviceEditEntry: DeviceEditEntryComponent){
-        console.log(deviceEditEntry, this.selectedDeviceEditEntries)
         if(this.selectedDeviceEditEntries.has(deviceEditEntry)){
             this.selectedDeviceEditEntries.delete(deviceEditEntry)
         }else{
@@ -531,6 +530,7 @@ export class AppState{
     }
 
     setAccessToken(value: string){
+        let simulate:"teacher" | "student" | "none" = "teacher"
         return new Promise((resolve, reject) => {
             if(!value || value == "undefined" || value == "") reject("no access token provided")
 
@@ -551,13 +551,13 @@ export class AppState{
                     user.role = UserRoleEnum.STUDENT
                 }
 
-                if (UrlHandler.getParam("simulate") == "teacher") {
+                if (UrlHandler.getParam("simulate") == "teacher" || simulate == "teacher") {
                     if (user.role == UserRoleEnum.ADMIN) {
                         user.role = UserRoleEnum.MEDT_TEACHER
                     }
                 }
 
-                if (UrlHandler.getParam("simulate") == "student") {
+                if (UrlHandler.getParam("simulate") == "student" || simulate == "student") {
                     if (user.role == UserRoleEnum.ADMIN) {
                         user.role = UserRoleEnum.STUDENT
                     }
@@ -566,11 +566,11 @@ export class AppState{
                 this.currentUser = user
 
                 resolve(user)
+
+                this.update()
             }).catch(e => {
                 console.error(e)
             })
-
-            this.update()
         })
     }
 

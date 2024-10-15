@@ -72,7 +72,8 @@ export class DeviceTypeChildrenEntryComponent extends LitElement {
     }
 
     getPropertyValue(property: string, value: any){
-        return html`${value ? html`<cc-property-value property="${property}" value="${value}" size="${SizeEnum.SMALL}"></cc-property-value>` : ''}`
+        if(value && value != "") return html`<cc-property-value property="${property}" value="${value}" size="${SizeEnum.SMALL}"></cc-property-value>`
+        return html``
     }
 
     private removeDevice(device: Device) {

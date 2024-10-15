@@ -140,9 +140,14 @@ export default class UrlHandler {
             model.appState.value.currentUserLoaded.subscribe((status) => {
                 if (status == false) return
 
-                if (nextPage.permit && !nextPage.permit.includes(model.appState.value.currentUser?.role)) {
-                    pages.notAllowed.handler()
+                if (nextPage.permit && !nextPage.permit.includes(model.appState.value.currentUser.role)) {
+                    console.log(model.appState.value.currentUser.role)
+                    console.error("failed the access check", nextPage)
+                    /*pages.notAllowed.handler()*/
                     return
+                }
+                else{
+                    console.log(nextPage, "passed the access check")
                 }
 
                 this.loadPage(nextPage, pageIndex, currentPath)
@@ -248,9 +253,6 @@ export default class UrlHandler {
         window.location.href = url
     }
 
-    static getUrl(){
-        return window.location.pathname + window.location.search
-    }
 
     /**
      * goes to a specific page without changing the params or reloading the page
@@ -262,6 +264,10 @@ export default class UrlHandler {
         model.appState.value.updateBackUrl()
         UrlHandler.updateUrl(page)
         UrlHandler.parseCurrentURL()
+    }
+
+    static getUrl(){
+        return window.location.pathname + window.location.search
     }
 
     static clearParams() {

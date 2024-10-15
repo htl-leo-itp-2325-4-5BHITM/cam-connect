@@ -20,21 +20,29 @@ alter user camconnect with superuser;
 ```
 
 ### initial
-To run the backend open the whole project in IntelliJ and run the module cam-connect-backend.
-\
-If the module does not show up  edit your run configuration:
-- click the selection field in the top right, left of the run button
-- select "edit configurations"
-- add a new configuration
-- select quarkus
-- select the module "cam-connect_backend"
-- run the module
+To run the backend open the backend folder in IntelliJ.
 
-If you cant select the module try re adding it 
-- choose `file > new > Module from Existing Sources`
-- select the cam-connect_backend.iml file from the backend folder
+<details>
+  <summary>Alternatively you can also open the whole project in IntelliJ and run the module cam-connect-backend.</summary>
 
-If the Module still does not show up you need to only open the backend folder in IntelliJ and run the whole thing.
+  If the module does not show up  edit your run configuration:
+  - click the selection field in the top right, left of the run button
+  - select "edit configurations"
+  - add a new configuration
+  - select quarkus
+  - select the module "cam-connect_backend"
+  - run the module
+
+  If you cant select the module try re adding it
+  - choose `file > new > Module from Existing Sources`
+  - select the cam-connect_backend.iml file from the backend folder
+
+  If the Module still does not show up you need to only open the backend folder in IntelliJ and run the whole thing.
+</details>
+
+pull maven dependencies
+create a ".env" file in the backend folder with the following content: `FRONTEND_URL=http://localhost:4200`
+run the project
 
 ### errors
 if you get errors related to no existent contstraints, wrong primary keys or simmilar this may be because quarkus has config files

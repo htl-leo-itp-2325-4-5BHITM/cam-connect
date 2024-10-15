@@ -38,13 +38,14 @@ export class DeviceTypeChildrenComponent extends LitElement {
                     <div class="header">
                         <div class="left">
                             <icon-cta size="3rem" @click="${() => {
-                                UrlHandler.setUrl(`/app/edit?type=${this.deviceType.deviceType.variant}`)}}">${unsafeSVG(icon(faArrowLeft).html[0])}
+                                model.appState.value.editPage = EditPageEnum.DEVICETYPE
+                                UrlHandler.updateUrl(`/app/edit?type=${this.deviceType.deviceType.variant}`)}}">${unsafeSVG(icon(faArrowLeft).html[0])}
                             </icon-cta>
 
                             <div @click="${() => {
                                 model.appState.value.openOverlay(
-                                        html`<cc-edit-device-type-modal .element="${this.deviceType}" .isEditMode="${true}"></cc-edit-device-type-modal>`,
-                                        () => {}
+                                    html`<cc-edit-device-type-modal .element="${this.deviceType}" .isEditMode="${true}"></cc-edit-device-type-modal>`,
+                                    () => {}
                                 )
                             }}" class="deviceTypeHeading">
                                 <div class="deviceTypeName">
