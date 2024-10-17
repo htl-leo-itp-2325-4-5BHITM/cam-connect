@@ -111,8 +111,9 @@ export class DeviceListEntryComponent extends LitElement {
                     html`
                         <cc-button type="${ButtonType.OUTLINED}" .disabled="${this.deviceTypeFull.available == 0}"
                                    @click="${() => {
-                                       this.toggleDeviceCheck();
-                                       model.appState.value.openCreateRentModalWithDevices(this.appState.value.selectedDeviceEntries, "type")
+                                       this.appState.value.selectedDeviceEntries.clear()
+                                       this.appState.value.selectedDeviceEntries.add(this)
+                                       this.appState.value.openCreateRentModalWithDevices(this.appState.value.selectedDeviceEntries, "type")
                                     }}"
                         >Verleihen</cc-button>
                     ` : ""

@@ -31,7 +31,7 @@ public class DeviceSetRepository {
     }
 
     public List<DeviceSetFullDTO> getAllFull(DeviceTypeFilters filters){
-        System.out.println("\nstarting getter");
+        System.out.println(filters);
         List<DeviceSet> sets = em.createQuery(
                         "select ds from DeviceSet ds " +
                                 "where ds.status = 'active' " +
@@ -41,8 +41,6 @@ public class DeviceSetRepository {
                 .getResultList();
 
         List<DeviceSetFullDTO> dtos = new LinkedList<>();
-
-        System.out.println(deviceTypeRepository.isMatchingWithFilters(em.find(DeviceType.class, 1L), filters));
 
         for(DeviceSet set : sets) {
             boolean isTypeMatchingWithFilter = false;

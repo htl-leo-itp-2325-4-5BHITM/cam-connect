@@ -298,14 +298,17 @@ export class AppState{
         this.update()
     }
 
+    clearSelectedDeviceEntries(){
+        this.selectedDeviceEntries.clear()
+        this.update()
+    }
+
     removeSelectedDeviceEntry(deviceEntry: DeviceListEntryComponent){
         this.selectedDeviceEntries.delete(deviceEntry)
         this.update()
     }
 
-
     toggleSelectedDeviceEditEntry(deviceEditEntry: DeviceEditEntryComponent){
-        console.log(deviceEditEntry, this.selectedDeviceEditEntries)
         if(this.selectedDeviceEditEntries.has(deviceEditEntry)){
             this.selectedDeviceEditEntries.delete(deviceEditEntry)
         }else{
@@ -481,7 +484,7 @@ export class AppState{
         UrlHandler.setParam("searchTerm", value)
         this.update()
         if(this._page == PageEnum.RENTS) RentService.fetchAll()
-        if(this._page == PageEnum.EQUIPMENT) DeviceTypeService.fetchAllFull()
+        if(this._page == PageEnum.EQUIPMENT) DeviceTypeService.fetchAllFull(); DeviceSetService.fetchAllFull()
     }
 
 

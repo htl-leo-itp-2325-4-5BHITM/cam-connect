@@ -79,11 +79,19 @@ export class DashboardComponent extends LitElement {
             case PageEnum.EQUIPMENT:
                 sidebar = html`
                 <cc-sidebar>
-                    <cc-select slot="sorts" size="${SizeEnum.MEDIUM}" .onSelect="${(elem) => {model.appState.value.equipmentDisplayMode = elem.dataset['name']}}">
+                    <cc-select slot="sorts" size="${SizeEnum.MEDIUM}" .onSelect="${(elem) => {
+                        model.appState.value.equipmentDisplayMode = elem.dataset['name']
+                        model.appState.value.selectedSetEntries.clear()
+                        model.appState.value.selectedDeviceEntries.clear()
+                    }}">
                         <p class="selected" data-name="grid">raster</p>
                         <p data-name="list">liste</p>
                     </cc-select>
-                    <cc-select slot="sorts" size="${SizeEnum.MEDIUM}" .onSelect="${(elem) => {model.appState.value.deviceTypeOrSet = elem.dataset['name']}}">
+                    <cc-select slot="sorts" size="${SizeEnum.MEDIUM}" .onSelect="${(elem) => {
+                        model.appState.value.deviceTypeOrSet = elem.dataset['name']
+                        model.appState.value.selectedSetEntries.clear()
+                        model.appState.value.selectedDeviceEntries.clear()
+                    }}">
                         <p class="selected" data-name="type">geräte-typen</p>
                         <p data-name="set">geräte-sets</p>
                     </cc-select>
