@@ -28,6 +28,7 @@ div.edit{
   height: 100%;
   cursor: initial;
   transition: opacity .1s;
+  z-index: 10;
 }
 
 :host(:hover){

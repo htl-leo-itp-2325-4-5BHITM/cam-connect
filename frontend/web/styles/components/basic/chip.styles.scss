@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 @import "../../base";
 
 :host {
@@ -9,27 +11,27 @@
 :host([color="ACCENT"]){
   --background: #{$accent500};
   --hover-background: #{$accent700};
-  --expanded-background: #{darken($accent500, 80%)};
+  --expanded-background: #{color.adjust($gray500, $lightness: -80%)};
 }
 :host([color="GOOD"]){
   --background: #{$good};
   --hover-background: #{$goodLight};
-  --expanded-background: #{darken($gray500, 80%)};
+  --expanded-background: #{color.adjust($gray500, $lightness: -80%)};
 }
 :host([color="MID"]){
   --background: #{$mid};
   --hover-background: #{$midLight};
-  --expanded-background: #{darken($gray500, 80%)};
+  --expanded-background: #{color.adjust($gray500, $lightness: -80%)};
 }
 :host([color="BAD"]){
   --background: #{$bad};
   --hover-background: #{$badLight};
-  --expanded-background: #{adjust-color($bad, $lightness: -30%)};
+  --expanded-background: #{color.adjust($bad, $lightness: -30%)};
 }
 :host([color="GRAY"]){
   --background: #{$gray500};
   --hover-background: #{$gray400};
-  --expanded-background: #{darken($gray500, 80%)};
+  --expanded-background: #{color.adjust($gray500, $lightness: -80%)};
 }
 
 .cc-chip{

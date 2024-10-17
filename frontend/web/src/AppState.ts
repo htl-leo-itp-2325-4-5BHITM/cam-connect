@@ -534,6 +534,7 @@ export class AppState{
     }
 
     setAccessToken(value: string){
+        let simulate: boolean = true
         return new Promise((resolve, reject) => {
             if(!value || value == "undefined" || value == "") reject("no access token provided")
 
@@ -554,7 +555,7 @@ export class AppState{
                     user.role = UserRoleEnum.STUDENT
                 }
 
-                if (UrlHandler.getParam("simulate") == "teacher") {
+                if (UrlHandler.getParam("simulate") == "teacher" || simulate == true) {
                     if (user.role == UserRoleEnum.ADMIN) {
                         user.role = UserRoleEnum.MEDT_TEACHER
                     }
@@ -569,11 +570,11 @@ export class AppState{
                 this.currentUser = user
 
                 resolve(user)
+
+                this.update()
             }).catch(e => {
                 console.error(e)
             })
-
-            this.update()
         })
     }
 
