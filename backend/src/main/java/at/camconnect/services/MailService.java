@@ -57,7 +57,11 @@ public class MailService {
         String emailContent = confirmationRequest
                 .data("frontendUrl", url)
                 .data("currentYear", currentYear)
+                .data("name", rents.get(0).getStudent().getFirstname())
+                .data("rents", rents)
                 .render();
+
+        System.out.println(rents.get(0).getType().toString());
 
         // Determine recipient email
         String recipient = rents.get(0).getStudent().getEmail();

@@ -70,6 +70,11 @@
             margin-left: auto;
             margin-right: auto;
         }
+
+        strong{
+            color: red;
+            font-size: 2rem;
+        }
     </style>
 </head>
 <body>
@@ -85,7 +90,7 @@
 
             <ul>
                 {#for rent in rents}
-                    {#if rent.getType() == at.camconnect.enums.RentTypeEnum.DEFAULT}
+                    {#if rent.getType().toString() == 'DEFAULT'}
                         <li>{rent.getDevice().getType().getName()} • {rent.getDevice().getNumber()} von {rent.getRent_start()} bis {rent.getRent_end_planned()}</li>
                     {#else}
                         <li>{rent.getDevice_string()} von {rent.getRent_start()} bis {rent.getRent_end_planned()}</li>
