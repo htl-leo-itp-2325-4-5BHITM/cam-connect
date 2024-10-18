@@ -4,7 +4,6 @@
   "description": "",
   "main": "webpack.config.js",
   "scripts": {
-    "preinstall": "npx npm-force-resolutions",
     "start": "webpack serve --port 4200",
     "build": "webpack",
     "testo": "webpack --json > stats.json"
@@ -40,8 +39,5 @@
     "sas": "^3.0.4",
     "sass": "^1.79.3",
     "tslib": "^2.7.0"
-  },
-  "resolutions": {
-    "sass-loader": "14.0.0"
   }
 }
