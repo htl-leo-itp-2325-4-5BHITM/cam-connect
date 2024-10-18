@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Rechnung</title>
     <style type="text/css">
-        /* Ihr bestehendes CSS bleibt unverändert */
         body {
             font-family: Arial, sans-serif;
             color: #333333;
@@ -42,10 +41,15 @@
             line-height: 1.5;
             display: flex;
             flex-direction: column;
+            padding-inline: 20px;
         }
 
         .email-body p {
-            margin-bottom: 15px;
+            margin: 0;
+        }
+
+        .email-body h1{
+            margin-bottom: 10px;
         }
 
         .email-footer {
@@ -66,9 +70,10 @@
             text-decoration: none;
             border-radius: .3rem;
             cursor: pointer;
-            padding: .5rem 1rem;
+            padding: .5rem 3rem;
             margin-left: auto;
             margin-right: auto;
+            margin-top: 1rem;
         }
 
         strong{
@@ -78,15 +83,15 @@
     </style>
 </head>
 <body>
+<p><strong>diese email ist ein Test - bitte nicht beachten</strong></p>
 <div class="email-container">
     <div class="email-content">
-        <p><strong>diese email ist ein Test - bitte nicht beachten</strong></p>
         <div class="email-header">
             <img src="cid:camConnectLogo" alt="cam-connect logo">
         </div>
         <div class="email-body">
             <h1>Hallo {name}</h1>
-            <p>Du hast folgende offene Verleihe:</p>
+            <p>Du hast folgende offene Verleihe, bitte bestätige diese um den Verleih abzuschließen:</p>
 
             <ul>
                 {#for rent in rents}
