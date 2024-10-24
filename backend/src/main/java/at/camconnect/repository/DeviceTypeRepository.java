@@ -243,20 +243,35 @@ public class DeviceTypeRepository {
 
     //endregion
 
-    public Response exportAllDeviceTypeVariants() {
+    public Response exportAllDeviceTypeVariants(List<DeviceTypeVariantEnum> selectedVariants) {
+        System.out.println();
+
         StreamingOutput stream = os -> {
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(os))) {
-                writer.write("type_id; name; image; autofocus; f_stop; focal_length; height_centimeters; max_range; max_weight_kilograms; needs_recorder; number_of_axis; rgb; variable_temperature; watts; needs_power; wireless; head_id; mount_id; resolution_id; sensor_id; system; flight_time_minutes; description\n");
+                writer.write("cc-import-v1");
 
-                List<DeviceTypeFullDTO> deviceTypeList = getAllFull(new DeviceTypeFilters(false, null, null, null, null));
-                for (DeviceTypeFullDTO deviceType : deviceTypeList) {
-                    try {
-                        writer.write(deviceType.deviceType().toGlobalDTO().toCsvString());
-                        System.out.println(deviceType.deviceType().toGlobalDTO().toCsvString());
-                    }catch (Exception ex){
-                        ex.printStackTrace();
-                    }
+                 Map<String, List<DeviceType>> deviceTypeMap = new HashMap<>();
+
+                for (DeviceTypeVariantEnum variant : selectedVariants) {
+                    List<DeviceType> deviceTypeList = em.createQuery(
+                            "SELECT d FROM DeviceType d WHERE d.variant = :variant", DeviceType.class)
+                            .setParameter("variant", variant)
+                            .getResultList();
+
+                    deviceTypeMap.put(variant.toString(), deviceTypeList);
                 }
+
+                deviceTypeMap.forEach((key, value) -> {
+                    try {
+                        writer.write(value.get(0).getCsvHeader());
+                        for (DeviceType deviceType : value) {
+                            writer.write(deviceType.toCsvString());
+                        }
+                    } catch (IOException e) {
+                        throw new CCException(1200);
+                    }
+                });
+
             } catch (IOException e) {
                 throw new CCException(1200);
             }
@@ -353,8 +368,6 @@ public class DeviceTypeRepository {
                         }
                     }
 
-                    System.out.println(currType);
-                    System.out.println(line);
                     for (int i = 0; i < lineArray.length; i++) {
                         System.out.print(lineArray[i] + "-");
                     }

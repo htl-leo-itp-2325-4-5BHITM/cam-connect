@@ -4,7 +4,7 @@ import styles from '../../../styles/components/navigation/toolbar.styles.scss'
 import {icon} from '@fortawesome/fontawesome-svg-core'
 import {unsafeSVG} from 'lit/directives/unsafe-svg.js';
 import {faCamera, faTrash, faUpload} from "@fortawesome/free-solid-svg-icons"
-import { ObservedProperty, PageEnum} from "../../model"
+import {EditPageEnum, ObservedProperty, PageEnum} from "../../model"
 import {ButtonType} from "../basic/button.component"
 import {SimpleColorEnum, SizeEnum} from "../../base"
 import {model} from "../../index"
@@ -16,6 +16,8 @@ import {RentStatus} from "../basic/rentStatus.component"
 import UrlHandler from "../../util/UrlHandler";
 import DeviceService from "../../service/device.service"
 import DeviceSetService from "../../service/deviceSet.service"
+import {EditComponent} from "../app/edit/edit.component"
+import {ExportImportModalComponent} from "../app/edit/exportImportModal.component"
 
 @customElement('cc-toolbar')
 export class ToolbarComponent extends LitElement {
@@ -160,7 +162,7 @@ export class ToolbarComponent extends LitElement {
                 <div>
                     <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}"
                                @click="${() => {
-                                   UrlHandler.goToPage("/app/edit")
+                                   model.appState.value.openOverlay(html`<cc-export-import-modal></cc-export-import-modal>`, () => {})
                                }}">
                         <div slot="left" class="icon accent">
                             ${unsafeSVG(icon(faUpload).html[0])}

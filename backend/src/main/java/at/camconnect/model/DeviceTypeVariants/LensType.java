@@ -90,4 +90,14 @@ public class LensType extends DeviceType {
     }
 
     //endregion
+
+    @Override
+    public String toCsvString() {
+        return getType_id() + ";" + getName() + ";" + getImage_blob() + ";" + getStatus() + ";" + getTagsToString() + ";" + getMount().getAttribute_id() + ";" + getF_stop() + ";" + getFocal_length() + ";\n";
+    }
+
+    @Override
+    public String getCsvHeader() {
+        return "type_id; name; image; status; tags; mount_id; f_stop; focal_length;\n";
+    }
 }

@@ -31,7 +31,6 @@ public class DeviceSetRepository {
     }
 
     public List<DeviceSetFullDTO> getAllFull(DeviceTypeFilters filters){
-        System.out.println(filters);
         List<DeviceSet> sets = em.createQuery(
                         "select ds from DeviceSet ds " +
                                 "where ds.status = 'active' " +

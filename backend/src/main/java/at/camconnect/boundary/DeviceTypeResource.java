@@ -128,13 +128,14 @@ public class DeviceTypeResource {
         return CCResponse.ok(result);
     }
 
-    @GET
+    @POST
     @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path("/getcsv")
     @RolesAllowed({"camconnect-admin", "medt-teacher"})
-    public Response exportAllDeviceVariants() {
+    public Response exportAllDeviceVariants(List<DeviceTypeVariantEnum> selectedVariants) {
         try {
-            return deviceTypeRepository.exportAllDeviceTypeVariants();
+            return deviceTypeRepository.exportAllDeviceTypeVariants(selectedVariants);
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }

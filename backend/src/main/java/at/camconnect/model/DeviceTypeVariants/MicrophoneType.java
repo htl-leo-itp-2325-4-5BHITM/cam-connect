@@ -82,4 +82,14 @@ public class MicrophoneType extends DeviceType {
     public void setConnector(AudioConnector connector) {
         this.connector = connector;
     }
+
+    @Override
+    public String toCsvString() {
+        return getType_id() + ";" + getName() + ";" + getImage_blob() + ";" + getStatus() + ";" + getTagsToString() + ";" + isNeeds_recorder() + ";" + getConnector().getAttribute_id() + ";" + isNeeds_power() + ";\n";
+    }
+
+    @Override
+    public String getCsvHeader() {
+        return "type_id; name; image; status; tags; needs_recorder; connector_id; needs_power;\n";
+    }
 }

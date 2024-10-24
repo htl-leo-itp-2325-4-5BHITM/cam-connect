@@ -1,0 +1,65 @@
+@import "../../../base";
+
+:host{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: $gray350;
+  border-radius: 1rem;
+  padding: 2rem !important;
+  gap: 1rem;
+}
+
+.options{
+  display: flex;
+  align-items: center;
+  gap: 5rem;
+}
+
+.import{
+  display: flex;
+  flex-direction: column;
+
+  input[type="file"] {
+    display: none;
+  }
+
+  .custom-input {
+    display: flex;
+    cursor: pointer;
+    border-radius: .3rem;
+    border: 1px solid $gray900;
+    padding: .65rem;
+    width: 100%;
+    gap: .5rem;
+    transition: .2s;
+
+    &:hover{
+      background-color: $gray300;
+    }
+  }
+
+  .icon {
+    width: 1rem;
+
+    svg *{
+      fill: white;
+    }
+  }
+
+  .checkboxes{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .5rem;
+  }
+}
+
+.feedback{
+  p.gray{
+    color: $gray700;
+  }
+}
+
+cc-line{
+  width: 100%;
+}

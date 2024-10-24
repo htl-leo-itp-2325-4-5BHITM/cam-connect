@@ -95,4 +95,14 @@ public class CameraType extends DeviceType {
     public void setPhoto_resolution(CameraResolution photo_resolution) {
         this.photo_resolution = photo_resolution;
     }
+
+    @Override
+    public String toCsvString() {
+        return getType_id() + ";" + getName() + ";" + getImage_blob() + ";" + getStatus() + ";" + getTagsToString() + ";" + getMount().getAttribute_id() + ";" + getSystem().getAttribute_id() + ";" + getPhoto_resolution().getAttribute_id() + ";" + isAutofocus() + ";\n";
+    }
+
+    @Override
+    public String getCsvHeader() {
+        return "type_id; name; image; status; tags; mount_id; system_id; photo_resolution_id; autofocus;\n";
+    }
 }

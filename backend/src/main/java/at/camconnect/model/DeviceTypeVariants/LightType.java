@@ -82,4 +82,14 @@ public class LightType extends DeviceType {
     public void setVariable_temperature(boolean variableTempreture) {
         this.variable_temperature = variableTempreture;
     }
+
+    @Override
+    public String toCsvString() {
+        return getType_id() + ";" + getName() + ";" + getImage_blob() + ";" + getStatus() + ";" + getTagsToString() + ";" + getWatts() + ";" + isRgb() + ";" + isVariable_temperature() + ";\n";
+    }
+
+    @Override
+    public String getCsvHeader() {
+        return "type_id; name; image; status; tags; watts; rgb; variable_temperature;\n";
+    }
 }

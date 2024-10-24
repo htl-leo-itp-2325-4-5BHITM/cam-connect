@@ -299,8 +299,6 @@ public class RentRepository {
     public void confirmRent(Long rentId, String currentUserId) {
         Rent rent = getById(rentId);
 
-        System.out.println(currentUserId);
-
         if(!Objects.equals(rent.getStudent().getUser_id(), currentUserId)) throw new CCException(1205);
 
         rent.setStatus(RentStatusEnum.CONFIRMED);
@@ -603,7 +601,6 @@ public class RentRepository {
             if(lineArray.length != 16) throw new CCException(1204, "invalid line length");
 
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
                 lineArray = line.split(";");
                 if(lineArray.length != 16) break;
 

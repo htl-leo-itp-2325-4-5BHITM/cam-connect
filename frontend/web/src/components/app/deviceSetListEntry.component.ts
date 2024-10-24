@@ -97,11 +97,13 @@ export class DeviceSetListEntryComponent extends LitElement {
                 ></cc-chip>
                 ${model.appState.value.currentUser?.role == UserRoleEnum.MEDT_TEACHER ?
                         html`
-                            <cc-button type="${ButtonType.OUTLINED}" .disabled="${this.deviceSet.available == 0}"
+                            <cc-button type="${ButtonType.OUTLINED}"
+                                       .disabled="${this.deviceSet.available == 0 || this.appState.value.selectedSetEntries.size > 0}"
                                        @click="${() => {
                                            this.appState.value.selectedSetEntries.clear()
-                                           this.appState.value.selectedSetEntries.add(this)
-                                           this.appState.value.openCreateRentModalWithDevices(this.appState.value.selectedSetEntries, "set")
+                                           let sets : Set<DeviceSetListEntryComponent> = new Set()
+                                           sets.add(this)
+                                           this.appState.value.openCreateRentModalWithDevices(sets, "set")
                                        }}"
                             >Verleihen
                             </cc-button>
@@ -139,7 +141,7 @@ export class DeviceSetListEntryComponent extends LitElement {
     }
 
     toggleDeviceCheck(isSimpleClick?: boolean) {
-        if (!isSimpleClick || this.appState.value && this.appState.value.selectedDeviceEntries.size > 0) {
+        if (!isSimpleClick || this.appState.value && this.appState.value.selectedSetEntries.size > 0) {
             if (!this.isChecked()) {
                 this.appState.value.addSelectedSetEntry(this)
             } else {

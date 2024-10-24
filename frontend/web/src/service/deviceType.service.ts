@@ -217,4 +217,16 @@ export default class DeviceTypeService {
                 return Promise.reject(error);
             });
     }
+
+    static exportDeviceTypes(selectedExportTypes : (string | number)[]) {
+        console.log(selectedExportTypes)
+        return Api.postData(`/devicetype/getcsv`, selectedExportTypes)
+            .then(result => {
+                return result.data;
+            })
+            .catch(error => {
+                console.error(error);
+                return Promise.reject(error);
+            });
+    }
 }

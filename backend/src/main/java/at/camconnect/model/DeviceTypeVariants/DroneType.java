@@ -82,4 +82,14 @@ public class DroneType extends DeviceType {
     public void setFlight_time_minutes(int flight_time) {
         this.flight_time_minutes = flight_time;
     }
+
+    @Override
+    public String toCsvString() {
+        return getType_id() + ";" + getName() + ";" + getImage_blob() + ";" + getStatus() + ";" + getTagsToString() + ";" + getMax_range_kilometers() + ";" + getFlight_time_minutes() + ";" + isRequires_license() + ";\n";
+    }
+
+    @Override
+    public String getCsvHeader() {
+        return "type_id; name; image; status; tags; max_range_kilometers; flight_time_minutes; requires_license\n";
+    }
 }

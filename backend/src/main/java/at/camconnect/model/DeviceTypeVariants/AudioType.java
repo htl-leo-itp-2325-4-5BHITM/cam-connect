@@ -52,4 +52,14 @@ public class AudioType extends DeviceType {
     public List<DeviceTypeAttribute> getAttributes() {
         return List.of(connector);
     }
+
+    @Override
+    public String toCsvString() {
+        return getType_id() + ";" + getName() + ";" + getImage_blob() + ";" + getStatus() + ";" + getTagsToString() + ";" + getConnector().getAttribute_id() + ";\n";
+    }
+
+    @Override
+    public String getCsvHeader() {
+        return "type_id; name; image; status; tags; connector_id;\n";
+    }
 }
