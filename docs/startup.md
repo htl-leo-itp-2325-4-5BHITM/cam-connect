@@ -63,16 +63,18 @@ if you get errors with your maven version
 ### Web
 Open the whole project in Webstorm, VsCode or similar.
 
-Web is based on webpack, run it by cd-ing to the web folder and running `npm start`
+cd into the frontend/web folder
+
+to pull the dependencies run `npm install --legacy-peer-deps`
+\n
+the flag is needed because we basically had to piece together a bunch of libraries to properly build a project of this 
+size without using a web framework like react (which also could have been compiled to mobile .-.). Still sorry future 
+aberger, reading this, maybe you can figure out a fix for this without forcing the next group to rewrite the whole system ;)
+
+Web is based on webpack, run it by with `npm start`
 
 The project is now accessible at localhost:4200
 
-### IOS
-Open the whole project in Xcode.
-    
-### Android
-Open the whole project in AndroidStudio or similar.
-
 ## Docs
 
-To run the uml file, install the "PlantUML Integration" plugin in IntelliJ
+To visualize the uml file, install the "PlantUML Integration" plugin in IntelliJ or webstorm

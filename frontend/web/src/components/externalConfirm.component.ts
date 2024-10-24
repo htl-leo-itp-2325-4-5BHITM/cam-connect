@@ -39,6 +39,7 @@ export class ExternalConfirmComponent extends LitElement {
                 <h1>Hallo ${UrlHandler.getParam("name")}</h1>
                 <p class="top">Du hast folgende unbestätigte Verleihe:</p>
                 <ul>
+                    ${this.rents.length == 0 ? "Verleiheinträge werden geladen.." : ""}
                     ${
                         this.rents.map((rent, i) => {
                             let name = ""

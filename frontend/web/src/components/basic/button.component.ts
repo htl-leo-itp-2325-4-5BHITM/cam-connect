@@ -42,7 +42,7 @@ export class ButtonComponent extends LitElement {
             <style>${styles}</style>
             <button part="button" color="${this.color}" type="${this.type}" size="${this.size}" .disabled="${this.disabled}" noPadding="${this.noPadding}">
                 <slot name="left"></slot>
-                ${this.loadingState ? "loading..." : this.text}
+                ${this.loadingState ? "lädt..." : this.text}
                 <slot name="right"></slot>
             </button>`
     }
