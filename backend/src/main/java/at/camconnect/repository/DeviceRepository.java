@@ -9,7 +9,6 @@ import at.camconnect.model.Rent;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.model.Device;
 import at.camconnect.model.DeviceType;
-import at.camconnect.socket.DeviceSocket;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -31,13 +30,9 @@ public class DeviceRepository {
     @Inject
     EntityManager em;
 
-    @Inject
-    DeviceSocket deviceSocket;
-
     @Transactional
     public void create(Device device){
         em.persist(device);
-        deviceSocket.broadcast();
     }
 
     @Transactional
@@ -53,7 +48,6 @@ public class DeviceRepository {
     @Transactional
     public void remove(Long id){
         getById(id).setStatus(DeviceStatus.DELETED);
-        deviceSocket.broadcast();
     }
 
     @Transactional
@@ -74,7 +68,6 @@ public class DeviceRepository {
             setType(id, data.type_id());
         } catch(Exception ex){ System.out.println(ex.getMessage()); throw new CCException(1106); }
 
-        deviceSocket.broadcast();
 
         return getById(id);
     }
@@ -167,21 +160,18 @@ public class DeviceRepository {
         Device device = getById(rentId);
         device.setChange_date(LocalDateTime.now());
         device.setNumber(number);
-        deviceSocket.broadcast();
     }
 
     public void setSerial(Long rentId, String serial) {
         Device device = getById(rentId);
         device.setChange_date(LocalDateTime.now());
         device.setSerial(serial);
-        deviceSocket.broadcast();
     }
 
     public void setNote(Long rentId, String serial) {
         Device device = getById(rentId);
         device.setChange_date(LocalDateTime.now());
         device.setNote(serial);
-        deviceSocket.broadcast();
     }
 
     public void setType(Long rentId, Long type) {
@@ -189,7 +179,6 @@ public class DeviceRepository {
         device.setChange_date(LocalDateTime.now());
         DeviceType deviceType = em.find(DeviceType.class, type);
         device.setType(deviceType);
-        deviceSocket.broadcast();
     }
 
     public boolean importDevices(InputStream fileInputStream) {
