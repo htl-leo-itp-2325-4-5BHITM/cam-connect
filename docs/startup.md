@@ -19,7 +19,14 @@ create user camconnect with password 'postgresdb';
 grant all privileges on database camconnect to camconnect;
 ```
 
-### initial
+### enviroment
+For the backend to run you need to create a .env file in the backend folder with the following two properties:
+```
+  FRONTEND_URL=http://localhost:4200
+  EMAIL_PASSWORD=<ask-someone-for-the-pw>
+```
+
+### run
 To run the backend open the backend folder in IntelliJ.
 
 <details>

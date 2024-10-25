@@ -23,59 +23,6 @@ public class TagResource {
     @Inject
     TagRepository tagRepository;
 
-    @POST
-    @Path("/create")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"camconnect-admin", "medt-teacher"})
-    public Response createTag(Tag t){
-        try{
-            tagRepository.addTag(t);
-        }catch (CCException ex){
-            return CCResponse.error(ex);
-        }
-        return CCResponse.ok();
-    }
-
-    @POST
-    @Path("/delete")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"camconnect-admin", "medt-teacher"})
-    public Response removeTag(Tag t){
-        try{
-            tagRepository.deleteTag(t);
-        }catch (CCException ex){
-            return CCResponse.error(ex);
-        }
-        return CCResponse.ok();
-    }
-
-    //TODO this is definitely not correct..
-    @POST
-    @Path("/update/{id: [0-9]+}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"camconnect-admin", "medt-teacher"})
-    public Response updateTag(Tag t){
-        try{
-            tagRepository.updateTag(t);
-        }catch (CCException ex){
-            return CCResponse.error(ex);
-        }
-        return CCResponse.ok();
-    }
-
-    @GET
-    @Path("/getbyid/{id: [0-9]+}")
-    @Authenticated
-    public Response getById(@PathParam("id")long id){
-        Tag tag;
-        try{
-            tag = tagRepository.getById(id);
-        } catch(CCException ex){
-            return CCResponse.error(ex);
-        }
-        return CCResponse.ok(tag);
-    }
-
     @GET
     @Path("/getall")
     @Authenticated
@@ -96,11 +43,61 @@ public class TagResource {
     public Response search(JsonObject data){
         List<AutocompleteNumberOptionDTO<Tag>> result;
         try{
-            result = tagRepository.search(data.getString("searchTerm"));;
+            result = tagRepository.search(data.getString("searchTerm"));
         }catch (CCException ex){
             return CCResponse.error(ex);
         }
 
         return CCResponse.ok(result);
+    }
+
+    @POST
+    @Path("/create")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
+    public Response createTag(Tag t){
+        try{
+            tagRepository.addTag(t);
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
+    }
+
+    @GET
+    @Path("/getbyid/{id: [0-9]+}")
+    @Authenticated
+    public Response getById(@PathParam("id") Long id){
+        Tag tag;
+        try{
+            tag = tagRepository.getById(id);
+        } catch(CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok(tag);
+    }
+
+    @GET
+    @Path("/getbyid/{id: [0-9]+}/update")
+    @Authenticated
+    public Response update(@PathParam("id") Long id){
+        try{
+
+        } catch(CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
+    }
+
+    @GET
+    @Path("/getbyid/{id: [0-9]+}/remove")
+    @Authenticated
+    public Response delete(@PathParam("id") Long id){
+        try{
+
+        } catch(CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok();
     }
 }

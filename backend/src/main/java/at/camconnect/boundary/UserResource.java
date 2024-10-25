@@ -30,26 +30,6 @@ public class UserResource {
 
     AtomicBoolean isRunning = new AtomicBoolean(false);
 
-    @PUT
-    @Path("loadfromldap")
-    @RolesAllowed({"camconnect-admin", "medt-teacher"})
-    public Response loadFromLDAP(){
-        if (isRunning.compareAndSet(false, true)) {
-            List<KeycloakUser> users;
-            try{
-                users = userSyncService.syncUsersWithLDAP();
-            }catch (CCException ex){
-                return CCResponse.error(ex);
-            }
-
-            isRunning.set(false);
-
-            return CCResponse.ok(users);
-        } else {
-            return CCResponse.error(new CCException(1201, "users are already being loaded"));
-        }
-    }
-
     @GET
     @Path("/getbyid/{id}")
     @Authenticated
@@ -61,6 +41,19 @@ public class UserResource {
             return CCResponse.error(ex);
         }
         return CCResponse.ok(user);
+    }
+
+    @GET
+    @Path("/getallstudents")
+    @Authenticated
+    public Response getAllStudents() {
+        List<User> studentList;
+        try{
+            studentList = userRepository.getAllStudents();
+        } catch(CCException ex){
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok(studentList);
     }
 
     @POST
@@ -79,12 +72,12 @@ public class UserResource {
     }
 
     @GET
-    @Path("/getallstudents")
+    @Path("/getallteachers")
     @Authenticated
-    public Response getAllStudents() {
+    public Response getAllTeachers() {
         List<User> studentList;
         try{
-            studentList = userRepository.getAllStudents();
+            studentList = userRepository.getAllTeachers();
         } catch(CCException ex){
             return CCResponse.error(ex);
         }
@@ -106,16 +99,24 @@ public class UserResource {
         return CCResponse.ok(result);
     }
 
-    @GET
-    @Path("/getallteachers")
-    @Authenticated
-    public Response getAllTeachers() {
-        List<User> studentList;
-        try{
-            studentList = userRepository.getAllTeachers();
-        } catch(CCException ex){
-            return CCResponse.error(ex);
+    @PUT
+    @Path("loadfromldap")
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
+    public Response loadFromLDAP(){
+        if (isRunning.compareAndSet(false, true)) {
+            List<KeycloakUser> users;
+            try{
+                users = userSyncService.syncUsersWithLDAP();
+            }catch (CCException ex){
+                return CCResponse.error(ex);
+            }
+
+            isRunning.set(false);
+
+            return CCResponse.ok(users);
+        } else {
+            return CCResponse.error(new CCException(1201, "users are already being loaded"));
         }
-        return CCResponse.ok(studentList);
     }
+
 }

@@ -25,10 +25,10 @@ api
 │   ├── getall -> DeviceSet
 │   ├── getallfull: DeviceTypeFilters -> DeviceSet
 │   ├── create: DeviceSetDTO -> DeviceSet
-│   ├── getbyid/{rent_id}
-│   │   ├── delete
-│   │   ├── update : DeviceSetDTO -> DeviceSet
-│   │   └── tag/{tagId}/toggle
+│   └── getbyid/{rent_id}
+│       ├── delete
+│       ├── update : DeviceSetDTO -> DeviceSet
+│       └── tag/{tagId}/toggle
 ├── devicetype -x
 │   ├── getall -> [DeviceType]
 │   ├── getallfull: DeviceTypeFilters -> [DeviceType]
@@ -48,30 +48,38 @@ api
 │           ├── update: DeviceTypeAttributeDTO -> DeviceTypeAttribute
 │           └── remove
 ├── rent -x
-│   ├── create -> Rent
-│   ├── getall -> [Rent]
-│   ├── getbynumberandtype/{number}/{type_id} -> Rent
-│   ├── validatenumberandtype/{number}/{type_id} -> boolean
+│   ├── getall: RentFilters -> [Rent]
+│   ├── getallsinglelist -> [Rent]
+│   ├── getbyidlist/{ids} -> [Rent]
+│   ├── create: [CreateRentDTO] -> Rent
 │   └── getbyid/{rent_id} -> Rent
+│       ├── sendconfirmation
+│       ├── verifyconfirmationcode/{code}
+│       ├── externalconfirmordecline
+│       ├── confirm
+│       ├── decline
+│       ├── return
 │       ├── remove
-│       └── update : ?{Rent: student_id.. }
-│           ├── student : {value}
-│           ├── device : {value}
-│           ├── teacherstart : {value}
-│           ├── teacherend : {value}
-│           ├── rentstart : {value}
-│           ├── rentendplanned : {value}
-│           ├── rentendactual : {value}
-│           ├── note : {value}
-│           └── status : {value}
+│       ├── update : ?{Rent: student_id.. }
+│       ├── update/{property} : {value}
+│       ├── exportcsv -> File
+│       └── importcsv: File
+├── tag -x
+│   ├── getall -> [Tag]
+│   ├── search: {searchTerm} -> Tag
+│   ├── create: Tag -> Tag
+│   └── getbyid/{rent_id} -> Rent
+│       ├── update
+│       └── remove
+├── user -x
+│   ├── getbyid/{user_id} -> User
+│   ├── getallstudents -> [User]
+│   ├── searchforstudent: {searchTerm: string} -> [AutocompleteNumberOptionDTO<User>]
+│   ├── getallteachers -> [User]
+│   ├── searchforteacher: {searchTerm: string} -> [AutocompleteNumberOptionDTO<User>]
+│   └── loadfromldap -> [User]
 └── socket
-    ├── rents ~> [Rent]
-    ├── devices ~> [Device]
-    ├── devicetypes ~> [DeviceType]
-    ├── students ~> [Student]
-    └── teachers ~> [Teacher]
-  
-
+    └── rents ~> "update"
 ```
 
 ## Response Structure
