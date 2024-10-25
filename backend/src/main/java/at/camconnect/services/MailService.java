@@ -28,7 +28,7 @@ public class MailService {
     String FRONTEND_URL;
 
     public static void sendReturnEmail(Rent rent) {
-
+        /*I dont think we need to annoy uses all the tme by sending them emails because of stuff like this*/
     }
 
     public void sendConfirmEmail(List<Rent> rents) {
@@ -61,12 +61,10 @@ public class MailService {
                 .data("rents", rents)
                 .render();
 
-        System.out.println(rents.get(0).getType().toString());
-
         // Determine recipient email
         String recipient = rents.get(0).getStudent().getEmail();
 
-        System.out.println(recipient);
+        System.out.println("Email to " + recipient + " - " + url);
 
         String subject = "Bestätigung deines Geräteverleihs";
 
@@ -75,7 +73,7 @@ public class MailService {
 
         // Create and send email
         Mail mail = Mail.withHtml(recipient, subject, emailContent)
-                .setFrom("signup.camconnect@gmail.com")
+                .setFrom("cam-connect@htl-leonding.ac.at")
                 .addInlineAttachment("logo.png", logoBytes, "image/png", "camConnectLogo");
 
         mailer.send(mail);

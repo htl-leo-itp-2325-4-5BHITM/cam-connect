@@ -57,7 +57,7 @@ public class DeviceRepository {
     }
 
     @Transactional
-    public void update(Long id, DeviceDTO data) {
+    public Device update(Long id, DeviceDTO data) {
         try{
             setNumber(id, data.number());
         } catch(NumberFormatException ex){ System.out.println(ex.getMessage()); throw new CCException(1106); }
@@ -75,6 +75,8 @@ public class DeviceRepository {
         } catch(Exception ex){ System.out.println(ex.getMessage()); throw new CCException(1106); }
 
         deviceSocket.broadcast();
+
+        return getById(id);
     }
 
     public Device getById(Long id){
@@ -107,7 +109,8 @@ public class DeviceRepository {
                     .setParameter("type_id", type_id)
                     .setParameter("number", number)
                     .getSingleResult();
-            getById(1L);
+            //pretty sure this is unneeded might break something tho - 24.10.2024
+            //getById(1L);
         }
         catch (Exception ex){
             throw new CCException(1200);
@@ -117,7 +120,6 @@ public class DeviceRepository {
     }
 
     public List<AutocompleteNumberOptionDTO<Device>> search(DeviceSearchDTO data){
-
         Query query;
         if(data.typeId() > 0) {
             query = em.createQuery("SELECT d FROM Device d " +

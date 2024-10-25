@@ -32,8 +32,21 @@ public class RentResource {
     @Inject
     JsonWebToken jwt;
 
-    @Inject
-    SecurityIdentity securityIdentity;
+    @POST
+    @Path("/getall")
+    @Authenticated
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getAll(RentFilters filters){
+        List<RentByStudentDTO> result;
+        try{
+            result = rentRepository.getAll(filters);
+        }catch (CCException ex){
+            ex.printStackTrace();
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok(result);
+    }
 
     @POST
     @Path("/create")
@@ -70,22 +83,6 @@ public class RentResource {
         try{
             result = rentRepository.getAllSingleList();
         }catch (CCException ex){
-            return CCResponse.error(ex);
-        }
-
-        return CCResponse.ok(result);
-    }
-
-    @POST
-    @Path("/getall")
-    @Authenticated
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response getAll(RentFilters filters){
-        List<RentByStudentDTO> result;
-        try{
-            result = rentRepository.getAll(filters);
-        }catch (CCException ex){
-            ex.printStackTrace();
             return CCResponse.error(ex);
         }
 

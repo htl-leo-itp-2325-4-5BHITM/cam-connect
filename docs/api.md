@@ -6,6 +6,47 @@
 ## Structure
 ```
 api
+├── auth -x
+│   ├── login -> KeyCloakResponse
+│   ├── validate
+│   └── role -> UserRoleEnum
+├── device -x
+│   ├── create : DeviceDTO -> [Device]
+│   ├── getall -> [Device]
+│   ├── search: DeviceSearchDTO -> Device
+│   ├── getbynumberandtype/{number}/{type_id: [0-9]+} -> Device
+│   ├── validatenumberandtype/{number}/{type_id} -> boolean
+│   ├── getbyid/{rent_id}
+│   │   ├── remove
+│   │   └── update : DeviceDTO -> Device
+│   ├── importcsv : File
+│   └── exportcsv : File -> File (no cc-response)
+├── deviceset -x
+│   ├── getall -> DeviceSet
+│   ├── getallfull: DeviceTypeFilters -> DeviceSet
+│   ├── create: DeviceSetDTO -> DeviceSet
+│   ├── getbyid/{rent_id}
+│   │   ├── delete
+│   │   ├── update : DeviceSetDTO -> DeviceSet
+│   │   └── tag/{tagId}/toggle
+├── devicetype -x
+│   ├── getall -> [DeviceType]
+│   ├── getallfull: DeviceTypeFilters -> [DeviceType]
+│   ├── search: {searchTerm: string} -> [AutocompleteNumberOptionDTO<DeviceTypeMinimalDTO>]
+│   ├── create/{type: DeviceTypeVariantEnum}: data -> DeviceType
+│   ├── getbyid/{type_id} -> DeviceType
+│   │   ├── remove
+│   │   ├── update: DeviceTypeGlobalObjectsDTO -> DeviceType
+│   │   └── tag/{tagId}/toggle
+│   ├── exportcsv/{type}
+│   ├── importcsv/{type}
+│   ├── importcsv/{type}
+│   └── attribute -x
+│       ├── getall -> [DeviceTypeAttribute]
+│       ├── create/{type}
+│       └── getbyid/{attribute_id} -> DeviceTypeAttribute
+│           ├── update: DeviceTypeAttributeDTO -> DeviceTypeAttribute
+│           └── remove
 ├── rent -x
 │   ├── create -> Rent
 │   ├── getall -> [Rent]
@@ -23,48 +64,6 @@ api
 │           ├── rentendactual : {value}
 │           ├── note : {value}
 │           └── status : {value}
-├── device -x
-│   ├── create : {type_id, number, serial} -> [Device]
-│   ├── getall -> [Device]
-│   └── getbyid/{rent_id}
-│       ├── remove
-│       └── update : {number, serial, note}
-│           ├── number : {value}
-│           ├── serial : {value}
-│           ├── note : {value}
-│           └── type: {value}
-├── devicetype -x
-│   ├── getall -> [DeviceType]
-│   ├── create -x
-│   │   ├── lens : {f_stop, mount_id, focal_length}
-│   │   ├── camera : {system_id, sensor_id, resolution_id, mount_id, framerate, autofocus}
-│   │   ├── drone : {sensor_id, resolution_id, max_range
-│   │   ├── audio : {windblocker, wireless, needs-recorder}
-│   │   ├── light : {watts, rbg, variable_temperatur}
-│   │   ├── tripod : {height, head_id}
-│   │   └── stabilizer : {max_weight, number_of_axis}
-│   ├── getbyid/{type_id} -> DeviceType
-│   │   ├── remove
-│   │   └── update -x
-│   │       ├── lens : {name, f_stop, mount_id, focal_length}
-│   │       ├── camera : {name, sensor_id, resolution_id, mount_id}
-│   │       ├── drone : {name, sensor_id, resolution_id, max_range
-│   │       ├── microphone : {name, windblocker, wireless, needs-recorder}
-│   │       ├── light : {name, watts, rbg, variable_temperatur}
-│   │       ├── tripod : {name, height, head_id}
-│   │       └── stabilizer : {name, max_weight, number_of_axis}
-│   └── attribute -x
-│       ├── getall -> [DeviceTypeAttribute]
-│       ├── create -x
-│       │   ├── cameraresolution : {name, details, resolution}
-│       │   ├── camerasensor : {name, details, size}
-│       │   ├── camerasystem : {name, details}
-│       │   ├── lensmount : {name, details}
-│       │   └── tripodhead : {name, details}
-│       └── getbyid/{attribute_id} -> DeviceTypeAttribute
-│           └── remove
-├── student -x
-├── teacher -x
 └── socket
     ├── rents ~> [Rent]
     ├── devices ~> [Device]
@@ -121,3 +120,6 @@ api
 - 1204: File has Invalid Structure
 - 1205: Operation was not allowed
 - 1206: Invalid Data provided
+
+**Note**
+Sorry we did not know yet how to properly write an API so the default @GET @DELETE pattern was not followed.. sry

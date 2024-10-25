@@ -28,22 +28,6 @@ public class DeviceTypeResource {
     @Inject
     DeviceTypeRepository deviceTypeRepository;
 
-    @POST
-    @Path("/create/{type: [A-z]+}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"camconnect-admin", "medt-teacher"})
-    public Response create(@PathParam("type") DeviceTypeVariantEnum type, JsonObject data){//leave as JsonObject NOT DTO
-        DeviceType result;
-        try{
-            result = deviceTypeRepository.create(type, data);
-        }catch (CCException ex){
-            ex.printStackTrace();
-            return CCResponse.error(ex);
-        }
-
-        return CCResponse.ok(result);
-    }
-
     @GET
     @Path("/getall")
     @Authenticated
@@ -66,6 +50,38 @@ public class DeviceTypeResource {
         try{
             result = deviceTypeRepository.getAllFull(deviceTypeFilters);
         }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok(result);
+    }
+
+
+    @POST
+    @Path("/search")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Authenticated
+    public Response search(JsonObject data){
+        List<AutocompleteNumberOptionDTO<DeviceTypeMinimalDTO>> result;
+        try{
+            result = deviceTypeRepository.search(data.getString("searchTerm"));;
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok(result);
+    }
+
+    @POST
+    @Path("/create/{type: [A-z]+}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
+    public Response create(@PathParam("type") DeviceTypeVariantEnum type, JsonObject data){//leave as JsonObject NOT DTO
+        DeviceType result;
+        try{
+            result = deviceTypeRepository.create(type, data);
+        }catch (CCException ex){
+            ex.printStackTrace();
             return CCResponse.error(ex);
         }
 
@@ -113,38 +129,11 @@ public class DeviceTypeResource {
         return CCResponse.ok();
     }
 
-    @POST
-    @Path("/search")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Authenticated
-    public Response search(JsonObject data){
-        List<AutocompleteNumberOptionDTO<DeviceTypeMinimalDTO>> result;
-        try{
-            result = deviceTypeRepository.search(data.getString("searchTerm"));;
-        }catch (CCException ex){
-            return CCResponse.error(ex);
-        }
-
-        return CCResponse.ok(result);
-    }
-
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    @Path("/getcsv")
+    @Path("/exportcsv/{type}")
     @RolesAllowed({"camconnect-admin", "medt-teacher"})
-    public Response exportAllDeviceVariants() {
-        try {
-            return deviceTypeRepository.exportAllDeviceTypeVariants();
-        } catch (CCException ex) {
-            return CCResponse.error(ex);
-        }
-    }
-
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    @Path("/getcsv/{type}")
-    @RolesAllowed({"camconnect-admin", "medt-teacher"})
-    public Response exportDeviceTypeVariant(@PathParam("type")DeviceTypeVariantEnum variant) {
+    public Response exportDeviceTypeVariant(@PathParam("type") DeviceTypeVariantEnum variant) {
         try {
             return deviceTypeRepository.exportDeviceTypeVariant(variant);
         } catch (CCException ex) {
@@ -153,10 +142,10 @@ public class DeviceTypeResource {
     }
 
     @POST
-    @Path("/import/{type}")
+    @Path("/importcsv/{type}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @RolesAllowed({"camconnect-admin", "medt-teacher"})
-    public Response uploadCsvFile(@RestForm File file, @PathParam("type")String type) {
+    public Response uploadCsvFile(@RestForm File file, @PathParam("type") String type) {
         try{
             deviceTypeRepository.importDeviceTypes(file, type);
         }catch (CCException ex){
@@ -170,7 +159,6 @@ public class DeviceTypeResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public Response addTag(@PathParam("id") Long id, @PathParam("tagId") Long tagId){
-        DeviceType result;
         try{
             deviceTypeRepository.toggleTag(id, tagId);
         }catch (CCException ex){
@@ -178,5 +166,17 @@ public class DeviceTypeResource {
         }
 
         return CCResponse.ok();
+    }
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/getcsv")
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
+    public Response exportAllDeviceVariants() {
+        try {
+            return deviceTypeRepository.exportAllDeviceTypeVariants();
+        } catch (CCException ex) {
+            return CCResponse.error(ex);
+        }
     }
 }

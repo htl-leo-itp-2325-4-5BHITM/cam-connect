@@ -91,17 +91,7 @@
         </div>
         <div class="email-body">
             <h1>Hallo {name}</h1>
-            <p>Du hast folgende offene Verleihe, bitte bestätige diese um den Verleih abzuschließen:</p>
-
-            <ul>
-                {#for rent in rents}
-                    {#if rent.getType().toString() == 'DEFAULT'}
-                        <li>{rent.getDevice().getType().getName()} • {rent.getDevice().getNumber()} von {rent.getRent_start()} bis {rent.getRent_end_planned()}</li>
-                    {#else}
-                        <li>{rent.getDevice_string()} von {rent.getRent_start()} bis {rent.getRent_end_planned()}</li>
-                    {/if}
-                {/for}
-            </ul>
+            <p>Return email goes here</p>
 
             <a href="{frontendUrl}">Zur Übersicht</a>
         </div>

@@ -50,7 +50,7 @@ public class AuthResource {
             String responseString = keycloakResponse.readEntity(String.class);
 
             JSONParser parser = new JSONParser();
-            JSONObject responseJson = new JSONObject();
+            JSONObject responseJson;
             try{
                 responseJson = (JSONObject) parser.parse(responseString);
             }catch (org.jose4j.json.internal.json_simple.parser.ParseException e) {

@@ -22,6 +22,20 @@ public class DeviceTypeAttributeResource {
     @Inject
     DeviceTypeAttributeRepository deviceTypeAttributeRepository;
 
+    @GET
+    @Path("/getall")
+    @Authenticated
+    public Response getall(){
+        DeviceTypeAttributeCollection result;
+        try{
+            result = deviceTypeAttributeRepository.getAll();
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok(result);
+    }
+
     @POST
     @Path("/create/{type: [A-z]+}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -30,20 +44,6 @@ public class DeviceTypeAttributeResource {
         DeviceTypeAttribute result;
         try{
             result = deviceTypeAttributeRepository.create(type, data);
-        }catch (CCException ex){
-            return CCResponse.error(ex);
-        }
-
-        return CCResponse.ok(result);
-    }
-
-    @GET
-    @Path("/getall")
-    @Authenticated
-    public Response getall(){
-        DeviceTypeAttributeCollection result;
-        try{
-            result = deviceTypeAttributeRepository.getAll();
         }catch (CCException ex){
             return CCResponse.error(ex);
         }
