@@ -17,8 +17,11 @@ let pages = {
                     model.createSocketConnection()
                     AuthService.validateAccessToken()
                 })
-                .catch(() => {
-                    AuthService.logOut()
+                .catch((e) => {
+                    alert("an error occured while trying to fetch data or validate the access token, please take a look")
+                    console.error(e)
+                    console.log(model.appState.value.access_token)
+                    //AuthService.logOut()
                 })
         },
         children: {

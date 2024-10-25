@@ -111,7 +111,9 @@ export default class AuthService {
                     return true
                 } else {
                     console.log("Access token invalid")
-                    this.logOut()
+                    alert("access token " + model.appState.value.access_token + " is invalid, please take a look")
+                    console.log(model.appState.value.access_token)
+                    //this.logOut()
                     return false
                 }
             })
