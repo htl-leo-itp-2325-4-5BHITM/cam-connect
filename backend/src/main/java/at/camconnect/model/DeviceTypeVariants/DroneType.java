@@ -85,11 +85,18 @@ public class DroneType extends DeviceType {
 
     @Override
     public String toCsvString() {
-        return getType_id() + ";" + getName() + ";" + getImage_blob() + ";" + getStatus() + ";" + getTagsToString() + ";" + getMax_range_kilometers() + ";" + getFlight_time_minutes() + ";" + isRequires_license() + ";\n";
+        return getVariant() + ";" + getType_id() + ";" + getName() + ";" + getImage_blob() + ";" + getStatus() + ";" + getTagsToString() + ";" + getMax_range_kilometers() + ";" + getFlight_time_minutes() + ";" + isRequires_license() + ";\n";
     }
 
     @Override
     public String getCsvHeader() {
-        return "type_id; name; image; status; tags; max_range_kilometers; flight_time_minutes; requires_license\n";
+        return "variant; type_id; name; image; status; tags; max_range_kilometers; flight_time_minutes; requires_license\n";
+    }
+
+    @Override
+    public void fromCsvString(String[] csvString, List<String> header) {
+        setFlight_time_minutes(Integer.parseInt(csvString[header.indexOf("flight_time_minutes")]));
+        setRequires_license(Boolean.parseBoolean(csvString[header.indexOf("requires_license")]));
+        setMax_range_kilometers(Integer.parseInt(csvString[header.indexOf("max_range_kilometers")]));
     }
 }

@@ -85,11 +85,18 @@ public class LightType extends DeviceType {
 
     @Override
     public String toCsvString() {
-        return getType_id() + ";" + getName() + ";" + getImage_blob() + ";" + getStatus() + ";" + getTagsToString() + ";" + getWatts() + ";" + isRgb() + ";" + isVariable_temperature() + ";\n";
+        return getVariant() + ";" + getType_id() + ";" + getName() + ";" + getImage_blob() + ";" + getStatus() + ";" + getTagsToString() + ";" + getWatts() + ";" + isRgb() + ";" + isVariable_temperature() + ";\n";
     }
 
     @Override
     public String getCsvHeader() {
-        return "type_id; name; image; status; tags; watts; rgb; variable_temperature;\n";
+        return "variant; type_id; name; image; status; tags; watts; rgb; variable_temperature;\n";
+    }
+
+    @Override
+    public void fromCsvString(String[] csvString, List<String> header) {
+        setWatts(Integer.parseInt(csvString[header.indexOf("watts")]));
+        setRgb(Boolean.parseBoolean(csvString[header.indexOf("rgb")]));
+        setVariable_temperature(Boolean.parseBoolean(csvString[header.indexOf("variable_temperature")]));
     }
 }

@@ -55,11 +55,15 @@ public class AudioType extends DeviceType {
 
     @Override
     public String toCsvString() {
-        return getType_id() + ";" + getName() + ";" + getImage_blob() + ";" + getStatus() + ";" + getTagsToString() + ";" + getConnector().getAttribute_id() + ";\n";
+        return getVariant() + ";" + getType_id() + ";" + getName() + ";" + getImage_blob() + ";" + getStatus() + ";" + getTagsToString() + ";" + getConnector().getAttribute_id() + ";\n";
     }
 
     @Override
     public String getCsvHeader() {
-        return "type_id; name; image; status; tags; connector_id;\n";
+        return "variant; type_id; name; image; status; tags; connector_id;\n";
+    }
+
+    @Override
+    public void fromCsvString(String[] csvString, List<String> header) {
     }
 }

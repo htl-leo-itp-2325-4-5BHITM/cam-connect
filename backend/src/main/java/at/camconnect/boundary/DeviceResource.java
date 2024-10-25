@@ -187,7 +187,7 @@ public class DeviceResource {
     }
 
     @POST
-    @Path("/import")
+    @Path("/importcsv")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response uploadCsvFile(@RestForm File file) {
@@ -201,7 +201,7 @@ public class DeviceResource {
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    @Path("/getcsv")
+    @Path("/exportcsv")
     @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response exportAllDevices() {
         try {

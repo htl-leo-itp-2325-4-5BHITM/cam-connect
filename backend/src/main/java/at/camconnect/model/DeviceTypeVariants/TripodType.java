@@ -76,11 +76,16 @@ public class TripodType extends DeviceType {
 
     @Override
     public String toCsvString() {
-        return getType_id() + ";" + getName() + ";" + getImage_blob() + ";" + getStatus() + ";" + getTagsToString() + ";" + getHead().getAttribute_id() + ";" + getHeight_centimeters() + ";\n";
+        return getVariant() + ";" + getType_id() + ";" + getName() + ";" + getImage_blob() + ";" + getStatus() + ";" + getTagsToString() + ";" + getHead().getAttribute_id() + ";" + getHeight_centimeters() + ";\n";
     }
 
     @Override
     public String getCsvHeader() {
-        return "type_id; name; image; status; tags; head_id; height_centimeters\n";
+        return "variant; type_id; name; image; status; tags; head_id; height_centimeters\n";
+    }
+
+    @Override
+    public void fromCsvString(String[] csvString, List<String> header) {
+        setHeight_centimeters(Integer.parseInt(csvString[header.indexOf("height_centimeters")]));
     }
 }

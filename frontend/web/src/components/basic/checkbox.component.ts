@@ -2,8 +2,8 @@ import {LitElement, html, PropertyValues} from 'lit'
 import {customElement, property, queryAssignedElements} from 'lit/decorators.js'
 import styles from '../../../styles/components/basic/checkbox.styles.scss'
 import { icon } from '@fortawesome/fontawesome-svg-core'
-import {faSquareCheck as faSquareChecked} from "@fortawesome/free-solid-svg-icons"
-import {faSquareCheck as faSquareUnchecked} from "@fortawesome/free-regular-svg-icons"
+import {faSquareCheck} from "@fortawesome/free-solid-svg-icons"
+import {faSquare} from "@fortawesome/free-regular-svg-icons"
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 
 export enum ChipType { EXPANDABLE="expandable", REMOVABLE="removable", CLICKABLE="clickable", DEFAULT="default" }
@@ -34,7 +34,7 @@ export class CheckboxComponent extends LitElement {
         return html`
             <style>${styles}</style>
             ${
-            this.state ? unsafeSVG(icon(faSquareChecked).html[0]) : unsafeSVG(icon(faSquareUnchecked).html[0])
+            this.state ? unsafeSVG(icon(faSquareCheck).html[0]) : unsafeSVG(icon(faSquare).html[0])
             }
             <p>${this.text}</p>
             <slot></slot>

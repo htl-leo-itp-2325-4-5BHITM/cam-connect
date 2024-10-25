@@ -1,5 +1,5 @@
 import {model} from "../index"
-import {ccResponse, SimpleOption} from "../base"
+import {ccResponse, config, SimpleOption} from "../base"
 import {DeviceType, DeviceTypeSource, DeviceTypeVariantCollection, DeviceTypeVariantEnum} from "./deviceType.service"
 import {Rent, RentByStudentDTO} from "./rent.service"
 import {Api} from "../util/Api"
@@ -116,5 +116,39 @@ export default class DeviceService{
             console.error(e)
             return []
         }
+    }
+
+    static importDevices(file: File) {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        fetch(config.api_url + "/device/importcsv", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${model.appState.value.access_token}`
+            },
+            body: formData,
+        }).then((response) => {
+            if (response.status === 200) {
+                DeviceService.fetchAll();
+            }
+        })
+    }
+
+    static exportDevices() {
+        fetch(config.api_url + "/device/exportcsv", {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${model.appState.value.access_token}`
+            }
+        }).then((response) => {
+            response.blob().then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'export_device.csv';
+                a.click();
+            });
+        })
     }
 }

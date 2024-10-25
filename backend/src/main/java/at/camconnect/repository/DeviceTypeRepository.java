@@ -244,11 +244,9 @@ public class DeviceTypeRepository {
     //endregion
 
     public Response exportAllDeviceTypeVariants(List<DeviceTypeVariantEnum> selectedVariants) {
-        System.out.println();
-
         StreamingOutput stream = os -> {
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(os))) {
-                writer.write("cc-import-v1");
+                writer.write("cc-import-v1\n");
 
                  Map<String, List<DeviceType>> deviceTypeMap = new HashMap<>();
 
@@ -263,6 +261,7 @@ public class DeviceTypeRepository {
 
                 deviceTypeMap.forEach((key, value) -> {
                     try {
+                        writer.write("\ncc-device-type\n");
                         writer.write(value.get(0).getCsvHeader());
                         for (DeviceType deviceType : value) {
                             writer.write(deviceType.toCsvString());
@@ -284,103 +283,109 @@ public class DeviceTypeRepository {
                 .build();
     }
 
-    public Response exportDeviceTypeVariant(DeviceTypeVariantEnum variant) {
-        StreamingOutput stream = os -> {
-            try (Writer writer = new BufferedWriter(new OutputStreamWriter(os))) {
-                writer.write("type_id; name; image; autofocus; f_stop; focal_length; height_centimeters; max_range; max_weight_kilograms; needs_recorder; number_of_axis; rgb; variable_temperature; watts; needs_power; wireless; head_id; mount_id; resolution_id; sensor_id; system; flight_time_minutes; description");
-
-                List<DeviceTypeFullDTO> deviceTypeList = getAllFull(new DeviceTypeFilters(false,null, null, null, null));
-                for (DeviceTypeFullDTO deviceType : deviceTypeList) {
-                    writer.write(deviceType.deviceType().toGlobalDTO().toCsvString());
-                }
-            } catch (IOException e) {
-                throw new CCException(1200);
-            }
-        };
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm");
-
-        return Response.ok(stream)
-                .header("Content-Disposition", "attachment; filename=\"camconnect_devicetype-export_" + dateFormat.format(new Date()) + ".csv\"")
-                .build();
-    }
-
-    private String getCSVHeader(String type) {
-        String base = "type_id;creation_date;name;image;status;variant;";
-        return base + switch(type){
-            case "audio" -> "connector_id;\n";
-            case "camera" -> "sensor_id;resolution_id;mount_id;system;autofocus;\n";
-            case "drone" -> "sensor_id;resolution_id;max_range;\n";
-            case "lens" -> "f_stop;mount_id;focal_length;\n";
-            case "light" -> "watts;rgb;variable_temperature;\n";
-            case "microphone" -> "needs_power;wireless;needs_recorder;\n";
-            case "stabilizer" ->"max_weight_kilograms;number_of_axis;\n";
-            case "tripod" -> "height_centimeters;head_id;\n";
-            case "simple" -> "description;\n";
-            default -> "";
-        };
-    }
-
     @Transactional
-    public void importDeviceTypes(File file, String type) {
+    public void importDeviceTypes(File file) {
         if (file == null) throw new CCException(1105);
-
-        HashMap<Integer, List<String>> typeMap = new HashMap<>() {{
-            put(26, new LinkedList<>(List.of("all")));
-            put(12, new LinkedList<>(List.of("camera")));
-            put(9, new LinkedList<>(List.of("drone", "lens", "light", "microphone")));
-            put(8, new LinkedList<>(List.of("stabilizer", "tripod")));
-            put(7, new LinkedList<>(List.of("simple", "audio")));
-        }};
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line = reader.readLine();
             if (line == null || line.isEmpty()) throw new CCException(1203);
 
-            String[] lineArray = line.split(";");
-            int headerLength = lineArray.length;
+            boolean newDeviceType = false;
+            List<String> header = new LinkedList<>();
+            while ((line = reader.readLine()) != null){
 
-            if(!typeMap.get(headerLength).contains(type)) throw new CCException(1204);
+                if(line.isEmpty()) continue;
 
-            if (headerLength <= 1) throw new CCException(1203);
-
-            //removes characters like our friend \uFEFF a invisible zero space character added to csv files when opening excel that throws off my validations :)
-            lineArray[0] = lineArray[0].replaceAll("[^a-zA-Z_-]", "");
-
-            while ((line = reader.readLine()) != null) {
-                lineArray = line.split(";");
-
-                if (lineArray.length != headerLength) throw new CCException(1204, lineArray[0] + " has no valid structure");
-
-                try {
-                    String currType = type;
-                    if(Objects.equals(type, "all")){
-                        currType = lineArray[5];
-
-                        switch(currType){
-                            case "audio": lineArray[6] = lineArray[10]; break; //todo hmm weiß nicht ob das stimmt
-                            case "simple": lineArray[6] = lineArray[25]; break;
-                            case "drone": lineArray[8] = lineArray[12]; break;
-                            case "lens": lineArray[6] = lineArray[8]; lineArray[7] = lineArray[13]; lineArray[8] = lineArray[14]; break;
-                            case "light": lineArray[6] = lineArray[15]; lineArray[7] = lineArray[16]; lineArray[8] = lineArray[17]; break;
-                            case "microphone": lineArray[6] = lineArray[18]; lineArray[7] = lineArray[19]; lineArray[8] = lineArray[20]; break;
-                            case "stabilizer":  lineArray[6] = lineArray[21]; lineArray[7] = lineArray[22]; break;
-                        }
-                    }
-
-                    for (int i = 0; i < lineArray.length; i++) {
-                        System.out.print(lineArray[i] + "-");
-                    }
-                    DeviceType deviceType = getDeviceTypeByLineArray(lineArray, currType);
-                    em.persist(deviceType);
-
-                } catch(NumberFormatException ex){
-                    throw new CCException(1106, "Wrong data type in the import file: " + ex.getMessage());
-                } catch(ConstraintViolationException ex){
-                    throw new CCException(1201, "One device type does already exist " + ex.getMessage());
-                } catch(IllegalArgumentException | ArrayIndexOutOfBoundsException ex){
-                    throw new CCException(1204, ex.getMessage());
+                if(line.equals("cc-device-type")){
+                    newDeviceType = true;
+                    continue;
                 }
+
+                String[] lineArray = line.split(";");
+
+                if(newDeviceType){
+                    line = line.trim().replaceAll("\\s+", "");
+                    lineArray = line.split(";");
+                    header = new LinkedList<>(Arrays.asList(lineArray));
+                    newDeviceType = false;
+                    if(lineArray.length < 2) throw new CCException(1204, "DeviceType header has wrong length");
+                    continue;
+                }
+
+                int variantIndex = header.indexOf("variant");
+
+                if(variantIndex == -1) throw new CCException(1204, "DeviceType header has no variant column");
+                if(lineArray.length < header.size()) throw new CCException(1204, "DeviceType line has wrong length");
+
+                if(header.contains("type_id")) {
+                    if(em.find(DeviceType.class, Long.parseLong(lineArray[header.indexOf("type_id")])) != null) throw new CCException(1204, "DeviceType with id " + lineArray[header.indexOf("type_id")] + " already exists");
+                }
+
+                String type = lineArray[variantIndex];
+
+                DeviceType deviceType;
+                switch(type){
+                    case "audio":
+                        AudioType audioType = new AudioType();
+                        audioType.fromCsvString(lineArray, header);
+                        audioType.setConnector(em.find(AudioConnector.class, lineArray[header.indexOf("connector_id")]));
+                        deviceType = audioType;
+                        break;
+                    case "camera":
+                        CameraType cameraType = new CameraType();
+                        cameraType.fromCsvString(lineArray, header);
+                        cameraType.setMount(em.find(LensMount.class, lineArray[header.indexOf("mount_id")]));
+                        cameraType.setSystem(em.find(CameraSystem.class, lineArray[header.indexOf("system_id")]));
+                        cameraType.setPhoto_resolution(em.find(CameraResolution.class, lineArray[header.indexOf("photo_resolution_id")]));
+                        deviceType = cameraType;
+                        break;
+                    case "drone":
+                        DroneType droneType = new DroneType();
+                        droneType.fromCsvString(lineArray, header);
+                        deviceType = droneType;
+                        break;
+                    case "lens":
+                        LensType lensType = new LensType();
+                        lensType.fromCsvString(lineArray, header);
+                        lensType.setMount(em.find(LensMount.class, lineArray[header.indexOf("mount_id")]));
+                        deviceType = lensType;
+                        break;
+                    case "light":
+                        LightType lightType = new LightType();
+                        lightType.fromCsvString(lineArray, header);
+                        deviceType = lightType;
+                        break;
+                    case "microphone":
+                        MicrophoneType microphoneType = new MicrophoneType();
+                        microphoneType.fromCsvString(lineArray, header);
+                        microphoneType.setConnector(em.find(AudioConnector.class, lineArray[header.indexOf("connector_id")]));
+                        deviceType = microphoneType;
+                        break;
+                    case "simple":
+                        SimpleType simpleType = new SimpleType();
+                        simpleType.fromCsvString(lineArray, header);
+                        deviceType = simpleType;
+                        break;
+                    case "stabilizer":
+                        StabilizerType stabilizerType = new StabilizerType();
+                        stabilizerType.fromCsvString(lineArray, header);
+                        deviceType = stabilizerType;
+                        break;
+                    case "tripod":
+                        TripodType tripodType = new TripodType();
+                        tripodType.fromCsvString(lineArray, header);
+                        tripodType.setHead(em.find(TripodHead.class, lineArray[header.indexOf("head_id")]));
+                        deviceType = tripodType;
+                        break;
+                    default:
+                        throw new CCException(1204, "Unknown device type: " + type);
+                }
+
+                if(header.contains("type_id")) {
+                    deviceType.setType_id(Long.parseLong(lineArray[header.indexOf("type_id")]));
+                }
+                em.persist(deviceType);
             }
         } catch (IOException e) {
             throw new CCException(1204, "File could not be read");

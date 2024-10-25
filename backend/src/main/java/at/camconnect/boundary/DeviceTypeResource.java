@@ -131,7 +131,7 @@ public class DeviceTypeResource {
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/getcsv")
+    @Path("/exportcsv")
     @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response exportAllDeviceVariants(List<DeviceTypeVariantEnum> selectedVariants) {
         try {
@@ -141,25 +141,13 @@ public class DeviceTypeResource {
         }
     }
 
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    @Path("/getcsv/{type}")
-    @RolesAllowed({"camconnect-admin", "medt-teacher"})
-    public Response exportDeviceTypeVariant(@PathParam("type")DeviceTypeVariantEnum variant) {
-        try {
-            return deviceTypeRepository.exportDeviceTypeVariant(variant);
-        } catch (CCException ex) {
-            return CCResponse.error(ex);
-        }
-    }
-
     @POST
-    @Path("/import/{type}")
+    @Path("/importcsv")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @RolesAllowed({"camconnect-admin", "medt-teacher"})
-    public Response uploadCsvFile(@RestForm File file, @PathParam("type")String type) {
+    public Response uploadCsvFile(@RestForm File file) {
         try{
-            deviceTypeRepository.importDeviceTypes(file, type);
+            deviceTypeRepository.importDeviceTypes(file);
         }catch (CCException ex){
             return CCResponse.error(ex);
         }

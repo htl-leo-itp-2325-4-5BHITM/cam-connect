@@ -93,11 +93,17 @@ public class LensType extends DeviceType {
 
     @Override
     public String toCsvString() {
-        return getType_id() + ";" + getName() + ";" + getImage_blob() + ";" + getStatus() + ";" + getTagsToString() + ";" + getMount().getAttribute_id() + ";" + getF_stop() + ";" + getFocal_length() + ";\n";
+        return getVariant() + ";" + getType_id() + ";" + getName() + ";" + getImage_blob() + ";" + getStatus() + ";" + getTagsToString() + ";" + getMount().getAttribute_id() + ";" + getF_stop() + ";" + getFocal_length() + ";\n";
     }
 
     @Override
     public String getCsvHeader() {
-        return "type_id; name; image; status; tags; mount_id; f_stop; focal_length;\n";
+        return "variant; type_id; name; image; status; tags; mount_id; f_stop; focal_length;\n";
+    }
+
+    @Override
+    public void fromCsvString(String[] csvString, List<String> header) {
+        setF_stop(csvString[header.indexOf("f_stop")]);
+        setFocal_length(csvString[header.indexOf("focal_length")]);
     }
 }

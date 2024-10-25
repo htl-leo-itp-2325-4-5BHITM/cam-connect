@@ -7,7 +7,15 @@ import {AppState} from "../../../AppState";
 import DeviceTypeService from "../../../service/deviceType.service"
 import {unsafeSVG} from "lit/directives/unsafe-svg.js"
 import {icon} from "@fortawesome/fontawesome-svg-core"
-import {faDownload, faUpload} from "@fortawesome/free-solid-svg-icons"
+import {
+    faArrowUpFromBracket,
+    faDownload,
+    faFileArrowDown,
+    faUpload,
+    faUpRightFromSquare
+} from "@fortawesome/free-solid-svg-icons"
+import {ColorEnum} from "../../../base"
+import DeviceService from "../../../service/device.service"
 
 @customElement('cc-export-import-modal')
 export class ExportImportModalComponent extends LitElement {
@@ -25,6 +33,9 @@ export class ExportImportModalComponent extends LitElement {
 
     connectedCallback() {
         super.connectedCallback();
+        model.deviceTypeNameFilterOptions.value.map((option) => {
+            this.selectedExportTypes.push(option.id);
+        })
     }
 
     protected firstUpdated(_changedProperties: PropertyValues) {
@@ -38,6 +49,19 @@ export class ExportImportModalComponent extends LitElement {
         `;
     }
 
+    handleFileUpload(event: Event) {
+        const input = event.target as HTMLInputElement;
+        if (input.files && input.files.length > 0) {
+            const file = input.files[0];
+
+            if(this.type == "devicetype"){
+                DeviceTypeService.importDeviceTypes(file);
+            } else {
+                DeviceService.importDevices(file);
+            }
+        }
+    }
+
     getModalContent() {
         return html`
             <cc-select>
@@ -46,62 +70,62 @@ export class ExportImportModalComponent extends LitElement {
             </cc-select>
 
             <div class="import">
-                <label for="file-upload" class="custom-input">
-                    <p>Importieren</p>
-                    
-                    <div class="icon">
-                        ${unsafeSVG(icon(faUpload).html[0])}
+                <button class="import">
+                    <label for="file-upload" class="custom-input">
+                        <p>Importieren</p>
+
+                        <div class="icon">
+                            ${unsafeSVG(icon(faArrowUpFromBracket).html[0])}
+                        </div>
+                    </label>
+
+                    <input id="file-upload" type="file" @change="${this.handleFileUpload}"/>
+                </button>
+                
+                <div class="info">
+                    <p>import dokumentation</p>
+                    <div class="small">
+                        ${unsafeSVG(icon(faUpRightFromSquare).html[0])}
                     </div>
-                </label>
-                <input id="file-upload" type="file" />
+                </div>
             </div>
             
-            <div class="options">
-                <div class="checkboxes">
-                    ${
-                        model.deviceTypeNameFilterOptions.value.map((option) => {
-                            this.selectedExportTypes.push(option.id);
-                            
-                            return html`
+            
+            <div class="export">
+                ${
+                    this.type == "devicetype" ? html`
+                        <div class="checkboxes">
+                            ${
+                                    model.deviceTypeNameFilterOptions.value.map((option) => {
+                                        return html`
                                 <cc-checkbox .state="${true}" @click="${() => {
-                                    if(this.selectedExportTypes.includes(option.id)){
-                                        this.selectedExportTypes = this.selectedExportTypes.filter((id) => id !== option.id);
-                                    } else{
-                                        this.selectedExportTypes.push(option.id);
-                                    }
-                                }}">${option.name}</cc-checkbox>
+                                            if(this.selectedExportTypes.includes(option.id)){
+                                                this.selectedExportTypes = this.selectedExportTypes.filter((id) => id !== option.id);
+                                            } else{
+                                                this.selectedExportTypes.push(option.id);
+                                            }
+                                        }}">${option.name}</cc-checkbox>
                             `
-                        })
-                    }
-                </div>
+                                    })
+                            }
+                        </div>
+                    ` : ''
+                }
                 
-                <cc-button @click="${
+                <button @click="${
                     () => {
                         if(this.type == "devicetype"){
-                            DeviceTypeService.exportDeviceTypes(this.selectedExportTypes).then((data) => {
-                                console.log(data)
-                                /*
-                                // Convert data array to CSV string
-                                let csvContent = "data:text/csv;charset=utf-8,"
-                                        + data.map(e => e.join(",")).join("\n");
-
-                                // Create a link element
-                                let link = document.createElement("a");
-                                link.setAttribute("href", encodeURI(csvContent));
-                                link.setAttribute("download", "data.csv");
-
-                                // Append the link to the body
-                                document.body.appendChild(link);
-
-                                // Simulate click to trigger download
-                                link.click();
-
-                                // Remove the link after download
-                                document.body.removeChild(link);  */
-                            })
+                            DeviceTypeService.exportDeviceTypes(this.selectedExportTypes)
+                        } else {
+                            DeviceService.exportDevices()
                         }
                     }
-                }">Exportieren</cc-button>
+                }">
+                    <p>Exportieren</p>
+                    <div class="icon">
+                        ${unsafeSVG(icon(faFileArrowDown).html[0])}
+                    </div>
+                </button>
             </div>
         `
     }

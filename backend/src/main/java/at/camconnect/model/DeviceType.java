@@ -95,6 +95,8 @@ public abstract class DeviceType{
 
     public abstract String getCsvHeader();
 
+    public abstract void fromCsvString(String[] csvString, List<String> header);
+
     public abstract List<DeviceTypeAttribute> getAttributes();
 
     //getter setter
@@ -122,6 +124,9 @@ public abstract class DeviceType{
         }
     }
 
+    public void setType_id(Long type_id) {
+        this.type_id = type_id;
+    }
 
     public DeviceTypeStatusEnum getStatus() {
         return status;

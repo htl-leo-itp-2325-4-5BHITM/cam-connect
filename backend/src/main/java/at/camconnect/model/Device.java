@@ -103,4 +103,8 @@ public class Device {
     public LocalDateTime getChange_date() {
         return change_date;
     }
+
+    public void setDevice_id(Long device_id) {
+        this.device_id = device_id;
+    }
 }

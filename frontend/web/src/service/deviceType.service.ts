@@ -1,4 +1,4 @@
-import {ccResponse, SimpleOption} from '../base'
+import {ccResponse, config, SimpleOption} from '../base'
 import {model} from "../index"
 import {
     AudioConnector,
@@ -219,14 +219,39 @@ export default class DeviceTypeService {
     }
 
     static exportDeviceTypes(selectedExportTypes : (string | number)[]) {
-        console.log(selectedExportTypes)
-        return Api.postData(`/devicetype/getcsv`, selectedExportTypes)
-            .then(result => {
-                return result.data;
-            })
-            .catch(error => {
-                console.error(error);
-                return Promise.reject(error);
+        fetch(config.api_url + "/devicetype/exportcsv", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${model.appState.value.access_token}`
+            },
+            body: JSON.stringify(selectedExportTypes),
+        }).then((response) => {
+            response.blob().then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'export_device-type.csv';
+                a.click();
             });
+        })
+    }
+
+    static importDeviceTypes(file: File) {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        fetch(config.api_url + "/devicetype/importcsv", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${model.appState.value.access_token}`
+            },
+            body: formData,
+        }).then((response) => {
+            console.log(response)
+            if (response.status === 200) {
+                DeviceTypeService.fetchAllFull();
+            }
+        })
     }
 }
