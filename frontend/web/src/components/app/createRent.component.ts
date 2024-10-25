@@ -114,6 +114,7 @@ export class CreateRentComponent extends LitElement {
 
     addDevice(type: RentDeviceEntryComponentType = "default", setFocus = true, deviceTypeId?: number) {
         //TODO passing the global date is a setting
+        //TODO possibility to add it to the queue
         let newDevice = new CreateRentDeviceEntryComponent(this, type, this.globalDatePicker.instance.selectedDates)
         this.devices.add(newDevice)
         this.shadowRoot.querySelector(".deviceList").appendChild(newDevice)

@@ -70,4 +70,21 @@ public class StabilizerType extends DeviceType {
     public void setNumber_of_axis(int numberOfAxis) {
         this.number_of_axis = numberOfAxis;
     }
+
+    @Override
+    public String toCsvString() {
+        return getVariant() + ";" + getType_id() + ";" + getName() + ";" + getImage_blob() + ";" + getStatus() + ";" + getTagsToString() + ";" + getMax_weight_kilograms() + ";" + getNumber_of_axis() + ";\n";
+    }
+
+    @Override
+    public String getCsvHeader() {
+        return "variant; type_id; name; image; status; tags; max_weight_kilograms; number_of_axis;\n";
+    }
+
+    @Override
+    public void fromCsvString(String[] csvString, List<String> header) {
+        setType_id(Long.parseLong(csvString[header.indexOf("type_id")]));
+        setMax_weight_kilograms(Double.parseDouble(csvString[header.indexOf("max_weight_kilograms")]));
+        setNumber_of_axis(Integer.parseInt(csvString[header.indexOf("number_of_axis")]));
+    }
 }

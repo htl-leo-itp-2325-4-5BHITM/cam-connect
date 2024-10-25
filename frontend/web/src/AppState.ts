@@ -194,7 +194,7 @@ export class AppState{
 
                         firstDeviceSelector?.setFocus()
                     })
-            }else{
+            }else if("deviceType"){
                 setTimeout(() => {
                     let firstDeviceSelector = this._createRentElement.shadowRoot.querySelector("cc-create-rent-device-entry")
                         .shadowRoot.querySelector("cc-autocomplete") as AutocompleteComponent<DeviceType>

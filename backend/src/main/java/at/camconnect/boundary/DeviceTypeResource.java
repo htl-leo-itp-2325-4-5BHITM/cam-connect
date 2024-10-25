@@ -132,22 +132,24 @@ public class DeviceTypeResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/exportcsv/{type}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/exportcsv")
     @RolesAllowed({"camconnect-admin", "medt-teacher"})
-    public Response exportDeviceTypeVariant(@PathParam("type") DeviceTypeVariantEnum variant) {
+    public Response exportAllDeviceVariants(List<DeviceTypeVariantEnum> selectedVariants) {
         try {
-            return deviceTypeRepository.exportDeviceTypeVariant(variant);
+            return deviceTypeRepository.exportAllDeviceTypeVariants(selectedVariants);
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }
     }
 
     @POST
-    @Path("/importcsv/{type}")
+    @Path("/importcsv")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @RolesAllowed({"camconnect-admin", "medt-teacher"})
-    public Response uploadCsvFile(@RestForm File file, @PathParam("type") String type) {
+    public Response uploadCsvFile(@RestForm File file) {
         try{
-            deviceTypeRepository.importDeviceTypes(file, type);
+            deviceTypeRepository.importDeviceTypes(file);
         }catch (CCException ex){
             return CCResponse.error(ex);
         }
@@ -166,17 +168,5 @@ public class DeviceTypeResource {
         }
 
         return CCResponse.ok();
-    }
-
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    @Path("/getcsv")
-    @RolesAllowed({"camconnect-admin", "medt-teacher"})
-    public Response exportAllDeviceVariants() {
-        try {
-            return deviceTypeRepository.exportAllDeviceTypeVariants();
-        } catch (CCException ex) {
-            return CCResponse.error(ex);
-        }
     }
 }

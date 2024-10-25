@@ -109,11 +109,13 @@ export class DeviceListEntryComponent extends LitElement {
                 ></cc-chip>
                 ${model.appState.value.currentUser?.role == UserRoleEnum.MEDT_TEACHER ?
                     html`
-                        <cc-button type="${ButtonType.OUTLINED}" .disabled="${this.deviceTypeFull.available == 0}"
+                        <cc-button type="${ButtonType.OUTLINED}" .disabled="${this.deviceTypeFull.available == 0 
+                                    || this.appState.value.selectedDeviceEntries.size > 0}"
                                    @click="${() => {
                                        this.appState.value.selectedDeviceEntries.clear()
-                                       this.appState.value.selectedDeviceEntries.add(this)
-                                       this.appState.value.openCreateRentModalWithDevices(this.appState.value.selectedDeviceEntries, "type")
+                                       let sets : Set<DeviceListEntryComponent> = new Set()
+                                       sets.add(this)
+                                       this.appState.value.openCreateRentModalWithDevices(sets, "type")
                                     }}"
                         >Verleihen</cc-button>
                     ` : ""

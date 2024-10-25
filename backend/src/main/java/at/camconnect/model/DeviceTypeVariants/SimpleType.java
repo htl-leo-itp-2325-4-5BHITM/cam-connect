@@ -57,4 +57,19 @@ public class SimpleType extends DeviceType {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public String toCsvString() {
+        return getVariant() + ";" + getType_id() + ";" + getName() + ";" + getImage_blob() + ";" + getStatus() + ";" + getTagsToString() + ";" + getDescription() + ";\n";
+    }
+
+    @Override
+    public String getCsvHeader() {
+        return "variant; type_id; name; image; status; tags; description;\n";
+    }
+
+    @Override
+    public void fromCsvString(String[] csvString, List<String> header) {
+        setDescription(csvString[header.indexOf("description")]);
+    }
 }

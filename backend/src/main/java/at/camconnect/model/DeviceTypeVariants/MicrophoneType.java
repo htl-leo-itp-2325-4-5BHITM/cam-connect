@@ -82,4 +82,20 @@ public class MicrophoneType extends DeviceType {
     public void setConnector(AudioConnector connector) {
         this.connector = connector;
     }
+
+    @Override
+    public String toCsvString() {
+        return getVariant() + ";" + getType_id() + ";" + getName() + ";" + getImage_blob() + ";" + getStatus() + ";" + getTagsToString() + ";" + isNeeds_recorder() + ";" + getConnector().getAttribute_id() + ";" + isNeeds_power() + ";\n";
+    }
+
+    @Override
+    public String getCsvHeader() {
+        return "variant; type_id; name; image; status; tags; needs_recorder; connector_id; needs_power;\n";
+    }
+
+    @Override
+    public void fromCsvString(String[] csvString, List<String> header) {
+        setNeeds_recorder(Boolean.parseBoolean(csvString[header.indexOf("needs_recorder")]));
+        setNeeds_power(Boolean.parseBoolean(csvString[header.indexOf("needs_power")]));
+    }
 }

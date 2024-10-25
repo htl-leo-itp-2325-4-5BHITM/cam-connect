@@ -1,0 +1,19 @@
+@use 'sass:color';
+
+@import "../../base";
+
+:host {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: .25rem
+}
+
+svg {
+  width: 1rem;
+
+  * {
+    fill: white;
+  }
+}
+

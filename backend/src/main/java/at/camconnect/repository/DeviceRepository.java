@@ -21,6 +21,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -206,10 +207,13 @@ public class DeviceRepository {
     public Response exportAllDevices() {
         StreamingOutput stream = os -> {
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(os))) {
+                writer.write("cc-import-v1\n\n");
+                writer.write("cc-device\n");
                 writer.write(getCSVHeader());
 
                 List<Device> devices = getAll();
                 for (Device device : devices) {
+                    System.out.println(device);
                     String csvLine = buildCSVLine(device);
                     writer.write(csvLine);
                 }
@@ -226,7 +230,7 @@ public class DeviceRepository {
     }
 
     private String getCSVHeader() {
-        return "serial;number;note;type;\n";
+        return "serial;number;note;type_id;\n";
     }
 
     private String buildCSVLine(Device device) {
@@ -240,20 +244,43 @@ public class DeviceRepository {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line = reader.readLine();
 
-            if(line == null || line.equals("")) throw new CCException(1203);
-            String[] lineArray = line.split(";");
-            if (lineArray.length <= 1) throw new CCException(1203);
+            if(line == null || line.isEmpty()) throw new CCException(1203);
 
-            lineArray[0] = lineArray[0].replaceAll("[^a-zA-Z_-]", "");
-
-            //checks if the csv file matches the required structure
-            if(lineArray.length != 4) throw new CCException(1204, "invalid line length");
-
+            boolean newDeviceType = false;
+            List<String> header = new LinkedList<>();
             while ((line = reader.readLine()) != null) {
-                lineArray = line.split(";");
-                if(lineArray.length != 4) break;
-                create(new Device(lineArray[0], lineArray[1], lineArray[2],
-                        em.find(DeviceType.class, lineArray[3]), DeviceStatus.ACTIVE));
+                if(line.isEmpty()) continue;
+
+                if(line.equals("cc-device")){
+                    newDeviceType = true;
+                    continue;
+                }
+
+                String[] lineArray = line.split(";");
+
+                if(newDeviceType){
+                    line = line.trim().replaceAll("\\s+", "");
+                    lineArray = line.split(";");
+                    header = new LinkedList<>(Arrays.asList(lineArray));
+                    newDeviceType = false;
+                    if(lineArray.length < 2) throw new CCException(1204, "DeviceType header has wrong length");
+                    continue;
+                }
+
+                if(lineArray.length < header.size()) throw new CCException(1204, "DeviceType line has wrong length");
+
+                if(header.contains("type_id")) {
+                    if(em.find(DeviceType.class, Long.parseLong(lineArray[header.indexOf("type_id")])) != null) throw new CCException(1204, "DeviceType with id " + lineArray[header.indexOf("type_id")] + " already exists");
+                }
+
+                String[] values = line.split(";");
+                DeviceType deviceType = em.find(DeviceType.class, header.indexOf("type_id"));
+                if(deviceType == null){
+                    throw new CCException(1201, "Device type does not exist");
+                }
+
+                Device device = new Device(values[0].trim(), values[1].trim(), values[2].trim(), deviceType, DeviceStatus.ACTIVE);
+                em.persist(device);
             }
         } catch (IOException e) {
             throw new CCException(1204, "File could not be read");

@@ -91,11 +91,29 @@ public abstract class DeviceType{
 
     public abstract DeviceTypeGlobalIdDTO toGlobalDTO();
 
+    public abstract String toCsvString();
+
+    public abstract String getCsvHeader();
+
+    public abstract void fromCsvString(String[] csvString, List<String> header);
+
     public abstract List<DeviceTypeAttribute> getAttributes();
 
     //getter setter
     public List<Tag> getTags() {
         return tags;
+    }
+
+    public String getTagsToString(){
+        StringBuilder sb = new StringBuilder();
+        for (Tag tag : tags) {
+            sb.append(tag.getName()).append(",");
+        }
+
+        if(sb.length() > 1){
+            sb.deleteCharAt(sb.length() - 1); // Removes the last character
+        }
+        return sb.toString();
     }
 
     public void toggleTag(Tag tag) {
@@ -106,6 +124,9 @@ public abstract class DeviceType{
         }
     }
 
+    public void setType_id(Long type_id) {
+        this.type_id = type_id;
+    }
 
     public DeviceTypeStatusEnum getStatus() {
         return status;
