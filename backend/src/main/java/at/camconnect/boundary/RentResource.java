@@ -32,8 +32,51 @@ public class RentResource {
     @Inject
     JsonWebToken jwt;
 
-    @Inject
-    SecurityIdentity securityIdentity;
+    @POST
+    @Path("/getall")
+    @Authenticated
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getAll(RentFilters filters){
+        List<RentByStudentDTO> result;
+        try{
+            result = rentRepository.getAll(filters);
+        }catch (CCException ex){
+            ex.printStackTrace();
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok(result);
+    }
+
+    @GET
+    @Path("/getallsinglelist")
+    @Authenticated
+    public Response getAllSingleList(){
+        List<RentDTO> result;
+        try{
+            result = rentRepository.getAllSingleList();
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok(result);
+    }
+
+    /**
+     * For external confirmation
+     */
+    @GET
+    @Path("/getbyidlist/{ids}")
+    public Response getByIdList(@PathParam("ids") String ids) {
+        List<RentDTO> rents;
+        try {
+            String[] idList = ids.split(",");
+            rents = rentRepository.getByIdList(idList);
+        } catch (CCException ex) {
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok(rents);
+    }
 
     @POST
     @Path("/create")
@@ -63,36 +106,6 @@ public class RentResource {
     }
 
     @GET
-    @Path("/getallsinglelist")
-    @Authenticated
-    public Response getAllSingleList(){
-        List<RentDTO> result;
-        try{
-            result = rentRepository.getAllSingleList();
-        }catch (CCException ex){
-            return CCResponse.error(ex);
-        }
-
-        return CCResponse.ok(result);
-    }
-
-    @POST
-    @Path("/getall")
-    @Authenticated
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response getAll(RentFilters filters){
-        List<RentByStudentDTO> result;
-        try{
-            result = rentRepository.getAll(filters);
-        }catch (CCException ex){
-            ex.printStackTrace();
-            return CCResponse.error(ex);
-        }
-
-        return CCResponse.ok(result);
-    }
-
-    @GET
     @Path("/getbyid/{id: [0-9]+}")
     @Authenticated
     public Response getById(@PathParam("id") Long id) {
@@ -103,22 +116,6 @@ public class RentResource {
             return CCResponse.error(ex);
         }
         return CCResponse.ok(rent);
-    }
-
-    /**
-     * For external confirmation
-     */
-    @GET
-    @Path("/getbyidlist/{ids}")
-    public Response getByIdList(@PathParam("ids") String ids) {
-        List<RentDTO> rents;
-        try {
-            String[] idList = ids.split(",");
-            rents = rentRepository.getByIdList(idList);
-        } catch (CCException ex) {
-            return CCResponse.error(ex);
-        }
-        return CCResponse.ok(rents);
     }
 
     @GET
@@ -212,7 +209,7 @@ public class RentResource {
     //TODO check if both updates are needed
 
     @PUT
-    @Path("/getbyid/{id: [0-9]+}/update/")
+    @Path("/getbyid/{id: [0-9]+}/update")
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response update(@PathParam("id") Long id, JsonObject rent) {
@@ -240,7 +237,7 @@ public class RentResource {
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    @Path("/getcsv")
+    @Path("/exportcsv")
     @Authenticated
     public Response exportAllRents() {
         try {
@@ -252,7 +249,7 @@ public class RentResource {
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Path("/import")
+    @Path("/importcsv")
     @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response importCSV(@RestForm File file){
         try{

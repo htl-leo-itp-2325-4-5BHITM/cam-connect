@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 public class StabilizerType extends DeviceType {
     @Column(length = 6)
-    private double max_weight_kilograms; // in kg
+    private double max_weight_kilograms;
     @Column(length = 1)
     private int number_of_axis;
 

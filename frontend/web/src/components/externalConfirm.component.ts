@@ -53,7 +53,7 @@ export class ExternalConfirmComponent extends LitElement {
                                 <li>
                                     <div>
                                         <p>${name}</p>
-                                        <p class="date">${rent.rent_start} - ${rent.rent_end_planned}</p>
+                                        <p class="date">${Util.formatLongDateForHuman(rent.rent_start)} - ${Util.formatLongDateForHuman(rent.rent_end_planned)}</p>
                                     </div>
                                     ${rent.status == RentStatusEnum.WAITING ? 
                                         html`

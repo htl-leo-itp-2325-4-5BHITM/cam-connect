@@ -6,73 +6,80 @@
 ## Structure
 ```
 api
-├── rent -x
-│   ├── create -> Rent
-│   ├── getall -> [Rent]
-│   ├── getbynumberandtype/{number}/{type_id} -> Rent
-│   ├── validatenumberandtype/{number}/{type_id} -> boolean
-│   └── getbyid/{rent_id} -> Rent
-│       ├── remove
-│       └── update : ?{Rent: student_id.. }
-│           ├── student : {value}
-│           ├── device : {value}
-│           ├── teacherstart : {value}
-│           ├── teacherend : {value}
-│           ├── rentstart : {value}
-│           ├── rentendplanned : {value}
-│           ├── rentendactual : {value}
-│           ├── note : {value}
-│           └── status : {value}
+├── auth -x
+│   ├── login -> KeyCloakResponse
+│   ├── validate
+│   └── role -> UserRoleEnum
 ├── device -x
-│   ├── create : {type_id, number, serial} -> [Device]
+│   ├── create : DeviceDTO -> [Device]
 │   ├── getall -> [Device]
+│   ├── search: DeviceSearchDTO -> Device
+│   ├── getbynumberandtype/{number}/{type_id: [0-9]+} -> Device
+│   ├── validatenumberandtype/{number}/{type_id} -> boolean
+│   ├── getbyid/{rent_id}
+│   │   ├── remove
+│   │   └── update : DeviceDTO -> Device
+│   ├── importcsv : File
+│   └── exportcsv : File -> File (no cc-response)
+├── deviceset -x
+│   ├── getall -> DeviceSet
+│   ├── getallfull: DeviceTypeFilters -> DeviceSet
+│   ├── create: DeviceSetDTO -> DeviceSet
 │   └── getbyid/{rent_id}
-│       ├── remove
-│       └── update : {number, serial, note}
-│           ├── number : {value}
-│           ├── serial : {value}
-│           ├── note : {value}
-│           └── type: {value}
+│       ├── delete
+│       ├── update : DeviceSetDTO -> DeviceSet
+│       └── tag/{tagId}/toggle
 ├── devicetype -x
 │   ├── getall -> [DeviceType]
-│   ├── create -x
-│   │   ├── lens : {f_stop, mount_id, focal_length}
-│   │   ├── camera : {system_id, sensor_id, resolution_id, mount_id, framerate, autofocus}
-│   │   ├── drone : {sensor_id, resolution_id, max_range
-│   │   ├── audio : {windblocker, wireless, needs-recorder}
-│   │   ├── light : {watts, rbg, variable_temperatur}
-│   │   ├── tripod : {height, head_id}
-│   │   └── stabilizer : {max_weight, number_of_axis}
+│   ├── getallfull: DeviceTypeFilters -> [DeviceType]
+│   ├── search: {searchTerm: string} -> [AutocompleteNumberOptionDTO<DeviceTypeMinimalDTO>]
+│   ├── create/{type: DeviceTypeVariantEnum}: data -> DeviceType
 │   ├── getbyid/{type_id} -> DeviceType
 │   │   ├── remove
-│   │   └── update -x
-│   │       ├── lens : {name, f_stop, mount_id, focal_length}
-│   │       ├── camera : {name, sensor_id, resolution_id, mount_id}
-│   │       ├── drone : {name, sensor_id, resolution_id, max_range
-│   │       ├── microphone : {name, windblocker, wireless, needs-recorder}
-│   │       ├── light : {name, watts, rbg, variable_temperatur}
-│   │       ├── tripod : {name, height, head_id}
-│   │       └── stabilizer : {name, max_weight, number_of_axis}
+│   │   ├── update: DeviceTypeGlobalObjectsDTO -> DeviceType
+│   │   └── tag/{tagId}/toggle
+│   ├── exportcsv/{type}
+│   ├── importcsv/{type}
+│   ├── importcsv/{type}
 │   └── attribute -x
 │       ├── getall -> [DeviceTypeAttribute]
-│       ├── create -x
-│       │   ├── cameraresolution : {name, details, resolution}
-│       │   ├── camerasensor : {name, details, size}
-│       │   ├── camerasystem : {name, details}
-│       │   ├── lensmount : {name, details}
-│       │   └── tripodhead : {name, details}
+│       ├── create/{type}
 │       └── getbyid/{attribute_id} -> DeviceTypeAttribute
+│           ├── update: DeviceTypeAttributeDTO -> DeviceTypeAttribute
 │           └── remove
-├── student -x
-├── teacher -x
+├── rent -x
+│   ├── getall: RentFilters -> [Rent]
+│   ├── getallsinglelist -> [Rent]
+│   ├── getbyidlist/{ids} -> [Rent]
+│   ├── create: [CreateRentDTO] -> Rent
+│   └── getbyid/{rent_id} -> Rent
+│       ├── sendconfirmation
+│       ├── verifyconfirmationcode/{code}
+│       ├── externalconfirmordecline
+│       ├── confirm
+│       ├── decline
+│       ├── return
+│       ├── remove
+│       ├── update : ?{Rent: student_id.. }
+│       ├── update/{property} : {value}
+│       ├── exportcsv -> File
+│       └── importcsv: File
+├── tag -x
+│   ├── getall -> [Tag]
+│   ├── search: {searchTerm} -> Tag
+│   ├── create: Tag -> Tag
+│   └── getbyid/{rent_id} -> Rent
+│       ├── update
+│       └── remove
+├── user -x
+│   ├── getbyid/{user_id} -> User
+│   ├── getallstudents -> [User]
+│   ├── searchforstudent: {searchTerm: string} -> [AutocompleteNumberOptionDTO<User>]
+│   ├── getallteachers -> [User]
+│   ├── searchforteacher: {searchTerm: string} -> [AutocompleteNumberOptionDTO<User>]
+│   └── loadfromldap -> [User]
 └── socket
-    ├── rents ~> [Rent]
-    ├── devices ~> [Device]
-    ├── devicetypes ~> [DeviceType]
-    ├── students ~> [Student]
-    └── teachers ~> [Teacher]
-  
-
+    └── rents ~> "update"
 ```
 
 ## Response Structure
@@ -121,3 +128,6 @@ api
 - 1204: File has Invalid Structure
 - 1205: Operation was not allowed
 - 1206: Invalid Data provided
+
+**Note**
+Sorry we did not know yet how to properly write an API so the default @GET @DELETE pattern was not followed.. sry

@@ -1,16 +1,14 @@
 package at.camconnect.repository;
 
-import at.camconnect.dtos.deviceSet.DeviceSetCreateDTO;
+import at.camconnect.dtos.deviceSet.DeviceSetDTO;
 import at.camconnect.dtos.deviceSet.DeviceSetFullDTO;
 import at.camconnect.dtos.filters.DeviceTypeFilters;
-import at.camconnect.model.Device;
 import at.camconnect.model.DeviceSet;
 import at.camconnect.model.DeviceType;
 import at.camconnect.model.Tag;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -86,8 +84,7 @@ public class DeviceSetRepository {
         return minValue;
     }
 
-    @Transactional
-    public void create(DeviceSetCreateDTO dto){
+    public DeviceSet create(DeviceSetDTO dto){
         DeviceSet deviceSet = new DeviceSet(dto.name(), dto.description(), dto.status());
         em.persist(deviceSet);
         em.flush();
@@ -106,11 +103,13 @@ public class DeviceSetRepository {
         }
 
         em.merge(deviceSet);
+
+        return deviceSet;
     }
 
-    @Transactional
-    public void update(DeviceSetCreateDTO dto) {
-        DeviceSet deviceSet = em.find(DeviceSet.class, dto.id());
+    public void update(Long id, DeviceSetDTO dto) {
+        DeviceSet deviceSet = em.find(DeviceSet.class, id);
+
         deviceSet.setName(dto.name());
         deviceSet.setDescription(dto.description());
         deviceSet.setStatus(dto.status());
@@ -127,7 +126,6 @@ public class DeviceSetRepository {
         em.merge(deviceSet);
     }
 
-    @Transactional
     public void delete(Long id) {
         DeviceSet deviceSet = em.find(DeviceSet.class, id);
         em.remove(deviceSet);

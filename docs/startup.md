@@ -8,18 +8,27 @@ Pull the postgres container
 Run the postgres container with appropriate port and password
 `docker run --name postgres-container -e POSTGRES_PASSWORD=postgresdb -p 5432:5432 -v postgres-data:/var/lib/postgresql/data -d postgres`
 
-Enter the postgres dp to execute commands inside it
-`docker exec -it postgres-container psql -U postgres -d camconnect`
+Enter the postgres dp to execute commands inside it `docker exec -it postgres-container psql -U postgres`
 
+And create a database for cam-connect `create database camconnect;`
+
+Now exit postgres and execute commands in the newly created database `docker exec -it postgres-container psql -U postgres -d camconnect`
+
+And create a new user
 ```
-create database camconnect;
-
 create user camconnect with password 'postgresdb';
 
 grant all privileges on database camconnect to camconnect;
 ```
 
-### initial
+### enviroment
+For the backend to run you need to create a .env file in the backend folder with the following two properties:
+```
+  FRONTEND_URL=http://localhost:4200
+  EMAIL_PASSWORD=<ask-someone-for-the-pw>
+```
+
+### run
 To run the backend open the backend folder in IntelliJ.
 
 <details>

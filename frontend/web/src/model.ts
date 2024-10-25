@@ -21,7 +21,7 @@ export enum EditPageEnum { OVERVIEW="overview", CHILDREN="children", DEVICE="dev
 
 /**
  * A message to all future students working on this project: we were forced to use no proper library like react or
- * a framework like angular by a-burger. Therefore we had to write SO MANY SYSTEMS ourselfs that would have been included
+ * a framework like angular by a-burger. Therefor we had to write SO MANY SYSTEMS ourselfs that would have been included
  * in a framework. As well as this abomination.. sorry guys
  */
 

@@ -65,6 +65,7 @@ public class Rent {
     private String verification_message;
 
     @Column(length = 150)
+    @Deprecated
     private String note;
 
     @Column(length = 100)

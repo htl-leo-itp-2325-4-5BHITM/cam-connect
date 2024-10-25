@@ -62,8 +62,8 @@ export default class DeviceSetService{
             })
     }
 
-    static remove(device: DeviceSet) {
-        Api.putData("/deviceset/delete?id=" + device.id)
+    static remove(deviceSet: DeviceSet) {
+        Api.putData("/deviceset/getbyid/delete/" + deviceSet.id)
             .then(result => {
                 if (result.ccStatus.statusCode == 1000) {
                     DeviceSetService.fetchAll();
@@ -75,9 +75,9 @@ export default class DeviceSetService{
             });
     }
 
-    static create(element: DeviceSetCreateDTO) {
-        console.log(element)
-        return Api.postData("/deviceset/create", element)
+    static create(createDTO: DeviceSetCreateDTO) {
+        console.log(createDTO)
+        return Api.postData("/deviceset/create", createDTO)
             .then(result => {
                 if (result.ccStatus.statusCode == 1000) {
                     DeviceSetService.fetchAll();

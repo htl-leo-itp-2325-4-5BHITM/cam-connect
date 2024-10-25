@@ -89,14 +89,14 @@ export class DeviceSetEditEntryComponent extends LitElement {
         `
     }
 
-    private removeDevice(device: DeviceSet) {
+    private removeDevice(deviceSet: DeviceSet) {
         PopupEngine.createModal({
-            text: `Möchten Sie das Geräte-Set ${device.name} wirklich löschen?`,
+            text: `Möchten Sie das Geräte-Set ${deviceSet.name} wirklich löschen?`,
             buttons: [
                 {
                     text: "Ja",
                     action: (data) => {
-                        DeviceSetService.remove(device)
+                        DeviceSetService.remove(deviceSet)
                         this.appState.value.clearSelectedDeviceTypeEditEntries()
                         this.appState.value.clearSelectedDeviceEditEntries()
                         this.appState.value.clearSelectedDeviceSetEditEntries()

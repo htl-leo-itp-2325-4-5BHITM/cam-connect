@@ -10,7 +10,6 @@ import at.camconnect.repository.DeviceRepository;
 import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -52,34 +51,6 @@ public class DeviceResource {
         return CCResponse.ok(devices);
     }
 
-    @GET
-    @Path("/getbyid/{id: [0-9]+}")
-    @Authenticated
-    public Response getById(@PathParam("id")long id) {
-        Device result;
-        try{
-            result = deviceRepository.getById(id);
-        }catch (CCException ex){
-            return CCResponse.error(ex);
-        }
-
-        return CCResponse.ok(result);
-    }
-
-    @GET
-    @Path("/getbynumberandtype/{number}/{type_id: [0-9]+}")
-    @Authenticated
-    public Response getByNumberAndType(@PathParam("number") String number, @PathParam("type_id") long type_id) {
-        Device result;
-        try{
-            result = deviceRepository.getByNumberAndType(number, type_id);
-        }catch (CCException ex){
-            return CCResponse.error(ex);
-        }
-
-        return CCResponse.ok(result);
-    }
-
     @POST
     @Path("/search")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -96,10 +67,24 @@ public class DeviceResource {
     }
 
     @GET
+    @Path("/getbyid/{id: [0-9]+}")
+    @Authenticated
+    public Response getById(@PathParam("id") Long id) {
+        Device result;
+        try{
+            result = deviceRepository.getById(id);
+        }catch (CCException ex){
+            return CCResponse.error(ex);
+        }
+
+        return CCResponse.ok(result);
+    }
+
+    @GET
     @Path("/getbyid/{id: [0-9]+}/remove")
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed({"camconnect-admin", "medt-teacher"})
-    public Response remove(@PathParam("id")long id){
+    public Response remove(@PathParam("id") Long id){
         try {
             deviceRepository.remove(id);
         } catch (CCException ex) {
@@ -113,65 +98,29 @@ public class DeviceResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response update(@PathParam("id")Long id, DeviceDTO deviceDTO){
+        Device device;
         try {
-            deviceRepository.update(id, deviceDTO);
+            device = deviceRepository.update(id, deviceDTO);
         } catch (CCException ex) {
             return CCResponse.error(ex);
         }
-        return CCResponse.ok();
+        return CCResponse.ok(device);
     }
 
-    @POST
-    @Path("/getbyid/{id: [0-9]+}/update/number")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"camconnect-admin", "medt-teacher"})
-    public Response updateNumber(@PathParam("id")Long id, DeviceDTO deviceDTO){
-        try {
-            deviceRepository.setNumber(id, deviceDTO.number());
-        } catch (CCException ex) {
+    @GET
+    @Path("/getbynumberandtype/{number}/{type_id: [0-9]+}")
+    @Authenticated
+    public Response getByNumberAndType(@PathParam("number") String number, @PathParam("type_id") Long type_id) {
+        Device result;
+        try{
+            result = deviceRepository.getByNumberAndType(number, type_id);
+        }catch (CCException ex){
             return CCResponse.error(ex);
         }
-        return CCResponse.ok();
+
+        return CCResponse.ok(result);
     }
 
-    @POST
-    @Path("/getbyid/{id: [0-9]+}/update/serial")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"camconnect-admin", "medt-teacher"})
-    public Response updateSerial(@PathParam("id")Long id, DeviceDTO deviceDTO){
-        try {
-            deviceRepository.setSerial(id, deviceDTO.serial());
-        } catch (CCException ex) {
-            return CCResponse.error(ex);
-        }
-        return CCResponse.ok();
-    }
-
-    @POST
-    @Path("/getbyid/{id: [0-9]+}/update/note")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"camconnect-admin", "medt-teacher"})
-    public Response updateNote(@PathParam("id")Long id, DeviceDTO deviceDTO){
-        try {
-            deviceRepository.setNote(id, deviceDTO.note());
-        } catch (CCException ex) {
-            return CCResponse.error(ex);
-        }
-        return CCResponse.ok();
-    }
-
-    @POST
-    @Path("/getbyid/{id: [0-9]+}/update/type")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"camconnect-admin", "medt-teacher"})
-    public Response updateType(@PathParam("id")Long id, DeviceDTO deviceDTO){
-        try {
-            deviceRepository.setType(id, deviceDTO.type_id());
-        } catch (CCException ex) {
-            return CCResponse.error(ex);
-        }
-        return CCResponse.ok();
-    }
     @GET
     @Path("/validatenumberandtype/{number}/{type_id}")
     @RolesAllowed({"camconnect-admin", "medt-teacher"})
@@ -190,7 +139,7 @@ public class DeviceResource {
     @Path("/importcsv")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @RolesAllowed({"camconnect-admin", "medt-teacher"})
-    public Response uploadCsvFile(@RestForm File file) {
+    public Response importCSV(@RestForm File file) {
         try{
             deviceRepository.importDevices(file);
         }catch (CCException ex){
@@ -203,7 +152,7 @@ public class DeviceResource {
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/exportcsv")
     @RolesAllowed({"camconnect-admin", "medt-teacher"})
-    public Response exportAllDevices() {
+    public Response exportCSV() {
         try {
             return deviceRepository.exportAllDevices();
         } catch (CCException ex) {

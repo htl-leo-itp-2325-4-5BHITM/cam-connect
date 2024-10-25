@@ -4,39 +4,40 @@
 	entity DeviceType {
 		* type_id: Long
 		--
+		* variant: String
+		* status: String
 		* name: String
-		* image: image
+		* image_blob: String
+		* tags: List<Tag>
+		* creation_date: LocalDate
+		* change_date: LocalDate
 	}
+
+	entity AudioType {
+    		--
+    		* connector_id: Long
+    	}
 
 	entity CameraType {
 		--
-		* sensor_id: Long
-		* resolution_id: Long
 		* mount_id: Long
 		* system_id: Long
-		* framerate: int
+		* photo_resolution_id: Long
 		* autofocus: boolean
 	}
 
 	entity DroneType {
 		--
-		* sensor_id: Long
-		* resolution_id: Long
-		* max_range: int
+		* max_range_kilometers: int
+		* flight_time_minutes: int
+		* requires_license: boolean
 	}
 
 	entity LensType {
 		--
-		* f_stop: double
 		* mount_id: Long
+		* f_stop: double
 		* focal_length: int
-	}
-
-	entity MicrophoneType {
-		--
-		* windblocker: boolean
-		* wireless: boolean
-		* needs_recorder: boolean
 	}
 
 	entity LightType {
@@ -46,25 +47,40 @@
 		* variable_temperature: boolean
 	}
 
-	entity TripodType {
+	entity MicrophoneType {
 		--
-		* height: int
-		* head_id: Long
+		* needs_recorder: boolean
+		* connector: Long
+		* needs_power: boolean
+	}
+
+	entity SimpleType {
+	    --
+	    * description: String
 	}
 
 	entity StabilizerType {
 		--
-		* max_weight: int
+		* max_weight_kilograms: int
 		* number_of_axis: int
 	}
 
+	entity TripodType {
+		--
+		* head_id: Long
+		* height_centimeters: int
+	}
+
+
+	DeviceType <|-down- AudioType
 	DeviceType <|-down- CameraType
-	DeviceType <|-down- MicrophoneType
-	DeviceType <|-down- LightType
-	DeviceType <|-down- TripodType
-	DeviceType <|-down- StabilizerType
 	DeviceType <|-down- DroneType
 	DeviceType <|-down- LensType
+	DeviceType <|-down- LightType
+	DeviceType <|-down- MicrophoneType
+	DeviceType <|-down- SimpleType
+	DeviceType <|-down- StabilizerType
+	DeviceType <|-down- TripodType
 
 	entity DeviceTypeAttribute {
 		* attribute_id: Long
@@ -73,35 +89,38 @@
 		* details: String
 	}
 
-	entity TripodHead {
-	}
-
-	entity LensMount {
-	}
-
-	entity CameraSensor {
-		--
-		* size: String
-	}
+	entity AudioConnector { }
 
 	entity CameraResolution {
 		--
 		* resolution: String
 	}
 
-	DeviceTypeAttribute <|-up- TripodHead
-	DeviceTypeAttribute <|-up- LensMount
-	DeviceTypeAttribute <|-up- CameraSensor
+	entity CameraSensorDEPRECATED {
+		--
+		* size: String
+	}
+
+	entity CameraSystem { }
+
+	entity LensMount { }
+
+	entity TripodHead { }
+
+	DeviceTypeAttribute <|-up- AudioConnector
 	DeviceTypeAttribute <|-up- CameraResolution
+	DeviceTypeAttribute <|-up- CameraSensorDEPRECATED
+	DeviceTypeAttribute <|-up- CameraSystem
+	DeviceTypeAttribute <|-up- LensMount
+	DeviceTypeAttribute <|-up- TripodHead
 
-
-	TripodType }o--|| TripodHead
-	LensType }o--|| LensMount
+	AudioType }o--|| AudioConnector
 	CameraType }o--|| LensMount
-	CameraType }o--|| CameraSensor
-	DroneType }o--|| CameraSensor
-	DroneType }o--|| CameraResolution
 	CameraType }o--|| CameraResolution
+	CameraType }o--|| CameraSystem
+	LensType }o--|| LensMount
+	MicrophoneType }o--|| AudioConnector
+	TripodType }o--|| TripodHead
 
 	entity Device {
 		* device_id: Long
@@ -110,51 +129,47 @@
 		* type: Long
 		* serial: String
 		* note: String
+		* creation_date: LocalDate
+		* change_date: LocalDate
+		* status: String
 	}
 
-	entity Rent{
-		* rent_id: Long
-		--
-		* student_id: Long
-		* device_id: Long
-		* teacher_id_start: Long
-		* teacher_id_end: Long
-		* rent_start: LocalDate
-		* rent_end_planned: LocalDate
-		* rent_end_actual: LocalDate
-		* status: RentStatus
-		* verification_code: String
-		* verification_message: String
-	}
+	entity Rent {
+        * rent_id: Long
+        --
+        * student_id: Long
+        * device_id: Long
+        * teacher_id_start: Long
+        * teacher_id_end: Long
+        * rent_start: LocalDate
+        * rent_end_planned: LocalDate
+        * rent_end_actual: LocalDate
+        * creation_date: LocalDateTime
+        * change_date: LocalDateTime
+        * status: RentStatusEnum
+        * verification_code: String
+        * verification_message: String
+        * note: String
+        * device_string: String
+        * type: RentTypeEnum
+    }
 
 	entity Tag {
 		* tag_id : Long
 		--
-		* type_ids: List<DeviceType>
 		* name: String
 		* description: String
 	}
 
-	entity Student {
-		* student_id: Long
-		--
-		* firstname: String
-		* lastname: String
-		* school_class: String
-		* email: String
-		* password: String
-		* username: String
-		* favourites: List<DeviceType>
-	}
-
-	entity Teacher {
-		* teacher_id: Long
-		--
-		* firstname: String
-		* lastname: String
-		* password: String
-		* username: String
-	}
+	entity User {
+        * user_id: String
+        --
+        * firstname: String
+        * lastname: String
+        * email: String
+        * username: String
+        * school_class: String
+    }
 
 	entity DeviceSet {
 		* set_id: Long
@@ -168,9 +183,9 @@
 	DeviceType }o-right-o{ Tag
 
 	Rent }o--|| Device
-	Rent }o-up-|| Student
-	Rent }o-right-|| Teacher
-	Rent }o-right-|| Teacher
+	Rent }o-up-|| User
+	Rent }o-right-|| User
+	Rent }o-right-|| User
 
-	Student }o--|| DeviceType
+	User }o--|| DeviceType
 @enduml
