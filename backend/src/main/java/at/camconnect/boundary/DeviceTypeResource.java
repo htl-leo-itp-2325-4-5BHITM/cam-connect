@@ -131,7 +131,6 @@ public class DeviceTypeResource {
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    @Path("/exportcsv/{type}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/exportcsv")
     @RolesAllowed({"camconnect-admin", "medt-teacher"})
