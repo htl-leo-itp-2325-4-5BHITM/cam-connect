@@ -118,6 +118,13 @@
     min-height: 10rem;
     overflow-y: auto;
 
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+
+    &::-webkit-scrollbar {
+      display: none; /*Chrome, Safari and Opera */
+    }
+
     cursor: initial;
   }
 }
