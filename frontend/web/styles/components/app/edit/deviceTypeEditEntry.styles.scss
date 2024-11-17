@@ -9,6 +9,7 @@
   border-radius: .5rem;
   background-color: $gray200;
   transition: background-color $transitionTimeShort;
+  gap: .5rem;
 }
 
 div.edit{
@@ -60,7 +61,6 @@ div{
   display: flex;
 
   &.tags{
-    margin-left: 1rem;
     width: 9vw;
     gap: .5rem;
 
@@ -69,15 +69,10 @@ div{
     }
   }
 
-  &.deviceTypes{
+  &.properties{
     transition: all $transitionTimeShort;
     z-index: 2;
-    padding-block: .1rem;
-    background-color: $gray200;
-  }
-
-  cc-property-value{
-    margin-inline: .5rem;
+    overflow: hidden;
   }
 }
 
