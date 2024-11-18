@@ -83,6 +83,7 @@ public class StabilizerType extends DeviceType {
 
     @Override
     public void fromCsvString(String[] csvString, List<String> header) {
+        super.fromCsvString(csvString, header);
         setType_id(Long.parseLong(csvString[header.indexOf("type_id")]));
         setMax_weight_kilograms(Double.parseDouble(csvString[header.indexOf("max_weight_kilograms")]));
         setNumber_of_axis(Integer.parseInt(csvString[header.indexOf("number_of_axis")]));

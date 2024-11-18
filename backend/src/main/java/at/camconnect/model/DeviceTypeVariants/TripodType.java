@@ -86,6 +86,7 @@ public class TripodType extends DeviceType {
 
     @Override
     public void fromCsvString(String[] csvString, List<String> header) {
+        super.fromCsvString(csvString, header);
         setHeight_centimeters(Integer.parseInt(csvString[header.indexOf("height_centimeters")]));
     }
 }

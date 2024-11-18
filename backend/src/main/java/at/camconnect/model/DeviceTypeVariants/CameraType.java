@@ -108,6 +108,7 @@ public class CameraType extends DeviceType {
 
     @Override
     public void fromCsvString(String[] csvString, List<String> header) {
+        super.fromCsvString(csvString, header);
         setAutofocus(Boolean.parseBoolean(csvString[header.indexOf("autofocus")]));
     }
 }

@@ -70,6 +70,7 @@ public class SimpleType extends DeviceType {
 
     @Override
     public void fromCsvString(String[] csvString, List<String> header) {
+        super.fromCsvString(csvString, header);
         setDescription(csvString[header.indexOf("description")]);
     }
 }

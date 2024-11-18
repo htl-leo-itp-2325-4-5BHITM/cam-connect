@@ -12,6 +12,7 @@ import {html, TemplateResult} from "lit"
 
 import {Api} from "../util/Api"
 import {Tag} from "./tag.service"
+import PopupEngine from "../util/PopupEngine"
 
 //region devicetype interfaces
 export interface DeviceTypeSource {
@@ -100,6 +101,17 @@ export interface DeviceFilterDTO{
     attributes: number[]
     tags: number[]
     searchTerm: string
+}
+
+export interface ImportFeedbackDTO {
+    id: number
+    message: string
+    success: boolean
+}
+
+export interface ImportFeedbackDividerDTO{
+    correct: ImportFeedbackDTO[]
+    incorrect: ImportFeedbackDTO[]
 }
 
 export default class DeviceTypeService {
@@ -231,7 +243,7 @@ export default class DeviceTypeService {
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'export_device-type.csv';
+                a.download = "camconnect_devicetype-export_" + new Date().toISOString().split("T")[0] + ".csv";
                 a.click();
             });
         })
@@ -241,17 +253,17 @@ export default class DeviceTypeService {
         const formData = new FormData();
         formData.append("file", file);
 
-        fetch(config.api_url + "/devicetype/importcsv", {
+        return fetch(config.api_url + "/devicetype/importcsv", {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${model.appState.value.access_token}`
             },
             body: formData,
         }).then((response) => {
-            console.log(response)
             if (response.status === 200) {
-                DeviceTypeService.fetchAllFull();
+                DeviceTypeService.fetchAllFull()
             }
+            return response.json()
         })
     }
 }

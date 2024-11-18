@@ -89,13 +89,27 @@ public abstract class DeviceType{
         this.change_date = change_date;
     }
 
+    @PrePersist
+    @PreUpdate
+    private void ensureId() {
+        if (this.type_id != null && this.type_id == 0) {
+            this.type_id = null;
+        }
+    }
+
     public abstract DeviceTypeGlobalIdDTO toGlobalDTO();
 
     public abstract String toCsvString();
 
     public abstract String getCsvHeader();
 
-    public abstract void fromCsvString(String[] csvString, List<String> header);
+    public void fromCsvString(String[] csvString, List<String> header){
+        type_id = Long.parseLong(csvString[header.indexOf("type_id")]);
+        name = csvString[header.indexOf("name")];
+        image_blob = csvString[header.indexOf("image")];
+        status = DeviceTypeStatusEnum.valueOf(csvString[header.indexOf("status")]);
+        updateChangeDate();
+    };
 
     public abstract List<DeviceTypeAttribute> getAttributes();
 
