@@ -56,6 +56,16 @@
     transition: rotate $transitionTimeShort;
     height: .7rem;
   }
+
+  .right{
+    svg{
+      height: 1.3rem;
+      margin-inline: .3rem;
+      path{
+        fill: $gray800;
+      }
+    }
+  }
 }
 
 :host([minimized]) .heading{
@@ -70,6 +80,10 @@
 .entries{
   padding-left: 2.6rem;
   transition: max-height $transitionTimeShort;
+
+  @media screen and (max-width: 750px){
+    padding-left: 1rem;
+  }
 
   cc-rent-list-entry:last-child{
     border-radius: 0 0 0.75rem 0.75rem;

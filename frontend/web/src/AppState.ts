@@ -86,6 +86,7 @@ export class AppState{
     private _sidebarElement: SidebarComponent
     private _equipmentDisplayMode: "grid" | "list" = "grid"
     private _deviceTypeOrSet: "type" | "set" = "type"
+    private _screenWidth: "mobile" | "desktop" = "desktop"
 
     //TODO should be moved to the model itself
     private _userSettings: UserSettings = {
@@ -590,5 +591,16 @@ export class AppState{
 
     get currentUserLoaded(): BehaviorSubject<boolean> {
         return this._currentUserLoaded
+    }
+
+
+    get screenWidth(): "mobile" | "desktop" {
+        return this._screenWidth
+    }
+
+    set screenWidth(value: "mobile" | "desktop") {
+        if(value == this._screenWidth) return
+        this._screenWidth = value
+        this.update()
     }
 }

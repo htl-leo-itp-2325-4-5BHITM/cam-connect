@@ -11,6 +11,10 @@
   cc-rent-list-entry {
     margin: 1rem !important;
   }
+
+  @media screen and (max-width: 750px){
+    padding-inline: .5rem !important;
+  }
 }
 
 .noResults{

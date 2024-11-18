@@ -13,6 +13,7 @@ import {AppState} from "../../AppState"
 import RentService from "../../service/rent.service"
 import UrlHandler from "../../util/UrlHandler"
 import logo from "../../../assets/logo/cc-wordmark-white.svg"
+import logoSmall from "../../../assets/logo/cc-logomark-accent.svg"
 import Util, {AnimationHelper} from "../../util/Util"
 import {ButtonType} from "../basic/button.component"
 import PopupEngine from "../../util/PopupEngine"
@@ -55,7 +56,10 @@ export class NavbarComponent extends LitElement {
                 </cc-button>
                 
                 <div class="logo">
-                    <img src="${logo}" alt="cam-connect" @click="${()=> UrlHandler.setUrl("/app/rents")}">
+                    ${this.appState.value.screenWidth == "mobile" ?
+                        html`<img src="${logoSmall}" alt="logo small" @click="${()=> UrlHandler.setUrl("/app/rents")}">` :
+                        html`<img src="${logo}" alt="cam-connect" @click="${()=> UrlHandler.setUrl("/app/rents")}">`
+                    }
                 </div>
 
                 <div class="tools">
@@ -66,7 +70,10 @@ export class NavbarComponent extends LitElement {
         return html`
             <style>${styles}</style>
             <div class="logo">
-                <img src="${logo}" alt="cam-connect" @click="${()=> UrlHandler.setUrl("/app/rents")}">
+                ${this.appState.value.screenWidth == "mobile" ?
+                    html`<img src="${logoSmall}" alt="logo small" @click="${()=> UrlHandler.setUrl("/app/rents")}">` :
+                    html`<img src="${logo}" alt="cam-connect" @click="${()=> UrlHandler.setUrl("/app/rents")}">`
+                }
             </div>
 
             <cc-select size="${SizeEnum.MEDIUM}" spacerColor="${SimpleColorEnum.ACCENT}" 

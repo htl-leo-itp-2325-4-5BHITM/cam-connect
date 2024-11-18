@@ -10,6 +10,10 @@
   align-items: center;
   justify-content: space-between;
   transition: background-color $transitionTimeShort;
+
+  @media screen and (max-width: 750px){
+    gap: .5rem;
+  }
 }
 
 :host(.hoverHighlighted:hover){
@@ -63,8 +67,6 @@
   }
 }
 
-
-
 //TODO format all dates with more letter spacing as they are in figma
 
 .area{//TODO cleanup this selector
@@ -98,6 +100,10 @@ cc-chip{
     p{
       margin-bottom: .5rem;
     }
+  }
+
+  @media screen and (max-width: 750px){
+    margin-right: 0;
   }
 }
 

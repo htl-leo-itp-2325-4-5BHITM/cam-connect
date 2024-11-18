@@ -37,7 +37,7 @@ export class SidebarComponent extends LitElement {
         if(this.type == "default") {
             return html`
                 <style>${styles}</style>
-                ${ model.appState.value.currentUser?.role == UserRoleEnum.MEDT_TEACHER ? html`
+                ${ model.appState.value.currentUser?.role == UserRoleEnum.MEDT_TEACHER && this.appState.value.screenWidth == "desktop" ? html`
                     <div class="buttons">
                     <cc-button size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.ACCENT}" type="${ButtonType.FILLED}"
                         @click="${() => {

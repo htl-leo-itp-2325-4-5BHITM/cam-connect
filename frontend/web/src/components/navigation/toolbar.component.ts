@@ -52,19 +52,22 @@ export class ToolbarComponent extends LitElement {
         return html`
             <style>${styles}</style>
             <div class="main rentlist">
-                <div>
-                    <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}"
-                               @click="${() => {
-                                   UrlHandler.goToPage("/app/edit?type=camera")
-                               }}">
-                        <div slot="left" class="icon accent">
-                            ${unsafeSVG(icon(faCamera).html[0])}
-                        </div>
-                        Geräte bearbeiten
-                    </cc-button>
-                </div>
+                ${this.appState.value.screenWidth == "desktop" ? html`
+                    <div>
+                        <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}"
+                                   @click="${() => {
+                                       UrlHandler.goToPage("/app/edit?type=camera")
+                                   }}">
+                            <div slot="left" class="icon accent">
+                                ${unsafeSVG(icon(faCamera).html[0])}
+                            </div>
+                            Geräte bearbeiten
+                        </cc-button>
+                    </div>
+                ` : html``
+                }
 
-                <div>
+                <div class="right">
                     <cc-button @click="${() => {
                         this.uncheckAll('rent')
                     }}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}"

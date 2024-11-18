@@ -8,10 +8,11 @@ import {model} from "../../index"
 import {RentListEntryComponent} from "./rentListEntry.component"
 import {ButtonType} from "../basic/button.component"
 import { icon } from '@fortawesome/fontawesome-svg-core'
-import { faCaretDown } from "@fortawesome/free-solid-svg-icons"
+import { faCaretDown, faCircleInfo, faCirclePlus } from "@fortawesome/free-solid-svg-icons"
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import UrlHandler from "../../util/UrlHandler"
 import { Student } from 'src/service/user.service'
+import {ObservedProperty} from "../../model"
 
 @customElement('cc-rent-list-student')
 export class RentListStudentComponent extends LitElement {
@@ -20,6 +21,9 @@ export class RentListStudentComponent extends LitElement {
 
     @property({type: Boolean, reflect: true})
     minimized: boolean = false
+
+    @property()
+    appState = new ObservedProperty(this, model.appState)
 
     constructor() {
         super()
@@ -72,19 +76,37 @@ export class RentListStudentComponent extends LitElement {
                     </div>
                 </cc-button>
                 <div class="right">
-                    <cc-button type="${ButtonType.OUTLINED}" size="${SizeEnum.SMALL}" 
+                    ${ this.appState.value.screenWidth == "desktop" ? html`
+                            <cc-button type="${ButtonType.OUTLINED}" size="${SizeEnum.SMALL}" 
                                @click="${() => model.appState.value.openCreateRentModal(this.rentByStudent.student.user_id)}"
-                    >Verleih erstellen</cc-button>
-                    <cc-button type="${ButtonType.TEXT}" color="${SimpleColorEnum.GRAY}" size="${SizeEnum.SMALL}" 
-                               @click="${() => {
-                                   UrlHandler.updateUrl("/app/rents/details")
-                                   UrlHandler.setParam("sid", String(student.user_id))
-                                   model.appState.value.openOverlay(
-                                       html`<cc-rent-detail-view .studentId="${student.user_id}"></cc-rent-detail-view>`, 
-                            () => { UrlHandler.updateUrl("/app/rents") }
-                                   )
-                               }}"
-                    >Details anzeigen</cc-button>
+                            >Verleih erstellen</cc-button>
+                            <cc-button type="${ButtonType.TEXT}" color="${SimpleColorEnum.GRAY}" size="${SizeEnum.SMALL}" 
+                                       @click="${() => {
+                                        UrlHandler.updateUrl("/app/rents/details")
+                                        UrlHandler.setParam("sid", String(student.user_id))
+                                        model.appState.value.openOverlay(
+                                                html`<cc-rent-detail-view .studentId="${student.user_id}"></cc-rent-detail-view>`,
+                                                () => { UrlHandler.updateUrl("/app/rents") }
+                                        )
+                                    }}"
+                            >Details anzeigen</cc-button>
+                        ` : 
+                        html`
+                            <div @click="${() => model.appState.value.openCreateRentModal(this.rentByStudent.student.user_id)}">
+                                ${unsafeSVG(icon(faCirclePlus).html[0])}
+                            </div>
+                            <div @click="${() => {
+                                UrlHandler.updateUrl("/app/rents/details")
+                                UrlHandler.setParam("sid", String(student.user_id))
+                                model.appState.value.openOverlay(
+                                        html`<cc-rent-detail-view .studentId="${student.user_id}"></cc-rent-detail-view>`,
+                                        () => { UrlHandler.updateUrl("/app/rents") }
+                                )
+                            }}">
+                                ${unsafeSVG(icon(faCircleInfo).html[0])}
+                            </div>
+                        `
+                    }
                     
                     <cc-circle-select type="${CircleSelectType.MULTIPLE}" size="${SizeEnum.SMALL}" 
                                       .onToggle="${(checked: boolean) => this.toggleSelectAll(checked)}"

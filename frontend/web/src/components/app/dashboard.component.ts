@@ -11,6 +11,10 @@ import {FilterOption} from "../basic/filterContainer.component"
 import {OrderByFilterRent, RentStatusEnum} from "../../service/rent.service"
 import {KeyBoardShortCut} from "../../util/KeyboardShortcut"
 import {UserRoleEnum} from "../../service/user.service"
+import {faSquarePlus} from "@fortawesome/free-regular-svg-icons"
+import {faBars, faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons"
+import {unsafeSVG} from "lit/directives/unsafe-svg.js"
+import {icon} from "@fortawesome/fontawesome-svg-core"
 
 @customElement('cc-dashboard')
 export class DashboardComponent extends LitElement {
@@ -189,14 +193,30 @@ export class DashboardComponent extends LitElement {
             ${sidebar}
             
             <div class="toolbar-container">
+                
                 ${ model.appState.value.currentUser?.role == UserRoleEnum.MEDT_TEACHER ?
                     html`
-                            <cc-toolbar></cc-toolbar>
-                            <cc-create-rent></cc-create-rent>
+                        ${model.appState.value.screenWidth == "desktop" ? 
+                            html`
+                                <cc-toolbar></cc-toolbar>
+                            ` : html`
+                                <div id="mobileBottomBar">
+                                    <cc-toolbar></cc-toolbar>   
+                                    <div class="mobileBottomNav">
+                                        ${unsafeSVG(icon(faBars).html[0])}
+                                        <div @click="${() => {model.appState.value.openCreateRentModal()}}">
+                                            ${unsafeSVG(icon(faSquarePlus).html[0])}
+                                        </div>
+                                        ${unsafeSVG(icon(faMagnifyingGlass).html[0])}
+                                    </div>
+                                </div>
+                            `
+                        }
+                        <cc-create-rent></cc-create-rent>
                     ` : ""
                 }
-                
-                ${page}
+
+                ${ page }
             </div>
         `
     }

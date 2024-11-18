@@ -16,6 +16,11 @@
   width: fit-content;
 
   transition: max-width $transitionTimeLong, opacity $transitionTimeMedium;
+
+  @media screen and (max-width: 750px){
+    position: absolute;
+    z-index: 2000;
+  }
 }
 
 .top{

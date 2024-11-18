@@ -15,7 +15,7 @@ import {icon} from "@fortawesome/fontawesome-svg-core"
 import {faHashtag} from "@fortawesome/free-solid-svg-icons"
 import DeviceService, {Device, DeviceDTO, SearchDTO} from "../../service/device.service"
 import {AutocompleteComponent} from "../basic/autocomplete.component"
-import DeviceTypeService, {DeviceType, DeviceTypeSource} from "../../service/deviceType.service"
+import DeviceTypeService, {DeviceType} from "../../service/deviceType.service"
 import PopupEngine from "../../util/PopupEngine"
 
 @customElement('cc-rent-list-entry')
@@ -106,29 +106,38 @@ export class RentListEntryComponent extends LitElement {
             </div>
 
             <div class="area">
-                <cc-button color="${buttonColor}" 
+                ${this.appState.value.screenWidth == "desktop" ? html`
+                        <cc-button color="${buttonColor}" 
                            type="${ButtonType.TEXT}" size="${SizeEnum.SMALL}"
                            @click="${buttonClickBehavior}"
                            text="${buttonText}"
-                ></cc-button>
+                        ></cc-button>
+                    ` : html``
+                }
                 
-                <cc-chip color="${chipColor}" size="${SizeEnum.SMALL}"
-                         type="${chipType}" 
-                         text="${chipText}">
-                    <div class="details">
-                        <h2>Angegebener Ablehngrund:</h2>
-                        <p>${this.rent.verification_message}</p>
-                        <cc-button closeChip @click="${this.requestConfirmation}" 
-                                   type="${ButtonType.OUTLINED}" color="${ColorEnum.GRAY}" 
-                                   size="${SizeEnum.SMALL}">Bestätigung erneut Anfragen
-                        </cc-button>
-                    </div>
-                </cc-chip>
+                ${ this.appState.value.screenWidth == "desktop" || this.rent.status == RentStatusEnum.DECLINED ? html`
+                    <cc-chip color="${chipColor}" size="${SizeEnum.SMALL}"
+                             type="${chipType}" 
+                             text="${chipText}">
+                        <div class="details">
+                            <h2>Angegebener Ablehngrund:</h2>
+                            <p>${this.rent.verification_message}</p>
+                            <cc-button closeChip @click="${this.requestConfirmation}" 
+                                       type="${ButtonType.OUTLINED}" color="${ColorEnum.GRAY}" 
+                                       size="${SizeEnum.SMALL}"
+                                >Bestätigung erneut Anfragen
+                            </cc-button>
+                        </div>
+                    </cc-chip>
+                    ` : html ``
+                }
                 
-                <cc-circle-select .onToggle="${(checked: boolean) => this.toggleRentCheck(checked)}" 
-                                  .checked="${this.appState.value.selectedRentEntries.has(this)}" 
-                                  size="${SizeEnum.SMALL}"
-                ></cc-circle-select>
+                ${ !(this.appState.value.screenWidth == "mobile" && this.rent.status == RentStatusEnum.DECLINED) ? html`
+                    <cc-circle-select .onToggle="${(checked: boolean) => this.toggleRentCheck(checked)}" 
+                                      .checked="${this.appState.value.selectedRentEntries.has(this)}" 
+                                      size="${SizeEnum.SMALL}"
+                    ></cc-circle-select>
+                ` : html``}
             </div>
         `
     }
@@ -184,15 +193,22 @@ export class RentListEntryComponent extends LitElement {
                         `
                 }
                 
-                <cc-line color=${LineColor.DEFAULT} type="${Orientation.VERTICAL}"></cc-line>
- 
+                 ${this.appState.value.screenWidth == "desktop" ? html`
+                     <cc-line color=${LineColor.DEFAULT} type="${Orientation.VERTICAL}"></cc-line>
+                 ` : html``}
+                
                 <input type="text" class="date">
                 
-                <cc-line color=${LineColor.DEFAULT} type="${Orientation.VERTICAL}"></cc-line>
+                ${this.appState.value.screenWidth == "desktop" ?
+                    html`
+                        <cc-line color=${LineColor.DEFAULT} type="${Orientation.VERTICAL}"></cc-line>
                 
-                <cc-property-value size="${SizeEnum.SMALL}" property="Erstellt von" 
-                                   value="${this.rent.teacher_start?.firstname.charAt(0)}. ${this.rent.teacher_start?.lastname}">
-                </cc-property-value>`
+                        <cc-property-value size="${SizeEnum.SMALL}" property="Erstellt von" 
+                                           value="${this.rent.teacher_start?.firstname.charAt(0)}. ${this.rent.teacher_start?.lastname}">
+                        </cc-property-value>
+                    ` : html``
+                }
+            `
         } else { //static rent
             return html`
                 ${this.rent.type == RentTypeEnum.DEFAULT ?
@@ -219,17 +235,23 @@ export class RentListEntryComponent extends LitElement {
                         ${Util.formatShortDateForHuman(this.rent.rent_end_planned)}
                     </span>
                 </div>
-                
-                <cc-line color=${LineColor.LIGHTER} type="${Orientation.VERTICAL}"></cc-line>
-                
-                <cc-property-value size="${SizeEnum.SMALL}" property="Erstellt von"
-                                   value="${this.rent.teacher_start ? 
-                                           this.rent.teacher_start.firstname.charAt(0) + ". " + this.rent.teacher_start.lastname
-                                           : "unbekannt"
-                                   }">
-                </cc-property-value>`
+
+                ${this.appState.value.screenWidth == "desktop" ?
+                        html`
+                            <cc-line color=${LineColor.LIGHTER} type="${Orientation.VERTICAL}"></cc-line>
+
+                            <cc-property-value size="${SizeEnum.SMALL}" property="Erstellt von"
+                                               value="${this.rent.teacher_start ?
+                                                       this.rent.teacher_start.firstname.charAt(0) + ". " + this.rent.teacher_start.lastname
+                                                       : "unbekannt"
+                                               }">
+                            </cc-property-value>
+                    ` : html``
+                }
+            `
         }
     }
+
     async searchForDevice(searchTerm: string): Promise<SimpleOption<number, Device>[]> {
         let searchDTO : SearchDTO = {
             searchTerm: searchTerm,

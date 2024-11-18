@@ -108,4 +108,17 @@ KeyBoardShortCut.register(["escape"], () => {model.appState.value.cancelCurrentA
     console.log(focusedElem)
 }, 2000)*/
 
+window.addEventListener("resize", checkScreenWidth)
+
+function checkScreenWidth(){
+    if (window.innerWidth < 750){
+        model.appState.value.screenWidth = "mobile"
+    }
+    else {
+        model.appState.value.screenWidth = "desktop"
+    }
+}
+
+checkScreenWidth()
+
 document.body.appendChild(new AppComponent())
