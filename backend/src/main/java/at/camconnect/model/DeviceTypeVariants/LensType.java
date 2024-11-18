@@ -103,6 +103,7 @@ public class LensType extends DeviceType {
 
     @Override
     public void fromCsvString(String[] csvString, List<String> header) {
+        super.fromCsvString(csvString, header);
         setF_stop(csvString[header.indexOf("f_stop")]);
         setFocal_length(csvString[header.indexOf("focal_length")]);
     }

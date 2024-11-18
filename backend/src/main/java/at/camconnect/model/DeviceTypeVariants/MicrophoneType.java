@@ -95,6 +95,7 @@ public class MicrophoneType extends DeviceType {
 
     @Override
     public void fromCsvString(String[] csvString, List<String> header) {
+        super.fromCsvString(csvString, header);
         setNeeds_recorder(Boolean.parseBoolean(csvString[header.indexOf("needs_recorder")]));
         setNeeds_power(Boolean.parseBoolean(csvString[header.indexOf("needs_power")]));
     }

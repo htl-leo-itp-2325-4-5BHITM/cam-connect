@@ -65,5 +65,6 @@ public class AudioType extends DeviceType {
 
     @Override
     public void fromCsvString(String[] csvString, List<String> header) {
+        super.fromCsvString(csvString, header);
     }
 }

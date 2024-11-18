@@ -95,6 +95,7 @@ public class LightType extends DeviceType {
 
     @Override
     public void fromCsvString(String[] csvString, List<String> header) {
+        super.fromCsvString(csvString, header);
         setWatts(Integer.parseInt(csvString[header.indexOf("watts")]));
         setRgb(Boolean.parseBoolean(csvString[header.indexOf("rgb")]));
         setVariable_temperature(Boolean.parseBoolean(csvString[header.indexOf("variable_temperature")]));

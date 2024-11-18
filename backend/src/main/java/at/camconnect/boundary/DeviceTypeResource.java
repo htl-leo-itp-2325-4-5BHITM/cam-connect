@@ -129,9 +129,9 @@ public class DeviceTypeResource {
         return CCResponse.ok();
     }
 
-    @GET
+    @POST
     @Produces(MediaType.TEXT_PLAIN)
-    @Path("/exportcsv/{type}")
+    @Path("/exportcsv")
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response exportAllDeviceVariants(List<DeviceTypeVariantEnum> selectedVariants) {
@@ -145,14 +145,12 @@ public class DeviceTypeResource {
     @POST
     @Path("/importcsv")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response uploadCsvFile(@RestForm File file) {
         try{
-            deviceTypeRepository.importDeviceTypes(file);
+            return CCResponse.ok(deviceTypeRepository.importDeviceTypes(file));
         }catch (CCException ex){
-            return CCResponse.error(ex);
+            return CCResponse.error(ex, 400);
         }
-        return CCResponse.ok();
     }
 
     @POST

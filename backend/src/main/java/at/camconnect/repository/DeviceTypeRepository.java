@@ -284,7 +284,10 @@ public class DeviceTypeRepository {
     }
 
     @Transactional
-    public void importDeviceTypes(File file) {
+    public ImportFeedbackDividerDTO importDeviceTypes(File file) {
+        List<ImportFeedbackDTO> correct = new LinkedList<>();
+        List<ImportFeedbackDTO> incorrect = new LinkedList<>();
+
         if (file == null) throw new CCException(1105);
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -294,10 +297,11 @@ public class DeviceTypeRepository {
             boolean newDeviceType = false;
             List<String> header = new LinkedList<>();
             while ((line = reader.readLine()) != null){
+                boolean hasError = false;
 
-                if(line.isEmpty()) continue;
+                if(line.replaceAll(";", "").isEmpty()) continue;
 
-                if(line.equals("cc-device-type")){
+                if(line.replaceAll(";", "").equals("cc-device-type")){
                     newDeviceType = true;
                     continue;
                 }
@@ -319,7 +323,11 @@ public class DeviceTypeRepository {
                 if(lineArray.length < header.size()) throw new CCException(1204, "DeviceType line has wrong length");
 
                 if(header.contains("type_id")) {
-                    if(em.find(DeviceType.class, Long.parseLong(lineArray[header.indexOf("type_id")])) != null) throw new CCException(1204, "DeviceType with id " + lineArray[header.indexOf("type_id")] + " already exists");
+                    Long typeId = Long.parseLong(lineArray[header.indexOf("type_id")]);
+                    if(em.find(DeviceType.class, typeId) != null){
+                        incorrect.add(new ImportFeedbackDTO(typeId, "DeviceType with id " + typeId + " already exists"));
+                        continue;
+                    }
                 }
 
                 String type = lineArray[variantIndex];
@@ -379,17 +387,35 @@ public class DeviceTypeRepository {
                         deviceType = tripodType;
                         break;
                     default:
-                        throw new CCException(1204, "Unknown device type: " + type);
+                        incorrect.add(new ImportFeedbackDTO(Long.parseLong(lineArray[header.indexOf("type_id")]),
+                                "DeviceType " + Long.parseLong(lineArray[header.indexOf("type_id")]) + " imported successfully"));
+                        continue;
+                }
+
+                if(header.contains("tags")){
+                    String[] tagNames = lineArray[header.indexOf("tags")].split(",");
+
+                    for (String tagName : tagNames) {
+                        if(tagName.isEmpty()) continue;
+                        Tag tag = em.createQuery("select t from Tag t where t.name = :name", Tag.class)
+                                .setParameter("name", tagName).getSingleResult();
+                        deviceType.toggleTag(tag);
+                    }
                 }
 
                 if(header.contains("type_id")) {
                     deviceType.setType_id(Long.parseLong(lineArray[header.indexOf("type_id")]));
                 }
-                em.persist(deviceType);
+
+                em.merge(deviceType);
+
+                correct.add(new ImportFeedbackDTO(deviceType.getType_id(), "DeviceType " + deviceType.getType_id() + " imported successfully"));
             }
         } catch (IOException e) {
             throw new CCException(1204, "File could not be read");
         }
+
+        return new ImportFeedbackDividerDTO(correct, incorrect);
     }
 
     public DeviceType getDeviceTypeByLineArray(String[] lineArray, String type) {

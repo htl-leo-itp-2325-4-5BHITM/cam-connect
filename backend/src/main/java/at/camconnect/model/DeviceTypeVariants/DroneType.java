@@ -95,6 +95,7 @@ public class DroneType extends DeviceType {
 
     @Override
     public void fromCsvString(String[] csvString, List<String> header) {
+        super.fromCsvString(csvString, header);
         setFlight_time_minutes(Integer.parseInt(csvString[header.indexOf("flight_time_minutes")]));
         setRequires_license(Boolean.parseBoolean(csvString[header.indexOf("requires_license")]));
         setMax_range_kilometers(Integer.parseInt(csvString[header.indexOf("max_range_kilometers")]));

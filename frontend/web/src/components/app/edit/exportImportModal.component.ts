@@ -4,7 +4,7 @@ import {EditPageEnum, ObservedProperty} from "../../../model";
 import {model} from "../../../index";
 import styles from '../../../../styles/components/app/edit/exportImportModal.styles.scss';
 import {AppState} from "../../../AppState";
-import DeviceTypeService from "../../../service/deviceType.service"
+import DeviceTypeService, {ImportFeedbackDividerDTO, ImportFeedbackDTO} from "../../../service/deviceType.service"
 import {unsafeSVG} from "lit/directives/unsafe-svg.js"
 import {icon} from "@fortawesome/fontawesome-svg-core"
 import {
@@ -20,11 +20,14 @@ import DeviceService from "../../../service/device.service"
 @customElement('cc-export-import-modal')
 export class ExportImportModalComponent extends LitElement {
     @property() private appState: ObservedProperty<AppState>;
+    @property({type: String}) private renderState: "default" | "loading" | "import" = "default";
 
-    private type : "devicetype" | "device" = "devicetype";
+    private type: "devicetype" | "device" = "devicetype";
 
     @property()
     private selectedExportTypes: (string | number)[] = [];
+
+    private importFeedback : ImportFeedbackDividerDTO = {} as ImportFeedbackDividerDTO;
 
     constructor() {
         super();
@@ -35,7 +38,7 @@ export class ExportImportModalComponent extends LitElement {
         super.connectedCallback();
         model.deviceTypeNameFilterOptions.value.map((option) => {
             this.selectedExportTypes.push(option.id);
-        })
+        });
     }
 
     protected firstUpdated(_changedProperties: PropertyValues) {
@@ -43,26 +46,68 @@ export class ExportImportModalComponent extends LitElement {
     }
 
     render() {
+        console.log("rendering export import modal");
+
+        if (this.renderState === "loading") {
+            return html`
+                <div class="spinner">Loading ...</div>
+            `;
+        }
+
+        if (this.renderState === "import") {
+            return html`
+                <h2>Es sind bei ${this.importFeedback.incorrect?.length} Einträgen Fehler aufgetreten:</h2>
+                ${
+                    this.importFeedback.incorrect?.map((feedback) => {
+                        return html`
+                                <div class="import-feedback">
+                                    <p>${feedback.message}</p>
+                                </div>
+                            `;
+                    })
+                }
+                
+                <h2>Es wurden ${this.importFeedback.correct?.length} Einträge erfolgreich importiert:</h2>
+                ${
+                    this.importFeedback.correct?.map((feedback) => {
+                        return html`
+                                <div class="import-feedback">
+                                    <p>${feedback.message}</p>
+                                </div>
+                            `;
+                    })
+                }
+            `
+        }
+
         return html`
             <style>${styles}</style>
-            ${this.getModalContent()}
+            ${this.generateModalContent()}
         `;
     }
 
     handleFileUpload(event: Event) {
+        this.renderState = "loading";
+        this.requestUpdate();
+
         const input = event.target as HTMLInputElement;
         if (input.files && input.files.length > 0) {
             const file = input.files[0];
 
-            if(this.type == "devicetype"){
-                DeviceTypeService.importDeviceTypes(file);
+            if (this.type === "devicetype") {
+                DeviceTypeService.importDeviceTypes(file).then((data) => {
+                    this.importFeedback = data.data;
+
+                    this.renderState = "import";
+                    this.requestUpdate();
+                });
             } else {
                 DeviceService.importDevices(file);
             }
         }
     }
 
-    getModalContent() {
+    generateModalContent() {
         return html`
             <cc-select>
                 <cc-option value="1" @click="${() => {this.type = 'devicetype'}}" class="selected">Gerätetypen</cc-option>
@@ -81,7 +126,7 @@ export class ExportImportModalComponent extends LitElement {
 
                     <input id="file-upload" type="file" @change="${this.handleFileUpload}"/>
                 </button>
-                
+
                 <div class="info">
                     <p>import dokumentation</p>
                     <div class="small">
@@ -89,37 +134,36 @@ export class ExportImportModalComponent extends LitElement {
                     </div>
                 </div>
             </div>
-            
-            
+
             <div class="export">
                 ${
-                    this.type == "devicetype" ? html`
-                        <div class="checkboxes">
-                            ${
-                                    model.deviceTypeNameFilterOptions.value.map((option) => {
-                                        return html`
-                                <cc-checkbox .state="${true}" @click="${() => {
-                                            if(this.selectedExportTypes.includes(option.id)){
-                                                this.selectedExportTypes = this.selectedExportTypes.filter((id) => id !== option.id);
-                                            } else{
-                                                this.selectedExportTypes.push(option.id);
-                                            }
-                                        }}">${option.name}</cc-checkbox>
-                            `
-                                    })
-                            }
-                        </div>
-                    ` : ''
+                        this.type === "devicetype" ? html`
+                            <div class="checkboxes">
+                                ${
+                                        model.deviceTypeNameFilterOptions.value.map((option) => {
+                                            return html`
+                                                <cc-checkbox .state="${true}" @click="${() => {
+                                                    if (this.selectedExportTypes.includes(option.id)) {
+                                                        this.selectedExportTypes = this.selectedExportTypes.filter((id) => id !== option.id);
+                                                    } else {
+                                                        this.selectedExportTypes.push(option.id);
+                                                    }
+                                                }}">${option.name}</cc-checkbox>
+                                            `;
+                                        })
+                                }
+                            </div>
+                        ` : ''
                 }
-                
+
                 <button @click="${
-                    () => {
-                        if(this.type == "devicetype"){
-                            DeviceTypeService.exportDeviceTypes(this.selectedExportTypes)
-                        } else {
-                            DeviceService.exportDevices()
+                        () => {
+                            if (this.type === "devicetype") {
+                                DeviceTypeService.exportDeviceTypes(this.selectedExportTypes);
+                            } else {
+                                DeviceService.exportDevices();
+                            }
                         }
-                    }
                 }">
                     <p>Exportieren</p>
                     <div class="icon">
@@ -127,7 +171,7 @@ export class ExportImportModalComponent extends LitElement {
                     </div>
                 </button>
             </div>
-        `
+        `;
     }
 }
 
