@@ -1,8 +1,6 @@
 package at.camconnect.repository;
 
-import at.camconnect.dtos.AutocompleteNumberOptionDTO;
-import at.camconnect.dtos.DeviceDTO;
-import at.camconnect.dtos.DeviceSearchDTO;
+import at.camconnect.dtos.*;
 import at.camconnect.enums.DeviceStatus;
 import at.camconnect.enums.RentStatusEnum;
 import at.camconnect.model.Rent;
@@ -238,7 +236,10 @@ public class DeviceRepository {
     }
 
     @Transactional
-    public void importDevices(File file) {
+    public ImportFeedbackDividerDTO importDevices(File file) {
+        List<ImportFeedbackDTO> correct = new LinkedList<>();
+        List<ImportFeedbackDTO> incorrect = new LinkedList<>();
+
         if(file == null) throw new CCException(1105);
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -263,20 +264,26 @@ public class DeviceRepository {
                     lineArray = line.split(";");
                     header = new LinkedList<>(Arrays.asList(lineArray));
                     newDeviceType = false;
-                    if(lineArray.length < 2) throw new CCException(1204, "DeviceType header has wrong length");
+                    if(lineArray.length < 2) {
+                        throw new CCException(1204, "Device header has wrong length");
+                    }
                     continue;
                 }
 
-                if(lineArray.length < header.size()) throw new CCException(1204, "DeviceType line has wrong length");
+                if(lineArray.length < header.size()) throw new CCException(1204, "Device line has wrong length");
 
                 if(header.contains("type_id")) {
-                    if(em.find(DeviceType.class, Long.parseLong(lineArray[header.indexOf("type_id")])) != null) throw new CCException(1204, "DeviceType with id " + lineArray[header.indexOf("type_id")] + " already exists");
+                    if(em.find(DeviceType.class, Long.parseLong(lineArray[header.indexOf("type_id")])) != null){
+                        incorrect.add(new ImportFeedbackDTO(Long.parseLong(lineArray[header.indexOf("type_id")]), "Device type does already exist"));
+                        continue;
+                    }
                 }
 
                 String[] values = line.split(";");
                 DeviceType deviceType = em.find(DeviceType.class, header.indexOf("type_id"));
                 if(deviceType == null){
-                    throw new CCException(1201, "Device type does not exist");
+                    incorrect.add(new ImportFeedbackDTO(Long.parseLong(lineArray[header.indexOf("type_id")]), "Device type does not exist"));
+                    continue;
                 }
 
                 Device device = new Device(values[0].trim(), values[1].trim(), values[2].trim(), deviceType, DeviceStatus.ACTIVE);
@@ -291,5 +298,7 @@ public class DeviceRepository {
         } catch(IllegalArgumentException | ArrayIndexOutOfBoundsException ex){
             throw new CCException(1204);
         }
+
+        return new ImportFeedbackDividerDTO(correct, incorrect);
     }
 }
