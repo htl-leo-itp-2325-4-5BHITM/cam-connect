@@ -6,6 +6,7 @@
   all: initial;
   flex-grow: 1;
   padding-inline: 1rem !important;
+  padding-bottom: 5rem !important;
   overflow-y: auto;
 
   cc-rent-list-entry {
@@ -14,6 +15,11 @@
 
   @media screen and (max-width: 750px){
     padding-inline: .5rem !important;
+    padding-bottom: 15rem !important;
+  }
+
+  &::-webkit-scrollbar {
+    display: none; /*Chrome, Safari and Opera */
   }
 }
 

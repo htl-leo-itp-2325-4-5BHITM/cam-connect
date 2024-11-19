@@ -42,6 +42,10 @@ div.tools{
   svg{
     height: 1.2rem;
     @include imgIconColorGray800;
+
+    @media screen and (max-width: 750px){
+      height: 1.5rem;
+    }
   }
 }
 
@@ -84,5 +88,9 @@ div.search{
       opacity: 1;
       width: 22ch;
     }
+  }
+
+  @media screen and (max-width: 750px){
+    display: none;
   }
 }

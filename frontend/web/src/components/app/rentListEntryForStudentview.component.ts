@@ -66,6 +66,15 @@ export class RentListEntryForStudentviewComponent extends LitElement {
         return html`
             <style>${styles}</style>
             
+            ${this.appState.value.screenWidth == "desktop" ? 
+                this.generateDesktopView(name, chipColor, chipText) : 
+                this.generateMobileView(name, chipColor, chipText)
+            }
+        `
+    }
+
+    generateDesktopView(name, chipColor, chipText){
+        return html`
             <div>
                 <p>${name}</p>
                 <p class="date">${this.rent.rent_start} - ${this.rent.rent_end_planned}</p>
@@ -74,7 +83,7 @@ export class RentListEntryForStudentviewComponent extends LitElement {
                 </cc-property-value>
             </div>
             ${this.rent.status == RentStatusEnum.WAITING ?
-                    html`
+            html`
                         <cc-button color="${ColorEnum.GOOD}"
                                    text="Bestätigen"
                                    type="underlined"
@@ -98,13 +107,61 @@ export class RentListEntryForStudentviewComponent extends LitElement {
                             </div>
                         </cc-button>
                     ` :
+            html`
+                        <cc-chip color="${chipColor}" 
+                                 size="${SizeEnum.BIG}"
+                                 text="${chipText}">
+                        </cc-chip>
+                    `
+        }
+        `
+    }
+
+    generateMobileView(name, chipColor, chipText){
+        return html`
+            <p>${name}</p>
+            
+            <div>
+                <p class="date">${this.rent.rent_start} - ${this.rent.rent_end_planned}</p>
+                <cc-property-value size="${SizeEnum.SMALL}" property="Erstellt von"
+                                   value="${this.rent.teacher_start?.firstname.charAt(0)}. ${this.rent.teacher_start?.lastname}">
+                </cc-property-value>
+            </div>
+            
+            <div class="buttons">
+                ${this.rent.status == RentStatusEnum.WAITING ?
+                    html`
+                        <cc-button color="${ColorEnum.GOOD}"
+                                   text="Bestätigen"
+                                   type="outlined"
+                                   @click=${this.acceptRent}
+                                   noPadding
+                                   loading
+                        >
+                            <div slot="right" class="icon good">
+                                ${unsafeSVG(icon(faCheck).html[0])}
+                            </div>
+                        </cc-button>
+                        <cc-button color="${ColorEnum.BAD}"
+                                   text="Ablehnen"
+                                   type="outlined"
+                                   @click="${() => this.declineRent(name)}"
+                                   noPadding
+                                   loading
+                        >
+                            <div slot="right" class="icon bad">
+                                ${unsafeSVG(icon(faXmark).html[0])}
+                            </div>
+                        </cc-button>
+                    ` :
                     html`
                         <cc-chip color="${chipColor}" 
                                  size="${SizeEnum.BIG}"
                                  text="${chipText}">
                         </cc-chip>
                     `
-            }
+                }
+            </div>
         `
     }
 

@@ -17,6 +17,7 @@ import DeviceService, {Device, DeviceDTO, SearchDTO} from "../../service/device.
 import {AutocompleteComponent} from "../basic/autocomplete.component"
 import DeviceTypeService, {DeviceType} from "../../service/deviceType.service"
 import PopupEngine from "../../util/PopupEngine"
+import {wuText} from "@yanikkendler/web-utils"
 
 @customElement('cc-rent-list-entry')
 export class RentListEntryComponent extends LitElement {
@@ -129,7 +130,9 @@ export class RentListEntryComponent extends LitElement {
                             </cc-button>
                         </div>
                     </cc-chip>
-                    ` : html ``
+                    ` : html `
+                    <div class="statusDisplay ${chipColor}"></div>
+                    `
                 }
                 
                 ${ !(this.appState.value.screenWidth == "mobile" && this.rent.status == RentStatusEnum.DECLINED) ? html`
@@ -214,7 +217,7 @@ export class RentListEntryComponent extends LitElement {
                 ${this.rent.type == RentTypeEnum.DEFAULT ?
                         html`
                             <div class="deviceInfos">
-                                <span>${this.rent.device.type.name}</span>
+                                <span>${this.appState.value.screenWidth == "desktop" ? this.rent.device.type.name : wuText.truncateText(this.rent.device.type.name, 15)}</span>
                                 <span>•</span>
                                 <span>${this.rent.device.number}</span>
                             </div>

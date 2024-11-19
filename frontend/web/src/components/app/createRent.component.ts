@@ -58,7 +58,7 @@ export class CreateRentComponent extends LitElement {
             <style>${styles}</style>
             <style>
                 :host {
-                    max-width: ${this.appState.value.createRentModalOpen ? "50vw" : "0"};
+                    max-width: ${this.appState.value.createRentModalOpen ? "100vw" : "0"};
                     opacity: ${this.appState.value.createRentModalOpen ? 1 : 0};
                 }
             </style>

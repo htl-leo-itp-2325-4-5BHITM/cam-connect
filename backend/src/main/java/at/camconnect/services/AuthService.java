@@ -66,6 +66,30 @@ public class AuthService {
         }
     }
 
+    /*public Uni<TokenResponse> refreshToken(String refreshToken) {
+        MultiMap form = MultiMap.caseInsensitiveMultiMap();
+        form.set("grant_type", "refresh_token");
+        form.set("client_id", clientId);
+        form.set("client_secret", clientSecret);
+        form.set("refresh_token", refreshToken);
+
+        return webClient.postAbs(authServerUrl + "/protocol/openid-connect/token")
+                .putHeader("Content-Type", "application/x-www-form-urlencoded")
+                .as(BodyCodec.jsonObject())
+                .sendForm(form)
+                .onItem().transform(response -> {
+                    if (response.statusCode() == 200) {
+                        JsonObject responseBody = response.body();
+                        String accessToken = responseBody.getString("access_token");
+                        String newRefreshToken = responseBody.getString("refresh_token");
+                        return new TokenResponse(accessToken, newRefreshToken);
+                    } else {
+                        return null;
+                    }
+                })
+                .onFailure().recoverWithNull();
+    }*/
+
     public String getToken() {
         try (Client client = ClientBuilder.newClient()) {
             Form form = new Form();

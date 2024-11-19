@@ -169,13 +169,15 @@ export class DashboardComponent extends LitElement {
                             Filter zurücksetzten
                         </cc-button>
                         
-                        <cc-filter-container slot="primaryFilters" .options="${this.rentStatusFilterOptions}" 
-                             .onUpdate="${(options: FilterOption[])=> {
-                                 let newFilters = model.appState.value.rentFilters 
-                                 newFilters.statuses = options.filter(option => option.selected == true).map(option => RentStatusEnum[option.id])
-                                 if(newFilters.statuses.length == 0) newFilters.statuses = [RentStatusEnum.CONFIRMED, RentStatusEnum.DECLINED, RentStatusEnum.WAITING]
-                                 model.appState.value.rentFilters = newFilters
-                             }}"
+                        <cc-filter-container 
+                            slot="primaryFilters" 
+                            .options="${this.rentStatusFilterOptions}" 
+                            .onUpdate="${(options: FilterOption[])=> {
+                                let newFilters = model.appState.value.rentFilters 
+                                newFilters.statuses = options.filter(option => option.selected == true).map(option => RentStatusEnum[option.id])
+                                if(newFilters.statuses.length == 0) newFilters.statuses = [RentStatusEnum.CONFIRMED, RentStatusEnum.DECLINED, RentStatusEnum.WAITING]
+                                model.appState.value.rentFilters = newFilters
+                            }}"
                         >Status</cc-filter-container>
                         
                         <cc-filter-container slot="secondaryFilters" .options="${this.firstGraders}" .onUpdate="${this.handleStudentFilterUpdate}">Erste Klassen</cc-filter-container>
@@ -190,9 +192,10 @@ export class DashboardComponent extends LitElement {
         return html`
             <style>${styles}</style>
             <cc-navbar></cc-navbar>
-            ${sidebar}
+            ${this.appState.value.screenWidth == "desktop" ? sidebar : ""}
             
             <div class="toolbar-container">
+                ${this.appState.value.screenWidth == "mobile" ? sidebar : ""}
                 
                 ${ model.appState.value.currentUser?.role == UserRoleEnum.MEDT_TEACHER ?
                     html`
@@ -203,11 +206,15 @@ export class DashboardComponent extends LitElement {
                                 <div id="mobileBottomBar">
                                     <cc-toolbar></cc-toolbar>   
                                     <div class="mobileBottomNav">
-                                        ${unsafeSVG(icon(faBars).html[0])}
+                                        <div @click="${()=>{this.classList.toggle("sidebar-open")}}">
+                                            ${unsafeSVG(icon(faBars).html[0])}
+                                        </div>
                                         <div @click="${() => {model.appState.value.openCreateRentModal()}}">
                                             ${unsafeSVG(icon(faSquarePlus).html[0])}
                                         </div>
-                                        ${unsafeSVG(icon(faMagnifyingGlass).html[0])}
+                                        <div>
+                                            ${unsafeSVG(icon(faMagnifyingGlass).html[0])}
+                                        </div>
                                     </div>
                                 </div>
                             `

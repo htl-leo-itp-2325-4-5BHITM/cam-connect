@@ -18,14 +18,14 @@
   max-width: 30ch;
   top: 0;
   left: 0;
-  z-index: 100;
+  z-index: 2100;
   font-size: $fSizeDesktopSmall;
   transform: translateX(-50%);
 }
 
 #autocompleteSuggestions{
   position: absolute;
-  z-index: 1000;
+  z-index: 2000;
   left: 0;
 
   padding: .3rem .2rem;
@@ -97,7 +97,7 @@
   right: 0;
   bottom: 0;
   background-color: hsl(0, 0%, 0%, 50%);
-  z-index: 100;
+  z-index: 2000;
   backdrop-filter: blur(10px);
 
   display: none;
@@ -114,6 +114,7 @@
     border-radius: .5rem;
     box-shadow: .3rem .3rem .3rem hsl(0, 0%, 0%, 20%);
     min-width: 40vw;
+    max-width: 90vw;
     max-height: 80vh;
     min-height: 10rem;
     overflow-y: auto;

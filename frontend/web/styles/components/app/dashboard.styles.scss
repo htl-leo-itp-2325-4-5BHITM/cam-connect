@@ -40,6 +40,7 @@ cc-sidebar{
   @media screen and (max-width: 750px){
     display: flex;
     flex-direction: column;
+    position: relative;
   }
 
   cc-toolbar {
@@ -58,18 +59,30 @@ cc-sidebar{
   }
 }
 
+@media screen and (max-width: 750px){
+  :host(.sidebar-open) .toolbar-container .content {
+    display: none;
+  }
+
+  :host(:not(.sidebar-open)) cc-sidebar{
+    display: none;
+  }
+}
+
 #mobileBottomBar{
   position: absolute;
   width: 100vw;
   bottom: 0;
+  z-index: 200;
 
   .mobileBottomNav{
     display: flex;
     justify-content: space-between;
     padding: 1rem;
+    background-color: $gray100;
 
     svg{
-      height: 2rem;
+      height: 1.8rem;
       * {
         fill: $gray800;
       }

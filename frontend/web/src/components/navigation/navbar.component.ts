@@ -76,7 +76,7 @@ export class NavbarComponent extends LitElement {
                 }
             </div>
 
-            <cc-select size="${SizeEnum.MEDIUM}" spacerColor="${SimpleColorEnum.ACCENT}" 
+            <cc-select size="${this.appState.value.screenWidth == "desktop" ? SizeEnum.MEDIUM : SizeEnum.BIG}" spacerColor="${SimpleColorEnum.ACCENT}" 
                        .onSelect = "${(elem) => {
                            this.appState.value.page = elem.dataset.page
                            UrlHandler.updateUrl(elem.dataset.page)

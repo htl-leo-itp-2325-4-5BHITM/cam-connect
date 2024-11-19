@@ -14,11 +14,9 @@
   box-sizing: border-box;
 
   @media screen and (max-width: 750px){
-    position: absolute;
-    z-index: 1000;
+    /*position: absolute;
+    z-index: 1500;*/
     width: 100vw;
-    display: none;
-    /*TODO temporary solution*/
   }
 }
 

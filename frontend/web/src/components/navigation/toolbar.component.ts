@@ -68,27 +68,37 @@ export class ToolbarComponent extends LitElement {
                 }
 
                 <div class="right">
-                    <cc-button @click="${() => {
-                        this.uncheckAll('rent')
-                    }}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}"
-                               type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.uncheckAll}">
+                    <cc-button 
+                        @click="${() => {
+                            this.uncheckAll('rent')
+                        }}"
+                       size="${this.appState.value.screenWidth == "desktop" ? SizeEnum.SMALL : SizeEnum.BIG}" 
+                       color="${SimpleColorEnum.GRAY}"
+                       type="${ButtonType.TEXT}" 
+                       .disabled="${isButtonDisabled.uncheckAll}"
+                    >
                         <div slot="left" class="icon accent">
                             <img slot="left" src="../../../assets/icon/custom/select_circle.svg" alt="+">
                         </div>
                         Auswahl aufheben
                     </cc-button>
 
-                    <cc-button @click="${() => {
-                        this.removeSelection()
-                    }}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}"
-                               .disabled="${isButtonDisabled.remove}">
+                    <cc-button 
+                        @click="${() => {
+                            this.removeSelection()
+                        }}" 
+                       size="${this.appState.value.screenWidth == "desktop" ? SizeEnum.SMALL : SizeEnum.BIG}" 
+                       color="${SimpleColorEnum.GRAY}" 
+                       type="${ButtonType.TEXT}"
+                       .disabled="${isButtonDisabled.remove}"
+                    >
                         <div slot="left" class="icon accent">
                             ${unsafeSVG(icon(faTrash).html[0])}
                         </div>
                         Löschen
                     </cc-button>
 
-                    <cc-button @click="${this.returnSelection}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}"
+                    <cc-button @click="${this.returnSelection}" size="${this.appState.value.screenWidth == "desktop" ? SizeEnum.SMALL : SizeEnum.BIG}" color="${SimpleColorEnum.GRAY}"
                                type="${ButtonType.TEXT}" .disabled="${isButtonDisabled.return}">
                         <div slot="left" class="icon accent">
                             <img slot="left" src="../../../assets/icon/custom/return.svg" alt="<-">
@@ -109,34 +119,46 @@ export class ToolbarComponent extends LitElement {
         return html`
             <style>${styles}</style>
             <div class="main equipment">
-                <div>
-                    <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}"
-                               @click="${() => {
-                                   UrlHandler.goToPage("/app/edit?type=camera")
-                               }}">
-                        <div slot="left" class="icon accent">
-                            ${unsafeSVG(icon(faCamera).html[0])}
-                        </div>
-                        Geräte bearbeiten
-                    </cc-button>
-                </div>
-
-                <div>
-                    <cc-button @click=${() => {
-                        this.uncheckAll("device")
-                    }}
-                               size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}"
-                               .disabled="${isButtonDisabled.uncheckAll}">
+                ${this.appState.value.screenWidth == "desktop" ? html`
+                    <div>
+                        <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}"
+                                   @click="${() => {
+                                       UrlHandler.goToPage("/app/edit?type=camera")
+                                   }}">
+                            <div slot="left" class="icon accent">
+                                ${unsafeSVG(icon(faCamera).html[0])}
+                            </div>
+                            Geräte bearbeiten
+                        </cc-button>
+                    </div>
+                ` : html``
+                }
+                
+                <div class="right">
+                    <cc-button 
+                        @click=${() => {
+                            this.uncheckAll("device")
+                        }}
+                        size="${this.appState.value.screenWidth == "desktop" ? SizeEnum.SMALL : SizeEnum.BIG}"
+                        color="${SimpleColorEnum.GRAY}" 
+                        type="${ButtonType.TEXT}"
+                        .disabled="${isButtonDisabled.uncheckAll}"
+                    >
                         <div slot="left" class="icon accent">
                             <img slot="left" src="../../../assets/icon/custom/select_circle.svg" alt="+">
                         </div>
                         Auswahl aufheben
                     </cc-button>
 
-                    <cc-button @click="${() => {
-                        this.rentSelection()
-                    }}" size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}"
-                               .disabled="${isButtonDisabled.remove}">
+                    <cc-button 
+                        @click="${() => {
+                            this.rentSelection()
+                        }}" 
+                        size="${this.appState.value.screenWidth == "desktop" ? SizeEnum.SMALL : SizeEnum.BIG}"
+                        color="${SimpleColorEnum.GRAY}" 
+                        type="${ButtonType.TEXT}"
+                        .disabled="${isButtonDisabled.remove}"
+                    >
                         <div slot="left" class="icon accent">
                             <img slot="left" src="../../../assets/icon/custom/return.svg" alt="<-">
                         </div>

@@ -118,3 +118,18 @@ cc-line{
     color: inherit;
   }
 }
+
+.statusDisplay{
+  height: .7rem;
+  width: .7rem;
+  background-color: $gray500;
+  border-radius: 50%;
+
+  &.mid{
+    background-color: $mid;
+  }
+
+  &.good{
+    background-color: $good;
+  }
+}
