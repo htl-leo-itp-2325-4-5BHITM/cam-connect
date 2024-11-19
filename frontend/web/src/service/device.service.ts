@@ -122,7 +122,7 @@ export default class DeviceService{
         const formData = new FormData();
         formData.append("file", file);
 
-        fetch(config.api_url + "/device/importcsv", {
+        return fetch(config.api_url + "/device/importcsv", {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${model.appState.value.access_token}`
@@ -132,6 +132,7 @@ export default class DeviceService{
             if (response.status === 200) {
                 DeviceService.fetchAll();
             }
+            return response.json();
         })
     }
 
@@ -146,7 +147,7 @@ export default class DeviceService{
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'export_device.csv';
+                a.download = "cc_device-export_" + new Date().toISOString().split("T")[0] + ".csv";
                 a.click();
             });
         })

@@ -141,11 +141,10 @@ public class DeviceResource {
     @RolesAllowed({"camconnect-admin", "medt-teacher"})
     public Response importCSV(@RestForm File file) {
         try{
-            deviceRepository.importDevices(file);
+            return CCResponse.ok(deviceRepository.importDevices(file));
         }catch (CCException ex){
             return CCResponse.error(ex);
         }
-        return CCResponse.ok();
     }
 
     @GET

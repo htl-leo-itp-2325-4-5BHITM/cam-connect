@@ -10,12 +10,14 @@ import {icon} from "@fortawesome/fontawesome-svg-core"
 import {
     faArrowUpFromBracket,
     faDownload,
-    faFileArrowDown,
+    faFileArrowDown, faSortDown,
     faUpload,
-    faUpRightFromSquare
+    faUpRightFromSquare, faXmark
 } from "@fortawesome/free-solid-svg-icons"
 import {ColorEnum} from "../../../base"
 import DeviceService from "../../../service/device.service"
+import PopupEngine from "../../../util/PopupEngine"
+import {ButtonType} from "../../basic/button.component"
 
 @customElement('cc-export-import-modal')
 export class ExportImportModalComponent extends LitElement {
@@ -50,33 +52,55 @@ export class ExportImportModalComponent extends LitElement {
 
         if (this.renderState === "loading") {
             return html`
+                <style>${styles}</style>
                 <div class="spinner">Loading ...</div>
             `;
         }
 
         if (this.renderState === "import") {
             return html`
-                <h2>Es sind bei ${this.importFeedback.incorrect?.length} Einträgen Fehler aufgetreten:</h2>
-                ${
-                    this.importFeedback.incorrect?.map((feedback) => {
-                        return html`
-                                <div class="import-feedback">
-                                    <p>${feedback.message}</p>
-                                </div>
-                            `;
-                    })
-                }
+            <style>${styles}</style>
+            <div class="import-container">
+                <cc-button
+                        type="${ButtonType.TEXT}" color="${ColorEnum.BAD}"
+                        text="schließen"
+                        @click="${() => model.appState.value.closeOverlay()}"
+                >
+                    <div slot="left" class="icon bad">${unsafeSVG(icon(faXmark).html[0])}</div>
+                </cc-button>
                 
-                <h2>Es wurden ${this.importFeedback.correct?.length} Einträge erfolgreich importiert:</h2>
-                ${
-                    this.importFeedback.correct?.map((feedback) => {
-                        return html`
-                                <div class="import-feedback">
-                                    <p>${feedback.message}</p>
-                                </div>
-                            `;
-                    })
-                }
+                <div class="import-feedback">
+                    <div class="header" @click="${(e)=>{e.target.closest('.header').classList.toggle("closed")}}">
+                        ${unsafeSVG(icon(faSortDown).html[0])}
+                        <h2>Es sind bei ${this.importFeedback.incorrect?.length} Einträgen Fehler aufgetreten:</h2>
+                    </div>
+                    <ul>
+                        ${
+                            this.importFeedback.incorrect?.map((feedback) => {
+                                return html`
+                                    <li class="feedback">${feedback.message}</li>`;
+                            })
+                        }
+                    </ul>
+                  
+                </div>
+                
+                <div class="import-feedback">
+                    <div class="header" @click="${(e)=>{e.target.closest('.header').classList.toggle("closed")}}">
+                        ${unsafeSVG(icon(faSortDown).html[0])}
+                        <h2>Es wurden ${this.importFeedback.correct?.length} Einträge erfolgreich importiert:</h2>
+                    </div>
+                    
+                    <ul>
+                        ${
+                            this.importFeedback.correct?.map((feedback) => {
+                                return html`
+                                    <li class="feedback">${feedback.message}</li>`;
+                            })
+                        }
+                    </ul>
+                </div>
+            </div>
             `
         }
 
@@ -96,82 +120,101 @@ export class ExportImportModalComponent extends LitElement {
 
             if (this.type === "devicetype") {
                 DeviceTypeService.importDeviceTypes(file).then((data) => {
-                    this.importFeedback = data.data;
+                    if(data.ccStatus.statusCode != 1000){
+                        PopupEngine.createNotification({heading: "Invalid File: " + data.ccStatus.message, text: data.ccStatus.details, CSSClass: "bad"})
+                        this.renderState = "default"
+                        this.requestUpdate();
+                    } else {
+                        this.importFeedback = data.data;
 
-                    this.renderState = "import";
-                    this.requestUpdate();
+                        this.renderState = "import";
+                        this.requestUpdate();
+                    }
+
+
                 });
             } else {
-                DeviceService.importDevices(file);
+                DeviceService.importDevices(file).then((data) => {
+                    if(data.ccStatus.statusCode != 1000){
+                        PopupEngine.createNotification({heading: "Invalid File: " + data.ccStatus.message, text: data.ccStatus.details, CSSClass: "bad"})
+                        this.renderState = "default"
+                        this.requestUpdate();
+                    } else {
+                        this.importFeedback = data.data;
+
+                        this.renderState = "import";
+                        this.requestUpdate();
+                    }
+                });
             }
         }
     }
 
     generateModalContent() {
         return html`
-            <cc-select>
-                <cc-option value="1" @click="${() => {this.type = 'devicetype'}}" class="selected">Gerätetypen</cc-option>
-                <cc-option value="2" @click="${() => {this.type = 'device'}}">Geräte</cc-option>
-            </cc-select>
+        <cc-select>
+            <cc-option value="1" @click="${() => {this.type = 'devicetype'; this.requestUpdate()}}" class="selected">Gerätetypen</cc-option>
+            <cc-option value="2" @click="${() => {this.type = 'device'; this.requestUpdate()}}">Geräte</cc-option>
+        </cc-select>
 
-            <div class="import">
-                <button class="import">
-                    <label for="file-upload" class="custom-input">
-                        <p>Importieren</p>
+        <div class="import">
+            <button class="import">
+                <label for="file-upload" class="custom-input">
+                    <p>Importieren</p>
 
-                        <div class="icon">
-                            ${unsafeSVG(icon(faArrowUpFromBracket).html[0])}
-                        </div>
-                    </label>
-
-                    <input id="file-upload" type="file" @change="${this.handleFileUpload}"/>
-                </button>
-
-                <div class="info">
-                    <p>import dokumentation</p>
-                    <div class="small">
-                        ${unsafeSVG(icon(faUpRightFromSquare).html[0])}
+                    <div class="icon">
+                        ${unsafeSVG(icon(faArrowUpFromBracket).html[0])}
                     </div>
+                </label>
+
+                <input id="file-upload" type="file" @change="${this.handleFileUpload}"/>
+            </button>
+
+            <div class="info">
+                <p>import dokumentation</p>
+                <div class="small">
+                    ${unsafeSVG(icon(faUpRightFromSquare).html[0])}
                 </div>
             </div>
-
-            <div class="export">
-                ${
-                        this.type === "devicetype" ? html`
-                            <div class="checkboxes">
-                                ${
-                                        model.deviceTypeNameFilterOptions.value.map((option) => {
-                                            return html`
-                                                <cc-checkbox .state="${true}" @click="${() => {
-                                                    if (this.selectedExportTypes.includes(option.id)) {
-                                                        this.selectedExportTypes = this.selectedExportTypes.filter((id) => id !== option.id);
-                                                    } else {
-                                                        this.selectedExportTypes.push(option.id);
-                                                    }
-                                                }}">${option.name}</cc-checkbox>
-                                            `;
-                                        })
-                                }
-                            </div>
-                        ` : ''
-                }
-
-                <button @click="${
-                        () => {
-                            if (this.type === "devicetype") {
-                                DeviceTypeService.exportDeviceTypes(this.selectedExportTypes);
-                            } else {
-                                DeviceService.exportDevices();
-                            }
+        </div>
+        
+        <div class="export">
+            ${
+            this.type === "devicetype" ? html`
+                        <div class="checkboxes">
+                            ${
+                model.deviceTypeNameFilterOptions.value.map((option) => {
+                    return html`
+                                            <cc-checkbox .state="${true}" @click="${() => {
+                        if (this.selectedExportTypes.includes(option.id)) {
+                            this.selectedExportTypes = this.selectedExportTypes.filter((id) => id !== option.id);
+                        } else {
+                            this.selectedExportTypes.push(option.id);
                         }
-                }">
-                    <p>Exportieren</p>
-                    <div class="icon">
-                        ${unsafeSVG(icon(faFileArrowDown).html[0])}
-                    </div>
-                </button>
-            </div>
-        `;
+                    }}">${option.name}</cc-checkbox>
+                                        `;
+                })
+            }
+                        </div>
+                    ` : ''
+        }
+
+            <button @click="${
+            () => {
+                if (this.type === "devicetype") {
+                    DeviceTypeService.exportDeviceTypes(this.selectedExportTypes);
+                } else {
+                    DeviceService.exportDevices();
+                }
+            }
+        }">
+                <p>Exportieren</p>
+                <div class="icon">
+                    ${unsafeSVG(icon(faFileArrowDown).html[0])}
+                </div>
+            </button>
+        </div>
+    `;
     }
 }
 

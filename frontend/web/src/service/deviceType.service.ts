@@ -243,7 +243,7 @@ export default class DeviceTypeService {
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = "camconnect_devicetype-export_" + new Date().toISOString().split("T")[0] + ".csv";
+                a.download = "cc_devicetype-export_" + new Date().toISOString().split("T")[0] + ".csv";
                 a.click();
             });
         })
