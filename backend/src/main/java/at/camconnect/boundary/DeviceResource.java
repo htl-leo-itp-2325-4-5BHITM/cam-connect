@@ -3,6 +3,8 @@ package at.camconnect.boundary;
 import at.camconnect.dtos.AutocompleteNumberOptionDTO;
 import at.camconnect.dtos.DeviceDTO;
 import at.camconnect.dtos.DeviceSearchDTO;
+import at.camconnect.dtos.rent.RentDTO;
+import at.camconnect.model.Rent;
 import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.model.Device;
@@ -105,6 +107,20 @@ public class DeviceResource {
             return CCResponse.error(ex);
         }
         return CCResponse.ok(device);
+    }
+
+    @GET
+    @Path("/getbyid/{id: [0-9]+}/rents")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"camconnect-admin", "medt-teacher"})
+    public Response associatedRents(@PathParam("id")Long id){
+        List<RentDTO> rents;
+        try {
+            rents = deviceRepository.associatedRents(id);
+        } catch (CCException ex) {
+            return CCResponse.error(ex);
+        }
+        return CCResponse.ok(rents);
     }
 
     @GET

@@ -1,6 +1,6 @@
 import {html, LitElement} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
-import styles from '../../../styles/components/app/rentDetailView.styles.scss'
+import styles from '../../../styles/components/app/rentHistory.styles.scss'
 import RentService, {Rent, RentStatusEnum} from "../../service/rent.service"
 import {ColorEnum, SimpleColorEnum} from "../../base"
 import Util from "../../util/Util"
@@ -11,22 +11,25 @@ import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import {model} from "../../index"
 import DeviceService from "../../service/device.service"
 import DeviceTypeService from "../../service/deviceType.service"
-import { Student } from 'src/service/user.service'
 
 interface chipProperty {
     color: ColorEnum
     text: string
 }
 
-@customElement('cc-rent-detail-view')
-export class RentDetailViewComponent extends LitElement {
+@customElement('cc-rent-history')
+export class RentHistoryComponent extends LitElement {
     @property()
-    private studentId: string = null
-
-    @property() private student: Student
+    private mode: "student" | "device" = "student"
 
     @property()
-    private rentList: Rent[] = []
+    private identifier: string | number
+
+    @property()
+    private headerText: string = "unbekannt"
+
+    @property()
+    private rentList: Rent[] = null
 
     chipProperties: Map<RentStatusEnum, chipProperty>
 
@@ -44,10 +47,18 @@ export class RentDetailViewComponent extends LitElement {
     connectedCallback() {
         super.connectedCallback();
 
-        RentService.allRentsByStudent(this.studentId).then(rentList => {
-            this.rentList = rentList[0]?.rentList || []
-            this.student = rentList[0]?.student
-        })
+        if(this.mode == "student") {
+            RentService.allRentsByStudent(this.identifier as string).then(rentList => {
+                this.rentList = rentList[0]?.rentList || []
+                this.headerText = `${rentList[0]?.student?.firstname} ${rentList[0]?.student?.lastname}`
+            })
+        }else if(this.mode == "device") {
+            DeviceService.associatedRents(this.identifier as number).then(rentList => {
+                console.log(rentList)
+                this.rentList = rentList || []
+                this.headerText = `Gerät ${this.rentList[0]?.device.number || "unbekannt"}`
+            })
+        }
     }
 
     render() {
@@ -55,18 +66,22 @@ export class RentDetailViewComponent extends LitElement {
             <style>${styles}</style>
             
             <div class="header">
-                <h2>Verleiheinträge von ${this.student?.firstname} ${this.student?.lastname}</h2>
+                <h2>Verleiheinträge von ${this.headerText}</h2>
                 <cc-button 
-                        type="${ButtonType.TEXT}" color="${ColorEnum.BAD}" 
+                        type="${ButtonType.TEXT}" color="${ColorEnum.GRAY}" 
                         text="schließen"
                         @click="${() => model.appState.value.closeOverlay()}"
                 >
-                    <div slot="left" class="icon bad">${unsafeSVG(icon(faXmark).html[0])}</div>
+                    <div slot="left" class="icon">${unsafeSVG(icon(faXmark).html[0])}</div>
                 </cc-button>
             </div>
+
+            ${this.rentList == null ? html`<p class="noResults">Lade Verleiheinträge..</p>` : ''}
+
+            ${this.rentList?.length == 0 ? html`<p class="noResults">Keine Verleiheinträge vorhanden</p>` : ''}
             
             <div class="rent-container">
-                ${this.rentList.map((rent:Rent, index) => html`
+                ${this.rentList?.map((rent:Rent, index) => html`
                     <div class="rent">
                         <div class="heading">
                             ${DeviceTypeService.deviceTypeToIcon(rent.device.type.variant)}
@@ -98,14 +113,12 @@ export class RentDetailViewComponent extends LitElement {
             </div>
             
             <div class="bottomBlur"></div>
-            
-            ${this.rentList.length == 0 ? html`<p>Lade Verleiheinträge..</p>` : ''}
         `
     }
 }
 
 declare global {
     interface HTMLElementTagNameMap {
-        "cc-rent-detail-view": RentDetailViewComponent
+        "cc-rent-history": RentHistoryComponent
     }
 }

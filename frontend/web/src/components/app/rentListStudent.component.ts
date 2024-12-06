@@ -85,7 +85,7 @@ export class RentListStudentComponent extends LitElement {
                                         UrlHandler.updateUrl("/app/rents/details")
                                         UrlHandler.setParam("sid", String(student.user_id))
                                         model.appState.value.openOverlay(
-                                                html`<cc-rent-detail-view .studentId="${student.user_id}"></cc-rent-detail-view>`,
+                                                html`<cc-rent-history mode="student" .identifier="${student.user_id}"></cc-rent-history>`,
                                                 () => { UrlHandler.updateUrl("/app/rents") }
                                         )
                                     }}"
@@ -99,7 +99,7 @@ export class RentListStudentComponent extends LitElement {
                                 UrlHandler.updateUrl("/app/rents/details")
                                 UrlHandler.setParam("sid", String(student.user_id))
                                 model.appState.value.openOverlay(
-                                        html`<cc-rent-detail-view .studentId="${student.user_id}"></cc-rent-detail-view>`,
+                                        html`<cc-rent-history .identifier="${student.user_id}"></cc-rent-history>`,
                                         () => { UrlHandler.updateUrl("/app/rents") }
                                 )
                             }}">

@@ -61,7 +61,7 @@ export class ToolbarComponent extends LitElement {
                             <div slot="left" class="icon accent">
                                 ${unsafeSVG(icon(faCamera).html[0])}
                             </div>
-                            Geräte bearbeiten
+                            Geräte verwalten
                         </cc-button>
                     </div>
                 ` : html``
@@ -128,7 +128,7 @@ export class ToolbarComponent extends LitElement {
                             <div slot="left" class="icon accent">
                                 ${unsafeSVG(icon(faCamera).html[0])}
                             </div>
-                            Geräte bearbeiten
+                            Geräte verwalten
                         </cc-button>
                     </div>
                 ` : html``
