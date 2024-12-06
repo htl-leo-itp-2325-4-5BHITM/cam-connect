@@ -12,7 +12,7 @@ Enter the postgres dp to execute commands inside it `docker exec -it postgres-co
 
 And create a database for cam-connect `create database camconnect;`
 
-Now exit postgres and execute commands in the newly created database `docker exec -it postgres-container psql -U postgres -d camconnect`
+Now `exit` postgres and execute commands in the newly created database `docker exec -it postgres-container psql -U postgres -d camconnect`
 
 And create a new user
 ```
