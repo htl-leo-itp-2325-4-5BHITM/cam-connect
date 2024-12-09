@@ -81,7 +81,7 @@ public class TripodType extends DeviceType {
 
     @Override
     public String getCsvHeader() {
-        return "variant; type_id; name; image; status; tags; head_id; height_centimeters\n";
+        return "variant; type_id; name; image_blob; status; tags; head_id; height_centimeters\n";
     }
 
     @Override

@@ -39,7 +39,7 @@ public class AudioType extends DeviceType {
     @Override
     public void update(DeviceTypeGlobalObjectsDTO data) {
         setName(data.name());
-        setImage_blob(data.image());
+        setImage_blob(data.image_blob());
         setConnector(data.connector());
     }
 
@@ -60,7 +60,7 @@ public class AudioType extends DeviceType {
 
     @Override
     public String getCsvHeader() {
-        return "variant; type_id; name; image; status; tags; connector_id;\n";
+        return "variant; type_id; name; image_blob; status; tags; connector_id;\n";
     }
 
     @Override

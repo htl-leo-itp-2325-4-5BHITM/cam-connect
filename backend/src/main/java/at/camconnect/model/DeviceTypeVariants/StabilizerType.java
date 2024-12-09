@@ -78,7 +78,7 @@ public class StabilizerType extends DeviceType {
 
     @Override
     public String getCsvHeader() {
-        return "variant; type_id; name; image; status; tags; max_weight_kilograms; number_of_axis;\n";
+        return "variant; type_id; name; image_blob; status; tags; max_weight_kilograms; number_of_axis;\n";
     }
 
     @Override

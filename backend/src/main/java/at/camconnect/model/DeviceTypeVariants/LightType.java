@@ -35,7 +35,7 @@ public class LightType extends DeviceType {
     public void update(DeviceTypeGlobalObjectsDTO data) {
         try{
             setName(data.name());
-            setImage_blob(data.image());
+            setImage_blob(data.image_blob());
             setRgb(data.rgb());
             setWatts(data.watts());
             setVariable_temperature(data.variable_temperature());
@@ -90,7 +90,7 @@ public class LightType extends DeviceType {
 
     @Override
     public String getCsvHeader() {
-        return "variant; type_id; name; image; status; tags; watts; rgb; variable_temperature;\n";
+        return "variant; type_id; name; image_blob; status; tags; watts; rgb; variable_temperature;\n";
     }
 
     @Override

@@ -35,7 +35,7 @@ public class DroneType extends DeviceType {
     public void update(DeviceTypeGlobalObjectsDTO data) {
         try{
             setName(data.name());
-            setImage_blob(data.image());
+            setImage_blob(data.image_blob());
             setMax_range_kilometers(data.max_range());
             setFlight_time_minutes(data.flight_time_minutes());
             setRequires_license(data.requires_license());
@@ -90,7 +90,7 @@ public class DroneType extends DeviceType {
 
     @Override
     public String getCsvHeader() {
-        return "variant; type_id; name; image; status; tags; max_range_kilometers; flight_time_minutes; requires_license\n";
+        return "variant; type_id; name; image_blob; status; tags; max_range_kilometers; flight_time_minutes; requires_license\n";
     }
 
     @Override

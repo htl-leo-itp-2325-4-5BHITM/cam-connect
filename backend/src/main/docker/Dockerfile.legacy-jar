@@ -1,11 +1,11 @@
 ####
 # This Dockerfile is used in order to build a container that runs the Quarkus application in JVM mode
 #
-# Before building the container image run:
+# Before building the container image_blob run:
 #
 # ./mvnw package -Dquarkus.package.type=legacy-jar
 #
-# Then, build the image with:
+# Then, build the image_blob with:
 #
 # docker build -f src/main/docker/Dockerfile.legacy-jar -t quarkus/backend-legacy-jar .
 #
@@ -13,7 +13,7 @@
 #
 # docker run -i --rm -p 8080:8080 quarkus/backend-legacy-jar
 #
-# If you want to include the debug port into your docker image
+# If you want to include the debug port into your docker image_blob
 # you will have to expose the debug port (default 5005 being the default) like this :  EXPOSE 8080 5005.
 # Additionally you will have to set -e JAVA_DEBUG=true and -e JAVA_DEBUG_PORT=*:5005
 # when running the container
@@ -22,7 +22,7 @@
 #
 # docker run -i --rm -p 8080:8080 quarkus/backend-legacy-jar
 #
-# This image uses the `run-java.sh` script to run the application.
+# This image_blob uses the `run-java.sh` script to run the application.
 # This scripts computes the command line to execute your Java application, and
 # includes memory/GC tuning.
 # You can configure the behavior using the following environment properties:

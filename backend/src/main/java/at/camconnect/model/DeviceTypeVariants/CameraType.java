@@ -103,7 +103,7 @@ public class CameraType extends DeviceType {
 
     @Override
     public String getCsvHeader() {
-        return "variant; type_id; name; image; status; tags; mount_id; system_id; photo_resolution_id; autofocus;\n";
+        return "variant; type_id; name; image_blob; status; tags; mount_id; system_id; photo_resolution_id; autofocus;\n";
     }
 
     @Override

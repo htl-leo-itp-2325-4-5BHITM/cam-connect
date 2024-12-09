@@ -65,7 +65,7 @@ public class SimpleType extends DeviceType {
 
     @Override
     public String getCsvHeader() {
-        return "variant; type_id; name; image; status; tags; description;\n";
+        return "variant; type_id; name; image_blob; status; tags; description;\n";
     }
 
     @Override

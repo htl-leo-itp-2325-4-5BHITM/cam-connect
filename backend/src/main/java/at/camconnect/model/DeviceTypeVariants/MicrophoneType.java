@@ -35,7 +35,7 @@ public class MicrophoneType extends DeviceType {
     public void update(DeviceTypeGlobalObjectsDTO data) {
         try{
             setName(data.name());
-            setImage_blob(data.image());
+            setImage_blob(data.image_blob());
             setNeeds_recorder(data.needs_recorder());
             setConnector(data.connector());
             setNeeds_power(data.needs_power());
@@ -90,7 +90,7 @@ public class MicrophoneType extends DeviceType {
 
     @Override
     public String getCsvHeader() {
-        return "variant; type_id; name; image; status; tags; needs_recorder; connector_id; needs_power;\n";
+        return "variant; type_id; name; image_blob; status; tags; needs_recorder; connector_id; needs_power;\n";
     }
 
     @Override

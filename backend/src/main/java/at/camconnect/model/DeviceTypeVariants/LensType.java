@@ -40,7 +40,7 @@ public class LensType extends DeviceType {
     public void update(DeviceTypeGlobalObjectsDTO data) {
         try{
             setName(data.name());
-            setImage_blob(data.image());
+            setImage_blob(data.image_blob());
             setF_stop(data.f_stop());
             setFocal_length(data.focal_length());
             setMount(data.mount());
@@ -98,7 +98,7 @@ public class LensType extends DeviceType {
 
     @Override
     public String getCsvHeader() {
-        return "variant; type_id; name; image; status; tags; mount_id; f_stop; focal_length;\n";
+        return "variant; type_id; name; image_blob; status; tags; mount_id; f_stop; focal_length;\n";
     }
 
     @Override
