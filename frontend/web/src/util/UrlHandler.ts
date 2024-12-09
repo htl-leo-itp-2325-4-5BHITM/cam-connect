@@ -57,6 +57,11 @@ let pages = {
             user: {
                 handler: () => { UrlHandler.changeOrigin("cc-user-settings") }
             },
+            students: {
+                handler: () => {
+                    UrlHandler.changeOrigin("cc-student-list")
+                }
+            },
             edit: {
                 handler: () => {
                     UrlHandler.changeOrigin("cc-edit")

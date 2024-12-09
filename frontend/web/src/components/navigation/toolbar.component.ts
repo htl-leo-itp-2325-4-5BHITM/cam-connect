@@ -3,7 +3,7 @@ import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/navigation/toolbar.styles.scss'
 import {icon} from '@fortawesome/fontawesome-svg-core'
 import {unsafeSVG} from 'lit/directives/unsafe-svg.js';
-import {faCamera, faTrash, faUpload} from "@fortawesome/free-solid-svg-icons"
+import {faCamera, faTrash, faUpload, faUser} from "@fortawesome/free-solid-svg-icons"
 import {EditPageEnum, ObservedProperty, PageEnum} from "../../model"
 import {ButtonType} from "../basic/button.component"
 import {SimpleColorEnum, SizeEnum} from "../../base"
@@ -63,10 +63,19 @@ export class ToolbarComponent extends LitElement {
                             </div>
                             Geräte verwalten
                         </cc-button>
+                        
+                        <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}"
+                                   @click="${() => {
+                                        UrlHandler.goToPage("/app/students")
+                                    }}">
+                            <div slot="left" class="icon accent">
+                                ${unsafeSVG(icon(faUser).html[0])}
+                            </div>
+                            Schülerliste anzeigen
+                        </cc-button>
                     </div>
                 ` : html``
                 }
-
                 <div class="right">
                     <cc-button 
                         @click="${() => {
@@ -130,10 +139,20 @@ export class ToolbarComponent extends LitElement {
                             </div>
                             Geräte verwalten
                         </cc-button>
+                        
+                        <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}"
+                                   @click="${() => {
+                                        UrlHandler.goToPage("/app/students")
+                                    }}">
+                            <div slot="left" class="icon accent">
+                                ${unsafeSVG(icon(faUser).html[0])}
+                            </div>
+                            Schülerliste anzeigen
+                        </cc-button>
                     </div>
                 ` : html``
                 }
-                
+
                 <div class="right">
                     <cc-button 
                         @click=${() => {

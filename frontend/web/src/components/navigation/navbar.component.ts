@@ -58,7 +58,7 @@ export class NavbarComponent extends LitElement {
                 <div class="logo">
                     ${this.appState.value.screenWidth == "mobile" ?
                         html`<img src="${logoSmall}" alt="logo small" @click="${()=> UrlHandler.setUrl("/app/rents")}">` :
-                        html`<img src="${logo}" alt="cam-connect" @click="${()=> UrlHandler.setUrl("/app/rents")}">`
+                        html`<img src="${logo}" alt="cam-connect" @click="${()=> UrlHandler.setUrl(model.appState.value.backUrl)}">`
                     }
                 </div>
 

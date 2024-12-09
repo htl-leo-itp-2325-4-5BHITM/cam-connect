@@ -1,0 +1,27 @@
+@use "../../base" as *;
+
+:host{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+main{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+
+  width: 30%;
+
+  margin: 1rem;
+}
+
+.student{
+  display: flex;
+  gap: 1rem;
+  padding-block: .5rem;
+
+  border-bottom: 1px solid $gray250;
+}
