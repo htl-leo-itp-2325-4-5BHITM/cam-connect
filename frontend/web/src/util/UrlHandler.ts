@@ -31,12 +31,21 @@ let pages = {
                     details: {
                         handler: () => { UrlHandler.updateUrl("/app/rents/details")
                             console.log("opening details")
-                            //TODO because of stuff like this its probably best to move all the logic related to a change in the url to here and only use that
-                            UrlHandler.setParam("sid", UrlHandler.getParam("sid"))
-                            model.appState.value.openOverlay(
-                                html`<cc-rent-history mode="student" .identifier="${UrlHandler.getParam("sid")}"></cc-rent-history>`,
-                                () => { UrlHandler.updateUrl("/app/rents") }
-                            )
+
+                            if(UrlHandler.getParam("sid") != null) {
+                                //TODO because of stuff like this its probably best to move all the logic related to a change in the url to here and only use that
+                                UrlHandler.setParam("sid", UrlHandler.getParam("sid"))
+                                model.appState.value.openOverlay(
+                                    html`<cc-rent-history mode="student" .identifier="${UrlHandler.getParam("sid")}"></cc-rent-history>`,
+                                    () => { UrlHandler.updateUrl("/app/rents") }
+                                )
+                            } else{
+                                UrlHandler.setParam("did", UrlHandler.getParam("did"))
+                                model.appState.value.openOverlay(
+                                    html`<cc-rent-history mode="device" .identifier="${UrlHandler.getParam("did")}"></cc-rent-history>`,
+                                    () => { UrlHandler.updateUrl("/app/rents") }
+                                )
+                            }
                         },
                         waitForDom: true
                     },

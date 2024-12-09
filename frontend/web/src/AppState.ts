@@ -161,7 +161,7 @@ export class AppState{
         if(variant == "type"){
             devices = devices as Set<DeviceListEntryComponent>
             devices.forEach(device => {
-                if(i++ <= 0){
+                if(i++ <= 0 && this._createRentElement.devices.size <= 0){
                     this.openCreateRentModal(device.deviceTypeFull.deviceType.type_id, "deviceType")
                 } else{
                     this._createRentElement.addDevice("default", true, device.deviceTypeFull.deviceType.type_id)
@@ -171,7 +171,7 @@ export class AppState{
             devices = devices as Set<DeviceSetListEntryComponent>
             devices.forEach(device => {
                 device.deviceSet.deviceSet.device_types.forEach(deviceType => {
-                    if(i++ <= 0){
+                    if(i++ <= 0 && this._createRentElement.devices.size <= 0){
                         this.openCreateRentModal(deviceType.type_id, "deviceType")
                     } else{
                         this._createRentElement.addDevice("default", true, deviceType.type_id)

@@ -2,7 +2,7 @@ import {html, LitElement} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/app/deviceListEntry.styles.scss'
 import {ButtonType} from "../basic/button.component"
-import {ColorEnum} from "../../base"
+import {ColorEnum, SimpleColorEnum, SizeEnum} from "../../base"
 import {DeviceListComponent} from "./deviceList.component";
 import DeviceTypeService, {
     AudioType,
@@ -23,6 +23,7 @@ import {AppState} from "../../AppState"
 import {model} from "../../index"
 import Util from "../../util/Util"
 import {UserRoleEnum} from "../../service/user.service"
+import UrlHandler from "../../util/UrlHandler"
 
 @customElement('cc-device-list-entry')
 export class DeviceListEntryComponent extends LitElement {
