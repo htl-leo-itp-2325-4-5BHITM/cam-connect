@@ -179,7 +179,7 @@ public class RentRepository {
                             "       OR :deviceTypeSearchTerm like '%' || upper(r.device.type.name) || '%' " +
                             "       OR upper(r.device_string) like '%' || :deviceTypeSearchTerm || '%' " +
                             "       OR :deviceTypeSearchTerm like '%' || upper(r.device_string) || '%' " +
-                            "OR :deviceTypeSearchTermEmpty = true) " +
+                            "       OR :deviceTypeSearchTermEmpty = true) " +
                             "order by r.creation_date desc"
                     , Rent.class)
                     .setParameter("studentId", student.getUser_id())

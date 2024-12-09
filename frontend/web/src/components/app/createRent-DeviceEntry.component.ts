@@ -189,10 +189,6 @@ export class CreateRentDeviceEntryComponent extends LitElement {
 
         return DeviceService.search(searchDTO).then(results => {
             return results.filter(result => {
-                console.log(result.data)
-                console.log(this.appState.value.devicesInRentPreview)
-                console.log(this.appState.value.isDeviceInRentPreview(result.data))
-
                 return !this.appState.value.isDeviceInRentPreview(result.data)
             });
         });
