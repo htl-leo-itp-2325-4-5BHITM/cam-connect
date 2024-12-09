@@ -1,4 +1,5 @@
-@import "./variables";
+@use "variables" as *;
+@forward "variables";
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 
 *:not(img, svg, path){

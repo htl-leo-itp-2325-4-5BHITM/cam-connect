@@ -1,6 +1,6 @@
 @use 'sass:color';
 
-@import "../../base";
+@use "../../base" as *;
 
 :host {
   display: flex;

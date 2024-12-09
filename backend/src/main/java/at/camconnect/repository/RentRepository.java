@@ -152,6 +152,7 @@ public class RentRepository {
                         "       OR :studentSearchTerm like '%' || upper(s.lastname) || '%' " +
                         "       OR :studentSearchTerm like '%' || upper(s.firstname) || '%' || upper(s.lastname) || '%' " +
                         "       OR upper(s.firstname) || '%' || upper(s.lastname) like '%' || :studentSearchTerm || '%' " +
+                        "       OR upper(r.device.type.name) like '%' || upper(:studentSearchTerm) || '%' " +
                         "OR :studentSearchTermEmpty = true) " +
                         "group by s.user_id " +
                         orderByString

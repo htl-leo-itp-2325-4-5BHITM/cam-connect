@@ -1,4 +1,4 @@
-@import "../../variables";
+@use "../../variables" as *;
 
 :host{
     --padding: 0.4rem;

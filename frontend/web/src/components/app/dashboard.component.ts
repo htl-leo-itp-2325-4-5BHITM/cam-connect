@@ -156,8 +156,8 @@ export class DashboardComponent extends LitElement {
                         <cc-dropdown slot="sorts" .options="${[
                             {id: OrderByFilterRent.ALPHABETICAL_ASC, data: 'alphabetisch (aufst.)'},
                             {id: OrderByFilterRent.ALPHABETICAL_DESC, data: 'alphabetisch (abst.)'},
-                            {id: OrderByFilterRent.DATE_ASC, data: 'datum (neueste zuerst)'},
-                            {id: OrderByFilterRent.DATE_DESC, data: 'datum (älteste zuerst)'},
+                            {id: OrderByFilterRent.DATE_ASC, data: 'datum (älteste zuerst)'},
+                            {id: OrderByFilterRent.DATE_DESC, data: 'datum (neueste zuerst)'},
                         ]}"
                             .onSelect="${(option) => {
                                 let newFilters = model.appState.value.rentFilters
