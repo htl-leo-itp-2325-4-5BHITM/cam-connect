@@ -34,7 +34,7 @@ let pages = {
                             //TODO because of stuff like this its probably best to move all the logic related to a change in the url to here and only use that
                             UrlHandler.setParam("sid", UrlHandler.getParam("sid"))
                             model.appState.value.openOverlay(
-                                html`<cc-rent-detail-view .studentId="${UrlHandler.getParam("sid")}"></cc-rent-detail-view>`,
+                                html`<cc-rent-history mode="student" .identifier="${UrlHandler.getParam("sid")}"></cc-rent-history>`,
                                 () => { UrlHandler.updateUrl("/app/rents") }
                             )
                         },

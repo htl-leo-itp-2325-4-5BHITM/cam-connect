@@ -140,7 +140,6 @@ button{
         color: var(--color-light);
         margin: 0;
       }
-
       ::slotted(svg){
         @include imgIconColorAccent;
       }
@@ -152,6 +151,24 @@ button{
     &[color="gray"] {
       ::slotted(*) {
         color: var(--color-text);
+      }
+      ::slotted(svg){
+        @include imgIconColorGray800;
+      }
+      ::slotted(img){
+        @include imgIconColorGray800;
+      }
+    }
+
+    &[color="bad"] {
+      ::slotted(*) {
+        color: var(--color-light);
+      }
+      ::slotted(svg){
+        @include imgIconColorBad;
+      }
+      ::slotted(img){
+        @include imgIconColorBad;
       }
     }
   }

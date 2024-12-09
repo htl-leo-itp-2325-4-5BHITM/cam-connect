@@ -1,6 +1,8 @@
 package at.camconnect.repository;
 
 import at.camconnect.dtos.*;
+import at.camconnect.dtos.rent.RentDTO;
+import at.camconnect.dtos.rent.RentIdsDTO;
 import at.camconnect.enums.DeviceStatus;
 import at.camconnect.enums.RentStatusEnum;
 import at.camconnect.model.Rent;
@@ -23,6 +25,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class DeviceRepository {
@@ -300,5 +303,33 @@ public class DeviceRepository {
         }
 
         return new ImportFeedbackDividerDTO(correct, incorrect);
+    }
+
+    public List<RentDTO> associatedRents(Long id) {
+        return em.createQuery(
+            "SELECT r FROM Rent r " +
+                    "where r.device.id = :deviceId " +
+                    "order by r.change_date desc"
+            , Rent.class)
+            .setParameter("deviceId", id)
+            .getResultStream()
+            .map(rent -> new RentDTO(
+                    rent.getRent_id(),
+                    rent.getStatus(),
+                    rent.getType(),
+                    rent.getDevice(),
+                    rent.getDevice_string(),
+                    rent.getTeacher_start(),
+                    rent.getTeacher_end(),
+                    rent.getRent_start(),
+                    rent.getRent_end_planned(),
+                    rent.getRent_end_actual(),
+                    rent.getStudent(),
+                    rent.getNote(),
+                    rent.getVerification_message(),
+                    rent.getCreation_date(),
+                    rent.getChange_date()
+            ))
+            .collect(Collectors.toList());
     }
 }

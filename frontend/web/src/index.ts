@@ -26,7 +26,7 @@ import "./components/app/rentListEntryForStudentview.component"
 import "./components/app/deviceList.component"
 import "./components/app/deviceListEntry.component"
 import "./components/app/deviceSetListEntry.component"
-import "./components/app/rentDetailView.component"
+import "./components/app/rentHistory.component"
 
 import "./components/app/edit/exportImportModal.component"
 import "./components/app/edit/deviceTypeEdit.component"

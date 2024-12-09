@@ -5,7 +5,7 @@ import DeviceService, {Device} from "../../../service/device.service"
 import {ColorEnum, Orientation, SizeEnum} from "../../../base"
 import {unsafeSVG} from "lit/directives/unsafe-svg.js"
 import {icon} from "@fortawesome/fontawesome-svg-core"
-import {faPen, faTrash} from "@fortawesome/free-solid-svg-icons"
+import {faPen, faTrash, faClockRotateLeft} from "@fortawesome/free-solid-svg-icons"
 import {EditPageEnum, ObservedProperty} from "../../../model"
 import {AppState} from "../../../AppState"
 import {model} from "../../../index"
@@ -44,6 +44,16 @@ export class DeviceTypeChildrenEntryComponent extends LitElement {
             
             <div class="edit">
                 <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}"  @click="${(event) => {
+                    model.appState.value.openOverlay(html`<cc-rent-history mode="device" .identifier="${this.device.device_id}"></cc-rent-history>`, ()=>{})
+                    event.stopPropagation()
+                }}">
+                    <div slot="left" class="icon accent">
+                        ${unsafeSVG(icon(faClockRotateLeft).html[0])}
+                    </div>
+                    <p>Verlauf</p>
+                </cc-button>
+                
+                <cc-button type="text" color="${ColorEnum.GRAY}" size="${SizeEnum.SMALL}"  @click="${(event) => {
                     //UrlHandler.updateUrl('/app/edit/device?did=' + this.device.device_id)
                     (model.appState.value.originElement as EditComponent).showModal(this.device, true, EditPageEnum.DEVICE)
                     event.stopPropagation()
@@ -72,7 +82,7 @@ export class DeviceTypeChildrenEntryComponent extends LitElement {
     }
 
     getPropertyValue(property: string, value: any){
-        if(value && value != "") return html`<cc-property-value property="${property}" value="${value}" size="${SizeEnum.SMALL}"></cc-property-value>`
+        if(value && value != "") return html`<cc-property-value property="${property}" value="${value}" size="${SizeEnum.SMALL}" nowrap></cc-property-value>`
         return html``
     }
 

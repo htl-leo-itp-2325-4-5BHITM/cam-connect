@@ -44,8 +44,6 @@ export class EditDeviceModalComponent extends LitElement {
     constructor() {
         super();
         this.appState = new ObservedProperty<AppState>(this, model.appState);
-
-        console.log(this.isEditMode)
     }
 
     connectedCallback() {
@@ -112,7 +110,7 @@ export class EditDeviceModalComponent extends LitElement {
 
     getModalContent() {
             return html`
-                <h1>Gerät Erstellen</h1>
+                <h1>Gerät ${this.isEditMode ? "Bearbeiten" : "Erstellen"}</h1>
                 <div class="contentByDeviceType">
                     <div>
                         <p>Gerätetyp</p>

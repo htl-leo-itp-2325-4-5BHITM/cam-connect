@@ -73,6 +73,8 @@ div{
     transition: all $transitionTimeShort;
     z-index: 2;
     overflow: hidden;
+    display: flex;
+    gap: .5rem;
   }
 }
 
@@ -88,4 +90,12 @@ cc-circle-select{
   span{
     color: $gray800;
   }
+}
+
+.deviceInfos{
+  display: flex;
+  gap: .8rem;
+  flex-wrap: wrap;
+  overflow: hidden;
+  width: 100%;
 }

@@ -1,7 +1,7 @@
 import {model} from "../index"
 import {ccResponse, config, SimpleOption} from "../base"
 import {DeviceType, DeviceTypeSource, DeviceTypeVariantCollection, DeviceTypeVariantEnum} from "./deviceType.service"
-import {Rent, RentByStudentDTO} from "./rent.service"
+import {OrderByFilterRent, Rent, RentByStudentDTO, RentFilterDTO} from "./rent.service"
 import {Api} from "../util/Api"
 
 export enum DeviceStatus{
@@ -99,6 +99,16 @@ export default class DeviceService{
         Api.getData(`/device/getbyid/${device.device_id}/remove`)
             .then(() => {
                 DeviceService.fetchAll()
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
+
+    static associatedRents(deviceId: number) {
+        return Api.getData<Rent[]>(`/device/getbyid/${deviceId}/rents`)
+            .then(result => {
+                return result.data
             })
             .catch(error => {
                 console.error(error)
