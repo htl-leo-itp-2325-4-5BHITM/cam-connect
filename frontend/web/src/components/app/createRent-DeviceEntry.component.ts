@@ -127,6 +127,8 @@ export class CreateRentDeviceEntryComponent extends LitElement {
                                          
                                          let typeInput = this.shadowRoot.querySelector('cc-autocomplete.name') as AutocompleteComponent<DeviceTypeSource>
                                          typeInput.selectSuggestion({id: option.type.type_id, data: option.type})
+                                         
+                                         this.appState.value.toggleDeviceInRentPreview(option)
                                      }}"
                                      .querySuggestions="${(searchTerm) => this.searchForDevice(searchTerm)}"
                                      .iconProvider="${this.provideDeviceIcon}"
@@ -185,7 +187,15 @@ export class CreateRentDeviceEntryComponent extends LitElement {
             onlyAvailable: true
         }
 
-        return DeviceService.search(searchDTO)
+        return DeviceService.search(searchDTO).then(results => {
+            return results.filter(result => {
+                console.log(result.data)
+                console.log(this.appState.value.devicesInRentPreview)
+                console.log(this.appState.value.isDeviceInRentPreview(result.data))
+
+                return !this.appState.value.isDeviceInRentPreview(result.data)
+            });
+        });
     }
 
     //TODO find better icon here

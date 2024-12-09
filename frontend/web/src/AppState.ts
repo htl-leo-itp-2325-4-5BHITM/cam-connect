@@ -5,7 +5,7 @@ import {CreateRentComponent} from "./components/app/createRent.component"
 import {AutocompleteComponent} from "./components/basic/autocomplete.component"
 import DeviceTypeService, {DeviceType, DeviceTypeVariantEnum} from "./service/deviceType.service"
 import {DeviceListEntryComponent} from "./components/app/deviceListEntry.component"
-import DeviceService from "./service/device.service"
+import DeviceService, {Device} from "./service/device.service"
 import RentService, {OrderByFilterRent, RentStatusEnum} from "./service/rent.service"
 import {html, render, TemplateResult} from "lit"
 import UrlHandler from "./util/UrlHandler"
@@ -67,6 +67,8 @@ export class AppState{
     private _editPageType: EditType = DeviceTypeVariantEnum.camera;
     private _createRentModalOpen: boolean = false
     private _createMultiRentModalOpen: boolean = false
+    private _devicesInRentPreview: Set<Device> = new Set<Device>()
+
     private _selectedRentEntries: Set<RentListEntryComponent> = new Set<RentListEntryComponent>()
     private _selectedDeviceEntries: Set<DeviceListEntryComponent> = new Set<DeviceListEntryComponent>()
     //TODO @michi i added this because the setter threw an error IDK man take a look pls
@@ -253,6 +255,10 @@ export class AppState{
         return this._selectedDeviceEntries
     }
 
+    get devicesInRentPreview(): Set<Device> {
+        return this._devicesInRentPreview
+    }
+
     get selectedDeviceTypeEditEntries(): Set<DeviceTypeEditEntryComponent> {
         return this._selectedDeviceTypeEditEntries
     }
@@ -272,6 +278,19 @@ export class AppState{
     set selectedSetEntries(value: Set<DeviceSetListEntryComponent>) {
         this._selectedSetEntries = value
         this.update()
+    }
+
+    toggleDeviceInRentPreview(device: Device){
+        if(this.isDeviceInRentPreview(device)){
+            this.devicesInRentPreview.delete(device)
+        }else{
+            this.devicesInRentPreview.add(device)
+        }
+        this.update()
+    }
+
+    isDeviceInRentPreview(device: Device) {
+        return Array.from(this.devicesInRentPreview).some(d => d.device_id === device.device_id);
     }
 
     addSelectedSetEntry(deviceSetEntry: DeviceSetListEntryComponent){

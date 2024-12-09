@@ -142,6 +142,8 @@ export class CreateRentComponent extends LitElement {
     removeDevice(device: CreateRentDeviceEntryComponent) {
         this.devices.delete(device)
 
+        this.appState.value.toggleDeviceInRentPreview(device.selectedDevice)
+
         if(this.devices.size == 0) {
             device.remove();
             this.addDevice()
