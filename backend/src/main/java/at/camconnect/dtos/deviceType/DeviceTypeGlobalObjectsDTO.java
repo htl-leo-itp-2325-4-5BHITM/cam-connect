@@ -5,7 +5,7 @@ import at.camconnect.model.DeviceTypeAttributes.*;
 public record DeviceTypeGlobalObjectsDTO(
     Long type_id,
     String name,
-    String image,
+    String image_blob,
     boolean autofocus,
     String f_stop,
     String focal_length,

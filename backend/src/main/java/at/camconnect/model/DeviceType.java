@@ -78,7 +78,7 @@ public abstract class DeviceType{
     public void update(DeviceTypeGlobalObjectsDTO data){
         try{
             setName(data.name());
-            setImage_blob(data.image());
+            setImage_blob(data.image_blob());
             setChange_date(LocalDateTime.now());
         }catch (Exception ex){
             throw new CCException(1106);

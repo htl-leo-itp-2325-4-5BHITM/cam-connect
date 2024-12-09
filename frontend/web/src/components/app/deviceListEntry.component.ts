@@ -350,12 +350,12 @@ export class DeviceListEntryComponent extends LitElement {
         return html`
             <div class="image">
                 ${
-                    deviceType.image_blob == "" || deviceType.image_blob == null ?
-                        html`<img src="../../../assets/tempCamera.png" alt="">` :
-                        DeviceTypeService.deviceTypeToIcon(deviceType.variant)
-                }
+                deviceType.image_blob == "" || deviceType.image_blob == null || deviceType.image_blob.length < 10 ?
+                    DeviceTypeService.deviceTypeToIcon(deviceType.variant) :
+                    html`<img src="${deviceType.image_blob}" alt="">`
+            }
             </div>
-        `
+        `;
     }
 
     toggleDeviceCheck(isSimpleClick?: boolean){

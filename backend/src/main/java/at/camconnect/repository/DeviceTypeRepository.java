@@ -202,6 +202,7 @@ public class DeviceTypeRepository {
         em.merge(deviceType);
     }
 
+    @Transactional
     public DeviceType update(Long id, DeviceTypeGlobalObjectsDTO data){
         DeviceType deviceType = getById(id);
         //just call the update method on whichever child class it is

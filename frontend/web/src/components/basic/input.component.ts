@@ -16,6 +16,9 @@ export class InputComponent extends LitElement {
     @property({type: String})
     text?: String = this.innerText;
 
+    @property({type: String})
+    image?: String
+
     @property()
     placeholder?: String = ""
 
@@ -55,6 +58,11 @@ export class InputComponent extends LitElement {
             ${this.type == InputType.TEXTAREA ? 
                     html`
                         <textarea id="inputField" rows="2" placeholder="${this.placeholder}" minlength="2" maxlength="${this.maxLength}" @input="${(e) => {this.onInput(e.target.value)}}" required>${this.text}</textarea>` :
+                this.type == InputType.UPLOAD ?
+                        html`
+                            <input type="file" @input="${(e) => this.handleFileInput(e)}">
+                        `                        
+                        :
                     html`
                         <input id="inputField" type="text" placeholder="${this.placeholder}" value="${this.text}"
                                @input="${(e) => {this.onInput(e.target.value)}}" minlength="2" maxlength="${this.maxLength}" required>
@@ -69,6 +77,19 @@ export class InputComponent extends LitElement {
                 ` : ''
             }
         `
+    }
+
+    handleFileInput(event: Event) {
+        const input = event.target as HTMLInputElement;
+        if (input.files && input.files.length > 0) {
+            const file = input.files[0];
+            const reader = new FileReader();
+            reader.onload = () => {
+                const base64String = reader.result as string;
+                this.onInput(base64String);
+            };
+            reader.readAsDataURL(file);
+        }
     }
 }
 

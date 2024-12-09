@@ -194,7 +194,10 @@ export class EditDeviceTypeModalComponent extends LitElement {
                 deviceType.name = value;
                 this.isFinishable = value.length >= 2;
             }}"></cc-input>
-            <cc-input label="Bild" type="${InputType.UPLOAD}"></cc-input>
+            <cc-input label="Bild" type="${InputType.UPLOAD}" image="${deviceType.image_blob}" .onInput="${(image) => {
+                deviceType.image_blob = image;
+                DeviceTypeService.update(deviceType)
+            }}"></cc-input>
             <div class="separator">
                 <cc-line></cc-line>
             </div>
