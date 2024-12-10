@@ -82,11 +82,9 @@ export default class RentService {
             rentFiltersForBackend.studentSearchTerm = model.appState.value.searchTerm
         }
 
-        console.log(rentFiltersForBackend)
-
         Api.postData<RentFilterDTO, RentByStudentDTO[]>("/rent/getall", rentFiltersForBackend)
             .then(result => {
-                console.log(result)
+                console.log(result.data)
                 model.loadRents(result.data || [])
             })
             .catch(error => {
@@ -114,8 +112,8 @@ export default class RentService {
         }
     }
 
-    static create(rent: CreateRentDTO[]) {
-        Api.postData("/rent/create", rent)
+    static create(rentList: CreateRentDTO[]) {
+        Api.postData("/rent/create", rentList)
             .then((result) => {
                 model.appState.value.createRentElement.close()
 
