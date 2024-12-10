@@ -137,6 +137,7 @@ export default class DeviceTypeService {
 
         Api.postData<DeviceFilterDTO, DeviceTypeFullDTO[]>("/devicetype/getallfull", deviceFiltersForBackend)
             .then(result => {
+                console.log(result.data)
                 model.loadDeviceTypesFull(result.data)
             })
             .catch(error => {

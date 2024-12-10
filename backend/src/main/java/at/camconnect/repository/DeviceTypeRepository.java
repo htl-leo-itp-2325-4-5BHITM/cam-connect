@@ -119,7 +119,7 @@ public class DeviceTypeRepository {
             if (isMatchingWithFilters(deviceType, filters)) {
                 Long availableDevices = em.createQuery(
                                 "select coalesce(count(d), 0) from Device d " +
-                                        "where d.device_id not in (select r.device.device_id from Rent r where r.status != 'CREATED' and r.status != 'RETURNED')" +
+                                        "where d.device_id not in (select r.device.device_id from Rent r where r.status != 'CREATED' and r.status != 'RETURNED' and r.status != 'DELETED' and r.device.device_id != null)" +
                                         "group by d.type.type_id " +
                                         "having d.type.type_id = :type_id", Long.class)
                         .setParameter("type_id", deviceType.getType_id())
