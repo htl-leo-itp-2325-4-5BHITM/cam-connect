@@ -82,6 +82,8 @@ export default class RentService {
             rentFiltersForBackend.studentSearchTerm = model.appState.value.searchTerm
         }
 
+        console.log(rentFiltersForBackend)
+
         Api.postData<RentFilterDTO, RentByStudentDTO[]>("/rent/getall", rentFiltersForBackend)
             .then(result => {
                 console.log(result.data)
