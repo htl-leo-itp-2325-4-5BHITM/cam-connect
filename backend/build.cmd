@@ -1,3 +1,3 @@
 ./mvnw package -DskipTests
 docker build --tag ghcr.io/elyanuki/camconnect-backend .
-docker compose up
+docker push ghcr.io/elyanuki/camconnect-backend
