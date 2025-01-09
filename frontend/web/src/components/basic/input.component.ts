@@ -79,7 +79,7 @@ export class InputComponent extends LitElement {
         `
     }
 
-    handleFileInput(event: Event) {
+   /* handleFileInput(event: Event) {
         const input = event.target as HTMLInputElement;
         if (input.files && input.files.length > 0) {
             const file = input.files[0];
@@ -90,7 +90,50 @@ export class InputComponent extends LitElement {
             };
             reader.readAsDataURL(file);
         }
+    }*/
+
+    //practically fully GPT generated
+    handleFileInput(event: Event) {
+        const input = event.target as HTMLInputElement;
+        if (input.files && input.files.length > 0) {
+            const file = input.files[0];
+            const reader = new FileReader();
+
+            reader.onload = () => {
+                const base64String = reader.result as string;
+
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    // Target height and dynamic width calculation
+                    const targetHeight = 300; // Fixed height
+                    const targetWidth = (img.width / img.height) * targetHeight;
+
+                    // Set the canvas dimensions
+                    canvas.width = targetWidth;
+                    canvas.height = targetHeight;
+
+                    // Draw the downscaled image onto the canvas
+                    if (ctx) {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height); // Ensure canvas is clear
+                        ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+                    }
+
+                    // Get the downscaled image as a base64 string (preserve transparency)
+                    const downscaledBase64 = canvas.toDataURL('image/png'); // Use 'image/png' to retain transparency
+                    this.onInput(downscaledBase64);
+                };
+
+                img.src = base64String;
+            };
+
+            reader.readAsDataURL(file);
+        }
     }
+
+
 }
 
 declare global {

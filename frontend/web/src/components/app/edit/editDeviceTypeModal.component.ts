@@ -206,7 +206,7 @@ export class EditDeviceTypeModalComponent extends LitElement {
                 <cc-line></cc-line>
             </div>
             <div class="tags">  
-                <cc-autocomplete label="Tags" class="tagSelector" color="${ColorEnum.GRAY}"
+                <cc-autocomplete placeholder="Tags" class="tagSelector" color="${ColorEnum.GRAY}"
                                  size="${SizeEnum.MEDIUM}"
                                  .onSelect="${(option: Tag) => {
                                      this.tags.push(option);
