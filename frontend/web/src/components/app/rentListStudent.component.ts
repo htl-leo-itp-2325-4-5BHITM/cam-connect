@@ -53,6 +53,7 @@ export class RentListStudentComponent extends LitElement {
             <div class="entries">
                 ${rentList.map(rent => {
                     if(rent.status != RentStatusEnum.RETURNED){
+                        console.log(rent)
                         return html`<cc-rent-list-entry .rent="${rent}"></cc-rent-list-entry>`
                     }
                 })}

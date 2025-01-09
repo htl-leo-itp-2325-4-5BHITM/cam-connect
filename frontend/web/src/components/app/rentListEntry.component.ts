@@ -39,7 +39,8 @@ export class RentListEntryComponent extends LitElement {
     protected firstUpdated(_changedProperties: PropertyValues) {
         super.firstUpdated(_changedProperties);
 
-            this.classList.add("hoverHighlighted")
+        this.classList.add("hoverHighlighted")
+
         if(model.appState.value.userSettings.showHoverEffectOfRentListEntry){
 
         }

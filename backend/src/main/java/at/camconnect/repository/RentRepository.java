@@ -142,6 +142,8 @@ public class RentRepository {
         List<User> students = em.createQuery(
                 "SELECT s FROM Rent r " +
                         "join User s on r.student.user_id = s.user_id " +
+                        "LEFT JOIN r.device d " +
+                        "LEFT JOIN d.type t " +
                         "where (s.school_class IN :schoolClasses OR :schoolClassesEmpty = true) " +
                         "and (s.user_id IN :studentIds OR :studentIdsEmpty = true) " +
                         "and (" +
@@ -151,8 +153,10 @@ public class RentRepository {
                         "       OR :studentSearchTerm like '%' || upper(s.lastname) || '%' " +
                         "       OR :studentSearchTerm like '%' || upper(s.firstname) || '%' || upper(s.lastname) || '%' " +
                         "       OR upper(s.firstname) || '%' || upper(s.lastname) like '%' || :studentSearchTerm || '%' " +
-                        "       OR upper(r.device.type.name) like '%' || upper(:studentSearchTerm) || '%' " +
-                        "OR :studentSearchTermEmpty = true) " +
+                        "       OR upper(d.type.name) like '%' || upper(:studentSearchTerm) || '%' " +
+                        "    OR (d IS NOT NULL AND t IS NOT NULL AND upper(t.name) LIKE '%' || upper(:studentSearchTerm) || '%') " +
+                        "       OR upper(r.device_string) like '%' || upper(:studentSearchTerm) || '%' " +
+                        "       OR :studentSearchTermEmpty = true) " +
                         "group by s.user_id " +
                         orderByString
                 ,User.class)
@@ -167,16 +171,19 @@ public class RentRepository {
         List<RentByStudentDTO> result = new LinkedList<>();
 
         //INFO
-        //this is currently just joining to half the db and not using a proper DTO,
+        // this is currently just joining to half the db and not using a proper DTO,
         // this might cause performance problems in the future but is fine for now
         for (User student : students) {
+            System.out.println(student.getUsername());
             List<RentDTO> rents = em.createQuery(
                     "SELECT r FROM Rent r " +
+                            "LEFT JOIN r.device d " +
+                            "LEFT JOIN d.type t " +
                             "where r.student.user_id = :studentId " +
                             "and (r.status IN :statuses OR :statusesEmpty = true) " +
                             "and (" +
-                            "       upper(r.device.type.name) like '%' || :deviceTypeSearchTerm || '%' " +
-                            "       OR :deviceTypeSearchTerm like '%' || upper(r.device.type.name) || '%' " +
+                            "       (d IS NOT NULL AND t IS NOT NULL AND upper(t.name) LIKE '%' || :deviceTypeSearchTerm || '%') " +
+                            "       OR (d IS NOT NULL AND t IS NOT NULL AND :deviceTypeSearchTerm like '%' || upper(t.name) || '%' ) " +
                             "       OR upper(r.device_string) like '%' || :deviceTypeSearchTerm || '%' " +
                             "       OR :deviceTypeSearchTerm like '%' || upper(r.device_string) || '%' " +
                             "       OR :deviceTypeSearchTermEmpty = true) " +
