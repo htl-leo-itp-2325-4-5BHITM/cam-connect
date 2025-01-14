@@ -108,4 +108,32 @@ cc-sidebar{
   }
 }
 
+#tutorial-overlay{
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  display: none;
 
+  .background{
+    position: absolute;
+    inset: 0;
+    clip-path: polygon(0% 0%, 0% 100%, 400px 100%, 400px 400px, 450px 400px, 450px 450px, 400px 450px, 400px 100%, 100% 100%, 100% 0%);
+    background-color: rgba(0, 0, 0, 50%);
+  }
+
+  .description{
+    position: absolute;
+    padding: .5rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    background-color: rgba(0, 0, 0, 20%);
+    backdrop-filter: blur(30px);
+    border-radius: .5rem;
+
+    .buttons{
+      display: flex;
+      gap: .5rem;
+    }
+  }
+}

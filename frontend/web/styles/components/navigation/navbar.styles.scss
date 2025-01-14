@@ -10,6 +10,7 @@
   padding: 0.3rem 0.75rem !important;
   box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.15);
   height: fit-content;
+  position: relative;
 }
 
 :host([type = "simple"]){
@@ -93,4 +94,16 @@ div.search{
   @media screen and (max-width: 750px){
     display: none;
   }
+}
+
+.helpMenu{
+  position: absolute;
+  display: none;
+  right: .5rem;
+  top: calc(100% + 0.5rem);
+  background-color: $gray350;
+  border-radius: .5rem;
+  padding: .5rem;
+  box-sizing: border-box;
+  z-index: 100;
 }

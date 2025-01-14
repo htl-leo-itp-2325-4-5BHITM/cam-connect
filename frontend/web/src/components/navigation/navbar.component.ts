@@ -19,6 +19,8 @@ import {ButtonType} from "../basic/button.component"
 import PopupEngine from "../../util/PopupEngine"
 import {KeyBoardShortCut} from "../../util/KeyboardShortcut"
 import {Tooltip} from "../../util/Tooltip"
+import {DashboardComponent} from "../app/dashboard.component"
+import {UserRoleEnum} from "../../service/user.service"
 
 @customElement('cc-navbar')
 export class NavbarComponent extends LitElement {
@@ -63,7 +65,7 @@ export class NavbarComponent extends LitElement {
                 </div>
 
                 <div class="tools">
-                    <icon-cta>${unsafeSVG(icon(faCircleQuestion).html[0])}</icon-cta>
+                    ${this.generateHelpMenu()}
                 </div>
             `
 
@@ -108,9 +110,30 @@ export class NavbarComponent extends LitElement {
                     </div>
                 </div>
                 <!-- <icon-cta @click="${this.reload}" class="reload">${unsafeSVG(icon(faArrowRotateRight).html[0])}</icon-cta> -->
-                <icon-cta>${unsafeSVG(icon(faCircleQuestion).html[0])}</icon-cta>
+                ${this.generateHelpMenu()}
             </div>
         `
+    }
+
+    generateHelpMenu(){
+        return html`
+            <icon-cta @click="${this.toggleHelpMenu}">${unsafeSVG(icon(faCircleQuestion).html[0])}</icon-cta>
+            <div class="helpMenu">
+                ${model.appState.value.currentUser?.role == UserRoleEnum.MEDT_TEACHER ? html`<cc-button type="${ButtonType.TEXT}" @click="${this.startTutorial}">Start tutorial</cc-button>` : ""}
+            </div>
+        `
+    }
+
+    toggleHelpMenu(){
+        let menuPopup = this.shadowRoot.querySelector(".helpMenu") as HTMLElement
+
+        AnimationHelper.toggleVisibility(menuPopup)
+    }
+
+    startTutorial(){
+        let dashboard = this.appState.value.appElement.shadowRoot.querySelector("cc-dashboard") as DashboardComponent
+
+        dashboard.startTutorial()
     }
 
     connectedCallback() {

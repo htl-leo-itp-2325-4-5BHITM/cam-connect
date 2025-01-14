@@ -322,6 +322,17 @@ export class AnimationHelper{
             }
         },duration)
     }
+
+    static toggleVisibility(elem: Element, display: string = "block", showDuration:number = 200, hideDuration: number = 200){
+        let elemAsHTMLElement = elem as HTMLElement
+
+        if(elemAsHTMLElement.dataset.visibility == "visible") {
+            this.hide(elem, hideDuration)
+        }
+        else {
+            this.show(elem, display, showDuration)
+        }
+    }
 }
 
 /**

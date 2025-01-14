@@ -25,35 +25,35 @@ export class DashboardComponent extends LitElement {
         {name: "Warte auf Bestätigung", id: "WAITING"},
         {name: "Bestätigt", id: "CONFIRMED"},
         {name: "Abgelehnt", id: "DECLINED"}
-    ] as const)
+    ])
 
     private firstGraders = new BehaviorSubject<FilterOption[]>([
         {name: "1AHITM", id: "1AHITM"},
         {name: "1BHITM", id: "1BHITM"},
         {name: "1CHITM", id: "1CHITM"}
-    ] as const)
+    ])
 
     private secondGraders = new BehaviorSubject<FilterOption[]>([
         {name: "2AHITM", id: "2AHITM"},
         {name: "2BHITM", id: "2BHITM"},
         {name: "2CHITM", id: "2CHITM"}
-    ] as const)
+    ])
 
     private thirdGraders = new BehaviorSubject<FilterOption[]>([
         {name: "3AHITM", id: "3AHITM"},
         {name: "3BHITM", id: "3BHITM"},
         {name: "3CHITM", id: "3CHITM"}
-    ] as const)
+    ])
 
     private fourthGraders = new BehaviorSubject<FilterOption[]>([
         {name: "4AHITM", id: "4AHITM"},
         {name: "4BHITM", id: "4BHITM"},
-    ] as const)
+    ])
 
     private fithGraders = new BehaviorSubject<FilterOption[]>([
         {name: "5AHITM", id: "5AHITM"},
         {name: "5BHITM", id: "5BHITM"},
-    ] as const)
+    ])
 
     constructor() {
         super();
@@ -194,6 +194,18 @@ export class DashboardComponent extends LitElement {
             <cc-navbar></cc-navbar>
             ${this.appState.value.screenWidth == "desktop" ? sidebar : ""}
             
+            <div id="tutorial-overlay">
+                <div class="background"></div>
+                <div class="highlight"></div>
+                <div class="description">
+                    <p class="text"></p>
+                    <div class="buttons">
+                        <cc-button @click="${this.cancelTutorial}">cancel tutorial</cc-button>
+                        <cc-button @click="${this.nextTutorialStep}">next</cc-button>
+                    </div>
+                </div>
+            </div>
+            
             <div class="toolbar-container">
                 ${this.appState.value.screenWidth == "mobile" ? sidebar : ""}
                 
@@ -293,6 +305,55 @@ export class DashboardComponent extends LitElement {
 
     autoCloseOverlay(event: MouseEvent){
         if(event.composedPath()[0] == this.shadowRoot.querySelector("#overlay")) model.appState.value.closeOverlay()
+    }
+
+    highlightElement(element: HTMLElement, description: string){
+        let overlay = this.shadowRoot.querySelector("#tutorial-overlay") as HTMLElement
+        let highlightElement = overlay.querySelector(".highlight") as HTMLElement
+        let descriptionElement = overlay.querySelector(".description") as HTMLElement
+        let backgroundElement = overlay.querySelector(".background") as HTMLElement
+
+
+        let offset = 5
+        let rect = element.getBoundingClientRect()
+
+        highlightElement.style.width = rect.width + "px"
+        highlightElement.style.height = rect.height + "px"
+        highlightElement.style.top = rect.top + "px"
+        highlightElement.style.left = rect.left + "px"
+
+        descriptionElement.querySelector("p.text").innerHTML = description
+        descriptionElement.style.top = rect.top + "px"
+        descriptionElement.style.left = rect.left + rect.width + 20 + "px"
+
+        backgroundElement.style.clipPath = `polygon(0% 0%, 0% 100%, ${rect.left-offset}px 100%, ${rect.left-offset}px ${rect.top-offset}px, ${rect.left+rect.width+offset}px ${rect.top-offset}px, ${rect.left+rect.width+offset}px ${rect.top+rect.height+offset}px, ${rect.left-offset}px ${rect.top+rect.height+offset}px, ${rect.left-offset}px 100%, 100% 100%, 100% 0%)`
+    }
+
+    currentTutorialStep = 0
+    tutorialSteps = []
+
+    startTutorial(){
+        (this.shadowRoot.querySelector("#tutorial-overlay") as HTMLElement).style.display = "block"
+
+        this.tutorialSteps = [
+            {element: this.shadowRoot.querySelector("cc-sidebar"), description: "Hier findest du alle Geräte und Gerätesets"},
+            {element: this.shadowRoot.querySelector("cc-navbar").shadowRoot.querySelector("cc-select"), description: "wähle page"}
+        ]
+
+        this.currentTutorialStep = 0
+
+        this.nextTutorialStep()
+    }
+
+    nextTutorialStep(){
+        let currentStep = this.tutorialSteps[this.currentTutorialStep]
+        console.log(currentStep)
+        this.highlightElement(currentStep.element, currentStep.description)
+        this.currentTutorialStep++
+    }
+
+    cancelTutorial(){
+        (this.shadowRoot.querySelector("#tutorial-overlay") as HTMLElement).style.display = "none"
     }
 }
 
