@@ -313,20 +313,30 @@ export class DashboardComponent extends LitElement {
         let descriptionElement = overlay.querySelector(".description") as HTMLElement
         let backgroundElement = overlay.querySelector(".background") as HTMLElement
 
-
         let offset = 5
         let rect = element.getBoundingClientRect()
 
-        highlightElement.style.width = rect.width + "px"
-        highlightElement.style.height = rect.height + "px"
-        highlightElement.style.top = rect.top + "px"
-        highlightElement.style.left = rect.left + "px"
+        let coords = {
+            top: rect.top - offset + "px",
+            left: rect.left - offset + "px",
+            right: rect.left + rect.width + offset + "px",
+            bottom: rect.top + rect.height + offset + "px"
+        }
+
+        highlightElement.style.top = rect.top - offset + "px"
+        highlightElement.style.left = rect.left - offset + "px"
+        highlightElement.style.height = rect.height + offset*2 + "px"
+        highlightElement.style.width = rect.width + offset*2 + "px"
 
         descriptionElement.querySelector("p.text").innerHTML = description
         descriptionElement.style.top = rect.top + "px"
         descriptionElement.style.left = rect.left + rect.width + 20 + "px"
 
-        backgroundElement.style.clipPath = `polygon(0% 0%, 0% 100%, ${rect.left-offset}px 100%, ${rect.left-offset}px ${rect.top-offset}px, ${rect.left+rect.width+offset}px ${rect.top-offset}px, ${rect.left+rect.width+offset}px ${rect.top+rect.height+offset}px, ${rect.left-offset}px ${rect.top+rect.height+offset}px, ${rect.left-offset}px 100%, 100% 100%, 100% 0%)`
+        let cp = `polygon(0% 0%, 0% 100%, ${coords.left} 100%, ${coords.left} ${coords.top}, ${coords.right} ${coords.top}, ${coords.right} ${coords.bottom}, ${coords.left} ${coords.bottom}, ${coords.left} 100%, 100% 100%, 100% 0%)`
+
+        console.log(cp)
+
+        backgroundElement.style.clipPath = cp
     }
 
     currentTutorialStep = 0
