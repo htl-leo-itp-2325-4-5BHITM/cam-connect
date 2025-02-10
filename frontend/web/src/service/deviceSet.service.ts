@@ -63,7 +63,7 @@ export default class DeviceSetService{
     }
 
     static remove(deviceSet: DeviceSet) {
-        Api.putData("/deviceset/getbyid/delete/" + deviceSet.id)
+        Api.putData(`/deviceset/getbyid/${deviceSet.id}/delete`, deviceSet)
             .then(result => {
                 if (result.ccStatus.statusCode == 1000) {
                     DeviceSetService.fetchAll();
@@ -90,7 +90,7 @@ export default class DeviceSetService{
     }
 
     static update(element: DeviceSetCreateDTO) {
-        Api.putData("/deviceset/update", element)
+        Api.putData(`/deviceset/getbyid/${element.id}/update`, element)
             .then(result => {
                 if (result.ccStatus.statusCode == 1000) {
                     DeviceSetService.fetchAll();

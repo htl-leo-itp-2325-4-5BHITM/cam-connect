@@ -30,6 +30,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @ApplicationScoped
+@Transactional
 public class DeviceTypeRepository {
     private static final Logger log = LoggerFactory.getLogger(DeviceTypeRepository.class);
     @Inject

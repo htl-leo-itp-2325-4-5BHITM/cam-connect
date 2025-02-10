@@ -104,13 +104,8 @@ export class SidebarComponent extends LitElement {
                             return html`
                                 <div class="${value.id as DeviceTypeVariantEnum == this.appState.value.editPageType ? 'selected' : ''}"
                                      @click="${() => {
-                                         if(this.appState.value.editPageType == null){
-                                             UrlHandler.setUrl('/app/edit?type=' + value.id as string)
-                                         } else{
-                                             UrlHandler.updateUrl('/app/edit')
-                                             UrlHandler.clearParams()
-                                             UrlHandler.setParam("type", value.id as string)
-                                         }
+                                         UrlHandler.updateUrl('/app/edit')
+                                         UrlHandler.setParam("type", value.id as string)
 
                                          this.appState.value.clearSelectedDeviceEditEntries()
                                          this.appState.value.clearSelectedDeviceTypeEditEntries()
@@ -126,13 +121,8 @@ export class SidebarComponent extends LitElement {
                     }
                     
                     <div class="${model.appState.value.editPage == EditPageEnum.DEVICESET ? 'selected' : ''} deviceSet" @click="${() => {
-                        if(this.appState.value.editPageType == null){
-                            UrlHandler.setUrl('/app/edit?type=set')
-                        } else{
-                            UrlHandler.updateUrl('/app/edit')
-                            UrlHandler.clearParams()
-                            UrlHandler.setParam("type", "set")
-                        }
+                        UrlHandler.updateUrl('/app/edit')
+                        UrlHandler.setParam("type", "set")
 
                         this.appState.value.clearSelectedDeviceEditEntries()
                         this.appState.value.clearSelectedDeviceTypeEditEntries()
