@@ -98,6 +98,8 @@ export default class AuthService {
     }
 
     static validateAccessToken() {
+        console.log(model.appState.value.access_token)
+
         return fetch(config.api_url + "/auth/validate", {
             method: "POST",
             headers: {

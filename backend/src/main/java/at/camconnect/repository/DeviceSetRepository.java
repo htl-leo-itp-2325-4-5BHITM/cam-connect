@@ -9,6 +9,7 @@ import at.camconnect.model.Tag;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -84,6 +85,7 @@ public class DeviceSetRepository {
         return minValue;
     }
 
+    @Transactional
     public DeviceSet create(DeviceSetDTO dto){
         DeviceSet deviceSet = new DeviceSet(dto.name(), dto.description(), dto.status());
         em.persist(deviceSet);
@@ -107,6 +109,7 @@ public class DeviceSetRepository {
         return deviceSet;
     }
 
+    @Transactional
     public void update(Long id, DeviceSetDTO dto) {
         DeviceSet deviceSet = em.find(DeviceSet.class, id);
 
@@ -126,6 +129,7 @@ public class DeviceSetRepository {
         em.merge(deviceSet);
     }
 
+    @Transactional
     public void delete(Long id) {
         DeviceSet deviceSet = em.find(DeviceSet.class, id);
         em.remove(deviceSet);

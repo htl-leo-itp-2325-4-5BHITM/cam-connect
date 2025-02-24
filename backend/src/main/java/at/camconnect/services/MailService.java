@@ -28,7 +28,7 @@ public class MailService {
     String FRONTEND_URL;
 
     public static void sendReturnEmail(Rent rent) {
-        /*I dont think we need to annoy uses all the tme by sending them emails because of stuff like this*/
+        /*I dont think we need to annoy users all the time by sending them emails because of stuff like this*/
     }
 
     public void sendConfirmEmail(List<Rent> rents) {
