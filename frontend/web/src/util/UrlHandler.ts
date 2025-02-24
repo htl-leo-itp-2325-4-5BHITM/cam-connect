@@ -13,9 +13,12 @@ let pages = {
 
             model.appState.value.setAccessToken(localStorage["cc-access_token"])
                 .then(user => {
-                    model.fetchAll()
-                    model.createSocketConnection()
-                    AuthService.validateAccessToken()
+                    AuthService.validateAccessToken().then((valid) => {
+                        if(valid == true){
+                            model.fetchAll()
+                            model.createSocketConnection()
+                        }
+                    })
                 })
                 .catch((e) => {
                     alert("an error occured while trying to fetch data or validate the access token, please take a look")

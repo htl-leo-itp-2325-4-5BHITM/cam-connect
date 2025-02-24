@@ -26,6 +26,7 @@ For the backend to run you need to create a .env file in the backend folder with
 ```
   FRONTEND_URL=http://localhost:4200
   EMAIL_PASSWORD=<ask-someone-for-the-pw>
+  AUTH_URL=auth.htl-leonding.ac.at
 ```
 
 ### run
