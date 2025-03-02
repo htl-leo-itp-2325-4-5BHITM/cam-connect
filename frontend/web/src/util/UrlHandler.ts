@@ -65,7 +65,8 @@ let pages = {
                 handler: () => { model.appState.value.page = PageEnum.EQUIPMENT },
             },
             user: {
-                handler: () => { UrlHandler.changeOrigin("cc-user-settings") }
+                handler: () => { UrlHandler.changeOrigin("cc-user-settings") },
+                permit: [UserRoleEnum.MEDT_TEACHER],
             },
             students: {
                 handler: () => {

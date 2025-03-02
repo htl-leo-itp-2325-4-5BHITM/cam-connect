@@ -12,6 +12,7 @@ import {DeviceTypeVariantEnum} from "../../service/deviceType.service"
 import {Tooltip} from "../../util/Tooltip"
 import {EditComponent} from "../app/edit/edit.component"
 import {UserRoleEnum} from "../../service/user.service"
+import {UserSettingsComponent} from "../app/userSettings.component"
 
 @customElement('cc-sidebar')
 export class SidebarComponent extends LitElement {
@@ -70,13 +71,8 @@ export class SidebarComponent extends LitElement {
                         <slot name="secondaryFilters"></slot>
                     </div>
                 </div>
-    
-                <div class="user" @click="${() => {
-                    UrlHandler.goToPage('/app/user')
-                }}">
-                    <img src="../../../assets/icon/user-icon-default.svg" alt="user">
-                    <p>${this.appState.value.currentUser?.firstname} ${this.appState.value.currentUser?.lastname}</p>
-                </div>
+                
+                ${this.generateUser()}
             `
         }
         else {
@@ -135,14 +131,41 @@ export class SidebarComponent extends LitElement {
                     </div>
                 </cc-select>
 
-                <div class="user" @click="${() => {
-                    UrlHandler.goToPage('/app/user')
-                }}">
-                    <img src="../../../assets/icon/user-icon-default.svg" alt="user">
-                    <p>${this.appState.value.currentUser?.firstname} ${this.appState.value.currentUser?.lastname}</p>
-                </div>
+                ${this.generateUser()}
             `
         }
+    }
+
+    generateUser(){
+        let styles = html`
+            <style>
+                .user:hover{
+                    background-color: rgba(66,66,66,1);
+                    cursor: pointer;
+    
+                    p{
+                        text-decoration-color: rgba(173,173,173,1);
+                    }
+    
+                    img{
+                        outline-color: rgba(204,204,204,1);
+                    }
+                }
+            </style>
+        `
+
+        return html`
+            ${model.appState.value.currentUser?.role.includes(UserRoleEnum.MEDT_TEACHER) ? styles : ""}
+            
+            <div class="user" @click="${() => {
+                if(model.appState.value.currentUser.role.includes(UserRoleEnum.MEDT_TEACHER)) {
+                    UrlHandler.goToPage('/app/user')
+                }
+            }}">
+                <img src="../../../assets/icon/user-icon-default.svg" alt="user">
+                <p>${this.appState.value.currentUser?.firstname} ${this.appState.value.currentUser?.lastname}</p>
+            </div>
+        `
     }
 
     setSecondaryFilterVisibility(){

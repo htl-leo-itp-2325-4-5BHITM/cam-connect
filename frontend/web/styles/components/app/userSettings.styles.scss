@@ -10,7 +10,9 @@
 
 main{
   width: 40%;
-  margin-inline: auto;
+  min-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
   padding-block: 4rem;
 }
 

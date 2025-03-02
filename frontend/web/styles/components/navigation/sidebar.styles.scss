@@ -103,8 +103,6 @@ cc-line{
   background-color: $gray350;
   border-top: 2px solid $gray400;
 
-  cursor: pointer;
-
   position: relative;
 
   &::after{
@@ -124,18 +122,6 @@ cc-line{
     text-decoration-color: transparent;
 
     transition: text-decoration-color .2s;
-  }
-
-  &:hover{
-    background-color: $gray400;
-
-    p{
-      text-decoration-color: $gray700;
-    }
-
-    img{
-      outline-color: $gray800;
-    }
   }
 
   img{

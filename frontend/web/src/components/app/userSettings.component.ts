@@ -27,14 +27,18 @@ export class UserSettingsComponent extends LitElement {
             <cc-navbar type="back"></cc-navbar>
             
             <main>
+                <!--
                 <section>
                     <h1>Benachrichtigungen</h1>
                     <cc-toggle>Send emails</cc-toggle>
                     <cc-toggle>Show push notifications</cc-toggle>
                 </section>
-                
+                -->
+                    
+                <!--
                 <section>
                     <h1>Settings</h1>
+                    <cc-toggle>Email benachrichtigungen senden</cc-toggle>
                     <div class="line">
                         <p>Darstellung</p>
                         <cc-select size="${SizeEnum.MEDIUM}" color="${SimpleColorEnum.GRAY}" heavy .onSelect="${option=>this.updateSetting("isDarkmode", option, prop => prop=='dark')}">
@@ -54,16 +58,19 @@ export class UserSettingsComponent extends LitElement {
                     <cc-toggle>Eingabefeld Inhalte beim klick markieren</cc-toggle>
                     <cc-toggle>Hover-Effekt der Verleiheinträge anzeigen</cc-toggle>
                 </section>
+                -->
                 
+                <!--
                 <section>
                     <h1>Keymap</h1>
                     ${this.generateInputField("Name", "text")}
                     ${this.generateInputField("Name", "text")}
                     ${this.generateInputField("Name", "text")}
                 </section>
+                -->
                 
                 <section>
-                    <h1>Verwalten</h1>
+                    <h1>Admin Menü</h1>
                     <div class="line">
                         <p>Alle Verleiheinträge exportieren</p>
                         <a href="${config.api_url}/rent/getcsv" download>
@@ -79,7 +86,7 @@ export class UserSettingsComponent extends LitElement {
                     </div>
                     
                     <div class="inputField line">
-                        <label for="importRents">Import rents</label>
+                        <label for="importRents">Verleiheinträge importieren</label>
                         <input id="importRents" type="file" @change="${(event) => {this.importDataFromCsv(event)}}" accept=".csv"/>
                     </div>
                     
