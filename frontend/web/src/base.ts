@@ -5,8 +5,8 @@ import localeDe from "air-datepicker/locale/de"
 import PopupEngine from "./util/PopupEngine"
 
 export const config = {
-    api_url: "http://localhost:8080/api/",
-    socket_url: "ws://localhost:8080/socket/",
+    api_url: "http://localhost:8080/api",
+    socket_url: "ws://localhost:8080/socket",
     do_logs: true,
 }
 

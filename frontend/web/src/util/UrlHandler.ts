@@ -9,6 +9,10 @@ import {takeWhile} from "rxjs"
 let pages = {
     app: {
         handler: () => {
+            model.appState.value.setAccessToken(localStorage["cc-access_token"])
+
+            UrlHandler.changeOrigin("cc-dashboard")
+
             AuthService.refreshToken().then(newResponse => {
                 console.log("refreshed access token", newResponse)
 
@@ -18,8 +22,6 @@ let pages = {
                             if(valid == true){
                                 model.fetchAll()
                                 model.createSocketConnection()
-
-                                UrlHandler.changeOrigin("cc-dashboard")
                             }
                         })
                     })

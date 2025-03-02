@@ -25,49 +25,55 @@ export class StudentListComponent extends LitElement {
         super()
         this.appState = new ObservedProperty<AppState>(this, model.appState)
         this.students = new ObservedProperty<Student[]>(this, model.students)
-
-        console.log(this.students)
     }
 
     render() {
         return html`
             <style>${styles}</style>
-            <cc-navbar type="back"></cc-navbar>
+            <div class="top">
+                <input
+                    type="text" 
+                    placeholder="Search for Student" 
+                    @input="${(e) => { this.searchTerm = e.target.value.toUpperCase(); this.requestUpdate(); }}"
+                >
+            </div>
 
-            <main>
-                <input type="text" placeholder="Search for Student" @input="${(e) => { this.searchTerm = e.target.value.toUpperCase(); this.requestUpdate(); }}">
+            ${
+                this.students.value.sort((a, b) => {
+                    if(a.firstname < b.firstname)
+                        return -1
+                    else if(a.firstname > b.firstname)
+                        return 1
+                    else
+                        return 0
+                }).filter(s => {
+                    const fullName = (s.firstname + " " + s.lastname).toUpperCase();
+                    const fullNameReverse = (s.lastname + " " + s.firstname).toUpperCase();
+                    const searchTerm = this.searchTerm;
+                    return fullName.includes(searchTerm) || fullNameReverse.includes(searchTerm) ||
+                            searchTerm.includes(s.firstname.toUpperCase()) &&
+                            searchTerm.includes(s.lastname.toUpperCase()) ||
+                            s.firstname.toUpperCase().includes(searchTerm) &&
+                            s.lastname.toUpperCase().includes(searchTerm);
+                }).map(student => {
+                    return html`
+                        <div class="student">
+                            <p>${student.firstname} ${student.lastname}</p>
 
-                ${
-                        this.students.value.filter(s => {
-                            const fullName = (s.firstname + " " + s.lastname).toUpperCase();
-                            const fullNameReverse = (s.lastname + " " + s.firstname).toUpperCase();
-                            const searchTerm = this.searchTerm;
-                            return fullName.includes(searchTerm) || fullNameReverse.includes(searchTerm) ||
-                                    searchTerm.includes(s.firstname.toUpperCase()) &&
-                                    searchTerm.includes(s.lastname.toUpperCase()) ||
-                                    s.firstname.toUpperCase().includes(searchTerm) &&
-                                    s.lastname.toUpperCase().includes(searchTerm);
-                        }).map(student => {
-                            return html`
-                                <div class="student">
-                                    
-                                    ${student.firstname} ${student.lastname}
-
-                                    <cc-button type="${ButtonType.OUTLINED}" color="${SimpleColorEnum.GRAY}" size="${SizeEnum.SMALL}"
-                                               @click="${() => {
-                                                   UrlHandler.updateUrl("/app/rents/details")
-                                                   UrlHandler.setParam("sid", String(student.user_id))
-                                                   model.appState.value.openOverlay(
-                                                           html`<cc-rent-history mode="student" .identifier="${student.user_id}"></cc-rent-history>`,
-                                                           () => { UrlHandler.updateUrl("/app/rents") }
-                                                   )
-                                               }}"
-                                    >Details anzeigen</cc-button>
-                                </div>
-                            `;
-                        })
-                }
-            </main>
+                            <cc-button type="${ButtonType.OUTLINED}" color="${SimpleColorEnum.GRAY}" size="${SizeEnum.SMALL}"
+                                       @click="${() => {
+                                           UrlHandler.updateUrl("/app/rents/details")
+                                           UrlHandler.setParam("sid", String(student.user_id))
+                                           model.appState.value.openOverlay(
+                                                   html`<cc-rent-history mode="student" .identifier="${student.user_id}"></cc-rent-history>`,
+                                                   () => { UrlHandler.updateUrl("/app/rents") }
+                                           )
+                                       }}"
+                            >Details anzeigen</cc-button>
+                        </div>
+                    `;
+                })
+            }
         `;
     }
 }

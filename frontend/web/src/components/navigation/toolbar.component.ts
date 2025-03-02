@@ -66,7 +66,10 @@ export class ToolbarComponent extends LitElement {
                         
                         <cc-button size="${SizeEnum.SMALL}" color="${SimpleColorEnum.GRAY}" type="${ButtonType.TEXT}"
                                    @click="${() => {
-                                        UrlHandler.goToPage("/app/students")
+                                       model.appState.value.openOverlay(
+                                               html`<cc-student-list></cc-student-list>`,
+                                               () => { }
+                                       )
                                     }}">
                             <div slot="left" class="icon accent">
                                 ${unsafeSVG(icon(faUser).html[0])}

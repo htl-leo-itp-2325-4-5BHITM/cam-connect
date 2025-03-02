@@ -107,7 +107,7 @@ export default class RentService {
     }
 
     static createSocketConnection() {
-        let socket = new WebSocket(config.socket_url + "/socket/rents");
+        let socket = new WebSocket(config.socket_url + "/rents");
 
         socket.onmessage = (m) => {
             RentService.fetchAll()

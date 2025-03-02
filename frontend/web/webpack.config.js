@@ -77,10 +77,10 @@ module.exports = {
         },
         compress: true,
         port: 4200,
-        proxy: {
+        /*proxy: {
             '/api': 'http://localhost:8080/',
             pathRewrite: { '^/api': '' }
-        },
+        },*/
         historyApiFallback: true
     }
 };

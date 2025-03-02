@@ -589,8 +589,6 @@ export class AppState{
 
                 this.currentUser = user
 
-
-
                 resolve(user)
 
                 this.update()
