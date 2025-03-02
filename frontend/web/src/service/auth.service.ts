@@ -94,7 +94,9 @@ export default class AuthService {
     static async login(username, password):Promise<ccResponse<TokenResponse>> {
         return Api.postData<LoginRequest, TokenResponse>("/auth/login",
             {username: username, password: password}
-            )
+            ).catch(error => {
+            console.error(error)
+        })
     }
 
     static validateAccessToken() {
@@ -135,5 +137,13 @@ export default class AuthService {
             .catch(error => {
 
             })
+    }
+
+    static refreshToken() {
+        return fetch(config.api_url + "/auth/refresh", {
+            method: "POST",
+            body: localStorage["cc-refresh_token"],
+        })
+            .then(response => response.json() as Promise<TokenResponse>)
     }
 }

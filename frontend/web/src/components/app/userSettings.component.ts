@@ -104,14 +104,15 @@ export class UserSettingsComponent extends LitElement {
             buttons: [
                 {text: "Abbrechen", role: "cancel"},
                 {text: "Laden", role: "confirm", action: () => {
-                        PopupEngine.createNotification({text: `Nutzer werden geladen, dieser Vorgang kann einige Minuten dauern...`, lifetime: 0})
+                        PopupEngine.createNotification({text: `Nutzer werden geladen, dieser Vorgang kann einige Minuten dauern...`, lifetime: -1})
 
                         UserService.loadFromLDAP()
-                            .then(() => {
-                                PopupEngine.createNotification({text: `Nutzer wurden erfolgreich geladen`, CSSClass: "good", lifetime: 0})
+                            .then((response) => {
+                                if(response.ccStatus.statusCode == 1000)
+                                    PopupEngine.createNotification({text: `Nutzer wurden erfolgreich geladen`, CSSClass: "good", lifetime: -1})
                             })
                             .catch(e => {
-                                PopupEngine.createNotification({text: `Nutzer konnten nicht geladen werden ${e}`, CSSClass: "bad", lifetime: 0})
+                                PopupEngine.createNotification({text: `Nutzer konnten nicht geladen werden ${e}`, CSSClass: "bad", lifetime: -1})
                             })
                     }
                 }

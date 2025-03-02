@@ -57,12 +57,14 @@ public class UserSyncService {
 
             String jsonResponse = response.readEntity(String.class);
 
+            System.out.println(jsonResponse);
+
             ObjectMapper objectMapper = new ObjectMapper();
             List<KeycloakUser> users = objectMapper.readValue(jsonResponse, new TypeReference<List<KeycloakUser>>() {});
 
             for (KeycloakUser user : users) {
                 // Process each user
-                System.out.println("Processing user: " + user.username());
+                System.out.println("Processing user: " + user.username);
 
                 // Save or update the user in your database
                 persistKeycloakUser(user);
@@ -78,15 +80,16 @@ public class UserSyncService {
     public void persistKeycloakUser(KeycloakUser user) {
         try{
             em.persist(new User(
-                    user.id(),
-                    user.firstName(),
-                    user.lastName(),
-                    user.email(),
-                    user.username(),
+                    user.id,
+                    user.firstName,
+                    user.lastName,
+                    user.email,
+                    user.username,
                     "unknown"
             ));
         }catch (Exception e){
             e.printStackTrace();
+            throw new CCException(1200, "Failed to persist user: " + user.username);
         }
     }
 }

@@ -2,6 +2,7 @@ package at.camconnect.boundary;
 
 import at.camconnect.dtos.LoginRequest;
 import at.camconnect.enums.UserRoleEnum;
+import at.camconnect.responseSystem.CCException;
 import at.camconnect.responseSystem.CCResponse;
 import at.camconnect.responseSystem.CCStatus;
 import at.camconnect.services.AuthService;
@@ -9,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.security.Authenticated;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.inject.Inject;
+import jakarta.json.JsonObject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
@@ -40,6 +42,8 @@ public class AuthResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(LoginRequest loginRequest) {
+        //i have no clue why the response is parsed and returned as a response like 3 times here
+
         try {
             Response keycloakResponse = authService.requestLogin(loginRequest.username(), loginRequest.password());
 
@@ -63,6 +67,24 @@ public class AuthResource {
         }
     }
 
+    @POST
+    @Path("/refresh")
+    public Response refreshToken(String tokenString) {
+        String result;
+        try {
+            result = authService.refreshToken(tokenString);
+        } catch (CCException ex) {
+            ex.printStackTrace();
+            return CCResponse.error(ex);
+        }
+
+        if (result != null) {
+            return Response.ok(result).build();
+        } else {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+    }
 
     @POST
     @Path("/validate")

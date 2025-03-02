@@ -106,4 +106,6 @@ div.search{
   padding: .5rem;
   box-sizing: border-box;
   z-index: 100;
+  flex-direction: column;
+  gap: .3rem;
 }

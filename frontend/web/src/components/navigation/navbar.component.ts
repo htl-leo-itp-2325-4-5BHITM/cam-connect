@@ -3,10 +3,17 @@ import {customElement, property} from 'lit/decorators.js'
 import styles from '../../../styles/components/navigation/navbar.styles.scss'
 import { icon } from '@fortawesome/fontawesome-svg-core'
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
-import { faMagnifyingGlass, faArrowRotateRight, faArrowLeft, faXmark } from "@fortawesome/free-solid-svg-icons"
+import { faMagnifyingGlass,
+    faArrowRotateRight,
+    faArrowLeft,
+    faXmark,
+    faHandPointer,
+    faTriangleExclamation,
+    faBook
+} from "@fortawesome/free-solid-svg-icons"
 import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons"
 import {model} from "../../index"
-import {SimpleColorEnum, SizeEnum} from "../../base"
+import {ColorEnum, SimpleColorEnum, SizeEnum} from "../../base"
 import { ObservedProperty, PageEnum} from "../../model"
 import { SelectComponent } from "../basic/select.component"
 import {AppState} from "../../AppState"
@@ -119,7 +126,30 @@ export class NavbarComponent extends LitElement {
         return html`
             <icon-cta @click="${this.toggleHelpMenu}">${unsafeSVG(icon(faCircleQuestion).html[0])}</icon-cta>
             <div class="helpMenu">
-                ${model.appState.value.currentUser?.role == UserRoleEnum.MEDT_TEACHER ? html`<cc-button type="${ButtonType.TEXT}" @click="${this.startTutorial}">Start tutorial</cc-button>` : ""}
+                <a href="https://github.com/htl-leo-itp-2325-4-5bhitm/cam-connect/issues/new" target="_blank">
+                    <cc-button type="${ButtonType.TEXT}" color="${ColorEnum.GRAY}">
+                        Einen Fehler Melden
+                        <div slot="left" class="icon accent">
+                            ${unsafeSVG(icon(faTriangleExclamation).html[0])}
+                        </div>
+                    </cc-button>
+                </a>
+                ${model.appState.value.currentUser?.role == UserRoleEnum.MEDT_TEACHER ? html`
+                    <cc-button type="${ButtonType.TEXT}" @click="${this.startTutorial}" color="${ColorEnum.GRAY}">
+                        Tutorial
+                        <div slot="left" class="icon accent">
+                            ${unsafeSVG(icon(faHandPointer).html[0])}
+                        </div>
+                    </cc-button>
+                ` : ""}
+                <a href="https://github.com/htl-leo-itp-2325-4-5bhitm/cam-connect" target="_blank">
+                    <cc-button type="${ButtonType.TEXT}" color="${ColorEnum.GRAY}">
+                        Dokumentation
+                        <div slot="left" class="icon accent">
+                            ${unsafeSVG(icon(faBook).html[0])}
+                        </div>
+                    </cc-button>
+                </a>
             </div>
         `
     }
@@ -127,7 +157,7 @@ export class NavbarComponent extends LitElement {
     toggleHelpMenu(){
         let menuPopup = this.shadowRoot.querySelector(".helpMenu") as HTMLElement
 
-        AnimationHelper.toggleVisibility(menuPopup)
+        AnimationHelper.toggleVisibility(menuPopup, "flex")
     }
 
     startTutorial(){

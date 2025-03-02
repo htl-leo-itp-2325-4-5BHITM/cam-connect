@@ -69,7 +69,7 @@ export class RentListComponent extends LitElement {
                     UrlHandler.updateUrl("/app/rents/details")
                     UrlHandler.setParam("sid", String(this.appState.value.currentUser.user_id))
                     model.appState.value.openOverlay(
-                            html`<cc-rent-detail-view .studentId="${this.appState.value.currentUser.user_id}"></cc-rent-detail-view>`,
+                            html`<cc-rent-history .studentId="${this.appState.value.currentUser.user_id}"></cc-rent-history>`,
                             () => { UrlHandler.updateUrl("/app/rents") }
                     )
                 }}"

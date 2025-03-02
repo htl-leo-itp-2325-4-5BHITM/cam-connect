@@ -3,6 +3,7 @@ package at.camconnect.services;
 import at.camconnect.dtos.KeycloakUser;
 import at.camconnect.enums.UserRoleEnum;
 import at.camconnect.model.User;
+import at.camconnect.responseSystem.CCException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -55,6 +56,8 @@ public class AuthService {
             int status = keycloakResponse.getStatus();
             String responseBody = keycloakResponse.readEntity(String.class);
 
+            /*System.out.println("keycloak login response body: " + responseBody);*/
+
             return Response.status(status)
                     .entity(responseBody)
                     .build();
@@ -66,29 +69,29 @@ public class AuthService {
         }
     }
 
-    /*public Uni<TokenResponse> refreshToken(String refreshToken) {
-        MultiMap form = MultiMap.caseInsensitiveMultiMap();
-        form.set("grant_type", "refresh_token");
-        form.set("client_id", clientId);
-        form.set("client_secret", clientSecret);
-        form.set("refresh_token", refreshToken);
+    public String refreshToken(String refreshToken) {
+        try (Client client = ClientBuilder.newClient()) {
+            Form form = new Form();
+            form.param("grant_type", "refresh_token");
+            form.param("client_id", AUTH_CLIENT_ID);
+            form.param("client_secret", AUTH_CLIENT_SECRET);
+            form.param("refresh_token", refreshToken);
 
-        return webClient.postAbs(authServerUrl + "/protocol/openid-connect/token")
-                .putHeader("Content-Type", "application/x-www-form-urlencoded")
-                .as(BodyCodec.jsonObject())
-                .sendForm(form)
-                .onItem().transform(response -> {
-                    if (response.statusCode() == 200) {
-                        JsonObject responseBody = response.body();
-                        String accessToken = responseBody.getString("access_token");
-                        String newRefreshToken = responseBody.getString("refresh_token");
-                        return new TokenResponse(accessToken, newRefreshToken);
-                    } else {
-                        return null;
-                    }
-                })
-                .onFailure().recoverWithNull();
-    }*/
+            Response keycloakResponse = client.target(String.format("%s/protocol/openid-connect/token", AUTH_SERVER_URL))
+            .request(MediaType.APPLICATION_FORM_URLENCODED)
+            .post(Entity.form(form));
+
+            String responseString = keycloakResponse.readEntity(String.class);
+
+            /*System.out.println("status: " + keycloakResponse.getStatus());
+            System.out.println("body: " + responseString);*/
+
+            return responseString;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new CCException(1205, "token could not be refreshed");
+        }
+    }
 
     public String getToken() {
         try (Client client = ClientBuilder.newClient()) {
@@ -114,7 +117,7 @@ public class AuthService {
             }catch (org.jose4j.json.internal.json_simple.parser.ParseException e) {
                 e.printStackTrace();
             }
-                        return (String) keycloakResponse.get("access_token");
+            return (String) keycloakResponse.get("access_token");
         } catch (Exception e) {
             System.err.println("Error obtaining token: " + e.getMessage());
             return null;

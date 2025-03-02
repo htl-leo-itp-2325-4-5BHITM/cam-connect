@@ -77,7 +77,7 @@ export class Api {
     }
 
     static handleCCError(status: ccStatus, url:string): boolean {
-        if(!status) {
+        if(!status || !status.statusCode){
             console.error("no ccResponse object received from", url)
             return false
         }
@@ -89,6 +89,14 @@ export class Api {
             PopupEngine.createNotification({
                 heading: "Ein Fehler ist aufgetreten",
                 text: "Die angeforderten Daten konnten nicht geladen werden - ccStatus: 1101",
+                CSSClass: "bad"
+            })
+        }
+        else{
+            PopupEngine.createNotification({
+                heading: "Ein Fehler ist aufgetreten",
+                text: `statuscode: ${status.statusCode} - details: ${status.details}`,
+                CSSClass: "bad"
             })
         }
         console.error("something went wrong in the backend trying to reach endpoint: ", url, "statusCode: ", status.statusCode + ". Details:", status.details, ". Message:", status.message)
@@ -97,6 +105,11 @@ export class Api {
 
     static handleHttpError(statusCode: number, url:string):boolean{
         if(statusCode >= 200 && statusCode < 300) return true
-        else return false
+        PopupEngine.createNotification({
+            heading: "Ein Fehler ist aufgetreten",
+            text: `HTTP Fehlercode: ${statusCode} - URL: ${url}`,
+            CSSClass: "bad"
+        })
+        return false
     }
 }

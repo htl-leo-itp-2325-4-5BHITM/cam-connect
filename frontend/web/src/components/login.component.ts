@@ -47,12 +47,21 @@ export class LoginComponent extends LitElement {
 
         let response = await AuthService.login(usernameInput.value, passwordInput.value)
 
+        if(!response) {
+            PopupEngine.createNotification({
+                heading: "Unbekannter Fehler beim Login",
+                text: "Bitte versuche es später erneut.",
+                CSSClass: "bad"
+            })
+            return
+        }
         console.log(response)
 
         switch (response.ccStatus.statusCode) {
             case 1000:
-                console.log(response.data.access_token)
+                console.log("keycloak response", response.data)
                 model.appState.value.setAccessToken(response.data.access_token)
+                model.appState.value.setRefreshToken(response.data.refresh_token, response.data.expires_in)
                 UrlHandler.goToPage("/app/rents")
                 break
             case 1206:
@@ -61,7 +70,7 @@ export class LoginComponent extends LitElement {
             case 1207:
                 PopupEngine.createNotification({heading: "Keycloak Fehler beim Login", text: "Die Antwort des Keycloak Servers war kein valdierbares JSON."})
                 break
-            case 1205:
+            default:
                 PopupEngine.createNotification({heading: "Unbekannter Fehler beim Login", text: "Bitte versuche es später erneut."})
                 break
         }

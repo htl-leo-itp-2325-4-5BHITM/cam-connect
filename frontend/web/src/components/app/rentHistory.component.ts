@@ -62,6 +62,19 @@ export class RentHistoryComponent extends LitElement {
     }
 
     render() {
+        if(this.rentList == null) {
+            return html`
+                <style>${styles}</style>
+                <p class="noResults">Lade Verleiheinträge..</p>
+            `
+        }
+        else if(this.rentList.length == 0){
+            return html`
+                <style>${styles}</style>
+                <p class="noResults">Keine Verleiheinträge vorhanden</p>
+            `
+        }
+
         return html`
             <style>${styles}</style>
             
@@ -75,10 +88,6 @@ export class RentHistoryComponent extends LitElement {
                     <div slot="left" class="icon">${unsafeSVG(icon(faXmark).html[0])}</div>
                 </cc-button>
             </div>
-
-            ${this.rentList == null ? html`<p class="noResults">Lade Verleiheinträge..</p>` : ''}
-
-            ${this.rentList?.length == 0 ? html`<p class="noResults">Keine Verleiheinträge vorhanden</p>` : ''}
             
             <div class="rent-container">
                 ${this.rentList?.map((rent:Rent, index) => html`

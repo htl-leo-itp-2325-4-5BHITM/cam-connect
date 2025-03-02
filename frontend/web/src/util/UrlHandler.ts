@@ -9,23 +9,28 @@ import {takeWhile} from "rxjs"
 let pages = {
     app: {
         handler: () => {
-            UrlHandler.changeOrigin("cc-dashboard")
+            AuthService.refreshToken().then(newResponse => {
+                console.log("refreshed access token", newResponse)
 
-            model.appState.value.setAccessToken(localStorage["cc-access_token"])
-                .then(user => {
-                    AuthService.validateAccessToken().then((valid) => {
-                        if(valid == true){
-                            model.fetchAll()
-                            model.createSocketConnection()
-                        }
+                model.appState.value.setAccessToken(newResponse.access_token)
+                    .then(user => {
+                        AuthService.validateAccessToken().then((valid) => {
+                            if(valid == true){
+                                model.fetchAll()
+                                model.createSocketConnection()
+
+                                UrlHandler.changeOrigin("cc-dashboard")
+                            }
+                        })
                     })
-                })
-                .catch((e) => {
-                    alert("an error occured while trying to fetch data or validate the access token, please take a look")
-                    console.error(e)
-                    console.log(model.appState.value.access_token)
-                    //AuthService.logOut()
-                })
+                    .catch((e) => {
+                        console.error("an error occured while trying to fetch data or validate the access token, please take a look")
+                        console.error(e)
+                        console.log(model.appState.value.access_token)
+                        //AuthService.logOut()
+                    })
+                model.appState.value.setRefreshToken(newResponse.refresh_token, newResponse.expires_in)
+            })
         },
         children: {
             rents: {

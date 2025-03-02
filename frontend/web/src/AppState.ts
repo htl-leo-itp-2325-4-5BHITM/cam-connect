@@ -18,7 +18,7 @@ import Util from "./util/Util"
 import {SidebarComponent} from "./components/navigation/sidebar.component"
 import {EditType} from "./components/app/edit/edit.component"
 import {DeviceSetEditEntryComponent} from "./components/app/edit/deviceSetEditEntry.component"
-import AuthService from "./service/auth.service"
+import AuthService, {TokenResponse} from "./service/auth.service"
 import {DeviceSetListEntryComponent} from "./components/app/deviceSetListEntry.component"
 import DeviceSetService from "./service/deviceSet.service"
 
@@ -111,6 +111,7 @@ export class AppState{
     }
     private _searchTerm: string = ""
     private _access_token: string = ""
+    private _refresh_token: string = ""
     private _currentUser: User = null
     private _currentUserLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
 
@@ -588,6 +589,8 @@ export class AppState{
 
                 this.currentUser = user
 
+
+
                 resolve(user)
 
                 this.update()
@@ -595,6 +598,29 @@ export class AppState{
                 console.error(e)
             })
         })
+    }
+
+    get refresh_token(): string {
+        return this._refresh_token
+    }
+
+    setRefreshToken(value: string, expiresIn: number){
+        this._refresh_token = value
+        localStorage["cc-refresh_token"] = value
+        this.update()
+
+        setTimeout(() => {
+            /*console.log("refreshing token")
+            console.log("current token", this._access_token)
+            console.log("current refresh token", this._refresh_token)*/
+
+            AuthService.refreshToken().then(newResponse => {
+                console.log("refreshed access token", newResponse)
+
+                model.appState.value.setAccessToken(newResponse.access_token)
+                model.appState.value.setRefreshToken(newResponse.refresh_token, newResponse.expires_in)
+            })
+        },expiresIn*1000)
     }
 
     get currentUser(): User {

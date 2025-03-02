@@ -174,7 +174,6 @@ public class RentRepository {
         // this is currently just joining to half the db and not using a proper DTO,
         // this might cause performance problems in the future but is fine for now
         for (User student : students) {
-            System.out.println(student.getUsername());
             List<RentDTO> rents = em.createQuery(
                     "SELECT r FROM Rent r " +
                             "LEFT JOIN r.device d " +

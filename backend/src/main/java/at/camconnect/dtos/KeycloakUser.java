@@ -1,37 +1,69 @@
 package at.camconnect.dtos;
-import at.camconnect.enums.UserRoleEnum;
+
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
+import java.util.Map;
 
-public record KeycloakUser (
-        String id,
-        String username,
-        @JsonProperty("firstName") String firstName,
-        @JsonProperty("lastName") String lastName,
-        String email,
-        boolean emailVerified,
-        Attributes attributes,
-        long createdTimestamp,
-        boolean enabled,
-        boolean totp,
-        String federationLink,
-        String[] disableableCredentialTypes,
-        String[] requiredActions,
-        int notBefore,
-        Access access
-) {
-    public record Attributes (
-            @JsonProperty("LDAP_ENTRY_DN") String[] ldapEntryDn,
-            @JsonProperty("locale") String[] locale,
-            @JsonProperty("modifyTimestamp") String[] modifyTimestamp,
-            @JsonProperty("createTimestamp") String[] createTimestamp,
-            @JsonProperty("LDAP_ID") String[] ldapId
-    ) {}
+public class KeycloakUser {
+    @JsonProperty("id")
+    public String id;
+    @JsonProperty("username")
+    public String username;
+    @JsonProperty("firstName")
+    public String firstName;
+    @JsonProperty("lastName")
+    public String lastName;
+    @JsonProperty("email")
+    public String email;
+    @JsonProperty("emailVerified")
+    public boolean emailVerified;
+    @JsonProperty("attributes")
+    public Attributes attributes;
+    @JsonProperty("createdTimestamp")
+    public long createdTimestamp;
+    @JsonProperty("enabled")
+    public boolean enabled;
+    @JsonProperty("totp")
+    public boolean totp;
+    @JsonProperty("federationLink")
+    public String federationLink;
+    @JsonProperty("disableableCredentialTypes")
+    public List<String> disableableCredentialTypes;
+    @JsonProperty("requiredActions")
+    public List<String> requiredActions;
+    @JsonProperty("notBefore")
+    public int notBefore;
+    @JsonProperty("access")
+    public Access access;
 
-    public record Access (
-            @JsonProperty("manageGroupMembership") boolean manageGroupMembership,
-            @JsonProperty("view") boolean view,
-            @JsonProperty("mapRoles") boolean mapRoles,
-            @JsonProperty("impersonate") boolean impersonate,
-            @JsonProperty("manage") boolean manage
-    ) {}
+    public static class Attributes {
+        @JsonProperty("LDAP_ENTRY_DN")
+        public List<String> ldapEntryDn;
+        @JsonProperty("objectGUID")
+        public List<String> objectGuid;
+        @JsonProperty("distinguishedName")
+        public List<String> distinguishedName;
+        @JsonProperty("objectSid")
+        public List<String> objectSid;
+        @JsonProperty("LDAP_ID")
+        public List<String> ldapId;
+        @JsonProperty("createTimestamp")
+        public List<String> createTimestamp;
+        @JsonProperty("modifyTimestamp")
+        public List<String> modifyTimestamp;
+    }
+
+    public static class Access {
+        @JsonProperty("manageGroupMembership")
+        public boolean manageGroupMembership;
+        @JsonProperty("view")
+        public boolean view;
+        @JsonProperty("mapRoles")
+        public boolean mapRoles;
+        @JsonProperty("impersonate")
+        public boolean impersonate;
+        @JsonProperty("manage")
+        public boolean manage;
+    }
 }
