@@ -556,7 +556,10 @@ export class AppState{
 
     setAccessToken(value: string){
         return new Promise((resolve, reject) => {
-            if(!value || value == "undefined" || value == "") reject("no access token provided")
+            if(!value || value == "undefined" || value == "") {
+                reject("no access token provided")
+                AuthService.logOut()
+            }
 
             this._access_token = value
             localStorage["cc-access_token"] = value
