@@ -125,7 +125,7 @@ export default class AuthService {
 
     static logOut(){
         console.log("Logging out")
-        model.appState.value.setAccessToken(null)
+        localStorage["cc-access_token"] = null
         UrlHandler.setUrl("/login")
     }
 

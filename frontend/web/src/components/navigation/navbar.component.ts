@@ -142,7 +142,7 @@ export class NavbarComponent extends LitElement {
                         </div>
                     </cc-button>
                 ` : ""}
-                <a href="https://github.com/htl-leo-itp-2325-4-5bhitm/cam-connect" target="_blank">
+                <a href="http://localhost:1313" target="_blank">
                     <cc-button type="${ButtonType.TEXT}" color="${ColorEnum.GRAY}">
                         Dokumentation
                         <div slot="left" class="icon accent">

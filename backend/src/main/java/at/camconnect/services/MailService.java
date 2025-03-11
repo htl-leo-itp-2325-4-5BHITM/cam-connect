@@ -4,6 +4,7 @@ import at.camconnect.model.Rent;
 import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.Mailer;
 import io.quarkus.qute.Template;
+import io.smallrye.common.annotation.RunOnVirtualThread;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @ApplicationScoped
 @Transactional
@@ -76,7 +78,9 @@ public class MailService {
                 .setFrom("cam-connect@htl-leonding.ac.at")
                 .addInlineAttachment("logo.png", logoBytes, "image/png", "camConnectLogo");
 
-        mailer.send(mail);
+        CompletableFuture.runAsync(() -> {
+            mailer.send(mail);
+        });
     }
 
     private byte[] loadLogoAsBase64() {

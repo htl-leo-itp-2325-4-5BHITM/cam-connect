@@ -158,7 +158,7 @@ export class SidebarComponent extends LitElement {
             ${model.appState.value.currentUser?.role.includes(UserRoleEnum.MEDT_TEACHER) ? styles : ""}
             
             <div class="user" @click="${() => {
-                if(model.appState.value.currentUser.role.includes(UserRoleEnum.MEDT_TEACHER)) {
+                if(model.appState.value.currentUser?.role.includes(UserRoleEnum.MEDT_TEACHER)) {
                     UrlHandler.goToPage('/app/user')
                 }
             }}">

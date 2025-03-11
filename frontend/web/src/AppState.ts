@@ -21,6 +21,7 @@ import {DeviceSetEditEntryComponent} from "./components/app/edit/deviceSetEditEn
 import AuthService, {TokenResponse} from "./service/auth.service"
 import {DeviceSetListEntryComponent} from "./components/app/deviceSetListEntry.component"
 import DeviceSetService from "./service/deviceSet.service"
+import PopupEngine from "./util/PopupEngine"
 
 interface ActionCancellation {
     identifier: string,
@@ -567,6 +568,25 @@ export class AppState{
             UserService.getById(Util.parseJwt(value).sub).then(async user => {
                 if(!user){
                     console.error("user was not found in cam-connect database")
+                    PopupEngine.createModal({
+                        heading: "Nutzer wurde nicht in der camconnect Datenbank gefunden",
+                        text: "Möchten sie die Nutzer neu mit dem LDAP server snychronisieren? Dieser vorgang kann einige Zeit dauern.",
+                        buttons: [
+                            {
+                                text: "Ja",
+                                action: () => {
+                                    UserService.loadFromLDAP()
+                                },
+                                role: "confirm"
+                            },
+                            {
+                                text: "Nein",
+                                action: () => {
+                                },
+                                role: "cancel"
+                            },
+                        ]
+                    })
                     resolve(null)
                     return
                 }

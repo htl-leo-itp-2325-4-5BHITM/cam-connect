@@ -1,0 +1,6 @@
+baseURL = 'https://example.org/'
+languageCode = 'de-at'
+title = 'cam-connect Dokumentation'
+theme = 'ananke'
+[params]
+  favicon = "/favicon.svg"
