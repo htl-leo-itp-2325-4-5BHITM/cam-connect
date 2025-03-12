@@ -123,6 +123,18 @@ export default class DeviceTypeService {
             .catch(error => {
                 console.error(error)
             })
+
+        /*fetch(config.api_url + "/devicetype/getall", {
+            headers: {
+                "Authorization": `Bearer ${model.appState.value.access_token}`
+            }
+        })
+            .then(response => {
+                return response.text()
+            })
+            .then(text => {
+                console.log(text)
+            })*/
     }
 
     static fetchAllFull(){
@@ -185,10 +197,12 @@ export default class DeviceTypeService {
     static async create(deviceType: DeviceType, tags: Tag[]): Promise<void> {
         console.log("Creating device type:", deviceType, tags);
         try {
-            const result: ccResponse<DeviceType> = await Api.postData(`/devicetype/create/${deviceType.variant}`, deviceType );
+            let data = deviceType as any
+            data.tags = []
+            const result: ccResponse<DeviceType> = await Api.postData(`/devicetype/create/${deviceType.variant}`, data );
             DeviceTypeService.fetchAllFull()
 
-            tags.forEach(tags => this.toggleTag(tags, result.data))
+            /*tags.forEach(tags => this.toggleTag(tags, result.data))*/
 
             if (result.ccStatus.statusCode !== 1000) {
                 throw new Error(`Error creating device type: ${result.ccStatus.message}`);

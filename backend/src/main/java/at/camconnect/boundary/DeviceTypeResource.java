@@ -82,6 +82,7 @@ public class DeviceTypeResource {
             result = deviceTypeRepository.create(type, data);
         }catch (CCException ex){
             ex.printStackTrace();
+            System.out.println("Error: " + ex.getMessage());
             return CCResponse.error(ex);
         }
 

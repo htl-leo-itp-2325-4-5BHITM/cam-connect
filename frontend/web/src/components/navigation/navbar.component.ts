@@ -27,7 +27,7 @@ import PopupEngine from "../../util/PopupEngine"
 import {KeyBoardShortCut} from "../../util/KeyboardShortcut"
 import {Tooltip} from "../../util/Tooltip"
 import {DashboardComponent} from "../app/dashboard.component"
-import {UserRoleEnum} from "../../service/user.service"
+import UserService, {UserRoleEnum} from "../../service/user.service"
 
 @customElement('cc-navbar')
 export class NavbarComponent extends LitElement {
@@ -84,6 +84,19 @@ export class NavbarComponent extends LitElement {
                     html`<img src="${logo}" alt="cam-connect" @click="${()=> UrlHandler.setUrl("/app/rents")}">`
                 }
             </div>
+            
+            
+            <cc-button @click="${() => {
+                UserService.loadFromLDAP()
+                        .then((response) => {
+                            if(response.ccStatus.statusCode == 1000)
+                                PopupEngine.createNotification({text: `Nutzer wurden erfolgreich geladen`, CSSClass: "good", lifetime: -1})
+                        })
+                        .catch(e => {
+                            PopupEngine.createNotification({text: `Nutzer konnten nicht geladen werden ${e}`, CSSClass: "bad", lifetime: -1})
+                        })
+            }}">load from ldapllappl</cc-button>
+            
 
             <cc-select size="${this.appState.value.screenWidth == "desktop" ? SizeEnum.MEDIUM : SizeEnum.BIG}" spacerColor="${SimpleColorEnum.ACCENT}" 
                        .onSelect = "${(elem) => {

@@ -1,0 +1,415 @@
+{
+  "ccStatus": {
+    "statusCode": 1000,
+    "details": "All good",
+    "message": "The endpoint responded without encountering errors"
+  },
+  "details": {
+    "time": "2025-03-12 12:42:24",
+    "dataType": "at.camconnect.dtos.deviceType.DeviceTypeCollection"
+  },
+  "data": {
+    "cameraTypes": [
+      {
+        "type_id": 1,
+        "variant": "camera",
+        "status": "active",
+        "name": "Canon EOS 5D Mark IV",
+        "image_blob": "url1",
+        "tags": [
+          {
+            "tag_id": 1,
+            "name": "Foto",
+            "description": "Dieses Gerät ist am besten für Fotografie geeignet"
+          }
+        ],
+        "creation_date": null,
+        "change_date": null,
+        "mount": {
+          "attribute_id": 6,
+          "name": "Canon RF",
+          "details": "Used by Canon mirrorless cameras"
+        },
+        "system": {
+          "attribute_id": 1,
+          "name": "Spiegelreflex",
+          "details": "DSLR mit physischem beweglichem Spiegel"
+        },
+        "photo_resolution": {
+          "attribute_id": 3,
+          "name": "4k",
+          "details": "Sehr cool aber große filesize",
+          "resolution": "3840 x 2160"
+        },
+        "autofocus": true,
+        "attributes": [
+          {
+            "attribute_id": 6,
+            "name": "Canon RF",
+            "details": "Used by Canon mirrorless cameras"
+          },
+          {
+            "attribute_id": 1,
+            "name": "Spiegelreflex",
+            "details": "DSLR mit physischem beweglichem Spiegel"
+          },
+          {
+            "attribute_id": 3,
+            "name": "4k",
+            "details": "Sehr cool aber große filesize",
+            "resolution": "3840 x 2160"
+          }
+        ],
+        "csvHeader": "variant; type_id; name; image_blob; status; tags; mount_id; system_id; photo_resolution_id; autofocus;\n",
+        "tagsToString": "Foto"
+      },
+      {
+        "type_id": 2,
+        "variant": "camera",
+        "status": "active",
+        "name": "Nikon D850",
+        "image_blob": "url2",
+        "tags": [
+          {
+            "tag_id": 2,
+            "name": "Video",
+            "description": "Dieses Gerät ist am besten fürs filmen von Videos geeignet"
+          }
+        ],
+        "creation_date": null,
+        "change_date": null,
+        "mount": {
+          "attribute_id": 6,
+          "name": "Canon RF",
+          "details": "Used by Canon mirrorless cameras"
+        },
+        "system": {
+          "attribute_id": 2,
+          "name": "Systemkamera",
+          "details": "DSLM, spiegellose Digitalkamera"
+        },
+        "photo_resolution": {
+          "attribute_id": 3,
+          "name": "4k",
+          "details": "Sehr cool aber große filesize",
+          "resolution": "3840 x 2160"
+        },
+        "autofocus": true,
+        "attributes": [
+          {
+            "attribute_id": 6,
+            "name": "Canon RF",
+            "details": "Used by Canon mirrorless cameras"
+          },
+          {
+            "attribute_id": 2,
+            "name": "Systemkamera",
+            "details": "DSLM, spiegellose Digitalkamera"
+          },
+          {
+            "attribute_id": 3,
+            "name": "4k",
+            "details": "Sehr cool aber große filesize",
+            "resolution": "3840 x 2160"
+          }
+        ],
+        "csvHeader": "variant; type_id; name; image_blob; status; tags; mount_id; system_id; photo_resolution_id; autofocus;\n",
+        "tagsToString": "Video"
+      },
+      {
+        "type_id": 3,
+        "variant": "camera",
+        "status": "active",
+        "name": "Sony Alpha a7 III",
+        "image_blob": "url3",
+        "tags": [
+          {
+            "tag_id": 1,
+            "name": "Foto",
+            "description": "Dieses Gerät ist am besten für Fotografie geeignet"
+          },
+          {
+            "tag_id": 2,
+            "name": "Video",
+            "description": "Dieses Gerät ist am besten fürs filmen von Videos geeignet"
+          }
+        ],
+        "creation_date": null,
+        "change_date": null,
+        "mount": {
+          "attribute_id": 7,
+          "name": "Nikon Z",
+          "details": "Used by Nikon mirrorless cameras"
+        },
+        "system": {
+          "attribute_id": 1,
+          "name": "Spiegelreflex",
+          "details": "DSLR mit physischem beweglichem Spiegel"
+        },
+        "photo_resolution": {
+          "attribute_id": 4,
+          "name": "1080p",
+          "details": "Standard High Definition resolution",
+          "resolution": "1920 x 1080"
+        },
+        "autofocus": true,
+        "attributes": [
+          {
+            "attribute_id": 7,
+            "name": "Nikon Z",
+            "details": "Used by Nikon mirrorless cameras"
+          },
+          {
+            "attribute_id": 1,
+            "name": "Spiegelreflex",
+            "details": "DSLR mit physischem beweglichem Spiegel"
+          },
+          {
+            "attribute_id": 4,
+            "name": "1080p",
+            "details": "Standard High Definition resolution",
+            "resolution": "1920 x 1080"
+          }
+        ],
+        "csvHeader": "variant; type_id; name; image_blob; status; tags; mount_id; system_id; photo_resolution_id; autofocus;\n",
+        "tagsToString": "Foto,Video"
+      },
+      {
+        "type_id": 4,
+        "variant": "camera",
+        "status": "active",
+        "name": "Fujifilm X-T3",
+        "image_blob": "url4",
+        "tags": [
+          {
+            "tag_id": 1,
+            "name": "Foto",
+            "description": "Dieses Gerät ist am besten für Fotografie geeignet"
+          },
+          {
+            "tag_id": 2,
+            "name": "Video",
+            "description": "Dieses Gerät ist am besten fürs filmen von Videos geeignet"
+          }
+        ],
+        "creation_date": null,
+        "change_date": null,
+        "mount": {
+          "attribute_id": 7,
+          "name": "Nikon Z",
+          "details": "Used by Nikon mirrorless cameras"
+        },
+        "system": {
+          "attribute_id": 1,
+          "name": "Spiegelreflex",
+          "details": "DSLR mit physischem beweglichem Spiegel"
+        },
+        "photo_resolution": {
+          "attribute_id": 5,
+          "name": "720p",
+          "details": "Standard High Definition resolution",
+          "resolution": "1280 x 720"
+        },
+        "autofocus": false,
+        "attributes": [
+          {
+            "attribute_id": 7,
+            "name": "Nikon Z",
+            "details": "Used by Nikon mirrorless cameras"
+          },
+          {
+            "attribute_id": 1,
+            "name": "Spiegelreflex",
+            "details": "DSLR mit physischem beweglichem Spiegel"
+          },
+          {
+            "attribute_id": 5,
+            "name": "720p",
+            "details": "Standard High Definition resolution",
+            "resolution": "1280 x 720"
+          }
+        ],
+        "csvHeader": "variant; type_id; name; image_blob; status; tags; mount_id; system_id; photo_resolution_id; autofocus;\n",
+        "tagsToString": "Foto,Video"
+      },
+      {
+        "type_id": 5,
+        "variant": "camera",
+        "status": "active",
+        "name": "Olympus OM-D E-M10 Mark III",
+        "image_blob": "url5",
+        "tags": [
+          {
+            "tag_id": 1,
+            "name": "Foto",
+            "description": "Dieses Gerät ist am besten für Fotografie geeignet"
+          },
+          {
+            "tag_id": 2,
+            "name": "Video",
+            "description": "Dieses Gerät ist am besten fürs filmen von Videos geeignet"
+          }
+        ],
+        "creation_date": null,
+        "change_date": null,
+        "mount": {
+          "attribute_id": 8,
+          "name": "L-Mount",
+          "details": "Wird benutzt von Lumix, Leica und Blackmagic. Geignet für alle sensor größen bis inklusive full frame"
+        },
+        "system": {
+          "attribute_id": 2,
+          "name": "Systemkamera",
+          "details": "DSLM, spiegellose Digitalkamera"
+        },
+        "photo_resolution": {
+          "attribute_id": 4,
+          "name": "1080p",
+          "details": "Standard High Definition resolution",
+          "resolution": "1920 x 1080"
+        },
+        "autofocus": true,
+        "attributes": [
+          {
+            "attribute_id": 8,
+            "name": "L-Mount",
+            "details": "Wird benutzt von Lumix, Leica und Blackmagic. Geignet für alle sensor größen bis inklusive full frame"
+          },
+          {
+            "attribute_id": 2,
+            "name": "Systemkamera",
+            "details": "DSLM, spiegellose Digitalkamera"
+          },
+          {
+            "attribute_id": 4,
+            "name": "1080p",
+            "details": "Standard High Definition resolution",
+            "resolution": "1920 x 1080"
+          }
+        ],
+        "csvHeader": "variant; type_id; name; image_blob; status; tags; mount_id; system_id; photo_resolution_id; autofocus;\n",
+        "tagsToString": "Foto,Video"
+      },
+      {
+        "type_id": 46,
+        "variant": "camera",
+        "status": "active",
+        "name": "gfsdgsd",
+        "image_blob": null,
+        "tags": [],
+        "creation_date": "2025-03-12T12:10:54.456983",
+        "change_date": "2025-03-12T12:10:54.459991",
+        "mount": {
+          "attribute_id": 6,
+          "name": "Canon RF",
+          "details": "Used by Canon mirrorless cameras"
+        },
+        "system": {
+          "attribute_id": 1,
+          "name": "Spiegelreflex",
+          "details": "DSLR mit physischem beweglichem Spiegel"
+        },
+        "photo_resolution": {
+          "attribute_id": 3,
+          "name": "4k",
+          "details": "Sehr cool aber große filesize",
+          "resolution": "3840 x 2160"
+        },
+        "autofocus": false,
+        "attributes": [
+          {
+            "attribute_id": 6,
+            "name": "Canon RF",
+            "details": "Used by Canon mirrorless cameras"
+          },
+          {
+            "attribute_id": 1,
+            "name": "Spiegelreflex",
+            "details": "DSLR mit physischem beweglichem Spiegel"
+          },
+          {
+            "attribute_id": 3,
+            "name": "4k",
+            "details": "Sehr cool aber große filesize",
+            "resolution": "3840 x 2160"
+          }
+        ],
+        "csvHeader": "variant; type_id; name; image_blob; status; tags; mount_id; system_id; photo_resolution_id; autofocus;\n",
+        "tagsToString": ""
+      },
+      {
+        "type_id": 47,
+        "variant": "camera",
+        "status": "active",
+        "name": "sdfs afsdf",
+        "image_blob": null,
+        "tags": [],
+        "creation_date": "2025-03-12T12:14:08.763116",
+        "change_date": "2025-03-12T12:14:08.763644",
+        "mount": {
+          "attribute_id": 6,
+          "name": "Canon RF",
+          "details": "Used by Canon mirrorless cameras"
+        },
+        "system": {
+          "attribute_id": 1,
+          "name": "Spiegelreflex",
+          "details": "DSLR mit physischem beweglichem Spiegel"
+        },
+        "photo_resolution": {
+          "attribute_id": 3,
+          "name": "4k",
+          "details": "Sehr cool aber große filesize",
+          "resolution": "3840 x 2160"
+        },
+        "autofocus": false,
+        "attributes": [
+          {
+            "attribute_id": 6,
+            "name": "Canon RF",
+            "details": "Used by Canon mirrorless cameras"
+          },
+          {
+            "attribute_id": 1,
+            "name": "Spiegelreflex",
+            "details": "DSLR mit physischem beweglichem Spiegel"
+          },
+          {
+            "attribute_id": 3,
+            "name": "4k",
+            "details": "Sehr cool aber große filesize",
+            "resolution": "3840 x 2160"
+          }
+        ],
+        "csvHeader": "variant; type_id; name; image_blob; status; tags; mount_id; system_id; photo_resolution_id; autofocus;\n",
+        "tagsToString": ""
+      },
+      {
+        "type_id": 49,
+        "variant": "camera",
+        "status": "active",
+        "name": "ydfgvf",
+        "image_blob": null,
+        "tags": [],
+        "creation_date": "2025-03-12T12:17:40.383781",
+        "change_date": "2025-03-12T12:17:40.383781",
+        "mount": {
+          "attribute_id": 6,
+          "name": "Canon RF",
+          "details": "Used by Canon mirrorless cameras"
+        },
+        "system": {
+          "attribute_id": 1,
+          "name": "Spiegelreflex",
+          "details": "DSLR mit physischem beweglichem Spiegel"
+        },
+        "photo_resolution": {
+          "attribute_id": 3,
+          "name": "4k",
+          "details": "Sehr cool aber große filesize",
+          "resolution": "3840 x 2160"
+        },
+        "autofocus": false,
+        "attributes": [
+          {
+            "at

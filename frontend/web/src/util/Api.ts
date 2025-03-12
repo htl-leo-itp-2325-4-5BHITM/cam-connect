@@ -20,7 +20,7 @@ export class Api {
                 return {} as Promise<ccResponse<Out>>
             })
             .then((result: ccResponse<Out>) => {
-                this.handleCCError(result.ccStatus, url)
+                this.handleCCError(result, url)
                 return result
             })
     }
@@ -39,7 +39,7 @@ export class Api {
 
         let result: ccResponse<Out> = await response.json()
 
-        this.handleCCError(result.ccStatus, url)
+        this.handleCCError(result, url)
 
         return result
     }
@@ -71,20 +71,21 @@ export class Api {
 
         let result: ccResponse<Out> = await response.json()
 
-        this.handleCCError(result.ccStatus, path)
+        this.handleCCError(result, path)
 
         return result
     }
 
-    static handleCCError(status: ccStatus, url:string): boolean {
-        if(!status || !status.statusCode){
+    static handleCCError(result: ccResponse<any>, url:string): boolean {
+        if(!result.ccStatus || !result.ccStatus.statusCode){
             console.error("no ccResponse object received from", url)
+            console.log(result)
             return false
         }
 
-        if(status.statusCode == 1000) return true
-        if(status.statusCode == 1101) {
-            console.error(`CCException - invalid id in getter - statuscode: ${status.statusCode} - details: ${status.details} - url: ${url}`)
+        if(result.ccStatus.statusCode == 1000) return true
+        if(result.ccStatus.statusCode == 1101) {
+            console.error(`CCException - invalid id in getter - statuscode: ${result.ccStatus.statusCode} - details: ${result.ccStatus.details} - url: ${url}`)
 
             PopupEngine.createNotification({
                 heading: "Ein Fehler ist aufgetreten",
@@ -95,11 +96,11 @@ export class Api {
         else{
             PopupEngine.createNotification({
                 heading: "Ein Fehler ist aufgetreten",
-                text: `statuscode: ${status.statusCode} - details: ${status.details}`,
+                text: `statuscode: ${result.ccStatus.statusCode} - details: ${result.ccStatus.details}`,
                 CSSClass: "bad"
             })
         }
-        console.error("something went wrong in the backend trying to reach endpoint: ", url, "statusCode: ", status.statusCode + ". Details:", status.details, ". Message:", status.message)
+        console.error("something went wrong in the backend trying to reach endpoint: ", url, "statusCode: ", result.ccStatus.statusCode + ". Details:", result.ccStatus.details, ". Message:", result.ccStatus.message)
         return false
     }
 

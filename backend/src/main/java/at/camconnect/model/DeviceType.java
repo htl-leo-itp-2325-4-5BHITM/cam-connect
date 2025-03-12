@@ -191,4 +191,8 @@ public abstract class DeviceType{
     public Long getType_id() {
         return type_id;
     }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
 }
