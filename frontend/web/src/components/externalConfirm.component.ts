@@ -95,9 +95,9 @@ export class ExternalConfirmComponent extends LitElement {
                                                                 role: "confirm",
                                                                 action: (data) => {
                                                                     RentService.confirmOrDecline(
-                                                                            rent.rent_id, this.rentConfirmationCodes[i],
-                                                                            RentStatusEnum.DECLINED,
-                                                                            data.inputValues[0] as string
+                                                                        rent.rent_id, this.rentConfirmationCodes[i],
+                                                                        RentStatusEnum.DECLINED,
+                                                                        data.inputValues[0] as string
                                                                     ).then((success) => {
                                                                         if(success){
                                                                             rent.status = RentStatusEnum.DECLINED

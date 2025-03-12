@@ -93,8 +93,8 @@ export class RentHistoryComponent extends LitElement {
                 ${this.rentList?.map((rent:Rent, index) => html`
                     <div class="rent">
                         <div class="heading">
-                            ${DeviceTypeService.deviceTypeToIcon(rent.device.type.variant)}
-                            <h3>${rent.device.type.name}</h3>
+                            ${DeviceTypeService.deviceTypeToIcon(rent.device?.type.variant)}
+                            <h3>${rent.device?.type.name}</h3>
                             <cc-chip color="${this.chipProperties.get(rent.status).color}" text="${this.chipProperties.get(rent.status)?.text}"></cc-chip>
                         </div>
                         <div class="row">

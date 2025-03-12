@@ -75,6 +75,7 @@ public class RentResource {
             String[] idList = ids.split(",");
             rents = rentRepository.getByIdList(idList);
         } catch (CCException ex) {
+            ex.printStackTrace();
             return CCResponse.error(ex);
         }
         return CCResponse.ok(rents);
