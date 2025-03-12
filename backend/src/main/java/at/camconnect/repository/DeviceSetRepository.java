@@ -57,7 +57,6 @@ public class DeviceSetRepository {
                     dtos.add(new DeviceSetFullDTO(set, availabilities));
                 }
             }
-
         }
         return dtos;
     }

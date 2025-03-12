@@ -31,7 +31,7 @@ public abstract class DeviceType{
     @Column(length = 50)
     private String name;
 
-    @Column(length = 1000000)
+    @Column(length = 5000000)
     private String image_blob;
 
     @ManyToMany(fetch = FetchType.EAGER)

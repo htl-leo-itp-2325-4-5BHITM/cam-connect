@@ -86,7 +86,7 @@ export class NavbarComponent extends LitElement {
             </div>
             
             
-            <cc-button @click="${() => {
+            <!--<cc-button @click="${() => {
                 UserService.loadFromLDAP()
                         .then((response) => {
                             if(response.ccStatus.statusCode == 1000)
@@ -95,7 +95,7 @@ export class NavbarComponent extends LitElement {
                         .catch(e => {
                             PopupEngine.createNotification({text: `Nutzer konnten nicht geladen werden ${e}`, CSSClass: "bad", lifetime: -1})
                         })
-            }}">load from ldapllappl</cc-button>
+            }}">load from ldapllappl</cc-button>-->
             
 
             <cc-select size="${this.appState.value.screenWidth == "desktop" ? SizeEnum.MEDIUM : SizeEnum.BIG}" spacerColor="${SimpleColorEnum.ACCENT}" 

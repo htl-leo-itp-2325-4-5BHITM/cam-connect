@@ -60,7 +60,7 @@ export class InputComponent extends LitElement {
                         <textarea id="inputField" rows="2" placeholder="${this.placeholder}" minlength="2" maxlength="${this.maxLength}" @input="${(e) => {this.onInput(e.target.value)}}" required>${this.text}</textarea>` :
                 this.type == InputType.UPLOAD ?
                         html`
-                            <input type="file" @input="${(e) => this.handleFileInput(e)}">
+                            <input type="file" accept="image/png, image/jpeg, image/webp" @input="${(e) => this.handleFileInput(e)}">
                         `                        
                         :
                     html`
@@ -121,8 +121,11 @@ export class InputComponent extends LitElement {
                         ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
                     }
 
-                    // Get the downscaled image as a base64 string (preserve transparency)
-                    const downscaledBase64 = canvas.toDataURL('image/png'); // Use 'image/png' to retain transparency
+                    let quality;
+                    if (file.type === 'image/jpeg') {
+                        quality = 0.5; // You can adjust this as needed
+                    }
+                    const downscaledBase64 = canvas.toDataURL(file.type, quality);
                     this.onInput(downscaledBase64);
                 };
 
