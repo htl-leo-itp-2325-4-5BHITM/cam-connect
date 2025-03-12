@@ -98,7 +98,7 @@ export class RentHistoryComponent extends LitElement {
                             <cc-chip color="${this.chipProperties.get(rent.status).color}" text="${this.chipProperties.get(rent.status)?.text}"></cc-chip>
                         </div>
                         <div class="row">
-                            <cc-property-value property="Geräte Nr." value="${rent.device.number}"></cc-property-value>
+                            <cc-property-value property="Geräte Nr." value="${rent?.device ? rent?.device?.number : rent.device_string}"></cc-property-value>
                             <cc-property-value property="Erstellt am" value="${Util.formatDateTimeForHuman(rent.creation_date)}"></cc-property-value>
                             <cc-property-value property="Bearbeitet am" value="${Util.formatDateTimeForHuman(rent.change_date)}"></cc-property-value>
                         </div>
