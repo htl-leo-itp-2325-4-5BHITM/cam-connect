@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>My New Hugo Site</title>
+    <title>cam-connect docs</title>
     <link>http://localhost:1313/teacher/</link>
-    <description>Recent content on My New Hugo Site</description>
+    <description>Recent content on cam-connect docs</description>
     <generator>Hugo -- 0.142.0</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 11 Mar 2025 16:00:44 +0100</lastBuildDate>
