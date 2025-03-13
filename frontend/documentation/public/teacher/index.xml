@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>cam-connect Dokumentation</title>
+    <title>My New Hugo Site</title>
     <link>http://localhost:1313/teacher/</link>
-    <description>Recent content on cam-connect Dokumentation</description>
-    <generator>Hugo</generator>
-    <language>de-at</language>
+    <description>Recent content on My New Hugo Site</description>
+    <generator>Hugo -- 0.142.0</generator>
+    <language>en-us</language>
     <lastBuildDate>Tue, 11 Mar 2025 16:00:44 +0100</lastBuildDate>
     <atom:link href="http://localhost:1313/teacher/index.xml" rel="self" type="application/rss+xml" />
     <item>
@@ -13,21 +13,112 @@
       <link>http://localhost:1313/teacher/geraete-verwalten/</link>
       <pubDate>Tue, 11 Mar 2025 16:00:44 +0100</pubDate>
       <guid>http://localhost:1313/teacher/geraete-verwalten/</guid>
-      <description>&lt;h1 id=&#34;neue-geräte-verwalten&#34;&gt;Neue Geräte verwalten&lt;/h1&gt;&#xA;&lt;p&gt;Klicken Sie oben links auf die Schaltfläche &lt;strong&gt;„Geräte verwalten“&lt;/strong&gt;.&lt;/p&gt;&#xA;&lt;h2 id=&#34;geräteübersicht&#34;&gt;Geräteübersicht&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Nun werden Ihnen alle Geräte der &lt;strong&gt;links ausgewählten Gerätetypen&lt;/strong&gt; angezeigt.&lt;/li&gt;&#xA;&lt;li&gt;Falls Sie Geräte aus einer &lt;strong&gt;CSV-Datei&lt;/strong&gt; importieren möchten, klicken Sie auf &lt;strong&gt;„Importieren/Exportieren“&lt;/strong&gt; und laden Sie Ihre Datei in das Importieren-Fenster.&lt;/li&gt;&#xA;&lt;li&gt;Andernfalls klicken Sie oben links auf die Schaltfläche &lt;strong&gt;„Neu erstellen“&lt;/strong&gt;.&lt;/li&gt;&#xA;&lt;li&gt;Wählen Sie Ihren &lt;strong&gt;Gerätetyp&lt;/strong&gt; aus. Falls Sie ein Set erstellen wollen, klicken Sie auf &lt;strong&gt;Geräteset&lt;/strong&gt;.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;gerät-erstellen&#34;&gt;Gerät erstellen&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Geben Sie den &lt;strong&gt;Namen des Geräts&lt;/strong&gt; an.&lt;/li&gt;&#xA;&lt;li&gt;Optional kann ein &lt;strong&gt;Bild&lt;/strong&gt; ausgewählt werden.&lt;/li&gt;&#xA;&lt;li&gt;Konfigurieren Sie alle &lt;strong&gt;Details&lt;/strong&gt; zu Ihrem Gerät.&lt;/li&gt;&#xA;&lt;li&gt;Abschließend können Sie noch einen &lt;strong&gt;Tag&lt;/strong&gt; auswählen (z. B. &lt;em&gt;Slow Motion&lt;/em&gt;).&lt;/li&gt;&#xA;&lt;li&gt;Falls alles korrekt eingegeben wurde, klicken Sie auf &lt;strong&gt;„Gerät erstellen“&lt;/strong&gt;, um das Gerät zu erstellen.&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
+      <description>&lt;h1 id=&#34;neue-geräte-verwalten&#34;&gt;Neue Geräte verwalten&lt;/h1&gt;
+&lt;p&gt;Klicken Sie oben links auf die Schaltfläche &lt;strong&gt;„Geräte verwalten“&lt;/strong&gt;.&lt;/p&gt;
+&lt;h2 id=&#34;geräteübersicht&#34;&gt;Geräteübersicht&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Nun werden Ihnen alle Geräte der &lt;strong&gt;links ausgewählten Gerätetypen&lt;/strong&gt; angezeigt.&lt;/li&gt;
+&lt;li&gt;Falls Sie Geräte aus einer &lt;strong&gt;CSV-Datei&lt;/strong&gt; importieren möchten, klicken Sie auf &lt;strong&gt;„Importieren/Exportieren“&lt;/strong&gt; und laden Sie Ihre Datei in das Importieren-Fenster.&lt;/li&gt;
+&lt;li&gt;Andernfalls klicken Sie oben links auf die Schaltfläche &lt;strong&gt;„Neu erstellen“&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;Wählen Sie Ihren &lt;strong&gt;Gerätetyp&lt;/strong&gt; aus. Falls Sie ein Set erstellen wollen, klicken Sie auf &lt;strong&gt;Geräteset&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;gerät-erstellen&#34;&gt;Gerät erstellen&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Geben Sie den &lt;strong&gt;Namen des Geräts&lt;/strong&gt; an.&lt;/li&gt;
+&lt;li&gt;Optional kann ein &lt;strong&gt;Bild&lt;/strong&gt; ausgewählt werden.&lt;/li&gt;
+&lt;li&gt;Konfigurieren Sie alle &lt;strong&gt;Details&lt;/strong&gt; zu Ihrem Gerät.&lt;/li&gt;
+&lt;li&gt;Abschließend können Sie noch einen &lt;strong&gt;Tag&lt;/strong&gt; auswählen (z. B. &lt;em&gt;Slow Motion&lt;/em&gt;).&lt;/li&gt;
+&lt;li&gt;Falls alles korrekt eingegeben wurde, klicken Sie auf &lt;strong&gt;„Gerät erstellen“&lt;/strong&gt;, um das Gerät zu erstellen.&lt;/li&gt;
+&lt;/ul&gt;</description>
     </item>
     <item>
       <title>Equipment</title>
       <link>http://localhost:1313/teacher/equipment/</link>
       <pubDate>Tue, 11 Mar 2025 16:00:18 +0100</pubDate>
       <guid>http://localhost:1313/teacher/equipment/</guid>
-      <description>&lt;h1 id=&#34;seite-equipment&#34;&gt;Seite: Equipment&lt;/h1&gt;&#xA;&lt;h2 id=&#34;überblick-der-startseite&#34;&gt;Überblick der Startseite&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;Menüleiste oben&lt;/strong&gt;: Zugriff auf Aktionen wie &amp;ldquo;Neuer Verleih&amp;rdquo;, &amp;ldquo;Geräte verwalten&amp;rdquo; und &amp;ldquo;Schülerliste anzeigen&amp;rdquo;.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Filterleiste links&lt;/strong&gt;: Filteroptionen zur besseren Organisation nach &lt;strong&gt;Verfügbarkeit, Gerätetypen, Tags und Geräteigenschaften&lt;/strong&gt;.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Hauptbereich rechts&lt;/strong&gt;: Liste der Verleihanfragen.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;neuen-verleih-erstellen&#34;&gt;Neuen Verleih erstellen&lt;/h2&gt;&#xA;&lt;h3 id=&#34;1-verleih-beginnen&#34;&gt;1. Verleih beginnen&lt;/h3&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Klicken Sie oben links auf die Schaltfläche &lt;strong&gt;&amp;ldquo;Neuer Verleih&amp;rdquo;&lt;/strong&gt;.&lt;/li&gt;&#xA;&lt;li&gt;Sie können auch &lt;strong&gt;ein oder mehrere verfügbare Geräte auswählen&lt;/strong&gt; und oben rechts auf &lt;strong&gt;„Gerät/e verleihen“&lt;/strong&gt; klicken, um diese Geräte schon auszuwählen.&lt;/li&gt;&#xA;&lt;li&gt;Klicken Sie auf das Feld &lt;strong&gt;„Schüler“&lt;/strong&gt; und wählen Sie nach Eingabe den Schüler aus der angezeigten Liste aus, der das Equipment ausleihen soll.&lt;/li&gt;&#xA;&lt;li&gt;Wählen Sie unter &lt;strong&gt;„globalen Zeitraum setzen“&lt;/strong&gt; den Zeitraum aus, in dem das Equipment ausgeliehen wird (z. B. &lt;em&gt;„30.01 - 02.02“&lt;/em&gt;).&lt;/li&gt;&#xA;&lt;li&gt;Klicken Sie auf den &lt;strong&gt;Pfeil-Button (↓)&lt;/strong&gt;, um diesen Zeitraum für alle Geräte zu übernehmen.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h3 id=&#34;2-geräte-hinzufügen&#34;&gt;2. Geräte hinzufügen&lt;/h3&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Wählen Sie das Gerät im Dropdown-Menü &lt;strong&gt;„Name“&lt;/strong&gt; aus.&lt;/li&gt;&#xA;&lt;li&gt;Geben Sie die &lt;strong&gt;individuelle Gerätenummer (Nr.)&lt;/strong&gt; ein.&lt;/li&gt;&#xA;&lt;li&gt;Legen Sie den spezifischen &lt;strong&gt;Verleihzeitraum&lt;/strong&gt; für dieses Gerät fest, falls er vom globalen Zeitraum abweicht.&lt;/li&gt;&#xA;&lt;li&gt;Um ein weiteres Gerät hinzuzufügen, klicken Sie auf den Button &lt;strong&gt;„Gerät hinzufügen“&lt;/strong&gt;. Wiederholen Sie den obigen Schritt für jedes zusätzliche Gerät.&lt;/li&gt;&#xA;&lt;li&gt;Falls &lt;strong&gt;Zubehör&lt;/strong&gt; (z. B. Akkus, Ladegeräte) benötigt wird, klicken Sie auf den Button &lt;strong&gt;„Zubehör“&lt;/strong&gt; und schreiben Sie das verliehene Zubehör unter &lt;strong&gt;„Gerätename“&lt;/strong&gt; hinzu.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h3 id=&#34;3-verleih-abschließen&#34;&gt;3. Verleih abschließen&lt;/h3&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;Verleih erstellen&lt;/strong&gt;: Klicken Sie auf diesen Button, um den Verleih zu bestätigen.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Abbrechen&lt;/strong&gt;: Falls Sie den Vorgang abbrechen möchten, klicken Sie auf diesen Button.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h4 id=&#34;hinweis&#34;&gt;Hinweis:&lt;/h4&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;Verleih anpassen&lt;/strong&gt;: Sollten Änderungen an Zeiträumen oder Geräten notwendig sein, passen Sie diese vor dem Abschluss an.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Warten auf Bestätigung&lt;/strong&gt;: Nach dem Erstellen des Verleihs wird dieser zunächst zur Bestätigung weitergeleitet, welche der ausgewählte Schüler über die Schulmail oder seinen Account auf der Website betätigen muss.&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
+      <description>&lt;h1 id=&#34;seite-equipment&#34;&gt;Seite: Equipment&lt;/h1&gt;
+&lt;h2 id=&#34;überblick-der-startseite&#34;&gt;Überblick der Startseite&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Menüleiste oben&lt;/strong&gt;: Zugriff auf Aktionen wie &amp;ldquo;Neuer Verleih&amp;rdquo;, &amp;ldquo;Geräte verwalten&amp;rdquo; und &amp;ldquo;Schülerliste anzeigen&amp;rdquo;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Filterleiste links&lt;/strong&gt;: Filteroptionen zur besseren Organisation nach &lt;strong&gt;Verfügbarkeit, Gerätetypen, Tags und Geräteigenschaften&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Hauptbereich rechts&lt;/strong&gt;: Liste der Verleihanfragen.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;neuen-verleih-erstellen&#34;&gt;Neuen Verleih erstellen&lt;/h2&gt;
+&lt;h3 id=&#34;1-verleih-beginnen&#34;&gt;1. Verleih beginnen&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Klicken Sie oben links auf die Schaltfläche &lt;strong&gt;&amp;ldquo;Neuer Verleih&amp;rdquo;&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;Sie können auch &lt;strong&gt;ein oder mehrere verfügbare Geräte auswählen&lt;/strong&gt; und oben rechts auf &lt;strong&gt;„Gerät/e verleihen“&lt;/strong&gt; klicken, um diese Geräte schon auszuwählen.&lt;/li&gt;
+&lt;li&gt;Klicken Sie auf das Feld &lt;strong&gt;„Schüler“&lt;/strong&gt; und wählen Sie nach Eingabe den Schüler aus der angezeigten Liste aus, der das Equipment ausleihen soll.&lt;/li&gt;
+&lt;li&gt;Wählen Sie unter &lt;strong&gt;„globalen Zeitraum setzen“&lt;/strong&gt; den Zeitraum aus, in dem das Equipment ausgeliehen wird (z. B. &lt;em&gt;„30.01 - 02.02“&lt;/em&gt;).&lt;/li&gt;
+&lt;li&gt;Klicken Sie auf den &lt;strong&gt;Pfeil-Button (↓)&lt;/strong&gt;, um diesen Zeitraum für alle Geräte zu übernehmen.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;2-geräte-hinzufügen&#34;&gt;2. Geräte hinzufügen&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Wählen Sie das Gerät im Dropdown-Menü &lt;strong&gt;„Name“&lt;/strong&gt; aus.&lt;/li&gt;
+&lt;li&gt;Geben Sie die &lt;strong&gt;individuelle Gerätenummer (Nr.)&lt;/strong&gt; ein.&lt;/li&gt;
+&lt;li&gt;Legen Sie den spezifischen &lt;strong&gt;Verleihzeitraum&lt;/strong&gt; für dieses Gerät fest, falls er vom globalen Zeitraum abweicht.&lt;/li&gt;
+&lt;li&gt;Um ein weiteres Gerät hinzuzufügen, klicken Sie auf den Button &lt;strong&gt;„Gerät hinzufügen“&lt;/strong&gt;. Wiederholen Sie den obigen Schritt für jedes zusätzliche Gerät.&lt;/li&gt;
+&lt;li&gt;Falls &lt;strong&gt;Zubehör&lt;/strong&gt; (z. B. Akkus, Ladegeräte) benötigt wird, klicken Sie auf den Button &lt;strong&gt;„Zubehör“&lt;/strong&gt; und schreiben Sie das verliehene Zubehör unter &lt;strong&gt;„Gerätename“&lt;/strong&gt; hinzu.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;3-verleih-abschließen&#34;&gt;3. Verleih abschließen&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Verleih erstellen&lt;/strong&gt;: Klicken Sie auf diesen Button, um den Verleih zu bestätigen.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Abbrechen&lt;/strong&gt;: Falls Sie den Vorgang abbrechen möchten, klicken Sie auf diesen Button.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;hinweis&#34;&gt;Hinweis:&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Verleih anpassen&lt;/strong&gt;: Sollten Änderungen an Zeiträumen oder Geräten notwendig sein, passen Sie diese vor dem Abschluss an.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Warten auf Bestätigung&lt;/strong&gt;: Nach dem Erstellen des Verleihs wird dieser zunächst zur Bestätigung weitergeleitet, welche der ausgewählte Schüler über die Schulmail oder seinen Account auf der Website betätigen muss.&lt;/li&gt;
+&lt;/ul&gt;</description>
     </item>
     <item>
       <title>Verleihliste</title>
       <link>http://localhost:1313/teacher/verleihliste/</link>
       <pubDate>Tue, 11 Mar 2025 16:00:00 +0100</pubDate>
       <guid>http://localhost:1313/teacher/verleihliste/</guid>
-      <description>&lt;h1 id=&#34;verleihliste&#34;&gt;Verleihliste&lt;/h1&gt;&#xA;&lt;h2 id=&#34;überblick-der-startseite&#34;&gt;Überblick der Startseite&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;Menüleiste oben&lt;/strong&gt;: Zugriff auf Aktionen wie &amp;ldquo;Neuer Verleih&amp;rdquo;, &amp;ldquo;Geräte verwalten&amp;rdquo; und &amp;ldquo;Schülerliste anzeigen&amp;rdquo;.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Filterleiste links&lt;/strong&gt;: Filteroptionen zur besseren Organisation nach Klassen und Status der Verleihanfragen.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Hauptbereich rechts&lt;/strong&gt;: Liste der Verleihanfragen.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;neuen-verleih-erstellen&#34;&gt;Neuen Verleih erstellen&lt;/h2&gt;&#xA;&lt;h3 id=&#34;1-verleih-beginnen&#34;&gt;1. Verleih beginnen&lt;/h3&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Klicken Sie oben links auf die Schaltfläche &lt;strong&gt;&amp;ldquo;Neuer Verleih&amp;rdquo;&lt;/strong&gt;.&lt;/li&gt;&#xA;&lt;li&gt;Klicken Sie auf das Feld &lt;strong&gt;„Schüler“&lt;/strong&gt; und wählen Sie nach Eingabe den Schüler aus der angezeigten Liste aus, der das Equipment ausleihen soll.&lt;/li&gt;&#xA;&lt;li&gt;Wählen Sie unter &lt;strong&gt;„globalen Zeitraum setzen“&lt;/strong&gt; den Zeitraum aus, in dem das Equipment ausgeliehen wird (z. B. &lt;em&gt;„30.01 - 02.02“&lt;/em&gt;).&lt;/li&gt;&#xA;&lt;li&gt;Klicken Sie auf den &lt;strong&gt;Pfeil-Button (↓)&lt;/strong&gt;, um diesen Zeitraum für alle Geräte zu übernehmen.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h3 id=&#34;2-geräte-hinzufügen&#34;&gt;2. Geräte hinzufügen&lt;/h3&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Wählen Sie das Gerät im Dropdown-Menü &lt;strong&gt;„Name“&lt;/strong&gt; aus.&lt;/li&gt;&#xA;&lt;li&gt;Geben Sie die &lt;strong&gt;individuelle Gerätenummer (Nr.)&lt;/strong&gt; ein.&lt;/li&gt;&#xA;&lt;li&gt;Legen Sie den spezifischen &lt;strong&gt;Verleihzeitraum&lt;/strong&gt; für dieses Gerät fest, falls er vom globalen Zeitraum abweicht.&lt;/li&gt;&#xA;&lt;li&gt;Um ein weiteres Gerät hinzuzufügen, klicken Sie auf den Button &lt;strong&gt;„Gerät hinzufügen“&lt;/strong&gt;. Wiederholen Sie den obigen Schritt für jedes zusätzliche Gerät.&lt;/li&gt;&#xA;&lt;li&gt;Falls &lt;strong&gt;Zubehör&lt;/strong&gt; (z. B. Akkus, Ladegeräte) benötigt wird, klicken Sie auf den Button &lt;strong&gt;„Zubehör“&lt;/strong&gt; und schreiben Sie das verliehene Zubehör unter &lt;strong&gt;„Gerätename“&lt;/strong&gt; hinzu.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h3 id=&#34;3-verleih-abschließen&#34;&gt;3. Verleih abschließen&lt;/h3&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;Verleih erstellen&lt;/strong&gt;: Klicken Sie auf diesen Button, um den Verleih zu bestätigen.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Abbrechen&lt;/strong&gt;: Falls Sie den Vorgang abbrechen möchten, klicken Sie auf diesen Button.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h4 id=&#34;hinweis&#34;&gt;Hinweis:&lt;/h4&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;Verleih anpassen&lt;/strong&gt;: Sollten Änderungen an Zeiträumen oder Geräten notwendig sein, passen Sie diese vor dem Abschluss an.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Warten auf Bestätigung&lt;/strong&gt;: Nach dem Erstellen des Verleihs wird dieser zunächst zur Bestätigung weitergeleitet, welche der ausgewählte Schüler über die Schulmail oder seinen Account auf der Website betätigen muss.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;verleihanfragen-verwalten&#34;&gt;Verleihanfragen verwalten&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;Status ändern&lt;/strong&gt;: Im Hauptbereich können Sie den Status der Verleihanfragen überprüfen (z. B. &lt;em&gt;&amp;ldquo;Warte auf Bestätigung&amp;rdquo;, &amp;ldquo;Bestätigt&amp;rdquo; oder &amp;ldquo;Abgelehnt&amp;rdquo;&lt;/em&gt;).&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Klicken Sie auf &lt;strong&gt;&amp;ldquo;Details anzeigen&amp;rdquo;&lt;/strong&gt;, um alle Informationen über laufende und vergangene Verleihanträge des Schülers zu sehen.&lt;/li&gt;&#xA;&lt;li&gt;Sie können Anfragen &lt;strong&gt;genehmigen, ablehnen oder bearbeiten&lt;/strong&gt;.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Gerät zurückgegeben&lt;/strong&gt;: Bei Rückgabe von Geräten wählen Sie die zutreffenden Geräte aus und klicken oben links auf die Schaltfläche &lt;strong&gt;„Zurückgeben“&lt;/strong&gt;.&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
+      <description>&lt;h1 id=&#34;verleihliste&#34;&gt;Verleihliste&lt;/h1&gt;
+&lt;h2 id=&#34;überblick-der-startseite&#34;&gt;Überblick der Startseite&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Menüleiste oben&lt;/strong&gt;: Zugriff auf Aktionen wie &amp;ldquo;Neuer Verleih&amp;rdquo;, &amp;ldquo;Geräte verwalten&amp;rdquo; und &amp;ldquo;Schülerliste anzeigen&amp;rdquo;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Filterleiste links&lt;/strong&gt;: Filteroptionen zur besseren Organisation nach Klassen und Status der Verleihanfragen.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Hauptbereich rechts&lt;/strong&gt;: Liste der Verleihanfragen.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;neuen-verleih-erstellen&#34;&gt;Neuen Verleih erstellen&lt;/h2&gt;
+&lt;h3 id=&#34;1-verleih-beginnen&#34;&gt;1. Verleih beginnen&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Klicken Sie oben links auf die Schaltfläche &lt;strong&gt;&amp;ldquo;Neuer Verleih&amp;rdquo;&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;Klicken Sie auf das Feld &lt;strong&gt;„Schüler“&lt;/strong&gt; und wählen Sie nach Eingabe den Schüler aus der angezeigten Liste aus, der das Equipment ausleihen soll.&lt;/li&gt;
+&lt;li&gt;Wählen Sie unter &lt;strong&gt;„globalen Zeitraum setzen“&lt;/strong&gt; den Zeitraum aus, in dem das Equipment ausgeliehen wird (z. B. &lt;em&gt;„30.01 - 02.02“&lt;/em&gt;).&lt;/li&gt;
+&lt;li&gt;Klicken Sie auf den &lt;strong&gt;Pfeil-Button (↓)&lt;/strong&gt;, um diesen Zeitraum für alle Geräte zu übernehmen.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;2-geräte-hinzufügen&#34;&gt;2. Geräte hinzufügen&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Wählen Sie das Gerät im Dropdown-Menü &lt;strong&gt;„Name“&lt;/strong&gt; aus.&lt;/li&gt;
+&lt;li&gt;Geben Sie die &lt;strong&gt;individuelle Gerätenummer (Nr.)&lt;/strong&gt; ein.&lt;/li&gt;
+&lt;li&gt;Legen Sie den spezifischen &lt;strong&gt;Verleihzeitraum&lt;/strong&gt; für dieses Gerät fest, falls er vom globalen Zeitraum abweicht.&lt;/li&gt;
+&lt;li&gt;Um ein weiteres Gerät hinzuzufügen, klicken Sie auf den Button &lt;strong&gt;„Gerät hinzufügen“&lt;/strong&gt;. Wiederholen Sie den obigen Schritt für jedes zusätzliche Gerät.&lt;/li&gt;
+&lt;li&gt;Falls &lt;strong&gt;Zubehör&lt;/strong&gt; (z. B. Akkus, Ladegeräte) benötigt wird, klicken Sie auf den Button &lt;strong&gt;„Zubehör“&lt;/strong&gt; und schreiben Sie das verliehene Zubehör unter &lt;strong&gt;„Gerätename“&lt;/strong&gt; hinzu.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;3-verleih-abschließen&#34;&gt;3. Verleih abschließen&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Verleih erstellen&lt;/strong&gt;: Klicken Sie auf diesen Button, um den Verleih zu bestätigen.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Abbrechen&lt;/strong&gt;: Falls Sie den Vorgang abbrechen möchten, klicken Sie auf diesen Button.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;hinweis&#34;&gt;Hinweis:&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Verleih anpassen&lt;/strong&gt;: Sollten Änderungen an Zeiträumen oder Geräten notwendig sein, passen Sie diese vor dem Abschluss an.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Warten auf Bestätigung&lt;/strong&gt;: Nach dem Erstellen des Verleihs wird dieser zunächst zur Bestätigung weitergeleitet, welche der ausgewählte Schüler über die Schulmail oder seinen Account auf der Website betätigen muss.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;verleihanfragen-verwalten&#34;&gt;Verleihanfragen verwalten&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Status ändern&lt;/strong&gt;: Im Hauptbereich können Sie den Status der Verleihanfragen überprüfen (z. B. &lt;em&gt;&amp;ldquo;Warte auf Bestätigung&amp;rdquo;, &amp;ldquo;Bestätigt&amp;rdquo; oder &amp;ldquo;Abgelehnt&amp;rdquo;&lt;/em&gt;).
+&lt;ul&gt;
+&lt;li&gt;Klicken Sie auf &lt;strong&gt;&amp;ldquo;Details anzeigen&amp;rdquo;&lt;/strong&gt;, um alle Informationen über laufende und vergangene Verleihanträge des Schülers zu sehen.&lt;/li&gt;
+&lt;li&gt;Sie können Anfragen &lt;strong&gt;genehmigen, ablehnen oder bearbeiten&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Gerät zurückgegeben&lt;/strong&gt;: Bei Rückgabe von Geräten wählen Sie die zutreffenden Geräte aus und klicken oben links auf die Schaltfläche &lt;strong&gt;„Zurückgeben“&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;</description>
     </item>
   </channel>
 </rss>
