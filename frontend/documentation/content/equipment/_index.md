@@ -1,8 +1,8 @@
 +++
 date = '2025-03-11T15:59:40+01:00'
 draft = false
-title = ''
+title = 'Equipment'
 layout = 'equipment'
 +++
 
-# Equipment
+# Equipment Verleihen
