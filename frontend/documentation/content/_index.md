@@ -4,6 +4,9 @@ draft = false
 title = ''
 +++
 
-[Für Lehrer]({{< ref "teacher/_index.md" >}})
-[Equipment]({{< ref "equipment/_index.md" >}})
-[Für Schüler]({{< ref "student/_index.md" >}})
+# Dokumentation der cam-connect Anwendung
+
+Hier gehts zur Dokumentation [Für Lehrer]({{< ref "teacher/_index.md" >}})
+\
+\
+Für die Schüler Dokumentation klicke [Hier]({{< ref "student/_index.md" >}})
