@@ -1,0 +1,31 @@
+[
+  {
+    "id": 1,
+    "title": "1. Verleih beginnen",
+    "points": [
+      "Klicken Sie oben links auf die Schaltfläche <strong>\"Neuer Verleih\"</strong>.",
+      "Klicken Sie auf das Feld <strong>„Schüler“</strong> und wählen Sie nach Eingabe den Schüler aus der angezeigten Liste aus, der das Equipment ausleihen soll.",
+      "Wählen Sie unter <strong>„globalen Zeitraum setzen“</strong> den Zeitraum aus, in dem das Equipment ausgeliehen wird (z. B. <i>„30.01 - 02.02“</i>).",
+      "Klicken Sie auf den <strong>Pfeil-Button (↓)</strong>, um diesen Zeitraum für alle Geräte zu übernehmen."
+    ]
+  },
+  {
+    "id": 2,
+    "title": "2. Geräte hinzufügen",
+    "points": [
+      "Wählen Sie das Gerät im Dropdown-Menü <strong>„Name“</strong> aus.",
+      "Geben Sie die <strong>individuelle Gerätenummer (Nr.)</strong> ein.",
+      "Legen Sie den spezifischen <strong>Verleihzeitraum</strong> für dieses Gerät fest, falls er vom globalen Zeitraum abweicht.",
+      "Um ein weiteres Gerät hinzuzufügen, klicken Sie auf den Button <strong>„Gerät hinzufügen“</strong>. Wiederholen Sie den obigen Schritt für jedes zusätzliche Gerät.",
+      "Falls <strong>Zubehör</strong> (z. B. Akkus, Ladegeräte) benötigt wird, klicken Sie auf den Button <strong>„Zubehör“</strong> und schreiben Sie das verliehene Zubehör unter <strong>„Gerätename“</strong> hinzu."
+    ]
+  },
+  {
+    "id": 3,
+    "title": "3. Verleih abschließen",
+    "points": [
+      "<strong>Verleih erstellen</strong>: Klicken Sie auf diesen Button, um den Verleih zu bestätigen.",
+      "<strong>Abbrechen</strong>: Falls Sie den Vorgang abbrechen möchten, klicken Sie auf diesen Button."
+    ]
+  }
+]

@@ -5,5 +5,6 @@ title = ''
 +++
 
 [Für Lehrer]({{< ref "teacher/_index.md" >}})
-[Equipment]({{< ref "equipment/_index.md" >}})
 [Für Schüler]({{< ref "student/_index.md" >}})
+
+[Equipment]({{< ref "equipment/_index.md" >}})

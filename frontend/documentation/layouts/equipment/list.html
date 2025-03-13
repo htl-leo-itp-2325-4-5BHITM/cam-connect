@@ -1,14 +1,64 @@
 {{ define "main" }}
+<style>
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+    }
+    .news-page {
+        padding: 20px;
+        border-radius: 8px;
+    }
+    .news-item {
+        margin-bottom: 20px;
+    }
+    .news-item h2 {
+        font-size: 1.5em;
+        border-bottom: 2px solid #ddd;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+    }
+    .news-item ul {
+        list-style-type: disc;
+        padding-left: 20px;
+    }
+    .news-item ul li {
+        margin-bottom: 10px;
+        line-height: 1.6;
+    }
+    .news-item hr {
+        border: 0;
+        height: 1px;
+        background: #ddd;
+        margin: 20px 0;
+    }
+    .no-data {
+        text-align: center;
+        color: #999;
+        font-size: 1.2em;
+    }
+</style>
 <div class="container">
     <div class="news-page">
         {{ .Content }}
+        <br>
         <div class="news-items">
             {{ $newsData := resources.Get "data/equipment.json" | transform.Unmarshal }}
+            {{ if $newsData }}
             {{ range $newsData }}
             <div class="news-item">
                 <h2>{{ .title }}</h2>
+                <ul>
+                    {{ range .points }}
+                    <li>{{ . | safeHTML }}</li>
+                    {{ end }}
+                </ul>
                 <hr>
             </div>
+            {{ end }}
+            {{ else }}
+            <p class="no-data">No data found in equipment.json</p>
             {{ end }}
         </div>
     </div>
