@@ -1,0 +1,16 @@
+{{ define "main" }}
+<div class="container">
+    <div class="news-page">
+        {{ .Content }}
+        <div class="news-items">
+            {{ $newsData := resources.Get "data/equipment.json" | transform.Unmarshal }}
+            {{ range $newsData }}
+            <div class="news-item">
+                <h2>{{ .title }}</h2>
+                <hr>
+            </div>
+            {{ end }}
+        </div>
+    </div>
+</div>
+{{ end }}
