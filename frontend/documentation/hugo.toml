@@ -1,4 +1,4 @@
 baseURL = 'https://example.org/'
-languageCode = 'en-us'
+languageCode = 'de-at'
 title = 'cam-connect docs'
 theme = 'papermod'
